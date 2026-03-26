@@ -1,0 +1,196 @@
+%==============================================================================
+% MANUSCRIPT FOR CHEMICAL SCIENCE (ROYAL SOCIETY OF CHEMISTRY)
+%==============================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,graphicx,booktabs,siunitx,physics,authblk}
+\usepackage[super,sort&compress,comma]{natbib}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[margin=2.5cm]{geometry}
+
+% SIunitx configuration
+\sisetup{
+    locale = US,
+    detect-all = true,
+    group-minimum-digits = 4,
+    separate-uncertainty = true,
+    multi-part-units = single,
+    range-phrase = {--},
+    range-units = single,
+    number-unit-product = \,,
+    input-comparators = { < > = \le \ge \ll \gg \leq \geq }
+}
+
+%==============================================================================
+% AUTHOR INFORMATION
+%==============================================================================
+\title{\textbf{Quantum-coherent control of biological energy transfer via spectral bath engineering}}
+
+\author[1,*]{Steve Cabrel Teguia Kouam}
+\author[2]{Theodore Goumai Vedekoi}
+\author[2]{Jean-Pierre Tchapet Njafa}
+\author[1]{Jean-Pierre Nguenang}
+\author[2]{Serge Guy Nana Engo}
+
+\affil[1]{\small Department of Physics, Faculty of Science, University of Douala, Cameroon}
+\affil[2]{\small Department of Physics, Faculty of Science, University of Yaoundé I, Cameroon}
+\affil[*]{\textit{Corresponding author: steve.teguia@facsciences-uy1.cm}}
+
+\date{\vspace{-5ex}}
+
+%==============================================================================
+% DOCUMENT BEGIN
+%==============================================================================
+\begin{document}
+
+\maketitle
+
+%==============================================================================
+% BROADER CONTEXT (Required by Chemical Science)
+%==============================================================================
+\noindent\textbf{Broader context.}
+Photosynthetic organisms harvest sunlight with near-unity quantum efficiency, a feat that relies on quantum coherence persisting in warm, wet biological environments. Understanding and controlling this coherence has implications beyond biology: it could inform the design of artificial light-harvesting materials, bio-inspired photovoltaics, and molecular electronics. In this work, we show that the \textit{spectral structure} of incident light---not just its intensity---can serve as an external control parameter for quantum coherence in pigment-protein complexes, opening a new avenue for engineering energy transfer in both natural and synthetic systems.
+
+\vspace{1em}
+
+\begin{abstract}
+Quantum coherence in biological light-harvesting complexes persists at physiological temperatures, yet the mechanisms enabling this robustness remain debated. Here we demonstrate that \textit{external} spectral engineering of the incident photon bath provides a previously unexplored route to actively control excitonic coherence. Using the numerically exact Process Tensor Hierarchy of Pure States (PT-HOPS) algorithm with Spectrally Bundled Dissipators, we show that applying dual-band optical transmission windows (\SIlist{750;820}{\nano\meter}) to the Fenna--Matthews--Olson (FMO) complex selectively populates vibronic resonances while reducing excitation of overdamped bath modes that dominate pure dephasing. This selective excitation extends coherence lifetimes by \SIrange{20}{50}{\percent} and enhances energy transfer efficiency to the reaction center by \SI{25}{\percent} at \SI{295}{\kelvin}. The enhancement is robust against static disorder ($\sigma = \SI{50}{\per\centi\meter}$; $\langle\eta\rangle = 0.20 \pm 0.04$ over \num{500} realizations). These findings establish spectral bath engineering as a design principle for coherence-assisted transport, bridging quantum dynamics, biophysical chemistry, and biomimetic materials science.
+\end{abstract}
+
+%==============================================================================
+% INTRODUCTION
+%==============================================================================
+\section{Introduction}
+
+Quantum coherence in biological light-harvesting complexes has been the subject of sustained interdisciplinary investigation since two-dimensional electronic spectroscopy (2DES) revealed long-lived oscillatory signals in the Fenna--Matthews--Olson (FMO) complex.\cite{Engel2007,Panitchayangkoon2010} In green sulfur bacteria, the FMO complex transfers excitations from the chlorosome antenna to the reaction center with near-unity efficiency.\cite{Adolphs2006} This efficiency is linked to the structured, non-Markovian protein-solvent environment: discrete underdamped vibronic modes within the spectral density can regenerate excitonic correlations, a phenomenon termed Environment-Assisted Quantum Transport (ENAQT).\cite{Mohseni2008,Chin2013,Huelga2013}
+
+Previous theoretical work has treated the protein-solvent environment as fixed.\cite{Tanimura1989,Ishizaki2009a,Cao2020} In this work, we explore a complementary approach: manipulating the \textit{external} incident radiation field to selectively excite vibronic resonances within the FMO network. We term this approach \textbf{spectral bath engineering}.
+
+Combining the numerically exact PT-HOPS/SBD methodology\cite{Suess2014,Citty2024a} with established FMO parameters,\cite{Adolphs2006,Moix2011} we demonstrate that dual-band optical filters selectively populate vibronic channels that experience reduced pure dephasing in the polaron frame.\cite{Jang2008} The resulting coherence extension and energy transfer enhancement are robust under physiological conditions, suggesting that spectral bath engineering could inform the design of bio-inspired light-harvesting architectures.
+
+%==============================================================================
+% THEORY AND METHODS
+%==============================================================================
+\section{Theoretical approach}
+
+\subsection{Multi-chromophore Hamiltonian}
+The FMO monomer is modeled as a seven-site exciton network within the single-exciton manifold. The electronic Hamiltonian is:
+\begin{equation}
+\hat{H}_{\mathrm{el}} = \sum_{n=1}^{7} \varepsilon_n \dyad{n} + \sum_{n \neq m} J_{nm} \dyad{n}{m},
+\end{equation}
+with site energies $\varepsilon_n$ and electronic couplings $J_{nm}$ from Adolphs and Renger.\cite{Adolphs2006} Each chromophore couples to a local harmonic bath described by:\cite{Moix2011}
+\begin{equation}
+J_{\mathrm{bath}}(\omega) = \frac{2\lambda\gamma\omega}{\omega^2 + \gamma^2} + \sum_k \frac{2\lambda_k\omega_k^2\gamma_k}{(\omega-\omega_k)^2 + \gamma_k^2},
+\label{eq:spectral_density}
+\end{equation}
+where the Drude--Lorentz term models overdamped protein-solvent fluctuations ($\lambda = \SI{35}{\per\centi\meter}$, $\gamma^{-1} = \SI{106}{\femto\second}$) and the Brownian oscillator terms capture underdamped vibronic modes.\cite{Chin2013}
+
+\subsection{Spectral engineering}
+We impose a dual-band transmission filter on the incident solar spectrum:
+\begin{equation}
+J_{\mathrm{eff}}(\omega) = T(\omega) \cdot J_{\mathrm{solar}}(\omega), \quad T(\omega) = T_{\mathrm{peak}} \sum_{i=1}^{2} w_i \exp\!\left[-\frac{(\omega - \omega_{c,i})^2}{2\sigma_i^2}\right].
+\label{eq:filtered_spectral_density}
+\end{equation}
+The filter modifies the \textit{driving field} that prepares the initial excitonic state, not the protein-bath spectral density $J_{\mathrm{bath}}(\omega)$.
+
+\subsection{PT-HOPS/SBD simulations}
+Simulations use the PT-HOPS method with Spectrally Bundled Dissipators.\cite{Suess2014,Citty2024a} This numerically exact approach captures non-Markovian bath memory without secular, Markov, or weak-coupling approximations. The stochastic hierarchy evolves as:
+\begin{equation}
+\pdv{t}\ket{\psi^{(\vb{n})}} = \left(-i\hat{H}_S - \sum_j n_j\nu_j\right)\ket{\psi^{(\vb{n})}}
+- i\sum_j \sqrt{(n_j{+}1)d_j}\,\hat{L}_j\ket{\psi^{(\vb{n}+\vb{e}_j)}}
+- i\sum_j \sqrt{n_j/d_j}\,\hat{L}_j^\dagger\ket{\psi^{(\vb{n}-\vb{e}_j)}},
+\end{equation}
+where $\vb{n}$ is the hierarchy multi-index, $\nu_j$ and $d_j$ are Padé expansion parameters, and $\hat{L}_j$ are coupling operators.\cite{Duan2017} All simulations use $L = 6$, $K = 3$, and are validated via a 12-test suite benchmarked against HEOM\cite{Ishizaki2009a} (\SI{1.8}{\percent} deviation) and the TEMPO method\cite{Strathearn2018} (see ESI$\dagger$).
+
+%==============================================================================
+% RESULTS AND DISCUSSION
+%==============================================================================
+\section{Results and discussion}
+
+\subsection{Coherence lifetime extension}
+We quantify coherence via the $l_1$-norm:\cite{Baumgratz2014}
+\begin{equation}
+C_{l_1}(\rho) = \sum_{i \neq j} \abs{\rho_{ij}}.
+\end{equation}
+Under optimized dual-band filtering (\SIlist{750;820}{\nano\meter}) at \SI{295}{\kelvin}, the $1/e$ coherence decay time extends from $\tau_c = \SI{280(25)}{\femto\second}$ (broadband) to $\SI{420(35)}{\femto\second}$ (filtered)---a \SI{50}{\percent} increase (Figure~\ref{fig:quantum_dynamics}a).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{Quantum_dynamics.png}
+\caption{\textbf{Quantum dynamics under spectral filtering.} PT-HOPS/SBD simulations at \SI{295}{\kelvin}, averaged over \num{500} static disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$). \textbf{(a)}~$l_1$-norm coherence. \textbf{(b)}~Site populations showing enhanced transfer to the reaction center. \textbf{(c)}~Inverse participation ratio. \textbf{(d)}~Quantum Fisher Information. Shaded: \SI{95}{\percent} confidence intervals.}
+\label{fig:quantum_dynamics}
+\end{figure}
+
+The inverse participation ratio increases from $\mathrm{IPR} \approx 4.1$ to $6.8$, indicating that the exciton delocalizes across a larger fraction of the chromophore network under filtered excitation.
+
+\subsection{Energy transfer enhancement and mechanism}
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Quantum metric enhancement.} Dual-band (\SIlist{750;820}{\nano\meter}) vs.\ broadband illumination at \SI{295}{\kelvin}. Averages over \num{500} disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$); uncertainties: \SI{95}{\percent} CI.}
+\label{tab:quantum_metrics}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Filtered} & \textbf{Broadband} & \textbf{Enhancement} \\
+\midrule
+ETE (relative) & 1.25(3) & 1.00(2) & $+\SI{25}{\percent}$ \\
+$\tau_c$ (\si{\femto\second}) & 420(35) & 280(25) & $+\SI{50}{\percent}$ \\
+IPR (sites) & 6.8(5) & 4.1(4) & $+\SI{66}{\percent}$ \\
+QFI (max) & 12.4(11) & 7.8(8) & $+\SI{59}{\percent}$ \\
+Concurrence & 0.34(5) & 0.18(4) & $+\SI{89}{\percent}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The enhancement mechanism involves selective state preparation. The filtered driving field preferentially populates modes satisfying the vibronic resonance condition $\Delta E_{nm} \approx \hbar\omega_{\mathrm{vib}} \pm J_{nm}$.\cite{Chin2013} In the polaron frame,\cite{Jang2008} these vibronically prepared states couple less strongly to the overdamped continuum, reducing the pure dephasing rate $\Gamma_{\mathrm{pd}} \propto \lambda_{\mathrm{eff}} k_B T$ while preserving the vibronic channels that mediate transport.
+
+\subsection{Environmental robustness}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\columnwidth]{ETR_Under_Environmental_Effects.pdf}
+\caption{\textbf{Environmental robustness.} \textbf{(a)}~Temperature dependence of the relative enhancement $\eta(T)$, peaking at \SIrange{285}{300}{\kelvin}. \textbf{(b)}~Distribution of $\eta$ over \num{500} disorder realizations: $\expval{\eta} = 0.20 \pm 0.04$.}
+\label{fig:robustness}
+\end{figure}
+
+The enhancement is robust across physiological conditions (Figure~\ref{fig:robustness}). At \SI{295}{\kelvin}, $\eta = 0.25$; at \SI{310}{\kelvin}, $\eta = 0.18$, remaining statistically significant ($p < 0.01$). Under static disorder ($\sigma = \SI{50}{\per\centi\meter}$), $\expval{\eta} = 0.20(4)$ with a coefficient of variation of \SI{20}{\percent}.
+
+\subsection{Limitations}
+This analysis is restricted to the single-exciton manifold with site-independent baths and phenomenological trapping ($k_{\mathrm{trap}} = \SI{1}{\per\pico\second}$). Direct experimental validation is required; we propose 2DES with spectrally filtered pump pulses as a concrete test. Extension to site-dependent baths and larger complexes (LHCII) is computationally feasible within the SBD framework.
+
+%==============================================================================
+% CONCLUSION
+%==============================================================================
+\section{Conclusions and outlook}
+
+Spectral bath engineering---deliberate shaping of the incident photon spectrum---extends excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and enhances energy transfer efficiency by \SI{25}{\percent} in the FMO complex at \SI{295}{\kelvin}. The mechanism involves selective state preparation that reduces the effective system-bath coupling in the polaron frame while preserving vibronic resonance channels.
+
+These findings have implications for: (i)~understanding the role of light quality in natural photosynthesis under variable environmental conditions; (ii)~designing artificial light-harvesting systems where spectral filtering replaces chemical modification as a means of coherence control; and (iii)~developing biomimetic photovoltaic architectures that exploit coherence-assisted transport for improved efficiency. The spectral engineering principle generalizes to any open quantum system where vibronic resonances contribute to energy transfer.
+
+%==============================================================================
+% CONFLICTS OF INTEREST
+%==============================================================================
+\section*{Conflicts of interest}
+There are no conflicts to declare.
+
+%==============================================================================
+% DATA AVAILABILITY
+%==============================================================================
+\section*{Data availability}
+Simulation parameters and analysis scripts are available from the corresponding author upon reasonable request. The PT-HOPS/SBD implementation uses the open-source MesoHOPS library.
+
+%==============================================================================
+% ACKNOWLEDGMENTS
+%==============================================================================
+\section*{Acknowledgements}
+This work was supported by the University of Yaoundé~I and the University of Douala. Computational resources were provided by departmental facilities. The MesoHOPS library was used for all simulations.
+
+%==============================================================================
+% REFERENCES
+%==============================================================================
+\bibliographystyle{rsc}
+\bibliography{references}
+
+\end{document}

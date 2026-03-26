@@ -1,0 +1,60 @@
+%==============================================================================
+% COVER LETTER FOR JOURNAL OF CHEMICAL THEORY AND COMPUTATION
+%==============================================================================
+\documentclass[11pt,a4paper]{letter}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,siunitx}
+
+\address{
+Department of Physics\\
+Faculty of Science\\
+University of Yaoundé I\\
+Yaoundé, Cameroon
+}
+
+\signature{Steve Cabrel Teguia Kouam}
+
+\begin{document}
+
+\begin{letter}{
+Prof. William L. Hase \\
+Editor-in-Chief\\
+The Journal of Chemical Theory and Computation\\
+American Chemical Society
+}
+
+\opening{Dear Prof. Hase,}
+
+We submit ``Scalable Simulation of Non-Markovian Energy Transfer via Process Tensor Hierarchy of Pure States with Spectrally Bundled Dissipators'' for consideration as an Article in The Journal of Chemical Theory and Computation.
+
+\textbf{What we found:} We have deployed and systematically validated a highly scalable algorithm---the Process Tensor Hierarchy of Pure States equipped with Spectrally Bundled Dissipators (PT-HOPS/SBD)---capable of navigating highly structured, multi-peaked non-Markovian environments without invoking Markov or secular approximations. Benchmarking establishes that optimal hierarchy depth scaling ($L=6$) maps steady-state transport targets with \SI{1.0}{\percent} accuracy while fundamentally bypassing the memory explosion intrinsic to standard HEOM. 
+
+\textbf{Why it matters:} The simulation of large biological and artificial light-harvesting constructs requires handling complex non-Markovian memory structures. PT-HOPS fundamentally minimizes the stochastic footprint. Our validation tests confirm trace preservation (within $10^{-13}$), eigenvalue positivity, and rapid Padé convergence within double precision computing environments. 
+
+\textbf{Application:} To demonstrate the utility of PT-HOPS/SBD, we applied the method to simulate excitonic navigation through the Fenna--Matthews--Olson (FMO) complex under an engineered, non-Markovian photon spectrum. We predict a \SIrange{20}{50}{\percent} extension in coherence lifetimes and a \SI{25}{\percent} increase in energy transfer efficiency. This proves that precision bath modeling can uncover fundamentally new operating regimes for biological pathways.
+
+\textbf{Why JCTC:} Because this work relies intensely upon advancing the numerical simulation of open quantum systems utilizing stochastic differential equations and tensor network hierarchies, we rapidly transitioned the focus to methodology. The rigorous 12-test validation, HEOM benchmarking, and cost-scaling limits featured centrally in our manuscript fit perfectly with the rigorous computational standards characteristic of JCTC readers.
+
+\textbf{Key computational advances:}
+\begin{enumerate}
+\item Numerical exactness against HEOM verified within \SI{1.8}{\percent} variation.
+\item Rigorous analytical hierarchy and Matsubara convergence established natively.
+\item Real-world implementation: Excitonic coherence control through effective reorganization energy truncation.
+\end{enumerate}
+
+All authors have approved this manuscript. We declare no conflicts of interest. This manuscript is not under consideration elsewhere.
+
+Thank you for your consideration.
+
+\closing{Sincerely,}
+
+\fromsig{
+Steve Cabrel Teguia Kouam\\
+Department of Physics\\
+University of Douala, Cameroon\\
+Email: steve.teguia@facsciences-uy1.cm
+}
+
+\end{letter}
+\end{document}

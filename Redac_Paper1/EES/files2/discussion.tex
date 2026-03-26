@@ -1,0 +1,152 @@
+% Discussion Section - EES Version
+% Spectral Bath Engineering for Quantum-Enhanced Agrivoltaics
+
+\section{Discussion}\label{sec:Discussion}
+
+\subsection{Quantum advantage in a renewable energy context}
+
+Our central finding---a \SI{25}{\percent} enhancement in the photosynthetic electron transport rate (ETR) driven by targeted spectral filtering---challenges the prevailing paradigm in agrivoltaic design. Conventional optimization models typically assume that crop yield scales linearly with total photosynthetically active radiation (PAR). However, our results demonstrate that spectral quality can compensate for reduced photon quantity. By deploying optical filters that actively sustain quantum coherence within the plant's light-harvesting apparatus, the per-photon biological efficiency increases significantly. As evidenced in \Cref{fig:coherence}, aligning the transmission window with specific vibronic modes extends coherence lifetimes by \SIrange{20}{50}{\percent} and broadens exciton delocalization. This microscopic quantum advantage translates directly into macroscopic agricultural gains, permitting substantially higher photovoltaic (PV) coverage densities than classical shading models would otherwise allow.
+
+The practical implications of this non-linear light response are profound. For instance, in a standard \SI{1}{\hectare} deployment with \SI{40}{\percent} PV coverage, a classical spectrally neutral configuration typically incurs a commensurate \SI{40}{\percent} decline in crop yield. Our quantum-optimized design, conversely, limits this penalty to just \SI{20}{\percent} (given an ETR of \SI{80.51}{\percent}). For high-value crops with baseline revenues of USD~\numrange{5000}{10000}\,\si{\per\hectare}, recovering this fraction of agricultural productivity directly preserves USD~\numrange{2000}{3500} in annual income.
+
+These outcomes address a critical gap identified in recent multidisciplinary reviews by Ma~Lu et al.\ \cite{MaLu2025} and Campana et al.\ \cite{Campana2025}, which emphasize the need for fully integrated energy--food models rather than ad hoc shading mitigation. Our framework answers this call by moving beyond passive light interception. While previous studies have shown that conventional spectral splitting improves microclimates but often incurs PAR-induced yield penalties \cite{Asaa2024, Vu2025}, our approach exploits quantum biology to elevate intrinsic light-use efficiency, effectively decoupling energy generation from agricultural loss. Furthermore, the thermal stabilization provided by PV shading---often noted as a vital defense against heat stress \cite{Scarano2024}---acquires a novel functional role in our model. We show that maintaining canopy temperatures near \SI{295}{\kelvin} is not merely agronomically beneficial, but establishes the precise thermodynamic envelope required to preserve coherence-assisted excitonic transport.
+
+\subsection{Process Tensor HOPS and multi-scale quantum dynamics}
+
+Capturing this coherence-driven enhancement necessitates sophisticated computational methods that can accurately resolve non-Markovian quantum dynamics. By incorporating recent advances in Process Tensor HOPS (PT-HOPS), we were able to interrogate increasingly large photosynthetic systems while retaining the rigorous accuracy traditionally exclusive to hierarchical equations of motion (HEOM).
+
+Computationally, the PT-HOPS methodology substantially outpaces HEOM architectures. Whereas HEOM scales unfavorably as $\mathcal{O}(N^3)$, PT-HOPS achieves near-linear scaling by applying a Padé decomposition to the bath correlation function, seamlessly simulating architectures exceeding 100 chromophores.
+
+As the physical scope approaches complete photosynthetic antenna complexes ($\sim \numrange{e2}{e3}$ chromophores), employing Spectrally Bundled Dissipators (SBD) affords critical additional processing efficiency. Instead of tracking every environmental degree of freedom, the SBD technique aggregates dissipative processes according to their spectral profiles. This dramatically lowers computational overhead without sacrificing the underlying non-Markovian physics:
+\begin{equation}\label{eq:sbd_operator_main}
+\mathcal{L}_{\mathrm{SBD}}[\rho] = \sum_{\alpha} p_{\alpha}(t) \mathcal{D}_{\alpha}[\rho],
+\end{equation}
+where $\mathcal{D}_{\alpha}[\rho] = L_{\alpha} \rho L_{\alpha}^{\dagger} - \frac{1}{2}\{L_{\alpha}^{\dagger}L_{\alpha}, \rho\}$ represents the dissipator for bundle $\alpha$ with time-dependent probability $p_{\alpha}(t)$.
+
+Ultimately, this unified computational approach bridges the historical gap between idealized models, such as the FMO complex, and fully articulated biological architectures. Verifying that these coherence phenomena persist within larger, realistic systems robustly validates the foundation of quantum-enhanced agrivoltaics at practical implementation scales.
+
+\subsection{Full chloroplast modeling and hierarchical coarse-graining}
+
+While the FMO complex serves as an excellent foundational model for excitonic transport, it constitutes only the primary energy funnel within a much broader photosynthetic architecture. Complete biological systems orchestrate a vast network of antenna complexes (such as LHCII and CP43/CP47), Photosystems I and II, and ATP synthase. Establishing whether the quantum advantages verified at the FMO level permeate these expansive networks necessitates advanced multiscale modeling.
+
+Although our PT-HOPS and SBD protocols successfully handle intermediate system sizes, capturing whole-chloroplast dynamics requires structured hierarchical coarse-graining. Our comprehensive modeling roadmap is thus stratified into four interconnected levels:
+\begin{enumerate}
+    \item \textbf{Molecular Scale.} Simulating FMO and allied small complexes using full quantum dynamics (current capacity: \numrange{10}{100} chromophores).
+    \item \textbf{Supramolecular Scale.} Modeling extensive antenna structures via SBD reduction (current capacity: \numrange{100}{1000} chromophores).
+    \item \textbf{Organelle Scale.} Simulating the entire chloroplast through specialized coarse-grained proxies (target threshold: \num{1000}+ chromophores).
+    \item \textbf{Organism Scale.} Fusing quantum thermodynamic outputs with macro-level metabolic and physiological models (slated for future development).
+\end{enumerate}
+By carefully coarse-graining at each transitional boundary, we preserve the core quantum signatures while maintaining computational feasibility. Preliminary findings using this unified approach indicate that the coherence-driven enhancements seen in the FMO complex do indeed scale, enduring against the decoherence pressures inherent in denser, more complex environmental matrices.
+
+\subsection{Eco-design and sustainability implications}
+
+Transitioning theoretical spectral designs into physically viable devices demands materials that satisfy rigorous performance benchmarks while simultaneously adhering to modern sustainability imperatives. By leveraging quantum reactivity descriptors---specifically utilizing the Fukui function formalism---we reliably forecast the biodegradability of organic photovoltaic (OPV) materials. This predictive capability allows us to navigate the vast chemical space of donor--acceptor blends, isolating environmentally benign candidates that do not compromise on power conversion efficiency (PCE).
+
+Our computational material screening identified a highly promising PM6 derivative (Molecule~A), which achieves an exceptional eco-design score of $\eta_{\mathrm{eco}} = \num{1.12}$. This holistic metric balances a robust energy generation profile (PCE $\approx \SI{15.5}{\percent}$) against a superior biodegradability profile ($B_{\mathrm{index}} = \num{101.5}$). Because this index sits well above the standard threshold of \num{70}, it indicates highly accelerated degradation driven by the molecule's soft chemical hardness (\SI{1.10}{\electronvolt}) and high electrophilicity (\SI{8.40}{\electronvolt}). In comparison, alternative materials like the Y6-BO derivative (Molecule~B) exhibit slower degradation rates ($B_{\mathrm{index}} = \num{58}$) and lower overall ecological compatibility. Employing these computational descriptors grants us mechanistic insights into molecular degradation pathways, circumventing the need for exhaustive empirical testing and accelerating the high-throughput design of next-generation OPVs.
+
+Scaling these material benefits to the system level, our life cycle assessment (LCA) demonstrates that quantum-enhanced agrivoltaic installations boast a carbon footprint of just \SI{45.2}{gCO_2eq/kWh}---a substantial \SI{15}{\percent} reduction compared to state-of-the-art classical deployments. This minimized environmental impact is driven by a triad of interconnected factors: the improved photosynthetic efficiency suppresses agriculture-related emissions per unit of crop produced; the higher energy density per panel area curtails initial manufacturing resource demands; and the deployment of highly biodegradable active layers effectively mitigates long-term, end-of-life toxicities.
+
+\subsection{Agrivoltaic implementation strategy}
+
+\subsubsection{OPV material design guidelines}
+
+\Cref{tab:opv_specs} consolidates the critical OPV design specifications mandated by our multi-objective Pareto optimization, which ensures a baseline \SI{18.83}{\percent} PCE alongside an \SI{80.51}{\percent} system ETR.
+
+% OPV Design Specifications Table
+\begin{table}[ht]
+\centering
+\caption{\textbf{Target OPV specifications for quantum-enhanced agrivoltaic deployments.} Derived from a multi-objective Pareto optimization encompassing over 10,000 configurations, these parameters establish the critical spectral and material thresholds necessary to balance solar energy generation with optimal coherence-driven crop yield. Key spectral windows (\SIlist{750;820}{\nano\meter} for FMO vs. \SIlist{668;440}{\nano\meter} for OPV) permit seamless system-level co-optimization.}
+\label{tab:opv_specs}
+\begin{tabular}{lll}
+	\toprule
+	\textbf{Parameter}           & \textbf{Specification}                 & \textbf{Rationale}      \\ \midrule
+	\multicolumn{3}{l}{\textit{Spectral Requirements}}                                              \\
+	\quad Target wavelengths     & \SIlist{750;820}{\nano\meter}          & FMO vibronic resonances \\
+	\quad Bandwidth (FWHM)       & \SIrange{70}{90}{\nano\meter}          & Selective excitation    \\
+	\quad Peak transmission      & \SIrange{65}{75}{\percent}             & PAR/energy balance      \\
+	\quad Out-of-band absorption & $> \SI{85}{\percent}$                  & OPV efficiency          \\[0.5em]
+	\multicolumn{3}{l}{\textit{Performance Targets}}                                                \\
+	\quad PCE (minimum)          & $\geq \SI{15}{\percent}$               & Commercial viability    \\
+	\quad ETR enhancement        & $\geq \SI{15}{\percent}$               & Quantum advantage       \\
+	\quad Operating range        & \SIrange{270}{320}{\kelvin}            & All-climate             \\
+	\quad Lifetime               & $> \SI{10000}{\hour}$                  & $> \SI{1}{\yr}$         \\[0.5em]
+	\multicolumn{3}{l}{\textit{Sustainability Requirements}}                                        \\
+	\quad Biodegradability       & $> \SI{80}{\percent}$ (\SI{180}{\day}) & OECD 301                \\
+	\quad Material limits        & No Pb, Cd, halogens                    & Safety                  \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Realizing these exacting optical and performance targets is demonstrably feasible using current-generation OPV architectures \cite{Li2020, Cui2021}, particularly when incorporating bio-derived polymers such as cellulose derivatives and lignin-based side chains. A molecular design that prioritizes extended $\pi$-conjugation, optimal HOMO--LUMO gaps ($\sim\SIrange{1.6}{1.8}{\electronvolt}$) for dual-band absorption, and biodegradable side chains can successfully meet both performance and sustainability requirements. Furthermore, tandem OPV architectures featuring tunable transmission windows provide a solid technological foundation for these specifications \cite{Li2020, Cui2021}.
+
+Multi-objective optimization, which jointly maximizes PCE and ETR, reveals a strict two-band spectral splitting strategy. This entails a primary band centered at \SI{668.4}{\nano\meter} (the red absorption edge, optimized for the OPV) coupled with a secondary band at \SI{440.4}{\nano\meter} (the Soret region, vital for photosynthetic units). This precise splitting scheme complements the FMO-tuned vibronic resonances at \SIlist{750;820}{\nano\meter}, enabling seamless system-level co-optimization where the OPV absorbs excess red photons while the PSU receives vital blue light and coherence-sustaining near-infrared illumination.
+
+We evaluated candidate donor--acceptor systems using density functional theory (DFT) to confirm the existence of experimentally accessible designs. As noted previously, the PM6 derivative (Molecule~A) achieves a high biodegradability index ($B_{\rm index} = 101.5$) owing to hydrolyzable ester linkages and a low minimum bond dissociation energy (BDE) of \SI{285}{\kilo\joule\per\mole}. The Y6-BO derivative (Molecule~B) scores moderately ($B_{\rm index} = 58$). Crucially, both candidates achieve $> \SI{15.5}{\percent}$ PCE in semi-transparent configurations while satisfying the core sustainability targets.
+
+\subsubsection{Geographic optimisation}
+
+Because regional solar spectra and ambient temperatures vary, optimal transmission profiles must be geographically tailored. Temperate zones (\SIrange{40}{60}{\degree} latitude) benefit most from the dual-band filtering at \SIlist{750;820}{\nano\meter}, with potential for seasonal adjustments. Tropical zones (\SIrange{0}{25}{\degree} latitude) favor broader single-band transmission at \SI{780}{\nano\meter}, leveraging year-round temperature stability near the optimal quantum transport regime. Conversely, desert regions require narrower-band filtering at \SI{750}{\nano\meter} to maximize selectivity under intense direct sunlight, alongside additional infrared reflection to mitigate extreme heat stress. Site-specific optimization can yield an additional \SIrange{5}{10}{\percent} overall improvement relative to universal "one-size-fits-all" designs.
+
+\subsubsection{Regional case study: Sub-Saharan Africa}
+
+The potential for quantum advantages extends robustly to sub-Saharan Africa. Simulations across five representative sites---Yaound\'e (\SI{3.87}{\degree}N), N'Djamena (\SI{12.13}{\degree}N), Abuja (\SI{9.06}{\degree}N), Dakar (\SI{14.69}{\degree}N), and Abidjan (\SI{5.36}{\degree}N)---show persistent ETR enhancements of \SIrange{18}{24}{\percent} across diverse climatic conditions.
+
+This localized analysis rigorously accounts for regional environmental factors, including elevated aerosol optical depths (AOD \numrange{0.4}{0.8}), seasonal dust patterns, and varied precipitation regimes. The quantum-enhanced approach maintains robust performance despite these challenges, exhibiting particular strength in equatorial humid zones where reliable temperature stability ensures optimal coherence preservation.
+
+By simultaneously boosting crop yields and electricity production, quantum-enhanced agrivoltaics offer a compelling pathway to improved food security and energy independence in sub-Saharan agricultural systems, directly supporting UN Sustainable Development Goals 2 (Zero Hunger) and 7 (Affordable and Clean Energy).
+
+\subsubsection{Operational considerations}
+
+Practical field deployment must account for complex operational realities, including angle-dependent transmission, long-term OPV degradation, and the accumulation of dust and soiling. Our data indicate that the quantum advantage remains substantial at \SIrange{18}{22}{\percent} for tilt angles up to \SI{30}{\degree}. Strikingly, year-long environmental simulations (\SI{365}{\day}) spanning realistic terrestrial thermal cycles (\SIrange{283}{303}{\kelvin}) and variable humidity profiles (\numrange{0.30}{0.70}) confirm a negligible \SI{0.17}{\percent} annual degradation in both PCE and ETR, even amid severe dust accumulation (reaching \SI{1.523}{\micro\metre}). This exceptional operational stability falls well within the \SI{1}{\percent} industry threshold, assuring that 20-year commercial system lifetimes are feasible without significant erosion of the quantum advantage.
+
+\subsection{Economic and environmental impact}
+
+\subsubsection{Economic analysis}
+
+The commercial viability of any agrivoltaic infrastructure hinges on the delicate balance between energy generation revenue and crop yield preservation. Comparing a baseline classical agrivoltaic setup (\SI{35}{\percent} PV coverage, \SI{15}{\percent} PCE, returning \SI{70}{\percent} of the unshaded crop yield) against our quantum-optimized framework (\SI{40}{\percent} PV coverage, \SI{18.83}{\percent} PCE, sustaining \SI{75}{\percent} crop yield via an \SI{80.51}{\percent} system ETR) reveals a highly compelling financial narrative.
+
+A traditional configuration generates approximately USD~\num{6000}\,\si{ha^{-1}\,yr^{-1}} in blended revenue, partitioned into USD~\num{2500} from electricity and USD~\num{3500} from agriculture. Implementing quantum-tuned spectral filtering elevates this total to USD~\num{6844}\,\si{ha^{-1}\,yr^{-1}} (USD~\num{3094} electrical; USD~\num{3750} agricultural). This \SI{14.1}{\percent} annual net improvement fundamentally alters the system's return on investment (ROI) trajectory. Compounded over a standard 20-year operational lifecycle, the quantum advantage injects an additional USD~\num{16880}\,\si{\per\hectare} in cumulative value, easily offsetting the anticipated manufacturing premiums associated with advanced OPV materials.
+
+As detailed in \Cref{tab:economic_analysis}, this financial upside holds robustly across diverse geographic regions.
+
+% Economic Analysis Table
+\begin{table}[ht]
+\centering
+\caption{\textbf{Regional economic performance of quantum-enhanced agrivoltaic models.} Estimated financial returns across major climate zones based on a representative wheat crop. Projections incorporate a \SI{15}{\percent} manufacturing premium for quantum-tuned OPV materials against standard \SI{150}{USD/m^2} panels, demonstrating broad commercial feasibility and robust 10-year ROI.}
+\label{tab:economic_analysis}
+\begin{tabular}{lcccc}
+	\toprule
+	\textbf{Climate Zone} & \textbf{Baseline} & \textbf{ETR}  & \textbf{Value/ha/yr} & \textbf{10yr ROI} \\
+	                      &  \textbf{(t/ha)}  & \textbf{(\%)} &    \textbf{(USD)}    &   \textbf{(\%)}   \\ \midrule
+	Temperate             &        8.2        &      22       &        1,850         &        185        \\
+	Mediterranean         &        7.5        &      25       &        2,100         &        210        \\
+	Tropical              &        9.8        &      18       &        2,450         &        245        \\
+	Subtropical           &        8.9        &      20       &        2,180         &        218        \\
+	Semi-arid             &        6.1        &      28       &        1,920         &        192        \\
+	Continental           &        7.3        &      19       &        1,520         &        152        \\ \midrule
+	\textbf{Average}      &   \textbf{7.9}    &  \textbf{22}  &    \textbf{2,000}    &   \textbf{200}    \\ \bottomrule
+\end{tabular}
+\end{table}
+
+Furthermore, the transition from staple commodities to high-value specialty crops (which command baseline revenues of USD~\numrange{15000}{25000}\,\si{\per\hectare}) radically accelerates profitability. In these premium agricultural markets, the coherence-driven mitigation of shading losses preserves up to USD~\numrange{1500}{3000} in extra annual crop revenue alone, positioning quantum agrivoltaics as a highly disruptive technology for precision horticulture.
+
+\subsubsection{Environmental benefits}
+
+Beyond immediate economic gains, quantum spectral engineering yields cascading environmental benefits. Enhanced light-use efficiency leads to a \SIrange{10}{12}{\percent} reduction in irrigation requirements for equivalent biomass production. Additionally, the accelerated growth rates sequester an extra \numrange{0.5}{1.0}~\si{\tonne} of $\text{CO}_2$ \si{\per\hectare\per\yr}. Fundamentally, the improved land-use efficiency reduces agricultural pressure on natural habitats, aligning closely with UN SDG~15 (Life on Land). Collectively, full life cycle assessments consistently underscore a \SIrange{15}{20}{\percent} lower environmental footprint compared to classical shading designs.
+
+\subsection{Experimental validation pathway}
+
+The theoretical gains predicted by our framework can be empirically validated through a tiered experimental strategy spanning three distinct scales:
+
+\textbf{Ultrafast spectroscopy.} Two-dimensional electronic spectroscopy (2DES) deployed under filtered versus broadband illumination is anticipated to reveal a \SIrange{20}{50}{\percent} extension of quantum beating lifetimes near vibronic resonances. Specific mechanistic indicators to look for include a beating frequency enhancement at $\sim \SI{180}{\per\cm}$ with a \SIrange{25}{40}{\percent} amplitude increase, cross-peak lifetime prolongations from \SI{300}{\femto\second} out to \SIrange{400}{500}{\femto\second}, and vivid spectral signatures localized at \SIlist{750;820}{\nano\meter}. Concurrently, pump-probe spectroscopy tailored to match these vibronic resonances should confirm both enhanced excited-state absorption and delayed stimulated emission. Transient absorption protocols could subsequently track a \SIrange{50}{100}{\femto\second} delay in stimulated emission associated with an enhanced P680$^+$ signal.
+
+\textbf{Controlled environment experiments.} Intact photosynthetic systems, such as isolated chloroplasts or algae cultures, cultivated under LED arrays with programmable spectral profiles should demonstrate an \SIrange{8}{15}{\percent} quantum yield enhancement at equal total photon fluxes. Additionally, pulse-amplitude-modulated (PAM) fluorometry is expected to detect a \SIrange{15}{25}{\percent} enhancement in the quantum yield of Photosystem II ($\Phi_{\rm PSII}$) and a \SIrange{12}{18}{\percent} increase in photochemical quenching under the filtered illumination conditions.
+
+\textbf{Field trials.} Finally, multi-season trials comparing quantum-optimized OPV panels against classical semi-transparent PV and unshaded controls across multiple climatic zones should definitively demonstrate \SIrange{10}{18}{\percent} higher crop productivity at equivalent PV coverage fractions.
+
+\subsection{Limitations and future work}
+
+Despite these promising results, several limitations must be acknowledged. First, the FMO complex constitutes only the initial energy funnel of a larger photosynthetic apparatus. In higher plants, antenna systems (LHCII, CP43/CP47) feed into Photosystems~I and II, whose outputs ultimately drive ATP synthase. Quantum coherence observed at the FMO level may be altered when embedded within this vastly larger network. Thus, fully quantitative yield predictions require modeling the complete transport chain. While our PT-HOPS benchmarks (Supporting Information, Section~5) demonstrate excellent scaling up to $\sim 100$ chromophores, simulating a full chloroplast will require rigorous coarse-graining to accurately bridge the molecular and organismal scales.
+
+Second, our calculations assume fixed OPV transmission profiles. However, adaptive filtering capable of dynamically responding to diurnal and seasonal environmental variations could unlock further performance benefits. Third, generating accurate biomass-level predictions necessitates integrating these quantum kinetic models with broader Calvin cycle dynamics and crop-specific photosystem compositions---parameters that vary significantly across C$_3$, C$_4$, and CAM species. Such integration would inherently enable far more accurate economic projections tailored to specific crop--climate combinations.
+
+Future work must address these limitations through the expanded modelling of complete photosynthetic networks, the development of tunable or adaptive filtering technologies, and rigorous field validation across diverse crop species and climates. Techno-economic optimizations should also be expanded to dynamically incorporate localized installation costs and shifting regional energy markets. More broadly, the "spectral bath engineering" approach introduced here---identifying quantum-enhanced processes in nature, characterizing their environmental coupling, and then deliberately engineering artificial environments to maximize those quantum resources---may prove highly applicable to fields far beyond agrivoltaics, including artificial photosynthesis, next-generation quantum solar cells, and bio-inspired molecular electronics.
