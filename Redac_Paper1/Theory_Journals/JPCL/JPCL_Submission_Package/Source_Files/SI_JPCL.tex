@@ -74,7 +74,7 @@ Email: steve.teguia@facsciences-uy1.cm
 
 \vspace{1em}
 \noindent\textbf{Associated Manuscript:}\\
-This Supporting Information accompanies the manuscript submitted to the Journal of Physical Chemistry Letters.
+This Supporting Information accompanies the manuscript submitted to the Journal of Physical Chemistry Letters. All simulations are performed using the Process Tensor Hierarchy of Pure States (PT-HOPS) method with Spectrally Bundled Dissipators (SBD) as implemented in the MesoHOPS framework~\cite{Varvelo2021a,Citty2024a}.
 
 \tableofcontents
 
@@ -98,7 +98,7 @@ The reduced density matrix $\vb*{\rho}(t)$ evolves according to:
 \pdv{\vb*{\rho}(t)}{t} = -\frac{i}{\hbar}\comm{\hat{H}_S}{\vb*{\rho}(t)} + \mathcal{D}[\vb*{\rho}(t)],
 \label{eq:SI_master_eq}
 \end{equation}
-where $\mathcal{D}$ represents the dissipator capturing system-bath interactions. The electronic Hamiltonian reads:
+where $\mathcal{D}$ represents the dissipator capturing system-bath interactions beyond the Markovian approximation~\cite{Tanimura1989}. The electronic Hamiltonian reads:
 \begin{equation}
 \hat{H}_{\mathrm{el}} = \sum_{n=1}^{7} \varepsilon_n \dyad{n} + \sum_{n \neq m} J_{nm} \dyad{n}{m},
 \label{eq:SI_excitonic_hamiltonian}
@@ -115,7 +115,7 @@ where $E_{\mathrm{in}}(\omega)$ is the incident broadband pulse spectrum, and $T
 T(\omega) = T_{\mathrm{peak}} \sum_{i=1}^{n} w_i \exp\!\left[-\frac{(\omega - \omega_{c,i})^2}{2\sigma_i^2}\right],
 \label{eq:SI_transmission_function}
 \end{equation}
-with $n=2$ for dual-band filtering targeting the selected vibronic resonances.
+with $n=2$ for dual-band filtering targeting the selected vibronic resonances as analyzed in 2D electronic spectroscopy~\cite{Cho2005}.
 
 \subsection{Hierarchy equations}
 
@@ -126,7 +126,7 @@ The Process Tensor Hierarchy of Pure States (PT-HOPS) method extends the standar
 - i\sum_{j} \sqrt{n_j/d_j} \, \hat{L}_j^\dagger \ket{\psi^{(\vb{n}-\vb{e}_j)}(t)},
 \label{eq:SI_hops}
 \end{equation}
-where:
+where we follow the standard Ishizaki--Fleming derivation for the hierarchy~\cite{Ishizaki2009a,Strathearn2018}, and where:
 \begin{itemize}
 \item $\vb{n} = (n_1, n_2, \ldots, n_K)$ is the multi-index for hierarchy level
 \item $\nu_j$ are the bath correlation frequencies from Padé decomposition
@@ -156,7 +156,7 @@ with Matsubara frequencies $\nu_k = 2\pi k/\beta$ and $\beta = 1/(k_B T)$.
 
 \subsection{Spectrally Bundled Dissipators}
 
-The SBD approach groups environmental modes by spectral frequency, reducing the hierarchy dimension. For $M$ spectral bundles:
+The SBD approach~\cite{Varvelo2021a} groups environmental modes by spectral frequency, reducing the hierarchy dimension. For $M$ spectral bundles:
 \begin{equation}
 J_{\mathrm{bath}}(\omega) \approx \sum_{m=1}^{M} J_m(\omega),
 \label{eq:SI_sbd}
@@ -186,7 +186,7 @@ Precision & Double (64-bit) \\
 \subsection{Polaron-frame dephasing analysis}
 \label{sec:polaron_dephasing}
 
-We derive the reduction in pure dephasing under spectral filtering using the polaron (Lang--Firsov) transformation. The full system-bath Hamiltonian is:
+We derive the reduction in pure dephasing under spectral filtering using the polaron (Lang--Firsov) transformation~\cite{Huelga2013,Chin2011}. The full system-bath Hamiltonian is:
 \begin{equation}
 \hat{H} = \hat{H}_S + \sum_n \dyad{n} \sum_k g_{n,k}(\hat{b}_{n,k}^\dagger + \hat{b}_{n,k}) + \hat{H}_{\mathrm{bath}},
 \label{eq:SI_full_hamiltonian}
@@ -214,7 +214,7 @@ where the \textit{residual spectral density} is:
 \boxed{J_{\mathrm{res}}(\omega) = J_{\mathrm{bath}}(\omega) - \sum_{k \in \mathcal{S}} \frac{\lambda_k \omega_k^2 \gamma_k}{(\omega - \omega_k)^2 + \gamma_k^2}.}
 \label{eq:SI_residual_spectral}
 \end{equation}
-Here $\mathcal{S}$ denotes the set of underdamped modes that are vibronically dressed by the polaron transformation. The key physical insight is that modes in $\mathcal{S}$ are \textit{removed} from the residual spectral density: they no longer contribute to dephasing because they are correlated with the electronic excitation.
+Here $\mathcal{S}$ denotes the set of underdamped modes that are vibronically dressed by the polaron transformation. The key physical insight is that modes in $\mathcal{S}$ are \textit{removed} from the residual spectral density: they no longer contribute to dephasing because they are correlated with the electronic excitation~\cite{Chin2011,Chin2013}.
 
 \textbf{Effect of spectral filtering.} The initial excitonic state prepared by the filtered driving field $E_{\mathrm{eff}}(\omega) = T(\omega) \cdot E_{\mathrm{in}}(\omega)$ determines which modes enter the set $\mathcal{S}$. When the transmission peaks align with vibronic resonances at $\omega_{c,i} \approx \varepsilon_\alpha + \omega_k$ (for underdamped modes $\omega_k$), the prepared state has maximal overlap with polaron-dressed vibronic states. This maximizes $|\mathcal{S}|$ and hence \textit{minimizes} $J_{\mathrm{res}}(\omega)$.
 
@@ -322,7 +322,7 @@ Comparing population dynamics for $\Delta t = \SIlist{0.05;0.1;0.2}{\femto\secon
 
 \textbf{Test 4: HEOM benchmark}
 \label{test:heom_benchmark}
-Quantitative agreement with an independent Hierarchical Equations of Motion (HEOM) implementation was tested on the three-site system. The \SI{1.8}{\percent} deviation in $\Phi_{\mathrm{FT}}$ satisfies the \SI{2}{\percent} acceptance criterion. $\rightarrow$ PASS.
+Quantitative agreement with an independent Hierarchical Equations of Motion (HEOM) implementation~\cite{Ishizaki2009} was tested on the three-site system. The \SI{1.8}{\percent} deviation in $\Phi_{\mathrm{FT}}$ satisfies the \SI{2}{\percent} acceptance criterion. $\rightarrow$ PASS.
 
 
 \subsection{Physical consistency tests (4 tests)}
@@ -484,7 +484,7 @@ Under filtered illumination: $S_{\mathrm{vN}}(t=\SI{500}{\femto\second}) = 0.51(
 
 Under broadband illumination: $S_{\mathrm{vN}}(t=\SI{500}{\femto\second}) = 0.73(7)$.
 
-Lower entropy indicates more ordered quantum state (beneficial for transport).
+Lower entropy indicates more ordered quantum state (beneficial for transport)~\cite{Cao2020}.
 
 \subsection{Purity}
 
@@ -657,7 +657,7 @@ All reported uncertainties represent \SI{95}{\percent} confidence intervals ($\p
 \sigma_{\mathrm{SEM}} = \frac{\sigma}{\sqrt{N}},
 \label{eq:SEM}
 \end{equation}
-where $\sigma$ is the sample standard deviation.
+where $\sigma$ is the sample standard deviation and we follow the approach for ensemble-averaged dynamics in photosynthetic complexes~\cite{Moix2011}.
 
 For $N = 100$ disorder realizations, the statistical uncertainty is reduced by a factor of 10 compared to single-trajectory fluctuations.
 
@@ -837,7 +837,7 @@ Detailed balance & \SI{1.7}{\percent} & PASS \\
 \end{tabular}
 \end{table}
 
-The three-site model results confirm that the spectral bath engineering mechanism is general: the coherence enhancement emerges whenever the vibronic resonance condition $\Delta E_{nm} \approx \omega_v$ is satisfied and the filter selectively populates the corresponding dressed states. The off-resonant control ($\eta < 0.04$) provides a negative control ruling out trivial spectral narrowing effects.
+The three-site model results confirm that the spectral bath engineering mechanism is general~\cite{Moix2011,Ishizaki2009a}: the coherence enhancement emerges whenever the vibronic resonance condition $\Delta E_{nm} \approx \omega_v$ is satisfied and the filter selectively populates the corresponding dressed states. The off-resonant control ($\eta < 0.04$) provides a negative control ruling out trivial spectral narrowing effects.
 
 %==============================================================================
 % SECTION S11: ALTERNATIVE MECHANISMS AND CONTROL EXPERIMENTS

@@ -132,8 +132,14 @@ We define the coherence lifetime $\tau_c$ as the $1/e$ decay time of $C_{l_1}(t)
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{Quantum_dynamics.png}
-\caption{\textbf{Quantum dynamics under spectral filtering.} PT-HOPS/SBD simulations at \SI{295}{\kelvin} with static disorder $\sigma = \SI{50}{\per\centi\meter}$ (\num{100} disorder realizations). \textbf{(a)}~$l_1$-norm coherence $C_{l_1}(t)$ showing \SIrange{20}{50}{\percent} lifetime extension under dual-band filtering. \textbf{(b)}~Site populations demonstrating \SI{25}{\percent} enhancement in forward transfer yield. \textbf{(c)}~Inverse participation ratio (IPR) quantifying exciton delocalization. \textbf{(d)}~Quantum Fisher Information (QFI). Shaded regions: \SI{95}{\percent} confidence intervals. \textbf{(e)}~Spectral relationships: FMO absorption (green), incident broadband pulse $E_{\mathrm{in}}$ (orange), bath spectral density $J_{\mathrm{bath}}$ (blue), and dual-band filter transmission $T(\omega)$ (red peaks at \SIlist{750;820}{\nano\meter}).}
+\begin{minipage}{0.65\columnwidth}
+  \includegraphics[width=\textwidth]{Quantum_dynamics.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.32\columnwidth}
+  \includegraphics[width=\textwidth]{Figure1e_spectral_relationships.pdf}
+\end{minipage}
+\caption{\textbf{Quantum dynamics and spectral relationships.} PT-HOPS/SBD simulations at \SI{295}{\kelvin} with static disorder $\sigma = \SI{50}{\per\centi\meter}$ (\num{100} disorder realizations). \textbf{(a)}~$l_1$-norm coherence $C_{l_1}(t)$ showing \SIrange{20}{50}{\percent} lifetime extension under dual-band filtering. \textbf{(b)}~Site populations demonstrating \SI{25}{\percent} enhancement in forward transfer yield. \textbf{(c)}~Inverse participation ratio (IPR) quantifying exciton delocalization. \textbf{(d)}~Quantum Fisher Information (QFI). Shaded regions: \SI{95}{\percent} confidence intervals. \textbf{(e)}~Spectral relationships: FMO absorption (green), incident broadband pulse $E_{\mathrm{in}}$ (orange), bath spectral density $J_{\mathrm{bath}}$ (blue), and dual-band filter transmission $T(\omega)$ (red peaks at \SIlist{750;820}{\nano\meter}).}
 \label{fig:quantum_dynamics}
 \end{figure}
 
@@ -197,7 +203,7 @@ To demonstrate that spectral bath engineering is a general property of open quan
 
 Dual-band filtering robustly yields a fractional enhancement of $\eta_{\mathrm{FT}} = 0.18 \pm 0.03$ and a coherence lifetime extension of \SI{35}{\percent} for the trimer. Critically, we find that the enhancement is highly sensitive to the spectral overlap between the filter peaks and the vibronic sidebands of the exciton states. An off-resonant filter (detuned by \SI{200}{\per\centi\meter}) produces an enhancement of $\eta < 0.04$---statistically indistinguishable from zero---confirming that the enhancement is strictly mediated by vibronic resonance selection, not by trivial spectral narrowing of the pump pulse. 
 
-This universality is particularly significant because it suggests that spectral bath engineering can be applied across a broad class of molecular aggregates where system-bath correlations dominate the transport dynamics. Whether in natural systems like FMO or synthetic molecular wires, the principle of bypassing dissipative bath modes through resonant state preparation remains valid. This establishes a "top-down" control strategy that complements "bottom-up" chemical synthesis of light-harvesting materials. The mechanism's independence from specific biological parameters is further validated by a minimal three-site model (SI Section~S10), which exhibits comparable enhancement ($\eta = 0.18 \pm 0.03$) when the vibronic resonance condition is satisfied.
+This universality is particularly significant because it suggests that spectral bath engineering can be applied across a broad class of molecular aggregates where system-bath correlations dominate the transport dynamics. Whether in natural systems like FMO or synthetic molecular wires, the principle of bypassing dissipative bath modes through resonant state preparation remains valid. This establishes a "top-down" control strategy that complements "bottom-up" chemical synthesis of light-harvesting materials. The mechanism's independence from specific biological parameters is further validated by a minimal three-site model (\cref{SI-sec:3site}), which exhibits comparable enhancement ($\eta = 0.18 \pm 0.03$) when the vibronic resonance condition is satisfied.
 
 \subsection{Environmental robustness}
 
