@@ -3,9 +3,15 @@ Hamiltonian Factory for Quantum Agrivoltaics.
 
 This module provides functions to create system Hamiltonians, specifically the
 Fenna-Matthews-Olsen (FMO) complex, and helper functions for spectral densities.
+All FMO parameters are read from constants.py — the single source of truth.
 """
 
 import numpy as np
+
+try:
+    from core.constants import FMO_SITE_ENERGIES_7, FMO_SITE_ENERGIES_8, FMO_COUPLINGS
+except ImportError:
+    from .constants import FMO_SITE_ENERGIES_7, FMO_SITE_ENERGIES_8, FMO_COUPLINGS
 
 
 def create_fmo_hamiltonian(include_reaction_center=False):
@@ -25,47 +31,12 @@ def create_fmo_hamiltonian(include_reaction_center=False):
     H (2D array): Hamiltonian matrix in units of cm^-1
     site_energies (1D array): Site energies in cm^-1
     """
-    if include_reaction_center:
-        # Include 8 sites with reaction center
-        site_energies = np.array(
-            [12410, 12530, 12210, 12320, 12480, 12630, 12440, 11700]
-        )  # Last is RC
-    else:
-        # Standard 7-site FMO complex
-        site_energies = np.array([12410, 12530, 12210, 12320, 12480, 12630, 12440])
-
+    site_energies = FMO_SITE_ENERGIES_8 if include_reaction_center else FMO_SITE_ENERGIES_7
     n_sites = len(site_energies)
     H = np.zeros((n_sites, n_sites))
-
-    # Set diagonal elements (site energies)
     np.fill_diagonal(H, site_energies)
 
-    # Off-diagonal elements (couplings) - symmetric matrix
-    couplings = {
-        (0, 1): -87.7,
-        (0, 2): 5.5,
-        (0, 3): -5.9,
-        (0, 4): 6.7,
-        (0, 5): -13.7,
-        (0, 6): -9.9,
-        (1, 2): 30.8,
-        (1, 3): 8.2,
-        (1, 4): 0.7,
-        (1, 5): 11.8,
-        (1, 6): 4.3,
-        (2, 3): -53.5,
-        (2, 4): -2.2,
-        (2, 5): -9.6,
-        (2, 6): 6.0,
-        (3, 4): -70.7,
-        (3, 5): -17.0,
-        (3, 6): -63.3,
-        (4, 5): 81.1,
-        (4, 6): -1.3,
-        (5, 6): 39.7,
-    }
-
-    for (i, j), value in couplings.items():
+    for (i, j), value in FMO_COUPLINGS.items():
         if i < n_sites and j < n_sites:
             H[i, j] = value
             H[j, i] = value  # Ensure Hermitian

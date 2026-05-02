@@ -453,6 +453,7 @@ class QuantumDynamicsSimulator:
             "discord": discord_values,
             "fidelity": fidelity_values,
             "mandel_q": mandel_q_values,
+            "simulator": "QuantumDynamicsSimulator (MesoHOPS)",
         }
 
     def calculate_etr(self, populations, time_points):
