@@ -2,112 +2,131 @@
 
 This repository contains the research framework, simulation codebase, and manuscript source files for two primary research areas in quantum dynamics:
 
-1.  **Quantum-Enhanced Agrivoltaics**: Spectral Bath Engineering via Non-Markovian Dynamics.
-2.  **Anderson Model Comparison**: A comparative study of the Anderson model in weak and strong interaction regimes (Julia vs. Python).
+1. **Quantum-Enhanced Agrivoltaics**: Spectral Bath Engineering via Non-Markovian Dynamics in the FMO complex.
+2. **Anderson Model Comparison**: A comparative study of the Anderson model in weak and strong interaction regimes (Julia vs. Python).
 
 **Official Repository**: [https://github.com/NanaEngo/Quantum_Agrivoltaic_PT-HOPS.git](https://github.com/NanaEngo/Quantum_Agrivoltaic_PT-HOPS.git)
 
 ---
 
 ## 🌾 Project 1: Quantum-Enhanced Agrivoltaics
-Our framework leverages the quantum mechanical nature of photosynthetic energy transfer to optimize agrivoltaic systems, co-locating solar energy generation with high-productivity agricultural production.
 
-## 📄 Manuscript Status
+### Manuscript Status
 
-- **Status**: Ready for Submission
-- **Target Journal**: *Energy & Environmental Science* (EES)
-- **Primary Objective**: Leveraging non-Markovian coherence in the FMO complex to enhance photosynthetic ETR under semi-transparent OPVs.
+| Field | Value |
+|-------|-------|
+| **Journal** | *The Journal of Physical Chemistry Letters* (JPCL) |
+| **Manuscript ID** | `jz-2026-00994t` |
+| **Status** | **Major Revision in progress** — deadline 28-May-2026 |
+| **Last updated** | 2026-05-02 |
 
-### Key Validated Metrics
-- **Photosynthetic Enhancement**: \SI{25.0}{\percent} ETR increase via vibronic resonance matching.
-- **Photovoltaic Performance**: \SI{18.83}{\percent} PCE for the balanced dual-band configuration.
-- **System ETR**: \SI{80.51}{\percent} (retaining agricultural productivity under shading).
-- **Eco-Compatibility**: PM6-derivative B-index of **101.5** (highly biodegradable).
-- **Environmental Stability**: \SI{0.17}{\percent} annual degradation in both PCE and ETR.
+### What this project does
 
----
+Uses PT-HOPS/SBD (Process Tensor Hierarchy of Pure States with Spectrally Bundled Dissipators) to simulate excitonic energy transfer in the FMO photosynthetic complex under spectrally engineered photon baths. Dual-band optical filtering (750 nm + 820 nm) selectively populates vibronic resonances, extending coherence lifetimes by 20–50% and improving forward transfer yields by 25% at 295 K.
 
-## 🧪 Project 2: Comparative Study of the Anderson Model
-This project systematically analyzes key observables of a single impurity coupled to two fermionic reservoirs (Anderson model), comparing performance in weak and strong interaction regimes using multiple numerical implementations.
+### Key results
 
-### Implementation Methods
-- **Julia (HierarchicalEOM.jl)**: HEOM in the extended space of Auxiliary Statistical Operators (ASOs).
-- **Python (QuTiP)**: HEOM implementation following the Tanimura formalism.
+| Metric | Filtered | Broadband | Enhancement |
+|--------|----------|-----------|-------------|
+| Coherence lifetime τ_c | 420 ± 35 fs | 280 ± 25 fs | +50% |
+| Forward transfer yield Φ_FT | 89.2% | 71.4% | +25% |
+| IPR (delocalization) | 6.8 sites | 4.1 sites | +66% |
 
-### Research Objectives
-- **Spectral density** $A(\omega)$
-- **Impurity occupation** $\langle n_\sigma \rangle$
-- **Time-dependent current** $I(\omega)$
-- **Differential conductance** $G(\omega)$
+### Running simulations
 
----
+All simulations **must** use the `MesoHOP-sim` mamba environment:
 
-## 🛠 Technical Stack & Environment
-
-### Computational Engines
-- **MesoHOPS (adHOPS) v1.6**: Core non-Markovian dynamics for photosynthetic systems.
-- **HierarchicalEOM.jl (Julia 1.10+)**: Efficient HEOM for deep hierarchy structures.
-- **QuTiP (Python 3.10+)**: User-friendly HEOM prototyping following Tanimura formalism.
-- **ORCA v6.1.0**: DFT calculations for molecular properties (wB97X-D4/def2-SVP).
-
-### Environment Specification
-- **Hardware**: AMD Ryzen 5 5500U | 40 GB RAM.
-- **Python Environment**: `mamba run -n MesoHOP-sim ...`
-- **Julia Dependencies**: `QuantumToolbox`, `CairoMakie`.
-
----
-
-## 📂 Project Structure
-
-```text
-.
-├── notebooks/                       # Core Research Notebooks
-│   ├── populations_{jl,py}.ipynb    # Anderson Model Populations
-│   ├── DOS_{jl,py}.ipynb            # Anderson Model Density of States
-│   ├── current_and_cond_py.ipynb    # Anderson Model Transport
-│   └── quantum_coherence_...py      # Agrivoltaics Driver
-├── Redac_Paper1/                    # Manuscript Editorial Directory (Agrivoltaics)
-│   ├── Q_Agrivoltaics_EES_Main.tex  # LaTeX source
-│   └── Graphics/                    # Verified figures
-├── manuscrit/                       # Anderson Model Publication Resources
-│   ├── article_theodore2_humanized.pdf # Published in PRB
-│   └── article_theodore2_humanized.tex # Paper LaTeX source
-├── simulation_data/                 # Archived simulation logs
-└── Archive/                         # Legacy codebase and reference materials
-```
-
----
-
-## 🚀 Getting Started
-
-### Installation
-Please refer to [INSTALLATION.md](INSTALLATION.md) for detailed environment setup and dependency installation instructions.
-
-### Running Simulations
-The primary simulation suite can be executed via the main driver script:
 ```bash
-python quantum_simulations_framework/quantum_coherence_agrivoltaics_mesohops_complete.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py
 ```
 
-### Building the Manuscript
-To compile the submission documents, ensure you have a complete TeX distribution (e.g., TeX Live 2025) and use `latexmk`:
-```bash
-latexmk -pdf Q_Agrivoltaics_EES_Main.tex Supporting_Info_EES.tex Cover_Letter_EES.tex
+The pipeline validates parameters (L=10, K=10), checks MesoHOPS availability, runs the L=9/10/11 convergence audit, and generates figures. It will **exit with an error** if MesoHOPS is not available, preventing invalid fallback data from being saved.
+
+### Canonical simulation parameters
+
+All parameters are defined in `Redac_Paper1/quantum_simulations_framework/parameters.yaml` — the single source of truth. Never hardcode physics values.
+
+| Parameter | Value |
+|-----------|-------|
+| Hierarchy depth L | **10** |
+| Matsubara terms K | **10** |
+| Time step Δt | **0.5 fs** |
+| Pulse FWHM | **50 fs**, centered at t = 0 |
+| Temperature | **295 K** |
+| λ_D (Drude-Lorentz) | **35 cm⁻¹** |
+| γ_D | **50 cm⁻¹** |
+| Vibronic modes | **12** (Kleinekathöfer/Coker) |
+
+---
+
+## 🧪 Project 2: Anderson Model Comparison
+
+Comparative study of a single magnetic impurity coupled to two fermionic reservoirs, comparing weak and strong interaction regimes using:
+
+- **Julia** — `HierarchicalEOM.jl` (HEOM in extended ASO space)
+- **Python** — `QuTiP` (Tanimura formalism)
+
+**Status**: Published in *Physical Review B*.
+
+Observables studied: spectral density A(ω), impurity occupation ⟨n_σ⟩, time-dependent current I(t), differential conductance G(ω).
+
+---
+
+## 🛠 Technical Stack
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| MesoHOPS (adHOPS) | v1.6 | PT-HOPS/SBD non-Markovian dynamics |
+| Python | 3.10+ | Simulation framework |
+| HierarchicalEOM.jl | latest | Julia HEOM (Anderson model) |
+| QuTiP | 5.2.2+ | Python HEOM (Anderson model) |
+| achemso (LaTeX) | latest | JPCL manuscript formatting |
+| Matplotlib | latest | Figures (600 DPI, JPCL theme) |
+
+**Hardware**: AMD Ryzen 5 5500U | 40 GB RAM (local only, no HPC).
+
+---
+
+## 📂 Repository Structure
+
+```
+Quantum_Agrivoltaic_PT-HOPS/
+├── Redac_Paper1/
+│   ├── Theory_Journals/JPCL/          # Manuscript, SI, response letter, cover letter
+│   └── quantum_simulations_framework/ # Simulation codebase
+│       ├── parameters.yaml            # ← Single source of truth for all parameters
+│       ├── core/                      # HopsSimulator, constants, Hamiltonian
+│       ├── models/                    # QuantumDynamicsSimulator, spectral optimizer
+│       ├── extensions/                # PT_HopsNoise, SBD_HopsTrajectory
+│       ├── utils/                     # FigureGenerator (600 DPI), JPCL theme
+│       ├── reproducibility/
+│       │   ├── main.py                # ← Single entry point
+│       │   ├── audit_convergence.py   # L=9,10,11 convergence audit
+│       │   └── results/               # Valid HDF5/CSV results (see README inside)
+│       └── tests/
+├── notebooks/                         # Anderson model Jupyter notebooks
+├── manuscrit/                         # Anderson model PRB publication
+├── _bmad-output/planning-artifacts/   # PRD, architecture, epics
+└── Archive/                           # Legacy code
 ```
 
 ---
 
-## 📑 Core Research Contributions
+## ⚠️ Important Rules for Contributors
 
-1. **Spectral Bath Engineering**: A methodology for Identifying quantum-enhanced processes in nature and engineering artificial environments to maximize those resources.
-2. **PT-HOPS & SBD**: Scalable non-Markovian dynamics framework achieving \num{10}x speedup over standard HEOM.
-3. **Quantum Reactivity Descriptors**: Mechanistic prediction of OPV biodegradability via Fukui functions and chemical hardness.
-4. **Pareto-Optimal Cogeneration**: Dual-band splitting strategy (\SI{440.4}{\nano\meter} and \SI{668.4}{\nano\meter}) for simultaneous energy-food maximization.
+- **Never commit** `*.INVALID_FALLBACK_DATA.csv` files — these are quarantined fake results from MesoHOPS fallback runs
+- **Never commit** HDF5 files to `data/converged/` without Git LFS configured
+- **Always** read parameters from `parameters.yaml`, never hardcode physics values
+- **Always** date manuscript filenames: `Manuscript_JPCL_YY-MM-DD.tex`
 
 ---
 
-## 🤝 Citation & Contact
+## 📑 Citation
 
-If you use this framework or data in your research, please cite our corresponding *Energy & Environmental Science* article.
+If you use this framework, please cite the corresponding JPCL article (in revision).
 
-**Corresponding Author**: Steve Cabrel Teguia Kouam ([steve.teguia@facsciences-uy1.cm](mailto:steve.teguia@facsciences-uy1.cm))
+**Corresponding Author**: Steve Cabrel Teguia Kouam — [steve.teguia@facsciences-uy1.cm](mailto:steve.teguia@facsciences-uy1.cm)
+
+## License
+
+MIT License

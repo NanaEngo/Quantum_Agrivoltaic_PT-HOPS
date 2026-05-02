@@ -32,8 +32,8 @@ DEFAULT_MAX_TIME: Final[float] = 1000.0  # femtoseconds
 # MESOHOPS SIMULATION PARAMETERS
 # =============================================================================
 
-DEFAULT_MAX_HIERARCHY: Final[int] = 10  # Maximum hierarchy level
-DEFAULT_N_MATSUBARA: Final[int] = 4  # Number of Matsubara frequencies
+DEFAULT_MAX_HIERARCHY: Final[int] = 10  # Maximum hierarchy level (L=10 mandate, JPCL revision)
+DEFAULT_N_MATSUBARA: Final[int] = 10  # Number of Matsubara frequencies (K=10 mandate, JPCL revision)
 
 # =============================================================================
 # FMO COMPLEX PARAMETERS
@@ -73,17 +73,22 @@ FMO_COUPLINGS: Final[dict] = {
 }
 
 # =============================================================================
-# SPECTRAL DENSITY PARAMETERS
+# SPECTRAL DENSITY PARAMETERS (Kleinekathöfer/Coker Realistic Model)
 # =============================================================================
 
-# Drude-Lorentz parameters
+# Drude-Lorentz (Solvent/Protein) parameters
 DEFAULT_REORGANIZATION_ENERGY: Final[float] = 35.0  # cm^-1
 DEFAULT_DRUDE_CUTOFF: Final[float] = 50.0  # cm^-1
 
-# Vibronic mode parameters (typical for FMO)
-DEFAULT_VIBRONIC_FREQUENCIES: Final[np.ndarray] = np.array([150.0, 200.0, 575.0, 1185.0])  # cm^-1
-DEFAULT_HUANG_RHYS_FACTORS: Final[np.ndarray] = np.array([0.05, 0.02, 0.01, 0.005])
-DEFAULT_VIBRONIC_DAMPING: Final[np.ndarray] = np.array([10.0, 10.0, 20.0, 20.0])  # cm^-1
+# High-Fidelity Vibronic mode parameters (48-mode simplification per Coker 2013)
+# Dominant frequencies (cm^-1) and corresponding Huang-Rhys factors
+DEFAULT_VIBRONIC_FREQUENCIES: Final[np.ndarray] = np.array([
+    180.0, 220.0, 280.0, 350.0, 520.0, 575.0, 720.0, 1050.0, 1185.0, 1220.0, 1350.0, 1500.0
+])
+DEFAULT_HUANG_RHYS_FACTORS: Final[np.ndarray] = np.array([
+    0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003
+])
+DEFAULT_VIBRONIC_DAMPING: Final[np.ndarray] = np.array([10.0] * 12)  # cm^-1
 
 # =============================================================================
 # AGRIVOLTAIC SYSTEM PARAMETERS
@@ -95,6 +100,16 @@ DEFAULT_N_PSU_SITES: Final[int] = 7
 # Default performance metrics
 DEFAULT_PCE: Final[float] = 0.15  # Power conversion efficiency (15%)
 DEFAULT_ETR: Final[float] = 0.25  # Electron transport rate
+
+# =============================================================================
+# LASER PULSE SPECIFICATIONS (Reviewer 3 Compliance)
+# =============================================================================
+
+PULSE_TYPE: Final[str] = "Gaussian"  # Options: Gaussian, Lorentzian
+PULSE_FWHM: Final[float] = 50.0  # fs
+PULSE_RELATIVE_DELAY: Final[float] = 0.0  # fs (delay from photoexcitation)
+PULSE_CENTRAL_FREQ: Final[float] = 12500.0  # cm^-1 (BChl Qy band)
+PULSE_PHASE: Final[float] = 0.0  # radians
 
 # =============================================================================
 # OPTIMIZATION PARAMETERS

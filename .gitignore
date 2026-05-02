@@ -52,6 +52,18 @@ test_suite_analysis/
 AGENTS.md
 QWEN.md
 
+# Simulation data — invalid/fallback results must not be committed
+*.INVALID_FALLBACK_DATA.csv
+
+# Converged simulation outputs (large HDF5 files — use Git LFS or exclude)
+Redac_Paper1/quantum_simulations_framework/data/converged/*.h5
+Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
+# Exception: keep the README explaining the results folder
+!Redac_Paper1/quantum_simulations_framework/reproducibility/results/README.md
+
+# Execution logs
+Redac_Paper1/quantum_simulations_framework/logs/
+
 # Temporary files
 *.tmp
 *.bak

@@ -23,24 +23,21 @@ class FigureGenerator:
 
     def __init__(self, figures_dir: str = "../Graphics/"):
         """
-        Initialize figure generator.
-
-        Parameters:
-        -----------
-        figures_dir : str
-            Directory to save figures
+        Initialize figure generator with JPCL theme.
         """
         self.figures_dir = figures_dir
         os.makedirs(figures_dir, exist_ok=True)
 
-        # Set publication-ready style (use available styles)
+        # Apply JPCL Publication Standards
         try:
-            plt.style.use(["science", "nature"])
-        except OSError:
-            # Fallback to default if styles not available
-            pass
+            from utils.theme import apply_jpcl_theme, get_color_palette
+            apply_jpcl_theme()
+            self.colors = get_color_palette()
+        except ImportError:
+            logger.warning("JPCL theme not found, using defaults.")
+            self.colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
 
-        logger.info(f"Figure generator initialized at {figures_dir}")
+        logger.info(f"Figure generator initialized at {figures_dir} with 600 DPI standards.")
 
     def plot_quantum_dynamics(
         self,
@@ -97,19 +94,22 @@ class FigureGenerator:
         # Plot populations over time
         ax0 = axes[0, 0]
         if n_sites == 1:
-            ax0.plot(time_points, populations, "b-", linewidth=2)
-            ax0.set_xlabel("Time (fs)")
-            ax0.set_ylabel("Population")
+            ax0.plot(time_points, populations, color=self.colors[0], linewidth=1.5)
+            ax0.set_xlabel("Time [fs]")
+            ax0.set_ylabel("Population [a.u.]")
             ax0.set_title("Population Dynamics")
-            ax0.grid(True, alpha=0.3)
+            ax0.grid(True)
         else:
-            for i in range(min(n_sites, 10)):  # Limit to first 10 sites for readability
-                ax0.plot(time_points, populations[:, i], label=f"Site {i + 1}", linewidth=1.5)
-            ax0.set_xlabel("Time (fs)")
-            ax0.set_ylabel("Population")
-            ax0.set_title("Site Populations vs Time")
-            ax0.legend(fontsize=8)
-            ax0.grid(True, alpha=0.3)
+            for i in range(min(n_sites, len(self.colors))):
+                ax0.plot(time_points, populations[:, i], 
+                         label=f"Site {i + 1}", 
+                         color=self.colors[i], 
+                         linewidth=1.2)
+            ax0.set_xlabel("Time [fs]")
+            ax0.set_ylabel("Population [a.u.]")
+            ax0.set_title("Exciton Transport Dynamics")
+            ax0.legend(loc='upper right', frameon=True, framealpha=0.8)
+            ax0.grid(True)
 
         # Plot coherences
         ax1 = axes[0, 1]
@@ -142,8 +142,8 @@ class FigureGenerator:
         plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
         # Save figures in multiple formats
-        plt.savefig(pdf_path, dpi=300, bbox_inches="tight")
-        plt.savefig(png_path, dpi=150, bbox_inches="tight")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Quantum dynamics figures saved to {pdf_path} and {png_path}")
@@ -292,8 +292,8 @@ class FigureGenerator:
         plt.tight_layout()
 
         # Save figures in multiple formats
-        plt.savefig(pdf_path, dpi=300, bbox_inches="tight")
-        plt.savefig(png_path, dpi=150, bbox_inches="tight")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Spectral optimization figures saved to {pdf_path} and {png_path}")
@@ -431,8 +431,8 @@ class FigureGenerator:
         plt.tight_layout()
 
         # Save figures in multiple formats
-        plt.savefig(pdf_path, dpi=300, bbox_inches="tight")
-        plt.savefig(png_path, dpi=150, bbox_inches="tight")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Agrivoltaic performance figures saved to {pdf_path} and {png_path}")
@@ -509,8 +509,8 @@ class FigureGenerator:
         plt.tight_layout()
 
         # Save figures in multiple formats
-        plt.savefig(pdf_path, dpi=300, bbox_inches="tight")
-        plt.savefig(png_path, dpi=150, bbox_inches="tight")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Quantum metrics figures saved to {pdf_path} and {png_path}")
@@ -576,8 +576,8 @@ class FigureGenerator:
         plt.tight_layout()
 
         # Save figures in multiple formats
-        plt.savefig(pdf_path, dpi=300, bbox_inches="tight")
-        plt.savefig(png_path, dpi=150, bbox_inches="tight")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Thermal stability figures saved to {pdf_path} and {png_path}")

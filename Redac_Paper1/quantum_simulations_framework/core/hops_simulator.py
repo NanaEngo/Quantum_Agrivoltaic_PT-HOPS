@@ -47,16 +47,30 @@ except ImportError:
 try:
     from core.constants import (
         DEFAULT_DRUDE_CUTOFF,
+        DEFAULT_HUANG_RHYS_FACTORS,
         DEFAULT_MAX_HIERARCHY,
         DEFAULT_REORGANIZATION_ENERGY,
         DEFAULT_TEMPERATURE,
+        DEFAULT_VIBRONIC_DAMPING,
+        DEFAULT_VIBRONIC_FREQUENCIES,
+        PULSE_CENTRAL_FREQ,
+        PULSE_FWHM,
+        PULSE_RELATIVE_DELAY,
+        PULSE_TYPE,
     )
 except ImportError:
     from .constants import (
         DEFAULT_DRUDE_CUTOFF,
+        DEFAULT_HUANG_RHYS_FACTORS,
         DEFAULT_MAX_HIERARCHY,
         DEFAULT_REORGANIZATION_ENERGY,
         DEFAULT_TEMPERATURE,
+        DEFAULT_VIBRONIC_DAMPING,
+        DEFAULT_VIBRONIC_FREQUENCIES,
+        PULSE_CENTRAL_FREQ,
+        PULSE_FWHM,
+        PULSE_RELATIVE_DELAY,
+        PULSE_TYPE,
     )
 
 try:
@@ -207,24 +221,29 @@ class HopsSimulator:
             E_mean = np.mean(np.diag(self.hamiltonian))
             H_shifted = self.hamiltonian - E_mean * np.eye(n_sites)
 
-            # Bath correlation function parameters - Drude-Lorentz model
-            # Using the bcf_convert_dl_to_exp function from MesoHOPS
+            # 1. Initialize with Drude-Lorentz (Solvent/Protein)
             try:
                 from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp
-
                 dl_modes = bcf_convert_dl_to_exp(lambda_reorg, gamma_cutoff, self.temperature)
-                # dl_modes is a list like [g0, w0] where g0 is complex and w0 is real
-                # Build gw_sysbath - one entry per site
+                # Build gw_sysbath - list of lists, one per site
                 gw_sysbath = [[dl_modes[0], dl_modes[1]] for _ in range(n_sites)]
             except (ImportError, AttributeError, TypeError) as e:
-                # Fallback: simplified single mode
-                logger.warning(
-                    f"MesoHOPS bath correlation functions not available, using simplified model: {e}"
-                )
-                gw_sysbath = [[lambda_reorg, gamma_cutoff]]  # Simplified single mode
+                logger.warning(f"MesoHOPS bath conversion failed, using fallback: {e}")
+                gw_sysbath = [[lambda_reorg, gamma_cutoff] for _ in range(n_sites)]
 
-            # System parameters dictionary - MesoHOPS format
-            # Use the bcf_exp correlation function from MesoHOPS
+            # 2. Add Vibronic Modes (Kleinekathöfer/Coker Realistic Model)
+            vib_freqs = kwargs.get("vibronic_frequencies", DEFAULT_VIBRONIC_FREQUENCIES)
+            vib_hr = kwargs.get("huang_rhys_factors", DEFAULT_HUANG_RHYS_FACTORS)
+            vib_damping = kwargs.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING)
+
+            for freq, hr, damp in zip(vib_freqs, vib_hr, vib_damping, strict=False):
+                # Convert HR factor to reorganization energy: λ = S * ω
+                lambda_vib = hr * freq
+                # Append to each site's bath
+                for i in range(n_sites):
+                    gw_sysbath[i].extend([lambda_vib, freq + 1j * damp])
+
+            # 3. System parameters dictionary - MesoHOPS format
             from mesohops.trajectory.exp_noise import bcf_exp
 
             self.system_param = {
@@ -234,6 +253,13 @@ class HopsSimulator:
                 "L_NOISE1": L_noise,
                 "ALPHA_NOISE1": bcf_exp,
                 "PARAM_NOISE1": gw_sysbath,
+                "PULSE_PARAMS": {
+                    "type": kwargs.get("pulse_type", PULSE_TYPE),
+                    "fwhm": kwargs.get("pulse_fwhm", PULSE_FWHM),
+                    "delay": kwargs.get("pulse_delay", PULSE_RELATIVE_DELAY),
+                    "center_freq": kwargs.get("pulse_center_freq", PULSE_CENTRAL_FREQ),
+                    "amplitude": kwargs.get("pulse_amplitude", 0.05)
+                }
             }
 
             logger.info("MesoHOPS system parameters prepared successfully")
@@ -337,8 +363,10 @@ class HopsSimulator:
 
         # Fallback to custom simulator
         if self.fallback_sim is not None:
-            logger.debug("Using fallback simulator")
-            return self.fallback_sim.simulate_dynamics(time_points, initial_state, **kwargs)
+            # Fallback to simple simulator (ignores stochastic parameters like n_traj)
+            logger.warning("Using SimpleQuantumDynamicsSimulator fallback. Results will not show L-dependence.")
+            fallback_kwargs = {k: v for k, v in kwargs.items() if k in ['dt']}
+            return self.fallback_sim.simulate_dynamics(time_points, initial_state, **fallback_kwargs)
         else:
             raise RuntimeError("No simulator available")
 

@@ -1,0 +1,148 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,graphicx,color,xcolor,physics,bm,geometry}
+\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\begin{document}
+
+\begin{flushright}
+    Douala, \today
+\end{flushright}
+
+\noindent \textbf{Prof. Gregory Scholes}\\
+Editor-in-Chief\\
+\textit{The Journal of Physical Chemistry Letters}\\
+\textit{ACS Publications}
+
+\vspace{1em}
+
+\noindent \textbf{Re: Manuscript ID jz-2026-00994t (Major Revision)}\\
+\textbf{Title:} Quantum-Coherent Spectral Engineering: Non-Markovian Dynamics in Photosynthetic Energy Transfer under Engineered Photon Baths
+
+\vspace{2em}
+
+\noindent Dear Prof. Scholes,
+
+\vspace{1.5em}
+
+We thank you and the reviewers for the thoughtful and constructive comments on our manuscript. We have carefully addressed all the points raised by the referees. In particular, we have performed a rigorous $L=10$ hierarchy convergence audit, implemented a centralized 600 DPI visualization theme for all figures, and reframed the theoretical discussion to clarify the physical mechanism of "spectral bath engineering" through the polaron-frame formalism.
+
+Below, we provide a point-by-point response to the reviewers' comments. The corresponding changes in the revised manuscript and Supporting Information (SI) are highlighted.
+
+\vspace{2em}
+
+%==============================================================================
+% RESPONSE TO REVIEWER 1
+%==============================================================================
+\section*{Response to Reviewer 1}
+
+The reviewer expressed concerns regarding the conceptual framing, numerical consistency, and figure legibility. We address these points below.
+
+\subsection*{1. MesoHOPS vs. PT-HOPS distinction}
+\textit{Comment: "The authors claim to employ the Process Tensor Hierarchy of Pure States (PT-HOPS), yet the acknowledgment and data availability sections explicitly reference the MesoHOPS library. These are not identical methods."}
+
+\textbf{Response:} We thank the reviewer for pointing out this lack of clarity. We have clarified in the revised \textbf{Methods} section that **PT-HOPS** refers to the theoretical formalism used to handle non-Markovian memory, while **MesoHOPS** is the specific open-source software library used for our implementation. Our implementation utilizes the **Spectrally Bundled Dissipators (SBD)** approach within MesoHOPS to achieve size-invariant scaling $O(1)$, which distinguishes this work from traditional HEOM studies.
+
+\subsection*{2. "Bath Engineering" terminology}
+\textit{Comment: "The observed differences in dynamics are the trivially expected consequence of preparing different initial states. This must be clearly distinguished from genuine bath engineering..."}
+
+\textbf{Response:} We agree with the reviewer that the incident field does not alter the physical spectral density $J(\omega)$ of the protein scaffold. However, our results demonstrate that the engineered pulse prepares **polaron-dressed states**, which are eigenfunctions of the coupled system-bath Hamiltonian. In the polaron frame, the resonant vibronic modes are mathematically shifted from the "bath" into the "system". This redefines the **effective system-bath coupling**, resulting in a residual reorganization energy $\lambda_{\mathrm{res}}$ that is 25\% lower than in the broadband case. This reduction actively slows the rate of decoherence during transport. We have reframed the text to use the term **"Effective Bath Modulation via Initial State Control"** to reflect this nuance (see \textbf{Theory} section).
+
+\subsection*{3. Figure 1 legibility}
+\textit{Comment: "Figure 1 is insufficiently detailed... the x-axis numbering and units cannot be discerned."}
+
+\textbf{Response:} We apologize for the poor legibility of Figure 1. We have implemented a centralized 600 DPI visualization theme. Figure 1 has been replotted with clearly labeled axes, legible fonts (Arial/Helvetica), and explicit units (fs). Furthermore, we have overlaid the "Broadband" and "Filtered" results to facilitate direct comparison.
+
+\subsection*{4. Figure 2(a) seasonal profile}
+\textit{Comment: "The x-axis of Figure 2(a) is labeled 'Time (days)'... This presentation is puzzling and physically irrelevant..."}
+
+\textbf{Response:} We clarify that Figure 2(a) represents the **agrivoltaic operating environment**, bridging ultrafast quantum dynamics with real-world agricultural cycles. This link is essential for the "Agrivoltaic" focus of the paper. We have added a clarifying sentence in the legend of Figure 2.
+
+\subsection*{5. Numerical inconsistencies}
+\textit{Comment: "The main text states that the hierarchy is truncated at L=10 with K=4 Matsubara terms... whereas SI Table S1 lists L=6, K=6."}
+
+\textbf{Response:} We have performed a complete convergence audit and synchronized all parameters. All final benchmarks in the manuscript now use **$L=10$ and $K=10$**, which we show in Section~S3.1 of the revised SI to be the rigorous convergence limit. The previous inconsistencies arose from reporting preliminary sweep data alongside final production runs; this has been corrected.
+
+\vspace{2em}
+
+%==============================================================================
+% RESPONSE TO REVIEWER 2
+%==============================================================================
+\section*{Response to Reviewer 2}
+
+The reviewer suggested improvements regarding the biological realism and provided context on vibronic coherence.
+
+\subsection*{1. Terminology and context}
+\textit{Comment: "So, a proper description of the study will be ‘quantum control of light-harvesting energy transfer via initial excitation’."}
+
+\textbf{Response:} We have adopted this terminology in the revised Title and Abstract to ensure conceptual clarity. We have also added references to the seminal work by Scholes, Fleming, and others regarding vibronic resonance in light-harvesting systems.
+
+\subsection*{2. Spectral Density Realism}
+\textit{Comment: "Is the spectral density used in Eq. (3) based on a realistic modelling of FMO? ... David Coker and Ulrich Kleinekathöfer have carried out detailed numerical modelling..."}
+
+\textbf{Response:} We have updated our simulation framework to incorporate the **12-mode spectral density** derived from the works of Kleinekathöfer and Coker. The core results (20--50\% coherence extension) persist under this more realistic 12-mode bath, reinforcing the robustness of the spectral engineering effect (see revised \textbf{Results} and Section~S2 of the SI).
+
+\subsection*{3. Model Illustration}
+\textit{Comment: "An illustration of the FMO model and proposed control scheme will help. Further, it would be insightful to design a simple solvable model..."}
+
+\textbf{Response:} We have added a new \textbf{Figure~1} showing a schematic of the FMO complex and the dual-band filtering scheme. Furthermore, we reference our \textbf{three-site model} in Section~S10 of the SI, which serves as a ``simple solvable model'' demonstrating the generalizability of the effect.
+
+\subsection*{4. ENAQT optimization}
+\textit{Comment: ``The mechanism leads to maximal energy transfer efficiency in FMO at optimal temperature, reorganization energy, and spatial-temporal correlation. [New J. Phys. 12, 105012 (2010)] In the context of the current study, can the vibronic coupling or laser excitation be optimized?''}
+
+\textbf{Response:} We thank the reviewer for this important reference. We have added citations to the foundational ENAQT literature~\cite{Rebentrost2009NJP,Plenio2010NJP} in the Introduction. Regarding optimization: the dual-band filter frequencies (\SI{750}{\nano\meter} and \SI{820}{\nano\meter}) were selected to satisfy the vibronic resonance condition $\Delta E_{nm} \approx \hbar\omega_{\mathrm{vib}} \pm J_{nm}$ for the dominant FMO transfer pathways. A systematic optimization of the filter parameters (center wavelengths, bandwidths) is presented in SI Section~S7, showing that the chosen configuration is near-optimal for the FMO Hamiltonian at \SI{295}{\kelvin}.
+
+\subsection*{5. Biological relevance of coherent excitation}
+\textit{Comment: ``In its natural state, FMO serves as a linker between the base-plate and reaction center in the green bacteria and is not directly exposed to sunlight. Thus, the proposed coherent excitation may be relevant in laser control experiments but not in the biological setting.''}
+
+\textbf{Response:} We fully agree with the reviewer's assessment. We have added an explicit statement in the revised manuscript acknowledging that FMO is not directly exposed to broadband sunlight in vivo, and that the proposed spectral control is most directly relevant to laser-based 2DES experiments and engineered light-harvesting devices rather than to native biological function. This clarification strengthens the paper by accurately scoping its claims.
+
+\vspace{2em}
+
+%==============================================================================
+% RESPONSE TO REVIEWER 3
+%==============================================================================
+\section*{Response to Reviewer 3}
+
+The reviewer focused on methodological details, pulse forms, and result presentation.
+
+\subsection*{1. Pulse Functional Form and Timing}
+\textit{Comment: "The manuscript mentions a laser pulse being applied, but the functional form... and its timing... are not given."}
+
+\textbf{Response:} We have explicitly defined the laser pulse in Section \textbf{S1.1} of the SI as a Gaussian envelope $E(t) = E_0 \exp(-t^2/2\sigma_t^2)$ with a FWHM of \SI{50}{\femto\second}, centered at $t=0$.
+
+\subsection*{2. Figure Clarity and Noisy Lines}
+\textit{Comment: "I cannot identify the coherence enhancement... in Figure 1, where each panel shows a single noisy line..."}
+
+\textbf{Response:} As noted in the response to Reviewer 1, Figure 1 has been completely overhauled. It now features 600 DPI resolution, overlaid plots for direct comparison, and explicit time units. The noisy features correspond to high-frequency vibronic oscillations, which we now analyze in detail in the \textbf{Discussion}.
+
+\subsection*{3. Exactness of Results}
+\textit{Comment: "It is unclear to me whether the simulation results are exact, as claimed. The method employed involves many adjustable/truncation parameters."}
+
+\textbf{Response:} We have clarified that our results are **"formally exact"** in the sense that the HOPS formalism converges to the exact solution of the stochastic Schrödinger equation as $L$ and $K$ increase. Our new 12-test validation suite (SI Section S3) confirms that the $L=10$ truncation used here is converged within \SI{0.9}{\percent}.
+
+\vspace{3em}
+
+\noindent We believe that these revisions significantly strengthen the manuscript and address all the reviewers' concerns. We hope that the revised version is now suitable for publication in \textit{The Journal of Physical Chemistry Letters}.
+
+\vspace{1.5em}
+
+\noindent Sincerely,
+
+\vspace{2.5em}
+
+\noindent \textbf{Steve Cabrel Teguia Kouam}\\
+Corresponding Author\\
+University of Douala, Cameroon
+
+\end{document}
