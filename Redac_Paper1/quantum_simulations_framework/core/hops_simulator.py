@@ -227,13 +227,28 @@ class HopsSimulator:
             vib_hr = kwargs.get("huang_rhys_factors", DEFAULT_HUANG_RHYS_FACTORS)
             vib_damping = kwargs.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING)
 
+            # Use bcf_convert_dl_ud_to_exp for underdamped vibronic modes.
+            # Each mode returns [g1, w1, g2, w2] — two complex conjugate pairs.
+            try:
+                from mesohops.util.bath_corr_functions import bcf_convert_dl_ud_to_exp
+                use_ud_bcf = True
+            except ImportError:
+                use_ud_bcf = False
+
+            n_vib_added = 0
             for freq, hr, damp in zip(vib_freqs, vib_hr, vib_damping, strict=False):
-                lambda_vib = hr * freq          # reorganization energy: λ = S·ω
-                w_vib = freq + 1j * damp        # complex frequency
-                for i in range(n_sites):
-                    gw_sysbath.append((lambda_vib, w_vib))
-                    l_hier_flat.append(L_hier[i])
-                    l_noise_flat.append(L_noise[i])
+                lambda_vib = hr * freq
+                if use_ud_bcf:
+                    ud_modes = bcf_convert_dl_ud_to_exp(lambda_vib, damp, freq, self.temperature)
+                    ud_pairs = [(ud_modes[i], ud_modes[i+1]) for i in range(0, len(ud_modes), 2)]
+                else:
+                    ud_pairs = [(lambda_vib, freq + 1j * damp)]
+                for g, w in ud_pairs:
+                    for i in range(n_sites):
+                        gw_sysbath.append((g, w))
+                        l_hier_flat.append(L_hier[i])
+                        l_noise_flat.append(L_noise[i])
+                n_vib_added += len(ud_pairs)
 
             # 3. System parameters dictionary — MesoHOPS format
             from mesohops.trajectory.exp_noise import bcf_exp
@@ -255,7 +270,7 @@ class HopsSimulator:
             }
             logger.info(
                 f"MesoHOPS system_param built: {len(gw_sysbath)} hierarchy modes "
-                f"({len(dl_pairs)} DL + {len(vib_freqs)} vibronic × {n_sites} sites)"
+                f"({len(dl_pairs)} DL + {n_vib_added} vibronic pairs × {n_sites} sites)"
             )
         except (ImportError, AttributeError, RuntimeError, ValueError) as e:
             logger.warning(f"Failed to initialize MesoHOPS: {e}")

@@ -102,51 +102,87 @@ def run_convergence_audit():
 
 
 def run_full_fmo_simulation(cfg):
-    """Run the full L=10 FMO simulation (filtered + broadband) and save results."""
-    print("\n[Step 3] Running full FMO simulation (filtered + broadband)...")
+    """Run the full L=10 FMO simulation (filtered + broadband) with ensemble averaging."""
+    print("\n[Step 3] Running full FMO simulation (filtered + broadband, ensemble)...")
     from core.hops_simulator import HopsSimulator
     from core.hamiltonian_factory import create_fmo_hamiltonian
     from utils.csv_data_storage import CSVDataStorage
 
     dyn = cfg['dynamics']
     bath = cfg['bath']
+    n_traj = cfg.get('simulation', {}).get('n_traj', 100)
+
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     time_points = np.arange(0, dyn['time_max'], dyn['time_step'])
-
-    # Initial state: BChl 1 (index 0) excitation — primary antenna site
     initial_state = np.zeros(H.shape[0], dtype=complex)
     initial_state[0] = 1.0
 
     results = {}
     for label in ['filtered', 'broadband']:
-        print(f"  Running {label} excitation...")
-        sim = HopsSimulator(
-            H,
-            temperature=bath['temperature'],
-            reorganization_energy=bath['reorganization_energy'],
-            drude_cutoff=bath['drude_cutoff'],
-            max_hierarchy=dyn['hierarchy_depth'],
-            k_matsubara=dyn['matsubara_truncation'],
-            use_sbd=True,
-            use_pt_hops=False,
-            # DL-only bath: vibronic modes are encoded in the spectral density
-            # but MesoHOPS noise model only supports the DL component
-            vibronic_frequencies=np.array([]),
-            huang_rhys_factors=np.array([]),
-            vibronic_damping=np.array([]),
-        )
-        data = sim.simulate_dynamics(time_points, initial_state=initial_state)
-        results[label] = data
-        logger.info(f"FMO {label} simulation complete. Simulator: {data.get('simulator','?')}")
+        print(f"  Running {label} excitation ({n_traj} trajectories)...")
+        # Ensemble average over n_traj independent trajectories
+        pop_sum = None
+        coh_sum = None
+        t_save = None
+        n_completed = 0
 
-    # Save both runs to CSV
+        for traj_idx in range(n_traj):
+            sim = HopsSimulator(
+                H,
+                temperature=bath['temperature'],
+                reorganization_energy=bath['reorganization_energy'],
+                drude_cutoff=bath['drude_cutoff'],
+                max_hierarchy=dyn['hierarchy_depth'],
+                k_matsubara=dyn['matsubara_truncation'],
+                use_sbd=True,
+                use_pt_hops=False,
+                # Vibronic modes via bcf_convert_dl_ud_to_exp
+                vibronic_frequencies=np.array(bath.get('vibronic_frequencies', [])),
+                huang_rhys_factors=np.array(bath.get('huang_rhys_factors', [])),
+                vibronic_damping=np.array([bath.get('vibronic_damping', 10.0)] *
+                                          len(bath.get('vibronic_frequencies', []))),
+            )
+            try:
+                data = sim.simulate_dynamics(time_points, initial_state=initial_state)
+                pops = data['populations']
+                cohs = data.get('coherences', np.zeros(pops.shape[0]))
+                t_ax = data.get('t_axis', time_points[:pops.shape[0]])
+
+                if pop_sum is None:
+                    pop_sum = pops.copy()
+                    coh_sum = cohs.copy()
+                    t_save = t_ax
+                else:
+                    n = min(pop_sum.shape[0], pops.shape[0])
+                    pop_sum[:n] += pops[:n]
+                    coh_sum[:n] += cohs[:n]
+                n_completed += 1
+                if (traj_idx + 1) % 10 == 0:
+                    logger.info(f"  {label}: {traj_idx+1}/{n_traj} trajectories done")
+                    print(f"    {traj_idx+1}/{n_traj} trajectories...")
+            except Exception as e:
+                logger.warning(f"  Trajectory {traj_idx} failed: {e}")
+
+        if n_completed == 0:
+            raise RuntimeError(f"All trajectories failed for {label} excitation")
+
+        results[label] = {
+            'populations': pop_sum / n_completed,
+            'coherences': coh_sum / n_completed,
+            't_axis': t_save,
+            'n_traj': n_completed,
+            'simulator': data.get('simulator', 'MesoHOPS'),
+        }
+        logger.info(f"FMO {label}: {n_completed} trajectories averaged. "
+                    f"Simulator: {results[label]['simulator']}")
+        print(f"  ✅ {label}: {n_completed} trajectories averaged")
+
+    # Save ensemble-averaged results
     _results_dir = os.path.join(_SCRIPT_DIR, 'results')
     storage = CSVDataStorage(output_dir=_results_dir)
-    # Trim to common length (MesoHOPS t_axis may differ slightly from time_points)
-    n_min = min(len(time_points),
-                results['filtered']['populations'].shape[0],
+    n_min = min(results['filtered']['populations'].shape[0],
                 results['broadband']['populations'].shape[0])
-    t_save = results['filtered']['t_axis'][:n_min] if 't_axis' in results['filtered'] else time_points[:n_min]
+    t_save = results['filtered']['t_axis'][:n_min]
 
     metrics = {
         "pop_site1_broadband": results['broadband']['populations'][:n_min, 0],
@@ -157,11 +193,11 @@ def run_full_fmo_simulation(cfg):
         results['filtered']['populations'][:n_min],
         results['filtered']['coherences'][:n_min],
         metrics,
-        filename_prefix="fmo_dynamics",
+        filename_prefix="fmo_dynamics_ensemble",
         config_dict=cfg,
     )
-    print(f"  💾 FMO dynamics saved → {csv_path}")
-    logger.info(f"FMO dynamics saved to {csv_path}")
+    print(f"  💾 FMO ensemble dynamics saved → {csv_path}")
+    logger.info(f"FMO ensemble dynamics saved to {csv_path}")
     return results, t_save
 
 

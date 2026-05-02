@@ -29,6 +29,9 @@ dynamics:
   time_step: 0.5  # fs
   convergence_threshold: 1.0e-6  # Frobenius norm
 
+simulation:
+  n_traj: 100  # ensemble trajectories for publication-grade results
+
 pulse:
   type: "Gaussian"
   fwhm: 50.0 # fs
