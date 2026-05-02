@@ -15,6 +15,15 @@ import numpy as np
 import scipy.linalg as la
 from scipy.sparse import csc_matrix
 
+try:
+    from core.constants import DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA
+except ImportError:
+    try:
+        from ..core.constants import DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA
+    except ImportError:
+        DEFAULT_MAX_HIERARCHY = 10
+        DEFAULT_N_MATSUBARA = 10
+
 logger = logging.getLogger(__name__)
 
 
@@ -88,8 +97,8 @@ class QuantumDynamicsSimulator:
         temperature=295,
         lambda_reorg=35.0,
         gamma_dl=50.0,
-        k_matsubara=0,
-        max_hier=10,
+        k_matsubara=DEFAULT_N_MATSUBARA,
+        max_hier=DEFAULT_MAX_HIERARCHY,
         n_traj=50,
         vibronic_modes=None,
     ):

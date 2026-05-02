@@ -142,12 +142,14 @@ class HopsSimulator:
         temperature: float = DEFAULT_TEMPERATURE,
         use_mesohops: bool = True,
         max_hierarchy: int = DEFAULT_MAX_HIERARCHY,
+        k_matsubara: int = DEFAULT_N_MATSUBARA,
         **kwargs: Any,
     ):
         """Initialize the simulator."""
         self.hamiltonian = hamiltonian
         self.temperature = temperature
         self.max_hierarchy = max_hierarchy
+        self.k_matsubara = k_matsubara
         self.use_mesohops = MESOHOPS_AVAILABLE and use_mesohops
         self.use_pt_hops = kwargs.pop("use_pt_hops", False)
         self.use_sbd = kwargs.pop("use_sbd", False)
@@ -394,9 +396,16 @@ class HopsSimulator:
         try:
             # Get simulation parameters
             max_hierarchy = kwargs.get("max_hierarchy", self.max_hierarchy)
+            k_matsubara = kwargs.get("k_matsubara", self.k_matsubara)
 
-            # Set up hierarchy parameters
-            hierarchy_param = {"MAXHIER": max_hierarchy}
+            # Set up hierarchy parameters — both L and K must be explicit
+            hierarchy_param = {
+                "MAXHIER": max_hierarchy,
+                "TERMINATOR": False,
+                "STATIC_FILTERS": [],
+            }
+            if k_matsubara > 0:
+                hierarchy_param["K_MATSUBARA"] = k_matsubara
 
             # Set up EOM parameters - use LINEAR for simplicity
             eom_param = {
