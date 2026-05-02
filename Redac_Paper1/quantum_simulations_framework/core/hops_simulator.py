@@ -58,6 +58,7 @@ try:
         PULSE_FWHM,
         PULSE_RELATIVE_DELAY,
         PULSE_TYPE,
+        PULSE_AMPLITUDE,
     )
 except ImportError:
     from .constants import (
@@ -73,6 +74,7 @@ except ImportError:
         PULSE_FWHM,
         PULSE_RELATIVE_DELAY,
         PULSE_TYPE,
+        PULSE_AMPLITUDE,
     )
 
 try:
@@ -170,35 +172,6 @@ class HopsSimulator:
         if self.fallback_sim is None:
             self._init_fallback(**kwargs)
 
-    def _drude_correlation_function(self, t_axis, lambda_reorg, gamma_cutoff, temperature):
-        """
-        Drude-Lorentz bath correlation function for MesoHOPS.
-
-        Mathematical Framework:
-        C(t) = (λ/π) * [coth(βωc/2) * cos(ωc*t) - i*sin(ωc*t)] * exp(-ωc*|t|)
-
-        For high temperature approximation:
-        C(t) ≈ (λ*ωc) * exp(-ωc*|t|) / (β*π*ωc/2)
-        """
-        # Boltzmann constant in appropriate units
-        kb = 0.695  # cm^-1/K
-        beta = 1.0 / (kb * temperature)
-
-        # Standard Drude-Lorentz correlation function
-        # For high-temperature approximation
-        if temperature > 77:  # Room temperature
-            corr = (lambda_reorg / np.pi) * gamma_cutoff * np.exp(-gamma_cutoff * np.abs(t_axis))
-        else:  # Include quantum correction at low temperature
-            coth_term = 1.0 / np.tanh(beta * gamma_cutoff / 2.0)
-            corr = (
-                (lambda_reorg / np.pi)
-                * gamma_cutoff
-                * coth_term
-                * np.exp(-gamma_cutoff * np.abs(t_axis))
-            )
-
-        return corr
-
     def _init_mesohops(self, **kwargs: Any) -> None:
         """Initialize MesoHOPS simulator with proper system parameters."""
         try:
@@ -226,36 +199,50 @@ class HopsSimulator:
             E_mean = np.mean(np.diag(self.hamiltonian))
             H_shifted = self.hamiltonian - E_mean * np.eye(n_sites)
 
-            # 1. Initialize with Drude-Lorentz (Solvent/Protein)
+            # Build GW_SYSBATH as a flat list of (g, w) tuples — one entry per mode per site.
+            # MesoHOPS requires: GW_SYSBATH[k] = (g_k, w_k), L_HIER[k] = coupling op for mode k.
+            gw_sysbath = []   # flat list of (g, w) tuples
+            l_hier_flat = []  # coupling operator for each mode
+            l_noise_flat = []
+
+            # 1. Drude-Lorentz modes (one per site)
             try:
                 from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp
                 dl_modes = bcf_convert_dl_to_exp(lambda_reorg, gamma_cutoff, self.temperature)
-                # Build gw_sysbath - list of lists, one per site
-                gw_sysbath = [[dl_modes[0], dl_modes[1]] for _ in range(n_sites)]
+                # dl_modes = [g0, w0, g1, w1, ...] — pairs of (g, w)
+                dl_pairs = [(dl_modes[i], dl_modes[i+1]) for i in range(0, len(dl_modes), 2)]
             except (ImportError, AttributeError, TypeError) as e:
-                logger.warning(f"MesoHOPS bath conversion failed, using fallback: {e}")
-                gw_sysbath = [[lambda_reorg, gamma_cutoff] for _ in range(n_sites)]
+                raise RuntimeError(
+                    f"MesoHOPS bath conversion failed — cannot build valid GW_SYSBATH: {e}"
+                ) from e
 
-            # 2. Add Vibronic Modes (Kleinekathöfer/Coker Realistic Model)
+            for i in range(n_sites):
+                for g, w in dl_pairs:
+                    gw_sysbath.append((g, w))
+                    l_hier_flat.append(L_hier[i])
+                    l_noise_flat.append(L_noise[i])
+
+            # 2. Vibronic modes (one per mode per site)
             vib_freqs = kwargs.get("vibronic_frequencies", DEFAULT_VIBRONIC_FREQUENCIES)
             vib_hr = kwargs.get("huang_rhys_factors", DEFAULT_HUANG_RHYS_FACTORS)
             vib_damping = kwargs.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING)
 
             for freq, hr, damp in zip(vib_freqs, vib_hr, vib_damping, strict=False):
-                # Convert HR factor to reorganization energy: λ = S * ω
-                lambda_vib = hr * freq
-                # Append to each site's bath
+                lambda_vib = hr * freq          # reorganization energy: λ = S·ω
+                w_vib = freq + 1j * damp        # complex frequency
                 for i in range(n_sites):
-                    gw_sysbath[i].extend([lambda_vib, freq + 1j * damp])
+                    gw_sysbath.append((lambda_vib, w_vib))
+                    l_hier_flat.append(L_hier[i])
+                    l_noise_flat.append(L_noise[i])
 
-            # 3. System parameters dictionary - MesoHOPS format
+            # 3. System parameters dictionary — MesoHOPS format
             from mesohops.trajectory.exp_noise import bcf_exp
 
             self.system_param = {
                 "HAMILTONIAN": H_shifted,
                 "GW_SYSBATH": gw_sysbath,
-                "L_HIER": L_hier,
-                "L_NOISE1": L_noise,
+                "L_HIER": l_hier_flat,
+                "L_NOISE1": l_noise_flat,
                 "ALPHA_NOISE1": bcf_exp,
                 "PARAM_NOISE1": gw_sysbath,
                 "PULSE_PARAMS": {
@@ -263,11 +250,13 @@ class HopsSimulator:
                     "fwhm": kwargs.get("pulse_fwhm", PULSE_FWHM),
                     "delay": kwargs.get("pulse_delay", PULSE_RELATIVE_DELAY),
                     "center_freq": kwargs.get("pulse_center_freq", PULSE_CENTRAL_FREQ),
-                    "amplitude": kwargs.get("pulse_amplitude", 0.05)
+                    "amplitude": kwargs.get("pulse_amplitude", 0.05),
                 }
             }
-
-            logger.info("MesoHOPS system parameters prepared successfully")
+            logger.info(
+                f"MesoHOPS system_param built: {len(gw_sysbath)} hierarchy modes "
+                f"({len(dl_pairs)} DL + {len(vib_freqs)} vibronic × {n_sites} sites)"
+            )
         except (ImportError, AttributeError, RuntimeError, ValueError) as e:
             logger.warning(f"Failed to initialize MesoHOPS: {e}")
             logger.info("Falling back to QuantumDynamicsSimulator")
@@ -370,7 +359,8 @@ class HopsSimulator:
         # Fallback to custom simulator
         if self.fallback_sim is not None:
             logger.warning("Using fallback simulator. Results will not show L-dependence.")
-            fallback_kwargs = {k: v for k, v in kwargs.items() if k in ['dt']}
+            # Remove aggressive filtering so fallback receives all physics params
+            fallback_kwargs = dict(kwargs)
             # Use keyword args to avoid arg-order mismatch between fallback implementations
             return self.fallback_sim.simulate_dynamics(
                 time_points=time_points, initial_state=initial_state, **fallback_kwargs
@@ -404,14 +394,14 @@ class HopsSimulator:
             max_hierarchy = kwargs.get("max_hierarchy", self.max_hierarchy)
             k_matsubara = kwargs.get("k_matsubara", self.k_matsubara)
 
-            # Set up hierarchy parameters — both L and K must be explicit
+            # Set up hierarchy parameters — L is the truncation depth
+            # Note: K_MATSUBARA is handled via bcf_convert_dl_to_exp_with_Matsubara
+            # in the bath decomposition, not as a hierarchy parameter in this MesoHOPS version
             hierarchy_param = {
                 "MAXHIER": max_hierarchy,
                 "TERMINATOR": False,
                 "STATIC_FILTERS": [],
             }
-            if k_matsubara > 0:
-                hierarchy_param["K_MATSUBARA"] = k_matsubara
 
             # Set up EOM parameters - use LINEAR for simplicity
             eom_param = {
@@ -421,8 +411,8 @@ class HopsSimulator:
 
             # Set up noise parameters based on test examples
             t_max = float(np.max(time_points)) if len(time_points) > 0 else 500.0
-            # Use actual time step from time_points to avoid Nyquist aliasing of vibronic modes
-            dt_save = float(time_points[1] - time_points[0]) if len(time_points) > 1 else 0.5
+            # Use explicit dt if provided to handle arbitrary time grids safely
+            dt_save = kwargs.get("dt", float(time_points[1] - time_points[0]) if len(time_points) > 1 else 0.5)
 
             noise_param = {
                 "SEED": kwargs.get("seed", 42),
@@ -478,9 +468,7 @@ class HopsSimulator:
 
             # Set initial state
             if initial_state is None:
-                # Default: excitation on site 0 (first site)
-                initial_state = np.zeros(self.hamiltonian.shape[0], dtype=complex)
-                initial_state[0] = 1.0
+                raise ValueError("initial_state must be explicitly provided. Defaulting to site 0 is physically unsafe for arbitrary Hamiltonians.")
 
             trajectory.initialize(initial_state.copy())
 
@@ -491,16 +479,8 @@ class HopsSimulator:
             integrator_step = 0.5  # Default RK integrator step
             tau = dt_save / integrator_step
 
-            import io
-
-            # Suppress normal stdout completely during trajectory propagation to avoid
-            # the spamming warnings, e.g., 'WARNING: circulant embedding is NOT positive semidefinite.'
-            old_stdout = sys.stdout
-            sys.stdout = io.StringIO()
-            try:
-                trajectory.propagate(t_max, tau)
-            finally:
-                sys.stdout = old_stdout
+            # Do NOT suppress stdout so numerical instabilities (like non-positive semidefinite matrices) are visible
+            trajectory.propagate(t_max, tau)
 
             # Extract results from trajectory
             t_axis = np.array(trajectory.storage.data["t_axis"])

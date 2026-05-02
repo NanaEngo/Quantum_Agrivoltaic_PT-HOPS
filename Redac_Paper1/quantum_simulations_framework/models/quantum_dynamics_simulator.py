@@ -226,8 +226,8 @@ class QuantumDynamicsSimulator:
             "TAU": dt_save,
         }
         hierarchy_param = {"MAXHIER": self.max_hier}
-        if self.k_matsubara > 0:
-            hierarchy_param["K_MATSUBARA"] = self.k_matsubara
+        # K_MATSUBARA is encoded in the bath decomposition via bcf_convert_dl_to_exp_with_Matsubara
+        # and is not a valid HopsHierarchy key in this MesoHOPS version
         integration_param = {"INTEGRATOR": "RUNGE_KUTTA"}
 
         hops = HopsTrajectory(

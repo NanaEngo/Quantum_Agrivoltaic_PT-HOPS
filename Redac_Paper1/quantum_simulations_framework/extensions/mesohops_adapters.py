@@ -294,31 +294,23 @@ class SBD_HopsTrajectory(HopsTrajectory):
             logger.info("SBD INTERCEPT: Preparing to compress spectral modes...")
             raw_modes = system_param["PARAM_NOISE1"]
 
-            # The structure of raw_modes is defined in specific BCFs.
-            # Often [g_1, w_1, g_2, w_2...]
-            if len(raw_modes) > n_bundles * 2:
+            # PARAM_NOISE1 is now a list of (g, w) tuples (one per hierarchy mode)
+            # Normalize to list of (g, w) tuples regardless of input format
+            if raw_modes and not isinstance(raw_modes[0], (tuple, list)):
+                # Legacy flat format [g0, w0, g1, w1, ...] — convert to tuples
+                modes_list = [(raw_modes[i], raw_modes[i+1])
+                              for i in range(0, len(raw_modes) - 1, 2)]
+            else:
+                modes_list = [tuple(m) for m in raw_modes]
+
+            if len(modes_list) > n_bundles:
                 self.sbd = SpectrallyBundledDissipator(n_bundles=n_bundles)
-
-                # Zip into (w, g) or similar structure.
-                # MesoHOPS usually passes correlations as [g_exp, w_exp, g_mats1, w_mats1...]
-                modes_tuple = []
-                for i in range(0, len(raw_modes), 2):
-                    g = raw_modes[i]
-                    w = raw_modes[i + 1]
-                    modes_tuple.append((w, g))
-
-                self.sbd.discretize_spectral_density(modes_tuple)
+                # SpectrallyBundledDissipator expects (w, g) order
+                self.sbd.discretize_spectral_density([(w, g) for g, w in modes_list])
                 bundled_ws, bundled_gs = self.sbd.get_bundle_parameters()
-
-                # Re-flatten back into PARAM_NOISE1 format
-                flattened = []
-                for g, w in zip(bundled_gs, bundled_ws, strict=False):
-                    flattened.append(g)
-                    flattened.append(w)
-
-                system_param["PARAM_NOISE1"] = flattened
+                system_param["PARAM_NOISE1"] = list(zip(bundled_gs, bundled_ws))
                 logger.info(
-                    f"SBD Compression complete: reduced to {len(bundled_ws)} structural dissipator groups."
+                    f"SBD Compression: {len(modes_list)} → {len(bundled_ws)} modes."
                 )
 
         # Fallback to standard trajectory initialization with the bundled parameters
