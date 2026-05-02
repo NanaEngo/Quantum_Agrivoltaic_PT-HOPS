@@ -226,6 +226,8 @@ class QuantumDynamicsSimulator:
             "TAU": dt_save,
         }
         hierarchy_param = {"MAXHIER": self.max_hier}
+        if self.k_matsubara > 0:
+            hierarchy_param["K_MATSUBARA"] = self.k_matsubara
         integration_param = {"INTEGRATOR": "RUNGE_KUTTA"}
 
         hops = HopsTrajectory(

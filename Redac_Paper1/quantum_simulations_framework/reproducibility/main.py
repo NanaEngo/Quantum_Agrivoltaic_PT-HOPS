@@ -8,17 +8,21 @@ import logging
 import yaml
 from datetime import datetime
 
-# Ensure framework is importable
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Ensure framework is importable regardless of CWD
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, '..'))
+sys.path.insert(0, _FRAMEWORK_DIR)
+sys.path.insert(0, _SCRIPT_DIR)  # so audit_convergence is importable
+
+_LOG_DIR = os.path.join(_SCRIPT_DIR, 'logs')
+os.makedirs(_LOG_DIR, exist_ok=True)
 
 logging.basicConfig(
-    filename=f"logs/execution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log",
+    filename=os.path.join(_LOG_DIR, f"execution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
-
-os.makedirs("logs", exist_ok=True)
 
 
 def load_and_validate_config():
