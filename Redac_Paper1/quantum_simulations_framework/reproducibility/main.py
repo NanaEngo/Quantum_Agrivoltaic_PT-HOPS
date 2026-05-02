@@ -1,6 +1,6 @@
 """
 main.py — Single-entry reproducibility pipeline for JPCL revision.
-Usage: mamba run -n MesoHOP-sim python reproducibility/main.py
+Usage: mamba run -n MesoHOP-sim python -u reproducibility/main.py
 
 Produces:
   reproducibility/results/convergence_audit_<hash>_<ts>.csv  — L=9,10,11 audit
@@ -11,6 +11,11 @@ Produces:
 """
 import os
 import sys
+
+# Force unbuffered stdout/stderr so log lines appear immediately
+sys.stdout.reconfigure(line_buffering=True)
+sys.stderr.reconfigure(line_buffering=True)
+
 import logging
 import yaml
 import numpy as np
@@ -27,16 +32,31 @@ os.makedirs(_LOG_DIR, exist_ok=True)
 
 _LOG_FILE = os.path.join(_LOG_DIR, f"execution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 
-# Root logger: INFO to both file and stdout
+# Root logger: INFO to both file and stdout, both flushed after every record
 _fmt = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s — %(message)s',
                           datefmt='%H:%M:%S')
 
-_file_handler = logging.FileHandler(_LOG_FILE)
-_file_handler.setLevel(logging.DEBUG)          # full detail in file
+
+class _FlushingStreamHandler(logging.StreamHandler):
+    """StreamHandler that flushes after every emit so lines appear immediately."""
+    def emit(self, record):
+        super().emit(record)
+        self.flush()
+
+
+class _FlushingFileHandler(logging.FileHandler):
+    """FileHandler that flushes after every emit."""
+    def emit(self, record):
+        super().emit(record)
+        self.flush()
+
+
+_file_handler = _FlushingFileHandler(_LOG_FILE)
+_file_handler.setLevel(logging.DEBUG)
 _file_handler.setFormatter(_fmt)
 
-_console_handler = logging.StreamHandler(sys.stdout)
-_console_handler.setLevel(logging.INFO)        # INFO+ on screen
+_console_handler = _FlushingStreamHandler(sys.stdout)
+_console_handler.setLevel(logging.INFO)
 _console_handler.setFormatter(_fmt)
 
 logging.basicConfig(level=logging.DEBUG, handlers=[_file_handler, _console_handler])
@@ -93,6 +113,10 @@ def run_full_fmo_simulation(cfg):
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     time_points = np.arange(0, dyn['time_max'], dyn['time_step'])
 
+    # Initial state: BChl 1 (index 0) excitation — primary antenna site
+    initial_state = np.zeros(H.shape[0], dtype=complex)
+    initial_state[0] = 1.0
+
     results = {}
     for label in ['filtered', 'broadband']:
         print(f"  Running {label} excitation...")
@@ -111,7 +135,7 @@ def run_full_fmo_simulation(cfg):
             huang_rhys_factors=np.array([]),
             vibronic_damping=np.array([]),
         )
-        data = sim.simulate_dynamics(time_points)
+        data = sim.simulate_dynamics(time_points, initial_state=initial_state)
         results[label] = data
         logger.info(f"FMO {label} simulation complete. Simulator: {data.get('simulator','?')}")
 
