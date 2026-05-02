@@ -49,9 +49,14 @@ def run_convergence_audit():
     # Hierarchy Depths to Audit
     depths = [9, 10, 11]
     results = {}
+    coherences = {}
 
     # Create Hamiltonian (Standard FMO)
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
+
+    # Define explicit initial state (Site 1 excitation, index 0)
+    init_state = np.zeros(H.shape[0], dtype=complex)
+    init_state[0] = 1.0
 
     for L in depths:
         logger.info(f"Running simulation for Hierarchy Depth L={L}, K={K}...")
@@ -63,8 +68,30 @@ def run_convergence_audit():
             use_pt_hops=True
         )
 
-        sim_data = simulator.simulate_dynamics(time_points)
+        sim_data = simulator.simulate_dynamics(time_points, initial_state=init_state)
         results[L] = sim_data['populations']
+        coherences[L] = sim_data.get('coherences', np.zeros(len(time_points)))
+
+    # Trace Preservation and Positivity Checks
+    for L in depths:
+        pops = results[L]
+        
+        # 1. Trace Preservation: sum of populations must be 1.0
+        traces = np.sum(pops, axis=1)
+        trace_dev = np.max(np.abs(traces - 1.0))
+        if trace_dev > 1e-5:
+            logger.error(f"L={L}: Trace preservation violated! Max deviation: {trace_dev:.2e}")
+            print(f"❌ FATAL: Trace preservation failed at L={L} (deviation {trace_dev:.2e} > 1e-5)")
+            sys.exit(1)
+            
+        # 2. Positivity: diagonal elements of density matrix must be >= 0
+        min_pop = np.min(pops)
+        if min_pop < -1e-5:
+            logger.error(f"L={L}: Positivity violated! Min population: {min_pop:.2e}")
+            print(f"❌ FATAL: Positivity failed at L={L} (min population {min_pop:.2e} < -1e-5)")
+            sys.exit(1)
+            
+    print("✅ Trace preservation and Positivity checks passed for all depths.")
 
     # Shape consistency guard before subtraction
     shapes = {L: results[L].shape for L in depths}
@@ -109,7 +136,7 @@ def run_convergence_audit():
     output_path = storage.save_quantum_dynamics_results(
         time_points,
         results[10],
-        np.zeros(len(time_points)), # Placeholder coherences
+        coherences[10], # Real coherences tracked from simulation
         metrics,
         filename_prefix="convergence_audit",
         config_dict=cfg,
@@ -117,6 +144,17 @@ def run_convergence_audit():
         audit_mae_10_11=diff_10_11
     )
     print(f"💾 Hardened Audit data saved to: {output_path}")
+    logger.info(f"Convergence audit complete. MAE(9→10)={diff_9_10:.2e}, MAE(10→11)={diff_10_11:.2e}")
+
+    # Return L=10 results for downstream figure generation
+    return {
+        "time_points": time_points,
+        "populations": results[10],
+        "coherences": np.zeros(len(time_points)),  # populated by full FMO run in main.py
+        "audit_mae_9_10": diff_9_10,
+        "audit_mae_10_11": diff_10_11,
+        "csv_path": output_path,
+    }
 
 if __name__ == "__main__":
     run_convergence_audit()
