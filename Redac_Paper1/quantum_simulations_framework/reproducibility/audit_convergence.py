@@ -97,7 +97,8 @@ def run_convergence_audit():
         
     # Save results for SI using Hardened Storage
     from utils.csv_data_storage import CSVDataStorage
-    storage = CSVDataStorage(output_dir="reproducibility/results")
+    _results_dir = os.path.join(os.path.dirname(__file__), 'results')
+    storage = CSVDataStorage(output_dir=_results_dir)
     
     # Pack metrics for storage
     metrics = {

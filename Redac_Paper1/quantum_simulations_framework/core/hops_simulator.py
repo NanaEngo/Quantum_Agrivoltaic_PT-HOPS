@@ -166,8 +166,9 @@ class HopsSimulator:
         if self.use_mesohops:
             self._init_mesohops(**kwargs)
 
-        # Always initialize fallback as well, just in case
-        self._init_fallback(**kwargs)
+        # Initialize fallback only if not already done inside _init_mesohops failure handler
+        if self.fallback_sim is None:
+            self._init_fallback(**kwargs)
 
     def _drude_correlation_function(self, t_axis, lambda_reorg, gamma_cutoff, temperature):
         """
@@ -313,7 +314,8 @@ class HopsSimulator:
                 )
                 qds_kwargs.setdefault("gamma_dl", kwargs.get("drude_cutoff", DEFAULT_DRUDE_CUTOFF))
                 qds_kwargs.setdefault("max_hier", self.max_hierarchy)
-                qds_kwargs.setdefault("n_traj", 10)  # Use fewer trajectories for testing
+                qds_kwargs.setdefault("k_matsubara", self.k_matsubara)
+                qds_kwargs.setdefault("n_traj", 10)
 
                 self.fallback_sim = QuantumDynamicsSimulator(self.hamiltonian, **qds_kwargs)
                 logger.info("QuantumDynamicsSimulator initialized successfully")
@@ -367,10 +369,12 @@ class HopsSimulator:
 
         # Fallback to custom simulator
         if self.fallback_sim is not None:
-            # Fallback to simple simulator (ignores stochastic parameters like n_traj)
-            logger.warning("Using SimpleQuantumDynamicsSimulator fallback. Results will not show L-dependence.")
+            logger.warning("Using fallback simulator. Results will not show L-dependence.")
             fallback_kwargs = {k: v for k, v in kwargs.items() if k in ['dt']}
-            return self.fallback_sim.simulate_dynamics(time_points, initial_state, **fallback_kwargs)
+            # Use keyword args to avoid arg-order mismatch between fallback implementations
+            return self.fallback_sim.simulate_dynamics(
+                time_points=time_points, initial_state=initial_state, **fallback_kwargs
+            )
         else:
             raise RuntimeError("No simulator available")
 
