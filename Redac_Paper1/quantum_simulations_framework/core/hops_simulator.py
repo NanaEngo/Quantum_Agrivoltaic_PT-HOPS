@@ -362,7 +362,7 @@ class HopsSimulator:
                 logger.debug("Attempting MesoHOPS simulation")
                 return self._simulate_with_mesohops(time_points, initial_state, **kwargs)
             except (RuntimeError, ModuleNotFoundError) as e:
-                logger.warning(f"MesoHOPS simulation failed: {e}")
+                logger.error(f"MesoHOPS simulation failed mid-run, falling back to SimpleQuantumDynamicsSimulator: {e}")
                 logger.info("Falling back to custom simulator...")
 
         # Fallback to custom simulator
@@ -417,7 +417,8 @@ class HopsSimulator:
 
             # Set up noise parameters based on test examples
             t_max = float(np.max(time_points)) if len(time_points) > 0 else 500.0
-            dt_save = 1.0  # Time step for saving
+            # Use actual time step from time_points to avoid Nyquist aliasing of vibronic modes
+            dt_save = float(time_points[1] - time_points[0]) if len(time_points) > 1 else 0.5
 
             noise_param = {
                 "SEED": kwargs.get("seed", 42),

@@ -233,7 +233,8 @@ class PT_HopsNoise(HopsNoise):
         self._noise = 0
 
         # Array-safe deduplication of L-operators
-        if self._lop_active is None:
+        # Use getattr to handle MesoHOPS versions that don't initialize _lop_active
+        if not hasattr(self, '_lop_active') or self._lop_active is None:
             self._lop_active = []
 
         for op in new_lop:

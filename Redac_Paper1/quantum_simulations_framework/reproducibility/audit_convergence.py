@@ -58,12 +58,20 @@ def run_convergence_audit():
         simulator = HopsSimulator(
             H,
             max_hierarchy=L,
+            k_matsubara=K,
             use_sbd=True,
             use_pt_hops=True
         )
 
-        sim_data = simulator.simulate_dynamics(time_points, n_traj=10)
+        sim_data = simulator.simulate_dynamics(time_points)
         results[L] = sim_data['populations']
+
+    # Shape consistency guard before subtraction
+    shapes = {L: results[L].shape for L in depths}
+    if len(set(shapes.values())) > 1:
+        logger.error(f"Shape mismatch across hierarchy depths: {shapes}")
+        print(f"❌ FATAL: Population arrays have inconsistent shapes: {shapes}")
+        sys.exit(1)
 
     # Sanity check: L=9 and L=10 must NOT be identical (would indicate fallback)
     if np.allclose(results[9], results[10], atol=1e-12):
