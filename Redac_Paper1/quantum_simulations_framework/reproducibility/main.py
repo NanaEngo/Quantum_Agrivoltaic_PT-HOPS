@@ -142,21 +142,27 @@ def run_full_fmo_simulation(cfg):
     # Save both runs to CSV
     _results_dir = os.path.join(_SCRIPT_DIR, 'results')
     storage = CSVDataStorage(output_dir=_results_dir)
+    # Trim to common length (MesoHOPS t_axis may differ slightly from time_points)
+    n_min = min(len(time_points),
+                results['filtered']['populations'].shape[0],
+                results['broadband']['populations'].shape[0])
+    t_save = results['filtered']['t_axis'][:n_min] if 't_axis' in results['filtered'] else time_points[:n_min]
+
     metrics = {
-        "pop_site1_broadband": results['broadband']['populations'][:, 0],
-        "coherence_broadband": results['broadband']['coherences'],
+        "pop_site1_broadband": results['broadband']['populations'][:n_min, 0],
+        "coherence_broadband": results['broadband']['coherences'][:n_min],
     }
     csv_path = storage.save_quantum_dynamics_results(
-        time_points,
-        results['filtered']['populations'],
-        results['filtered']['coherences'],
+        t_save,
+        results['filtered']['populations'][:n_min],
+        results['filtered']['coherences'][:n_min],
         metrics,
         filename_prefix="fmo_dynamics",
         config_dict=cfg,
     )
     print(f"  💾 FMO dynamics saved → {csv_path}")
     logger.info(f"FMO dynamics saved to {csv_path}")
-    return results, time_points
+    return results, t_save
 
 
 def generate_figures(cfg, sim_results, time_points):
