@@ -53,7 +53,7 @@ class CSVDataStorage:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         # Calculate Configuration Hash for Provenance
-        config_hash = "N/A"
+        config_hash = "no_config"
         if config_dict:
             config_str = json.dumps(config_dict, sort_keys=True)
             config_hash = hashlib.sha256(config_str.encode()).hexdigest()[:12]
@@ -61,6 +61,7 @@ class CSVDataStorage:
             metadata["provenance"] = "Hardened_JPCL_Resubmission_v1.3"
 
         filepath = os.path.join(self.output_dir, f"{filename_prefix}_{config_hash}_{timestamp}.csv")
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         # Create DataFrame with time series data
         data_dict = {"time_fs": time_points}

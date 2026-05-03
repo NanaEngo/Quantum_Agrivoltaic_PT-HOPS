@@ -14,11 +14,10 @@ from utils.figure_generator import FigureGenerator
 from utils.logging_config import get_logger, setup_logging
 
 
-def test_csv_data_storage():
+def test_csv_data_storage(tmp_path):
     """Test CSV data storage operations."""
-    storage = CSVDataStorage(output_dir="test_data")
+    storage = CSVDataStorage(output_dir=str(tmp_path))
 
-    # Test saving quantum dynamics
     time_fs = np.linspace(0, 100, 10)
     populations = np.random.rand(10, 7)
     coherences = np.random.rand(10)
@@ -30,12 +29,6 @@ def test_csv_data_storage():
     df = pd.read_csv(csv_path)
     assert "time_fs" in df.columns
     assert "population_site_1" in df.columns
-
-    # Cleanup
-    if os.path.exists("test_data"):
-        import shutil
-
-        shutil.rmtree("test_data")
 
 
 def test_figure_generator():

@@ -83,6 +83,12 @@ class FigureGenerator:
         time_points = time_points[:n_t]
         populations = populations[:n_t]
         coherences = coherences[:n_t]
+        quantum_metrics = {
+            k: (v[:n_t] if isinstance(v, np.ndarray) and len(v) >= n_t else
+                np.pad(v, (0, max(0, n_t - len(v))), constant_values=np.nan)
+                if isinstance(v, np.ndarray) else v)
+            for k, v in quantum_metrics.items()
+        }
         if 'baseline_populations' in kwargs:
             kwargs['baseline_populations'] = kwargs['baseline_populations'][:n_t]
         if 'baseline_coherences' in kwargs:

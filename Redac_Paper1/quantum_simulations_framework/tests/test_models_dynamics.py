@@ -43,7 +43,7 @@ def test_spectroscopy_2des():
     results = spec.simulate_2d_spectrum(H, waiting_time=0.0)
 
     assert "spectrum" in results
-    assert results["spectrum"].shape == (128, 128)  # Default resolution
+    assert results["spectrum"].shape == (256, 256)  # Default resolution
     assert "omega_exc" in results
     assert "omega_det" in results
 
