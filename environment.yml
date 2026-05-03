@@ -3,17 +3,21 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.10
-  - numpy>=1.23.0
-  - scipy>=1.9.0
-  - pandas>=1.5.0
-  - matplotlib>=3.6.0
+  - python=3.12
+  - numpy>=2.0,<2.4        # upper bound required by numba
+  - scipy>=1.10
+  - pandas>=2.0
+  - matplotlib>=3.7
   - pyyaml>=6.0
-  - h5py>=3.7.0
-  - tqdm
+  - numba>=0.59            # required by MesoHOPS noise generation
+  - h5py>=3.7              # HDF5 output for converged simulation data
+  - tqdm>=4.65             # progress bars for ensemble trajectory loops
+  - psutil>=5.9            # memory monitoring in pipeline
   - pip:
-    - qutip>=5.0.0
-    - quimb>=1.4.0
-    - jax>=0.4.0
-    - jaxlib>=0.4.0
-    - git+https://github.com/mesohops/mesohops.git@master
+    - qutip>=5.2
+    - scienceplots>=2.0    # publication-quality matplotlib styles (JPCL theme)
+    - mesohops @ git+https://github.com/mesohops/mesohops.git@master
+    # Optional — only needed for PT-HOPS tensor-network path:
+    # - quimb>=1.4
+    # - jax>=0.4
+    # - jaxlib>=0.4
