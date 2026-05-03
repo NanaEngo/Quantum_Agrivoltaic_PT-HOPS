@@ -117,16 +117,23 @@ def run_full_fmo_simulation(cfg):
     initial_state = np.zeros(H.shape[0], dtype=complex)
     initial_state[0] = 1.0
 
+    try:
+        from tqdm.auto import tqdm as _tqdm   # auto: notebook-aware (tqdm.notebook in Jupyter, tqdm in terminal)
+    except ImportError:
+        _tqdm = None
+
     results = {}
     for label in ['filtered', 'broadband']:
         print(f"  Running {label} excitation ({n_traj} trajectories)...")
-        # Ensemble average over n_traj independent trajectories
         pop_sum = None
         coh_sum = None
         t_save = None
         n_completed = 0
 
-        for traj_idx in range(n_traj):
+        traj_iter = _tqdm(range(n_traj), desc=f"{label}", unit="traj", leave=True) \
+                    if _tqdm else range(n_traj)
+
+        for traj_idx in traj_iter:
             sim = HopsSimulator(
                 H,
                 temperature=bath['temperature'],
@@ -158,9 +165,6 @@ def run_full_fmo_simulation(cfg):
                     pop_sum[:n] += pops[:n]
                     coh_sum[:n] += cohs[:n]
                 n_completed += 1
-                if (traj_idx + 1) % 10 == 0:
-                    logger.info(f"  {label}: {traj_idx+1}/{n_traj} trajectories done")
-                    print(f"    {traj_idx+1}/{n_traj} trajectories...")
             except Exception as e:
                 logger.warning(f"  Trajectory {traj_idx} failed: {e}")
 
