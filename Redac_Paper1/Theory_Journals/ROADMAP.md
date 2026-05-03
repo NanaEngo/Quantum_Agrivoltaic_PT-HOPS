@@ -75,6 +75,16 @@ Theory_Journals/
 
 ---
 
+## 🚨 Critical Synchronization Required (Post-JPCL Audit)
+
+Following a severe referee audit, **massive theoretical improvements** were applied to the `JPCL/` directory. These changes **must** be synchronized across the other manuscripts (`JCTC`, `Chem Sci`, `JCP`) before submission:
+
+1. **Purge "Agrivoltaic" Framing:** The original manuscripts conflated continuous solar illumination with transient coherent dynamics. You must replace all mentions of "solar driving flux" with explicit **femtosecond laser pulse excitation**. Remove the word "agrivoltaics" to prevent instant rejection by physics referees.
+2. **Correct the Efficiency Metric:** The Python simulation uses a trace-preserving master equation, meaning it has no trapping rate. The original manuscripts defined "Energy Transfer Efficiency (ETE)" using an integral that theoretically diverges. You must replace ETE with **Forward Transfer Yield ($\Phi_{\mathrm{FT}}$)** and define it precisely as $1 - \Tr[\hat{P}_{1}\rho(t_{\max})]$.
+3. **Include the 2DES & Artificial Materials Protocol:** Copy the "Proposed experimental validation" and "Outlook" sections from `Manuscript_JPCL.tex`. These sections propose specific $4f$-shaper SLM pulse configurations targeting the $\ket{1}$--$\ket{3}$ cross-peak, which drastically raises the impact factor.
+
+---
+
 ## ✅ Refinement Audit (Severe-Referee Level)
 
 All manuscripts passed the following checks:
@@ -117,3 +127,6 @@ All manuscripts passed the following checks:
 
 **Last Updated:** March 26, 2026  
 **Status:** Submission-ready across all four target journals
+
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/audit_convergence.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py

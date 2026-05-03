@@ -344,110 +344,67 @@ class EnvironmentalFactors:
 
     def plot_environmental_effects(
         self,
-        time_days: np.ndarray,
         temperatures: np.ndarray,
         humidity_values: np.ndarray,
         wind_speeds: np.ndarray,
-        pce_env: np.ndarray,
-        etr_env: np.ndarray,
-        dust_profile: np.ndarray,
-        filename_prefix: str = "environmental_effects",
+        pce_temp: np.ndarray,
+        etr_temp: np.ndarray,
+        pce_humidity: np.ndarray,
+        etr_humidity: np.ndarray,
+        filename_prefix: str = "environmental_effects_static",
         figures_dir: str = "../Graphics/",
     ) -> str:
         """
-        Plot environmental effects and save to file.
+        Plot environmental effects as static parameter sweeps to ensure physical relevance
+        to ultrafast dynamics, replacing the physically unmotivated 365-day seasonal cycle.
 
         Parameters
         ----------
-        time_days : np.ndarray
-            Time points in days
         temperatures : np.ndarray
             Temperature values in Kelvin
         humidity_values : np.ndarray
             Relative humidity values (0-1)
         wind_speeds : np.ndarray
             Wind speeds in m/s
-        pce_env : np.ndarray
-            PCE with environmental effects
-        etr_env : np.ndarray
-            ETR with environmental effects
-        dust_profile : np.ndarray
-            Dust thickness over time
+        pce_temp, etr_temp, pce_humidity, etr_humidity: np.ndarray
+            Sweep results for plotting
         filename_prefix : str
             Prefix for output filename
         figures_dir : str
             Directory to save figures
-
-        Returns
-        -------
-        str
-            Path to saved figure
         """
         os.makedirs(figures_dir, exist_ok=True)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        fig, axes = plt.subplots(2, 3, figsize=(16, 10))
-        fig.suptitle("Environmental Effects on Agrivoltaic System", fontsize=16, fontweight="bold")
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+        fig.suptitle("Environmental Effects on Exciton Transport", fontsize=16, fontweight="bold")
 
-        # Row 1: Environmental conditions
-        ax1 = axes[0, 0]
-        ax1.plot(time_days, temperatures, "r-", linewidth=2)
-        ax1.set_xlabel("Time (days)", fontsize=10)
-        ax1.set_ylabel("Temperature (K)", fontsize=10)
-        ax1.set_title("Temperature Variation", fontsize=11)
+        # (a) Temperature Profile
+        ax1 = axes[0]
+        ax1.plot(temperatures, etr_temp * 100, "r-", linewidth=2, label="ETR")
+        ax1.plot(temperatures, pce_temp * 100, "b--", linewidth=2, label="PCE")
+        ax1.set_xlabel("Temperature [K]", fontsize=12)
+        ax1.set_ylabel("Efficiency [%]", fontsize=12)
+        ax1.set_title("(a) Temperature Profile", fontsize=14, fontweight="bold")
         ax1.grid(True, alpha=0.3)
+        ax1.legend()
 
-        ax2 = axes[0, 1]
-        ax2.plot(time_days, humidity_values, "b-", linewidth=2)
-        ax2.set_xlabel("Time (days)", fontsize=10)
-        ax2.set_ylabel("Relative Humidity", fontsize=10)
-        ax2.set_title("Humidity Variation", fontsize=11)
+        # (b) Humidity Profile
+        ax2 = axes[1]
+        ax2.plot(humidity_values * 100, etr_humidity * 100, "g-", linewidth=2, label="ETR")
+        ax2.plot(humidity_values * 100, pce_humidity * 100, "b--", linewidth=2, label="PCE")
+        ax2.set_xlabel("Relative Humidity [%]", fontsize=12)
+        ax2.set_ylabel("Efficiency [%]", fontsize=12)
+        ax2.set_title("(b) Humidity Profile", fontsize=14, fontweight="bold")
         ax2.grid(True, alpha=0.3)
-
-        ax3 = axes[0, 2]
-        ax3.plot(time_days, wind_speeds, "g-", linewidth=2)
-        ax3.set_xlabel("Time (days)", fontsize=10)
-        ax3.set_ylabel("Wind Speed (m/s)", fontsize=10)
-        ax3.set_title("Wind Speed Variation", fontsize=11)
-        ax3.grid(True, alpha=0.3)
-
-        # Row 2: Effects on system performance
-        ax4 = axes[1, 0]
-        ax4.plot(time_days, dust_profile, "orange", linewidth=2)
-        ax4.set_xlabel("Time (days)", fontsize=10)
-        ax4.set_ylabel("Dust Thickness", fontsize=10)
-        ax4.set_title("Dust Accumulation", fontsize=11)
-        ax4.grid(True, alpha=0.3)
-
-        ax5 = axes[1, 1]
-        ax5.plot(time_days, pce_env, "purple", linewidth=2, label="PCE with Env. Effects")
-        ax5.axhline(y=np.mean(pce_env), color="gray", linestyle="--", alpha=0.7, label="Average")
-        ax5.set_xlabel("Time (days)", fontsize=10)
-        ax5.set_ylabel("PCE", fontsize=10)
-        ax5.set_title("PCE Under Environmental Effects", fontsize=11)
-        ax5.legend(fontsize=8)
-        ax5.grid(True, alpha=0.3)
-
-        ax6 = axes[1, 2]
-        ax6.plot(time_days, etr_env, "brown", linewidth=2, label="ETR with Env. Effects")
-        ax6.axhline(y=np.mean(etr_env), color="gray", linestyle="--", alpha=0.7, label="Average")
-        ax6.set_xlabel("Time (days)", fontsize=10)
-        ax6.set_ylabel("ETR", fontsize=10)
-        ax6.set_title("ETR Under Environmental Effects", fontsize=11)
-        ax6.legend(fontsize=8)
-        ax6.grid(True, alpha=0.3)
+        ax2.legend()
 
         plt.tight_layout()
 
         filename = f"{filename_prefix}_{timestamp}.pdf"
         filepath = os.path.join(figures_dir, filename)
-        plt.savefig(filepath, dpi=300, bbox_inches="tight")
-
-        png_filename = f"{filename_prefix}_{timestamp}.png"
-        png_filepath = os.path.join(figures_dir, png_filename)
-        plt.savefig(png_filepath, dpi=150, bbox_inches="tight")
-
+        plt.savefig(filepath, dpi=600, bbox_inches="tight")
         plt.close()
 
-        logger.info(f"Environmental effects plots saved to {filepath}")
+        logger.info(f"Environmental parameter sweeps saved to {filepath}")
         return filepath

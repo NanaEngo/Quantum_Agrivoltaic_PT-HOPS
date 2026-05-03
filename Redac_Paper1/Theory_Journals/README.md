@@ -10,10 +10,12 @@
 
 | Journal | Manuscript | SI | Cover Letter | Figures | Format |
 |---------|-----------|-----|-------------|---------|--------|
-| **JPCL** | `Manuscript_JPCL.tex` (13 pp) | `SI_JPCL.tex` | `Cover_Letter_JPCL.tex` | 2 | `achemso`, single-col |
-| **JCTC** | `Manuscript_JCTC.tex` (10 pp) | `SI_JCTC.tex` | `Cover_Letter_JCTC.tex` | 2 | `achemso`, single-col |
-| **Chem Sci** | `Manuscript_CS.tex` (6 pp) | `SI_CS.tex` | `Cover_Letter_CS.tex` | 2 | `article`+`natbib`, single-col |
-| **JCP** | `Manuscript_JCP.tex` (9 pp) | `SI_JCP.tex` | `Cover_Letter_JCP.tex` | 2 | `revtex4-2` preprint, single-col |
+| **JPCL** | `Manuscript_JPCL.tex` (8 pp*) | `SI_JPCL.tex` | `Cover_Letter_JPCL.tex` | 2 | `achemso`, `twocolumn` |
+| **JCTC** | `Manuscript_JCTC.tex` (~10 pp) | `SI_JCTC.tex` | `Cover_Letter_JCTC.tex` | 2 | `achemso`, single-col |
+| **Chem Sci** | `Manuscript_CS.tex` (~6 pp) | `SI_CS.tex` | `Cover_Letter_CS.tex` | 2 | `article`+`natbib`, single-col |
+| **JCP** | `Manuscript_JCP.tex` (~9 pp) | `SI_JCP.tex` | `Cover_Letter_JCP.tex` | 2 | `revtex4-2` preprint, single-col |
+
+*\* Note: The JPCL manuscript currently occupies ~8 pages in the final `twocolumn` layout. To meet the strict 2500-word / 4-5 page JPCL limit, authors must compress the manuscript before submission by moving the "Theory and methods" equations (Eq 1-4) and the extended Hamiltonian derivations directly into the Supporting Information (SI).*
 
 ---
 
@@ -60,6 +62,17 @@
 | **Focus** | Physical insight | Algorithm validation | Biomimetic design | Polaron theory |
 | **Methods** | Brief (in SI) | 12-test suite in main text | Moderate | Full derivation |
 | **Audience** | Physical chemists | Computational chemists | Multidisciplinary | Chemical physicists |
+
+---
+
+## 🔄 How to Refine the Non-JPCL Manuscripts
+
+The `JPCL/` directory acting as the primary target recently underwent two Severe Referee Audits. To ensure `JCTC/`, `Chemical_Science/`, and `JCP/` are mathematically and physically rigorous, you must manually sync the following changes from `JPCL/` to the other directories:
+
+1. **Delete "Agrivoltaics"**: The simulation models transient laser-driven quantum dynamics, not steady-state incoherent solar flux. Replace all mentions of solar driving fields with femtosecond pulse excitation to prevent immediate physical rejection.
+2. **Correct the "ETE" Math**: Replace the divergent Energy Transfer Efficiency integral with **Forward Transfer Yield ($\Phi_{\mathrm{FT}}$)**, ensuring Eq. 16 matches the trace-preserving Python simulation exactly.
+3. **Copy the 2DES Protocol**: Copy the specific testable experimental protocols (using SLM $4f$-shaping to track the $\ket{1}$--$\ket{3}$ cross peak lifetime) into the conclusions/outlooks of the other papers.
+4. **Copy the 3-Site Toy Model**: Ensure the minimalist 3-site generalizability proof is ported over to demonstrate the mechanism isn't an FMO artifact.
 
 ---
 

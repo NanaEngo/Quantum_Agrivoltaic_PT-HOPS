@@ -1,0 +1,46 @@
+% Introduction Section - EES Version
+% Spectral Bath Engineering for Quantum-Enhanced Agrivoltaics
+
+\section{Introduction}\label{sec:Introduction}
+
+Growing global demand for clean energy and food security calls for technologies that serve both needs simultaneously \cite{Valle2017, Dupraz2011, Marrou2013, Asaa2024}. Agrivoltaic systems---integrating crop production with semi-transparent photovoltaic (PV) panels---generate electricity and food on the same footprint, naturally advancing United Nations Sustainable Development Goals 2, 7, and 13 \cite{Weselek2019, Amaducci2018, Campana2025, Kumdokrub2025}. Field installations have demonstrated water usage reductions up to \SI{30}{\percent} while maintaining near-baseline crop yields \cite{BaronGafford2019, Elamri2018, Souza2025}. Yet, standard agrivoltaic designs focus on maximizing the total flux of Photosynthetically Active Radiation (PAR) across broad bandwidths, treating the light environment purely as a classical intensity distribution \cite{MaLu2025, Adeh2019, Kujawa2025}.
+
+This purely classical approach misses the nuanced ways light-harvesting organisms process photons. Energy transfer within pigment-protein complexes generally exhibits non-Markovian quantum dynamics, wherein electronic coherences coupled to structured environmental fluctuations facilitate transport \cite{Engel2007, Panitchayangkoon2010, Collini2010, Mohseni2008, Tao2020}. Biological complexes operate in an intermediate coupling regime where standard Markovian approximations cannot accurately model the synergy between vibrational and electronic states \cite{Ishizaki2009, Kelly2016, Blankenship2011, Scholes2011, Plenio2008, Sarovar2010, Huelga2013, Rebentrost2009}. Consequently, photosynthetic efficiency relies heavily on the detailed spectral structure of both the biological complex itself and the illuminating light source \cite{Curutchet2016, Gelzinis2017}. Because OPV panel transmission can be deliberately tuned, this spectral dependence can be optimized.
+
+\subsection{Quantum photosynthesis and the FMO complex}
+
+The Fenna-Matthews-Olsen (FMO) complex from green sulfur bacteria is widely studied as a benchmark for quantum effects in photosynthesis \cite{Fenna1974, Adolphs2006}. Its trimeric structural arrangement supports long-lived quantum coherences \cite{Engel2007, Collini2010}, providing a standard testbed for open quantum system transport properties \cite{Mohseni2014, Hildner2013}. Each monomer houses 7--8 bacteriochlorophyll-a molecules funneling energy from the chlorosome antenna to the reaction centre. Exploring these coherent effects directly clarifies the energy conversion processes intrinsic to natural photosynthesis.
+
+Concurrently, semi-transparent organic photovoltaic (OPV) cells have reached power conversion efficiencies over \SI{18}{\percent} \cite{Lunt2011, Tong2016, Firdaus2019, Li2020, Cui2021, Wu2024}. The capacity to adjust the spectral transmission of OPV materials presents a unique avenue to improve the \textit{spectral quality} of the light reaching the crops. Specifically, panels can be designed to target the quantum mechanical resonances that drive plant energy transport. This convergence of technologies paves the way to engineer energy conversion systems that actively leverage the non-Markovian nature of light harvesting.
+
+\subsection{Quantum spectral bath engineering for sustainable energy}
+
+To realize this, we introduce \textit{quantum spectral bath engineering} for agrivoltaics: the intentional, strategic modulation of the photon bath that crops experience via specifically tailored OPV panels. Within the open quantum system framework, the effective spectral density of the illumination becomes $J_{\rm plant}(\omega) = T(\omega) \times J_{\rm solar}(\omega)$, where $J_{\rm solar}(\omega)$ is the standard AM1.5G solar irradiance and $T(\omega)$ is the OPV transmission function.
+
+We examine whether specifically tailored $T(\omega)$ profiles that excite excitonic states quasi-resonant with internal vibrational modes can accelerate the electron transport rate (ETR). We hypothesize that matching panel transmission to these vibronic resonances promotes electronic coherence by exploiting non-Markovian memory effects, facilitating energy transfer pathways that would remain suppressed under standard broadband sunlight.
+
+Unlike classical spectral optimization, which merely aims to maximize the total number of absorbed photons regardless of frequency, quantum spectral bath engineering shapes the optical spectrum to unlock coherent transport mechanisms. As demonstrated later, a spectrally flat photon bath of equivalent total intensity fails to yield the same enhancement (\Cref{sec:Results}).
+
+\subsection{Environmental sustainability and eco-design}
+
+Improving quantum transport efficiency is only ecologically sound if the associated photovoltaic materials themselves pose minimal environmental hazard. We link the quantum dynamics analysis with an eco-design assessment framework. By utilizing Fukui function analysis and global reactivity descriptors, we evaluate the biodegradability profile of candidate OPV materials, ensuring that quantum-enhanced performance does not come at the expense of lifecycle sustainability.
+
+\subsection{Scope and contributions}
+
+Applying the Process Tensor HOPS and Stochastically Bundled Dissipators methods to simulate non-Markovian dynamics in the FMO benchmark, we establish five central findings spanning quantum dynamics, agrivoltaic design, and environmental sustainability:
+
+\begin{enumerate}
+\item A \SI{25}{\percent} higher ETR relative to standard Markovian conditions under matched overall photon flux, driven by vibronic resonances that highlight quantum advantages in biological energy conversion;
+
+\item Validation through 12 rigorous numerical tests, confirming convergence against HEOM benchmarks ($< \SI{2}{\percent}$ deviation) and robustness at physiological conditions (\SI{295}{\kelvin}, $\sigma = \SI{50}{\per\cm}$);
+
+\item Quantitative design guidelines derived from Pareto frontier mapping, revealing OPV configurations capable of providing \SIrange{15.4}{22.1}{\percent} PCE alongside \SIrange{12}{33}{\percent} ETR boosts to balance electrical yields with agricultural productivity;
+
+\item A framework for eco-design integration favoring biodegradable materials ($B_{\rm index} = 101.5$ for our primary PM6 derivative), addressing long-term ecological impact;
+
+\item Geographic assessment across nine varied climate zones---including temperate, subtropical, desert, and sub-Saharan settings---validating a persistent \SIrange{18}{26}{\percent} quantum-enhanced yield across distinct global environments.
+\end{enumerate}
+
+These findings bridge microscopic quantum effects in photosynthesis with macroscopic agrivoltaic engineering, illustrating a viable pathway to harness vibronic coherence for large-scale sustainable energy infrastructure.
+
+The article is structured as follows. \Cref{sec:Theory} details the theoretical models and computational methodologies. \Cref{sec:Results} presents the primary simulation outcomes and experimental validations. \Cref{sec:Discussion} addresses practical implementation feasibility, and \Cref{sec:Conclusion} offers final concluding remarks.

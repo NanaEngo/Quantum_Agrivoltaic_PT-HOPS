@@ -110,6 +110,7 @@ PULSE_FWHM: Final[float] = 50.0  # fs
 PULSE_RELATIVE_DELAY: Final[float] = 0.0  # fs (delay from photoexcitation)
 PULSE_CENTRAL_FREQ: Final[float] = 12500.0  # cm^-1 (BChl Qy band)
 PULSE_PHASE: Final[float] = 0.0  # radians
+PULSE_AMPLITUDE: Final[float] = 0.05  # arbitrary amplitude units
 
 # =============================================================================
 # OPTIMIZATION PARAMETERS

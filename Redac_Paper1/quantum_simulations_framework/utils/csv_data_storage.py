@@ -41,33 +41,26 @@ class CSVDataStorage:
         coherences: np.ndarray,
         quantum_metrics: Dict[str, np.ndarray],
         filename_prefix: str = "quantum_dynamics",
+        config_dict: Dict[str, Any] = None,
         **metadata,
     ) -> str:
         """
-        Save quantum dynamics simulation results to CSV.
-
-        Parameters:
-        -----------
-        time_points : np.ndarray
-            Time points for the simulation
-        populations : np.ndarray
-            Site populations over time
-        coherences : np.ndarray
-            Coherence measures over time
-        quantum_metrics : dict
-            Dictionary of quantum metrics (QFI, entropy, etc.)
-        filename_prefix : str
-            Prefix for the output filename
-        **metadata : dict
-            Additional metadata to include
-
-        Returns:
-        --------
-        str
-            Path to the saved CSV file
+        Save quantum dynamics results with strict provenance and high precision.
         """
+        import hashlib
+        import json
+        
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filepath = os.path.join(self.output_dir, f"{filename_prefix}_{timestamp}.csv")
+        
+        # Calculate Configuration Hash for Provenance
+        config_hash = "N/A"
+        if config_dict:
+            config_str = json.dumps(config_dict, sort_keys=True)
+            config_hash = hashlib.sha256(config_str.encode()).hexdigest()[:12]
+            metadata["config_sha256"] = config_hash
+            metadata["provenance"] = "Hardened_JPCL_Resubmission_v1.3"
+
+        filepath = os.path.join(self.output_dir, f"{filename_prefix}_{config_hash}_{timestamp}.csv")
 
         # Create DataFrame with time series data
         data_dict = {"time_fs": time_points}
@@ -80,31 +73,23 @@ class CSVDataStorage:
         else:
             data_dict["populations"] = populations
 
-        # Add coherences
         data_dict["coherences"] = coherences
-
-        # Add quantum metrics
         for metric_name, metric_values in quantum_metrics.items():
             if isinstance(metric_values, np.ndarray) and len(metric_values) == len(time_points):
                 data_dict[metric_name] = metric_values
             else:
-                # If single value, repeat for all time points
                 data_dict[metric_name] = [metric_values] * len(time_points)
 
         df = pd.DataFrame(data_dict)
 
-        # Add metadata as additional rows at the end
-        metadata_row = {
-            "time_fs": "METADATA",
-            "population_site_1": str(metadata) if metadata else "None",
-        }
-
-        # Add a metadata row
-        metadata_df = pd.DataFrame([metadata_row])
-        df = pd.concat([df, metadata_df], ignore_index=True)
-
-        df.to_csv(filepath, index=False)
-        logger.info(f"Quantum dynamics data saved to {filepath}")
+        # High-Precision Scientific Formatting (Reviewer 1 Compliance)
+        df.to_csv(filepath, index=False, float_format='%.10e')
+        
+        # Append Metadata as Comments to maintain CSV structure but ensure provenance
+        with open(filepath, 'a') as f:
+            f.write(f"\n# METADATA: {json.dumps(metadata)}\n")
+            
+        logger.info(f"Hardened results saved with SHA-256 [{config_hash}] at {filepath}")
         return filepath
 
     def save_spectral_optimization(

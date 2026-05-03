@@ -11,7 +11,7 @@ Sur la base de l'analyse du manuscrit **"Spectral Bath Engineering for Quantum-E
 *   **Applied Energy (Elsevier) 10,1 :** Revue de référence pour les systèmes agrivoltaïques. Votre optimisation de Pareto entre PCE et ETR biologique est une approche systémique très appréciée par leur lectorat.
 
 ### 3. Chimie Physique et Dynamique Quantique
-*   **Chemical Science (RSC) - IF 7,6 :** Pour des articles présentant des avancées méthodologiques majeures. Votre utilisation combinée de **PT-HOPS** (Process Tensor HOPS) et **SBD** (Spectrally Bundled Dissipators) pour simuler des systèmes à l'échelle mésoscopique (>1000 chromophores) est une innovation théorique de premier plan.
+*   **Chemical Science (RSC) - IF 7,6 :** Pour des articles présentant des avancées méthodologiques majeures. Votre utilisation combinée de **PT-HOPS** (Process Tensor HOPS) et **SBD** (Stochastically Bundled Dissipators) pour simuler des systèmes à l'échelle mésoscopique (>1000 chromophores) est une innovation théorique de premier plan.
 *   **The Journal of Chemical Physics (JCP) - IF 7,0 :** Cette revue consacre souvent des sections spéciales aux algorithmes pour la dynamique des systèmes quantiques ouverts. Elle serait parfaite si vous souhaitez mettre l'accent sur la rigueur de la méthode PT-HOPS/SBD.
 *   **npj Quantum Information (Nature) - IF 3,1 :** Étant donné que vous démontrez un "avantage quantique" dans la conversion de l'énergie biologique via la cohérence vibronique, cette revue est tout à fait pertinente pour le pont que vous jetez entre biologie quantique et ingénierie.
 

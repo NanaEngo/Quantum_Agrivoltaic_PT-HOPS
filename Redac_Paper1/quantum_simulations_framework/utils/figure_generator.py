@@ -94,42 +94,54 @@ class FigureGenerator:
         # Plot populations over time
         ax0 = axes[0, 0]
         if n_sites == 1:
-            ax0.plot(time_points, populations, color=self.colors[0], linewidth=1.5)
-            ax0.set_xlabel("Time [fs]")
-            ax0.set_ylabel("Population [a.u.]")
-            ax0.set_title("Population Dynamics")
-            ax0.grid(True)
+            ax0.plot(time_points, populations, color=self.colors[0], linewidth=2.0)
+            if 'baseline_populations' in kwargs:
+                ax0.plot(time_points, kwargs['baseline_populations'], '--', color='gray', linewidth=1.5, label='Broadband')
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
+            ax0.set_title("(a) Population Dynamics", loc='left', fontsize=14, fontweight='bold')
+            ax0.grid(True, alpha=0.3)
         else:
             for i in range(min(n_sites, len(self.colors))):
                 ax0.plot(time_points, populations[:, i], 
                          label=f"Site {i + 1}", 
                          color=self.colors[i], 
-                         linewidth=1.2)
-            ax0.set_xlabel("Time [fs]")
-            ax0.set_ylabel("Population [a.u.]")
-            ax0.set_title("Exciton Transport Dynamics")
-            ax0.legend(loc='upper right', frameon=True, framealpha=0.8)
-            ax0.grid(True)
+                         linewidth=2.0)
+            if 'baseline_populations' in kwargs:
+                # Just plot site 1 of broadband as an example trace to avoid clutter
+                ax0.plot(time_points, kwargs['baseline_populations'][:, 0], '--', color='gray', linewidth=1.5, label='Site 1 (Broadband)')
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
+            ax0.set_title("(a) Exciton Transport Dynamics", loc='left', fontsize=14, fontweight='bold')
+            ax0.legend(loc='upper right', frameon=False, fontsize=10)
+            ax0.grid(True, alpha=0.3)
 
         # Plot coherences
         ax1 = axes[0, 1]
-        ax1.plot(time_points, coherences, "r-", linewidth=2)
-        ax1.set_xlabel("Time (fs)")
-        ax1.set_ylabel("Coherence")
-        ax1.set_title("Coherence Evolution")
+        ax1.plot(time_points, coherences, "r-", linewidth=2.0, label='Filtered')
+        if 'baseline_coherences' in kwargs:
+            ax1.plot(time_points, kwargs['baseline_coherences'], '--', color='gray', linewidth=1.5, label='Broadband')
+            ax1.legend(frameon=False, fontsize=10)
+        ax1.set_xlabel("Time [fs]", fontsize=12)
+        ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=12)
+        ax1.set_title("(b) Coherence Evolution", loc='left', fontsize=14, fontweight='bold')
         ax1.grid(True, alpha=0.3)
 
         # Plot quantum metrics
+        panel_labels = ['(c)', '(d)', '(e)', '(f)']
         for i, (metric_name, metric_values) in enumerate(quantum_metrics.items()):
             row = 1 + i // n_cols
             col = i % n_cols
 
             if row < n_rows:
                 ax = axes[row, col]
-                ax.plot(time_points, metric_values, linewidth=2)
-                ax.set_xlabel("Time (fs)")
-                ax.set_ylabel(metric_name)
-                ax.set_title(f"{metric_name.replace('_', ' ').title()} Evolution")
+                ax.plot(time_points, metric_values, linewidth=2.0, color=self.colors[i % len(self.colors)])
+                if f'baseline_{metric_name}' in kwargs:
+                    ax.plot(time_points, kwargs[f'baseline_{metric_name}'], '--', color='gray', linewidth=1.5, label='Broadband')
+                    ax.legend(frameon=False, fontsize=10)
+                ax.set_xlabel("Time [fs]", fontsize=12)
+                ax.set_ylabel(metric_name.replace('_', ' ').title(), fontsize=12)
+                ax.set_title(f"{panel_labels[i]} {metric_name.replace('_', ' ').title()} Evolution", loc='left', fontsize=14, fontweight='bold')
                 ax.grid(True, alpha=0.3)
 
         # Remove empty subplots if any
@@ -438,83 +450,81 @@ class FigureGenerator:
         logger.info(f"Agrivoltaic performance figures saved to {pdf_path} and {png_path}")
         return pdf_path
 
-    def plot_quantum_metrics_evolution(
+    def plot_environmental_robustness(
         self,
-        time_points: np.ndarray,
-        quantum_metrics: Dict[str, np.ndarray],
-        filename_prefix: str = "quantum_metrics_evolution",
+        temperatures: np.ndarray,
+        eta_temp: np.ndarray,
+        eta_temp_err: np.ndarray,
+        disorder_samples: np.ndarray,
+        filename_prefix: str = "ETR_Under_Environmental_Effects",
         **kwargs,
     ) -> str:
         """
-        Plot evolution of various quantum metrics over time.
+        Plot environmental robustness (Figure 2 in manuscript).
+        - (a) Temperature dependence of enhancement eta(T)
+        - (b) Histogram of eta over 100 static disorder realizations
 
         Parameters:
         -----------
-        time_points : np.ndarray
-            Time points for the simulation
-        quantum_metrics : dict
-            Dictionary of quantum metrics
+        temperatures : np.ndarray
+            Temperature values in Kelvin
+        eta_temp : np.ndarray
+            Relative enhancement eta(T)
+        eta_temp_err : np.ndarray
+            95% confidence intervals for eta(T)
+        disorder_samples : np.ndarray
+            100 samples of eta under static disorder
         filename_prefix : str
             Prefix for the output filename
-        **kwargs : dict
-            Additional plotting options
-
-        Returns:
-        --------
-        str
-            Path to the saved figure
         """
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
-        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}.png")
 
-        n_metrics = len(quantum_metrics)
-        if n_metrics == 0:
-            logger.warning("No quantum metrics to plot")
-            return pdf_path
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+        fig.suptitle("Environmental Robustness of Spectral Bath Engineering", fontsize=14, fontweight="bold")
 
-        # Determine subplot layout
-        n_cols = 2
-        n_rows = (n_metrics + 1) // 2  # Round up
+        # (a) Temperature dependence
+        ax0 = axes[0]
+        ax0.errorbar(temperatures, eta_temp, yerr=eta_temp_err, fmt='o-', color=self.colors[0], 
+                     capsize=4, capthick=1.5, elinewidth=1.5, markersize=6, linewidth=2.0)
+        ax0.fill_between(temperatures, eta_temp - eta_temp_err, eta_temp + eta_temp_err, 
+                         alpha=0.2, color=self.colors[0])
+        ax0.axvspan(285, 300, alpha=0.1, color='green', label='Optimal Range (285-300 K)')
+        ax0.set_xlabel("Temperature [K]", fontsize=12)
+        ax0.set_ylabel(r"Relative Enhancement $\eta$", fontsize=12)
+        ax0.set_title("(a) Temperature Dependence", loc='left', fontsize=13, fontweight='bold')
+        ax0.legend(loc='lower left', frameon=False, fontsize=10)
+        ax0.grid(True, alpha=0.3)
 
-        fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, 5 * n_rows))
-        fig.suptitle("Quantum Metrics Evolution", fontsize=16, fontweight="bold")
-
-        # Handle case where there's only one row
-        if n_rows == 1:
-            axes = [axes]
-
-        metric_idx = 0
-        for metric_name, metric_values in quantum_metrics.items():
-            row = metric_idx // n_cols
-            col = metric_idx % n_cols
-
-            ax = axes[row] if n_rows == 1 else axes[row, col]
-
-            ax.plot(time_points, metric_values, linewidth=2)
-            ax.set_xlabel("Time (fs)")
-            ax.set_ylabel(metric_name.replace("_", " ").title())
-            ax.set_title(f"{metric_name.replace('_', ' ').title()} Evolution")
-            ax.grid(True, alpha=0.3)
-
-            metric_idx += 1
-
-        # If there are empty subplots, remove them
-        for idx in range(metric_idx, n_rows * n_cols):
-            row = idx // n_cols
-            col = idx % n_cols
-            ax = axes[row] if n_rows == 1 else axes[row, col]
-            fig.delaxes(ax)
+        # (b) Disorder histogram
+        ax1 = axes[1]
+        mean_eta = np.mean(disorder_samples)
+        std_eta = np.std(disorder_samples)
+        
+        ax1.hist(disorder_samples, bins=15, color=self.colors[1], edgecolor='black', alpha=0.7, density=True)
+        
+        # Overlay Gaussian fit
+        from scipy.stats import norm
+        xmin, xmax = ax1.get_xlim()
+        x = np.linspace(xmin, xmax, 100)
+        p = norm.pdf(x, mean_eta, std_eta)
+        ax1.plot(x, p, 'k--', linewidth=2, label='Gaussian Fit')
+        
+        ax1.axvline(mean_eta, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_eta:.2f}')
+        ax1.set_xlabel(r"Relative Enhancement $\eta$", fontsize=12)
+        ax1.set_ylabel("Probability Density", fontsize=12)
+        ax1.set_title(r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)", loc='left', fontsize=13, fontweight='bold')
+        ax1.legend(loc='upper right', frameon=False, fontsize=10)
+        ax1.grid(True, alpha=0.3)
 
         plt.tight_layout()
-
-        # Save figures in multiple formats
         plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
         plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
-        logger.info(f"Quantum metrics figures saved to {pdf_path} and {png_path}")
+        logger.info(f"Environmental robustness figures saved to {pdf_path} and {png_path}")
         return pdf_path
+
 
     def plot_thermal_stability(
         self,

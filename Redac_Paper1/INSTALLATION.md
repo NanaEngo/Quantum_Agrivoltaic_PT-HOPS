@@ -2,24 +2,18 @@
 
 This repository targets a MesoHOPS simulation environment. To create a reproducible environment:
 
-1. Create a virtual environment (Python 3.8+):
+1. Create the `MesoHOP-sim` environment:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
+mamba create -n MesoHOP-sim python=3.10
+mamba activate MesoHOP-sim
 ```
 
-2. Install base dependencies:
+2. Install all dependencies:
 
 ```bash
-pip install -r requirements.txt
-```
-
-3. Install MesoHOPS and mesohops-specific dependencies (system-dependent):
-
-```bash
-pip install -r requirements-mesohops.txt
+mamba run -n MesoHOP-sim pip install -r requirements.txt
+mamba run -n MesoHOP-sim pip install -r requirements-mesohops.txt
 ```
 
 4. Run tests (will skip mesohops tests if mesohops not installed):

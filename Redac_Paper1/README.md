@@ -23,7 +23,7 @@ Our framework leverages the quantum mechanical nature of photosynthetic energy t
 
 ### Computational Engine
 - **MesoHOPS (adHOPS) v1.6**: Core non-Markovian dynamics propagation.
-- **PT-HOPS/SBD Framework**: Custom Python implementation for process tensor hierarchical equations of motion and spectrally bundled dissipators.
+- **PT-HOPS/SBD Framework**: Custom Python implementation for process tensor hierarchical equations of motion and stochastically bundled dissipators.
 - **ORCA v6.1.0**: DFT calculations using **wB97X-D4** functional and **def2-SVP** basis set.
 
 ### Environment Specification
@@ -60,9 +60,10 @@ Redac_Paper1/
 Please refer to [INSTALLATION.md](INSTALLATION.md) for detailed environment setup and dependency installation instructions.
 
 ### Running Simulations
-The primary simulation suite can be executed via the main driver script:
+All simulations must be executed within the `MesoHOP-sim` environment using the `mamba run` wrapper to ensure dependency integrity:
+
 ```bash
-python quantum_simulations_framework/quantum_coherence_agrivoltaics_mesohops_complete.py
+mamba run -n MesoHOP-sim python quantum_simulations_framework/quantum_coherence_agrivoltaics_mesohops_complete.py
 ```
 
 ### Building the Manuscript

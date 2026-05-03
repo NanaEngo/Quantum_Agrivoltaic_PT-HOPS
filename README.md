@@ -22,7 +22,7 @@ This repository contains the research framework, simulation codebase, and manusc
 
 ### What this project does
 
-Uses PT-HOPS/SBD (Process Tensor Hierarchy of Pure States with Spectrally Bundled Dissipators) to simulate excitonic energy transfer in the FMO photosynthetic complex under spectrally engineered photon baths. Dual-band optical filtering (750 nm + 820 nm) selectively populates vibronic resonances, extending coherence lifetimes by 20–50% and improving forward transfer yields by 25% at 295 K.
+Uses PT-HOPS/SBD (Process Tensor Hierarchy of Pure States with Stochastically Bundled Dissipators) to simulate excitonic energy transfer in the FMO photosynthetic complex under spectrally engineered photon baths. Dual-band optical filtering (750 nm + 820 nm) selectively populates vibronic resonances, extending coherence lifetimes by 20–50% and improving forward transfer yields by 25% at 295 K.
 
 ### Key results
 

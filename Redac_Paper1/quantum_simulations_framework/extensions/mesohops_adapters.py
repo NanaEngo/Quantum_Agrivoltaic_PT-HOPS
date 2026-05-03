@@ -23,7 +23,7 @@ except ImportError:
             pass
 
 
-from .spectral_bundling import SpectrallyBundledDissipator
+from .stochastic_bundling import StochasticallyBundledDissipator
 
 try:
     import jax
@@ -138,7 +138,7 @@ class PT_HopsNoise(HopsNoise):
     CURRENT IMPLEMENTATION SCOPE
     ----------------------------
     For the current FMO-based simulations (7-8 sites, ~500 fs dynamics), the
-    combination of standard HOPS with Spectrally Bundled Dissipators (SBD) provides
+    combination of standard HOPS with Stochastically Bundled Dissipators (SBD) provides
     equivalent accuracy with better numerical stability. PT-HOPS is planned for
     future extensions to full chloroplast modeling.
 
@@ -158,8 +158,8 @@ class PT_HopsNoise(HopsNoise):
 
     See Also
     --------
-    SBD_HopsTrajectory : Spectrally Bundled Dissipators for mode compression
-    SpectrallyBundledDissipator : Core SBD implementation
+    SBD_HopsTrajectory : Stochastically Bundled Dissipators for mode compression
+    StochasticallyBundledDissipator : Core SBD implementation
     core.hops_simulator.HopsSimulator : Unified simulator interface
 
     References
@@ -273,7 +273,7 @@ class PT_HopsNoise(HopsNoise):
 
 class SBD_HopsTrajectory(HopsTrajectory):
     """
-    A Trajectory wrapper that triggers the Spectral Bundling Routine on initialization
+    A Trajectory wrapper that triggers the Stochastic Bundling Routine on initialization
     before delegating to standard or custom EOM integrators.
     """
 
@@ -291,7 +291,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
 
         # 1. Intercept system parameters to apply SBD compression
         if system_param and "PARAM_NOISE1" in system_param:
-            logger.info("SBD INTERCEPT: Preparing to compress spectral modes...")
+            logger.info("SBD INTERCEPT: Preparing to compress stochastic modes...")
             raw_modes = system_param["PARAM_NOISE1"]
 
             # PARAM_NOISE1 is now a list of (g, w) tuples (one per hierarchy mode)
@@ -304,8 +304,8 @@ class SBD_HopsTrajectory(HopsTrajectory):
                 modes_list = [tuple(m) for m in raw_modes]
 
             if len(modes_list) > n_bundles:
-                self.sbd = SpectrallyBundledDissipator(n_bundles=n_bundles)
-                # SpectrallyBundledDissipator expects (w, g) order
+                self.sbd = StochasticallyBundledDissipator(n_bundles=n_bundles)
+                # StochasticallyBundledDissipator expects (w, g) order
                 self.sbd.discretize_spectral_density([(w, g) for g, w in modes_list])
                 bundled_ws, bundled_gs = self.sbd.get_bundle_parameters()
                 system_param["PARAM_NOISE1"] = list(zip(bundled_gs, bundled_ws))
