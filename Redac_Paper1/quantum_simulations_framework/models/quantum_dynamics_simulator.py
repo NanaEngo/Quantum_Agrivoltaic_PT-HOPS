@@ -117,7 +117,11 @@ class QuantumDynamicsSimulator:
                 _eom_mod.EOM_DICT_TYPES["F_DISCARD"] = [float, int]
 
         self.H_raw = np.array(hamiltonian, dtype=complex)
+        if self.H_raw.ndim != 2 or self.H_raw.shape[0] != self.H_raw.shape[1]:
+            raise ValueError(f"Hamiltonian must be square, got shape {self.H_raw.shape}")
         self.n_sites = self.H_raw.shape[0]
+        if self.n_sites == 0:
+            raise ValueError("Hamiltonian must have at least 1 site")
         self.temperature = temperature
         self.lambda_reorg = lambda_reorg
         self.gamma_dl = gamma_dl
@@ -136,7 +140,12 @@ class QuantumDynamicsSimulator:
         dl_modes = bcf_convert_dl_to_exp_with_Matsubara(
             lambda_reorg, gamma_dl, temperature, k_matsubara
         )
-        # dl_modes = [g0, w0, g1, w1, ...] alternating g, w pairs
+        # Validate output format: must be flat [g0, w0, g1, w1, ...]
+        if not isinstance(dl_modes, (list, np.ndarray)) or len(dl_modes) % 2 != 0:
+            raise RuntimeError(
+                f"bcf_convert_dl_to_exp_with_Matsubara returned unexpected format: "
+                f"type={type(dl_modes)}, len={len(dl_modes) if hasattr(dl_modes, '__len__') else 'N/A'}"
+            )
         self.n_modes_dl = len(dl_modes) // 2
 
         # Optional: underdamped vibronic modes via shifted Drude-Lorentz
@@ -222,13 +231,15 @@ class QuantumDynamicsSimulator:
         noise_param = {
             "SEED": seed,
             "MODEL": "FFT_FILTER",
-            "TLEN": t_max + 100.0,
-            "TAU": dt_save,
+            "TLEN": t_max + max(100.0, 5.0 / self.gamma_dl),  # buffer ≥ bath correlation time
+            "TAU": dt_save,  # noise sampling interval = integration timestep
         }
         hierarchy_param = {"MAXHIER": self.max_hier}
-        # K_MATSUBARA is encoded in the bath decomposition via bcf_convert_dl_to_exp_with_Matsubara
-        # and is not a valid HopsHierarchy key in this MesoHOPS version
-        integration_param = {"INTEGRATOR": "RUNGE_KUTTA"}
+        integration_param = {
+            "INTEGRATOR": "RUNGE_KUTTA",
+            "INCHWORM_CAP": 5,
+            "STATIC_BASIS": None,
+        }
 
         hops = HopsTrajectory(
             system_param=system_param,
@@ -315,15 +326,23 @@ class QuantumDynamicsSimulator:
         for k, seed in enumerate(seeds):
             try:
                 hops = self._build_hops_trajectory(seed, t_max, dt_save)
-                required_tau = hops.noise1.param["TAU"] / hops.integrator_step
+                # required_tau: MesoHOPS propagate() expects the internal RK step size.
+                # Use TAU directly — the integrator step is handled internally.
                 hops.initialize(psi_0.copy())
-                hops.propagate(t_max, required_tau)
+                hops.propagate(t_max, dt_save)
 
                 psi_traj = np.array(hops.storage.data["psi_traj"])[:, :n_sites]
-                if t_axis is None:
-                    t_axis = np.array(hops.storage.data["t_axis"])
+                t_ax_k = np.array(hops.storage.data["t_axis"])
 
-                # Check for NaN
+                # Enforce consistent length: truncate to shortest t_axis seen so far
+                if t_axis is None:
+                    t_axis = t_ax_k
+                elif len(t_ax_k) < len(t_axis):
+                    t_axis = t_ax_k  # adopt shorter axis; longer trajs will be truncated below
+
+                # Check for NaN and truncate to current t_axis length
+                n_t = len(t_axis)
+                psi_traj = psi_traj[:n_t]
                 if not np.any(np.isnan(psi_traj)):
                     all_psi_trajs.append(psi_traj)
 

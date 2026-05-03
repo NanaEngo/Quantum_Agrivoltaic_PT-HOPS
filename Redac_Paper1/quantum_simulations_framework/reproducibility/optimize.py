@@ -5,6 +5,7 @@ Usage: mamba run -n MesoHOP-sim python reproducibility/optimize.py
 """
 import os
 import sys
+import csv
 import yaml
 import numpy as np
 import logging
@@ -82,17 +83,24 @@ def sweep_filter_wavelengths(cfg, center_wavelengths_nm=None, n_traj=5):
                 k_matsubara=dyn['matsubara_truncation'],
                 use_sbd=True,
                 use_pt_hops=True,
-                pulse_center_freq=1e7 / l1,  # nm → cm^-1
+                pulse_center_freq=1e7 / l1,   # λ1 (nm) → cm⁻¹ for primary band
+                pulse_center_freq2=1e7 / l2,  # λ2 (nm) → cm⁻¹ for secondary band
             )
-            data = sim.simulate_dynamics(time_points)
-            phi_ft = 1.0 - data['populations'][-1, 0]
+            init_state = np.zeros(H.shape[0], dtype=complex)
+            init_state[0] = 1.0
+            data = sim.simulate_dynamics(time_points, initial_state=init_state)
+            # phi_ft: forward transfer yield = 1 - population remaining on donor (site 1)
+            phi_ft = float(1.0 - data['populations'][-1, 0])
             results.append({'lambda1_nm': l1, 'lambda2_nm': l2, 'phi_ft': phi_ft})
             print(f"  λ1={l1}, λ2={l2} → Φ_FT={phi_ft:.3f}")
         except Exception as e:
             logger.warning(f"Failed at λ1={l1}, λ2={l2}: {e}")
 
-    # Save results
-    import csv
+    if not results:
+        logger.error("All wavelength sweeps failed — no results to save.")
+        print("❌ No results produced. Check MesoHOPS availability and parameters.")
+        return results
+
     out_path = os.path.join(_SCRIPT_DIR, 'results',
                             f"optimization_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)

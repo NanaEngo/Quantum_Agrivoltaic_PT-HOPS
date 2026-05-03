@@ -41,9 +41,11 @@ class StochasticallyBundledDissipator:
         if not modes:
             return []
 
-        # Extract frequencies and weights
+        # Reset bundles on each call to prevent accumulation across repeated calls
+        self.bundles = []
+
         frequencies = np.array([m[0] for m in modes])
-        np.array([m[1] for m in modes])
+        couplings = np.array([m[1] for m in modes])
 
         # If we have fewer modes than requested bundles, just return individual bundles
         if len(modes) <= self.n_bundles:
@@ -51,7 +53,7 @@ class StochasticallyBundledDissipator:
                 bundle = StochasticBundle(
                     bundle_id=i,
                     center_frequency=mode[0],
-                    effective_coupling=mode[1],
+                    effective_coupling=abs(mode[1]),  # use magnitude for physical coupling
                     modes=[mode],
                     variance=0.0,
                 )
@@ -60,9 +62,8 @@ class StochasticallyBundledDissipator:
 
         # Very simple 1D clustering (uniform bins for this structural demonstration)
         min_freq, max_freq = np.min(frequencies), np.max(frequencies)
-        bin_edges = np.linspace(min_freq, max_freq + 1e-5, self.n_bundles + 1)
+        bin_edges = np.linspace(min_freq, max_freq * (1 + 1e-9) + 1e-5, self.n_bundles + 1)
 
-        self.bundles = []
         for i in range(self.n_bundles):
             # Find modes in this bin
             mask = (frequencies >= bin_edges[i]) & (frequencies < bin_edges[i + 1])
@@ -73,18 +74,17 @@ class StochasticallyBundledDissipator:
 
             bin_freqs = np.array([m[0] for m in bin_modes])
             bin_coups = np.array([m[1] for m in bin_modes])
+            bin_coups_abs = np.abs(bin_coups)
 
-            # Weighted center frequency
-            total_coupling = np.sum(np.abs(bin_coups))
-            if total_coupling > 0:
-                center_freq = np.sum(bin_freqs * np.abs(bin_coups)) / total_coupling
-            else:
-                center_freq = np.mean(bin_freqs)
+            # Weighted center frequency (by |coupling|)
+            total_coupling = np.sum(bin_coups_abs)
+            center_freq = (np.sum(bin_freqs * bin_coups_abs) / total_coupling
+                           if total_coupling > 0 else np.mean(bin_freqs))
 
             variance = np.var(bin_freqs)
 
-            # The effective coupling is typically the sum of the couplings in the bundle
-            effective_coupling = np.sum(bin_coups)
+            # Effective coupling: sum of magnitudes (physically: total bath coupling strength)
+            effective_coupling = float(np.sum(bin_coups_abs))
 
             bundle = StochasticBundle(
                 bundle_id=i,

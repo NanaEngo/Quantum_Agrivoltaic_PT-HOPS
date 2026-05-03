@@ -32,91 +32,50 @@ class SimpleQuantumDynamicsSimulator:
     def simulate_dynamics(self, time_points=None, initial_state=None, dt=0.1):
         """
         Simulate quantum dynamics using the time-dependent Schrödinger equation.
-
-        iħ d/dt |ψ⟩ = H |ψ⟩
-
-        The solution is |ψ(t)⟩ = exp(-iHt/ħ) |ψ(0)⟩
+        iħ d/dt |ψ⟩ = H |ψ⟩  →  |ψ(t)⟩ = exp(-iHt) |ψ(0)⟩
+        Note: pure-state propagation — entropy is always 0 (no bath).
         """
-        # Set default time points if not provided
         if time_points is None:
-            time_points = np.linspace(0, 100, 101)  # 101 points from 0 to 100 fs
+            time_points = np.linspace(0, 100, 101)
+        time_points = np.asarray(time_points)
+        if time_points.ndim != 1:
+            raise ValueError(f"time_points must be 1-D, got shape {time_points.shape}")
 
-        # Set initial state if not provided (excitation on first site)
         if initial_state is None:
             initial_state = np.zeros(self.n_sites, dtype=complex)
             initial_state[0] = 1.0
+        initial_state = np.array(initial_state, dtype=complex).flatten()
+        if initial_state.shape[0] != self.n_sites:
+            raise ValueError(
+                f"initial_state length {initial_state.shape[0]} != n_sites {self.n_sites}"
+            )
 
-        initial_state = np.array(initial_state, dtype=complex)
-
-        # Number of time points
         n_times = len(time_points)
-
-        # Initialize result arrays
         populations = np.zeros((n_times, self.n_sites))
         coherences = np.zeros(n_times)
         qfi_values = np.zeros(n_times)
-        entropy_values = np.zeros(n_times)
+        entropy_values = np.zeros(n_times)  # always 0 for pure-state propagation
 
-        # Calculate time evolution
-        logger.info(f"Simulating quantum dynamics for {n_times} time points...")
+        # Hoist eigendecomposition — O(N³) once instead of O(N³·T)
+        eigenvals, eigenvecs = np.linalg.eigh(self.h_shifted)
+        # Precompute projection of initial state onto eigenbasis
+        c0 = eigenvecs.T.conj() @ initial_state  # shape (n_sites,)
 
         for i, t in enumerate(time_points):
-            # Time evolution operator: U(t) = exp(-iHt)
-            # Using units where ħ=1 and energy is in cm^-1, time in fs
-            # We need to account for units: E*t in units of (cm^-1) * fs
-            # 1 cm^-1 = 3.3356e-12 fs^-1 (in natural units)
-            # So we multiply by appropriate conversion factor
-            time_factor = t * 0.0333564  # Conversion factor to match units
-
-            # Calculate U(t) = exp(-i * H_shifted * time_factor)
-            eigenvals, eigenvecs = np.linalg.eigh(self.h_shifted)
+            # time_factor: (cm⁻¹)·fs → dimensionless via ħ=1/(2πc) in cm⁻¹·fs units
+            time_factor = t * 0.0333564
             exp_evals = np.exp(-1j * eigenvals * time_factor)
-
-            # U = V * exp(-i*E*t) * V^dagger
-            U = eigenvecs @ np.diag(exp_evals) @ eigenvecs.T.conj()
-
-            # Evolved state
-            psi_t = U @ initial_state
-
-            # Density matrix
+            psi_t = eigenvecs @ (exp_evals * c0)
             rho_t = np.outer(psi_t, psi_t.conj())
-
-            # Calculate observables
             populations[i, :] = np.real(np.diag(rho_t))
-
-            # Calculate coherence measure (L1 norm of off-diagonal elements)
-            off_diag_sum = 0.0
-            for m in range(self.n_sites):
-                for n in range(self.n_sites):
-                    if m != n:
-                        off_diag_sum += np.abs(rho_t[m, n])
-            coherences[i] = off_diag_sum
-
-            # Calculate von Neumann entropy: -Tr[rho * log(rho)]
-            eigenvals_rho = np.linalg.eigvals(rho_t)
-            eigenvals_rho = np.real(eigenvals_rho)  # Take real part to handle numerical errors
-            # Ensure non-negative and normalize
-            eigenvals_rho = np.clip(eigenvals_rho, 0, None)
-            total = np.sum(eigenvals_rho)
-            if total > 1e-12:
-                eigenvals_rho = eigenvals_rho / total
-            else:
-                eigenvals_rho = np.ones_like(eigenvals_rho) / len(eigenvals_rho)
-
-            # Calculate entropy, avoiding log(0)
-            entropy = 0.0
-            for ev in eigenvals_rho:
-                if ev > 1e-12:
-                    entropy += -ev * np.log(ev)
-            entropy_values[i] = entropy
-
-            # Simplified QFI calculation
-            qfi_values[i] = 4 * np.var(np.real(np.diag(rho_t)))
-
-            if (i + 1) % max(1, n_times // 10) == 0:  # Print progress every 10%
-                logger.info(f"  {i + 1}/{n_times} time steps completed")
-
-        logger.info("Quantum dynamics simulation completed")
+            # Coherence: L1 norm of off-diagonal elements (vectorised)
+            coherences[i] = float(np.sum(np.abs(rho_t)) - np.sum(np.abs(np.diag(rho_t))))
+            # QFI for pure state: 4·Var_ψ(H) = 4(⟨H²⟩-⟨H⟩²)
+            H_psi = self.h_shifted @ psi_t
+            exp_H = np.real(np.vdot(psi_t, H_psi))
+            exp_H2 = np.real(np.vdot(psi_t, self.h_shifted @ H_psi))
+            qfi_values[i] = 4.0 * max(0.0, exp_H2 - exp_H ** 2)
+            # entropy_values[i] = 0 always for pure state — left as zeros
 
         return {
             "t_axis": time_points,
@@ -128,7 +87,7 @@ class SimpleQuantumDynamicsSimulator:
             "multipartite_ent": np.zeros(n_times),
             "pairwise_concurrence": np.zeros(n_times),
             "discord": np.zeros(n_times),
-            "fidelity": np.ones(n_times),  # Dummy fidelity
+            "fidelity": np.ones(n_times),
             "mandel_q": np.zeros(n_times),
             "simulator": "Simple Quantum Simulator",
         }
