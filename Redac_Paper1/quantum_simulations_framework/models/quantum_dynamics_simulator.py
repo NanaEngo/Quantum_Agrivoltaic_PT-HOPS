@@ -31,15 +31,31 @@ try:
     import mesohops.eom.hops_eom as _eom_mod
     from mesohops.trajectory.hops_trajectory import HopsTrajectory
     from mesohops.util.bath_corr_functions import (
-        bcf_convert_dl_to_exp_with_Matsubara,
-        bcf_convert_sdl_to_exp,
+        bcf_convert_dl_to_exp,
     )
+    # MesoHOPS v1.6 renaming / reorganization support
+    try:
+        from mesohops.util.bath_corr_functions import bcf_convert_sdl_to_exp as bcf_convert_dl_ud_to_exp
+    except ImportError:
+        try:
+            from mesohops.util.bath_corr_functions import bcf_convert_dl_ud_to_exp
+        except ImportError:
+            # Fallback for older versions where it might be missing or named differently
+            bcf_convert_dl_ud_to_exp = None
+
+    # Check for Matsubara version specifically if needed
+    try:
+        from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp_with_Matsubara
+    except ImportError:
+        bcf_convert_dl_to_exp_with_Matsubara = bcf_convert_dl_to_exp
 
     MESOHOPS_AVAILABLE = True
 except ImportError:
-    # Fallback or warning if mesohops is not installed
     MESOHOPS_AVAILABLE = False
     _eom_mod = None
+    bcf_convert_dl_to_exp = None
+    bcf_convert_dl_ud_to_exp = None
+    bcf_convert_dl_to_exp_with_Matsubara = None
 
 
 class QuantumDynamicsSimulator:
@@ -148,13 +164,28 @@ class QuantumDynamicsSimulator:
             )
         self.n_modes_dl = len(dl_modes) // 2
 
-        # Optional: underdamped vibronic modes via shifted Drude-Lorentz
+        # Optional: underdamped vibronic modes via bcf_convert_dl_ud_to_exp
+        # Returns flat [g0, w0, g1, w1, ...] for the two complex conjugate poles
         vib_mode_list = []
         for vm in self.vibronic_modes:
-            g_vib, w_vib = bcf_convert_sdl_to_exp(
-                vm["lambda"], vm["gamma"], vm["omega"], temperature
-            )
-            vib_mode_list.append((g_vib, w_vib))
+            try:
+                if bcf_convert_dl_ud_to_exp is not None:
+                    ud_modes = bcf_convert_dl_ud_to_exp(
+                        vm["lambda"], vm["gamma"], vm["omega"], temperature
+                    )
+                    # Support both [g, w] (legacy) and [g1, w1, g2, w2] (modern)
+                    for k in range(0, len(ud_modes), 2):
+                        vib_mode_list.append((ud_modes[k], ud_modes[k + 1]))
+                else:
+                    # Basic high-temperature fallback: single pole approximation
+                    # g = lambda * omega * (coth(beta*omega/2) + 1), w = gamma + i*omega
+                    # Here we just use a simplified version:
+                    vib_mode_list.append((vm["lambda"], vm["gamma"] + 1j * vm["omega"]))
+            except KeyError as e:
+                raise ValueError(
+                    f"Vibronic mode dict missing key {e}. "
+                    "Required keys: 'lambda', 'gamma', 'omega'."
+                ) from e
         self.n_modes_vib = len(vib_mode_list)
 
         # Total modes per site

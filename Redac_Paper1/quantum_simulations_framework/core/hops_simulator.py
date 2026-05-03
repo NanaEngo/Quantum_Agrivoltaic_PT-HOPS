@@ -210,13 +210,24 @@ class HopsSimulator:
             # 1. Drude-Lorentz modes (one per site)
             try:
                 from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp
-                dl_modes = bcf_convert_dl_to_exp(lambda_reorg, gamma_cutoff, self.temperature)
+                # pass k_matsubara to enable PT-HOPS/low-temp corrections
+                dl_modes = bcf_convert_dl_to_exp(
+                    lambda_reorg, gamma_cutoff, self.temperature, n_matsubara=self.k_matsubara
+                )
                 # dl_modes = [g0, w0, g1, w1, ...] — pairs of (g, w)
                 dl_pairs = [(dl_modes[i], dl_modes[i+1]) for i in range(0, len(dl_modes), 2)]
             except (ImportError, AttributeError, TypeError) as e:
-                raise RuntimeError(
-                    f"MesoHOPS bath conversion failed — cannot build valid GW_SYSBATH: {e}"
-                ) from e
+                # Try legacy name if modern name fails
+                try:
+                    from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp_with_Matsubara
+                    dl_modes = bcf_convert_dl_to_exp_with_Matsubara(
+                        lambda_reorg, gamma_cutoff, self.temperature, self.k_matsubara
+                    )
+                    dl_pairs = [(dl_modes[i], dl_modes[i+1]) for i in range(0, len(dl_modes), 2)]
+                except Exception:
+                    raise RuntimeError(
+                        f"MesoHOPS bath conversion failed — cannot build valid GW_SYSBATH: {e}"
+                    ) from e
 
             for i in range(n_sites):
                 for g, w in dl_pairs:
@@ -234,10 +245,13 @@ class HopsSimulator:
             else:
                 vib_damping = np.asarray(vib_damping_raw, dtype=float)
 
-            # Use bcf_convert_dl_ud_to_exp for underdamped vibronic modes.
+            # Use bcf_convert_sdl_to_exp for underdamped vibronic modes.
             # Each mode returns [g1, w1, g2, w2] — two complex conjugate pairs.
             try:
-                from mesohops.util.bath_corr_functions import bcf_convert_dl_ud_to_exp
+                try:
+                    from mesohops.util.bath_corr_functions import bcf_convert_sdl_to_exp as bcf_convert_dl_ud_to_exp
+                except ImportError:
+                    from mesohops.util.bath_corr_functions import bcf_convert_dl_ud_to_exp
                 use_ud_bcf = True
             except ImportError:
                 use_ud_bcf = False

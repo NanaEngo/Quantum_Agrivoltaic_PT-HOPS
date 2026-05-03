@@ -11,6 +11,8 @@ numba>=0.59
 h5py>=3.7
 tqdm>=4.65
 psutil>=5.9
+networkx>=3.0
+pytest>=7.0
 scienceplots>=2.0
 qutip>=5.2
 mesohops @ git+https://github.com/mesohops/mesohops.git@master

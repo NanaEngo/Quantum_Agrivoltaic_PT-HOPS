@@ -45,6 +45,35 @@ def test_figure_generator():
         shutil.rmtree("test_plots")
 
 
+def test_figure_generator_dpi():
+    """Verify that FigureGenerator uses the mandated 600 DPI for publication figures."""
+    from unittest.mock import patch
+    import matplotlib.pyplot as plt
+    
+    gen = FigureGenerator(figures_dir="test_dpi_plots")
+    
+    # Mock plt.savefig to capture arguments
+    with patch("matplotlib.pyplot.savefig") as mock_savefig:
+        # Create dummy data
+        t = np.linspace(0, 10, 5)
+        pop = np.random.rand(5, 7)
+        coh = np.random.rand(5)
+        metrics = {"qfi": np.random.rand(5)}
+        
+        gen.plot_quantum_dynamics(t, pop, coh, metrics)
+        
+        # Check if savefig was called with dpi=600 for the PDF
+        # Note: plot_quantum_dynamics saves both PDF (600 DPI) and PNG (300 DPI)
+        dpi_calls = [call.kwargs.get("dpi") for call in mock_savefig.call_args_list]
+        assert 600 in dpi_calls, "At least one figure must be saved with 600 DPI"
+        assert 300 in dpi_calls, "PNG preview should be 300 DPI"
+
+    # Cleanup
+    if os.path.exists("test_dpi_plots"):
+        import shutil
+        shutil.rmtree("test_dpi_plots")
+
+
 def test_logging_config():
     """Test logging initialization."""
     import logging

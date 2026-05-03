@@ -13,6 +13,8 @@ dependencies:
   - h5py>=3.7              # HDF5 output for converged simulation data
   - tqdm>=4.65             # progress bars for ensemble trajectory loops
   - psutil>=5.9            # memory monitoring in pipeline
+  - networkx>=3.0          # generating complex FMO schematic diagrams
+  - pytest>=7.0            # comprehensive physics and integration test suite
   - pip:
     - qutip>=5.2
     - scienceplots>=2.0    # publication-quality matplotlib styles (JPCL theme)

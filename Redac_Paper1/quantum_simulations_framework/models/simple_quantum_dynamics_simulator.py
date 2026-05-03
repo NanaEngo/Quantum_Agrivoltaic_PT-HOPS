@@ -20,8 +20,12 @@ class SimpleQuantumDynamicsSimulator:
 
     def __init__(self, hamiltonian, temperature=295):
         self.hamiltonian = np.array(hamiltonian, dtype=complex)
-        self.temperature = temperature
+        if self.hamiltonian.ndim != 2 or self.hamiltonian.shape[0] != self.hamiltonian.shape[1]:
+            raise ValueError(f"Hamiltonian must be square, got shape {self.hamiltonian.shape}")
         self.n_sites = self.hamiltonian.shape[0]
+        if self.n_sites == 0:
+            raise ValueError("Hamiltonian must have at least 1 site")
+        self.temperature = temperature
 
         # Shift Hamiltonian to improve numerical stability
         self.energy_shift = np.mean(np.diag(self.hamiltonian).real)
