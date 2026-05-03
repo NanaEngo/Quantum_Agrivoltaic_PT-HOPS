@@ -28,6 +28,7 @@ dynamics:
   time_max: 1000.0  # fs
   time_step: 0.5  # fs
   convergence_threshold: 1.0e-6  # Frobenius norm
+  sbd_bundles_per_site: 2  # Memory optimization: 25 modes -> 2 per site
 
 simulation:
   n_traj: 100  # ensemble trajectories for publication-grade results

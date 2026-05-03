@@ -157,6 +157,7 @@ class HopsSimulator:
         self.use_mesohops = MESOHOPS_AVAILABLE and use_mesohops
         self.use_pt_hops = kwargs.pop("use_pt_hops", False)
         self.use_sbd = kwargs.pop("use_sbd", False)
+        self.sbd_bundles_per_site = kwargs.pop("sbd_bundles_per_site", 2)
         self.system = None
         self.fallback_sim: Optional[Any] = None
 
@@ -457,7 +458,7 @@ class HopsSimulator:
 
             if self.use_sbd and SBD_HopsTrajectory is not None:
                 TrajectoryClass = SBD_HopsTrajectory
-                traj_kwargs["n_bundles"] = kwargs.get("n_bundles", 5)
+                traj_kwargs["n_bundles_per_site"] = kwargs.get("sbd_bundles_per_site", self.sbd_bundles_per_site)
                 logger.info("Engaging SBD_HopsTrajectory for compressed environmental simulation.")
             elif self.use_pt_hops and PT_HopsNoise is not None:
                 logger.info("Engaging PT_HopsNoise for Process Tensor dynamics.")

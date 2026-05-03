@@ -141,6 +141,7 @@ def run_full_fmo_simulation(cfg):
                 huang_rhys_factors=np.array(bath.get('huang_rhys_factors', [])),
                 vibronic_damping=np.array([bath.get('vibronic_damping', 10.0)] *
                                           len(bath.get('vibronic_frequencies', []))),
+                sbd_bundles_per_site=dyn.get('sbd_bundles_per_site', 2),
             )
             try:
                 data = sim.simulate_dynamics(time_points, initial_state=initial_state)

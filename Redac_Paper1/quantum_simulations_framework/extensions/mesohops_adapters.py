@@ -286,32 +286,62 @@ class SBD_HopsTrajectory(HopsTrajectory):
         hierarchy_param=None,
         storage_param=None,
         integration_param=None,
-        n_bundles: int = 5,
+        n_bundles_per_site: int = 2,
     ):
 
         # 1. Intercept system parameters to apply SBD compression
-        if system_param and "PARAM_NOISE1" in system_param:
-            logger.info("SBD INTERCEPT: Preparing to compress stochastic modes...")
-            raw_modes = system_param["PARAM_NOISE1"]
+        if system_param and "GW_SYSBATH" in system_param and "L_HIER" in system_param:
+            logger.info("SBD INTERCEPT: Preparing to compress hierarchy and noise modes...")
+            raw_gw = system_param["GW_SYSBATH"]
+            raw_l_hier = system_param["L_HIER"]
+            raw_l_noise = system_param.get("L_NOISE1", raw_l_hier)
 
-            # PARAM_NOISE1 is now a list of (g, w) tuples (one per hierarchy mode)
-            # Normalize to list of (g, w) tuples regardless of input format
-            if raw_modes and not isinstance(raw_modes[0], (tuple, list)):
-                # Legacy flat format [g0, w0, g1, w1, ...] — convert to tuples
-                modes_list = [(raw_modes[i], raw_modes[i+1])
-                              for i in range(0, len(raw_modes) - 1, 2)]
-            else:
-                modes_list = [tuple(m) for m in raw_modes]
+            # Map modes to unique L-operators (sites)
+            # We use the diagonal indices to identify sites for this FMO model
+            site_to_modes = {}
+            for i, L in enumerate(raw_l_hier):
+                site_idx = np.argmax(np.diag(L))
+                if site_idx not in site_to_modes:
+                    site_to_modes[site_idx] = []
+                site_to_modes[site_idx].append(raw_gw[i])
 
-            if len(modes_list) > n_bundles:
-                self.sbd = StochasticallyBundledDissipator(n_bundles=n_bundles)
-                # StochasticallyBundledDissipator expects (w, g) order
-                self.sbd.discretize_spectral_density([(w, g) for g, w in modes_list])
-                bundled_ws, bundled_gs = self.sbd.get_bundle_parameters()
-                system_param["PARAM_NOISE1"] = list(zip(bundled_gs, bundled_ws))
-                logger.info(
-                    f"SBD Compression: {len(modes_list)} → {len(bundled_ws)} modes."
-                )
+            new_gw = []
+            new_l_hier = []
+            new_l_noise = []
+
+            for site_idx, modes in site_to_modes.items():
+                if len(modes) > n_bundles_per_site:
+                    sbd = StochasticallyBundledDissipator(n_bundles=n_bundles_per_site)
+                    # SBD expects (w, g) order
+                    sbd.discretize_spectral_density([(w, g) for g, w in modes])
+                    bundled_ws, bundled_gs = sbd.get_bundle_parameters()
+                    
+                    for g, w in zip(bundled_gs, bundled_ws):
+                        new_gw.append((g, w))
+                        # Reconstruct the L operator for this site
+                        L_op = np.zeros_like(raw_l_hier[0])
+                        L_op[site_idx, site_idx] = 1.0
+                        new_l_hier.append(L_op)
+                        new_l_noise.append(L_op)
+                else:
+                    # Not enough modes to bundle, keep as is
+                    for g, w in modes:
+                        new_gw.append((g, w))
+                        L_op = np.zeros_like(raw_l_hier[0])
+                        L_op[site_idx, site_idx] = 1.0
+                        new_l_hier.append(L_op)
+                        new_l_noise.append(L_op)
+
+            # Update system parameters with bundled values
+            system_param["GW_SYSBATH"] = new_gw
+            system_param["L_HIER"] = new_l_hier
+            system_param["L_NOISE1"] = new_l_noise
+            system_param["PARAM_NOISE1"] = new_gw
+            
+            logger.info(
+                f"SBD Compression complete: {len(raw_gw)} → {len(new_gw)} modes total "
+                f"({n_bundles_per_site} bundles per site)."
+            )
 
         # Fallback to standard trajectory initialization with the bundled parameters
         super().__init__(
