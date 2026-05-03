@@ -42,6 +42,29 @@ mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/repro
 
 The pipeline validates parameters (L=10, K=10), checks MesoHOPS availability, runs the L=9/10/11 convergence audit, and generates figures. It will **exit with an error** if MesoHOPS is not available, preventing invalid fallback data from being saved.
 
+### 🚀 HPC & Cluster Deployment
+
+For remote servers or clusters, use the provided environment and execution scripts to ensure stable, background processing:
+
+1. **Environment Setup**:
+   ```bash
+   mamba env create -f environment.yml
+   # or
+   pip install -r requirements.txt
+   ```
+
+2. **Background Execution**:
+   To prevent simulation interruption if your terminal disconnects, use the generic cluster script:
+   ```bash
+   ./run_cluster.sh
+   ```
+   This script triggers `nohup` and redirects all output to `reproducibility_cluster.log`.
+
+3. **Monitoring Results**:
+   ```bash
+   tail -f reproducibility_cluster.log
+   ```
+
 ### Canonical simulation parameters
 
 All parameters are defined in `Redac_Paper1/quantum_simulations_framework/parameters.yaml` — the single source of truth. Never hardcode physics values.

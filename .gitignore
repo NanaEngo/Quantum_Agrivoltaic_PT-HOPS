@@ -63,10 +63,14 @@ Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
 
 # Execution logs
 Redac_Paper1/quantum_simulations_framework/logs/
+reproducibility_cluster.log
+cluster_execution.log
+simulation_output.log
 
 # Temporary files
 *.tmp
 *.bak
+envs.txt
 
 # Sensitive development files
 Next/

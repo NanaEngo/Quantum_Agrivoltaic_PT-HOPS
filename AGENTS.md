@@ -14,11 +14,18 @@ This repository contains two active research projects:
 
 ## Simulation Environment
 
-All quantum dynamics simulations MUST be run using the MesoHOPS environment:
-
+### Local Execution
 ```bash
 mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py
 ```
+
+### Cluster/Remote Execution
+For background execution on remote servers or clusters (no Slurm specific requirement):
+```bash
+chmod +x run_cluster.sh
+./run_cluster.sh
+```
+Monitoring: `tail -f reproducibility_cluster.log`
 
 Any execution bypassing this wrapper may produce inconsistent results. The `main.py` orchestrator validates `parameters.yaml` (enforces L≥10, K≥10), checks MesoHOPS availability, runs the convergence audit, and generates figures.
 
