@@ -320,7 +320,9 @@ Temperature ($T$) & \multicolumn{2}{c}{\SI{295}{\kelvin}} \\
 \section{12-Test validation suite}
 \label{sec:validation}
 
-We implement a comprehensive 12-test validation suite organized in three categories to ensure observed quantum advantages are genuine physical effects rather than numerical artifacts.\subsection{Convergence tests (4 tests)}
+We implement a comprehensive 12-test validation suite organized in three categories to ensure observed quantum advantages are genuine physical effects rather than numerical artifacts. We clarify that the PT-HOPS method is formally exact. Using our globally synchronized production parameters ($L=10, K=10$), our dedicated \texttt{audit\_convergence.py} confirms trace preservation and positivity.
+
+\subsection{Convergence tests (4 tests)}
 
 \textbf{Test 1: Hierarchy depth convergence}
 This test ensures mathematical convergence with respect to the truncation of auxiliary density operators. Running the FMO dynamics at \SI{295}{\kelvin} with hierarchy depths $L=8$ and $L=10$ yields a relative difference of \SI{0.9}{\percent} in $\Phi_{\mathrm{FT}}$, confirming $L=10$ as a rigorous truncation limit. $\rightarrow$ PASS.
@@ -733,7 +735,7 @@ All reported enhancements have $p < 0.01$ (highly significant). For the primary 
 \section{Three-site model: generalizability demonstration}
 \label{sec:3site}
 
-To demonstrate that spectral bath engineering is not specific to the FMO complex, we apply the same PT-HOPS/SBD protocol to a minimal three-site excitonic trimer. The parameters are chosen to satisfy the vibronic resonance condition (Eq.~\cref{Main-eq:resonance_condition} of the main manuscript) without reference to any biological system.
+To demonstrate that quantum control via selective vibronic excitation is not specific to the FMO complex, we apply the same PT-HOPS/SBD protocol to a minimal three-site excitonic trimer. The parameters are chosen to satisfy the vibronic resonance condition (Eq.~\cref{Main-eq:resonance_condition} of the main manuscript) without reference to any biological system.
 
 \subsection{Model parameters}
 
@@ -848,7 +850,7 @@ Detailed balance & \SI{1.7}{\percent} & PASS \\
 \end{tabular}
 \end{table}
 
-The three-site model results confirm that the spectral bath engineering mechanism is general~\cite{Moix2011,Ishizaki2009a}: the coherence enhancement emerges whenever the vibronic resonance condition $\Delta E_{nm} \approx \omega_v$ is satisfied and the filter selectively populates the corresponding dressed states. The off-resonant control ($\eta < 0.04$) provides a negative control ruling out trivial spectral narrowing effects.
+The three-site model results confirm that the selective vibronic excitation mechanism is general~\cite{Moix2011,Ishizaki2009a}: the coherence enhancement emerges whenever the vibronic resonance condition $\Delta E_{nm} \approx \omega_v$ is satisfied and the filter selectively populates the corresponding dressed states. The off-resonant control ($\eta < 0.04$) provides a negative control ruling out trivial spectral narrowing effects.
 
 %==============================================================================
 % SECTION S11: ALTERNATIVE MECHANISMS AND CONTROL EXPERIMENTS
