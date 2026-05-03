@@ -48,6 +48,7 @@ def spectral_density_drude_lorentz(omega, lambda_reorg, gamma, temperature):
     """Calculate Drude-Lorentz spectral density."""
     kT = 0.695 * temperature
     J = 2 * lambda_reorg * gamma * omega / (omega**2 + gamma**2)
-    n_th = 1.0 / (np.exp(np.maximum(omega, 1e-10) / kT) - 1)
-    J *= (1 + n_th) if np.any(omega >= 0) else n_th - 1
+    n_th = 1.0 / (np.exp(np.maximum(np.abs(omega), 1e-10) / kT) - 1)
+    # Element-wise: emission side (omega<0) uses n_th-1, absorption side uses 1+n_th
+    J *= np.where(omega >= 0, 1.0 + n_th, n_th - 1.0)
     return J

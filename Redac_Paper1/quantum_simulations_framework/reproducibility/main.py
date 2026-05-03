@@ -13,8 +13,12 @@ import os
 import sys
 
 # Force unbuffered stdout/stderr so log lines appear immediately
-sys.stdout.reconfigure(line_buffering=True)
-sys.stderr.reconfigure(line_buffering=True)
+# reconfigure() is not available in Jupyter/Colab (OutStream has no reconfigure)
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+    sys.stderr.reconfigure(line_buffering=True)
+except AttributeError:
+    pass  # Jupyter/Colab environment — buffering handled by kernel
 
 import logging
 import yaml
@@ -165,6 +169,7 @@ def run_full_fmo_simulation(cfg):
                     pop_sum[:n] += pops[:n]
                     coh_sum[:n] += cohs[:n]
                 n_completed += 1
+                last_data = data  # track last successful trajectory's metadata
             except Exception as e:
                 logger.warning(f"  Trajectory {traj_idx} failed: {e}")
 
@@ -176,7 +181,7 @@ def run_full_fmo_simulation(cfg):
             'coherences': coh_sum / n_completed,
             't_axis': t_save,
             'n_traj': n_completed,
-            'simulator': data.get('simulator', 'MesoHOPS'),
+            'simulator': last_data.get('simulator', 'MesoHOPS'),
         }
         logger.info(f"FMO {label}: {n_completed} trajectories averaged. "
                     f"Simulator: {results[label]['simulator']}")
@@ -286,6 +291,9 @@ def main():
 
     # Step 2: Convergence audit — proves L=10 is sufficient
     audit_data = run_convergence_audit()
+    if not audit_data:
+        print("  ❌ Convergence audit returned no data. Exiting.")
+        sys.exit(1)
 
     # Step 3: Full FMO simulation — generates the actual paper data
     sim_results, time_points = run_full_fmo_simulation(cfg)

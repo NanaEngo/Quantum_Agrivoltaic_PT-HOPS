@@ -198,7 +198,8 @@ class PT_HopsNoise(HopsNoise):
 
     def __init__(self, noise_param, noise_corr, bond_dim=12):
         self.__locked__ = False
-        super().__init__(noise_param, {})
+        # Pass noise_corr to parent instead of empty dict
+        super().__init__(noise_param, noise_corr if isinstance(noise_corr, dict) else {})
         self.noise_corr = noise_corr
         self.is_pt_hops = True
         self.bond_dim = bond_dim
@@ -300,7 +301,14 @@ class SBD_HopsTrajectory(HopsTrajectory):
             # We use the diagonal indices to identify sites for this FMO model
             site_to_modes = {}
             for i, L in enumerate(raw_l_hier):
-                site_idx = np.argmax(np.diag(L))
+                # Identify site by the index of the largest diagonal element.
+                # For off-diagonal coupling operators, use the row of the largest element.
+                diag = np.abs(np.diag(L))
+                if diag.max() > 1e-12:
+                    site_idx = int(np.argmax(diag))
+                else:
+                    # Off-diagonal operator: use row of largest absolute element
+                    site_idx = int(np.argmax(np.abs(L).sum(axis=1)))
                 if site_idx not in site_to_modes:
                     site_to_modes[site_idx] = []
                 site_to_modes[site_idx].append(raw_gw[i])

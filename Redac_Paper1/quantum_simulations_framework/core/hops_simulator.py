@@ -169,8 +169,9 @@ class HopsSimulator:
         if self.use_mesohops:
             self._init_mesohops(**kwargs)
 
-        # Initialize fallback only if not already done inside _init_mesohops failure handler
-        if self.fallback_sim is None:
+        # Initialize fallback only if MesoHOPS was not requested or failed without
+        # already initializing a fallback inside _init_mesohops
+        if not self.use_mesohops and self.fallback_sim is None:
             self._init_fallback(**kwargs)
 
     def _init_mesohops(self, **kwargs: Any) -> None:
@@ -226,7 +227,12 @@ class HopsSimulator:
             # 2. Vibronic modes (one per mode per site)
             vib_freqs = kwargs.get("vibronic_frequencies", DEFAULT_VIBRONIC_FREQUENCIES)
             vib_hr = kwargs.get("huang_rhys_factors", DEFAULT_HUANG_RHYS_FACTORS)
-            vib_damping = kwargs.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING)
+            vib_damping_raw = kwargs.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING)
+            # Normalize: scalar → broadcast to array matching vib_freqs length
+            if np.isscalar(vib_damping_raw):
+                vib_damping = np.full(len(vib_freqs), float(vib_damping_raw))
+            else:
+                vib_damping = np.asarray(vib_damping_raw, dtype=float)
 
             # Use bcf_convert_dl_ud_to_exp for underdamped vibronic modes.
             # Each mode returns [g1, w1, g2, w2] — two complex conjugate pairs.
@@ -488,62 +494,60 @@ class HopsSimulator:
 
             trajectory.initialize(initial_state.copy())
 
-            # Propagate the system
-            # Note: The actual timestep is tau * integrator_step
-            # We want actual timestep = TAU, so we pass tau = TAU / integrator_step
-            # Since default integrator_step is 0.5, we pass tau = 2.0 * TAU
-            integrator_step = 0.5  # Default RK integrator step
-            tau = dt_save / integrator_step
-
-            # Do NOT suppress stdout so numerical instabilities (like non-positive semidefinite matrices) are visible
-            trajectory.propagate(t_max, tau)
+            # Propagate the system — tau is the internal integration timestep
+            trajectory.propagate(t_max, dt_save)
 
             # Extract results from trajectory
             t_axis = np.array(trajectory.storage.data["t_axis"])
-            psi_traj = np.array(trajectory.storage.data["psi_traj"])
 
-            # Calculate ensemble averages if multiple trajectories are used
-            # For simplicity here, using single trajectory results
+            # MesoHOPS stores the full hierarchy state vector in psi_traj.
+            # The physical (system) subspace occupies the first n_sites components
+            # of the zeroth hierarchy layer, which is always the leading block.
+            # We use 'pop_site' if available (direct population output), otherwise
+            # fall back to extracting from psi_traj.
             n_times = len(t_axis)
             n_sites = self.hamiltonian.shape[0]
 
-            # Calculate density matrices and observables
-            populations = np.zeros((n_times, n_sites))
+            storage_data = trajectory.storage.data
+            if "pop_site" in storage_data:
+                # Preferred: direct population output from MesoHOPS storage
+                populations = np.real(np.array(storage_data["pop_site"]))  # shape (T, n_sites)
+                if populations.ndim == 1:
+                    populations = populations.reshape(-1, 1)
+            else:
+                # Fallback: extract physical subspace from psi_traj
+                psi_traj = np.array(storage_data["psi_traj"])
+                populations = np.zeros((n_times, n_sites))
+                for i in range(n_times):
+                    psi = psi_traj[i, :n_sites]
+                    populations[i, :] = np.real(psi * np.conj(psi))
+
+            # Calculate coherences from populations (or psi_traj if available)
             coherences = np.zeros(n_times)
-
-            for i in range(n_times):
-                # Calculate density matrix: |psi><psi|
-                psi = psi_traj[i, :n_sites]  # Extract physical state
-                rho = np.outer(psi, np.conj(psi))
-
-                # Calculate populations
-                populations[i, :] = np.real(np.diag(rho))
-
-                # Calculate coherence measure (L1 norm)
-                coherence = 0.0
-                for m in range(n_sites):
-                    for n in range(n_sites):
-                        if m != n:
-                            coherence += np.abs(rho[m, n])
-                coherences[i] = coherence
+            if "psi_traj" in storage_data:
+                psi_traj = np.array(storage_data["psi_traj"])
+                for i in range(n_times):
+                    psi = psi_traj[i, :n_sites]
+                    rho = np.outer(psi, np.conj(psi))
+                    coherences[i] = float(np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho))))
 
             # Calculate other quantum metrics
             qfi_values = np.zeros(n_times)
             entropy_values = np.zeros(n_times)
 
+            psi_traj_arr = np.array(storage_data["psi_traj"]) if "psi_traj" in storage_data else None
             for i in range(n_times):
-                # Calculate density matrix from ensemble average if multiple trajectories
-                psi = psi_traj[i, :n_sites]
-                rho = np.outer(psi, np.conj(psi))  # Pure state
-
-                # Normalize density matrix
+                if psi_traj_arr is not None:
+                    psi = psi_traj_arr[i, :n_sites]
+                    rho = np.outer(psi, np.conj(psi))
+                else:
+                    # Build rho from populations (diagonal only — coherences lost)
+                    rho = np.diag(populations[i, :].astype(complex))
+                # Normalize
                 trace_rho = np.trace(rho).real
                 if trace_rho > 1e-10:
                     rho = rho / trace_rho
-
                 entropy_values[i] = self._calculate_von_neumann_entropy(rho)
-
-                # QFI calculation (simplified)
                 try:
                     qfi_values[i] = self._calculate_qfi(rho, self.hamiltonian)
                 except (np.linalg.LinAlgError, ValueError):

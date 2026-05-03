@@ -78,6 +78,16 @@ class FigureGenerator:
         n_sites = populations.shape[1] if len(populations.shape) > 1 else 1
         n_metrics = len(quantum_metrics)
 
+        # Guard: truncate all arrays to the shortest common length
+        n_t = min(len(time_points), populations.shape[0], len(coherences))
+        time_points = time_points[:n_t]
+        populations = populations[:n_t]
+        coherences = coherences[:n_t]
+        if 'baseline_populations' in kwargs:
+            kwargs['baseline_populations'] = kwargs['baseline_populations'][:n_t]
+        if 'baseline_coherences' in kwargs:
+            kwargs['baseline_coherences'] = kwargs['baseline_coherences'][:n_t]
+
         # Create subplots
         n_cols = 2
         # Row 0: populations and coherences
@@ -504,11 +514,14 @@ class FigureGenerator:
         ax1.hist(disorder_samples, bins=15, color=self.colors[1], edgecolor='black', alpha=0.7, density=True)
         
         # Overlay Gaussian fit
-        from scipy.stats import norm
-        xmin, xmax = ax1.get_xlim()
-        x = np.linspace(xmin, xmax, 100)
-        p = norm.pdf(x, mean_eta, std_eta)
-        ax1.plot(x, p, 'k--', linewidth=2, label='Gaussian Fit')
+        try:
+            from scipy.stats import norm as _norm
+            xmin, xmax = ax1.get_xlim()
+            x = np.linspace(xmin, xmax, 100)
+            p = _norm.pdf(x, mean_eta, std_eta)
+            ax1.plot(x, p, 'k--', linewidth=2, label='Gaussian Fit')
+        except ImportError:
+            logger.warning("scipy not available — Gaussian fit skipped in Figure 2")
         
         ax1.axvline(mean_eta, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_eta:.2f}')
         ax1.set_xlabel(r"Relative Enhancement $\eta$", fontsize=12)

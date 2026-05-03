@@ -142,24 +142,35 @@ def run_convergence_audit():
     storage = CSVDataStorage(output_dir=_results_dir)
 
     # Trim all arrays to the shortest common length before saving
-    n_min = min(len(time_points), results[9].shape[0], results[10].shape[0], results[11].shape[0])
+    n_min = min(
+        len(time_points),
+        results[9].shape[0],
+        results[10].shape[0],
+        results[11].shape[0],
+        len(coherences[10]),
+    )
     metrics = {
         "pop_site1_L9": results[9][:n_min, 0],
         "pop_site1_L11": results[11][:n_min, 0],
     }
 
-    output_path = storage.save_quantum_dynamics_results(
-        time_points[:n_min],
-        results[10][:n_min],
-        coherences[10][:n_min],
-        metrics,
-        filename_prefix="convergence_audit",
-        config_dict=cfg,
-        audit_mae_9_10=diff_9_10,
-        audit_mae_10_11=diff_10_11
-    )
-    print(f"💾 Hardened Audit data saved to: {output_path}")
-    logger.info(f"Convergence audit complete. MAE(9→10)={diff_9_10:.2e}, MAE(10→11)={diff_10_11:.2e}")
+    try:
+        output_path = storage.save_quantum_dynamics_results(
+            time_points[:n_min],
+            results[10][:n_min],
+            coherences[10][:n_min],
+            metrics,
+            filename_prefix="convergence_audit",
+            config_dict=cfg,
+            audit_mae_9_10=diff_9_10,
+            audit_mae_10_11=diff_10_11
+        )
+        print(f"💾 Hardened Audit data saved to: {output_path}")
+        logger.info(f"Convergence audit complete. MAE(9→10)={diff_9_10:.2e}, MAE(10→11)={diff_10_11:.2e}")
+    except Exception as e:
+        logger.error(f"Failed to save audit CSV: {e}")
+        output_path = None
+        print(f"⚠️  Audit CSV save failed: {e} — results still returned.")
 
     # Return L=10 results for downstream figure generation
     return {

@@ -77,6 +77,15 @@ class CSVDataStorage:
         for metric_name, metric_values in quantum_metrics.items():
             if isinstance(metric_values, np.ndarray) and len(metric_values) == len(time_points):
                 data_dict[metric_name] = metric_values
+            elif isinstance(metric_values, np.ndarray):
+                # Truncate or pad to match time_points length
+                n = len(time_points)
+                if len(metric_values) >= n:
+                    data_dict[metric_name] = metric_values[:n]
+                else:
+                    padded = np.full(n, np.nan)
+                    padded[:len(metric_values)] = metric_values
+                    data_dict[metric_name] = padded
             else:
                 data_dict[metric_name] = [metric_values] * len(time_points)
 

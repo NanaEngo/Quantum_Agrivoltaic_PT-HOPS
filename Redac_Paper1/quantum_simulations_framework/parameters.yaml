@@ -20,7 +20,7 @@ bath:
   # Realistic Vibronic Modes (12 Dominant Peaks per Coker 2013)
   vibronic_frequencies: [180.0, 220.0, 280.0, 350.0, 520.0, 575.0, 720.0, 1050.0, 1185.0, 1220.0, 1350.0, 1500.0]
   huang_rhys_factors: [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
-  vibronic_damping: 10.0 # cm^-1
+  vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
 
 dynamics:
   hierarchy_depth: 10  # L=10 mandate per Reviewer 1
