@@ -47,6 +47,10 @@ Thumbs.db
 
 # Project specific
 .qodo/
+.kiro/
+.agent/
+_bmad*/
+.QWEN*/
 managed_context/
 test_suite_analysis/
 AGENTS.md
