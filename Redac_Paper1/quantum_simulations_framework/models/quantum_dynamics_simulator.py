@@ -58,6 +58,28 @@ except ImportError:
     bcf_convert_dl_to_exp_with_Matsubara = None
 
 
+# FIX H-5: apply the EOM_DICT_TYPES patch once at module import time, not on
+# every QuantumDynamicsSimulator instantiation. Mutating a global MesoHOPS dict
+# inside __init__ runs 100× in a trajectory loop and is a side-effect that can
+# interfere with other MesoHOPS users in the same process.
+_EOM_PATCHED = False
+
+def _patch_eom_dict_types():
+    """Extend MesoHOPS EOM_DICT_TYPES with adHOPS keys (v1.6.0 compatibility)."""
+    global _EOM_PATCHED
+    if _EOM_PATCHED or _eom_mod is None:
+        return
+    if "ADAPTIVE_H" not in _eom_mod.EOM_DICT_TYPES:
+        _eom_mod.EOM_DICT_TYPES["ADAPTIVE_H"] = [bool]
+        _eom_mod.EOM_DICT_TYPES["ADAPTIVE_S"] = [bool]
+        _eom_mod.EOM_DICT_TYPES["UPDATE_STEP"] = [float, bool, type(None)]
+        _eom_mod.EOM_DICT_TYPES["F_DISCARD"] = [float, int]
+        logger.debug("EOM_DICT_TYPES patched for adHOPS support (MesoHOPS v1.6.0)")
+    _EOM_PATCHED = True
+
+_patch_eom_dict_types()
+
+
 class QuantumDynamicsSimulator:
     """
     Non-Markovian quantum dynamics for the FMO complex using MesoHOPS.
@@ -115,7 +137,7 @@ class QuantumDynamicsSimulator:
         gamma_dl=50.0,
         k_matsubara=DEFAULT_N_MATSUBARA,
         max_hier=DEFAULT_MAX_HIERARCHY,
-        n_traj=50,
+        n_traj=100,   # D-3 FIX: aligned with parameters.yaml n_traj=100 (was 50)
         vibronic_modes=None,
     ):
 
@@ -123,14 +145,6 @@ class QuantumDynamicsSimulator:
             raise ImportError(
                 "MesoHOPS is required but not available. Please install it: pip install mesohops"
             )
-
-        # Patch EOM_DICT_TYPES for adHOPS support in MesoHOPS v1.6.0
-        if MESOHOPS_AVAILABLE and _eom_mod is not None:
-            if "ADAPTIVE_H" not in _eom_mod.EOM_DICT_TYPES:
-                _eom_mod.EOM_DICT_TYPES["ADAPTIVE_H"] = [bool]
-                _eom_mod.EOM_DICT_TYPES["ADAPTIVE_S"] = [bool]
-                _eom_mod.EOM_DICT_TYPES["UPDATE_STEP"] = [float, bool, type(None)]
-                _eom_mod.EOM_DICT_TYPES["F_DISCARD"] = [float, int]
 
         self.H_raw = np.array(hamiltonian, dtype=complex)
         if self.H_raw.ndim != 2 or self.H_raw.shape[0] != self.H_raw.shape[1]:
@@ -144,7 +158,9 @@ class QuantumDynamicsSimulator:
         self.k_matsubara = k_matsubara
         self.max_hier = max_hier
         self.n_traj = n_traj
-        self.vibronic_modes = vibronic_modes or []
+        # FIX M-3: 'vibronic_modes or []' raises ValueError for empty np.ndarray.
+        # Use explicit None check instead.
+        self.vibronic_modes = vibronic_modes if vibronic_modes is not None else []
 
         # Zero-shift Hamiltonian to improve numerical stability
         self.E_shift = np.mean(np.diag(self.H_raw).real)
@@ -415,6 +431,7 @@ class QuantumDynamicsSimulator:
         coherences = np.zeros(n_times)
         qfi_values = np.zeros(n_times)
         entropy_values = np.zeros(n_times)
+        ipr_values = np.zeros(n_times)
         bipartite_ent_values = np.zeros(n_times)
         multipartite_ent_values = np.zeros(n_times)
         pairwise_concurrence_values = np.zeros(n_times)
@@ -438,6 +455,10 @@ class QuantumDynamicsSimulator:
             density_matrices.append(rho)
             populations[i, :] = np.real(np.diag(rho))
             coherences[i] = self.calculate_coherence_measure(rho)
+
+            # IPR = 1 / Σ_n ρ_nn²  (manuscript Fig. 1c)
+            diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
+            ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
 
             try:
                 qfi_values[i] = self.calculate_qfi(rho, self.H_raw)
@@ -497,6 +518,7 @@ class QuantumDynamicsSimulator:
             "coherences": coherences,
             "qfi": qfi_values,
             "entropy": entropy_values,
+            "ipr": ipr_values,
             "bipartite_ent": bipartite_ent_values,
             "multipartite_ent": multipartite_ent_values,
             "pairwise_concurrence": pairwise_concurrence_values,

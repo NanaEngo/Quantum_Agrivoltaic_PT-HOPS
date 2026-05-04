@@ -11,17 +11,34 @@ echo "--------------------------------------------------------"
 echo "  Quantum-Enhanced Agrivoltaics: Production Pipeline"
 echo "--------------------------------------------------------"
 
-# FIX M-7: CONDA_CMD was never set in this script, making the conda branch dead
-# code — the script always fell through to system Python (wrong environment).
-# Detect mamba first (faster solver), then conda, then fall back to empty string.
-if command -v mamba &> /dev/null; then
-    CONDA_CMD="mamba"
-elif command -v conda &> /dev/null; then
-    CONDA_CMD="conda"
-else
-    echo "  ⚠️  Neither mamba nor conda found. Assuming environment is pre-activated."
-    CONDA_CMD=""
+# Try multiple possible venv locations
+VENV_PATHS=(
+    "$HOME/VirtualEnv/bin/activate"
+    "$HOME/venv/bin/activate"
+    "$HOME/.venv/bin/activate"
+)
+
+ACTIVATED=false
+for venv in "${VENV_PATHS[@]}"; do
+    if [ -f "$venv" ]; then
+        echo "  ✅ Activating virtual environment: $venv"
+        source "$venv"
+        ACTIVATED=true
+        break
+    fi
+done
+
+if [ "$ACTIVATED" = false ]; then
+    echo "  ⚠️  No virtual environment found. Trying with system Python..."
+    echo "  Checked: ${VENV_PATHS[*]}"
 fi
+
+# Check Python
+if ! command -v python3 &> /dev/null; then
+    echo "ERROR: python3 not found"
+    exit 1
+fi
+echo "✅ Python3 available"
 
 # 2. Launch simulation
 if [ -n "$CONDA_CMD" ]; then

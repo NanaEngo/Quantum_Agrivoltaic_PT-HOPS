@@ -80,12 +80,16 @@ def run_convergence_audit():
         coherences[L] = sim_data.get('coherences', np.zeros(len(time_points)))
 
     # Trace check: single HOPS trajectories lose norm stochastically.
-    # We check that the mean trace (ensemble proxy) is reasonable, not exact.
+    # Threshold of 0.5 catches catastrophic solver failure (>50% norm loss)
+    # while tolerating the expected stochastic norm fluctuations of a single
+    # HOPS trajectory. A mean trace of 0.01 (the previous threshold) would
+    # only catch a completely collapsed wavefunction — 100× too permissive.
+    # FIX M-2: raised threshold from 0.01 to 0.5.
     for L in depths:
         pops = results[L]
         traces = np.sum(pops, axis=1)
         mean_trace = np.mean(traces)
-        if mean_trace < 0.01:  # catastrophic loss — indicates solver failure
+        if mean_trace < 0.5:  # catastrophic loss — indicates solver failure
             logger.error(f"L={L}: Catastrophic trace loss! Mean trace={mean_trace:.4f}")
             print(f"❌ FATAL: Catastrophic trace loss at L={L} (mean trace={mean_trace:.4f})")
             sys.exit(1)
@@ -120,6 +124,14 @@ def run_convergence_audit():
                      "The simulator fell back to a non-hierarchy solver.")
         print("❌ FATAL: Convergence data is invalid (all depths produce identical results).")
         print("   This means MesoHOPS hierarchy is not being used. Check solver initialization.")
+        sys.exit(1)
+
+    # FIX M-1: also check L=10 vs L=11 — a noisy fallback could pass the L=9/10 check
+    if np.allclose(results[10], results[11], atol=1e-12):
+        logger.error("FAKE DATA DETECTED: L=10 and L=11 populations are identical. "
+                     "The simulator is not using the hierarchy truncation depth.")
+        print("❌ FATAL: L=10 and L=11 results are identical — hierarchy depth has no effect.")
+        print("   Check that HopsSimulator is passing MAXHIER correctly to MesoHOPS.")
         sys.exit(1)
     
     # Compare L=10 vs L=9 (Convergence toward L=10)
@@ -172,11 +184,14 @@ def run_convergence_audit():
         output_path = None
         print(f"⚠️  Audit CSV save failed: {e} — results still returned.")
 
-    # Return L=10 results for downstream figure generation
+    # Return L=10 results for downstream figure generation.
+    # FIX C-5: return actual L=10 coherences (trimmed to n_min) instead of
+    # hardcoded np.zeros — the previous stub silently zeroed Figure 1's
+    # coherence panel regardless of the simulation output.
     return {
         "time_points": time_points,
         "populations": results[10],
-        "coherences": np.zeros(len(time_points)),  # populated by full FMO run in main.py
+        "coherences": coherences[10][:n_min],
         "audit_mae_9_10": diff_9_10,
         "audit_mae_10_11": diff_10_11,
         "csv_path": output_path,

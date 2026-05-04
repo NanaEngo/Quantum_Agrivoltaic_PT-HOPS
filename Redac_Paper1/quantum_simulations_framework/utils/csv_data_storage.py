@@ -46,22 +46,51 @@ class CSVDataStorage:
     ) -> str:
         """
         Save quantum dynamics results with strict provenance and high precision.
+
+        FIX H-6: config_dict is serialised with a numpy-aware JSON encoder so
+        that np.float64 / np.ndarray values (common after yaml.safe_load +
+        numpy processing) do not raise TypeError.
+
+        FIX H-7: the redundant os.makedirs(os.path.dirname(filepath)) call is
+        removed — the directory is guaranteed to exist from __init__, and
+        os.path.dirname returns '' when output_dir has no subdirectory component,
+        which would cause os.makedirs to raise FileNotFoundError.
+
+        FIX M-4: filename_prefix is sanitised with os.path.basename to prevent
+        path-traversal if a caller passes a prefix containing '../'.
         """
         import hashlib
         import json
-        
+
+        class _NumpyEncoder(json.JSONEncoder):
+            """JSON encoder that handles numpy scalars and arrays."""
+            def default(self, obj):
+                if isinstance(obj, np.ndarray):
+                    return obj.tolist()
+                if isinstance(obj, (np.integer,)):
+                    return int(obj)
+                if isinstance(obj, (np.floating,)):
+                    return float(obj)
+                return super().default(obj)
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
+
+        # FIX M-4: sanitise prefix to prevent path traversal
+        safe_prefix = os.path.basename(filename_prefix) or "quantum_dynamics"
+
         # Calculate Configuration Hash for Provenance
         config_hash = "no_config"
-        if config_dict:
-            config_str = json.dumps(config_dict, sort_keys=True)
+        if config_dict is not None:   # use 'is not None' — empty dict is valid
+            # FIX H-6: use _NumpyEncoder to handle numpy types in config_dict
+            config_str = json.dumps(config_dict, sort_keys=True, cls=_NumpyEncoder)
             config_hash = hashlib.sha256(config_str.encode()).hexdigest()[:12]
             metadata["config_sha256"] = config_hash
             metadata["provenance"] = "Hardened_JPCL_Resubmission_v1.3"
 
-        filepath = os.path.join(self.output_dir, f"{filename_prefix}_{config_hash}_{timestamp}.csv")
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        # FIX H-7: output_dir is already created in __init__; do not call
+        # os.makedirs(os.path.dirname(filepath)) here — dirname returns '' when
+        # output_dir is a bare name, causing FileNotFoundError.
+        filepath = os.path.join(self.output_dir, f"{safe_prefix}_{config_hash}_{timestamp}.csv")
 
         # Create DataFrame with time series data
         data_dict = {"time_fs": time_points}

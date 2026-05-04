@@ -20,7 +20,7 @@ bath:
   # Realistic Vibronic Modes (12 Dominant Peaks per Coker 2013)
   vibronic_frequencies: [180.0, 220.0, 280.0, 350.0, 520.0, 575.0, 720.0, 1050.0, 1185.0, 1220.0, 1350.0, 1500.0]
   huang_rhys_factors: [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
-  vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
+  vibronic_damping: 10.0 # cm^-1
 
 dynamics:
   hierarchy_depth: 10  # L=10 mandate per Reviewer 1
@@ -32,26 +32,14 @@ dynamics:
 
 simulation:
   n_traj: 100  # ensemble trajectories for publication-grade results
-  n_traj_temp_sweep: 10   # trajectories per temperature point in Fig 2a sweep
-  n_disorder_samples: 100 # static disorder realisations for Fig 2b histogram
-  disorder_sigma_cm: 50.0 # cm^-1 — Gaussian diagonal disorder std dev
 
 pulse:
   type: "Gaussian"
   fwhm: 50.0 # fs
   delay: 0.0 # fs (Relative to photoexcitation)
-  center_freq: 12500.0 # cm^-1 (BChl Qy band) — used for broadband excitation
+  center_freq: 12500.0 # cm^-1 (BChl Qy band)
   amplitude: 0.05
   phase: 0.0
-
-# Dual-band spectral filter for PT-HOPS filtered excitation (Eq. 3 in manuscript)
-# Targets vibronic resonances at 750 nm (13333 cm^-1) and 820 nm (12195 cm^-1)
-# Bandwidth Δω = 100 cm^-1 per band (FWHM of each Gaussian peak)
-spectral_filter:
-  type: "dual_band_gaussian"
-  band_centers_nm: [750.0, 820.0]       # nm — converted to cm^-1 internally
-  bandwidth_cm: 100.0                    # cm^-1 FWHM per band (Δω in manuscript)
-  weights: [1.0, 1.0]                    # relative amplitude of each band
 
 agrivoltaics:
   coupling_strength: 0.03

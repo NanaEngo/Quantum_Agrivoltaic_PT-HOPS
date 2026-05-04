@@ -107,7 +107,7 @@ class HopsSimulator:
     Parameters
     ----------
     hamiltonian : NDArray[np.float64]
-        System Hamiltonian matrix
+        System Hamiltonian matrix in cm⁻¹. Must be square and Hermitian.
     temperature : float, optional
         Temperature in Kelvin (default: 295.0)
     use_mesohops : bool, optional
@@ -117,10 +117,22 @@ class HopsSimulator:
     **kwargs : dict
         Additional arguments passed to underlying simulator
 
+    Notes
+    -----
+    Energy shift: the Hamiltonian is internally zero-shifted by subtracting the
+    mean diagonal energy before passing it to MesoHOPS:
+
+        H_shifted = H - mean(diag(H)) · I
+
+    For the FMO complex this removes ~12 400 cm⁻¹ from all site energies,
+    preventing rapid oscillations exp(-iHt/ℏ) that cause numerical overflow in
+    the integrator. All physical observables (populations, coherences, QFI) are
+    invariant to this uniform energy shift.
+
     Attributes
     ----------
     hamiltonian : NDArray[np.float64]
-        The system Hamiltonian
+        The system Hamiltonian (unshifted, as provided by the caller)
     temperature : float
         Simulation temperature
     use_mesohops : bool
@@ -160,6 +172,18 @@ class HopsSimulator:
         self.sbd_bundles_per_site = kwargs.pop("sbd_bundles_per_site", 2)
         self.system = None
         self.fallback_sim: Optional[Any] = None
+
+        # D-4 FIX: validate Hermiticity before any simulation work.
+        # A non-Hermitian Hamiltonian produces complex eigenvalues and unphysical
+        # dynamics that are hard to diagnose downstream. Catch it here.
+        H = np.asarray(hamiltonian)
+        if H.ndim == 2 and H.shape[0] == H.shape[1]:
+            max_asymmetry = np.max(np.abs(H - H.conj().T))
+            if max_asymmetry > 1e-8:
+                raise ValueError(
+                    f"Hamiltonian is not Hermitian: max|H - H†| = {max_asymmetry:.2e}. "
+                    "Check units and construction (should be in cm⁻¹, symmetric couplings)."
+                )
 
         logger.debug(
             f"Initializing HopsSimulator (MesoHOPS available: {MESOHOPS_AVAILABLE}, "
@@ -548,6 +572,7 @@ class HopsSimulator:
             # Calculate other quantum metrics
             qfi_values = np.zeros(n_times)
             entropy_values = np.zeros(n_times)
+            ipr_values = np.zeros(n_times)
 
             psi_traj_arr = np.array(storage_data["psi_traj"]) if "psi_traj" in storage_data else None
             for i in range(n_times):
@@ -566,6 +591,10 @@ class HopsSimulator:
                     qfi_values[i] = self._calculate_qfi(rho, self.hamiltonian)
                 except (np.linalg.LinAlgError, ValueError):
                     qfi_values[i] = 0.0
+                # IPR = 1 / Σ_n |⟨n|ρ|n⟩|²  (manuscript Fig. 1c)
+                # Measures exciton delocalization: IPR=1 fully localized, IPR=n_sites fully delocalized
+                diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
+                ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
 
             logger.debug("MesoHOPS simulation completed successfully")
 
@@ -575,6 +604,7 @@ class HopsSimulator:
                 "coherences": coherences,
                 "qfi": qfi_values,
                 "entropy": entropy_values,
+                "ipr": ipr_values,
                 "simulator": "MesoHOPS",
                 "n_traj_used": 1,  # Single trajectory
                 "max_hierarchy_used": max_hierarchy,

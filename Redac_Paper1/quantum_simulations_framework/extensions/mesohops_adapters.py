@@ -46,6 +46,9 @@ def _construct_mpo_from_bcf(time_grid, correlation_func, bond_dim=10):
         return None
 
     n_steps = len(time_grid)
+    if n_steps < 2:
+        logger.warning("_construct_mpo_from_bcf: time_grid must have at least 2 points. Returning None.")
+        return None
     dt = time_grid[1] - time_grid[0]
 
     # 1. Build the correlation matrix C(t_i - t_j)
@@ -67,8 +70,16 @@ def _construct_mpo_from_bcf(time_grid, correlation_func, bond_dim=10):
     
     # Ensure C is properly shaped as (n_steps, n_steps)
     if C.shape != (n_steps, n_steps):
-        # Reshape or tile to get correct shape
-        C = np.resize(C, (n_steps, n_steps))
+        # C-6 FIX: np.resize wraps data cyclically — it does NOT pad with zeros.
+        # A non-square result from correlation_func indicates a programming error
+        # (the function must accept a 2D time-difference matrix and return the
+        # same shape). Raise immediately so the caller can fix the function rather
+        # than silently decomposing a garbage matrix.
+        raise ValueError(
+            f"correlation_func returned shape {C.shape}, expected ({n_steps}, {n_steps}). "
+            "Ensure the correlation function accepts a 2D array of time differences "
+            "and returns an array of the same shape."
+        )
     
     # Fill any NaNs that might arise from numerical issues at t=0
     C = np.nan_to_num(C, nan=0.0)

@@ -144,7 +144,9 @@ class FigureGenerator:
         ax1.grid(True, alpha=0.3)
 
         # Plot quantum metrics
-        panel_labels = ['(c)', '(d)', '(e)', '(f)']
+        # FIX M-6: generate panel labels dynamically so IndexError cannot occur
+        # when quantum_metrics has more than 4 entries (the old hardcoded list).
+        panel_labels = [f"({chr(ord('c') + i)})" for i in range(len(quantum_metrics))]
         for i, (metric_name, metric_values) in enumerate(quantum_metrics.items()):
             row = 1 + i // n_cols
             col = i % n_cols
@@ -493,8 +495,11 @@ class FigureGenerator:
         filename_prefix : str
             Prefix for the output filename
         """
-        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}.pdf")
-        png_path = os.path.join(self.figures_dir, f"{filename_prefix}.png")
+        # FIX M-5: add timestamp so successive pipeline runs do not overwrite
+        # previous Figure 2 files (all other FigureGenerator methods do this).
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
 
         fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
         fig.suptitle("Environmental Robustness of Spectral Bath Engineering", fontsize=14, fontweight="bold")

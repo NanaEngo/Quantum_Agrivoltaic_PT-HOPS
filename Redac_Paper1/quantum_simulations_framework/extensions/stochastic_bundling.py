@@ -62,12 +62,47 @@ class StochasticallyBundledDissipator:
 
         # Very simple 1D clustering (uniform bins for this structural demonstration)
         min_freq, max_freq = np.min(frequencies), np.max(frequencies)
-        bin_edges = np.linspace(min_freq, max_freq * (1 + 1e-9) + 1e-5, self.n_bundles + 1)
 
-        for i in range(self.n_bundles):
-            # Find modes in this bin
-            mask = (frequencies >= bin_edges[i]) & (frequencies < bin_edges[i + 1])
-            bin_modes = [modes[j] for j in range(len(modes)) if mask[j]]
+        # D-2 FIX: replace uniform bins with 1D K-means (Lloyd's algorithm).
+        # Uniform bins cluster poorly for the FMO spectral density where modes
+        # span 180–1500 cm⁻¹ with most energy concentrated below 600 cm⁻¹.
+        # Lloyd's algorithm iterates centroid positions until convergence,
+        # producing coupling-weighted clusters that respect the actual mode density.
+        #
+        # Initialise centroids by spreading them evenly across the frequency range.
+        centroids = np.linspace(min_freq, max_freq, self.n_bundles)
+        labels = np.zeros(len(frequencies), dtype=int)
+
+        for _iteration in range(100):  # max 100 Lloyd iterations
+            # Assignment step: assign each mode to the nearest centroid
+            new_labels = np.argmin(
+                np.abs(frequencies[:, None] - centroids[None, :]), axis=1
+            )
+            if np.array_equal(new_labels, labels):
+                break  # converged
+            labels = new_labels
+
+            # Update step: recompute centroids as coupling-weighted mean frequency
+            for k in range(self.n_bundles):
+                mask_k = labels == k
+                if not np.any(mask_k):
+                    # Empty cluster: reinitialise centroid to a random mode frequency
+                    centroids[k] = frequencies[np.random.randint(len(frequencies))]
+                else:
+                    w = np.abs(couplings[mask_k])
+                    total_w = np.sum(w)
+                    centroids[k] = (
+                        np.sum(frequencies[mask_k] * w) / total_w
+                        if total_w > 0
+                        else np.mean(frequencies[mask_k])
+                    )
+
+        bin_edges = None  # no longer used — kept for reference only
+
+        for k in range(self.n_bundles):
+            # Find modes assigned to cluster k
+            cluster_mask = labels == k
+            bin_modes = [modes[j] for j in range(len(modes)) if cluster_mask[j]]
 
             if not bin_modes:
                 continue
@@ -87,7 +122,7 @@ class StochasticallyBundledDissipator:
             effective_coupling = float(np.sum(bin_coups_abs))
 
             bundle = StochasticBundle(
-                bundle_id=i,
+                bundle_id=k,
                 center_frequency=center_freq,
                 effective_coupling=effective_coupling,
                 modes=bin_modes,
