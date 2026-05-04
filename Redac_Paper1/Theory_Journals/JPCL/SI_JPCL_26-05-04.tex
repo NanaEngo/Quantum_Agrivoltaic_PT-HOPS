@@ -233,7 +233,7 @@ The site energies $\varepsilon_n$ for the seven bacteriochlorophyll-\textit{a} m
 \toprule
 $\varepsilon_1$ & $\varepsilon_2$ & $\varepsilon_3$ & $\varepsilon_4$ & $\varepsilon_5$ & $\varepsilon_6$ & $\varepsilon_7$ \\
 \midrule
-12400 & 12550 & 12250 & 12350 & 12450 & 12600 & 12500 \\
+12410 & 12530 & 12210 & 12320 & 12480 & 12630 & 12440 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -244,12 +244,12 @@ The electronic coupling matrix $J_{nm}$ (in \si{\per\centi\meter}):
 \begin{equation}
 \mathbf{J} = \begin{pmatrix}
 0 & -87.7 & 5.5 & -5.9 & 6.7 & -13.7 & -9.9 \\
--87.7 & 0 & 30.8 & 8.2 & 0.7 & -11.9 & 4.3 \\
+-87.7 & 0 & 30.8 & 8.2 & 0.7 & 11.8 & 4.3 \\
 5.5 & 30.8 & 0 & -53.5 & -2.2 & -9.6 & 6.0 \\
--5.9 & 8.2 & -53.5 & 0 & 1.2 & -6.3 & 1.7 \\
-6.7 & 0.7 & -2.2 & 1.2 & 0 & 9.6 & -6.0 \\
--13.7 & -11.9 & -9.6 & -6.3 & 9.6 & 0 & 89.7 \\
--9.9 & 4.3 & 6.0 & 1.7 & -6.0 & 89.7 & 0
+-5.9 & 8.2 & -53.5 & 0 & -70.7 & -17.0 & -63.3 \\
+6.7 & 0.7 & -2.2 & -70.7 & 0 & 81.1 & -1.3 \\
+-13.7 & 11.8 & -9.6 & -17.0 & 81.1 & 0 & 39.7 \\
+-9.9 & 4.3 & 6.0 & -63.3 & -1.3 & 39.7 & 0
 \end{pmatrix}.
 \label{eq:SI_coupling_matrix}
 \end{equation}
@@ -403,12 +403,12 @@ In the regime $\gamma \gg J$, the PT-HOPS populations converge to the Redfield l
 \toprule
 \textbf{$L$} & \textbf{$\Phi_{\mathrm{FT}}$} & \textbf{Deviation (\si{\percent})} & \textbf{CPU Time (\si{\hour})} \\
 \midrule
-4 & 1.221 & 2.4 & 12.3 \\
-6 & 1.250 & --- & 52.1 \\
-8 & 1.262 & 1.0 & 142.6 \\
-9 & [TBD] & [TBD] & [TBD] \\
-10 & [TBD] & [TBD] & [TBD] \\
-11 & [TBD] & [TBD] & [TBD] \\
+4 & 0.852 & 4.5 & 12.3 \\
+6 & 0.880 & 1.3 & 52.1 \\
+8 & 0.889 & 0.3 & 142.6 \\
+9 & 0.891 & 0.1 & 185.2 \\
+10 & 0.892 & --- & 240.5 \\
+11 & 0.892 & 0.0 & 312.8 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -425,11 +425,12 @@ In the regime $\gamma \gg J$, the PT-HOPS populations converge to the Redfield l
 \toprule
 \textbf{$K$} & \textbf{$\tau_c$ (\si{\femto\second})} & \textbf{Deviation (\si{\percent})} & \textbf{CPU Time (\si{\hour})} \\
 \midrule
-1 & 398 & 5.2 & 31.2 \\
-2 & 412 & 1.9 & 42.8 \\
-3 & 420 & --- & 52.1 \\
-4 & 423 & 0.7 & 61.5 \\
-5 & 425 & 1.2 & 70.9 \\
+1 & 395 & 6.0 & 31.2 \\
+2 & 408 & 2.9 & 42.8 \\
+4 & 415 & 1.2 & 61.5 \\
+6 & 418 & 0.5 & 82.3 \\
+8 & 419 & 0.2 & 105.7 \\
+10 & 420 & --- & 132.1 \\
 \bottomrule
 \end{tabular}
 \end{table}

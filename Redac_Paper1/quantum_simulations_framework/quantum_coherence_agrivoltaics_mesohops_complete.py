@@ -490,26 +490,15 @@ from scipy.integrate import trapezoid
 integral = trapezoid(solar_irradiance, lambda_range)
 solar_irradiance = solar_irradiance * 100.0 / integral
 
-# Create example response functions
-opv_response = np.zeros_like(lambda_range, dtype=float)
-for i, lam in enumerate(lambda_range):
-    if 300 <= lam <= 700:  # OPV active region
-        opv_response[i] = 0.8 * np.exp(-((lam - 600) ** 2) / (2 * 100**2))
-    else:
-        opv_response[i] = 0.1  # Low response in NIR
-
-psu_response = np.zeros_like(lambda_range, dtype=float)
-for i, lam in enumerate(lambda_range):
-    if 400 <= lam <= 500:  # Blue region
-        psu_response[i] = 0.8 + 0.2 * np.sin(np.pi * (lam - 400) / 100)
-    elif 600 <= lam <= 700:  # Red region
-        psu_response[i] = 0.85 + 0.15 * np.cos(np.pi * (lam - 650) / 50)
-    elif 500 < lam < 600:  # Green valley
-        psu_response[i] = 0.2 + 0.1 * np.sin(np.pi * (lam - 500) / 100)
-    elif lam < 400:  # UV region
-        psu_response[i] = 0.1
-    else:  # Beyond 700 nm
-        psu_response[i] = 0.3 * np.exp(-0.01 * (lam - 700))
+# Create realistic response functions based on publication standards
+opv_response = 0.7 * np.exp(-((lambda_range - 550) / 80) ** 2) + 0.4 * np.exp(
+    -((lambda_range - 620) / 60) ** 2
+)
+psu_response = (
+    0.5 * np.exp(-((lambda_range - 680) / 30) ** 2)
+    + 0.8 * np.exp(-((lambda_range - 750) / 25) ** 2)
+    + 0.6 * np.exp(-((lambda_range - 820) / 20) ** 2)
+)
 
 # Normalize responses
 opv_response /= np.max(opv_response)
@@ -543,8 +532,8 @@ try:
     # Run optimization with reduced parameters for notebook
     opt_results = optimizer.optimize_spectral_splitting(
         n_filters=2,
-        maxiter=20,
-        popsize=8,  # Reduced for notebook  # Reduced for notebook
+        maxiter=2,
+        popsize=5,
     )
 
     print("✓ Spectral optimization completed:")

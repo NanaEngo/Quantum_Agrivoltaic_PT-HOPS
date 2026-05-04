@@ -399,9 +399,9 @@ class FigureGenerator:
             wavelengths = spectral_data["wavelength"]
             transmission = spectral_data["transmission"]
             ax2.plot(wavelengths, transmission, "purple", linewidth=2, label="Transmission")
-            ax2.fill_between(wavelengths, transmission, alpha=0.3, label="OPV Region", color="blue")
+            ax2.fill_between(wavelengths, transmission, 1, alpha=0.3, label="OPV Region", color="blue")
             ax2.fill_between(
-                wavelengths, transmission, 1, alpha=0.3, label="PSU Region", color="green"
+                wavelengths, 0, transmission, alpha=0.3, label="PSU Region", color="green"
             )
             ax2.set_xlabel("Wavelength (nm)")
             ax2.set_ylabel("Transmission")

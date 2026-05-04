@@ -189,8 +189,8 @@ def run_convergence_audit():
     # hardcoded np.zeros — the previous stub silently zeroed Figure 1's
     # coherence panel regardless of the simulation output.
     return {
-        "time_points": time_points,
-        "populations": results[10],
+        "time_points": time_points[:n_min],
+        "populations": results[10][:n_min],
         "coherences": coherences[10][:n_min],
         "audit_mae_9_10": diff_9_10,
         "audit_mae_10_11": diff_10_11,

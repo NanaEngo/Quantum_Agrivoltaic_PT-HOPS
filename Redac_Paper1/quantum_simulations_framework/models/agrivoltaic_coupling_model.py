@@ -235,8 +235,8 @@ class AgrivoltaicCouplingModel:
         else:
             T = transmission_func
 
-        # Calculate absorbed irradiance for OPV
-        absorbed_irradiance = self.solar_spec * T * self.R_opv
+        # Calculate absorbed irradiance for OPV (1 - T)
+        absorbed_irradiance = self.solar_spec * (1 - T) * self.R_opv
 
         # Integrate to get current (proportional to photon flux)
         current = trapezoid(absorbed_irradiance, self.lambda_range)
@@ -298,8 +298,8 @@ class AgrivoltaicCouplingModel:
         else:
             T = transmission_func
 
-        # Calculate absorbed irradiance for PSU
-        absorbed_irradiance = self.solar_spec * (1 - T) * self.R_psu
+        # Calculate absorbed irradiance for PSU (direct transmission T)
+        absorbed_irradiance = self.solar_spec * T * self.R_psu
 
         # Integrate to get absorbed photosynthetically active radiation
         par_absorbed = trapezoid(absorbed_irradiance, self.lambda_range)
@@ -654,8 +654,8 @@ class AgrivoltaicCouplingModel:
                 "opv_response": self.R_opv,
                 "psu_response": self.R_psu,
                 "transmission": transmission_spectrum,
-                "opv_absorbed": self.solar_spec * transmission_spectrum * self.R_opv,
-                "psu_absorbed": self.solar_spec * (1 - transmission_spectrum) * self.R_psu,
+                "opv_absorbed": self.solar_spec * (1 - transmission_spectrum) * self.R_opv,
+                "psu_absorbed": self.solar_spec * transmission_spectrum * self.R_psu,
             }
         )
 

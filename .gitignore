@@ -49,6 +49,7 @@ Thumbs.db
 .qodo/
 .kiro/
 .agent/
+.agents/
 _bmad*/
 .QWEN*/
 managed_context/
@@ -60,22 +61,22 @@ QWEN.md
 *.INVALID_FALLBACK_DATA.csv
 
 # Converged simulation outputs (large HDF5 files — use Git LFS or exclude)
-Redac_Paper1/quantum_simulations_framework/data/converged/*.h5
-Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
+# Redac_Paper1/quantum_simulations_framework/data/converged/*.h5
+# Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
 # Exception: keep the README explaining the results folder
-!Redac_Paper1/quantum_simulations_framework/reproducibility/results/README.md
+# !Redac_Paper1/quantum_simulations_framework/reproducibility/results/README.md
 
-# QA/PT-HOPS test archives and extracted files (should never be committed)
-Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar
-Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar.gz
-Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corect-server/
-Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corcect-server.tar.gz
+# # QA/PT-HOPS test archives and extracted files (should never be committed)
+# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar
+# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar.gz
+# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corect-server/
+# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corcect-server.tar.gz
 
-# Execution logs
-Redac_Paper1/quantum_simulations_framework/logs/
-reproducibility_cluster.log
-cluster_execution.log
-simulation_output.log
+# # Execution logs
+# Redac_Paper1/quantum_simulations_framework/logs/
+# reproducibility_cluster.log
+# cluster_execution.log
+# simulation_output.log
 
 # Temporary files
 *.tmp

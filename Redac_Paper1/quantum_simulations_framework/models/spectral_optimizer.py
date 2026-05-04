@@ -77,15 +77,15 @@ class SpectralOptimizer:
         Parameters:
         -----------
         transmission : np.ndarray
-            Spectral transmission values
+            Spectral transmission values (transmittance to PSU)
 
         Returns:
         --------
         float
             Power conversion efficiency
         """
-        # Calculate absorbed irradiance for OPV
-        absorbed_irradiance = self.solar_spec * transmission * self.opv_response
+        # Calculate absorbed irradiance for OPV (1 - transmission)
+        absorbed_irradiance = self.solar_spec * (1 - transmission) * self.opv_response
 
         # Integrate to get absorbed power
         absorbed_power = trapezoid(absorbed_irradiance, self.lambda_range)
@@ -108,15 +108,15 @@ class SpectralOptimizer:
         Parameters:
         -----------
         transmission : np.ndarray
-            Spectral transmission values
+            Spectral transmission values (transmittance to PSU)
 
         Returns:
         --------
         float
             Electron transport rate
         """
-        # Calculate absorbed irradiance for PSU
-        absorbed_irradiance = self.solar_spec * (1 - transmission) * self.psu_response
+        # Calculate absorbed irradiance for PSU (direct transmission)
+        absorbed_irradiance = self.solar_spec * transmission * self.psu_response
 
         # Integrate to get absorbed power
         absorbed_power = trapezoid(absorbed_irradiance, self.lambda_range)

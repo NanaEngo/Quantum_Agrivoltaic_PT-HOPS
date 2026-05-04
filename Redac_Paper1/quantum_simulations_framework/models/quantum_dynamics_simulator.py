@@ -58,6 +58,42 @@ except ImportError:
     bcf_convert_dl_to_exp_with_Matsubara = None
 
 
+def _bcf_dl_to_exp_pairs(lam: float, gamma: float, T: float, k: int) -> list:
+    """
+    Robustly convert Drude-Lorentz bath parameters to exponential pairs (g, w).
+    Probes the installed MesoHOPS API signature to handle version differences.
+    """
+    import inspect
+    
+    if bcf_convert_dl_to_exp is None:
+        raise ImportError("MesoHOPS bath conversion functions not available")
+        
+    try:
+        # Priority 1: Modern MesoHOPS (v1.6+) with explicit Matsubara function
+        from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp_with_Matsubara
+        dl_modes = bcf_convert_dl_to_exp_with_Matsubara(lam, gamma, T, k)
+    except (ImportError, AttributeError):
+        # Priority 2: Probe signature of bcf_convert_dl_to_exp
+        sig = inspect.signature(bcf_convert_dl_to_exp)
+        params = sig.parameters
+        
+        if 'n_matsubara' in params:
+            # Keyword form (~v1.5)
+            dl_modes = bcf_convert_dl_to_exp(lam, gamma, T, n_matsubara=k)
+        elif len(params) >= 4:
+            # Positional form (~v1.4)
+            dl_modes = bcf_convert_dl_to_exp(lam, gamma, T, k)
+        else:
+            # 3-arg form (<=v1.3) — low-temp corrections not available
+            dl_modes = bcf_convert_dl_to_exp(lam, gamma, T)
+    
+    # Validate output format: must be flat list [g0, w0, g1, w1, ...]
+    if not isinstance(dl_modes, (list, np.ndarray)) or len(dl_modes) % 2 != 0:
+        raise RuntimeError(f"MesoHOPS bath conversion returned unexpected format: {type(dl_modes)}")
+        
+    return dl_modes
+
+
 # FIX H-5: apply the EOM_DICT_TYPES patch once at module import time, not on
 # every QuantumDynamicsSimulator instantiation. Mutating a global MesoHOPS dict
 # inside __init__ runs 100× in a trajectory loop and is a side-effect that can
@@ -169,7 +205,8 @@ class QuantumDynamicsSimulator:
         # ── Bath correlation function decomposition ──────────────────
         # Drude-Lorentz spectral density (high-temperature limit).
         # k_matsubara=0: High-temperature approximation (standard for 295K)
-        dl_modes = bcf_convert_dl_to_exp_with_Matsubara(
+        # FIX H-6: Use version-agnostic helper to build dl_modes
+        dl_modes = _bcf_dl_to_exp_pairs(
             lambda_reorg, gamma_dl, temperature, k_matsubara
         )
         # Validate output format: must be flat [g0, w0, g1, w1, ...]

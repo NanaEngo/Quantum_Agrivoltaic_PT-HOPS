@@ -43,18 +43,16 @@ lambda_dl = 35  # cm^-1
 gamma_dl = 50   # cm^-1
 J_dl = (2 * lambda_dl * gamma_dl * omega) / (omega**2 + gamma_dl**2)
 
-# Vibronic modes (underdamped oscillators)
-vibronic_params = [
-    (150, 0.05, 10),   # omega, Huang-Rhys S, gamma
-    (200, 0.02, 15),
-    (575, 0.01, 20),
-    (1185, 0.005, 30)
-]
+# 12-mode Kleinekathöfer/Coker vibronic modes
+vib_freqs = [180.0, 220.0, 280.0, 350.0, 520.0, 575.0, 720.0, 1050.0, 1185.0, 1220.0, 1350.0, 1500.0]
+vib_hr = [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
+vib_gamma = [10.0] * 12
 
 J_vibronic = np.zeros_like(omega)
-for w_v, S, gamma_v in vibronic_params:
-    J_vibronic += (2 * np.pi * S * w_v**3 * gamma_v * omega / 
-                   ((omega**2 - w_v**2)**2 + omega**2 * gamma_v**2))
+for w_v, S, g_v in zip(vib_freqs, vib_hr, vib_gamma):
+    lam_v = S * w_v
+    J_vibronic += (2 * lam_v * omega * w_v**2 * g_v / 
+                   ((w_v**2 - omega**2)**2 + omega**2 * g_v**2))
 
 # Normalize for visualization
 J_total = J_dl + J_vibronic
