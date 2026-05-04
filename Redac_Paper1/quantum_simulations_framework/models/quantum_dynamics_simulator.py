@@ -334,7 +334,7 @@ class QuantumDynamicsSimulator:
         )
         return hops
 
-    def simulate_dynamics(self, initial_state=None, time_points=None, dt_save=0.5, seeds=None):
+    def simulate_dynamics(self, initial_state=None, time_points=None, dt_save=5.0, seeds=None):
         """
         Run ensemble-averaged non-Markovian dynamics via MesoHOPS.
 

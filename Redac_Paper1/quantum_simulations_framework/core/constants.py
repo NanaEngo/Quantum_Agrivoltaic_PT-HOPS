@@ -24,8 +24,8 @@ EV_TO_CM: Final[float] = 1.0 / CM_TO_EV  # eV to cm^-1 conversion factor
 KB_CM_K: Final[float] = 0.695  # Boltzmann constant in cm^-1/K
 
 # Time
-DEFAULT_TIME_POINTS: Final[int] = 1000  # Number of time points for dynamics
-DEFAULT_TIME_STEP: Final[float] = 0.5  # femtoseconds
+DEFAULT_TIME_POINTS: Final[int] = 201   # 0–1000 fs at step=5 fs → linspace(0,1000,201)
+DEFAULT_TIME_STEP: Final[float] = 5.0   # femtoseconds
 DEFAULT_MAX_TIME: Final[float] = 1000.0  # femtoseconds
 
 # =============================================================================

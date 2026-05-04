@@ -308,8 +308,9 @@ class EcoDesignAnalyzer:
             + 0.6 * size_factor  # Global reactivity  # Size factor contribution
         )
 
-        # Normalize to 0-100 scale
-        b_index = min(100.0, max(0.0, b_index))
+        # Clamp to physically meaningful range; upper bound raised to 150 to
+        # accommodate highly reactive OPV materials (PM6 B-index = 101.5, manuscript).
+        b_index = min(150.0, max(0.0, b_index))
 
         return b_index
 
