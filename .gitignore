@@ -65,6 +65,12 @@ Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
 # Exception: keep the README explaining the results folder
 !Redac_Paper1/quantum_simulations_framework/reproducibility/results/README.md
 
+# QA/PT-HOPS test archives and extracted files (should never be committed)
+Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar
+Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar.gz
+Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corect-server/
+Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corcect-server.tar.gz
+
 # Execution logs
 Redac_Paper1/quantum_simulations_framework/logs/
 reproducibility_cluster.log
@@ -75,6 +81,9 @@ simulation_output.log
 *.tmp
 *.bak
 envs.txt
+
+# Jupyter notebook checkpoints
+notebooks/*.ipynb_checkpoints/
 
 # Sensitive development files
 Next/
