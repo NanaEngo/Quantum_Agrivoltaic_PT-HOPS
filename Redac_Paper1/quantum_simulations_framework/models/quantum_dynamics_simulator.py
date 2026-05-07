@@ -22,7 +22,7 @@ except ImportError:
         from ..core.constants import DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA
     except ImportError:
         DEFAULT_MAX_HIERARCHY = 10
-        DEFAULT_N_MATSUBARA = 10
+        DEFAULT_N_MATSUBARA = 2  # K=2: converged at T=295 K
 
 logger = logging.getLogger(__name__)
 

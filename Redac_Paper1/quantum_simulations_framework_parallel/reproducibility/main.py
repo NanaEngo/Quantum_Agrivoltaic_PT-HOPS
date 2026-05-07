@@ -76,8 +76,8 @@ def load_and_validate_config():
     K = cfg['dynamics']['matsubara_truncation']
     if L < 10:
         raise ValueError(f"hierarchy_depth={L} < 10. JPCL revision requires L=10.")
-    if K < 10:
-        raise ValueError(f"matsubara_truncation={K} < 10. JPCL revision requires K=10.")
+    if K < 2:
+        raise ValueError(f"matsubara_truncation={K} < 2. JPCL revision requires K≥2 (K=2 converged at T=295 K).")
     logger.info(f"Config validated: L={L}, K={K}, T={cfg['bath']['temperature']}K")
     return cfg
 

@@ -80,7 +80,7 @@ class TestParameterConsistency:
         assert self.cfg["dynamics"]["hierarchy_depth"] == DEFAULT_MAX_HIERARCHY == 10
 
     def test_matsubara_truncation(self):
-        assert self.cfg["dynamics"]["matsubara_truncation"] == DEFAULT_N_MATSUBARA == 10
+        assert self.cfg["dynamics"]["matsubara_truncation"] == DEFAULT_N_MATSUBARA == 2
 
     def test_temperature(self):
         assert self.cfg["bath"]["temperature"] == DEFAULT_TEMPERATURE == 295.0

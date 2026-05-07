@@ -19,7 +19,7 @@ def test_config_loading():
     with patch("builtins.open", MagicMock()):
         with patch("yaml.safe_load") as mock_yaml:
             mock_yaml.return_value = {
-                "dynamics": {"hierarchy_depth": 10, "matsubara_truncation": 10},
+                "dynamics": {"hierarchy_depth": 10, "matsubara_truncation": 2},
                 "bath": {"temperature": 295.0}
             }
             cfg = load_and_validate_config()
@@ -30,7 +30,7 @@ def test_config_validation_failure():
     with patch("builtins.open", MagicMock()):
         with patch("yaml.safe_load") as mock_yaml:
             mock_yaml.return_value = {
-                "dynamics": {"hierarchy_depth": 5, "matsubara_truncation": 10}
+                "dynamics": {"hierarchy_depth": 5, "matsubara_truncation": 2}
             }
             with pytest.raises(ValueError, match="hierarchy_depth=5 < 10"):
                 load_and_validate_config()
@@ -60,7 +60,7 @@ def test_full_pipeline_flow(mock_gen_figs, mock_sim, mock_audit):
     
     with patch("reproducibility.main.load_and_validate_config") as mock_cfg:
         mock_cfg.return_value = {
-            "dynamics": {"hierarchy_depth": 10, "matsubara_truncation": 10},
+            "dynamics": {"hierarchy_depth": 10, "matsubara_truncation": 2},
             "bath": {"temperature": 295.0}
         }
         with patch("reproducibility.main.check_environment", return_value=True):

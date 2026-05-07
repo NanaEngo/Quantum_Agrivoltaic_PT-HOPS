@@ -21,7 +21,7 @@ The architecture must support an 8-tier functional hierarchy, prioritizing the t
 
 **Non-Functional Requirements:**
 - **Accuracy**: Trace preservation ($10^{-6}$) and population positivity are non-negotiable.
-- **Performance**: Optimization for 32GB RAM environments to handle memory-intensive $L=10$ runs within 4 hours.
+- **Performance**: Optimization for 128 GB RAM server and 32 GB RAM local workstation. K=2 (21 hierarchy modes at L=10) is mandatory — K=10 (77 modes) produces ~10¹¹ hierarchy states and causes OOM on 128 GB. TERMINATOR=True and Triangular STATIC_FILTERS reduce memory by ~50%.
 - **Reproducibility**: A single entry-point (`main.py`) must orchestrate the entire pipeline.
 
 **Scale & Complexity:**
@@ -73,7 +73,7 @@ A custom monorepo approach ensures **Reproducibility**. By centralizing paramete
 **Critical Decisions (Block Implementation):**
 - **Parameter Synchronization**: `parameters.yaml` (YAML 1.2) is the single source of truth.
 - **Methodology**: **PT-HOPS** with **SBD** (Stochastically Bundled Dissipators) for non-Markovian dynamics.
-- **Convergence Audit**: **Relative Error Threshold (Frobenius Norm)** compared between $L=10$ and $L=9$.
+- **Convergence Audit**: **Relative Error Threshold (Frobenius Norm)** compared between $L=10$ and $L=9, 11$ (L-audit) AND between $K=1, 2, 3$ at fixed $L=10$ (K-audit). K=2 is the production standard at T=295 K (ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹).
 - **Pulse Specification**: Mandatory support for explicit functional forms and **relative timing/delays** between excitation and probes.
 - **Data Interoperability**: Mandated HDF5 (`.h5`) for all simulation outputs.
 

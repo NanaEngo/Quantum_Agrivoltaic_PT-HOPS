@@ -32,8 +32,8 @@ DEFAULT_MAX_TIME: Final[float] = 1000.0  # femtoseconds
 # MESOHOPS SIMULATION PARAMETERS
 # =============================================================================
 
-DEFAULT_MAX_HIERARCHY: Final[int] = 10  # Maximum hierarchy level (L=10 mandate, JPCL revision)
-DEFAULT_N_MATSUBARA: Final[int] = 10  # Number of Matsubara frequencies (K=10 mandate, JPCL revision)
+DEFAULT_MAX_HIERARCHY: Final[int] = 10  # L=10 mandate (JPCL revision)
+DEFAULT_N_MATSUBARA: Final[int] = 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹)
 
 # =============================================================================
 # FMO COMPLEX PARAMETERS

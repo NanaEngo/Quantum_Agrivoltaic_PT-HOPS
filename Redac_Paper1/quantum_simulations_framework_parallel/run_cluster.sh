@@ -40,13 +40,25 @@ if ! command -v python3 &> /dev/null; then
 fi
 echo "✅ Python3 available"
 
+# Detect mamba/conda for environment activation
+if command -v mamba &> /dev/null; then
+    CONDA_CMD="mamba"
+elif command -v conda &> /dev/null; then
+    CONDA_CMD="conda"
+else
+    CONDA_CMD=""
+fi
+
 # 2. Launch simulation
 if [ -n "$CONDA_CMD" ]; then
     echo "🚀 Launching via $CONDA_CMD run..."
     nohup $CONDA_CMD run -n $ENV_NAME python -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
+elif [ "$ACTIVATED" = true ]; then
+    echo "🚀 Launching via activated venv python..."
+    nohup python3 -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
 else
-    echo "🚀 Launching via native python..."
-    nohup python -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
+    echo "🚀 Launching via native python3..."
+    nohup python3 -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
 fi
 
 # 3. Finalize

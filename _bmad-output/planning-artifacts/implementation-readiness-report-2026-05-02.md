@@ -28,7 +28,7 @@ filesIncluded:
 ### Functional Requirements
 - **FR1**: Formally define "Spectral Engineering" as a two-stage mechanism (Selective Vibronic Driving + Polaron Frame Dephasing), remaining open to referee refinements.
 - **FR2**: Provide a mathematical derivation of coherence enhancement in the polaron frame.
-- **FR3**: Execute dynamics at $L=10$ and Matsubara truncation at $K=10$.
+- **FR3**: Execute dynamics at $L=10$ and Matsubara truncation at $K=2$ (converged at T=295 K).
 - **FR4**: Automate a **Convergence Audit** comparing observables at $L=9, 10, 11$.
 - **FR5**: Incorporate discrete **vibronic modes** into the realistic FMO model.
 - **FR6**: Generate 300+ DPI figures with consistent symbols and labels.
@@ -62,7 +62,7 @@ The PRD is exceptionally dense and rigorous for a scientific revision. It succes
 | --------- | --------------- | ------------- | ------ |
 | FR1 | Formally define "Spectral Engineering" | **NOT FOUND** | ❌ MISSING |
 | FR2 | Mathematical derivation of coherence enhancement | **NOT FOUND** | ❌ MISSING |
-| FR3 | Execute dynamics at $L=10$ / $K=10$ | **NOT FOUND** | ❌ MISSING |
+| FR3 | Execute dynamics at $L=10$ / $K=2$ | **NOT FOUND** | ❌ MISSING |
 | FR4 | Automate Convergence Audit | **NOT FOUND** | ❌ MISSING |
 | FR5 | Incorporate discrete vibronic modes | **NOT FOUND** | ❌ MISSING |
 | FR6 | Generate 300+ DPI figures | **NOT FOUND** | ❌ MISSING |

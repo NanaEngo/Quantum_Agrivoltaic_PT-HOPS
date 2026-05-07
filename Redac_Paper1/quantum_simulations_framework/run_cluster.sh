@@ -11,15 +11,41 @@ echo "--------------------------------------------------------"
 echo "  Quantum-Enhanced Agrivoltaics: Production Pipeline"
 echo "--------------------------------------------------------"
 
-# FIX M-7: CONDA_CMD was never set in this script, making the conda branch dead
-# code — the script always fell through to system Python (wrong environment).
-# Detect mamba first (faster solver), then conda, then fall back to empty string.
+# Try multiple possible venv locations
+VENV_PATHS=(
+    "$HOME/VirtualEnv/bin/activate"
+    "$HOME/venv/bin/activate"
+    "$HOME/.venv/bin/activate"
+)
+
+ACTIVATED=false
+for venv in "${VENV_PATHS[@]}"; do
+    if [ -f "$venv" ]; then
+        echo "  ✅ Activating virtual environment: $venv"
+        source "$venv"
+        ACTIVATED=true
+        break
+    fi
+done
+
+if [ "$ACTIVATED" = false ]; then
+    echo "  ⚠️  No virtual environment found. Trying with system Python..."
+    echo "  Checked: ${VENV_PATHS[*]}"
+fi
+
+# Check Python
+if ! command -v python3 &> /dev/null; then
+    echo "ERROR: python3 not found"
+    exit 1
+fi
+echo "✅ Python3 available"
+
+# Detect mamba/conda for environment activation
 if command -v mamba &> /dev/null; then
     CONDA_CMD="mamba"
 elif command -v conda &> /dev/null; then
     CONDA_CMD="conda"
 else
-    echo "  ⚠️  Neither mamba nor conda found. Assuming environment is pre-activated."
     CONDA_CMD=""
 fi
 
@@ -27,9 +53,12 @@ fi
 if [ -n "$CONDA_CMD" ]; then
     echo "🚀 Launching via $CONDA_CMD run..."
     nohup $CONDA_CMD run -n $ENV_NAME python -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
+elif [ "$ACTIVATED" = true ]; then
+    echo "🚀 Launching via activated venv python..."
+    nohup python3 -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
 else
-    echo "🚀 Launching via native python..."
-    nohup python -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
+    echo "🚀 Launching via native python3..."
+    nohup python3 -u $MAIN_SCRIPT > $LOG_FILE 2>&1 &
 fi
 
 # 3. Finalize

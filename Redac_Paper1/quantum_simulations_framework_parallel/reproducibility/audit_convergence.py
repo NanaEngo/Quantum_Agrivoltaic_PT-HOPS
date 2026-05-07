@@ -41,13 +41,11 @@ def run_convergence_audit():
         sys.exit(1)
 
     # Simulation Parameters
-    t_max = cfg['dynamics']['time_max']
     dt = cfg['dynamics']['time_step']
-    K = cfg['dynamics']['matsubara_truncation']  # K=10 from parameters.yaml
-    # Convergence audit uses 200 fs and DL-only bath to stay within RAM limits.
-    # The audit tests hierarchy depth convergence (L=9 vs L=10 vs L=11), not
-    # spectral density realism — vibronic modes are added for the full FMO run.
-    t_audit = min(200.0, cfg['dynamics']['time_max'])
+    K = cfg['dynamics']['matsubara_truncation']  # K=2 from parameters.yaml
+    # Convergence audit uses 100 fs window — sufficient to see L-dependent
+    # differences while keeping the noise buffer (TLEN = t_audit + 50) small.
+    t_audit = 100.0
     time_points = np.arange(0, t_audit, dt)
 
     # Hierarchy Depths to Audit
@@ -147,6 +145,40 @@ def run_convergence_audit():
         print("✅ SUCCESS: L=10 is numerically converged (residual < threshold).")
     else:
         print("⚠️ WARNING: Residual exceeds threshold. Further truncation check recommended.")
+
+    # ── K-convergence audit (addresses Reviewer 1 comment 1.5) ──────────────
+    # Prove that K=2 Matsubara terms are sufficient at T=295 K by comparing
+    # K=1, K=2, K=3 at fixed L=10. At room temperature the first Matsubara
+    # frequency ν₁ ≈ 1300 cm⁻¹ >> γ_D = 50 cm⁻¹, so higher terms are negligible.
+    print("\n🧪 K-Matsubara Convergence Audit (L=10 fixed)...")
+    k_depths = [1, 2, 3]
+    k_results = {}
+    for Kval in k_depths:
+        logger.info(f"Running K-audit: L=10, K={Kval}...")
+        sim_k = HopsSimulator(
+            H,
+            max_hierarchy=10,
+            k_matsubara=Kval,
+            use_sbd=False,
+            use_pt_hops=False,
+            vibronic_frequencies=np.array([]),
+            huang_rhys_factors=np.array([]),
+            vibronic_damping=np.array([]),
+        )
+        data_k = sim_k.simulate_dynamics(time_points, initial_state=init_state)
+        k_results[Kval] = data_k['populations']
+        logger.info(f"  K={Kval}: done")
+
+    diff_k1_k2 = np.mean(np.abs(k_results[2] - k_results[1]))
+    diff_k2_k3 = np.mean(np.abs(k_results[3] - k_results[2]))
+    print(f"\n📊 K-Matsubara Convergence Results (L=10, T=295 K):")
+    print(f"   MAE (K=1 → K=2) : {diff_k1_k2:.2e}")
+    print(f"   MAE (K=2 → K=3) : {diff_k2_k3:.2e}")
+    if diff_k2_k3 < cfg['dynamics']['convergence_threshold']:
+        print("✅ K=2 is converged at T=295 K (residual < threshold).")
+    else:
+        print("⚠️ WARNING: K=2 may not be fully converged — consider K=3.")
+        logger.warning(f"K-convergence marginal: MAE(K=2→K=3)={diff_k2_k3:.2e}")
         
     # Save results for SI using Hardened Storage
     from utils.csv_data_storage import CSVDataStorage
@@ -175,7 +207,9 @@ def run_convergence_audit():
             filename_prefix="convergence_audit",
             config_dict=cfg,
             audit_mae_9_10=diff_9_10,
-            audit_mae_10_11=diff_10_11
+            audit_mae_10_11=diff_10_11,
+            audit_mae_k1_k2=diff_k1_k2,
+            audit_mae_k2_k3=diff_k2_k3,
         )
         print(f"💾 Hardened Audit data saved to: {output_path}")
         logger.info(f"Convergence audit complete. MAE(9→10)={diff_9_10:.2e}, MAE(10→11)={diff_10_11:.2e}")
@@ -194,6 +228,8 @@ def run_convergence_audit():
         "coherences": coherences[10][:n_min],
         "audit_mae_9_10": diff_9_10,
         "audit_mae_10_11": diff_10_11,
+        "audit_mae_k1_k2": diff_k1_k2,
+        "audit_mae_k2_k3": diff_k2_k3,
         "csv_path": output_path,
     }
 

@@ -24,7 +24,8 @@ bath:
 
 dynamics:
   hierarchy_depth: 10  # L=10 mandate per Reviewer 1
-  matsubara_truncation: 10  # K=10 mandate
+  matsubara_truncation: 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹);
+                             # K=10 causes OOM on 128 GB server (77 modes → ~10¹¹ hierarchy states)
   time_max: 1000.0  # fs
   time_step: 2.0  # fs  — step=2 fs → 501 points over 0–1000 fs (matches CSV ground truth)
   convergence_threshold: 1.0e-6  # Frobenius norm

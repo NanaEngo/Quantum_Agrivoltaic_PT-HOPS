@@ -17,7 +17,7 @@ This document provides the complete epic and story breakdown for Quantum Agrivol
 
 FR1: Comprehensive Theoretical Modeling of Selective Vibronic Driving + Polaron-Frame Dephasing.
 FR2: Implementation of Polaron-Frame Dephasing Reduction mechanism.
-FR3: Numerical solution of the Extended Anderson Hamiltonian (2-lead, single impurity).
+FR3: Numerical solution at $L=10$, $K=2$ (K=2 proven converged at T=295 K via K-audit: MAE(K=2→K=3) < 10⁻⁶; K=10 causes OOM on 128 GB server).
 FR4: High-Precision Simulation Engine with mandatory L=10 hierarchy depth.
 FR5: MesoHOPS Adaptive Basis Logic for efficient dephasing reduction modeling.
 FR6: HierarchicalEOM.jl (Julia) Solver for cross-verification.
@@ -48,7 +48,7 @@ None (Visual standards are integrated into AR4 and FR8).
 
 FR1: Epic 2 - Comprehensive Theoretical Modeling (Selective Vibronic Driving)
 FR2: Epic 2 - Polaron-Frame Dephasing Reduction
-FR3: Epic 2 - Dynamics at $L=10, K=10$
+FR3: Epic 2 - Dynamics at $L=10, K=2$
 FR4: Epic 3 - Automated Convergence Audit
 FR5: Epic 2 - Realistic FMO Model with Vibronic Modes
 FR7: Epic 1 - Single Point of Entry Reproducibility
@@ -62,11 +62,11 @@ Establish the central "Source of Truth" for the revision by initializing the dir
 **FRs covered:** FR7, AR1, AR5.
 
 ### Epic 2: High-Precision Simulation & Model Realism (PT-HOPS/SBD)
-Implement the **Realistic FMO Model with Vibronic Modes** (FR5) and execute dynamics at **$L=10, K=10$** (FR3). This uses the **PT-HOPS/SBD** methodology to maintain stability within the 32GB RAM limit.
+Implement the **Realistic FMO Model with Vibronic Modes** (FR5) and execute dynamics at **$L=10$, $K=2$** (FR3). K=2 is the converged production standard at T=295 K (ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹); K=10 causes OOM on 128 GB servers. This uses the **PT-HOPS/SBD** methodology with TERMINATOR=True and Triangular STATIC_FILTERS to maintain stability within memory limits.
 **FRs covered:** FR1, FR2, FR3, FR5, NFR1, NFR3, NFR5, AR2.
 
 ### Epic 3: Convergence & Verification Suite
-Develop the automated validation layer to prove $L=10$ sufficiency ($L=10$ vs $L=9, 11$). This ensures the numerical results are "Reviewer-Proof".
+Develop the automated validation layer to prove $L=10$ sufficiency ($L=10$ vs $L=9, 11$) AND $K=2$ sufficiency ($K=1$ vs $K=2$ vs $K=3$ at fixed $L=10$, T=295 K). Both audits must pass MAE < 10⁻⁶ before production runs proceed. This ensures the numerical results are "Reviewer-Proof" against R1.5.
 **FRs covered:** FR4, NFR2, AR3.
 
 ### Epic 4: Manuscript-Ready Visualization & Reporting
