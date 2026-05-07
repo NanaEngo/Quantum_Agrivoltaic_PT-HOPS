@@ -1,0 +1,11 @@
+nohup: ignoring input
+--------------------------------------------------------
+  Quantum-Enhanced Agrivoltaics: Production Pipeline
+--------------------------------------------------------
+  ✅ Activating virtual environment: /home/penavora/VirtualEnv/bin/activate
+✅ Python3 available
+🚀 Launching via native python...
+✅ Job submitted to background (PID: 442708).
+📂 Log file: reproducibility_cluster.log
+📊 Monitoring: tail -f reproducibility_cluster.log
+--------------------------------------------------------
