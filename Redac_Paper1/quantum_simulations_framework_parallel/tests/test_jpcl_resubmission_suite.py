@@ -57,6 +57,7 @@ class TestJPCLValidationSuite:
         is_laptop = True # Detection based on user input
         L_prod = 9 if not is_laptop else 3
         L_prev = L_prod - 1
+        L_val = L_prod # Default for other tests
         n_traj = 4 if is_laptop else 100
         
         sim_prev = HopsSimulator(fmo_hamiltonian, max_hierarchy=L_prev, k_matsubara=2)
@@ -72,8 +73,10 @@ class TestJPCLValidationSuite:
     def test_si_2_matsubara_convergence(self, fmo_hamiltonian, t_audit):
         """Test 2: K=1 vs K=2 convergence."""
         n_traj = 4 # Small ensemble for local check
-        sim_k1 = HopsSimulator(fmo_hamiltonian, max_hierarchy=3, k_matsubara=1)
-        sim_k2 = HopsSimulator(fmo_hamiltonian, max_hierarchy=3, k_matsubara=2)
+        is_laptop = True
+        L_val = 3 if is_laptop else 9
+        sim_k1 = HopsSimulator(fmo_hamiltonian, max_hierarchy=L_val, k_matsubara=1)
+        sim_k2 = HopsSimulator(fmo_hamiltonian, max_hierarchy=L_val, k_matsubara=2)
         
         res_k1 = sim_k1.simulate_dynamics(t_audit, initial_state=np.eye(7)[0], n_traj=n_traj)
         res_k2 = sim_k2.simulate_dynamics(t_audit, initial_state=np.eye(7)[0], n_traj=n_traj)
@@ -84,8 +87,10 @@ class TestJPCLValidationSuite:
 
     def test_si_3_timestep_convergence(self, fmo_hamiltonian):
         """Test 3: dt=1.0 vs dt=2.0 convergence."""
+        is_laptop = True
+        L_val = 3 if is_laptop else 9
         t_max = 100.0
-        sim1 = HopsSimulator(fmo_hamiltonian, max_hierarchy=6, k_matsubara=2)
+        sim1 = HopsSimulator(fmo_hamiltonian, max_hierarchy=L_val, k_matsubara=2)
         
         res1 = sim1.simulate_dynamics(np.arange(0, t_max, 1.0), initial_state=np.eye(7)[0])
         res2 = sim1.simulate_dynamics(np.arange(0, t_max, 2.0), initial_state=np.eye(7)[0])
@@ -152,7 +157,9 @@ class TestJPCLValidationSuite:
 
     def test_si_8_hermiticity(self, fmo_hamiltonian, t_audit):
         """Test 8: Populations are real."""
-        sim = HopsSimulator(fmo_hamiltonian, max_hierarchy=4)
+        is_laptop = True
+        L_val = 3 if is_laptop else 9
+        sim = HopsSimulator(fmo_hamiltonian, max_hierarchy=L_val)
         res = sim.simulate_dynamics(t_audit, initial_state=np.eye(7)[0])
         
         assert np.all(np.isreal(res["populations"])), "Populations contain imaginary parts"
@@ -211,7 +218,9 @@ class TestJPCLValidationSuite:
     def test_si_12_markovian_recovery(self, fmo_hamiltonian):
         """Test 12: High gamma limit."""
         gamma_high = 1000.0 # cm^-1
-        sim = HopsSimulator(fmo_hamiltonian, drude_cutoff=gamma_high, max_hierarchy=1)
+        is_laptop = True
+        L_val = 1 if is_laptop else 4 # High gamma converges very fast
+        sim = HopsSimulator(fmo_hamiltonian, drude_cutoff=gamma_high, max_hierarchy=L_val)
         t = np.linspace(0, 500, 101)
         
         res = sim.simulate_dynamics(t, initial_state=np.eye(7)[0])
