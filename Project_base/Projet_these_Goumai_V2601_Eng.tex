@@ -77,7 +77,7 @@
 \newpage
 
 \begin{abstract}
-This doctoral project introduces a novel framework for the design of symbiotic quantum agrivoltaic systems, combining advanced non-Markovian quantum dynamics, non-recursive AI-QD frameworks, and eco-design principles. We develop a unified approach that models cropping under panels as an open quantum system subject to a filtered photonic bath, formalizing for the first time the coherent coupling between excitonic energy transfer (\texttt{EET}) and plant photosynthesis. The methodological architecture integrates \texttt{Process Tensor-HOPS} with \texttt{Low-Temperature Correction}, \texttt{Stochastically Bundled Dissipators} for mesoscale simulation, and \texttt{E(n)-equivariant Graph Neural Networks} for eco-design of non-toxic, biodegradable organic photovoltaic (\texttt{OPV}) materials using quantum reactivity descriptors. The project establishes an open-source quantum software ecosystem, \texttt{AgroQuantPV Suite}, and experimentally demonstrates simultaneous optimization of energy output (\texttt{PCE} > \SI{20}{\percent}) and agricultural performance (\texttt{ETR\_{rel}} > \SI{90}{\percent}, improved Brix degrees) via adaptive spectral control. The impact is quantified across eleven Sustainable Development Goals, with a valorization pathway through the \texttt{AgroQuantum Technologies} spin-off targeting a levelized cost of energy (\texttt{LCOE}) of \SI{0.04}{\dollar\per\kilo\watt\hour}.
+This doctoral project introduces a novel framework for the design of symbiotic quantum agrivoltaic systems, combining advanced non-Markovian quantum dynamics, non-recursive AI-QD frameworks, and eco-design principles. We develop a unified approach that models cropping under panels as an open quantum system subject to a filtered photonic bath, formalizing the spectrally-mediated resonance between excitonic energy transfer (\texttt{EET}) and plant photosynthesis. The methodological architecture integrates \texttt{Process Tensor-HOPS} with \texttt{Low-Temperature Correction}, \texttt{Stochastically Bundled Dissipators} for mesoscale simulation, and \texttt{E(n)-equivariant Graph Neural Networks} for eco-design of non-toxic, biodegradable organic photovoltaic (\texttt{OPV}) materials using quantum reactivity descriptors. The project establishes an open-source quantum software ecosystem, \texttt{AgroQuantPV Suite}, and experimentally demonstrates simultaneous optimization of energy output (\texttt{PCE} > \SI{20}{\percent}) and agricultural performance (\texttt{ETR\_{rel}} > \SI{90}{\percent}, improved Brix degrees) via adaptive spectral control. The impact is quantified across eleven Sustainable Development Goals, with a valorization pathway through the \texttt{AgroQuantum Technologies} spin-off targeting a levelized cost of energy (\texttt{LCOE}) of \SI{0.06}{\dollar\per\kilo\watt\hour}.
 \end{abstract}
 \newpage
 
@@ -112,7 +112,7 @@ In response to these advances, this project proposes to take a further step by i
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.85\textwidth]{agri-photovoltaic_premium.png}
-    \caption{3D vision of quantum agrivoltaics: transparent, spectrally-selective organic photovoltaic (OPV) panels with integrated NV-center quantum sensors positioned above crops (lettuce and spinach). The multi-layer architecture enables simultaneous optimization of energy conversion (\texttt{PCE} \SI{>20}{\percent}) and agricultural productivity (\texttt{ETR\textsubscript{rel}} \SI{>90}{\percent}) through adaptive spectral filtering.}
+    \caption{3D vision of quantum agrivoltaics: transparent, spectrally-selective organic photovoltaic (OPV) panels positioned above crops (lettuce and spinach). Nanodiamond-based NV-center quantum sensors are integrated into plant tissues for precision physiological monitoring. The multi-layer architecture enables simultaneous optimization of energy conversion (\texttt{PCE} \SI{>20}{\percent}) and agricultural productivity (\texttt{ETR\textsubscript{rel}} \SI{>90}{\percent}) through adaptive spectral filtering.}
     \label{fig_agrivoltaic_3d}
 \end{figure}
 
@@ -132,116 +132,26 @@ The central challenge is to develop an integrated technology platform that lever
   \item How can the \textit{AgroQuantPV Suite} quantum software ecosystem integrate the entire value chain from fundamental computation to industrial applications with robust technology transfer and ethical governance?
 \end{enumerate}
 
-\section{Impact on Sustainable Development Goals}
+\section{Impact on Sustainable Development Goals (SDGs)}
 \label{sec:sdg_impact}
 
-Our quantum-engineered agrivoltaic framework directly contributes to multiple SDGs with quantified targets:
+Our quantum-engineered agrivoltaic framework directly contributes to eleven SDGs with quantified targets:
 
 \begin{itemize}
-    \item \textbf{SDG 7 (Affordable Clean Energy):} Targeting LCOE < \SI{0.04}{\dollar\per\kilo\watt\hour} through 20\%+ PCE and reduced installation costs via 3D architecture optimization
-    \item \textbf{SDG 2 (Zero Hunger):} Maintaining >90\% relative ETR for crop productivity while improving fruit quality (Brix degrees) and preventing heat-stress induced parthenocarpy
-    \item \textbf{SDG 13 (Climate Action):} 60\% reduction in carbon footprint via local additive manufacturing and biodegradable materials
-    \item \textbf{SDG 12 (Responsible Consumption):} Biodegradable OPV materials with circular economy design achieving >80\% biodegradability
-    \item \textbf{SDG 3 (Good Health):} Non-toxic materials design using quantum reactivity descriptors, eliminating hazardous chemical exposure
-    \item \textbf{SDG 6 (Clean Water):} 25\% reduction in agricultural water consumption through reduced evaporation under panels
-\end{itemize}
-
-\section{Contribution to the Sustainable Development Goals (SDGs)}
-\label{sec:sdgs}
-
-This project is designed to generate measurable impact across eleven SDGs, with quantified metrics and contributions aligned with the official United Nations targets.
-
-\subsection{SDG 7: Affordable and clean energy}
-\begin{itemize}
-    \item \textbf{Target 7.2.} Substantially increase the share of renewable energy in the global energy mix, aiming for an LCOE below \SI{0.04}{\dollar\per\kilo\watt\hour}.
-
-    \item \textbf{Target 7.a.} Strengthen international cooperation to facilitate access to research and technology in clean energy via the open-source \textit{AgroQuantPV Suite} ecosystem.
-
-    \item \textbf{Target 7.3.} Contribute to doubling the global rate of improvement in energy efficiency through a 3D architecture that increases collector area by more than \SI{60}{\percent}.
-\end{itemize}
-
-\subsection{SDG 2: Zero hunger}
-\begin{itemize}
-    \item \textbf{Target 2.3.} Double agricultural productivity by maintaining \SI{90}{\percent} of the Electron Transport Rate (ETR) under the panels.
-
-    \item \textbf{Target 2.4.} Ensure sustainable food production systems through agrivoltaic optimization that maintains crop yield while improving fruit quality (Brix degrees) and preventing heat-stress induced parthenocarpy.
-
-    \item \textbf{Target 2.4.} Ensure sustainable food production systems and implement resilient agricultural practices through 3D canopy monitoring with quantum sensors.
-
-    \item \textbf{Target 2.a.} Strengthen research capacity in developing countries through open-source quantum simulation tools and international collaboration frameworks.
-\end{itemize}
-
-\subsection{SDG 3: Good health and well-being}
-\begin{itemize}
-    \item \textbf{Target 3.9.} Reduce deaths and illnesses from hazardous chemicals through eco-design of non-toxic, biodegradable OPV materials using quantum reactivity descriptors.
-\end{itemize}
-
-\subsection{SDG 12: Responsible consumption and production}
-\begin{itemize}
-    \item \textbf{Target 12.4.} Achieve environmentally sound management of chemicals through predictive biodegradability assessment using Fukui functions and quantum descriptors.
-    
-    \item \textbf{Target 12.5.} Substantially reduce waste generation through design of fully biodegradable photovoltaic materials.
+    \item \textbf{SDG 7 (Affordable Clean Energy):} Targeting LCOE < \SI{0.06}{\dollar\per\kilo\watt\hour} through 20\%+ PCE and reduced installation costs via 3D architecture optimization.
+    \item \textbf{SDG 2 (Zero Hunger):} Maintaining >90\% relative ETR for crop productivity while improving fruit quality (Brix degrees) and preventing heat-stress induced parthenocarpy.
+    \item \textbf{SDG 13 (Climate Action):} 60\% reduction in carbon footprint via local additive manufacturing and biodegradable materials.
+    \item \textbf{SDG 12 (Responsible Consumption):} Biodegradable OPV materials achieving >80\% biodegradability within 180 days.
+    \item \textbf{SDG 3 (Good Health):} Non-toxic materials design using quantum reactivity descriptors, eliminating hazardous chemical exposure.
+    \item \textbf{SDG 6 (Clean Water):} 25\% reduction in agricultural water consumption through reduced evaporation under panels.
+    \item \textbf{SDG 8 (Decent Work):} Creating the \textit{AgroQuantum Technologies} spin-off with 20+ direct jobs and 40\% gender parity in technical roles.
+    \item \textbf{SDG 9 (Industry and Innovation):} Fostering sustainable industrial modernization via the \textit{AgroQuantPV Suite} software ecosystem.
+    \item \textbf{SDG 15 (Life on Land):} Preserving 100\% of agricultural land use through industrial–agricultural symbiosis.
+    \item \textbf{SDG 16 (Strong Institutions):} Ensuring transparent governance via blockchain and ethical AI frameworks.
+    \item \textbf{SDG 17 (Partnerships):} Enhancing North–South cooperation through open-source quantum simulation tools.
 \end{itemize}
 
 
-\subsection{SDG 3: Good health and well-being}
-\begin{itemize}
-    \item \textbf{Target 3.9.} Substantially reduce the number of deaths and illnesses from hazardous chemicals and pollution by developing biodegradable OPV materials and an additive manufacturing process free of toxic solvents.
-\end{itemize}
-
-\subsection{SDG 6: Clean water and sanitation}
-\begin{itemize}
-    \item \textbf{Target 6.4.} Substantially increase water-use efficiency by reducing evaporation by \SI{25}{\percent}.
-
-    \item \textbf{Target 6.6.} Protect and restore water-related ecosystems by establishing blockchain traceability for circular-material flows to avoid contamination.
-\end{itemize}
-
-\subsection{SDG 8: Decent work and economic growth}
-\begin{itemize}
-    \item \textbf{Target 8.2.} Achieve higher levels of economic productivity through technological modernization and innovation by creating the \textit{AgroQuantum Technologies} spin-off (\num{20}+ direct jobs).
-
-    \item \textbf{Target 8.5.} Achieve full and productive employment and decent work for all women and men, with a target of \SI{40}{\percent} women among the \num{50}+ trained individuals.
-\end{itemize}
-
-\subsection{SDG 9: Industry, innovation and infrastructure}
-\begin{itemize}
-    \item \textbf{Target 9.4.} Upgrade infrastructure and retrofit industries to make them sustainable via the quantum software ecosystem for industrial innovation.
-
-    \item \textbf{Target 9.5.} Enhance scientific research and upgrade the technological capabilities of industrial sectors by fostering innovation through a global collaborative platform.
-\end{itemize}
-
-\subsection{SDG 12: Responsible Consumption and Production}
-\begin{itemize}
-    \item \textbf{Target 12.2.} Achieve the sustainable management and efficient use of natural resources through a circular economy for OPV materials.
-
-    \item \textbf{Target 12.5.} Substantially reduce waste generation through prevention, reduction, recycling, and reuse via design-for-disassembly.
-\end{itemize}
-
-\subsection{SDG 13: Climate action}
-\begin{itemize}
-    \item \textbf{Target 13.2.} Integrate climate change measures into policies, strategies, and planning through a \SI{60}{\percent} reduction in carbon footprint thanks to local additive manufacturing.
-\end{itemize}
-
-\subsection{SDG 15: Life on land}
-\begin{itemize}
-    \item \textbf{Target 15.1.} Ensure the conservation, restoration, and sustainable use of terrestrial ecosystems by preserving \SI{100}{\percent} of agricultural land use.
-
-    \item \textbf{Target 15.9.} Integrate ecosystem and biodiversity values into national and local planning by creating industry–agriculture symbiosis.
-\end{itemize}
-
-\subsection{SDG 16: Peace, justice and strong institutions}
-\begin{itemize}
-    \item \textbf{Target 16.6.} Develop effective, accountable, and transparent institutions using blockchain for project governance.
-
-    \item \textbf{Target 16.7.} Ensure responsive, inclusive, participatory, and representative decision-making by embedding AI ethics and environmental justice principles.
-\end{itemize}
-
-\subsection{SDG 17: Partnerships for the goals}
-\begin{itemize}
-    \item \textbf{Target 17.6.} Enhance North–South and South–South cooperation in science, technology, and innovation via the \textit{AgroQuantPV Suite} ecosystem.
-
-    \item \textbf{Target 17.9.} Strengthen international support for effective and targeted capacity-building through the creation of a global quantum-skills network.
-\end{itemize}
 
 
 \section{Thesis objectives: A holistic approach}
@@ -283,9 +193,9 @@ This axis aims to develop a theoretical and computational framework capable of m
 
 \subsubsection{Probing system–environment quantum correlations}
 \begin{itemize}
-    \item \textbf{NV-center sensors for entanglement.} Steer the use of NV-diamond sensors toward detecting robust signatures of quantum correlations such as negativity (entanglement) between excitons and relevant vibrational modes.
+    \item \textbf{Nanodiamond sensors for entanglement.} Steer the use of nanodiamond-based NV-center sensors integrated into plant tissues toward detecting robust signatures of quantum correlations such as negativity (entanglement) between excitons and relevant vibrational modes.
 
-    \item \textbf{3D monitoring of the photosynthetic response.} Deploy a multi-height sensor network to map the canopy response in 3D (e.g., non-photochemical quenching, NPQ) under the modulated light environment.
+    \item \textbf{Precision monitoring of the photosynthetic response.} Deploy in-vivo quantum sensors to map the internal response of the PSU (e.g., non-photochemical quenching, NPQ) under the modulated light environment.
 \end{itemize}
 
 \subsection{Axis 3: Ethical AI and predictive modeling for eco-design}
@@ -389,29 +299,10 @@ For a realistic description of complex biomimetic environments, we adopt a two-t
 
 \subsection{Stochastically bundled dissipators and quantum validation}
 
-\subsubsection{Stochastically bundled dissipators and quantum validation}
-
-\paragraph{Stochastically Bundled Dissipators implementation}
-
-\textbf{Mesoscale scaling approach.} For systems exceeding 1000 chromophores, we implement Stochastically Bundled Dissipators (SBD) that enable simulation of Lindblad dynamics while preserving non-Markovian effects essential for mesoscale coherence validation. The SBD framework stochastically bundles Lindblad operators to achieve computational efficiency:
-
-\begin{align}
-\mathcal{L}_{\rm SBD}[\rho] &= \sum_{\alpha} p_{\alpha}(t) \mathcal{D}_{\alpha}[\rho] \\
-\mathcal{D}_{\alpha}[\rho] &= L_{\alpha} \rho L_{\alpha}^{\dagger} - \frac{1}{2}\{L_{\alpha}^{\dagger}L_{\alpha}, \rho\}
-\end{align}
-
-where $p_{\alpha}(t)$ are time-dependent stochastic weights and $L_{\alpha}$ are bundled Lindblad operators.
-
-\textbf{Low-Temperature Correction parameters.} The LTC implementation uses optimized parameters: Matsubara cutoff $N_{\rm Mat} = 10$ for T<150K, time step enhancement factor $\eta_{\rm LTC} = 10$, and convergence tolerance $\epsilon_{\rm LTC} = 10^{-8}$ for auxiliary state truncation.
-
-\paragraph{Optimizing operator clustering}
-
+\subsubsection{Stochastically bundled dissipators for mesoscale scaling}
+\paragraph{Implementation of SBD}
 \begin{itemize}
-    \item \textbf{Spectral clustering of operators.} Partitioning Lindblad operators based on structural and energetic similarity:
-    \begin{equation}
-    \mathtt{L}_k^{\text{bundle}} = \sum_{j \in C_k} w_j(T) \mathtt{L}_j, \quad w_j(T) = \frac{\|\mathcal{D}[\mathtt{L}_j]\|_2}{\sum_{m\in C_k} \|\mathcal{D}[\mathtt{L}_m]\|_2}.
-    \end{equation}
-    
+    \item \textbf{Spectral clustering of operators.} Partitioning Lindblad operators based on structural and energetic similarity to achieve size-invariant scaling.
     \item \textbf{Adaptive error control.} Real-time estimation of truncation error and dynamic adjustment of the number of bundles, ensuring controlled accuracy with a \SI{40}{\percent} cost reduction.
 \end{itemize}
 
@@ -428,13 +319,12 @@ where $p_{\alpha}(t)$ are time-dependent stochastic weights and $L_{\alpha}$ are
 
 \subsection{Open-quantum-system formalism for crop–panel coupling}
 
-\subsubsection{Effective agrivoltaic Hamiltonian}
-
-We establish a unified formalism describing the quantum coupling between photovoltaic devices and photosynthetic systems:
+We establish an effective Hamiltonian formalism describing the spectrally-mediated coupling between photovoltaic devices and photosynthetic units:
 \begin{equation}
 \label{eq:agri_hamiltonian}
-\mathtt{H}_{\text{agri}} = \underbrace{\mathtt{H}_{\text{OPV}}}_{\text{OPV system}} \otimes \underbrace{\mathtt{H}_{\text{PSU}}}_{\text{Photosynthetic units}} + \underbrace{\mathtt{V}_{\text{spectral}}}_{\text{Light coupling}} + \underbrace{\mathtt{H}_{\text{env}}}_{\text{Environment}}.
+\mathtt{H}_{\text{agri}} = \mathtt{H}_{\text{OPV}} + \mathtt{H}_{\text{PSU}} + \mathtt{V}_{\text{spectral}}(t) + \mathtt{H}_{\text{env}},
 \end{equation}
+where $\mathtt{V}_{\text{spectral}}(t)$ represents the time-dependent driving field filtered by the OPV transmission function.
 where
 \begin{itemize}
     \item $\mathtt{H}_{\text{PSU}} = \sum_{i=1}^{N_{\text{Chl}}} \varepsilon_i a_i^\dagger a_i + \sum_{i\neq j} J_{ij} a_i^\dagger a_j$ models Photosystem II.
@@ -719,7 +609,7 @@ The three-year project timeline is detailed in \Cref{tab_timeline}.
 
     \item \textbf{Realistic non-Markovian quantum dynamics.} First framework integrating \texttt{AIMD} + \texttt{Process Tensor-HOPS} to faithfully capture environmental effects in photosynthetic and \texttt{OPV} systems.
     
-    \item \textbf{Filtered photonic-bath formalism.} First rigorous quantum modeling of crop–panel coupling as an open quantum system with two baths.
+    \item \textbf{Filtered photonic-bath formalism.} First rigorous quantum modeling of crop–panel coupling as an open quantum system where the OPV medium acts as a spectrally-tunable photonic bath for the photosynthetic units.
     
     \item \textbf{Hybrid AI–quantum-physics methods.} Innovative integration of \texttt{PINNs} ensuring ML predictions comply with quantum conservation laws.
 \end{itemize}

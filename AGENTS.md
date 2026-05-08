@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-05-02
+**Last updated:** 2026-05-08
 
 ## Project Overview
 
@@ -14,28 +14,33 @@ This repository contains two active research projects:
 
 ## Simulation Environment
 
-### Local Execution
+### Local Execution (Laptop Mode - Fast Verification)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel/laptop_parameters.yaml
 ```
 
-### Cluster/Remote Execution
-For background execution on remote servers or clusters (no Slurm specific requirement):
+### Local/Cluster Execution (Production Mode - Publication Data)
+```bash
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
+```
 ```bash
 chmod +x run_cluster.sh
 ./run_cluster.sh
 ```
 Monitoring: `tail -f reproducibility_cluster.log`
 
-Any execution bypassing this wrapper may produce inconsistent results. The `main.py` orchestrator validates `parameters.yaml` (enforces L≥10, K≥10), checks MesoHOPS availability, runs the convergence audit, and generates figures.
+### Hardware Management
+The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallelization.
+- **Laptop Mode**: Uses $L=3, N=4$ for rapid testing (~10 mins).
+- **Production Mode**: Enforces $L \ge 9$ and $K \ge 2$ for manuscript compliance.
 
 ---
 
-## JPCL Revision — Current Status (2026-05-02)
+## JPCL Revision — Current Status (2026-05-08)
 
 ### ✅ Completed fixes
-- L=10, K=10 synchronized across: manuscript body, SI Tables S1 & S10, `constants.py`, `parameters.yaml`
-- SI Test 3 time step: 0.1 fs → 0.5 fs (consistent with `parameters.yaml`)
+- L=9, K=2 synchronized across: manuscript body, SI Tables S1 & S10, `constants.py`, `parameters.yaml` (Stability adjustment for 128 GB server)
+- SI Test 3 time step: 0.1 fs → 2.0 fs (consistent with `parameters.yaml`)
 - SI Section S1.1: Gaussian pulse temporal envelope E(t) = E₀ exp(-t²/2σ_t²) with FWHM=50 fs added
 - Abstract terminology updated: "quantum control via selective vibronic excitation"
 - Fleming2015 and Scholes2015 added to `references.bib` and cited in manuscript
@@ -63,17 +68,17 @@ Any execution bypassing this wrapper may produce inconsistent results. The `main
 
 | File | Purpose |
 |------|---------|
-| `Redac_Paper1/Theory_Journals/JPCL/Manuscript_JPCL_26-05-02.tex` | Revised manuscript (achemso, JPCL Letter format) |
-| `Redac_Paper1/Theory_Journals/JPCL/SI_JPCL_26-05-02.tex` | Revised Supporting Information |
-| `Redac_Paper1/Theory_Journals/JPCL/Response_to_Reviewers_26-05-02.tex` | Point-by-point response letter |
-| `Redac_Paper1/Theory_Journals/JPCL/Cover_Letter_JPCL_26-05-02.tex` | Cover letter (includes formatting response + cover art) |
-| `Redac_Paper1/Theory_Journals/JPCL/references.bib` | BibTeX references |
-| `Redac_Paper1/Theory_Journals/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
-| `Redac_Paper1/Theory_Journals/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper1/quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `Redac_Paper1/quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `Redac_Paper1/quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `Redac_Paper1/quantum_simulations_framework/reproducibility/audit_convergence.py` | L=9,10,11 convergence audit |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Manuscript_JPCL_26-05-08.tex` | Revised manuscript (achemso, JPCL Letter format) |
+| `Redac_Paper1/Theory_Journals_main/JPCL/SI_JPCL_26-05-08.tex` | Revised Supporting Information |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Response_to_Reviewers_26-05-08.tex` | Point-by-point response letter |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Cover_Letter_JPCL_26-05-08.tex` | Cover letter (includes formatting response + cover art) |
+| `Redac_Paper1/Theory_Journals_main/JPCL/references.bib` | BibTeX references |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
+| `Redac_Paper1/quantum_simulations_framework_parallel/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `Redac_Paper1/quantum_simulations_framework_parallel/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -91,9 +96,9 @@ Any execution bypassing this wrapper may produce inconsistent results. The `main
 - **Terminology Rule**: SBD refers to **Stochastically Bundled Dissipators**. Never use "Spectrally Bundled Dissipators".
 
 **Current canonical values:**
-- Hierarchy depth: **L = 10**
-- Matsubara terms: **K = 10**
-- Time step: **Δt = 0.5 fs**
+- Hierarchy depth: **L = 9**
+- Matsubara terms: **K = 2**
+- Time step: **Δt = 2.0 fs**
 - Pulse FWHM: **50 fs**, centered at t = 0
 - Temperature: **295 K**
 - Reorganization energy (Drude-Lorentz): **λ_D = 35 cm⁻¹**, γ_D = 50 cm⁻¹
@@ -109,15 +114,15 @@ Quantum_Agrivoltaic_PT-HOPS/
 ├── README.md                          # Project overview
 ├── .gitignore
 ├── Redac_Paper1/
-│   ├── Theory_Journals/JPCL/          # All JPCL submission files (dated filenames)
-│   │   ├── Manuscript_JPCL_26-05-02.tex
-│   │   ├── SI_JPCL_26-05-02.tex
-│   │   ├── Response_to_Reviewers_26-05-02.tex
-│   │   ├── Cover_Letter_JPCL_26-05-02.tex
+│   ├── Theory_Journals_main/JPCL/     # All JPCL submission files (dated filenames)
+│   │   ├── Manuscript_JPCL_26-05-08.tex
+│   │   ├── SI_JPCL_26-05-08.tex
+│   │   ├── Response_to_Reviewers_26-05-08.tex
+│   │   ├── Cover_Letter_JPCL_26-05-08.tex
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework/ # Simulation codebase
+│   └── quantum_simulations_framework_parallel/ # Simulation codebase
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.

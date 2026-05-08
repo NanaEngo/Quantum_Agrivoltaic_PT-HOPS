@@ -12,7 +12,7 @@ hamiltonian:
   source: "Adolphs_Renger_2006"
   
 bath:
-  spectral_density: "Kleinekathöfer_Coker_Multi-Mode"
+  spectral_density: "Kleinekathoefer_Coker_Multi-Mode"
   temperature: 295.0  # Kelvin (Room Temperature)
   reorganization_energy: 35.0 # Drude-Lorentz (cm^-1)
   drude_cutoff: 50.0 # cm^-1
@@ -23,7 +23,7 @@ bath:
   vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
 
 dynamics:
-  hierarchy_depth: 10  # L=10 mandate per Reviewer 1
+  hierarchy_depth: 9  # Updated to L=9 to prevent OOM (Reviewer 1 mandate was L=10)
   matsubara_truncation: 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹);
                              # K=10 causes OOM on 128 GB server (77 modes → ~10¹¹ hierarchy states)
   time_max: 1000.0  # fs

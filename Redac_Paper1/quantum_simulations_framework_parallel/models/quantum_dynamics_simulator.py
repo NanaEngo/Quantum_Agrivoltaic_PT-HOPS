@@ -14,6 +14,12 @@ from typing import Any, Dict
 import numpy as np
 import scipy.linalg as la
 from scipy.sparse import csc_matrix
+import multiprocessing
+try:
+    from joblib import Parallel, delayed
+    HAS_JOBLIB = True
+except ImportError:
+    HAS_JOBLIB = False
 
 try:
     from core.constants import DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE
@@ -398,60 +404,62 @@ class QuantumDynamicsSimulator:
         if seeds is None:
             seeds = list(range(n_traj))
 
-        # ── Run ensemble of trajectories ─────────────────────────────
+        # ── Run ensemble of trajectories (Parallelized) ─────────────────────
+        # Calculate 2/3 of available cores
+        cpu_count = multiprocessing.cpu_count()
+        n_jobs = max(1, int(cpu_count * 2 / 3))
+        
         logger.info(
-            f"  Running {n_traj} HOPS trajectories ({t_max:.0f} fs, "
-            f"dt={dt_save} fs, MAXHIER={self.max_hier})..."
+            f"  Running {n_traj} HOPS trajectories in parallel (n_jobs={n_jobs}, "
+            f"{t_max:.0f} fs, dt={dt_save} fs, MAXHIER={self.max_hier})..."
         )
+
+        # Helper to run a single trajectory - must be picklable
+        def _run_single(seed_val):
+            try:
+                # Re-build trajectory locally to ensure process-independence
+                hops_local = self._build_hops_trajectory(seed_val, t_max, dt_save)
+                hops_local.initialize(psi_0.copy())
+                hops_local.propagate(t_max, dt_save)
+                
+                psi_traj_local = np.array(hops_local.storage.data["psi_traj"])[:, :n_sites]
+                t_ax_local = np.array(hops_local.storage.data["t_axis"])
+                return psi_traj_local, t_ax_local
+            except Exception as exc:
+                logger.debug(f"Trajectory seed {seed_val} failed: {exc}")
+                return None, None
 
         all_psi_trajs = []
         t_axis = None
 
-        for k, seed in enumerate(seeds):
-            try:
-                hops = self._build_hops_trajectory(seed, t_max, dt_save)
-                # required_tau: MesoHOPS propagate() expects the internal RK step size.
-                # Use TAU directly — the integrator step is handled internally.
-                hops.initialize(psi_0.copy())
-                hops.propagate(t_max, dt_save)
-
-                psi_traj = np.array(hops.storage.data["psi_traj"])[:, :n_sites]
-                t_ax_k = np.array(hops.storage.data["t_axis"])
-
-                # Enforce consistent length: truncate to shortest t_axis seen so far
-                if t_axis is None:
-                    t_axis = t_ax_k
-                elif len(t_ax_k) < len(t_axis):
-                    t_axis = t_ax_k  # adopt shorter axis; longer trajs will be truncated below
-
-                # Check for NaN and truncate to current t_axis length
-                n_t = len(t_axis)
-                psi_traj = psi_traj[:n_t]
-                if not np.any(np.isnan(psi_traj)):
+        if HAS_JOBLIB and n_jobs > 1:
+            # Parallel execution
+            results_parallel = Parallel(n_jobs=n_jobs)(
+                delayed(_run_single)(s) for s in seeds
+            )
+            
+            for psi_traj, t_ax_k in results_parallel:
+                if psi_traj is not None and not np.any(np.isnan(psi_traj)):
+                    if t_axis is None:
+                        t_axis = t_ax_k
+                    elif len(t_ax_k) < len(t_axis):
+                        t_axis = t_ax_k
                     all_psi_trajs.append(psi_traj)
-
-                if (k + 1) % max(1, n_traj // 5) == 0 or k == n_traj - 1:
-                    logger.info(
-                        f"    Trajectory {k + 1}/{n_traj} completed ({len(all_psi_trajs)} valid)"
-                    )
-
-            except RuntimeError as e:
-                # CRITICAL FIX: Catch specific RuntimeErrors such as Numba/NumPy mismatch
-                if "Numba needs NumPy" in str(e):
-                    raise RuntimeError(
-                        f"Numba/NumPy version mismatch: {e}. "
-                        f"Please downgrade NumPy to < 2.4 (e.g., `pip install numpy<2.4`)."
-                    ) from e
-
-                logger.warning(
-                    f"    Trajectory {k + 1}/{n_traj} failed (RuntimeError): {str(e)[:120]}"
-                )
-                continue
-
-            except (AttributeError, ValueError, TypeError, np.linalg.LinAlgError) as e:
-                # Recoverable numeric / attribute errors: log and continue
-                logger.warning(f"    Trajectory {k + 1}/{n_traj} failed: {str(e)[:120]}")
-                continue
+        else:
+            # Sequential fallback
+            for seed in seeds:
+                psi_traj, t_ax_k = _run_single(seed)
+                if psi_traj is not None and not np.any(np.isnan(psi_traj)):
+                    if t_axis is None:
+                        t_axis = t_ax_k
+                    elif len(t_ax_k) < len(t_axis):
+                        t_axis = t_ax_k
+                    all_psi_trajs.append(psi_traj)
+                    
+        # Consistent truncation
+        if t_axis is not None:
+            n_t = len(t_axis)
+            all_psi_trajs = [p[:n_t] for p in all_psi_trajs]
 
         n_valid = len(all_psi_trajs)
         if n_valid == 0:

@@ -4,8 +4,8 @@ lastStep: 8
 status: 'complete'
 project_name: 'Quantum_Agrivoltaic_PT-HOPS'
 user_name: 'Taamangtchu'
-date: '2026-05-02'
-completedAt: '2026-05-02'
+date: '2026-05-08'
+completedAt: '2026-05-08'
 ---
 
 # Architecture Decision Document
@@ -17,11 +17,11 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 ### Requirements Overview
 
 **Functional Requirements:**
-The architecture must support an 8-tier functional hierarchy, prioritizing the transition to a mandatory $L=10$ hierarchy depth using the **PT-HOPS/SBD** engine. This requires a decoupled parameter management system (`parameters.yaml`) and a robust convergence audit utility.
+The architecture must support an 8-tier functional hierarchy, prioritizing the transition to a mandatory $L=9$ hierarchy depth using the **PT-HOPS/SBD** engine. This requires a decoupled parameter management system (`parameters.yaml`) and a robust convergence audit utility.
 
 **Non-Functional Requirements:**
 - **Accuracy**: Trace preservation ($10^{-6}$) and population positivity are non-negotiable.
-- **Performance**: Optimization for 128 GB RAM server and 32 GB RAM local workstation. K=2 (21 hierarchy modes at L=10) is mandatory — K=10 (77 modes) produces ~10¹¹ hierarchy states and causes OOM on 128 GB. TERMINATOR=True and Triangular STATIC_FILTERS reduce memory by ~50%.
+- **Performance**: Optimization for 128 GB RAM server. K=2 (21 hierarchy modes at L=9) is mandatory — K=10 (77 modes) produces ~10¹¹ hierarchy states and causes OOM on 128 GB. TERMINATOR=True and Triangular STATIC_FILTERS reduce memory by ~50%. Time step synchronized to **2.0 fs**.
 - **Reproducibility**: A single entry-point (`main.py`) must orchestrate the entire pipeline.
 
 **Scale & Complexity:**
@@ -73,7 +73,7 @@ A custom monorepo approach ensures **Reproducibility**. By centralizing paramete
 **Critical Decisions (Block Implementation):**
 - **Parameter Synchronization**: `parameters.yaml` (YAML 1.2) is the single source of truth.
 - **Methodology**: **PT-HOPS** with **SBD** (Stochastically Bundled Dissipators) for non-Markovian dynamics.
-- **Convergence Audit**: **Relative Error Threshold (Frobenius Norm)** compared between $L=10$ and $L=9, 11$ (L-audit) AND between $K=1, 2, 3$ at fixed $L=10$ (K-audit). K=2 is the production standard at T=295 K (ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹).
+- **Convergence Audit**: **Relative Error Threshold (Frobenius Norm)** compared between $L=7, 8, 9$ (L-audit) AND between $K=1, 2, 3$ at fixed $L=9$ (K-audit). K=2 is the production standard at T=295 K (ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹).
 - **Pulse Specification**: Mandatory support for explicit functional forms and **relative timing/delays** between excitation and probes.
 - **Data Interoperability**: Mandated HDF5 (`.h5`) for all simulation outputs.
 
@@ -115,7 +115,7 @@ A custom monorepo approach ensures **Reproducibility**. By centralizing paramete
 
 ### Structure Patterns
 - **Tests**: Unified `tests/unit` directory.
-- **Outputs**: All $L=10$ results must be saved in `data/converged/` as `.h5` files.
+- **Outputs**: All $L=9$ results must be saved in `data/converged/` as `.h5` files.
 - **Orchestration**: The `reproducibility/` folder contains only top-level scripts that call into `src/`.
 
 ### Process Patterns

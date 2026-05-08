@@ -3,12 +3,16 @@
 # This script ensures the simulation runs in the background even if the terminal is closed.
 
 # Configuration
+_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+cd "$_SCRIPT_DIR"
+
 ENV_NAME="MesoHOP-sim"
 MAIN_SCRIPT="reproducibility/main.py"
 LOG_FILE="reproducibility_cluster.log"
 
 echo "--------------------------------------------------------"
 echo "  Quantum-Enhanced Agrivoltaics: Production Pipeline"
+echo "  Working Dir: $_SCRIPT_DIR"
 echo "--------------------------------------------------------"
 
 # Try multiple possible venv locations

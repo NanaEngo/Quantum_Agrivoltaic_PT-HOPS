@@ -18,7 +18,7 @@ This repository contains the research framework, simulation codebase, and manusc
 | **Journal** | *The Journal of Physical Chemistry Letters* (JPCL) |
 | **Manuscript ID** | `jz-2026-00994t` |
 | **Status** | **Major Revision in progress** — deadline 28-May-2026 |
-| **Last updated** | 2026-05-02 |
+| **Last updated** | 2026-05-08 |
 
 ### What this project does
 
@@ -37,10 +37,10 @@ Uses PT-HOPS/SBD (Process Tensor Hierarchy of Pure States with Stochastically Bu
 All simulations **must** use the `MesoHOP-sim` mamba environment:
 
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
 ```
 
-The pipeline validates parameters (L=10, K=10), checks MesoHOPS availability, runs the L=9/10/11 convergence audit, and generates figures. It will **exit with an error** if MesoHOPS is not available, preventing invalid fallback data from being saved.
+The pipeline validates parameters (L=9, K=2), checks MesoHOPS availability, runs the L=7/8/9 convergence audit, and generates figures. It will **exit with an error** if MesoHOPS is not available, preventing invalid fallback data from being saved.
 
 ### 🚀 HPC & Cluster Deployment
 
@@ -71,9 +71,9 @@ All parameters are defined in `Redac_Paper1/quantum_simulations_framework/parame
 
 | Parameter | Value |
 |-----------|-------|
-| Hierarchy depth L | **10** |
-| Matsubara terms K | **10** |
-| Time step Δt | **0.5 fs** |
+| Hierarchy depth L | **9** |
+| Matsubara terms K | **2** |
+| Time step Δt | **2.0 fs** |
 | Pulse FWHM | **50 fs**, centered at t = 0 |
 | Temperature | **295 K** |
 | λ_D (Drude-Lorentz) | **35 cm⁻¹** |
@@ -106,7 +106,7 @@ Observables studied: spectral density A(ω), impurity occupation ⟨n_σ⟩, tim
 | achemso (LaTeX) | latest | JPCL manuscript formatting |
 | Matplotlib | latest | Figures (600 DPI, JPCL theme) |
 
-**Hardware**: AMD Ryzen 5 5500U | 40 GB RAM (local only, no HPC).
+**Hardware**: Parallel Server (48 cores, 128 GB RAM) | Targeted for L=9 publication runs.
 
 ---
 
@@ -116,7 +116,7 @@ Observables studied: spectral density A(ω), impurity occupation ⟨n_σ⟩, tim
 Quantum_Agrivoltaic_PT-HOPS/
 ├── Redac_Paper1/
 │   ├── Theory_Journals/JPCL/          # Manuscript, SI, response letter, cover letter
-│   └── quantum_simulations_framework/ # Simulation codebase
+│   └── quantum_simulations_framework_parallel/ # Simulation codebase (Optimized for HPC)
 │       ├── parameters.yaml            # ← Single source of truth for all parameters
 │       ├── core/                      # HopsSimulator, constants, Hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, spectral optimizer
@@ -124,7 +124,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 │       ├── utils/                     # FigureGenerator (600 DPI), JPCL theme
 │       ├── reproducibility/
 │       │   ├── main.py                # ← Single entry point
-│       │   ├── audit_convergence.py   # L=9,10,11 convergence audit
+│       │   ├── audit_convergence.py   # L=7,8,9 convergence audit
 │       │   └── results/               # Valid HDF5/CSV results (see README inside)
 │       └── tests/
 ├── notebooks/                         # Anderson model Jupyter notebooks

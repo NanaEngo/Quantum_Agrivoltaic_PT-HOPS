@@ -11,6 +11,18 @@ from typing import Any, Dict, Optional
 import numpy as np
 import scipy.sparse as sp
 from numpy.typing import NDArray
+import multiprocessing
+try:
+    from joblib import Parallel, delayed
+    HAS_JOBLIB = True
+except ImportError:
+    HAS_JOBLIB = False
+
+try:
+    from tqdm.auto import tqdm
+    HAS_TQDM = True
+except ImportError:
+    HAS_TQDM = False
 
 # Import MesoHOPS modules
 try:
@@ -550,94 +562,106 @@ class HopsSimulator:
                 # We will handle PT-HOPS by overriding the noise component after trajectory init
                 pass
 
-            # Create HOPS trajectory with all parameters
-            trajectory = TrajectoryClass(**traj_kwargs)
+            # ── Run ensemble of trajectories (Parallelized) ─────────────────────
+            n_traj = kwargs.get("n_traj", 1)
+            cpu_count = multiprocessing.cpu_count()
+            n_jobs = max(1, int(cpu_count * 2 / 3)) if n_traj > 1 else 1
 
-            # If PT-HOPS, inject our custom noise adapter
-            if self.use_pt_hops and PT_HopsNoise is not None:
-                pt_noise = PT_HopsNoise(noise_param, self.system_param["PARAM_NOISE1"])
-                # Some mesohops versions use .noise, others .noise_engine
-                if hasattr(trajectory, "noise"):
-                    trajectory.noise = pt_noise
-                # Prepare the Process Tensor on the trajectory's time grid (use safe access)
+            # Determine seeds
+            seeds = kwargs.get("seeds", list(range(n_traj)))
+
+            def _run_single_traj(seed):
                 try:
-                    pt_noise._prepare_noise(self.system_param["L_NOISE1"], time_points=time_points)
-                except AttributeError:
-                    logger.warning(
-                        "PT_HopsNoise._prepare_noise not available in this adapter version"
-                    )
+                    # Deep copy of params to avoid process collisions
+                    local_traj_kwargs = dict(traj_kwargs)
+                    local_traj_kwargs["noise_param"] = dict(traj_kwargs["noise_param"])
+                    local_traj_kwargs["noise_param"]["SEED"] = seed
+                    
+                    trajectory = TrajectoryClass(**local_traj_kwargs)
+                    
+                    if self.use_pt_hops and PT_HopsNoise is not None:
+                        pt_noise = PT_HopsNoise(local_traj_kwargs["noise_param"], self.system_param["PARAM_NOISE1"])
+                        if hasattr(trajectory, "noise"):
+                            trajectory.noise = pt_noise
+                        pt_noise._prepare_noise(self.system_param["L_NOISE1"], time_points=time_points)
+                    
+                    trajectory.initialize(initial_state.copy())
+                    trajectory.propagate(t_max, dt_save)
+                    
+                    # Return essential data
+                    return {
+                        "psi_traj": np.array(trajectory.storage.data["psi_traj"]),
+                        "t_axis": np.array(trajectory.storage.data["t_axis"]),
+                        "pop_site": np.array(trajectory.storage.data.get("pop_site", []))
+                    }
+                except Exception as e:
+                    logger.error(f"Parallel trajectory {seed} failed: {e}")
+                    return None
 
-            # Set initial state
-            if initial_state is None:
-                raise ValueError("initial_state must be explicitly provided. Defaulting to site 0 is physically unsafe for arbitrary Hamiltonians.")
+            if HAS_JOBLIB and n_jobs > 1:
+                logger.info(f"Running ensemble of {n_traj} trajectories on {n_jobs} cores...")
+                
+                # Setup tqdm progress bar
+                iterable = seeds
+                if HAS_TQDM and kwargs.get("show_progress", True):
+                    desc = kwargs.get("desc", "Trajectories")
+                    iterable = tqdm(seeds, desc=desc, unit="traj", leave=False)
+                
+                traj_results = Parallel(n_jobs=n_jobs)(
+                    delayed(_run_single_traj)(s) for s in iterable
+                )
+            else:
+                traj_results = [_run_single_traj(s) for s in seeds]
 
-            trajectory.initialize(initial_state.copy())
+            # Filter failed trajectories
+            traj_results = [r for r in traj_results if r is not None]
+            if not traj_results:
+                raise RuntimeError("All parallel trajectories failed.")
 
-            # Propagate the system — tau is the internal integration timestep
-            trajectory.propagate(t_max, dt_save)
-
-            # Extract results from trajectory
-            t_axis = np.array(trajectory.storage.data["t_axis"])
-
-            # MesoHOPS stores the full hierarchy state vector in psi_traj.
-            # The physical (system) subspace occupies the first n_sites components
-            # of the zeroth hierarchy layer, which is always the leading block.
-            # We use 'pop_site' if available (direct population output), otherwise
-            # fall back to extracting from psi_traj.
+            # Ensemble averaging
+            t_axis = traj_results[0]["t_axis"]
             n_times = len(t_axis)
             n_sites = self.hamiltonian.shape[0]
-
-            storage_data = trajectory.storage.data
-            if "pop_site" in storage_data:
-                # Preferred: direct population output from MesoHOPS storage
-                populations = np.real(np.array(storage_data["pop_site"]))  # shape (T, n_sites)
-                if populations.ndim == 1:
-                    populations = populations.reshape(-1, 1)
-            else:
-                # Fallback: extract physical subspace from psi_traj
-                psi_traj = np.array(storage_data["psi_traj"])
-                populations = np.zeros((n_times, n_sites))
-                for i in range(n_times):
-                    psi = psi_traj[i, :n_sites]
-                    populations[i, :] = np.real(psi * np.conj(psi))
-
-            # Calculate coherences from populations (or psi_traj if available)
+            n_valid = len(traj_results)
+            
+            # Construct averaged rho(t)
+            # We use the physical subspace (first n_sites)
+            density_matrices = []
+            populations = np.zeros((n_times, n_sites))
             coherences = np.zeros(n_times)
-            if "psi_traj" in storage_data:
-                psi_traj = np.array(storage_data["psi_traj"])
-                for i in range(n_times):
-                    psi = psi_traj[i, :n_sites]
-                    rho = np.outer(psi, np.conj(psi))
-                    coherences[i] = float(np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho))))
+            
+            for i in range(n_times):
+                rho = np.zeros((n_sites, n_sites), dtype=complex)
+                for res in traj_results:
+                    psi = res["psi_traj"][i, :n_sites]
+                    rho += np.outer(psi, np.conj(psi))
+                rho /= n_valid
+                
+                # Trace normalization
+                tr = np.trace(rho).real
+                if tr > 1e-10:
+                    rho /= tr
+                
+                density_matrices.append(rho)
+                populations[i, :] = np.real(np.diag(rho))
+                coherences[i] = float(np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho))))
 
-            # Calculate other quantum metrics
+            # Calculate other metrics (QFI, IPR, Entropy)
             qfi_values = np.zeros(n_times)
             entropy_values = np.zeros(n_times)
             ipr_values = np.zeros(n_times)
 
-            psi_traj_arr = np.array(storage_data["psi_traj"]) if "psi_traj" in storage_data else None
             for i in range(n_times):
-                if psi_traj_arr is not None:
-                    psi = psi_traj_arr[i, :n_sites]
-                    rho = np.outer(psi, np.conj(psi))
-                else:
-                    # Build rho from populations (diagonal only — coherences lost)
-                    rho = np.diag(populations[i, :].astype(complex))
-                # Normalize
-                trace_rho = np.trace(rho).real
-                if trace_rho > 1e-10:
-                    rho = rho / trace_rho
+                rho = density_matrices[i]
                 entropy_values[i] = self._calculate_von_neumann_entropy(rho)
                 try:
                     qfi_values[i] = self._calculate_qfi(rho, self.hamiltonian)
                 except (np.linalg.LinAlgError, ValueError):
                     qfi_values[i] = 0.0
-                # IPR = 1 / Σ_n |⟨n|ρ|n⟩|²  (manuscript Fig. 1c)
-                # Measures exciton delocalization: IPR=1 fully localized, IPR=n_sites fully delocalized
                 diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
                 ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
 
-            logger.debug("MesoHOPS simulation completed successfully")
+            logger.info(f"Ensemble averaged over {n_valid} trajectories completed.")
 
             return {
                 "t_axis": t_axis,
@@ -646,9 +670,9 @@ class HopsSimulator:
                 "qfi": qfi_values,
                 "entropy": entropy_values,
                 "ipr": ipr_values,
-                "simulator": "MesoHOPS",
-                "n_traj_used": 1,  # Single trajectory
-                "max_hierarchy_used": max_hierarchy,
+                "simulator": "MesoHOPS-Parallel",
+                "n_traj_used": n_valid,
+                "max_hierarchy_used": kwargs.get("max_hierarchy", self.max_hierarchy),
             }
 
         except (

@@ -8,7 +8,7 @@ from quantum simulation results.
 import logging
 import os
 from datetime import datetime
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -177,6 +177,102 @@ class FigureGenerator:
         plt.close()
 
         logger.info(f"Quantum dynamics figures saved to {pdf_path} and {png_path}")
+        return pdf_path
+
+    def plot_bath_spectral_density(
+        self,
+        omega_cm: np.ndarray,
+        J_total: np.ndarray,
+        J_components: Dict[str, np.ndarray],
+        vibronic_peaks: List[float] = None,
+        filename_prefix: str = "spectral_density",
+    ) -> str:
+        """
+        Plot the bath spectral density with component breakdown and vibronic mode annotations.
+        Matches the style of SI Figure S1.
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, ax = plt.subplots(figsize=(7, 5))
+        
+        # Normalize for visualization if requested
+        J_max = np.max(J_total) if np.max(J_total) > 0 else 1.0
+        
+        # Plot components
+        if 'Drude-Lorentz' in J_components:
+            ax.fill_between(omega_cm, 0, J_components['Drude-Lorentz']/J_max, 
+                            alpha=0.2, color=self.colors[5], label='Protein-Solvent (DL)')
+        
+        if 'Vibronic' in J_components:
+            ax.fill_between(omega_cm, J_components.get('Drude-Lorentz', 0)/J_max, 
+                            J_total/J_max, alpha=0.3, color=self.colors[2], label='Vibronic Modes')
+
+        ax.plot(omega_cm, J_total/J_max, color=self.colors[0], linewidth=2, label='Total $J(\\omega)$')
+
+        # Annotate vibronic peaks
+        if vibronic_peaks:
+            for w_v in vibronic_peaks:
+                peak_val = np.interp(w_v, omega_cm, J_total/J_max)
+                ax.axvline(x=w_v, color=self.colors[2], linestyle=':', alpha=0.6, linewidth=1)
+                if peak_val > 0.1:
+                    ax.annotate(f'{int(w_v)}', xy=(w_v, peak_val + 0.02), 
+                                fontsize=8, ha='center', color=self.colors[2], fontweight='bold')
+
+        ax.set_xlabel('Wavenumber (cm$^{-1}$)', fontweight='bold')
+        ax.set_ylabel('Normalized Spectral Density', fontweight='bold')
+        ax.set_title('Bath Spectral Density Engineering', loc='left', fontweight='bold')
+        ax.set_xlim(0, max(omega_cm))
+        ax.set_ylim(0, 1.1)
+        ax.legend(loc='upper right', frameon=True)
+        ax.grid(True, alpha=0.2)
+
+        plt.tight_layout()
+        plt.savefig(pdf_path, dpi=600)
+        plt.savefig(png_path, dpi=300)
+        plt.close()
+        
+        logger.info(f"Spectral density figure saved to {pdf_path}")
+        return pdf_path
+
+    def plot_convergence_audit(
+        self,
+        depths: List[int],
+        metrics: np.ndarray,
+        threshold: float,
+        filename_prefix: str = "convergence_audit",
+    ) -> str:
+        """
+        Plot hierarchy depth convergence. Matches style of SI Figure S2.
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, ax = plt.subplots(figsize=(6, 4.5))
+        
+        ax.plot(depths, metrics, 'o-', color=self.colors[0], 
+                markersize=10, linewidth=2.5, markerfacecolor='white', 
+                markeredgewidth=2, label='Simulation Audit')
+        
+        ax.axhline(y=threshold, color=self.colors[3], linestyle='--', 
+                   linewidth=2, alpha=0.8, label=f'Threshold ({threshold:.1e})')
+
+        ax.set_xlabel('Hierarchy Depth ($L$)', fontweight='bold')
+        ax.set_ylabel('Convergence Metric (MAE)', fontweight='bold')
+        ax.set_title('Production Stability Audit', loc='left', fontweight='bold')
+        ax.set_xticks(depths)
+        ax.set_yscale('log')
+        ax.legend(loc='upper right')
+        ax.grid(True, alpha=0.3, linestyle='--')
+
+        plt.tight_layout()
+        plt.savefig(pdf_path, dpi=600)
+        plt.savefig(png_path, dpi=300)
+        plt.close()
+
+        logger.info(f"Convergence audit figure saved to {pdf_path}")
         return pdf_path
 
     def plot_spectral_optimization(

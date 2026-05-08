@@ -50,7 +50,7 @@ Thumbs.db
 .kiro/
 .agent/
 .agents/
-_bmad*/
+_bmad/
 .QWEN*/
 managed_context/
 test_suite_analysis/
@@ -60,23 +60,11 @@ QWEN.md
 # Simulation data — invalid/fallback results must not be committed
 *.INVALID_FALLBACK_DATA.csv
 
-# Converged simulation outputs (large HDF5 files — use Git LFS or exclude)
-# Redac_Paper1/quantum_simulations_framework/data/converged/*.h5
-# Redac_Paper1/quantum_simulations_framework/reproducibility/results/*.csv
-# Exception: keep the README explaining the results folder
-# !Redac_Paper1/quantum_simulations_framework/reproducibility/results/README.md
+# Simulation data — invalid/fallback results must not be committed
+*.INVALID_FALLBACK_DATA.csv
 
-# # QA/PT-HOPS test archives and extracted files (should never be committed)
-# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar
-# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-*.tar.gz
-# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corect-server/
-# Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corcect-server.tar.gz
-
-# # Execution logs
-# Redac_Paper1/quantum_simulations_framework/logs/
-# reproducibility_cluster.log
-# cluster_execution.log
-# simulation_output.log
+# Laptop-specific configurations (do not commit local test overrides)
+Redac_Paper1/quantum_simulations_framework_parallel/laptop_parameters.yaml
 
 # Temporary files
 *.tmp

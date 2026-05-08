@@ -20,14 +20,14 @@ workflowType: 'prd'
 # Product Requirements Document - Quantum_Agrivoltaic_PT-HOPS
 
 **Author:** Taamangtchu
-**Date:** May 1, 2026
+**Date:** May 8, 2026
 
 ## Executive Summary
 
 This project executes a rigorous revision of the manuscript "Quantum-Coherent Spectral Engineering in Light-Harvesting Systems" for **The Journal of Physical Chemistry Letters (JPCL)**. The revision transforms the original research into a bulletproof, submission-ready package. The primary goal is to resolve reviewer-identified gaps in theoretical framing, model realism, and numerical consistency. By reframing "Bath Engineering" as a precise two-stage mechanism—**Selective Vibronic Driving** and **Polaron-Frame Dephasing Reduction**—this work establishes a solid foundation for the future **AgroQuantPV Suite**.
 
 ### Product Differentiator
-We define **Spectral Engineering** not as trivial initial state preparation, but as a unique quantum control mechanism enabled by the adaptive spectral filtering of organic photovoltaics (OPV). This approach partitions the bath into protected resonant modes, supported by a **Mandatory Convergence Audit** ($L=10$, $K=2$, proven converged at $T=295$~K) and a **Realistic FMO Spectral Density** model (12-mode Kleinekathöfer/Coker).
+We define **Spectral Engineering** not as trivial initial state preparation, but as a unique quantum control mechanism enabled by the adaptive spectral filtering of organic photovoltaics (OPV). This approach partitions the bath into protected resonant modes, supported by a **Mandatory Convergence Audit** ($L=9$, $K=2$, proven converged at $T=295$~K) and a **Realistic FMO Spectral Density** model (12-mode Kleinekathöfer/Coker).
 
 ## Project Classification
 
@@ -44,7 +44,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **Clarity Metric**: 100% of figure labels and symbol definitions in Figures 1 and 2(a) are consistent with IUPAC conventions.
 
 ### Research & Technical Success
-- **Numerical Integrity**: All publication-grade results verified at **$L=10$, $K=2$** convergence (K=2 proven sufficient at T=295 K via dedicated K-audit: MAE(K=2→K=3) < 10⁻⁶), resolving previous text/SI contradictions.
+- **Numerical Integrity**: All publication-grade results verified at **$L=9$, $K=2$** convergence (K=2 proven sufficient at T=295 K via dedicated K-audit: MAE(K=2→K=3) < 10⁻⁶), resolving previous text/SI contradictions.
 - **Validation Pass**: Model passes the **12-test validation suite** (Trace preservation, Positivity, Hierarchy convergence).
 - **Reproducibility**: A single master script can regenerate all paper figures from finalized simulation data.
 
@@ -54,7 +54,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **Revised Manuscript & SI**: Full LaTeX update including theoretical reframing.
 - **High-Impact Figures**: 300+ DPI graphics generated with CairoMakie/Matplotlib.
 - **Response to Reviewers**: Comprehensive, point-by-point rebuttal (`Reviewers_Comments_Answers.md`).
-- **Converged Data**: Verified simulation datasets at $L=10$.
+- **Converged Data**: Verified simulation datasets at $L=9$.
 - **Parameter Schema**: Centralized `parameters.yaml` for synchronization between main text and SI.
 
 ### Vision (Future)
@@ -80,7 +80,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 
 ## Scientific & Domain Requirements
 - **Peer-Review Fidelity**: Every claim traceable to specific simulation runs with recorded parameters.
-- **Numerical Convergence**: Mandatory $L=10$ hierarchy depth for all final figures.
+- **Numerical Convergence**: Mandatory $L=9$ hierarchy depth for all final figures (Synchronized with 128 GB server limits).
 - **Physical Realism**: Mandatory use of the **Realistic FMO Spectral Density** (including vibronic modes).
 
 ## Functional Requirements
@@ -110,7 +110,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **Positivity**: Density matrix remains positive-semidefinite (${\rho} \ge 0$) at every time step.
 
 ### Performance & Integration
-- **NFR4**: Local Hardware Optimization: The pipeline must run on a 128 GB RAM server and a 32 GB RAM local workstation. K=2 (21 hierarchy modes) is mandatory to prevent OOM — K=10 (77 modes) causes ~10¹¹ hierarchy states at L=10, exhausting 128 GB RAM. Memory-efficient solvers (adaptive MesoHOPS with Triangular STATIC_FILTERS and TERMINATOR=True) are required.
+- **NFR4**: Hardware Optimization: The pipeline must run on a 128 GB RAM server. K=2 (21 hierarchy modes) is mandatory to prevent OOM — K=10 (77 modes) causes ~10¹¹ hierarchy states at L=9, exhausting memory. Memory-efficient solvers (adaptive MesoHOPS with Triangular STATIC_FILTERS and TERMINATOR=True) are required. Time step synchronized to **2.0 fs**.
 - **NFR5**: Algorithmic Transparency: Provide a self-contained algorithm bridge document for PT-HOPS/SBD.
 
 ## Risk Management

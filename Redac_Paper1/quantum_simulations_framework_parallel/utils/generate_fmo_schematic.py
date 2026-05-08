@@ -1,65 +1,56 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Generate FMO Complex Schematic for JPCL Figures.
+Draws the 7-site BChl arrangement in the FMO monomer.
+"""
+
 import matplotlib.pyplot as plt
-import networkx as nx
+from matplotlib.patches import Circle
 import os
-import scienceplots
+import logging
 
-# Apply publication-grade styling
-plt.style.use(['science'])
+logger = logging.getLogger(__name__)
 
-def draw_fmo_schematic():
-    G = nx.Graph()
-    # FMO 7-site bacteriochlorophylls
-    sites = range(1, 8)
-    G.add_nodes_from(sites)
+def generate_fmo_schematic(output_path):
+    """
+    Draw a stylized 7-site FMO complex schematic.
+    """
+    fig, ax = plt.subplots(figsize=(5, 5))
     
-    # Major couplings (approximate Adolphs-Renger layout for visual)
-    edges = [
-        (1, 2, 100), (2, 3, 30), (3, 4, 55), (4, 5, 70),
-        (5, 6, 85), (6, 7, 40), (1, 6, 35), (3, 7, -20)
+    # FMO positions (normalized 0-1)
+    fmo_positions = [
+        (0.5, 0.6), (0.3, 0.5), (0.7, 0.5),
+        (0.4, 0.35), (0.6, 0.35), (0.35, 0.2), (0.65, 0.2)
     ]
-    for u, v, w in edges:
-        G.add_edge(u, v, weight=abs(w))
-        
-    pos = {
-        1: (0, 2),
-        2: (1, 2.5),
-        3: (2, 2.2),
-        4: (3, 1.5),
-        5: (2.5, 0.5),
-        6: (1.5, 1),
-        7: (2, -0.5)
-    }
     
-    plt.figure(figsize=(8, 6), dpi=600)
+    # Colors
+    color_fmo = '#2E7D32'  # Green
+    color_coherence = '#00BCD4' # Cyan
     
-    # Draw edges with width proportional to coupling
-    edge_weights = [G[u][v]['weight'] / 15.0 for u, v in G.edges()]
-    nx.draw_networkx_edges(G, pos, width=edge_weights, edge_color="gray", alpha=0.6)
-    
-    # Draw nodes
-    nx.draw_networkx_nodes(G, pos, node_color="#2ca02c", node_size=1500, edgecolors="white", linewidths=2)
-    
-    # Draw labels
-    nx.draw_networkx_labels(G, pos, font_size=16, font_color="white", font_weight="bold")
-    
-    # Add excitation arrow
-    plt.annotate('Excitation\nPulse', xy=(0, 2.2), xytext=(-1, 2.5),
-                 arrowprops=dict(facecolor='red', shrink=0.05),
-                 fontsize=14, color='red', fontweight='bold')
-                 
-    # Add reaction center target
-    plt.annotate('To Reaction\nCenter', xy=(2, -0.7), xytext=(2.5, -1.2),
-                 arrowprops=dict(facecolor='blue', shrink=0.05),
-                 fontsize=14, color='blue', fontweight='bold')
+    # Draw connections (coherent)
+    for i, pos1 in enumerate(fmo_positions):
+        for j, pos2 in enumerate(fmo_positions[i+1:], i+1):
+            ax.plot([pos1[0], pos2[0]], [pos1[1], pos2[1]], 
+                     color=color_coherence, linewidth=2, alpha=0.6)
 
-    plt.title("FMO Complex Energy Transfer Schematic", fontsize=18, fontweight='bold', pad=20)
-    plt.axis("off")
+    # Draw BChl sites
+    for i, pos in enumerate(fmo_positions):
+        circle = Circle(pos, 0.06, color=color_fmo, alpha=0.9, zorder=10)
+        ax.add_patch(circle)
+        ax.text(pos[0], pos[1], str(i+1), color='white', ha='center', va='center', 
+                fontweight='bold', zorder=11)
+
+    ax.set_xlim(0.2, 0.8)
+    ax.set_ylim(0.1, 0.7)
+    ax.axis('off')
     
-    out_dir = os.path.join(os.path.dirname(__file__), "..", "reproducibility", "results")
-    os.makedirs(out_dir, exist_ok=True)
-    out_path = os.path.join(out_dir, "FMO_Schematic_JPCL.png")
-    plt.savefig(out_path, format="png", bbox_inches="tight", dpi=600)
-    print(f"✅ Schematic successfully generated at: {out_path}")
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=300, transparent=True)
+    plt.close()
+    logger.info(f"FMO schematic generated at {output_path}")
 
 if __name__ == "__main__":
-    draw_fmo_schematic()
+    logging.basicConfig(level=logging.INFO)
+    dest = os.path.join(os.path.dirname(__file__), '../../Theory_Journals_main/JPCL/FMO_Schematic_JPCL.png')
+    generate_fmo_schematic(dest)

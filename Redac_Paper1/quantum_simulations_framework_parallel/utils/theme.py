@@ -18,13 +18,14 @@ def apply_jpcl_theme():
     # Apply scienceplots base style if available
     try:
         import scienceplots  # noqa: F401 — registers styles on import
-        plt.style.use(_SCIENCE_STYLES)
-        logger.info("scienceplots 'science' base style applied.")
-    except ImportError:
-        logger.warning(
-            "scienceplots not installed — falling back to manual rcParams. "
-            "Install with: pip install scienceplots"
-        )
+        plt.style.use(['science', 'nature', 'no-latex']) # JPCL-preferred styles
+        logger.info("scienceplots 'science' + 'nature' styles applied.")
+    except (ImportError, Exception):
+        logger.warning("scienceplots not available — using seaborn-paper fallback.")
+        try:
+            plt.style.use('seaborn-v0_8-paper')
+        except:
+            plt.style.use('ggplot')
 
     # ACS/JPCL overrides on top of scienceplots base
     # Standard ACS column widths: single = 3.25 in, double = 7 in
