@@ -199,10 +199,9 @@ class HopsSimulator:
         if self.use_mesohops:
             self._init_mesohops(**kwargs)
 
-        # Always initialize fallback so it is available if MesoHOPS fails mid-run.
-        # _init_mesohops may have already set fallback_sim (on init failure path);
-        # skip re-initialization in that case.
-        if self.fallback_sim is None:
+        # Initialize fallback only if MesoHOPS was not requested or failed without
+        # already initializing a fallback inside _init_mesohops
+        if not self.use_mesohops and self.fallback_sim is None:
             self._init_fallback(**kwargs)
 
     @staticmethod
@@ -491,14 +490,10 @@ class HopsSimulator:
             # which reduces memory by ~50% with negligible accuracy loss.
             # STATIC_BASIS with triangular filter cuts the active hierarchy
             # from O(modes^L) to O(modes*L) — essential for 77-mode systems.
-            # STATIC_FILTERS "Triangular" expects params = [boolean_by_mode, kmax_2]
-            # boolean_by_mode: list of bools, length n_hmodes (which modes to filter)
-            # kmax_2: int, max individual mode depth (set equal to MAXHIER = no extra cut)
-            n_hmodes = len(self.system_param["GW_SYSBATH"])
             hierarchy_param = {
                 "MAXHIER": max_hierarchy,
                 "TERMINATOR": True,
-                "STATIC_FILTERS": [["Triangular", [[True] * n_hmodes, max_hierarchy]]],
+                "STATIC_FILTERS": [["Triangular", [max_hierarchy]]],
             }
 
             # Set up EOM parameters - use NORMALIZED NONLINEAR for better numerical stability
@@ -516,10 +511,7 @@ class HopsSimulator:
                 "SEED": kwargs.get("seed", 42),
                 "MODEL": "FFT_FILTER",
                 "TLEN": t_max + 50.0,  # 50 fs buffer is sufficient for FFT_FILTER stability
-                # TAU must equal tau * integrator_step (RK uses integrator_step=0.5).
-                # propagate(t_max, dt_save) passes tau=dt_save, so the internal
-                # sub-step is dt_save * 0.5. TAU must divide that sub-step evenly.
-                "TAU": dt_save * 0.5,
+                "TAU": dt_save,
             }
 
             # Set up integrator parameters based on test examples
