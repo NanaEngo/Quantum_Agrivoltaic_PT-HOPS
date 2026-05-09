@@ -27,7 +27,7 @@ dynamics:
   matsubara_truncation: 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹);
                              # K=10 causes OOM on 128 GB server (77 modes → ~10¹¹ hierarchy states)
   time_max: 1000.0  # fs
-  time_step: 1.0  # fs  — step=1 fs → 1001 points over 0–1000 fs
+  time_step: 1.0  # fs — Optimized for 12-mode bath stability
   convergence_threshold: 1.0e-6  # Frobenius norm
   sbd_bundles_per_site: 2  # Memory optimization: 25 modes -> 2 per site
 

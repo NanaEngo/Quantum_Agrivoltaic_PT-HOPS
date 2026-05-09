@@ -98,11 +98,12 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 **Current canonical values:**
 - Hierarchy depth: **L_max = 8**
 - Matsubara terms: **K = 2**
-- Time step: **Δt = 2.0 fs**
+- Time step: **Δt = 1.0 fs**
 - Pulse FWHM: **50 fs**, centered at t = 0
 - Temperature: **295 K**
 - Reorganization energy (Drude-Lorentz): **λ_D = 35 cm⁻¹**, γ_D = 50 cm⁻¹
 - Vibronic modes: **12 modes** (Kleinekathöfer/Coker model)
+- Disorder realizations: **100**
 
 ---
 

@@ -85,6 +85,7 @@ def sweep_filter_wavelengths(cfg, center_wavelengths_nm=None, n_traj=5):
                 use_pt_hops=True,
                 pulse_center_freq=1e7 / l1,   # λ1 (nm) → cm⁻¹ for primary band
                 pulse_center_freq2=1e7 / l2,  # λ2 (nm) → cm⁻¹ for secondary band
+                n_traj=n_traj  # Honor the provided trajectory count
             )
             init_state = np.zeros(H.shape[0], dtype=complex)
             init_state[0] = 1.0

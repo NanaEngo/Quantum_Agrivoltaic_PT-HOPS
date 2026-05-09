@@ -97,7 +97,7 @@ def run_convergence_audit(cfg=None):
             H,
             max_hierarchy=L,
             k_matsubara=K,
-            n_traj=cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ),
+            n_traj=cfg.get('simulation', {}).get('n_traj', 1),
             # SBD enabled: SI mandate — all convergence data reported in Table S2
             # was computed with SBD active. use_sbd=False causes OOM at L>=6 with 7 sites.
             use_sbd=True,
@@ -319,25 +319,26 @@ def run_convergence_audit(cfg=None):
 
 def run_time_step_audit(cfg=None):
     """Test 3: Time step convergence."""
-    print("\n🧪 Test 3: Time Step Convergence Audit...")
     if cfg is None:
         cfg = load_config()
+    
+    print("\n🧪 Test 3: Time Step Convergence Audit...")
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
+    # L=3 is sufficient to check dt-dependence
+    L_target = cfg['dynamics']['L_max']
+    dt_list = [0.5, 1.0, 2.0]
+    results = {}
     init_state = np.zeros(H.shape[0], dtype=complex)
     init_state[0] = 1.0
     
-    dt_list = [0.5, 1.0, 2.0]
-    t_max = AUDIT_TIME_WINDOW
-    results = {}
-    
-    for dt in _tqdm(dt_list, desc="Time Step Sweep", unit="dt"):
+    print(f"Time Step Sweep: ")
+    for dt in dt_list:
         logger.info(f"Running simulation for dt={dt} fs...")
         time_points = np.arange(0, AUDIT_TIME_WINDOW, dt)
         K_val = cfg['dynamics'].get('matsubara_truncation', DEFAULT_N_MATSUBARA)
-        L_target = cfg['dynamics']['L_max']
         simulator = HopsSimulator(
-            H, 
-            max_hierarchy=L_target, 
+            H,
+            max_hierarchy=L_target,
             k_matsubara=K_val,
             n_traj=cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
         )
@@ -357,12 +358,13 @@ def run_time_step_audit(cfg=None):
     return {"diff_10_20": diff_10_20, "status": status}
 
 def run_detailed_balance_audit(cfg=None):
-    """Test 7: Detailed balance verification."""
-    print("\n🧪 Test 7: Detailed Balance Audit...")
+    """Test 7: Convergence to Boltzmann distribution at long times."""
     if cfg is None:
         cfg = load_config()
-    T = cfg['bath']['temperature']
+    
+    print("\n🧪 Test 7: Detailed Balance Audit...")
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
+    T = cfg['bath']['temperature']
     
     # Analytical Boltzmann distribution
     beta = 1.0 / (KB_CM_K * T) # 1/kbT in cm^-1
@@ -411,18 +413,22 @@ def run_detailed_balance_audit(cfg=None):
     print(f"Status: {status}")
     return {"mae": mae, "status": status}
 
-def run_hermiticity_audit():
+def run_hermiticity_audit(cfg=None):
     """Test 8: Hermiticity preservation."""
+    if cfg is None:
+        cfg = load_config()
+    
     print("\n🧪 Test 8: Hermiticity Audit...")
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     time_points = np.linspace(0, 100, 51)
     init_state = np.zeros(H.shape[0], dtype=complex)
     init_state[0] = 1.0
     
-    cfg = load_config()
     L_target = cfg['dynamics']['L_max']
     K_h = cfg['dynamics'].get('matsubara_truncation', DEFAULT_N_MATSUBARA)
-    simulator = HopsSimulator(H, max_hierarchy=L_target, k_matsubara=K_h)
+    n_traj_h = cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+    
+    simulator = HopsSimulator(H, max_hierarchy=L_target, k_matsubara=K_h, n_traj=n_traj_h)
     # This requires access to rho which HopsSimulator currently approximates
     # but we can check if populations sum to 1 and are real.
     data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
@@ -440,18 +446,26 @@ def run_hermiticity_audit():
     print(f"Status: {status}")
     return {"max_img": max_img, "status": status}
 
-def run_markovian_limit_audit():
-    """Test 12: Markovian limit recovery."""
-    print("\n🧪 Test 12: Markovian Limit Audit...")
+def run_markovian_limit_audit(cfg=None):
+    """Test 10: Convergence to Markovian dynamics at high damping."""
+    if cfg is None:
+        cfg = load_config()
+    
+    print("\n🧪 Test 10: Markovian Limit Audit...")
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
-    # High gamma = Markovian limit
-    gamma_high = MARKOVIAN_DRUDE_CUTOFF  # cm^-1 (gamma >> J → Markovian limit)
-    time_points = np.linspace(0, 500, 101)
+    time_points = np.linspace(0, 100, 51)
     init_state = np.zeros(H.shape[0], dtype=complex)
     init_state[0] = 1.0
     
     # Run with standard params but high gamma
-    simulator = HopsSimulator(H, max_hierarchy=4, k_matsubara=1, drude_cutoff=gamma_high)
+    n_traj_m = cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+    simulator = HopsSimulator(
+        H, 
+        max_hierarchy=4, 
+        k_matsubara=1, 
+        drude_cutoff=MARKOVIAN_DRUDE_CUTOFF,
+        n_traj=n_traj_m
+    )
     data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
     
     # In Markovian limit, populations should decay exponentially

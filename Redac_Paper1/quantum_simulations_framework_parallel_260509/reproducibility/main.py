@@ -182,12 +182,14 @@ def run_convergence_audit(cfg):
     audit_data = _audit.run_convergence_audit(cfg=cfg)
     _audit.run_time_step_audit(cfg=cfg)
     _audit.run_detailed_balance_audit(cfg=cfg)
-    # Hermiticity and Markovian limit use small/analytical checks, config optional
-    _audit.run_hermiticity_audit()
-    _audit.run_markovian_limit_audit()
+    _audit.run_hermiticity_audit(cfg=cfg)
+    _audit.run_markovian_limit_audit(cfg=cfg)
     
     if audit_data:
-        mae_final = audit_data['audit_maes'][-1]
+        # audit_maes is now a dict {depth: mae}
+        maes = audit_data.get('audit_maes', {})
+        depths = sorted(list(maes.keys()))
+        mae_final = maes[depths[-1]] if depths else 0.0
         print(f"  ✅ Validation suite complete. Residual MAE={mae_final:.2e}")
     return audit_data
 
@@ -501,7 +503,8 @@ def _run_trajectory_worker(T, label, seed, lock, log_path, bath, dyn, pulse_cfg,
         huang_rhys_factors=np.array(vib_hr),
         vibronic_damping=vib_damping,
         sbd_bundles_per_site=dyn.get('sbd_bundles_per_site', 2),
-        seed=seed
+        seed=seed,
+        n_traj=1  # Worker runs exactly one trajectory
     )
     try:
         data = sim.simulate_dynamics(time_points, initial_state=psi0)
@@ -545,6 +548,8 @@ def _run_single_disorder(seed, lock, log_path, bath, dyn, pulse_cfg, filter_cfg,
             huang_rhys_factors=np.array(vib_hr),
             vibronic_damping=vib_damping,
             sbd_bundles_per_site=dyn.get('sbd_bundles_per_site', DEFAULT_SBD_BUNDLES),
+            seed=seed,
+            n_traj=1  # Worker runs exactly one trajectory
         )
         try:
             data = sim.simulate_dynamics(time_points, initial_state=psi0)
@@ -559,7 +564,7 @@ def _run_single_disorder(seed, lock, log_path, bath, dyn, pulse_cfg, filter_cfg,
         # Incremental save
         with lock:
             with open(log_path, 'a') as f:
-                f.write(f"{seed},{eta:.10e}\n")
+                f.write(f"{seed},None,None,{eta:.10e}\n")
         return eta
     return None
 
@@ -589,7 +594,7 @@ def _run_temperature_sweep(cfg, H, time_points):
     lock = manager.Lock()
     sweep_log_path = os.path.join(_LOG_DIR, f"temp_sweep_progress_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
     with open(sweep_log_path, 'w') as f:
-        f.write("temperature_k,eta_mean,eta_std\n")
+        f.write("temperature_k,label,seed,phi\n")
     temperatures = np.array([285, 290, 295, 300, 305, 310], dtype=float)
     eta_temp = np.zeros(len(temperatures))
     eta_temp_err = np.zeros(len(temperatures))
@@ -671,7 +676,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     # Setup Incremental Saving
     disorder_log_path = os.path.join(_LOG_DIR, f"disorder_sweep_progress_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
     with open(disorder_log_path, 'w') as f:
-        f.write("sample_index,eta\n")
+        f.write("seed,label,subseed,eta\n")
     
     from multiprocessing import Manager
     manager = Manager()
@@ -844,7 +849,7 @@ def generate_figures(cfg, sim_results, time_points):
     from utils.figure_generator import FigureGenerator
 
     jpcl_dir = os.path.abspath(os.path.join(
-        _SCRIPT_DIR, '..', '..', 'Theory_Journals', 'JPCL'
+        _SCRIPT_DIR, '..', '..', 'Theory_Journals_main', 'JPCL'
     ))
     gen = FigureGenerator(figures_dir=jpcl_dir)
 
@@ -957,7 +962,10 @@ def main():
 
     # FIX H-4: enforce convergence threshold — do not proceed with non-converged data
     convergence_threshold = cfg['dynamics']['convergence_threshold']
-    mae_residual = audit_data['audit_maes'][-1]
+    maes = audit_data.get('audit_maes', {})
+    depths = sorted(list(maes.keys()))
+    mae_residual = maes[depths[-1]] if depths else 999.0
+    
     if mae_residual >= convergence_threshold:
         print(f"\n❌ FATAL: Convergence NOT achieved. Residual MAE={mae_residual:.2e} ≥ threshold={convergence_threshold:.2e}")
         print("   Increase L_max or reduce time step before resubmitting.")

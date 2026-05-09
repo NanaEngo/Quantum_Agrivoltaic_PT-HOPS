@@ -4,7 +4,7 @@
 
 # Configuration
 ENV_NAME="MesoHOP-sim"
-MAIN_SCRIPT="Redac_Paper1/quantum_simulations_framework/reproducibility/main.py"
+MAIN_SCRIPT="Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py"
 LOG_FILE="reproducibility_cluster.log"
 
 echo "--------------------------------------------------------"
