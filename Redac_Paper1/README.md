@@ -1,13 +1,11 @@
 # Quantum-Enhanced Agrivoltaics: Spectral Bath Engineering via Non-Markovian Dynamics
 
-This repository contains the research framework, simulation codebase, and manuscript source for **"Spectral Bath Engineering for Quantum-Enhanced Agrivoltaics: Advancing Efficiency and Environmental Sustainability via Non-Markovian Dynamics"**. 
-
-Our framework leverages the quantum mechanical nature of photosynthetic energy transfer to optimize agrivoltaic systems, co-locating solar energy generation with high-productivity agricultural production.
+Research framework, simulation codebase, and manuscript source for the JPCL submission `jz-2026-00994t`.
 
 ## 📄 Manuscript Status
 
-- **Status**: Ready for Submission
-- **Target Journal**: *Energy & Environmental Science* (EES)
+- **Status**: Major Revision in progress (deadline: 28-May-2026)
+- **Target Journal**: *The Journal of Physical Chemistry Letters* (JPCL)
 - **Primary Objective**: Leveraging non-Markovian coherence in the FMO complex to enhance photosynthetic ETR under semi-transparent OPVs.
 
 ### Key Validated Metrics
