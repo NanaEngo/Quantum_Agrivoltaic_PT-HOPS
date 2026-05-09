@@ -16,12 +16,12 @@ This repository contains two active research projects:
 
 ### Local Execution (Laptop Mode - Fast Verification)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel/laptop_parameters.yaml
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --config laptop_parameters.yaml
 ```
 
 ### Local/Cluster Execution (Production Mode - Publication Data)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --parallel
 ```
 ```bash
 chmod +x run_cluster.sh
@@ -32,7 +32,7 @@ Monitoring: `tail -f reproducibility_cluster.log`
 ### Hardware Management
 The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallelization.
 - **Laptop Mode**: Uses $L=3, N=4$ for rapid testing (~10 mins).
-- **Production Mode**: Enforces $L \ge 9$ and $K \ge 2$ for manuscript compliance.
+- **Production Mode**: Enforces $L \ge 8$ and $K \ge 2$ for manuscript compliance.
 
 ---
 
@@ -96,7 +96,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - **Terminology Rule**: SBD refers to **Stochastically Bundled Dissipators**. Never use "Spectrally Bundled Dissipators".
 
 **Current canonical values:**
-- Hierarchy depth: **L = 9**
+- Hierarchy depth: **L_max = 8**
 - Matsubara terms: **K = 2**
 - Time step: **Δt = 2.0 fs**
 - Pulse FWHM: **50 fs**, centered at t = 0

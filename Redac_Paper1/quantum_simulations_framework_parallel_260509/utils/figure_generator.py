@@ -1,0 +1,715 @@
+"""
+Figure Generator Module for Quantum Agrivoltaics Simulations.
+
+This module provides tools for generating publication-quality figures
+from quantum simulation results.
+"""
+
+import logging
+import os
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+
+import matplotlib.pyplot as plt
+import numpy as np
+from core.constants import DEFAULT_DPI, PREVIEW_DPI
+
+logger = logging.getLogger(__name__)
+
+
+class FigureGenerator:
+    """
+    Class for generating publication-quality figures from simulation results.
+    """
+
+    def __init__(self, figures_dir: str = "../Graphics/"):
+        """
+        Initialize figure generator with JPCL theme.
+        """
+        self.figures_dir = figures_dir
+        os.makedirs(figures_dir, exist_ok=True)
+
+        # Apply JPCL Publication Standards
+        try:
+            from utils.theme import apply_jpcl_theme, get_color_palette
+            apply_jpcl_theme()
+            self.colors = get_color_palette()
+        except ImportError:
+            logger.warning("JPCL theme not found, using defaults.")
+            self.colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd']
+
+        logger.info(f"Figure generator initialized at {figures_dir} with 600 DPI standards.")
+
+    def plot_quantum_dynamics(
+        self,
+        time_points: np.ndarray,
+        populations: np.ndarray,
+        coherences: np.ndarray,
+        quantum_metrics: Dict[str, np.ndarray],
+        filename_prefix: str = "quantum_dynamics",
+        **kwargs,
+    ) -> str:
+        """
+        Plot quantum dynamics results.
+
+        Parameters:
+        -----------
+        time_points : np.ndarray
+            Time points for the simulation
+        populations : np.ndarray
+            Site populations over time
+        coherences : np.ndarray
+            Coherence measures over time
+        quantum_metrics : dict
+            Dictionary of quantum metrics (QFI, entropy, etc.)
+        filename_prefix : str
+            Prefix for the output filename
+        **kwargs : dict
+            Additional plotting options
+
+        Returns:
+        --------
+        str
+            Path to the saved figure
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        n_sites = populations.shape[1] if len(populations.shape) > 1 else 1
+        n_metrics = len(quantum_metrics)
+
+        # Guard: truncate all arrays to the shortest common length
+        n_t = min(len(time_points), populations.shape[0], len(coherences))
+        time_points = time_points[:n_t]
+        populations = populations[:n_t]
+        coherences = coherences[:n_t]
+        quantum_metrics = {
+            k: (v[:n_t] if isinstance(v, np.ndarray) and len(v) >= n_t else
+                np.pad(v, (0, max(0, n_t - len(v))), constant_values=np.nan)
+                if isinstance(v, np.ndarray) else v)
+            for k, v in quantum_metrics.items()
+        }
+        if 'baseline_populations' in kwargs:
+            kwargs['baseline_populations'] = kwargs['baseline_populations'][:n_t]
+        if 'baseline_coherences' in kwargs:
+            kwargs['baseline_coherences'] = kwargs['baseline_coherences'][:n_t]
+
+        # Create subplots
+        n_cols = 2
+        # Row 0: populations and coherences
+        # Subsequent rows: 2 metrics per row
+        n_rows = 1 + (n_metrics + 1) // 2
+
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(16, 5 * n_rows))
+        fig.suptitle("Quantum Dynamics Simulation Results", fontsize=16, fontweight="bold")
+
+        # Ensure axes is always a 2D array for consistent indexing
+        if n_rows == 1:
+            axes = np.array([axes]).reshape(1, n_cols)
+
+        # Plot populations over time
+        ax0 = axes[0, 0]
+        if n_sites == 1:
+            ax0.plot(time_points, populations, color=self.colors[0], linewidth=2.0)
+            if 'baseline_populations' in kwargs:
+                ax0.plot(time_points, kwargs['baseline_populations'], '--', color='gray', linewidth=1.5, label='Broadband')
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
+            ax0.set_title("(a) Population Dynamics", loc='left', fontsize=14, fontweight='bold')
+            ax0.grid(True, alpha=0.3)
+        else:
+            for i in range(min(n_sites, len(self.colors))):
+                ax0.plot(time_points, populations[:, i], 
+                         label=f"Site {i + 1}", 
+                         color=self.colors[i], 
+                         linewidth=2.0)
+            if 'baseline_populations' in kwargs:
+                # Just plot site 1 of broadband as an example trace to avoid clutter
+                ax0.plot(time_points, kwargs['baseline_populations'][:, 0], '--', color='gray', linewidth=1.5, label='Site 1 (Broadband)')
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
+            ax0.set_title("(a) Exciton Transport Dynamics", loc='left', fontsize=14, fontweight='bold')
+            ax0.legend(loc='upper right', frameon=False, fontsize=10)
+            ax0.grid(True, alpha=0.3)
+
+        # Plot coherences
+        ax1 = axes[0, 1]
+        ax1.plot(time_points, coherences, "r-", linewidth=2.0, label='Filtered')
+        if 'baseline_coherences' in kwargs:
+            ax1.plot(time_points, kwargs['baseline_coherences'], '--', color='gray', linewidth=1.5, label='Broadband')
+            ax1.legend(frameon=False, fontsize=10)
+        ax1.set_xlabel("Time [fs]", fontsize=12)
+        ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=12)
+        ax1.set_title("(b) Coherence Evolution", loc='left', fontsize=14, fontweight='bold')
+        ax1.grid(True, alpha=0.3)
+
+        # Plot quantum metrics
+        # FIX M-6: generate panel labels dynamically so IndexError cannot occur
+        # when quantum_metrics has more than 4 entries (the old hardcoded list).
+        panel_labels = [f"({chr(ord('c') + i)})" for i in range(len(quantum_metrics))]
+        for i, (metric_name, metric_values) in enumerate(quantum_metrics.items()):
+            row = 1 + i // n_cols
+            col = i % n_cols
+
+            if row < n_rows:
+                ax = axes[row, col]
+                ax.plot(time_points, metric_values, linewidth=2.0, color=self.colors[i % len(self.colors)])
+                if f'baseline_{metric_name}' in kwargs:
+                    ax.plot(time_points, kwargs[f'baseline_{metric_name}'], '--', color='gray', linewidth=1.5, label='Broadband')
+                    ax.legend(frameon=False, fontsize=10)
+                ax.set_xlabel("Time [fs]", fontsize=12)
+                ax.set_ylabel(metric_name.replace('_', ' ').title(), fontsize=12)
+                ax.set_title(f"{panel_labels[i]} {metric_name.replace('_', ' ').title()} Evolution", loc='left', fontsize=14, fontweight='bold')
+                ax.grid(True, alpha=0.3)
+
+        # Remove empty subplots if any
+        for i in range(n_metrics, (n_rows - 1) * n_cols):
+            row = 1 + i // n_cols
+            col = i % n_cols
+            if row < n_rows:
+                fig.delaxes(axes[row, col])
+
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+        # Save figures in multiple formats
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
+        plt.close()
+
+        logger.info(f"Quantum dynamics figures saved to {pdf_path} and {png_path}")
+        return pdf_path
+
+    def plot_bath_spectral_density(
+        self,
+        omega_cm: np.ndarray,
+        J_total: np.ndarray,
+        J_components: Dict[str, np.ndarray],
+        vibronic_peaks: List[float] = None,
+        filename_prefix: str = "spectral_density",
+    ) -> str:
+        """
+        Plot the bath spectral density with component breakdown and vibronic mode annotations.
+        Matches the style of SI Figure S1.
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, ax = plt.subplots(figsize=(7, 5))
+        
+        # Normalize for visualization if requested
+        J_max = np.max(J_total) if np.max(J_total) > 0 else 1.0
+        
+        # Plot components
+        if 'Drude-Lorentz' in J_components:
+            ax.fill_between(omega_cm, 0, J_components['Drude-Lorentz']/J_max, 
+                            alpha=0.2, color=self.colors[5], label='Protein-Solvent (DL)')
+        
+        if 'Vibronic' in J_components:
+            ax.fill_between(omega_cm, J_components.get('Drude-Lorentz', 0)/J_max, 
+                            J_total/J_max, alpha=0.3, color=self.colors[2], label='Vibronic Modes')
+
+        ax.plot(omega_cm, J_total/J_max, color=self.colors[0], linewidth=2, label='Total $J(\\omega)$')
+
+        # Annotate vibronic peaks
+        if vibronic_peaks:
+            for w_v in vibronic_peaks:
+                peak_val = np.interp(w_v, omega_cm, J_total/J_max)
+                ax.axvline(x=w_v, color=self.colors[2], linestyle=':', alpha=0.6, linewidth=1)
+                if peak_val > 0.1:
+                    ax.annotate(f'{int(w_v)}', xy=(w_v, peak_val + 0.02), 
+                                fontsize=8, ha='center', color=self.colors[2], fontweight='bold')
+
+        ax.set_xlabel('Wavenumber (cm$^{-1}$)', fontweight='bold')
+        ax.set_ylabel('Normalized Spectral Density', fontweight='bold')
+        ax.set_title('Bath Spectral Density Engineering', loc='left', fontweight='bold')
+        ax.set_xlim(0, max(omega_cm))
+        ax.set_ylim(0, 1.1)
+        ax.legend(loc='upper right', frameon=True)
+        ax.grid(True, alpha=0.2)
+
+        plt.tight_layout()
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI)
+        plt.savefig(png_path, dpi=PREVIEW_DPI)
+        plt.close()
+        
+        logger.info(f"Spectral density figure saved to {pdf_path}")
+        return pdf_path
+
+    def plot_convergence_audit(
+        self,
+        depths: List[int],
+        metrics: np.ndarray,
+        threshold: float,
+        filename_prefix: str = "convergence_audit",
+    ) -> str:
+        """
+        Plot hierarchy depth convergence. Matches style of SI Figure S2.
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, ax = plt.subplots(figsize=(6, 4.5))
+        
+        ax.plot(depths, metrics, 'o-', color=self.colors[0], 
+                markersize=10, linewidth=2.5, markerfacecolor='white', 
+                markeredgewidth=2, label='Simulation Audit')
+        
+        ax.axhline(y=threshold, color=self.colors[3], linestyle='--', 
+                   linewidth=2, alpha=0.8, label=f'Threshold ({threshold:.1e})')
+
+        ax.set_xlabel('Hierarchy Depth ($L$)', fontweight='bold')
+        ax.set_ylabel('Convergence Metric (MAE)', fontweight='bold')
+        ax.set_title('Production Stability Audit', loc='left', fontweight='bold')
+        ax.set_xticks(depths)
+        ax.set_yscale('log')
+        ax.legend(loc='upper right')
+        ax.grid(True, alpha=0.3, linestyle='--')
+
+        plt.tight_layout()
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI)
+        plt.savefig(png_path, dpi=PREVIEW_DPI)
+        plt.close()
+
+        logger.info(f"Convergence audit figure saved to {pdf_path}")
+        return pdf_path
+
+    def plot_spectral_optimization(
+        self,
+        optimization_results: Dict[str, Any],
+        solar_spectrum: Optional[Tuple[np.ndarray, np.ndarray]] = None,
+        filename_prefix: str = "spectral_optimization",
+        **kwargs,
+    ) -> str:
+        """
+        Plot spectral optimization results.
+
+        Parameters:
+        -----------
+        optimization_results : dict
+            Results from spectral optimization
+        solar_spectrum : tuple, optional
+            Solar spectrum data (wavelengths, irradiance)
+        filename_prefix : str
+            Prefix for the output filename
+        **kwargs : dict
+            Additional plotting options
+
+        Returns:
+        --------
+        str
+            Path to the saved figure
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        fig.suptitle("Spectral Optimization Results", fontsize=16, fontweight="bold")
+
+        # Plot 1: Objective function evolution (if available)
+        ax1 = axes[0, 0]
+        if "convergence_history" in optimization_results:
+            history = optimization_results["convergence_history"]
+            ax1.plot(history, "b-", linewidth=2)
+            ax1.set_xlabel("Iteration")
+            ax1.set_ylabel("Objective Function")
+            ax1.set_title("Optimization Convergence")
+        else:
+            # Just show the optimized values
+            ax1.text(
+                0.5,
+                0.5,
+                f"PCE: {optimization_results.get('optimal_pce', 0):.3f}\nETR: {optimization_results.get('optimal_etr', 0):.3f}",
+                horizontalalignment="center",
+                verticalalignment="center",
+                transform=ax1.transAxes,
+                fontsize=14,
+            )
+            ax1.set_title("Optimization Results")
+        ax1.grid(True, alpha=0.3)
+
+        # Plot 2: Spectral transmission (if available)
+        ax2 = axes[0, 1]
+        if "transmission_func" in optimization_results and solar_spectrum:
+            wavelengths, irradiances = solar_spectrum
+            transmission_func = optimization_results["transmission_func"]
+            transmission_values = transmission_func(wavelengths)
+
+            ax2.plot(wavelengths, irradiances, "orange", label="Solar Spectrum", linewidth=2)
+            ax2_twin = ax2.twinx()
+            ax2_twin.plot(
+                wavelengths, transmission_values, "blue", label="Transmission", linewidth=2
+            )
+
+            ax2.set_xlabel("Wavelength (nm)")
+            ax2.set_ylabel("Solar Irradiance (a.u.)", color="orange")
+            ax2_twin.set_ylabel("Transmission", color="blue")
+            ax2.set_title("Optimized Spectral Transmission")
+
+            ax2.legend(loc="upper left")
+            ax2_twin.legend(loc="upper right")
+        else:
+            ax2.text(
+                0.5,
+                0.5,
+                "Transmission data not available",
+                horizontalalignment="center",
+                verticalalignment="center",
+                transform=ax2.transAxes,
+            )
+            ax2.set_title("Spectral Transmission")
+        ax2.grid(True, alpha=0.3)
+
+        # Plot 3: Parameter space (if available)
+        ax3 = axes[1, 0]
+        if "optimal_params" in optimization_results:
+            params = optimization_results["optimal_params"]
+            n_params = len(params)
+            param_indices = range(n_params)
+            ax3.bar(param_indices, params, alpha=0.7, color="green")
+            ax3.set_xlabel("Parameter Index")
+            ax3.set_ylabel("Parameter Value")
+            ax3.set_title("Optimal Parameters")
+            ax3.grid(True, alpha=0.3)
+        else:
+            ax3.text(
+                0.5,
+                0.5,
+                "Parameter data not available",
+                horizontalalignment="center",
+                verticalalignment="center",
+                transform=ax3.transAxes,
+            )
+            ax3.set_title("Optimal Parameters")
+
+        # Plot 4: Performance metrics
+        ax4 = axes[1, 1]
+        pce = optimization_results.get("optimal_pce", 0)
+        etr = optimization_results.get("optimal_etr", 0)
+
+        metrics = ["PCE", "ETR"]
+        values = [pce, etr]
+        colors = ["#1f77b4", "#2ca02c"]
+
+        bars = ax4.bar(metrics, values, color=colors, alpha=0.7, edgecolor="black")
+        ax4.set_ylabel("Efficiency")
+        ax4.set_title("Performance Metrics")
+        ax4.grid(axis="y", alpha=0.3)
+
+        # Add value labels
+        for bar, val in zip(bars, values, strict=False):
+            height = bar.get_height()
+            ax4.text(
+                bar.get_x() + bar.get_width() / 2.0,
+                height,
+                f"{val:.3f}",
+                ha="center",
+                va="bottom",
+                fontsize=12,
+            )
+
+        # Add target lines for realistic values
+        ax4.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax4.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
+        ax4.legend()
+
+        plt.tight_layout()
+
+        # Save figures in multiple formats
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
+        plt.close()
+
+        logger.info(f"Spectral optimization figures saved to {pdf_path} and {png_path}")
+        return pdf_path
+
+    def plot_agrivoltaic_performance(
+        self,
+        pce: float,
+        etr: float,
+        spectral_data: Dict[str, np.ndarray],
+        filename_prefix: str = "agrivoltaic_performance",
+        **kwargs,
+    ) -> str:
+        """
+        Plot agrivoltaic system performance.
+
+        Parameters:
+        -----------
+        pce : float
+            Power conversion efficiency
+        etr : float
+            Electron transport rate
+        spectral_data : dict
+            Spectral data for plotting
+        filename_prefix : str
+            Prefix for the output filename
+        **kwargs : dict
+            Additional plotting options
+
+        Returns:
+        --------
+        str
+            Path to the saved figure
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+        fig.suptitle("Agrivoltaic System Performance", fontsize=16, fontweight="bold")
+
+        # Plot 1: Performance metrics
+        ax1 = axes[0, 0]
+        metrics = ["PCE", "ETR"]
+        values = [pce, etr]
+        colors = ["#1f77b4", "#2ca02c"]
+
+        bars = ax1.bar(metrics, values, color=colors, alpha=0.7, edgecolor="black")
+        ax1.set_ylabel("Efficiency")
+        ax1.set_title("Performance Metrics")
+        ax1.grid(axis="y", alpha=0.3)
+
+        # Add value labels
+        for bar, val in zip(bars, values, strict=False):
+            height = bar.get_height()
+            ax1.text(
+                bar.get_x() + bar.get_width() / 2.0,
+                height,
+                f"{val:.3f}",
+                ha="center",
+                va="bottom",
+                fontsize=12,
+            )
+
+        # Add target lines for realistic values
+        ax1.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax1.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
+        ax1.legend()
+
+        # Plot 2: Spectral data if available
+        ax2 = axes[0, 1]
+        if "wavelength" in spectral_data and "transmission" in spectral_data:
+            wavelengths = spectral_data["wavelength"]
+            transmission = spectral_data["transmission"]
+            ax2.plot(wavelengths, transmission, "purple", linewidth=2, label="Transmission")
+            ax2.fill_between(wavelengths, transmission, 1, alpha=0.3, label="OPV Region", color="blue")
+            ax2.fill_between(
+                wavelengths, 0, transmission, alpha=0.3, label="PSU Region", color="green"
+            )
+            ax2.set_xlabel("Wavelength (nm)")
+            ax2.set_ylabel("Transmission")
+            ax2.set_title("Spectral Transmission Function")
+            ax2.legend()
+        else:
+            ax2.text(
+                0.5,
+                0.5,
+                "Spectral data not available",
+                horizontalalignment="center",
+                verticalalignment="center",
+                transform=ax2.transAxes,
+            )
+            ax2.set_title("Spectral Transmission")
+        ax2.grid(True, alpha=0.3)
+
+        # Plot 3: Solar spectrum if available
+        ax3 = axes[1, 0]
+        if "wavelength" in spectral_data and "solar_irradiance" in spectral_data:
+            wavelengths = spectral_data["wavelength"]
+            solar_irradiance = spectral_data["solar_irradiance"]
+            ax3.plot(wavelengths, solar_irradiance, "orange", linewidth=2)
+            ax3.set_xlabel("Wavelength (nm)")
+            ax3.set_ylabel("Solar Irradiance (a.u.)")
+            ax3.set_title("Solar Spectrum")
+        else:
+            ax3.text(
+                0.5,
+                0.5,
+                "Solar spectrum not available",
+                horizontalalignment="center",
+                verticalalignment="center",
+                transform=ax3.transAxes,
+            )
+            ax3.set_title("Solar Spectrum")
+        ax3.grid(True, alpha=0.3)
+
+        # Plot 4: Efficiency trade-off
+        ax4 = axes[1, 1]
+        # This could be extended to show multiple operating points
+        ax4.scatter([pce], [etr], color="red", s=100, label="Current Point", zorder=5)
+        ax4.set_xlabel("PCE")
+        ax4.set_ylabel("ETR")
+        ax4.set_title("PCE vs ETR Trade-off")
+        ax4.grid(True, alpha=0.3)
+        ax4.legend()
+
+        # Add target region
+        ax4.add_patch(
+            plt.Rectangle(
+                (0.15, 0.85), 0.05, 0.1, fill=True, color="green", alpha=0.2, label="Target Region"
+            )
+        )
+        ax4.text(0.16, 0.87, "Target\nRegion", fontsize=10, verticalalignment="top")
+
+        plt.tight_layout()
+
+        # Save figures in multiple formats
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
+        plt.close()
+
+        logger.info(f"Agrivoltaic performance figures saved to {pdf_path} and {png_path}")
+        return pdf_path
+
+    def plot_environmental_robustness(
+        self,
+        temperatures: np.ndarray,
+        eta_temp: np.ndarray,
+        eta_temp_err: np.ndarray,
+        disorder_samples: np.ndarray,
+        filename_prefix: str = "ETR_Under_Environmental_Effects",
+        **kwargs,
+    ) -> str:
+        """
+        Plot environmental robustness (Figure 2 in manuscript).
+        - (a) Temperature dependence of enhancement eta(T)
+        - (b) Histogram of eta over 100 static disorder realizations
+
+        Parameters:
+        -----------
+        temperatures : np.ndarray
+            Temperature values in Kelvin
+        eta_temp : np.ndarray
+            Relative enhancement eta(T)
+        eta_temp_err : np.ndarray
+            95% confidence intervals for eta(T)
+        disorder_samples : np.ndarray
+            100 samples of eta under static disorder
+        filename_prefix : str
+            Prefix for the output filename
+        """
+        # FIX M-5: add timestamp so successive pipeline runs do not overwrite
+        # previous Figure 2 files (all other FigureGenerator methods do this).
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+        fig.suptitle("Environmental Robustness of Spectral Bath Engineering", fontsize=14, fontweight="bold")
+
+        # (a) Temperature dependence
+        ax0 = axes[0]
+        ax0.errorbar(temperatures, eta_temp, yerr=eta_temp_err, fmt='o-', color=self.colors[0], 
+                     capsize=4, capthick=1.5, elinewidth=1.5, markersize=6, linewidth=2.0)
+        ax0.fill_between(temperatures, eta_temp - eta_temp_err, eta_temp + eta_temp_err, 
+                         alpha=0.2, color=self.colors[0])
+        ax0.axvspan(285, 300, alpha=0.1, color='green', label='Optimal Range (285-300 K)')
+        ax0.set_xlabel("Temperature [K]", fontsize=12)
+        ax0.set_ylabel(r"Relative Enhancement $\eta$", fontsize=12)
+        ax0.set_title("(a) Temperature Dependence", loc='left', fontsize=13, fontweight='bold')
+        ax0.legend(loc='lower left', frameon=False, fontsize=10)
+        ax0.grid(True, alpha=0.3)
+
+        # (b) Disorder histogram
+        ax1 = axes[1]
+        mean_eta = np.mean(disorder_samples)
+        std_eta = np.std(disorder_samples)
+        
+        ax1.hist(disorder_samples, bins=15, color=self.colors[1], edgecolor='black', alpha=0.7, density=True)
+        
+        # Overlay Gaussian fit
+        try:
+            from scipy.stats import norm as _norm
+            xmin, xmax = ax1.get_xlim()
+            x = np.linspace(xmin, xmax, 100)
+            p = _norm.pdf(x, mean_eta, std_eta)
+            ax1.plot(x, p, 'k--', linewidth=2, label='Gaussian Fit')
+        except ImportError:
+            logger.warning("scipy not available — Gaussian fit skipped in Figure 2")
+        
+        ax1.axvline(mean_eta, color='red', linestyle='dashed', linewidth=2, label=f'Mean: {mean_eta:.2f}')
+        ax1.set_xlabel(r"Relative Enhancement $\eta$", fontsize=12)
+        ax1.set_ylabel("Probability Density", fontsize=12)
+        ax1.set_title(r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)", loc='left', fontsize=13, fontweight='bold')
+        ax1.legend(loc='upper right', frameon=False, fontsize=10)
+        ax1.grid(True, alpha=0.3)
+
+        plt.tight_layout()
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
+        plt.close()
+
+        logger.info(f"Environmental robustness figures saved to {pdf_path} and {png_path}")
+        return pdf_path
+
+
+    def plot_thermal_stability(
+        self,
+        temperatures: np.ndarray,
+        pce_values: np.ndarray,
+        etr_values: np.ndarray,
+        filename_prefix: str = "thermal_stability",
+        **kwargs,
+    ) -> str:
+        """
+        Plot thermal stability of the agrivoltaic system.
+
+        Parameters:
+        -----------
+        temperatures : np.ndarray
+            Temperature values
+        pce_values : np.ndarray
+            PCE values at different temperatures
+        etr_values : np.ndarray
+            ETR values at different temperatures
+        filename_prefix : str
+            Prefix for the output filename
+        **kwargs : dict
+            Additional plotting options
+
+        Returns:
+        --------
+        str
+            Path to the saved figure
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
+        png_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.png")
+
+        fig, ax = plt.subplots(1, 1, figsize=(10, 6))
+        fig.suptitle("Thermal Stability Analysis", fontsize=16, fontweight="bold")
+
+        ax_twin = ax.twinx()
+
+        # Plot PCE vs temperature
+        ax.plot(temperatures, pce_values, "b-", linewidth=2, label="PCE", marker="o")
+        ax.set_xlabel("Temperature (K)")
+        ax.set_ylabel("PCE", color="b")
+        ax.tick_params(axis="y", labelcolor="b")
+
+        # Plot ETR vs temperature
+        ax_twin.plot(temperatures, etr_values, "r-", linewidth=2, label="ETR", marker="s")
+        ax_twin.set_ylabel("ETR", color="r")
+        ax_twin.tick_params(axis="y", labelcolor="r")
+
+        # Add legends
+        lines1, labels1 = ax.get_legend_handles_labels()
+        lines2, labels2 = ax_twin.get_legend_handles_labels()
+        ax.legend(lines1 + lines2, labels1 + labels2, loc="best")
+
+        ax.grid(True, alpha=0.3)
+        ax.set_title("Temperature Dependence of Performance Metrics")
+
+        plt.tight_layout()
+
+        # Save figures in multiple formats
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
+        plt.close()
+
+        logger.info(f"Thermal stability figures saved to {pdf_path} and {png_path}")
+        return pdf_path
