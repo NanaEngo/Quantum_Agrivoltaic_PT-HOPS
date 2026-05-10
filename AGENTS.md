@@ -86,10 +86,10 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 | `Redac_Paper1/Theory_Journals_main/JPCL/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper1/quantum_simulations_framework_parallel/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `Redac_Paper1/quantum_simulations_framework_parallel/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260509/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260509/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -134,7 +134,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework_parallel/ # Simulation codebase
+│   └── quantum_simulations_framework_parallel_260509/ # Simulation codebase
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.
