@@ -86,7 +86,8 @@ try:
         MESOHOPS_INCHWORM_CAP,
         DEFAULT_MAX_TIME,
         DEFAULT_TIME_STEP,
-        ESTIMATED_TRAJ_MEMORY_GB,
+        BASE_TRAJ_MEMORY_GB,
+        MIN_TRAJ_MEMORY_GB,
     )
 except ImportError:
     from .constants import (
@@ -112,7 +113,8 @@ except ImportError:
         MESOHOPS_INCHWORM_CAP,
         DEFAULT_MAX_TIME,
         DEFAULT_TIME_STEP,
-        ESTIMATED_TRAJ_MEMORY_GB,
+        BASE_TRAJ_MEMORY_GB,
+        MIN_TRAJ_MEMORY_GB,
     )
 
 try:
@@ -138,6 +140,52 @@ def get_mesohops_version() -> Optional[str]:
 
 
 logger = get_logger(__name__)
+
+
+def _run_single_traj_worker(
+    seed: int,
+    TrajectoryClass: Any,
+    traj_kwargs: Dict[str, Any],
+    use_pt_hops: bool,
+    pt_hops_noise_class: Any,
+    system_param: Dict[str, Any],
+    initial_state: NDArray[np.complex128],
+    t_max: float,
+    dt_save: float,
+    time_points: NDArray[np.float64],
+) -> Optional[Dict[str, Any]]:
+    """Standalone worker function for parallel trajectory execution (picklable)."""
+    try:
+        # Deep copy of params to avoid process collisions
+        import copy
+
+        local_traj_kwargs = copy.deepcopy(traj_kwargs)
+        local_traj_kwargs["noise_param"]["SEED"] = seed
+
+        trajectory = TrajectoryClass(**local_traj_kwargs)
+
+        if use_pt_hops and pt_hops_noise_class is not None:
+            pt_noise = pt_hops_noise_class(
+                local_traj_kwargs["noise_param"], system_param["PARAM_NOISE1"]
+            )
+            if hasattr(trajectory, "noise"):
+                trajectory.noise = pt_noise
+            pt_noise._prepare_noise(system_param["L_NOISE1"], time_points=time_points)
+
+        trajectory.initialize(initial_state.copy())
+        trajectory.propagate(t_max, dt_save)
+
+        return {
+            "psi_traj": np.array(trajectory.storage.data["psi_traj"]),
+            "t_axis": np.array(trajectory.storage.data["t_axis"]),
+            "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
+        }
+    except Exception as e:
+        import traceback
+
+        # We use print here as logger might not be fully configured in worker processes
+        print(f"Parallel trajectory {seed} failed: {e}\n{traceback.format_exc()}")
+        return None
 
 
 class HopsSimulator:
@@ -250,6 +298,31 @@ class HopsSimulator:
         # skip re-initialization in that case.
         if self.fallback_sim is None:
             self._init_fallback(**kwargs)
+
+    def _get_memory_estimate(self) -> float:
+        """
+        Dynamically estimate memory per trajectory based on hierarchy depth (L)
+        and Matsubara terms (K). Scaling is heuristic-based.
+        
+        Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB (6GB)
+        """
+        l_ref = 8.0
+        k_ref = 2.0
+        
+        # Quadratic scaling with L (approximate growth of hierarchy states)
+        l_factor = (self.max_hierarchy / l_ref) ** 2
+        # Linear scaling with K (minimum factor 0.5 to avoid under-estimation)
+        k_factor = max(0.5, self.k_matsubara / k_ref)
+        
+        estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor
+        
+        # Apply platform-specific safety buffer if RAM is low
+        if HAS_PSUTIL:
+            total_ram_gb = psutil.virtual_memory().total / (1024**3)
+            if total_ram_gb < 16.0:
+                estimate *= 1.5  # 50% more conservative on low-RAM systems
+                
+        return max(MIN_TRAJ_MEMORY_GB, estimate)
 
     @staticmethod
     def _alpha_noise1(t_axis: NDArray[np.float64], g: complex, w: complex) -> NDArray[np.complex128]:
@@ -402,39 +475,53 @@ class HopsSimulator:
             self._init_fallback(**kwargs)
 
     def _init_fallback(self, **kwargs: Any) -> None:
-        """Initialize fallback simulator with proper priority."""
+        """Initialize fallback simulator with proper priority.
+
+        Issue-3 fix: the vibronic bath is specified via three separate arrays
+        (vibronic_frequencies, huang_rhys_factors, vibronic_damping) in the
+        HopsSimulator API.  QuantumDynamicsSimulator expects a single
+        ``vibronic_modes`` list of dicts {'omega', 'lambda', 'gamma'}.
+        We build that list here so the fallback uses the same 12-mode bath
+        that the primary MesoHOPS path uses.
+        """
+        # Build vibronic_modes list from the three-array representation used by
+        # HopsSimulator's public API (vibronic_frequencies / huang_rhys_factors /
+        # vibronic_damping) so the fallback simulator sees the correct bath.
+        vib_freqs   = np.asarray(kwargs.get("vibronic_frequencies", DEFAULT_VIBRONIC_FREQUENCIES), dtype=float)
+        vib_hr      = np.asarray(kwargs.get("huang_rhys_factors",   DEFAULT_HUANG_RHYS_FACTORS),   dtype=float)
+        vib_damping = np.asarray(kwargs.get("vibronic_damping",     DEFAULT_VIBRONIC_DAMPING),     dtype=float)
+
+        # Pad shorter arrays to the longest so zip is safe
+        n_modes = max(len(vib_freqs), len(vib_hr), len(vib_damping))
+        if n_modes > 0:
+            if len(vib_freqs)   < n_modes: vib_freqs   = np.pad(vib_freqs,   (0, n_modes - len(vib_freqs)))
+            if len(vib_hr)      < n_modes: vib_hr      = np.pad(vib_hr,      (0, n_modes - len(vib_hr)))
+            if len(vib_damping) < n_modes: vib_damping = np.pad(vib_damping, (0, n_modes - len(vib_damping)))
+
+        vibronic_modes = [
+            {"omega": float(omega), "lambda": float(hr) * float(omega), "gamma": float(gamma)}
+            for omega, hr, gamma in zip(vib_freqs, vib_hr, vib_damping)
+            if float(omega) > 0.0
+        ]
+
         # Priority 1: Full QuantumDynamicsSimulator (requires MesoHOPS but has more robust init)
         if QuantumDynamicsSimulator is not None:
             try:
-                # Filter kwargs to only pass parameters that QuantumDynamicsSimulator accepts
-                qds_kwargs = {}
-                valid_params = {
-                    "temperature",
-                    "lambda_reorg",
-                    "gamma_dl",
-                    "k_matsubara",
-                    "max_hier",
-                    "n_traj",
-                    "vibronic_modes",
+                qds_kwargs = {
+                    "temperature":    self.temperature,
+                    "lambda_reorg":   kwargs.get("reorganization_energy", DEFAULT_REORGANIZATION_ENERGY),
+                    "gamma_dl":       kwargs.get("drude_cutoff",          DEFAULT_DRUDE_CUTOFF),
+                    "max_hier":       self.max_hierarchy,
+                    "k_matsubara":    self.k_matsubara,
+                    "n_traj":         self.n_traj,
+                    "vibronic_modes": vibronic_modes if vibronic_modes else None,
                 }
 
-                for key, value in kwargs.items():
-                    if key in valid_params:
-                        qds_kwargs[key] = value
-
-                # Use default values if not provided
-                qds_kwargs.setdefault("temperature", self.temperature)
-                qds_kwargs.setdefault(
-                    "lambda_reorg",
-                    kwargs.get("reorganization_energy", DEFAULT_REORGANIZATION_ENERGY),
-                )
-                qds_kwargs.setdefault("gamma_dl", kwargs.get("drude_cutoff", DEFAULT_DRUDE_CUTOFF))
-                qds_kwargs.setdefault("max_hier", self.max_hierarchy)
-                qds_kwargs.setdefault("k_matsubara", self.k_matsubara)
-                qds_kwargs.setdefault("n_traj", self.n_traj)
-
                 self.fallback_sim = QuantumDynamicsSimulator(self.hamiltonian, **qds_kwargs)
-                logger.info("QuantumDynamicsSimulator (HOPS-based) initialized as fallback")
+                logger.info(
+                    f"QuantumDynamicsSimulator (HOPS-based) initialized as fallback "
+                    f"({len(vibronic_modes)} vibronic modes)"
+                )
                 return
             except Exception as e:
                 logger.warning(f"Failed to initialize QuantumDynamicsSimulator fallback: {e}")
@@ -450,7 +537,6 @@ class HopsSimulator:
             except Exception as e:
                 logger.error(f"Failed to initialize SimpleQuantumDynamicsSimulator fallback: {e}")
 
-        # If both fail, log error
         logger.error("Failed to initialize any fallback simulator")
         self.fallback_sim = None
 
@@ -505,9 +591,13 @@ class HopsSimulator:
             _HOPS_ONLY = {"n_traj", "show_progress", "desc", "seed", "strict_mode"}
             fallback_kwargs = {k: v for k, v in kwargs.items() if k not in _HOPS_ONLY}
             try:
-                return self.fallback_sim.simulate_dynamics(
+                result = self.fallback_sim.simulate_dynamics(
                     time_points=time_points, initial_state=initial_state, **fallback_kwargs
                 )
+                # Issue-5 fix: inject n_traj_used so main.py can safely access it
+                # regardless of which fallback path was taken.
+                result.setdefault("n_traj_used", self.n_traj)
+                return result
             except Exception as e2:
                 if strict_mode:
                     logger.error(f"Primary fallback failed in strict_mode: {e2}")
@@ -611,76 +701,60 @@ class HopsSimulator:
                 pass
 
             # ── Run ensemble of trajectories (Parallelized) ─────────────────────
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/core/hops_simulator.py
             # Ensemble size: use kwarg, then self.n_traj, then fallback to 1
             n_traj = kwargs.get("n_traj", self.n_traj if hasattr(self, "n_traj") else 1)
             cpu_count = multiprocessing.cpu_count()
-            
+
             # Memory-aware parallelization (User mandate: max 2/3 of available RAM)
             if HAS_PSUTIL:
                 mem_avail_gb = psutil.virtual_memory().available / (1024**3)
                 mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
-                # Estimate trajectories that can fit in the memory limit
-                n_mem_jobs = max(1, int(mem_limit_gb / ESTIMATED_TRAJ_MEMORY_GB))
+                # Dynamic estimate based on L and K
+                traj_mem_gb = self._get_memory_estimate()
+                n_mem_jobs = max(1, int(mem_limit_gb / traj_mem_gb))
                 n_jobs = min(n_mem_jobs, cpu_count)
-                logger.info(f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB)")
+                logger.info(
+                    f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB, Est/Traj: {traj_mem_gb:.1f}GB)"
+                )
             else:
                 n_jobs = max(1, int(cpu_count * 0.5)) if n_traj > 1 else 1
                 logger.warning(f"psutil not available; using conservative n_jobs: {n_jobs}")
 
             if n_traj == 1:
                 n_jobs = 1
-=======
-            n_traj = kwargs.get("n_traj", 1)
-            # n_jobs=1: parallelism disabled for OOM diagnosis — re-enable once memory is confirmed stable
-            n_jobs = 1
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/core/hops_simulator.py
 
             # Determine seeds
             seeds = kwargs.get("seeds", list(range(n_traj)))
 
-            def _run_single_traj(seed):
-                try:
-                    # Deep copy of params to avoid process collisions
-                    local_traj_kwargs = dict(traj_kwargs)
-                    local_traj_kwargs["noise_param"] = dict(traj_kwargs["noise_param"])
-                    local_traj_kwargs["noise_param"]["SEED"] = seed
-                    
-                    trajectory = TrajectoryClass(**local_traj_kwargs)
-                    
-                    if self.use_pt_hops and PT_HopsNoise is not None:
-                        pt_noise = PT_HopsNoise(local_traj_kwargs["noise_param"], self.system_param["PARAM_NOISE1"])
-                        if hasattr(trajectory, "noise"):
-                            trajectory.noise = pt_noise
-                        pt_noise._prepare_noise(self.system_param["L_NOISE1"], time_points=time_points)
-                    
-                    trajectory.initialize(initial_state.copy())
-                    trajectory.propagate(t_max, dt_save)
-                    
-                    return {
-                        "psi_traj": np.array(trajectory.storage.data["psi_traj"]),
-                        "t_axis": np.array(trajectory.storage.data["t_axis"]),
-                        "pop_site": np.array(trajectory.storage.data.get("pop_site", []))
-                    }
-                except Exception as e:
-                    import traceback
-                    logger.error(f"Parallel trajectory {seed} failed: {e}\n{traceback.format_exc()}")
-                    return None
+            # Prepare arguments for the picklable worker
+            worker_args = {
+                "TrajectoryClass": TrajectoryClass,
+                "traj_kwargs": traj_kwargs,
+                "use_pt_hops": self.use_pt_hops,
+                "pt_hops_noise_class": PT_HopsNoise,
+                "system_param": self.system_param,
+                "initial_state": initial_state,
+                "t_max": t_max,
+                "dt_save": dt_save,
+                "time_points": time_points,
+            }
 
             if HAS_JOBLIB and n_jobs > 1:
                 logger.info(f"Running ensemble of {n_traj} trajectories on {n_jobs} cores...")
-                
+
                 # Setup tqdm progress bar
                 iterable = seeds
                 if HAS_TQDM and kwargs.get("show_progress", True):
                     desc = kwargs.get("desc", "Trajectories")
                     iterable = tqdm(seeds, desc=desc, unit="traj", leave=False)
-                
+
                 traj_results = Parallel(n_jobs=n_jobs)(
-                    delayed(_run_single_traj)(s) for s in iterable
+                    delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
                 )
             else:
-                traj_results = [_run_single_traj(s) for s in seeds]
+                traj_results = [
+                    _run_single_traj_worker(s, **worker_args) for s in seeds
+                ]
 
             # Filter failed trajectories
             traj_results = [r for r in traj_results if r is not None]

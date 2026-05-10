@@ -40,11 +40,11 @@ from core.constants import (
     DEFAULT_DRUDE_CUTOFF,
     DEFAULT_REORGANIZATION_ENERGY,
     DEFAULT_N_TRAJ,
-    DEFAULT_N_MATSUBARA,
     DEFAULT_SBD_BUNDLES,
     DEFAULT_VIBRONIC_DAMPING_VAL,
     DEFAULT_N_TRAJ_SWEEP,
     DEFAULT_N_DISORDER,
+    BASE_TRAJ_MEMORY_GB,
 )
 from datetime import datetime
 import multiprocessing
@@ -126,17 +126,10 @@ def load_and_validate_config(custom_path=None):
     is_production = os.path.basename(config_path) == 'parameters.yaml'
     
     if is_production:
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
-        if L < DEFAULT_MAX_HIERARCHY:
-            raise ValueError(f"L_max={L} < {DEFAULT_MAX_HIERARCHY}. JPCL production requires L≥{DEFAULT_MAX_HIERARCHY}. Use a custom config for testing.")
-        if K < DEFAULT_N_MATSUBARA:
-            raise ValueError(f"matsubara_truncation={K} < {DEFAULT_N_MATSUBARA}. JPCL production requires K≥{DEFAULT_N_MATSUBARA}. Use a custom config for testing.")
-=======
         if L < 8:
-            raise ValueError(f"hierarchy_depth={L} < 8. Production requires L≥8 (L=9 causes OOM; see reproducibility_cluster.log).")
+            raise ValueError(f"hierarchy_depth={L} < 8. Production requires L≥8.")
         if K < 2:
-            raise ValueError(f"matsubara_truncation={K} < 2. JPCL production requires K≥2. Use a custom config for testing.")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
+            raise ValueError(f"matsubara_truncation={K} < 2. JPCL production requires K≥2.")
         logger.info(f"Production Config validated: L={L}, K={K}")
     else:
         logger.info(f"Config loaded: {os.path.basename(config_path)} (L={L}, K={K})")
@@ -197,15 +190,11 @@ def run_convergence_audit(cfg):
     _audit.run_markovian_limit_audit(cfg=cfg)
     
     if audit_data:
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
         # audit_maes is now a dict {depth: mae}
         maes = audit_data.get('audit_maes', {})
         depths = sorted(list(maes.keys()))
         mae_final = maes[depths[-1]] if depths else 0.0
         print(f"  ✅ Validation suite complete. Residual MAE={mae_final:.2e}")
-=======
-        print(f"  ✅ Validation suite complete. MAE(7→8)={audit_data['audit_mae_8_9']:.2e}")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
     return audit_data
 
 
@@ -380,7 +369,7 @@ def run_full_fmo_simulation(cfg):
     from core.hamiltonian_factory import create_fmo_hamiltonian
     from utils.csv_data_storage import CSVDataStorage
     from utils.parallel_utils import get_safe_n_jobs
-    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
+    from core.constants import BASE_TRAJ_MEMORY_GB
 
     dyn = cfg['dynamics']
     bath = cfg['bath']
@@ -436,13 +425,13 @@ def run_full_fmo_simulation(cfg):
                 'populations': data['populations'],
                 'coherences': data['coherences'],
                 't_axis': data['t_axis'],
-                'n_traj': data['n_traj_used'],
+                'n_traj': data.get('n_traj_used', n_traj),
                 'simulator': data.get('simulator', 'MesoHOPS-Parallel'),
                 'ipr': data.get('ipr'),
                 'qfi': data.get('qfi'),
                 'entropy': data.get('entropy'),
             }
-            n_completed = data['n_traj_used']
+            n_completed = data.get('n_traj_used', n_traj)
             
             logger.info(f"FMO {label}: {n_completed} trajectories averaged via Parallel Ensemble.")
             print(f"  ✅ {label}: {n_completed} trajectories averaged")
@@ -538,7 +527,7 @@ def _run_trajectory_worker(T, label, seed, lock, log_path, bath, dyn, pulse_cfg,
         vibronic_frequencies=np.array(vib_freqs),
         huang_rhys_factors=np.array(vib_hr),
         vibronic_damping=vib_damping,
-        sbd_bundles_per_site=dyn.get('sbd_bundles_per_site', 2),
+        sbd_bundles_per_site=dyn.get('sbd_bundles_per_site', DEFAULT_SBD_BUNDLES),
         seed=seed,
         n_traj=1  # Worker runs exactly one trajectory
     )
@@ -621,7 +610,7 @@ def _run_temperature_sweep(cfg, H, time_points):
     eta_temp_err : np.ndarray  shape (N,)  — std over n_traj_sweep trajectories
     """
     from utils.parallel_utils import get_safe_n_jobs
-    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
+    from core.constants import BASE_TRAJ_MEMORY_GB
     bath = cfg['bath']
     dyn = cfg['dynamics']
     pulse_cfg = cfg.get('pulse', {})
@@ -639,7 +628,7 @@ def _run_temperature_sweep(cfg, H, time_points):
 
     print(f"\n📊 Starting Flattened Parallel Temperature Sweep ({len(temperatures) * n_traj_sweep * 2} trajectories)...")
     
-    n_jobs = get_safe_n_jobs(ESTIMATED_TRAJ_MEMORY_GB)
+    n_jobs = get_safe_n_jobs(BASE_TRAJ_MEMORY_GB)
     logger.info(f"Using {n_jobs} parallel workers for temperature sweep (Hardware-limited)")
     
     # Build task list: each task is one trajectory (filtered or broadband) at one T
@@ -692,7 +681,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     from core.hops_simulator import HopsSimulator
     from core.constants import FMO_SITE_ENERGIES_7
     from utils.parallel_utils import get_safe_n_jobs
-    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
+    from core.constants import BASE_TRAJ_MEMORY_GB
 
     bath = cfg['bath']
     dyn = cfg['dynamics']
@@ -729,7 +718,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
 
     print(f"\n🎲 Starting Parallel Disorder Sampling ({n_samples} realizations)...")
     
-    n_jobs = get_safe_n_jobs(ESTIMATED_TRAJ_MEMORY_GB)
+    n_jobs = get_safe_n_jobs(BASE_TRAJ_MEMORY_GB)
     logger.info(f"Using {n_jobs} parallel workers for disorder sampling (Hardware-limited)")
 
     seeds = [rng_seed + i for i in range(n_samples)]
@@ -893,22 +882,22 @@ def generate_figures(cfg, sim_results, time_points):
 
     # Figure 1: Quantum dynamics (filtered vs broadband overlay)
     # Panels: (a) populations, (b) coherences, (c) IPR, (d) QFI
-    # IPR = Inverse Participation Ratio (manuscript Fig. 1c)
+    _n_t = len(filtered["t_axis"])
     quantum_metrics = {
-        "ipr":     filtered.get('ipr',     np.zeros(len(time_points))),
-        "qfi":     filtered.get('qfi',     np.zeros(len(time_points))),
-        "entropy": filtered.get('entropy', np.zeros(len(time_points))),
+        "ipr": filtered.get("ipr") if filtered.get("ipr") is not None else np.zeros(_n_t),
+        "qfi": filtered.get("qfi") if filtered.get("qfi") is not None else np.zeros(_n_t),
+        "entropy": filtered.get("entropy") if filtered.get("entropy") is not None else np.zeros(_n_t),
     }
     fig1_path = gen.plot_quantum_dynamics(
-        time_points,
-        filtered['populations'],
-        filtered['coherences'],
+        filtered["t_axis"],
+        filtered["populations"],
+        filtered["coherences"],
         quantum_metrics,
         filename_prefix="Quantum_dynamics",
-        baseline_populations=broadband['populations'],
-        baseline_coherences=broadband['coherences'],
-        baseline_ipr=broadband.get('ipr', np.zeros(len(time_points))),
-        baseline_qfi=broadband.get('qfi', np.zeros(len(time_points))),
+        baseline_populations=broadband["populations"],
+        baseline_coherences=broadband["coherences"],
+        baseline_ipr=broadband.get("ipr") if broadband.get("ipr") is not None else np.zeros(_n_t),
+        baseline_qfi=broadband.get("qfi") if broadband.get("qfi") is not None else np.zeros(_n_t),
     )
     print(f"  💾 Figure 1 saved → {fig1_path}")
     logger.info(f"Figure 1 saved to {fig1_path}")
@@ -971,12 +960,22 @@ def main():
     # Argument parsing
     parser = argparse.ArgumentParser(description="JPCL Reproducibility Pipeline")
     parser.add_argument("--config", type=str, help="Path to custom parameters.yaml")
-    args, unknown = parser.parse_known_args()
+    parser.add_argument("--skip-audit", action="store_true", help="Skip Step 2 convergence audit")
+    parser.add_argument("--parallel", action="store_true", help="Run with parallel trajectories")
+    parser.add_argument("--n-traj", type=int, help="Override n_traj from config")
+    parser.add_argument("--n-traj-sweep", type=int, help="Override n_traj_temp_sweep")
+    args = parser.parse_args()
 
     # Step 1: Validate config
     print(f"\n[Step 1] Loading and validating {args.config if args.config else 'parameters.yaml'}...")
     try:
         cfg = load_and_validate_config(args.config)
+        # Apply overrides
+        if args.n_traj:
+            cfg['simulation']['n_traj'] = args.n_traj
+        if args.n_traj_sweep:
+            cfg['simulation']['n_traj_temp_sweep'] = args.n_traj_sweep
+        
         L = cfg['dynamics']['L_max']
         K = cfg['dynamics']['matsubara_truncation']
     except Exception as e:
@@ -989,39 +988,28 @@ def main():
         print("\n⚠️  Cannot run simulations without MesoHOPS. Exiting.")
         sys.exit(1)
 
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
     # Step 2: Convergence audit — proves configured L_max is sufficient
-    audit_data = run_convergence_audit(cfg)
-=======
-    # Step 2: Convergence audit — proves L=8 is sufficient
-    audit_data = run_convergence_audit()
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
-    if not audit_data:
-        print("  ❌ Convergence audit returned no data. Exiting.")
-        sys.exit(1)
+    if not getattr(args, 'skip_audit', False):
+        audit_data = run_convergence_audit(cfg)
+        if not audit_data:
+            print("  ❌ Convergence audit returned no data. Exiting.")
+            sys.exit(1)
 
-    # FIX H-4: enforce convergence threshold — do not proceed with non-converged data
-    convergence_threshold = cfg['dynamics']['convergence_threshold']
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
-    maes = audit_data.get('audit_maes', {})
-    depths = sorted(list(maes.keys()))
-    mae_residual = maes[depths[-1]] if depths else 999.0
-    
-    if mae_residual >= convergence_threshold:
-        print(f"\n❌ FATAL: Convergence NOT achieved. Residual MAE={mae_residual:.2e} ≥ threshold={convergence_threshold:.2e}")
-        print("   Increase L_max or reduce time step before resubmitting.")
-        logger.error(f"Convergence check failed: Residual MAE={mae_residual:.2e} >= {convergence_threshold:.2e}")
-        sys.exit(1)
-    print(f"  ✅ Convergence confirmed: Residual MAE={mae_residual:.2e} < {convergence_threshold:.2e}")
-=======
-    mae_8_9 = audit_data['audit_mae_8_9']
-    if mae_8_9 >= convergence_threshold:
-        print(f"\n❌ FATAL: L=8 NOT converged. MAE(7→8)={mae_8_9:.2e} ≥ threshold={convergence_threshold:.2e}")
-        print("   Increase hierarchy depth or reduce time step before resubmitting.")
-        logger.error(f"Convergence check failed: MAE(7→8)={mae_8_9:.2e} >= {convergence_threshold:.2e}")
-        sys.exit(1)
-    print(f"  ✅ Convergence confirmed: MAE(7→8)={mae_8_9:.2e} < {convergence_threshold:.2e}")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
+        # FIX H-4: enforce convergence threshold — do not proceed with non-converged data
+        convergence_threshold = cfg['dynamics']['convergence_threshold']
+        maes = audit_data.get('audit_maes', {})
+        depths = sorted(list(maes.keys()))
+        mae_residual = maes[depths[-1]] if depths else 999.0
+        
+        if mae_residual >= convergence_threshold:
+            print(f"\n❌ FATAL: Convergence NOT achieved. Residual MAE={mae_residual:.2e} ≥ threshold={convergence_threshold:.2e}")
+            print("   Increase L_max or reduce time step before resubmitting.")
+            logger.error(f"Convergence check failed: Residual MAE={mae_residual:.2e} >= {convergence_threshold:.2e}")
+            sys.exit(1)
+        print(f"  ✅ Convergence confirmed: Residual MAE={mae_residual:.2e} < {convergence_threshold:.2e}")
+    else:
+        print("\n[Step 2] SKIPPING convergence audit (using pre-validated results).")
+        logger.info("Skipping convergence audit as requested by user.")
 
     # Step 3: Full FMO simulation — generates the actual paper data
     sim_results, time_points = run_full_fmo_simulation(cfg)

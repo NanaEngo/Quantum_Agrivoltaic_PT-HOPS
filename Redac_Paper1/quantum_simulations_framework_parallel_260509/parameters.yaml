@@ -23,18 +23,15 @@ bath:
   vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
 
 dynamics:
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/parameters.yaml
   L_max: 8  # Capped at L=8 to avoid OOM
-  matsubara_truncation: 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹);
-=======
-  hierarchy_depth: 8  # Capped at L=8: L=9 causes OOM on cluster (see reproducibility_cluster.log)
-  matsubara_truncation: 4   # K=4: extended from K=2 for improved Matsubara convergence;
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/parameters.yaml
+  matsubara_truncation: 2   # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹)
                              # K=10 causes OOM on 128 GB server (77 modes → ~10¹¹ hierarchy states)
   time_max: 1000.0  # fs
   time_step: 1.0  # fs — Optimized for 12-mode bath stability
   convergence_threshold: 1.0e-6  # Frobenius norm
-  sbd_bundles_per_site: 2  # Memory optimization: 25 modes -> 2 per site
+  sbd_bundles_per_site: 6  # Raised 2→6: preserves vibronic spectral structure (27 modes→6 bundles)
+                            # 2 bundles compressed 93% of bath away; 6 retains key resonance features
+
 
 simulation:
   n_traj: 100  # ensemble trajectories for publication-grade results

@@ -1,157 +1,69 @@
-# Quick Start Guide — Parallel/GPU Version
+# Quick Start Guide — Quantum Agrivoltaic PT-HOPS (Parallel/GPU)
 
-## Installation (One-time setup)
+## 🛠 Installation
 
 ```bash
-# 1. Activate environment
+# 1. Activate MesoHOP-sim environment
 mamba activate MesoHOP-sim
 
-# 2. Install CuPy with CUDA support (RECOMMENDED - native CUDA)
-pip install cupy-cuda12x
+# 2. Install GPU dependencies (optional but recommended)
+pip install cupy-cuda12x "jax[cuda12]"
 
-# 3. Alternative: Install JAX with CUDA (fallback)
-pip install --upgrade "jax[cuda12]"
-
-# 4. Verify GPU availability
-python -c "
-import cupy as cp
-print(f'CuPy: {cp.__version__}')
-print(f'CUDA: {cp.cuda.runtime.runtimeGetVersion()}')
-print(f'Device: {cp.cuda.Device(0).name.decode()}')
-"
-# Expected: CuPy version, CUDA version, GPU name (RTX A4000)
+# 3. Verify hardware visibility
+mamba run -n MesoHOP-sim python -c "import jax; print(f'JAX Devices: {jax.devices()}')"
 ```
-
-**Note:** CuPy is preferred (native CUDA), JAX is fallback. The code automatically selects the best available backend.
-
-## Usage
-
-### Run Benchmark (Recommended first step)
-```bash
-cd /home/tchapet/Documents/GitHub/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel
-
-mamba run -n MesoHOP-sim python benchmark_parallel.py
-```
-
-This will test:
-- Single-threaded CPU performance
-- 40-worker parallel CPU performance
-- GPU batch performance (if JAX available)
-
-### Run Parallel Simulation
-```bash
-cd /home/tchapet/Documents/GitHub/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel
-
-# Laptop Mode (Fast Verification)
-mamba run -n MesoHOP-sim python reproducibility/main.py --config laptop_parameters.yaml
-
-# Production Mode (Parallel)
-mamba run -n MesoHOP-sim python reproducibility/main.py --parallel
-```
-
-## Configuration
-
-Edit `parallel_config.yaml` to adjust settings:
-
-### For CPU-heavy workloads
-```yaml
-parallel:
-  n_workers: 46          # Use more cores
-  use_gpu: false         # Disable GPU
-```
-
-### For GPU-heavy workloads
-```yaml
-parallel:
-  n_workers: 8           # Fewer CPU workers
-  use_gpu: true
-  trajectory_batch_size: 50  # Larger GPU batches
-```
-
-### For memory-constrained scenarios
-```yaml
-parallel:
-  n_workers: 20          # Fewer workers
-  max_memory_per_worker: 5.0  # More memory per worker
-  trajectory_batch_size: 5    # Smaller GPU batches
-```
-
-## Expected Performance
-
-| Workload | Method | Time | Speedup |
-|----------|--------|------|---------|
-| 100 trajectories | Single-thread | ~800 s | 1× |
-| 100 trajectories | 40-worker CPU | ~20 s | 40× |
-| 100 trajectories | GPU batch | ~4-8 s | 100-200× |
-
-## Troubleshooting
-
-### GPU not detected
-```bash
-# Check NVIDIA driver
-nvidia-smi
-
-# Reinstall JAX with CUDA
-pip uninstall jax jaxlib
-pip install --upgrade "jax[cuda12]"
-```
-
-### Out of memory (GPU)
-Reduce `trajectory_batch_size` in `parallel_config.yaml`:
-```yaml
-parallel:
-  trajectory_batch_size: 5  # Reduce from 10
-```
-
-### Out of memory (CPU)
-Reduce `n_workers` in `parallel_config.yaml`:
-```yaml
-parallel:
-  n_workers: 20  # Reduce from 40
-```
-
-## Files Created
-
-```
-quantum_simulations_framework_parallel/
-├── parallel_config.yaml              # Configuration
-├── README_PARALLEL.md                # Full documentation
-├── PARALLEL_OPTIMIZATION_SUMMARY.md  # Technical summary
-├── benchmark_parallel.py             # Performance testing
-├── core/gpu_dynamics.py              # GPU acceleration
-├── utils/parallel_utils.py           # Parallel execution
-└── reproducibility/main.py           # Unified parallel pipeline
-```
-
-## Comparison with Original
-
-| Feature | Original | Parallel/GPU |
-|---------|----------|--------------|
-| Location | `quantum_simulations_framework/` | `quantum_simulations_framework_parallel/` |
-| Execution | Single-threaded | 40-worker + GPU |
-| 100 trajectories | ~800 s | ~4-20 s |
-| GPU support | No | Yes (JAX) |
-
-**Note:** Original codebase is unchanged and still available.
-
-## Next Steps
-
-1. ✅ Run benchmark: `python benchmark_parallel.py`
-2. ✅ Run simulation:
-   # Laptop
-   mamba run -n MesoHOP-sim python reproducibility/main.py --config laptop_parameters.yaml
-   # Production
-   mamba run -n MesoHOP-sim python reproducibility/main.py --parallel
-3. ⚙️ Adjust `parallel_config.yaml` based on results
-4. 📊 Compare results with original version
-
-## Support
-
-For detailed documentation, see:
-- `README_PARALLEL.md` — Full documentation
-- `PARALLEL_OPTIMIZATION_SUMMARY.md` — Technical details
 
 ---
 
-**Created:** 2026-05-04  
-**Optimized for:** Dual Xeon Gold 6136 + RTX A4000
+## 🚀 "Good Commands" for Production
+
+### 1. The Production Suite
+Run the full JPCL production ensemble ($L=8, K=2, N=100$) including all figures:
+
+```bash
+mamba run -n MesoHOP-sim python reproducibility/main.py --parallel --skip-audit
+```
+
+### 2. The Verification Suite
+Run the 12-test validation suite required for the Supporting Information:
+
+```bash
+mamba run -n MesoHOP-sim pytest tests/ -v
+```
+
+### 3. Monitoring & Housekeeping
+```bash
+# Live log monitoring
+tail -f reproducibility/logs/execution_*.log
+
+# Check result file generation
+watch -n 5 "ls -lh reproducibility/results/"
+
+# Cleanup temporary files
+rm reproducibility/logs/*.log
+```
+
+---
+
+## ⚙️ Configuration (parameters.yaml)
+
+This file is the **Single Source of Truth**. All physics parameters are centralized here:
+- **`L_max`**: 8 (Hierarchy depth)
+- **`matsubara_truncation`**: 2 (Matsubara terms)
+- **`time_step`**: 1.0 (fs)
+- **`n_traj`**: 100 (Ensemble size)
+
+---
+
+## ⚠️ Troubleshooting
+
+**Out of Memory (RAM):**
+If parallel workers crash, reduce `n_workers` in `parallel_config.yaml`. The system calculates a safe worker count based on `BASE_TRAJ_MEMORY_GB` (~4.0 GB for $L=8$), but manual overrides may be needed for highly constrained systems.
+
+**MesoHOPS Not Found:**
+Ensure you are using the `mamba run -n MesoHOP-sim` wrapper. This ensures all C-extensions and environment variables are correctly loaded.
+
+---
+
+**Last Updated:** May 10, 2026
+**Project Status:** JPCL Major Revision (Production Stabilized)

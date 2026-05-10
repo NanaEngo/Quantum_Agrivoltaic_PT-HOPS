@@ -135,10 +135,13 @@ class FigureGenerator:
 
         # Plot coherences
         ax1 = axes[0, 1]
-        ax1.plot(time_points, coherences, "r-", linewidth=2.0, label='Filtered')
-        if 'baseline_coherences' in kwargs:
-            ax1.plot(time_points, kwargs['baseline_coherences'], '--', color='gray', linewidth=1.5, label='Broadband')
-            ax1.legend(frameon=False, fontsize=10)
+        if coherences is not None:
+            ax1.plot(time_points, coherences, "r-", linewidth=2.0, label='Filtered')
+            if 'baseline_coherences' in kwargs and kwargs['baseline_coherences'] is not None:
+                ax1.plot(time_points, kwargs['baseline_coherences'], '--', color='gray', linewidth=1.5, label='Broadband')
+                ax1.legend(frameon=False, fontsize=10)
+        else:
+            ax1.text(0.5, 0.5, "Coherence data not available", ha='center', va='center', transform=ax1.transAxes)
         ax1.set_xlabel("Time [fs]", fontsize=12)
         ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=12)
         ax1.set_title("(b) Coherence Evolution", loc='left', fontsize=14, fontweight='bold')
@@ -154,10 +157,14 @@ class FigureGenerator:
 
             if row < n_rows:
                 ax = axes[row, col]
-                ax.plot(time_points, metric_values, linewidth=2.0, color=self.colors[i % len(self.colors)])
-                if f'baseline_{metric_name}' in kwargs:
-                    ax.plot(time_points, kwargs[f'baseline_{metric_name}'], '--', color='gray', linewidth=1.5, label='Broadband')
-                    ax.legend(frameon=False, fontsize=10)
+                if metric_values is not None:
+                    ax.plot(time_points, metric_values, linewidth=2.0, color=self.colors[i % len(self.colors)])
+                    if f'baseline_{metric_name}' in kwargs and kwargs[f'baseline_{metric_name}'] is not None:
+                        ax.plot(time_points, kwargs[f'baseline_{metric_name}'], '--', color='gray', linewidth=1.5, label='Broadband')
+                        ax.legend(frameon=False, fontsize=10)
+                else:
+                    ax.text(0.5, 0.5, "Data not available", ha='center', va='center', transform=ax.transAxes)
+                
                 ax.set_xlabel("Time [fs]", fontsize=12)
                 ax.set_ylabel(metric_name.replace('_', ' ').title(), fontsize=12)
                 ax.set_title(f"{panel_labels[i]} {metric_name.replace('_', ' ').title()} Evolution", loc='left', fontsize=14, fontweight='bold')

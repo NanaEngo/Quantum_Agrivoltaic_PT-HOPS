@@ -12,7 +12,7 @@ sys.path.insert(0, str(FRAMEWORK_DIR))
 
 from core.hops_simulator import HopsSimulator
 from core.hamiltonian_factory import create_fmo_hamiltonian
-from core.constants import DEFAULT_TEMPERATURE, DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA
+from core.constants import DEFAULT_TEMPERATURE, DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_SBD_BUNDLES
 
 def test_3site_simulation_with_config():
     """
@@ -45,7 +45,7 @@ def test_3site_simulation_with_config():
     t_max = cfg['dynamics']['time_max']
     time_points = np.arange(0, t_max, dt)
     n_sites = H3.shape[0]
-    sbd_bundles = cfg['dynamics'].get('sbd_bundles_per_site', 2)
+    sbd_bundles = cfg['dynamics'].get('sbd_bundles_per_site', DEFAULT_SBD_BUNDLES)
     n_traj = cfg['simulation']['n_traj']
 
     print(f"   Parameters: L={L}, K={K}, dt={dt} fs, t_max={t_max} fs, n_traj={n_traj}")

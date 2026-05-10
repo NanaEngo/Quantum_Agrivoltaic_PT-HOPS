@@ -27,7 +27,7 @@ LIGHT_SPEED_CMS: Final[float] = 2.99792458e10  # cm/s
 # =============================================================================
 # HIERARCHY / SBD PARAMETERS
 # =============================================================================
-DEFAULT_SBD_BUNDLES: Final[int] = 2  # SBD bundles per site (SI mandate: all production runs use SBD)
+DEFAULT_SBD_BUNDLES: Final[int] = 6  # SBD bundles per site (SI mandate: all production runs use SBD)
 
 # Dephasing rate (used by sensitivity_analyzer)
 DEFAULT_DEPHASING_RATE: Final[float] = 0.01  # cm^-1/fs (phenomenological dephasing)
@@ -197,7 +197,8 @@ DEFAULT_POPSIZE: Final[int] = 15
 DEFAULT_MAXITER: Final[int] = 100
 DEFAULT_WORKERS: Final[int] = -1  # Use all available cores
 MEMORY_FRACTION_LIMIT: Final[float] = 0.66  # Use at most 2/3 of available RAM
-ESTIMATED_TRAJ_MEMORY_GB: Final[float] = 2.0  # Estimated memory per trajectory for FMO
+BASE_TRAJ_MEMORY_GB: Final[float] = 6.0  # Reference memory for L=8, K=2 production
+MIN_TRAJ_MEMORY_GB: Final[float] = 0.5   # Minimum floor for memory estimation
 
 # =============================================================================
 # FILE PATHS

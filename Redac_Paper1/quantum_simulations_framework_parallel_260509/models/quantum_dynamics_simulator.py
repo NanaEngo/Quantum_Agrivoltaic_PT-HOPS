@@ -25,14 +25,16 @@ try:
     from core.constants import (
         DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE,
         DEFAULT_REORGANIZATION_ENERGY, DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, ESTIMATED_TRAJ_MEMORY_GB,
+        DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, 
+        BASE_TRAJ_MEMORY_GB, MIN_TRAJ_MEMORY_GB,
     )
 except ImportError:
     # Relative fallback for certain execution contexts
     from ..core.constants import (
         DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE,
         DEFAULT_REORGANIZATION_ENERGY, DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, ESTIMATED_TRAJ_MEMORY_GB,
+        DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, 
+        BASE_TRAJ_MEMORY_GB, MIN_TRAJ_MEMORY_GB,
     )
 
 try:
@@ -42,6 +44,71 @@ except ImportError:
     HAS_PSUTIL = False
 
 logger = logging.getLogger(__name__)
+
+
+def _qds_run_single_traj(
+    seed_val: int,
+    gw_sysbath: list,
+    l_hier: list,
+    l_noise1: list,
+    param_noise1: list,
+    H_shifted: "np.ndarray",
+    n_sites: int,
+    max_hier: int,
+    gamma_dl: float,
+    t_max: float,
+    dt_save: float,
+    psi_0: "np.ndarray",
+) -> tuple:
+    """
+    Module-level picklable worker for QuantumDynamicsSimulator parallel ensemble.
+
+    All state is passed explicitly so joblib can serialize this function
+    and send it to worker processes without encountering closure errors.
+    """
+    try:
+        from mesohops.trajectory.hops_trajectory import HopsTrajectory
+
+        def _alpha_noise1(t_axis, g, w):
+            return g * np.exp(-w * t_axis)
+
+        system_param = {
+            "HAMILTONIAN": H_shifted,
+            "GW_SYSBATH": gw_sysbath,
+            "L_HIER": l_hier,
+            "L_NOISE1": l_noise1,
+            "ALPHA_NOISE1": _alpha_noise1,
+            "PARAM_NOISE1": param_noise1,
+        }
+        eom_param = {"EQUATION_OF_MOTION": "NORMALIZED NONLINEAR"}
+        noise_param = {
+            "SEED": seed_val,
+            "MODEL": "FFT_FILTER",
+            "TLEN": t_max + max(100.0, 5.0 / gamma_dl),
+            "TAU": dt_save,
+        }
+        hierarchy_param = {"MAXHIER": max_hier}
+        integration_param = {
+            "INTEGRATOR": "RUNGE_KUTTA",
+            "INCHWORM_CAP": 5,
+            "STATIC_BASIS": None,
+        }
+        hops_local = HopsTrajectory(
+            system_param=system_param,
+            eom_param=eom_param,
+            noise_param=noise_param,
+            hierarchy_param=hierarchy_param,
+            integration_param=integration_param,
+        )
+        hops_local.initialize(psi_0.copy())
+        hops_local.propagate(t_max, dt_save)
+        psi_traj_local = np.array(hops_local.storage.data["psi_traj"])[:, :n_sites]
+        t_ax_local = np.array(hops_local.storage.data["t_axis"])
+        return psi_traj_local, t_ax_local
+    except Exception as exc:
+        import traceback
+        print(f"QDS trajectory seed {seed_val} failed: {exc}\n{traceback.format_exc()}")
+        return None, None
 
 
 try:
@@ -354,6 +421,29 @@ class QuantumDynamicsSimulator:
         )
         return hops
 
+    def _get_memory_estimate(self) -> float:
+        """
+        Dynamically estimate memory per trajectory based on hierarchy depth (L)
+        and Matsubara terms (K). Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB.
+        """
+        l_ref = 8.0
+        k_ref = 2.0
+        
+        # Quadratic scaling with L
+        l_factor = (self.max_hier / l_ref) ** 2
+        # Linear scaling with K (minimum factor 0.5 to avoid under-estimation)
+        k_factor = max(0.5, (self.k_matsubara / k_ref))
+        
+        estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor
+        
+        # Apply platform-specific safety buffer if RAM is low
+        if HAS_PSUTIL:
+            total_ram_gb = psutil.virtual_memory().total / (1024**3)
+            if total_ram_gb < 16.0:
+                estimate *= 1.5  # 50% more conservative on low-RAM systems
+                
+        return max(MIN_TRAJ_MEMORY_GB, estimate)
+
     def simulate_dynamics(self, initial_state=None, time_points=None, dt_save=2.0, seeds=None, **kwargs):
         """
         Run ensemble-averaged non-Markovian dynamics via MesoHOPS.
@@ -424,43 +514,43 @@ class QuantumDynamicsSimulator:
         if HAS_PSUTIL:
             mem_avail_gb = psutil.virtual_memory().available / (1024**3)
             mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
-            n_mem_jobs = max(1, int(mem_limit_gb / ESTIMATED_TRAJ_MEMORY_GB))
+            # Dynamic estimate based on L and K
+            traj_mem_gb = self._get_memory_estimate()
+            n_mem_jobs = max(1, int(mem_limit_gb / traj_mem_gb))
             n_jobs = min(n_mem_jobs, cpu_count)
-            logger.info(f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB)")
+            logger.info(f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB, Est/Traj: {traj_mem_gb:.1f}GB)")
         else:
             n_jobs = max(1, int(cpu_count * 0.5))
             logger.warning(f"psutil not available; using conservative n_jobs: {n_jobs}")
-        
+
         logger.info(
             f"  Running {n_traj} HOPS trajectories in parallel (n_jobs={n_jobs}, "
             f"{t_max:.0f} fs, dt={dt_save} fs, MAXHIER={self.max_hier})..."
         )
 
-        # Helper to run a single trajectory - must be picklable
-        def _run_single(seed_val):
-            try:
-                # Re-build trajectory locally to ensure process-independence
-                hops_local = self._build_hops_trajectory(seed_val, t_max, dt_save)
-                hops_local.initialize(psi_0.copy())
-                hops_local.propagate(t_max, dt_save)
-                
-                psi_traj_local = np.array(hops_local.storage.data["psi_traj"])[:, :n_sites]
-                t_ax_local = np.array(hops_local.storage.data["t_axis"])
-                return psi_traj_local, t_ax_local
-            except Exception as exc:
-                import traceback
-                logger.error(f"Trajectory seed {seed_val} failed: {exc}\n{traceback.format_exc()}")
-                return None, None
+        # Build picklable argument dict for module-level worker
+        worker_kwargs = dict(
+            gw_sysbath=self.gw_sysbath,
+            l_hier=self.l_hier,
+            l_noise1=self.l_noise1,
+            param_noise1=self.param_noise1,
+            H_shifted=self.H,
+            n_sites=n_sites,
+            max_hier=self.max_hier,
+            gamma_dl=self.gamma_dl,
+            t_max=t_max,
+            dt_save=dt_save,
+            psi_0=psi_0,
+        )
 
         all_psi_trajs = []
         t_axis = None
 
         if HAS_JOBLIB and n_jobs > 1:
-            # Parallel execution
+            # Parallel execution using the module-level picklable worker
             results_parallel = Parallel(n_jobs=n_jobs)(
-                delayed(_run_single)(s) for s in seeds
+                delayed(_qds_run_single_traj)(s, **worker_kwargs) for s in seeds
             )
-            
             for psi_traj, t_ax_k in results_parallel:
                 if psi_traj is not None and not np.any(np.isnan(psi_traj)):
                     if t_axis is None:
@@ -471,7 +561,7 @@ class QuantumDynamicsSimulator:
         else:
             # Sequential fallback
             for seed in seeds:
-                psi_traj, t_ax_k = _run_single(seed)
+                psi_traj, t_ax_k = _qds_run_single_traj(seed, **worker_kwargs)
                 if psi_traj is not None and not np.any(np.isnan(psi_traj)):
                     if t_axis is None:
                         t_axis = t_ax_k

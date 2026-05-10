@@ -1,170 +1,111 @@
 # Quantum Dynamics & Spectral Bath Engineering
 
-Computational framework, simulation pipelines, and manuscript source files for two research projects in non-Markovian quantum dynamics.
+Computational framework, simulation pipelines, and manuscript source files for non-Markovian quantum dynamics in photosynthesis and agrivoltaics. This repository is currently optimized for the **JPCL Major Revision** of the manuscript *Spectral Bath Engineering via Non-Markovian Dynamics in the FMO Complex* (jz-2026-00994t).
 
 ---
 
-## 🚀 Quick Start
+## 🛠️ Environment Setup
 
 All simulations require the `MesoHOP-sim` conda environment.
 
-### 💻 Laptop Mode (fast verification, L=3, n_traj=4)
-
 ```bash
-mamba run -n MesoHOP-sim python \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py \
-  --config Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml
-```
-
-Produces low-resolution figures and step-by-step CSVs in `reproducibility/results/` in ~10 min.
-
-### 🏢 Production Mode (publication data, L=8, K=2, n_traj=100)
-
-```bash
-# Run the full production pipeline with L=8, dt=1.0fs, N=100
-mamba run -n MesoHOP-sim python \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py \
-  --config Redac_Paper1/quantum_simulations_framework_parallel_260509/parameters.yaml \
-  --parallel
-```
-
-Requires 128 GB RAM, 24+ CPU cores. Monitor with:
-
-```bash
-tail -f Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/logs/execution_*.log
-```
-
-### 🖥️ Cluster (SLURM)
-
-```bash
-chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260509/run_cluster.sh
-./Redac_Paper1/quantum_simulations_framework_parallel_260509/run_cluster.sh
-```
-
-### 🧪 Full Test Suite
-
-```bash
-# All tests with live logging on screen
-mamba run -n MesoHOP-sim python -m pytest \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/ -v
-
-# JPCL 12-test SI validation suite only
-mamba run -n MesoHOP-sim python -m pytest \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/test_jpcl_resubmission_suite.py -v
-
-# 3-site dynamics smoke test
-mamba run -n MesoHOP-sim python -m pytest \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/test_3site_dynamics.py -v
-```
-
-Test logs are written to `reproducibility/logs/tests_<YYYYMMDD>.log` and displayed live via `pytest.ini`.
-
-### 🔍 Convergence Audit Only
-
-```bash
-mamba run -n MesoHOP-sim python \
-  Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/audit_convergence.py
+# Verify environment health
+mamba env list | grep MesoHOP-sim
+mamba run -n MesoHOP-sim python -c "import mesohops; print(f'MesoHOPS {mesohops.__version__} OK')"
 ```
 
 ---
 
-## 🌾 Project 1: Quantum-Enhanced Agrivoltaics
+## 🚀 Command Reference
 
-**Target Journal:** *The Journal of Physical Chemistry Letters* (JPCL) | **ID:** `jz-2026-00994t`  
-**Status:** Major Revision in progress
+### 1. Execution Pipelines
 
-Uses **PT-HOPS/SBD** (Process Tensor Hierarchy of Pure States with Stochastically Bundled Dissipators) to simulate excitonic energy transfer in the FMO complex. Investigates how dual-band spectral filtering (750 + 820 nm) selectively populates vibronic resonances to enhance quantum coherence.
+| Mode | Command | Target Hardware |
+| :--- | :--- | :--- |
+| **Laptop** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml` | 16GB RAM, 4+ Cores |
+| **Production** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --parallel --skip-audit` | 128GB RAM, 24+ Cores |
+| **Cluster** | `sbatch Redac_Paper1/quantum_simulations_framework_parallel_260509/run_cluster.sh` | HPC (SLURM) |
 
-### Key Performance Metrics (295 K)
+### 2. Monitoring & Live Logs
 
-| Metric | Filtered (750+820 nm) | Broadband | Enhancement |
-|--------|----------------------|-----------|-------------|
-| Coherence Lifetime | 420 ± 35 fs | 280 ± 25 fs | **+50%** |
-| Transfer Yield | 89.2% | 71.4% | **+25%** |
-| IPR (Delocalization) | 6.8 sites | 4.1 sites | **+66%** |
+Monitor the production ensemble progress in real-time:
 
-### Canonical Parameters
+```bash
+# Follow the latest execution log
+tail -f Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/logs/execution_$(date +%Y%m%d)*.log
 
-| Parameter | Value | Source |
-|-----------|-------|--------|
-| Hierarchy depth | L = 8 | `parameters.yaml` |
-| Matsubara terms | K = 2 | `parameters.yaml` |
-| Time step | Δt = 1.0 fs | `parameters.yaml` |
-| Temperature | 295 K | `parameters.yaml` |
-| Reorganization energy | λ_D = 35 cm⁻¹ | `parameters.yaml` |
-| Vibronic modes | 12 (Kleinekathöfer/Coker) | `parameters.yaml` |
-| Disorder realizations | 100 | `parameters.yaml` |
+# Watch result file generation
+watch -n 5 "ls -lh Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/results/"
+```
+
+### 3. Verification & Audits
+
+Run the 12-test SI validation suite or check convergence independently:
+
+```bash
+# Run SI Validation Suite
+mamba run -n MesoHOP-sim pytest Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/ -v
+
+# Manually verify trace preservation in results
+grep "Trace OK" Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/logs/*.log
+```
+
+### 4. Housekeeping & Cleanup
+
+Keep the workspace clean and manage large data files:
+
+```bash
+# Clean up temporary logs
+rm Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/logs/*.log
+
+# Check disk usage of simulation data
+du -sh Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/results/
+
+# Verify Git LFS tracking for HDF5/CSV
+git lfs status
+```
+
+### 5. Manuscript Compilation (JPCL Letter)
+
+```bash
+cd Redac_Paper1/Theory_Journals_main/JPCL/
+latexmk -pdf Manuscript_JPCL_26-05-08.tex SI_JPCL_26-05-08.tex
+```
 
 ---
 
-## 🧪 Project 2: Anderson Model Comparison
+## 📉 Parameter Source of Truth
 
-**Publication:** *Physical Review B*
+All simulations read from a single centralized configuration. Do not hardcode physics values.
 
-Comparative study of the Anderson model in weak and strong interaction regimes:
-- **Julia**: `HierarchicalEOM.jl` (ASO space)
-- **Python**: `QuTiP` (Tanimura formalism)
+*   **Canonical Config:** `Redac_Paper1/quantum_simulations_framework_parallel_260509/parameters.yaml`
+*   **Production Truncation:** $L=8$, $K=2$
+*   **Time Step:** $\Delta t = 1.0$ fs (Optimized for 12-mode bath stability)
 
 ---
 
 ## 📂 Repository Structure
 
-```
-Quantum_Agrivoltaic_PT-HOPS/
+```text
+.
+├── AGENTS.md                          # Project status and agent rules
 ├── Redac_Paper1/
-│   ├── Theory_Journals_main/JPCL/          # Manuscript, SI, Response, Cover Letter
-│   └── quantum_simulations_framework_parallel_260509/
-│       ├── parameters.yaml                 # ← Single source of truth
-│       ├── laptop_parameters.yaml          # Laptop-safe overrides (L=3, n_traj=4)
-│       ├── pytest.ini                      # Live log config
-│       ├── core/                           # HopsSimulator, constants, Hamiltonian
-│       ├── extensions/                     # PT_HopsNoise, SBD_HopsTrajectory
-│       ├── models/                         # QuantumDynamicsSimulator, etc.
-│       ├── utils/                          # FigureGenerator (600 DPI), CSVDataStorage
-│       ├── reproducibility/
-│       │   ├── main.py                     # Pipeline entry point
-│       │   ├── audit_convergence.py        # L/K convergence audit
-│       │   ├── results/                    # Step-by-step CSVs (auto-generated)
-│       │   └── logs/                       # Execution + test logs (auto-generated)
-│       └── tests/
-│           ├── conftest.py                 # Shared logger + PASS/FAIL hooks
-│           ├── test_jpcl_resubmission_suite.py  # 12 SI validation tests
-│           ├── test_3site_dynamics.py      # 3-site smoke test
-│           └── test_*.py                  # Unit tests per module
-├── notebooks/                             # Anderson model Jupyter notebooks
-└── manuscrit/                             # Anderson model PRB source
+│   ├── Theory_Journals_main/JPCL/     # Manuscript & SI (Target: JPCL)
+│   └── quantum_simulations_framework_parallel_260509/ # Core Codebase
+│       ├── parameters.yaml            # GLOBAL SOURCE OF TRUTH
+│       ├── reproducibility/           # main.py and result analysis
+│       ├── core/                      # HopsSimulator & Hamiltonian
+│       └── tests/                     # 12-test validation suite
+└── _bmad-output/                      # Planning artifacts
 ```
 
 ---
 
-## ⚙️ Technical Requirements
+## ⚠️ Troubleshooting
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| MesoHOPS | v1.6+ | PT-HOPS/SBD non-Markovian dynamics |
-| Python | 3.10+ | Simulation framework |
-| joblib | latest | Multi-core parallelization (2/3 of CPUs) |
-| pytest | 9.0+ | Test suite with live logging |
-| achemso | latest | JPCL LaTeX formatting |
+**Out of Memory (OOM):**
+If a production run crashes, check available RAM: `free -h`.
+Reduce `n_workers` in `parallel_config.yaml` or use the `--n-traj 10` override for testing.
 
----
-
-## ⚠️ Research Stability Rules
-
-1. **Parameter integrity** — read all physics values from `parameters.yaml`; never hardcode.
-2. **No fake data** — never commit `*.INVALID_FALLBACK_DATA.csv`.
-3. **HDF5 via LFS** — use Git LFS for files in `data/converged/`.
-4. **Dated manuscripts** — all LaTeX files must include the date (e.g., `Manuscript_JPCL_26-05-08.tex`).
-5. **Terminology** — SBD = **Stochastically Bundled Dissipators** (never "Spectrally Bundled").
-
----
-
-## 📑 Citation & Contact
-
-> *Spectral Engineering of Vibronic Coherence in Photosynthetic Complexes*, JPCL (2026), in revision. Manuscript ID: `jz-2026-00994t`
-
-**Corresponding Author:** Steve Cabrel Teguia Kouam  
-📧 [steve.teguia@facsciences-uy1.cm](mailto:steve.teguia@facsciences-uy1.cm)
-
----
-*License: MIT*
+**MesoHOPS Fallback:**
+If you see "MesoHOPS NOT found", ensure your `PYTHONPATH` includes the framework directory or use the `mamba run` wrapper as shown above.
