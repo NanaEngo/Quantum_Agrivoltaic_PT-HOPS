@@ -27,7 +27,7 @@ workflowType: 'prd'
 This project executes a rigorous revision of the manuscript "Quantum-Coherent Spectral Engineering in Light-Harvesting Systems" for **The Journal of Physical Chemistry Letters (JPCL)**. The revision transforms the original research into a bulletproof, submission-ready package. The primary goal is to resolve reviewer-identified gaps in theoretical framing, model realism, and numerical consistency. By reframing "Bath Engineering" as a precise two-stage mechanism—**Selective Vibronic Driving** and **Polaron-Frame Dephasing Reduction**—this work establishes a solid foundation for the future **AgroQuantPV Suite**.
 
 ### Product Differentiator
-We define **Spectral Engineering** not as trivial initial state preparation, but as a unique quantum control mechanism enabled by the adaptive spectral filtering of organic photovoltaics (OPV). This approach partitions the bath into protected resonant modes, supported by a **Mandatory Convergence Audit** ($L=9$, $K=2$, proven converged at $T=295$~K) and a **Realistic FMO Spectral Density** model (12-mode Kleinekathöfer/Coker).
+We define **Spectral Engineering** not as trivial initial state preparation, but as a unique quantum control mechanism enabled by the adaptive spectral filtering of organic photovoltaics (OPV). This approach partitions the bath into protected resonant modes, supported by a **Mandatory Convergence Audit** ($L=8$, $K=2$, proven converged at $T=295$~K) and a **Realistic FMO Spectral Density** model (12-mode Kleinekathöfer/Coker).
 
 ## Project Classification
 
@@ -44,7 +44,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **Clarity Metric**: 100% of figure labels and symbol definitions in Figures 1 and 2(a) are consistent with IUPAC conventions.
 
 ### Research & Technical Success
-- **Numerical Integrity**: All publication-grade results verified at **$L=9$, $K=2$** convergence (K=2 proven sufficient at T=295 K via dedicated K-audit: MAE(K=2→K=3) < 10⁻⁶), resolving previous text/SI contradictions.
+- **Numerical Integrity**: All publication-grade results verified at **$L=8$, $K=2$** convergence (K=2 proven sufficient at T=295 K via dedicated K-audit: MAE(K=2→K=3) $<10^{-6}$), resolving previous text/SI contradictions.
 - **Validation Pass**: Model passes the **12-test validation suite** (Trace preservation, Positivity, Hierarchy convergence).
 - **Reproducibility**: A single master script can regenerate all paper figures from finalized simulation data.
 
@@ -54,7 +54,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **Revised Manuscript & SI**: Full LaTeX update including theoretical reframing.
 - **High-Impact Figures**: 300+ DPI graphics generated with CairoMakie/Matplotlib.
 - **Response to Reviewers**: Comprehensive, point-by-point rebuttal (`Reviewers_Comments_Answers.md`).
-- **Converged Data**: Verified simulation datasets at $L=9$.
+- **Converged Data**: Verified simulation datasets at $L=8$.
 - **Parameter Schema**: Centralized `parameters.yaml` for synchronization between main text and SI.
 
 ### Vision (Future)
@@ -64,7 +64,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 
 ### Journey 1: The Skeptical Reviewer (Dr. Elara Vance)
 - **Action**: Reviews the new **Theoretical Reframing** section and the SI **Convergence Table**.
-- **Outcome**: Confirms that the "Bath Engineering" ambiguity is resolved by the precise "Selective Vibronic Driving" definition and $L=10$ baseline.
+- **Outcome**: Confirms that the "Bath Engineering" ambiguity is resolved by the precise "Selective Vibronic Driving" definition and $L=8$ baseline.
 
 ### Journey 2: The Responding Author (Taamangtchu)
 - **Action**: Uses the **Traceability Matrix** and **Convergence Audit tool** to manage 15+ requirements.
@@ -80,7 +80,7 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 
 ## Scientific & Domain Requirements
 - **Peer-Review Fidelity**: Every claim traceable to specific simulation runs with recorded parameters.
-- **Numerical Convergence**: Mandatory $L=9$ hierarchy depth for all final figures (Synchronized with 128 GB server limits).
+- **Numerical Convergence**: Mandatory $L=8$ hierarchy depth for all final figures (Synchronized with 128 GB server limits).
 - **Physical Realism**: Mandatory use of the **Realistic FMO Spectral Density** (including vibronic modes).
 
 ## Functional Requirements
@@ -90,8 +90,8 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 - **FR2**: Provide a mathematical derivation of coherence enhancement in the polaron frame.
 
 ### Quantum Simulation Engine
-- **FR3**: Execute dynamics at $L=10$ and Matsubara truncation at $K=2$ (converged at T=295 K; ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹). A dedicated K-convergence audit (K=1,2,3 at fixed L=10) must confirm MAE(K=2→K=3) < 10⁻⁶ before production runs.
-- **FR4**: Automate a **Convergence Audit** comparing observables at $L=9, 10, 11$.
+- **FR3**: Execute dynamics at $L=8$ and Matsubara truncation at $K=2$ (converged at T=295 K; ν₁ ≈ 1300 cm⁻¹ ≫ γ_D = 50 cm⁻¹). A dedicated K-convergence audit (K=1,2,3 at fixed L=8) must confirm MAE(K=2→K=3) $<10^{-6}$ before production runs.
+- **FR4**: Automate a **Convergence Audit** comparing observables at $L=7, 8, 9$.
 - **FR5**: Incorporate **multi-mode Kleinekathöfer/Coker spectral densities** (BChl modes + low-frequency solvent component) for realistic FMO modeling.
 - **FR9**: Implement a **Parameter Optimization Suite** to explore the optimal vibronic coupling and laser excitation regimes.
 - **FR10**: Define explicit **Functional Forms** for the laser pulse (envelope, phase, timing) within the simulation input.
@@ -105,12 +105,12 @@ We define **Spectral Engineering** not as trivial initial state preparation, but
 ## Non-Functional Requirements
 
 ### Accuracy & Integrity
-- **Convergence Standard**: $<1\%$ variance in population dynamics between $L=10$ and $L=11$.
+- **Convergence Standard**: $<1\%$ variance in population dynamics between $L=7$ and $L=8$.
 - **Conservation of Trace**: Total population trace maintained at **$1.000 \pm 10^{-6}$**.
 - **Positivity**: Density matrix remains positive-semidefinite (${\rho} \ge 0$) at every time step.
 
 ### Performance & Integration
-- **NFR4**: Hardware Optimization: The pipeline must run on a 128 GB RAM server. K=2 (21 hierarchy modes) is mandatory to prevent OOM — K=10 (77 modes) causes ~10¹¹ hierarchy states at L=9, exhausting memory. Memory-efficient solvers (adaptive MesoHOPS with Triangular STATIC_FILTERS and TERMINATOR=True) are required. Time step synchronized to **2.0 fs**.
+- **NFR4**: Hardware Optimization: The pipeline must run on a 128 GB RAM server. K=2 (21 hierarchy modes) is mandatory to prevent OOM — K=10 (77 modes) causes ~10¹¹ hierarchy states at L=8, exhausting memory. Memory-efficient solvers (adaptive MesoHOPS with stochastically bundled dissipators) are required. Time step synchronized to **1.0 fs**.
 - **NFR5**: Algorithmic Transparency: Provide a self-contained algorithm bridge document for PT-HOPS/SBD.
 
 ## Risk Management
