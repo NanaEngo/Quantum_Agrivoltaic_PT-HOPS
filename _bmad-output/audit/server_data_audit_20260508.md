@@ -19,8 +19,8 @@ This audit verifies the stability and physical validity of the **Quantum_Agrivol
 - **Matsubara Sufficiency**: $K=2$ is physically justified as $\nu_1 \approx 1300$ cm⁻¹ is significantly larger than the Drude cutoff $\gamma_D = 50$ cm⁻¹ at room temperature.
 
 ## 🛠️ Reproduction Pipeline
-- **Orchestrator**: `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py`
-- **Convergence Tool**: `Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/audit_convergence.py`
+- **Orchestrator**: `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py`
+- **Convergence Tool**: `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/audit_convergence.py`
 - **Validation**: L-audit (7→8→9) and K-audit (1→2→3) mandated before production figure generation.
 
 ## ⚠️ Known Issues & Mitigations

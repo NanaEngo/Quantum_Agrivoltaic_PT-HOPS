@@ -14,41 +14,69 @@ except ImportError:
     from .constants import FMO_SITE_ENERGIES_7, FMO_SITE_ENERGIES_8, FMO_COUPLINGS, KB_CM_K
 
 
-def create_fmo_hamiltonian(include_reaction_center=False):
+def create_fmo_hamiltonian(include_reaction_center: bool = False) -> tuple[np.ndarray, np.ndarray]:
     """
-    Create the FMO Hamiltonian matrix based on standard parameters from the literature.
+    Create FMO complex Hamiltonian matrix.
 
-    Mathematical Framework:
     The Fenna-Matthews-Olsen (FMO) complex is modeled as an excitonic system
-    with the Hamiltonian:
+    with the Hamiltonian H = Σᵢ εᵢ |i⟩⟨i| + Σᵢⱼ Jᵢⱼ |i⟩⟨j|.
 
-    H_FMO = Σᵢ εᵢ |i⟩⟨i| + Σᵢⱼ Jᵢⱼ |i⟩⟨j|
+    Parameters
+    ----------
+    include_reaction_center : bool
+        If True, use 8-site model (includes reaction center pigment).
+        If False, use the standard 7-site model.
 
-    Parameters:
-    include_reaction_center (bool): Whether to include the reaction center state
-
-    Returns:
-    H (2D array): Hamiltonian matrix in units of cm^-1
-    site_energies (1D array): Site energies in cm^-1
+    Returns
+    -------
+    H : np.ndarray
+        Hamiltonian matrix (n_sites × n_sites) in cm⁻¹. Hermitian by construction.
+    site_energies : np.ndarray
+        Site energies array (n_sites,) in cm⁻¹.
     """
     site_energies = FMO_SITE_ENERGIES_8 if include_reaction_center else FMO_SITE_ENERGIES_7
     n_sites = len(site_energies)
-    H = np.zeros((n_sites, n_sites))
-    np.fill_diagonal(H, site_energies)
 
-    for (i, j), value in FMO_COUPLINGS.items():
+    # Use np.diag for clean diagonal initialization (server best practice)
+    H = np.diag(site_energies.copy())
+
+    for (i, j), coupling in FMO_COUPLINGS.items():
         if i < n_sites and j < n_sites:
-            H[i, j] = value
-            H[j, i] = value  # Ensure Hermitian
+            H[i, j] = coupling
+            H[j, i] = coupling  # Hermitian symmetry
 
     return H, site_energies
 
 
-def spectral_density_drude_lorentz(omega, lambda_reorg, gamma, temperature):
-    """Calculate Drude-Lorentz spectral density."""
+def spectral_density_drude_lorentz(
+    omega: np.ndarray,
+    lambda_reorg: float,
+    gamma: float,
+    temperature: float,
+) -> np.ndarray:
+    """
+    Compute the symmetrised Drude-Lorentz spectral density J(ω).
+
+    Parameters
+    ----------
+    omega : np.ndarray
+        Frequency array in cm⁻¹ (may include negative values for emission).
+    lambda_reorg : float
+        Reorganisation energy λ_D in cm⁻¹ (canonical value: 35 cm⁻¹).
+    gamma : float
+        Bath relaxation rate γ_D in cm⁻¹ (canonical value: 50 cm⁻¹).
+    temperature : float
+        Temperature in Kelvin (canonical value: 295 K).
+
+    Returns
+    -------
+    J : np.ndarray
+        Symmetrised spectral density evaluated at each frequency in ``omega``.
+    """
     kT = KB_CM_K * temperature
-    J = 2 * lambda_reorg * gamma * omega / (omega**2 + gamma**2)
-    n_th = 1.0 / (np.exp(np.maximum(np.abs(omega), 1e-10) / kT) - 1)
-    # Element-wise: emission side (omega<0) uses n_th-1, absorption side uses 1+n_th
+    J = 2.0 * lambda_reorg * gamma * omega / (omega**2 + gamma**2)
+    # Bose-Einstein occupancy (regularised to avoid division-by-zero at ω=0)
+    n_th = 1.0 / (np.exp(np.maximum(np.abs(omega), 1e-10) / kT) - 1.0)
+    # Detailed balance: absorption (+ω) → (1 + n_th), emission (−ω) → n_th − 1
     J *= np.where(omega >= 0, 1.0 + n_th, n_th - 1.0)
     return J

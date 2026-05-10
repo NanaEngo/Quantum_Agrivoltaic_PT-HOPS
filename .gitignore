@@ -64,7 +64,7 @@ QWEN.md
 *.INVALID_FALLBACK_DATA.csv
 
 # Laptop-specific configurations (do not commit local test overrides)
-Redac_Paper1/quantum_simulations_framework_parallel/laptop_parameters.yaml
+Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml
 
 # Temporary files
 *.tmp

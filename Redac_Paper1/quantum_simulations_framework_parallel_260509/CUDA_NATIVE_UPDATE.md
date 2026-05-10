@@ -144,7 +144,7 @@ gpu_sim = GPUQuantumDynamics(H, use_gpu=False, backend='cpu')
 Run this to see what's available on your system:
 
 ```bash
-cd quantum_simulations_framework_parallel
+# Run from the framework root
 python -c "
 from core.gpu_dynamics import CUPY_AVAILABLE, JAX_AVAILABLE, GPU_BACKEND
 
@@ -192,7 +192,7 @@ print('✓ CuPy working correctly')
 
 ### Test GPU Dynamics
 ```bash
-cd quantum_simulations_framework_parallel
+# Run from the framework root
 python -c "
 from core.hamiltonian_factory import create_fmo_hamiltonian
 from core.gpu_dynamics import GPUQuantumDynamics, GPU_BACKEND

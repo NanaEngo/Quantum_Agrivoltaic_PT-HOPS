@@ -125,8 +125,8 @@ All manuscripts passed the following checks:
 
 ---
 
-**Last Updated:** March 26, 2026  
-**Status:** Submission-ready across all four target journals
+**Last Updated:** May 10, 2026  
+**Status:** Submission-ready across all four target journals (JPCL stabilized at L=8, K=2)
 
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/audit_convergence.py
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework/reproducibility/main.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/audit_convergence.py
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py

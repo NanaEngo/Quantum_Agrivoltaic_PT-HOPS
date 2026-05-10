@@ -154,7 +154,42 @@ def _run_single_traj_worker(
     dt_save: float,
     time_points: NDArray[np.float64],
 ) -> Optional[Dict[str, Any]]:
-    """Standalone worker function for parallel trajectory execution (picklable)."""
+    """
+    Standalone worker function for parallel trajectory execution.
+
+    This function must be picklable to run in a separate process via joblib.
+    It initializes the trajectory, prepares the PT-HOPS noise (if applicable),
+    and propagates the trajectory up to t_max.
+
+    Parameters
+    ----------
+    seed : int
+        Random seed for the specific trajectory's noise realization.
+    TrajectoryClass : type
+        The class object used to instantiate the trajectory (e.g., SBD_HopsTrajectory).
+    traj_kwargs : dict[str, Any]
+        Arguments dictionary to pass to the TrajectoryClass constructor.
+    use_pt_hops : bool
+        Flag indicating if PT-HOPS (Process Tensor HOPS) noise generation should be used.
+    pt_hops_noise_class : type
+        The class object for PT-HOPS noise generation (e.g., PT_HopsNoise).
+    system_param : dict[str, Any]
+        System parameters including noise basis details required for PT-HOPS.
+    initial_state : NDArray[np.complex128]
+        Initial wave function/state vector.
+    t_max : float
+        Maximum simulation time.
+    dt_save : float
+        Time interval for saving state data during propagation.
+    time_points : NDArray[np.float64]
+        Array of explicit time points at which noise is evaluated.
+
+    Returns
+    -------
+    dict[str, Any] or None
+        Dictionary containing trajectory state ('psi_traj'), time axis ('t_axis'), and
+        site populations ('pop_site'). Returns None if execution fails.
+    """
     try:
         # Deep copy of params to avoid process collisions
         import copy
@@ -302,9 +337,16 @@ class HopsSimulator:
     def _get_memory_estimate(self) -> float:
         """
         Dynamically estimate memory per trajectory based on hierarchy depth (L)
-        and Matsubara terms (K). Scaling is heuristic-based.
-        
-        Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB (6GB)
+        and Matsubara terms (K).
+
+        The scaling relies on heuristics: memory scales quadratically with max hierarchy
+        depth and linearly with the number of Matsubara terms. Safety buffers are applied 
+        to prevent system out-of-memory (OOM) errors.
+
+        Returns
+        -------
+        float
+            Estimated memory requirement per trajectory in gigabytes (GB).
         """
         l_ref = 8.0
         k_ref = 2.0
@@ -326,14 +368,52 @@ class HopsSimulator:
 
     @staticmethod
     def _alpha_noise1(t_axis: NDArray[np.float64], g: complex, w: complex) -> NDArray[np.complex128]:
-        """Single-mode bath correlation function: alpha(t) = g * exp(-w*t)."""
+        """
+        Single-mode exponential bath correlation function.
+
+        Evaluates the exponential form alpha(t) = g * exp(-w*t) used for noise generation
+        in the HOPS framework.
+
+        Parameters
+        ----------
+        t_axis : NDArray[np.float64]
+            Time points to evaluate the correlation function over.
+        g : complex
+            Pre-exponential factor (coupling strength parameter).
+        w : complex
+            Exponential decay rate (frequency parameter).
+
+        Returns
+        -------
+        NDArray[np.complex128]
+            The evaluated bath correlation function over the given time axis.
+        """
         return g * np.exp(-w * t_axis)
 
     @staticmethod
     def _bcf_dl_to_exp_pairs(lam: float, gamma: float, T: float, k: int) -> list:
         """
         Robustly convert Drude-Lorentz bath parameters to exponential pairs (g, w).
-        Probes the installed MesoHOPS API signature to handle version differences.
+
+        Since MesoHOPS API signatures vary across versions, this function uses reflection 
+        to detect the installed version and route the parameters to the correct parsing logic.
+
+        Parameters
+        ----------
+        lam : float
+            Reorganization energy lambda.
+        gamma : float
+            Drude-Lorentz cutoff frequency/damping rate.
+        T : float
+            Temperature in Kelvin.
+        k : int
+            Number of Matsubara terms to include in the approximation.
+
+        Returns
+        -------
+        list
+            A list of tuples or dictionaries representing the (g, w) exponential 
+            decomposition pairs for the Drude-Lorentz spectral density.
         """
         import inspect
         from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp

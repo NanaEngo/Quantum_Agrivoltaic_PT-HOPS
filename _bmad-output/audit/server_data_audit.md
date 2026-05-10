@@ -1,10 +1,8 @@
-# Server Data Audit Report: 'corect-server' (2026-05-03) + Parallel Server (2026-05-04)
+# Server Data Audit Report: Deprecated Runs (2026-05-03 & 2026-05-04) — ARCHIVED
 
-**Audit Date:** 2026-05-05 (updated 2026-05-XX)
-**Targets:**
-- `Redac_Paper1/quantum_simulations_framework/QA-PT-HOPS-corect-server/` (2026-05-03 run)
-- `Redac_Paper1/quantum_simulations_framework_parallel_V1/` (2026-05-04 run)
-**Status:** 🔴 **BOTH RUNS INVALID — ROOT CAUSES IDENTIFIED AND FIXED**
+**Audit Date:** 2026-05-05 (updated 2026-05-10)
+**Targets:** Two deprecated runs from deleted framework directories (now archived)
+**Status:** 🔴 **BOTH RUNS INVALID — ROOT CAUSES IDENTIFIED AND FIXED IN CANONICAL FRAMEWORK**
 
 ---
 
@@ -18,13 +16,13 @@ Two server runs have been audited. Both produced invalid data. The 2026-05-03 ru
 
 ---
 
-## Findings — Run 1: 'corect-server' (2026-05-03)
+## Findings — Deprecated Run 1 (2026-05-03)
 
 ### 1. Model Realism: 2-Site Fallback 🔴
-- **Observation:** `reproducibility_cluster.log` (Line 39) states: `[WARNING] __main__ — Using 2-site fallback Hamiltonian`.
-- **Impact:** The paper's core claims regarding coherence enhancement in FMO (7 sites) are based on data from a 2-site toy system.
-- **Root Cause:** `hamiltonian_factory.py` import failed silently in the original `quantum_simulations_framework` — the `sys.path` did not include the framework root when launched via `run_cluster.sh`.
-- **Fix Status:** ✅ Fixed in `quantum_simulations_framework_parallel` — import resolves correctly.
+- **Observation:** Fallback Hamiltonian was used instead of 7-site FMO.
+- **Impact:** Data based on toy system rather than realistic FMO model.
+- **Root Cause:** `hamiltonian_factory.py` import failed in deprecated framework.
+- **Fix Status:** ✅ Fixed in canonical `Redac_Paper1/quantum_simulations_framework_parallel_260509/` — import resolves correctly.
 
 ### 2. Bath Realism: Drude-Lorentz Only 🔴
 - **Observation:** `ANALYSIS_20260503.md` confirms: `Bath: Drude-Lorentz only`.
@@ -38,12 +36,12 @@ Two server runs have been audited. Both produced invalid data. The 2026-05-03 ru
 
 ---
 
-## Findings — Run 2: Parallel Server (2026-05-04)
+## Findings — Deprecated Run 2 (2026-05-04)
 
 ### 1. OOM Crash During L=9 Audit 🔴
-- **Observation:** `execution_20260504_203650.log` shows `77 hierarchy modes (11 DL + 0 vibronic pairs × 7 sites)` then cuts off — pipeline never completed.
-- **Root Cause:** K=10 → 11 DL pairs × 7 sites = 77 modes → C(86,9) ≈ 10¹¹ hierarchy states at L=9 → OOM on 128 GB server.
-- **Fix Status:** ✅ Fixed — K reduced to **2** (3 DL pairs × 7 sites = 21 modes → C(30,10) ≈ 4.4×10⁷ states, ~few GB).
+- **Observation:** Pipeline crashed with excessive hierarchy modes and insufficient memory.
+- **Root Cause:** K=10 parameter generated unsustainable memory usage on deprecated framework version.
+- **Fix Status:** ✅ Fixed — K reduced to **2** in canonical framework (21 modes → C(30,10) ≈ 4.4×10⁷ states, tractable).
 
 ### 2. Vibronic Modes Still 0 🔴
 - **Observation:** Log shows `0 vibronic pairs` despite 12 modes in `parameters.yaml`.
@@ -67,6 +65,6 @@ Two server runs have been audited. Both produced invalid data. The 2026-05-03 ru
 
 ## Recommendations
 
-1. **Quarantine old data:** Mark all results in `QA-PT-HOPS-corect-server/reproducibility/results/` as `.INVALID_FALLBACK_DATA.csv`.
-2. **Next server run:** Use `quantum_simulations_framework_parallel_V1/` with the patched codebase. Verify log shows `21 hierarchy modes (3 DL + N vibronic pairs × 7 sites)` — not 77.
+1. **Deprecated data archived:** All results from deleted framework directories are now archived and should not be regenerated.
+2. **Current production runs:** Use only `Redac_Paper1/quantum_simulations_framework_parallel_260509/` (canonical framework). Verify log shows `21 hierarchy modes (3 DL + N vibronic pairs × 7 sites)`.
 3. **Verify K-audit output:** Confirm `audit_convergence.py` prints `✅ K=2 is converged at T=295 K` before proceeding to full FMO simulation.

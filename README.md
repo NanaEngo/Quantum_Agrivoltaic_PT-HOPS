@@ -71,7 +71,7 @@ git lfs status
 
 ```bash
 cd Redac_Paper1/Theory_Journals_main/JPCL/
-latexmk -pdf Manuscript_JPCL_26-05-08.tex SI_JPCL_26-05-08.tex
+latexmk -pdf Manuscript_JPCL_26-05-10.tex SI_JPCL_26-05-10.tex
 ```
 
 ---

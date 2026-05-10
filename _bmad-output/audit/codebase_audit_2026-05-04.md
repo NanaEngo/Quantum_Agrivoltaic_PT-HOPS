@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-04
 **Reviewer:** Kiro (Blind Hunter + Edge Case Hunter layers)
-**Scope:** Full simulation framework — `Redac_Paper1/quantum_simulations_framework/`
+**Scope:** Full simulation framework — `Redac_Paper1/quantum_simulations_framework_parallel_260509/`
 
 ---
 

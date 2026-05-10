@@ -22,8 +22,19 @@ class SimpleQuantumDynamicsSimulator:
     """
     A simple quantum dynamics simulator that doesn't require MesoHOPS.
 
-    This uses a basic Schrodinger equation solver to simulate quantum dynamics.
-    It's not as accurate as the MesoHOPS implementation but serves as a fallback.
+    This uses a basic Schrodinger equation solver to simulate closed quantum 
+    dynamics (unitary evolution). It is not as accurate as the MesoHOPS 
+    implementation for open quantum systems, but serves as a fast, exact fallback
+    for isolated systems without a bath.
+
+    Parameters
+    ----------
+    hamiltonian : np.ndarray
+        The system Hamiltonian matrix in cm^-1. Must be square.
+    temperature : float, optional
+        System temperature in Kelvin, by default DEFAULT_TEMPERATURE.
+        Note: Temperature has no effect on closed-system dynamics but is 
+        kept for API compatibility.
     """
 
     def __init__(self, hamiltonian, temperature=DEFAULT_TEMPERATURE):
@@ -49,8 +60,33 @@ class SimpleQuantumDynamicsSimulator:
     ) -> Dict[str, Any]:
         """
         Simulate quantum dynamics using the time-dependent Schrödinger equation.
-        iħ d/dt |ψ⟩ = H |ψ⟩  →  |ψ(t)⟩ = exp(-iHt) |ψ(0)⟩
-        Note: pure-state propagation — entropy is always 0 (no bath).
+
+        Integrates the equation iħ d/dt |ψ⟩ = H |ψ⟩ analytically via matrix
+        exponentiation: |ψ(t)⟩ = exp(-iHt) |ψ(0)⟩.
+        Note: Because this is pure-state propagation, entropy is always 0 
+        (no environmental decoherence).
+
+        Parameters
+        ----------
+        time_points : np.ndarray, optional
+            Array of time points in femtoseconds to evaluate the state at.
+            If None, defaults to a linear space from 0 to DEFAULT_MAX_TIME.
+        initial_state : np.ndarray, optional
+            The initial quantum state vector |ψ(0)⟩.
+            If None, defaults to an excitation localized on the first site.
+        **kwargs : Any
+            Additional keyword arguments (ignored, kept for API compatibility).
+
+        Returns
+        -------
+        dict[str, Any]
+            Dictionary containing the simulation results:
+            - 't_axis' : The time points evaluated.
+            - 'populations' : The site populations over time.
+            - 'coherences' : L1 norm of the coherences.
+            - 'qfi' : Quantum Fisher Information.
+            - 'entropy' : Von Neumann entropy (always 0 here).
+            - and other metric arrays (zeros/ones for pure states).
         """
         if time_points is None:
             time_points = np.linspace(0, DEFAULT_MAX_TIME, DEFAULT_TIME_POINTS)

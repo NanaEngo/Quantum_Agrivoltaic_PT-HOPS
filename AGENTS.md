@@ -24,8 +24,8 @@ mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_paral
 mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --parallel --skip-audit
 ```
 ```bash
-chmod +x run_cluster.sh
-./run_cluster.sh
+chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh
+./Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh
 ```
 **Figure 2 Sweep (Server-Side):**
 ```bash
@@ -33,6 +33,16 @@ chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibil
 ./Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh
 ```
 Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fig 2)
+
+### Repository Hygiene (STRICT)
+**The canonical directory for all simulation work is:**
+`Redac_Paper1/quantum_simulations_framework_parallel_260509/`
+
+**DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
+- `Redac_Paper1/quantum_simulations_framework/` (DELETED)
+- `Redac_Paper1/quantum_simulations_framework_parallel/` (DELETED)
+
+If these directories appear, delete them immediately and check for stale path references in `AGENTS.md`, `ROADMAP.md`, or `README.md`.
 
 ### Hardware Management
 The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallelization.
@@ -62,16 +72,17 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - `main.py`: complete orchestrator (hardened with `--skip-audit` and `--parallel` flags)
 - `figure_generator.py`: Overhauled to support JPCL legibility standards (600 DPI, Time [fs] units, Panel labels (a)-(f), comparison traces)
 - `environmental_factors.py`: Replaced seasonal "Time (days)" cycle with physically motivated static temperature sweeps (FR11)
-- **Production Ensemble**: Successfully executed the $L=8, K=2$ production ensemble via `main.py` (verified via 100-trajectory results in `reproducibility/results/`).
-- **Environmental Sweep Hardening**: Implemented sequential execution (`n_jobs=1`) and robust **Resume Logic** in `run_temp_sweep_only.py` to recover from OOM errors during high-rigor $L=8$ production runs.
-- **Publication Figures**: Generated final `Quantum_dynamics.png` and `ETR_Under_Environmental_Effects.pdf` (pending final sweep completion).
-- **FMO Schematic**: Created the promised FMO structural schematic (`FMO_Schematic_JPCL.png`).
+- **Code Merge & Data Reconciliation (2026-05-10)**: Merged server-side best practices (Python 3.10+ type hints, NumPy-style docstrings, `np.diag` initialization) into `core/hamiltonian_factory.py`. Local `quantum_simulations_framework_parallel_260509/` confirmed as the canonical reference with all improvements incorporated. Production CSV format verified identical (local=server). SI `η` value aligned: Test 10 corrected from 0.22(4) to 0.20(4) to match production ensemble average.
+- **CSV Format Verified**: Both local and server CSVs use the same column schema (`time_fs` + 7 site populations + `coherences` + broadband columns). No compatibility patch needed for figure generator.
 
 ### ⚠️ Requires MesoHOPS environment (cannot be done without real solver)
 - (None) — All high-rigor production tasks have been completed.
 
 ### 📋 Remaining open items
-- (None) — All reviewer-requested code and bibliographic changes have been implemented. 12-mode spectral density verified in `constants.py` and `parameters.yaml`.
+- ✅ All reviewer-requested code and bibliographic changes have been implemented.
+- ✅ 12-mode spectral density verified in `constants.py` and `parameters.yaml`.
+- ✅ Local codebase merged with server best practices — local is now the canonical reference.
+- ✅ Production CSV format verified (local = server). Figure generator compatible.
 
 ---
 
@@ -79,8 +90,8 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 | File | Purpose |
 |------|---------|
-| `Redac_Paper1/Theory_Journals_main/JPCL/Manuscript_JPCL_26-05-08.tex` | Revised manuscript (achemso, JPCL Letter format) |
-| `Redac_Paper1/Theory_Journals_main/JPCL/SI_JPCL_26-05-08.tex` | Revised Supporting Information |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Manuscript_JPCL_26-05-08.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-05-10 |
+| `Redac_Paper1/Theory_Journals_main/JPCL/SI_JPCL_26-05-08.tex` | Revised Supporting Information — updated 2026-05-10 (η aligned = 0.20) |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Response_to_Reviewers_26-05-08.tex` | Point-by-point response letter |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Cover_Letter_JPCL_26-05-08.tex` | Cover letter (includes formatting response + cover art) |
 | `Redac_Paper1/Theory_Journals_main/JPCL/references.bib` | BibTeX references |

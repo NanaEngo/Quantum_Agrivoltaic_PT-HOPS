@@ -6,6 +6,7 @@ MesoHOPS (Mesoscale Hierarchy of Pure States) framework for simulating
 energy transfer in photosynthetic systems and quantum-enhanced agrivoltaics.
 """
 
+from models.quantum_analysis import QuantumAnalysisSuite
 import logging
 import os
 from datetime import datetime
@@ -21,16 +22,7 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
-try:
-    from core.constants import (
-        DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE,
-        DEFAULT_REORGANIZATION_ENERGY, DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, 
-        BASE_TRAJ_MEMORY_GB, MIN_TRAJ_MEMORY_GB,
-    )
-except ImportError:
-    # Relative fallback for certain execution contexts
-    from ..core.constants import (
+from core.constants import (
         DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE,
         DEFAULT_REORGANIZATION_ENERGY, DEFAULT_DRUDE_CUTOFF,
         DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, 
@@ -65,6 +57,39 @@ def _qds_run_single_traj(
 
     All state is passed explicitly so joblib can serialize this function
     and send it to worker processes without encountering closure errors.
+
+    Parameters
+    ----------
+    seed_val : int
+        Random seed for the stochastic noise generation.
+    gw_sysbath : list
+        List of [g, w] bath correlation parameters for all sites.
+    l_hier : list
+        List of hierarchy operator matrices (L_ops) for each mode.
+    l_noise1 : list
+        List of noise operator matrices.
+    param_noise1 : list
+        List of noise parameters corresponding to the noise operators.
+    H_shifted : np.ndarray
+        Zero-shifted Hamiltonian matrix to improve numerical stability.
+    n_sites : int
+        Number of sites in the system (e.g., 7 or 8 for FMO).
+    max_hier : int
+        Maximum depth of the MesoHOPS hierarchy (L_max).
+    gamma_dl : float
+        Drude-Lorentz cutoff frequency in cm^-1, used to determine the noise buffer length.
+    t_max : float
+        Total simulation time in femtoseconds.
+    dt_save : float
+        Time step interval for data saving.
+    psi_0 : np.ndarray
+        Initial quantum state vector.
+
+    Returns
+    -------
+    tuple
+        (psi_traj_local, t_ax_local) containing the trajectory state history and the time axis.
+        Returns (None, None) if the trajectory integration fails.
     """
     try:
         from mesohops.trajectory.hops_trajectory import HopsTrajectory
@@ -145,7 +170,26 @@ except ImportError:
 def _bcf_dl_to_exp_pairs(lam: float, gamma: float, T: float, k: int) -> list:
     """
     Robustly convert Drude-Lorentz bath parameters to exponential pairs (g, w).
-    Probes the installed MesoHOPS API signature to handle version differences.
+
+    Probes the installed MesoHOPS API signature to handle version differences,
+    specifically detecting support for Matsubara corrections (v1.6+).
+
+    Parameters
+    ----------
+    lam : float
+        Reorganization energy lambda in cm^-1.
+    gamma : float
+        Drude-Lorentz cutoff frequency in cm^-1.
+    T : float
+        Temperature in Kelvin.
+    k : int
+        Number of Matsubara terms to include.
+
+    Returns
+    -------
+    list
+        A flat list of [g0, w0, g1, w1, ...] representing the complex exponential
+        decomposition parameters of the bath correlation function.
     """
     import inspect
     
@@ -275,6 +319,7 @@ class QuantumDynamicsSimulator:
         if self.n_sites == 0:
             raise ValueError("Hamiltonian must have at least 1 site")
         self.temperature = temperature
+        self.analyzer = QuantumAnalysisSuite()
         self.lambda_reorg = lambda_reorg
         self.gamma_dl = gamma_dl
         self.k_matsubara = k_matsubara
@@ -424,7 +469,14 @@ class QuantumDynamicsSimulator:
     def _get_memory_estimate(self) -> float:
         """
         Dynamically estimate memory per trajectory based on hierarchy depth (L)
-        and Matsubara terms (K). Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB.
+        and Matsubara terms (K). 
+        
+        Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB.
+
+        Returns
+        -------
+        float
+            Estimated memory requirement in GB.
         """
         l_ref = 8.0
         k_ref = 2.0
@@ -612,44 +664,44 @@ class QuantumDynamicsSimulator:
 
             density_matrices.append(rho)
             populations[i, :] = np.real(np.diag(rho))
-            coherences[i] = self.calculate_coherence_measure(rho)
+            coherences[i] = self.analyzer.calculate_coherence_measure(rho)
 
             # IPR = 1 / Σ_n ρ_nn²  (manuscript Fig. 1c)
             diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
             ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
 
             try:
-                qfi_values[i] = self.calculate_qfi(rho, self.H_raw)
+                qfi_values[i] = self.analyzer.calculate_qfi(rho, self.H_raw)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"QFI calculation failed at t={i}: {e}")
                 qfi_values[i] = 0.0
 
             try:
-                entropy_values[i] = self.calculate_entropy_von_neumann(rho)
+                entropy_values[i] = self.analyzer.calculate_entropy_von_neumann(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Entropy calculation failed at t={i}: {e}")
                 entropy_values[i] = 0.0
 
             try:
-                bipartite_ent_values[i] = self.calculate_bipartite_entanglement(rho)
+                bipartite_ent_values[i] = self.analyzer.calculate_bipartite_entanglement(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Bipartite entanglement calc failed at t={i}: {e}")
                 bipartite_ent_values[i] = 0.0
 
             try:
-                multipartite_ent_values[i] = self.calculate_multipartite_entanglement(rho)
+                multipartite_ent_values[i] = self.analyzer.calculate_multipartite_entanglement(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Multipartite entanglement calc failed at t={i}: {e}")
                 multipartite_ent_values[i] = 0.0
 
             try:
-                pairwise_concurrence_values[i] = self.calculate_pairwise_concurrence(rho)
+                pairwise_concurrence_values[i] = self.analyzer.calculate_pairwise_concurrence(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Pairwise concurrence calc failed at t={i}: {e}")
                 pairwise_concurrence_values[i] = 0.0
 
             try:
-                discord_values[i] = self.calculate_quantum_discord(rho)
+                discord_values[i] = self.analyzer.calculate_quantum_discord(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Quantum discord calc failed at t={i}: {e}")
                 discord_values[i] = 0.0
@@ -657,14 +709,14 @@ class QuantumDynamicsSimulator:
             try:
                 # Fidelity relative to initial state
                 rho_0 = density_matrices[0]
-                fidelity_values[i] = self.calculate_fidelity(rho, rho_0)
+                fidelity_values[i] = self.analyzer.calculate_fidelity(rho, rho_0)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Fidelity calc failed at t={i}: {e}")
                 fidelity_values[i] = 1.0 if i == 0 else 0.0
 
             try:
                 # Mandel Q requires vibrational occupations - using population weighted average as dummy
-                mandel_q_values[i] = self.calculate_mandel_q_parameter(populations[i])
+                mandel_q_values[i] = self.analyzer.calculate_mandel_q_parameter(populations[i])
             except (ValueError, TypeError) as e:
                 logger.debug(f"Mandel Q calc failed at t={i}: {e}")
                 mandel_q_values[i] = 0.0
@@ -685,361 +737,6 @@ class QuantumDynamicsSimulator:
             "mandel_q": mandel_q_values,
             "simulator": "QuantumDynamicsSimulator (MesoHOPS)",
         }
-
-    def calculate_etr(self, populations, time_points):
-        """
-        Calculate the Electron Transfer Rate (ETR) from population dynamics.
-
-        Parameters
-        ----------
-        populations : np.ndarray (n_times, n_sites)
-            Site populations from simulation.
-        time_points : np.ndarray
-            Corresponding time points in fs.
-
-        Returns
-        -------
-        etr : float
-            Estimated energy transfer rate in ps^-1.
-        """
-        # ETR = rate of population leaving site 1
-        pop_site1 = populations[:, 0]
-        transferred = 1.0 - pop_site1
-
-        # Find time to 50% transfer (half-life)
-        idx_half = np.argmax(transferred >= 0.5)
-        if idx_half > 0 and transferred[idx_half] >= 0.5:
-            t_half = time_points[idx_half]  # fs
-            etr = np.log(2) / (t_half * 1e-3)  # ps^-1
-        else:
-            # Linear fit to early transfer
-            n_fit = min(20, len(time_points))
-            if n_fit > 2:
-                coeffs = np.polyfit(time_points[:n_fit], transferred[:n_fit], 1)
-                rate_fs = coeffs[0]  # transfer per fs
-                etr = rate_fs * 1e3  # ps^-1
-            else:
-                etr = 0.0
-
-        return etr
-
-    def calculate_coherence_measure(self, density_matrix):
-        """
-        Calculate the l1-norm of coherence for a density matrix.
-
-        C_l1(rho) = sum_{i!=j} |rho_{ij}|
-
-        Parameters
-        ----------
-        density_matrix : np.ndarray
-            Density matrix.
-
-        Returns
-        -------
-        coherence : float
-            l1-norm coherence measure.
-        """
-        n = density_matrix.shape[0]
-        coherence = 0.0
-        for i in range(n):
-            for j in range(n):
-                if i != j:
-                    coherence += np.abs(density_matrix[i, j])
-        return coherence
-
-    def calculate_qfi(self, rho, H):
-        """
-        Calculate the Quantum Fisher Information (QFI).
-
-        Parameters
-        ----------
-        rho : np.ndarray
-            Density matrix.
-        H : np.ndarray
-            Observable (Hamiltonian).
-
-        Returns
-        -------
-        qfi : float
-            Quantum Fisher Information.
-        """
-        eigenvals, eigenvecs = np.linalg.eigh(rho)
-        eigenvals = np.real(eigenvals)
-
-        qfi = 0.0
-        n = len(eigenvals)
-        for i in range(n):
-            for j in range(n):
-                denom = eigenvals[i] + eigenvals[j]
-                if denom > 1e-12:
-                    H_ij = np.abs(eigenvecs[:, i].conj() @ H @ eigenvecs[:, j]) ** 2
-                    qfi += 2.0 * (eigenvals[i] - eigenvals[j]) ** 2 / denom * H_ij
-
-        return float(np.real(qfi))
-
-    def analyze_robustness(
-        self, temperature_range=(273, 320), disorder_strengths=(0, 100), n_points=5
-    ):
-        """
-        Robustness analysis across temperature and static disorder.
-
-        Parameters
-        ----------
-        temperature_range : tuple
-            (T_min, T_max) in Kelvin.
-        disorder_strengths : tuple
-            (sigma_min, sigma_max) in cm^-1.
-        n_points : int
-            Number of sample points per parameter.
-
-        Returns
-        -------
-        results : dict
-            Temperature and disorder sensitivity data.
-        """
-        results = {
-            "temperature_sensitivity": [],
-            "disorder_sensitivity": [],
-            "temperatures": [],
-            "disorder_strengths": [],
-        }
-
-        # Temperature sweep
-        temperatures = np.linspace(temperature_range[0], temperature_range[1], n_points)
-        for temp in temperatures:
-            sim = QuantumDynamicsSimulator(
-                self.H_raw,
-                temperature=temp,
-                lambda_reorg=self.lambda_reorg,
-                gamma_dl=self.gamma_dl,
-                k_matsubara=self.k_matsubara,
-                max_hier=self.max_hier,
-                n_traj=max(5, self.n_traj // 10),
-            )
-            res = sim.simulate_dynamics(time_points=np.linspace(0, 200, 200), dt_save=1.0)
-            pops = res["populations"]
-            etr_proxy = np.sum(pops[-1, 1:])
-            results["temperature_sensitivity"].append(etr_proxy)
-            results["temperatures"].append(temp)
-
-        # Disorder sweep
-        disorder_vals = np.linspace(disorder_strengths[0], disorder_strengths[1], n_points)
-        for disorder in disorder_vals:
-            disorder_vec = np.random.normal(0, max(disorder, 0.01), self.n_sites)
-            ham_dis = self.H_raw + np.diag(disorder_vec)
-            sim = QuantumDynamicsSimulator(
-                ham_dis,
-                temperature=self.temperature,
-                lambda_reorg=self.lambda_reorg,
-                gamma_dl=self.gamma_dl,
-                k_matsubara=self.k_matsubara,
-                max_hier=self.max_hier,
-                n_traj=max(5, self.n_traj // 10),
-            )
-            res = sim.simulate_dynamics(time_points=np.linspace(0, 200, 200), dt_save=1.0)
-            pops = res["populations"]
-            etr_proxy = np.sum(pops[-1, 1:])
-            results["disorder_sensitivity"].append(etr_proxy)
-            results["disorder_strengths"].append(disorder)
-
-        return results
-
-    def calculate_entropy_von_neumann(self, rho):
-        """Calculate the von Neumann entropy of a quantum state."""
-        # Calculate eigenvalues
-        eigenvals = np.linalg.eigvals(rho)
-
-        # Take only the real part and ensure non-negative
-        eigenvals = np.real(eigenvals)
-        eigenvals = np.clip(eigenvals, a_min=1e-12, a_max=None)
-
-        # Calculate entropy: -Σ λᵢ log λᵢ
-        entropy = -np.sum(eigenvals * np.log(eigenvals))
-        return entropy
-
-    def calculate_concurrence(self, rho):
-        """Calculate the concurrence of a quantum state (for 2-qubit systems)."""
-        n = rho.shape[0]
-
-        if n < 2:
-            return 0.0
-
-        # For systems larger than 2x2, calculate average pairwise concurrence
-        if n > 2:
-            total_concurrence = 0.0
-            n_pairs = 0
-
-            # Calculate concurrence for each pair of sites
-            for i in range(n):
-                for j in range(i + 1, n):
-                    # Extract 2x2 reduced density matrix for sites i,j
-                    rho_ij = np.zeros((2, 2), dtype=complex)
-
-                    # Create reduced density matrix by tracing out other sites
-                    # For simplicity, we'll use a direct approach for 2x2 subsystem
-                    rho_ij[0, 0] = rho[i, i]
-                    rho_ij[0, 1] = rho[i, j]
-                    rho_ij[1, 0] = rho[j, i]
-                    rho_ij[1, 1] = rho[j, j]
-
-                    # Calculate concurrence for this pair
-                    pair_concurrence = self._calculate_2x2_concurrence(rho_ij)
-                    total_concurrence += pair_concurrence
-                    n_pairs += 1
-
-            return total_concurrence / n_pairs if n_pairs > 0 else 0.0
-        else:
-            # For 2x2 system, calculate directly
-            return self._calculate_2x2_concurrence(rho)
-
-    def _calculate_2x2_concurrence(self, rho):
-        """Helper to calculate concurrence for a 2x2 density matrix."""
-        # Define the spin-flipped density matrix
-        sigma_y = np.array([[0, -1j], [1j, 0]])
-        rho_tilde = np.kron(sigma_y, sigma_y) @ rho.conj() @ np.kron(sigma_y, sigma_y)
-
-        # Calculate R = sqrt(rho * rho_tilde)
-        R = la.sqrtm(rho @ rho_tilde)
-
-        # Calculate eigenvalues of R
-        evals = np.linalg.eigvals(R)
-        evals = np.sort(np.real(evals))[::-1]  # Sort in descending order
-
-        # Calculate concurrence
-        c = max(0, evals[0] - evals[1] - evals[2] - evals[3])
-        return c
-
-    def calculate_bipartite_entanglement(self, rho, partition=None):
-        """Calculate bipartite entanglement using von Neumann entropy of reduced density matrix."""
-        n = rho.shape[0]
-
-        if partition is None:
-            # Default partition: first half vs second half
-            partition = list(range(n // 2))
-
-        if len(partition) == 0 or len(partition) == n:
-            return 0.0
-
-        # Calculate reduced density matrix by tracing out subsystem B
-        reduced_rho = np.zeros((len(partition), len(partition)), dtype=complex)
-
-        for i, idx_i in enumerate(partition):
-            for j, idx_j in enumerate(partition):
-                reduced_rho[i, j] = rho[idx_i, idx_j]
-
-        # Normalize the reduced density matrix
-        trace = np.trace(reduced_rho)
-        if trace > 0:
-            reduced_rho = reduced_rho / trace
-        else:
-            return 0.0
-
-        return self.calculate_entropy_von_neumann(reduced_rho)
-
-    def calculate_multipartite_entanglement(self, rho):
-        """Calculate multipartite entanglement measure."""
-        n = rho.shape[0]
-
-        if n < 2:
-            return 0.0
-
-        # For computational efficiency, we'll calculate entanglement for
-        # a subset of bipartitions rather than all possible partitions
-        total_entanglement = 0.0
-        n_partitions = 0
-
-        # Calculate entanglement for different bipartitions
-        for i in range(1, min(n, 6)):  # Limit to avoid combinatorial explosion
-            # Partition into first i sites vs remaining sites
-            partition = list(range(i))
-            ent = self.calculate_bipartite_entanglement(rho, partition)
-            total_entanglement += ent
-            n_partitions += 1
-
-        return total_entanglement / n_partitions if n_partitions > 0 else 0.0
-
-    def calculate_pairwise_concurrence(self, rho):
-        """Calculate average pairwise concurrence across all pairs of sites."""
-        n = rho.shape[0]
-
-        if n < 2:
-            return 0.0
-
-        total_concurrence = 0.0
-        n_pairs = 0
-
-        # Calculate concurrence for each pair of sites
-        for i in range(n):
-            for j in range(i + 1, n):
-                # Extract 2x2 reduced density matrix for sites i,j
-                rho_ij = np.zeros((2, 2), dtype=complex)
-                rho_ij[0, 0] = rho[i, i]
-                rho_ij[0, 1] = rho[i, j]
-                rho_ij[1, 0] = rho[j, i]
-                rho_ij[1, 1] = rho[j, j]
-
-                # Calculate concurrence for this pair
-                pair_concurrence = self._calculate_2x2_concurrence(rho_ij)
-                total_concurrence += pair_concurrence
-                n_pairs += 1
-
-        return total_concurrence / n_pairs if n_pairs > 0 else 0.0
-
-    def calculate_quantum_synergy_index(self, rho_opv, rho_psu):
-        """Calculate quantum synergy index between OPV and photosynthetic system."""
-        numerator = np.trace(rho_opv @ rho_psu) - np.trace(rho_opv) * np.trace(rho_psu)
-        denominator = np.linalg.norm(rho_opv) * np.linalg.norm(rho_psu)
-        synergy = numerator / denominator if denominator != 0 else 0
-        return synergy
-
-    def calculate_mandel_q_parameter(self, vibrational_mode_occupations):
-        """
-        Calculate Mandel Q parameter for vibrational mode non-classicality.
-        Q < 0 indicates non-classical (quantum) behavior.
-        """
-        mean_occ = np.mean(vibrational_mode_occupations)
-        if mean_occ < 1e-12:
-            return 0.0
-        variance = np.var(vibrational_mode_occupations)
-        return (variance - mean_occ) / mean_occ
-
-    def calculate_fidelity(self, rho, sigma):
-        """Calculate quantum fidelity between two states."""
-        try:
-            sqrt_rho = la.sqrtm(rho)
-            matrix = sqrt_rho @ sigma @ sqrt_rho
-            return np.real(np.trace(la.sqrtm(matrix))) ** 2
-        except (np.linalg.LinAlgError, ValueError, TypeError) as e:
-            # Fallback fidelity for non-positive/ill-conditioned matrices
-            logger.debug(f"Fidelity calculation fallback due to: {e}")
-            return np.real(np.trace(rho @ sigma))
-
-    def calculate_quantum_discord(self, rho):
-        """Simplified measure of quantum correlations beyond entanglement (Quantum Discord)."""
-        # A full calculation is an optimization problem; we use relative entropy of discord proxy
-        # Treat as site 1 vs others partition
-        s_total = self.calculate_entropy_von_neumann(rho)
-        # Reduced rho_others (simplified)
-        diag = np.diag(rho).real
-        p_others = diag[1:]
-        p_others_sum = np.sum(p_others)
-        if p_others_sum < 1e-12:
-            return 0.0
-        p_others /= p_others_sum
-        s_others = -np.sum(p_others * np.log(p_others + 1e-15))
-        return max(0.0, s_others - s_total)
-
-    def stochastically_bundled_dissipators(self, rho, l_bundled, p_alpha):
-        """
-        Implement Stochastically Bundled Dissipators (SBD).
-        L_SBD[rho] = sum_alpha p_alpha * (L rho L_dag - 0.5 * {L_dag L, rho})
-        """
-        d_rho = np.zeros_like(rho, dtype=complex)
-        for L, p in zip(l_bundled, p_alpha, strict=False):
-            if p > 0:
-                L_dag = L.conj().T
-                d_rho += p * (L @ rho @ L_dag - 0.5 * (L_dag @ L @ rho + rho @ L_dag @ L))
-        return d_rho
 
 
 def spectral_density_drude_lorentz(omega, lambda_reorg, gamma):
