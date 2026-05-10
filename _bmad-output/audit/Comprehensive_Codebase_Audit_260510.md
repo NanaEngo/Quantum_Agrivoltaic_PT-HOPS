@@ -144,6 +144,12 @@ So the audit documentation should reflect the **actual implemented audits** unle
 - Replace any quantitative “metrics” (LOC, type-hint %, “N tests”) with:
   - an evidence pointer, or
   - a qualitative statement until mapped to concrete code.
+- **Large monolithic class remediation (best-practices):** if a module like `quantum_dynamics_simulator.py` is identified as monolithic, apply a safe refactor pattern:
+  - extract analysis into a dedicated service/class (keep pure functions),
+  - preserve joblib picklability by moving workers/helpers to module scope,
+  - introduce an interface/adapter layer so callers don’t change,
+  - add/extend unit tests around numerical outputs (regression tests with tolerance),
+  - refactor incrementally (mechanical moves first, behavior changes last).
 
 ### Priority 2 — Next code audit pass for full coverage
 To support claims like spectral density construction and CSV validation, the next audit should include (at minimum):
