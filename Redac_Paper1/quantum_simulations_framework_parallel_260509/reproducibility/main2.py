@@ -91,10 +91,6 @@ _console_handler.setFormatter(_fmt)
 
 logging.basicConfig(level=logging.DEBUG, handlers=[_file_handler, _console_handler])
 logger = logging.getLogger(__name__)
-
-# Silence verbose external libraries
-logging.getLogger('numba').setLevel(logging.WARNING)
-logging.getLogger('jax').setLevel(logging.WARNING)
 logger.info(f"Log file: {_LOG_FILE}")
 
 
@@ -126,17 +122,10 @@ def load_and_validate_config(custom_path=None):
     is_production = os.path.basename(config_path) == 'parameters.yaml'
     
     if is_production:
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
         if L < DEFAULT_MAX_HIERARCHY:
             raise ValueError(f"L_max={L} < {DEFAULT_MAX_HIERARCHY}. JPCL production requires L≥{DEFAULT_MAX_HIERARCHY}. Use a custom config for testing.")
         if K < DEFAULT_N_MATSUBARA:
             raise ValueError(f"matsubara_truncation={K} < {DEFAULT_N_MATSUBARA}. JPCL production requires K≥{DEFAULT_N_MATSUBARA}. Use a custom config for testing.")
-=======
-        if L < 8:
-            raise ValueError(f"hierarchy_depth={L} < 8. Production requires L≥8 (L=9 causes OOM; see reproducibility_cluster.log).")
-        if K < 2:
-            raise ValueError(f"matsubara_truncation={K} < 2. JPCL production requires K≥2. Use a custom config for testing.")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
         logger.info(f"Production Config validated: L={L}, K={K}")
     else:
         logger.info(f"Config loaded: {os.path.basename(config_path)} (L={L}, K={K})")
@@ -197,15 +186,11 @@ def run_convergence_audit(cfg):
     _audit.run_markovian_limit_audit(cfg=cfg)
     
     if audit_data:
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
         # audit_maes is now a dict {depth: mae}
         maes = audit_data.get('audit_maes', {})
         depths = sorted(list(maes.keys()))
         mae_final = maes[depths[-1]] if depths else 0.0
         print(f"  ✅ Validation suite complete. Residual MAE={mae_final:.2e}")
-=======
-        print(f"  ✅ Validation suite complete. MAE(7→8)={audit_data['audit_mae_8_9']:.2e}")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
     return audit_data
 
 
@@ -989,20 +974,14 @@ def main():
         print("\n⚠️  Cannot run simulations without MesoHOPS. Exiting.")
         sys.exit(1)
 
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
     # Step 2: Convergence audit — proves configured L_max is sufficient
     audit_data = run_convergence_audit(cfg)
-=======
-    # Step 2: Convergence audit — proves L=8 is sufficient
-    audit_data = run_convergence_audit()
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
     if not audit_data:
         print("  ❌ Convergence audit returned no data. Exiting.")
         sys.exit(1)
 
     # FIX H-4: enforce convergence threshold — do not proceed with non-converged data
     convergence_threshold = cfg['dynamics']['convergence_threshold']
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py
     maes = audit_data.get('audit_maes', {})
     depths = sorted(list(maes.keys()))
     mae_residual = maes[depths[-1]] if depths else 999.0
@@ -1013,15 +992,6 @@ def main():
         logger.error(f"Convergence check failed: Residual MAE={mae_residual:.2e} >= {convergence_threshold:.2e}")
         sys.exit(1)
     print(f"  ✅ Convergence confirmed: Residual MAE={mae_residual:.2e} < {convergence_threshold:.2e}")
-=======
-    mae_8_9 = audit_data['audit_mae_8_9']
-    if mae_8_9 >= convergence_threshold:
-        print(f"\n❌ FATAL: L=8 NOT converged. MAE(7→8)={mae_8_9:.2e} ≥ threshold={convergence_threshold:.2e}")
-        print("   Increase hierarchy depth or reduce time step before resubmitting.")
-        logger.error(f"Convergence check failed: MAE(7→8)={mae_8_9:.2e} >= {convergence_threshold:.2e}")
-        sys.exit(1)
-    print(f"  ✅ Convergence confirmed: MAE(7→8)={mae_8_9:.2e} < {convergence_threshold:.2e}")
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/reproducibility/main.py
 
     # Step 3: Full FMO simulation — generates the actual paper data
     sim_results, time_points = run_full_fmo_simulation(cfg)
