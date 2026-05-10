@@ -19,6 +19,63 @@ os.environ['NUMEXPR_NUM_THREADS'] = '2'
 os.environ['OMP_NUM_THREADS'] = '2'
 
 
+def get_safe_n_jobs(memory_per_traj_gb: float = 2.0) -> int:
+    """
+    Calculate the number of parallel workers that can safely run without OOM.
+    
+    Parameters
+    ----------
+    memory_per_traj_gb : float
+        Estimated memory consumption per trajectory in GB.
+        
+    Returns
+    -------
+    n_jobs : int
+        Number of parallel workers.
+    """
+    import multiprocessing
+    
+    # Default fractions if constants cannot be imported
+    cpu_fraction = 0.66
+    mem_fraction = 0.66
+    
+    try:
+        from core.constants import CPU_COUNT_FRACTION, MEMORY_FRACTION_LIMIT
+        cpu_fraction = CPU_COUNT_FRACTION
+        mem_fraction = MEMORY_FRACTION_LIMIT
+    except ImportError:
+        pass
+
+    # 1. Get CPU Count and apply fraction limit
+    n_cpus = multiprocessing.cpu_count()
+    cpu_limit = max(1, int(n_cpus * cpu_fraction))
+    
+    # 2. Get RAM Availability
+    try:
+        import psutil
+        mem = psutil.virtual_memory()
+        available_gb = mem.available / (1024**3)
+    except ImportError:
+        # Fallback to os.sysconf
+        try:
+            total_gb = (os.sysconf('SC_PAGE_SIZE') * os.sysconf('SC_PHYS_PAGES')) / (1024**3)
+            available_gb = total_gb * 0.7  # Conservative estimate
+        except:
+            available_gb = 8.0 # Safe fallback
+            
+    # 3. Calculate RAM-based slots
+    ram_slots = max(1, int((available_gb * mem_fraction) / memory_per_traj_gb))
+    
+    # 4. Final n_jobs is the minimum of both
+    n_jobs = min(cpu_limit, ram_slots)
+    
+    logger.info(f"Hardware-Aware Scaling: Available RAM={available_gb:.1f}GB, "
+                f"CPU Slots={cpu_limit}, RAM Slots={ram_slots} (at {memory_per_traj_gb}GB/traj). "
+                f"Setting n_jobs={n_jobs}")
+    
+    return n_jobs
+
+
 class ParallelExecutor:
     """Manages parallel execution across CPU cores and GPU."""
     

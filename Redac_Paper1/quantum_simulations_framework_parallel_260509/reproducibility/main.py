@@ -364,6 +364,8 @@ def run_full_fmo_simulation(cfg):
     from core.hops_simulator import HopsSimulator
     from core.hamiltonian_factory import create_fmo_hamiltonian
     from utils.csv_data_storage import CSVDataStorage
+    from utils.parallel_utils import get_safe_n_jobs
+    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
 
     dyn = cfg['dynamics']
     bath = cfg['bath']
@@ -584,6 +586,8 @@ def _run_temperature_sweep(cfg, H, time_points):
     eta_temp     : np.ndarray  shape (N,)
     eta_temp_err : np.ndarray  shape (N,)  — std over n_traj_sweep trajectories
     """
+    from utils.parallel_utils import get_safe_n_jobs
+    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
     bath = cfg['bath']
     dyn = cfg['dynamics']
     pulse_cfg = cfg.get('pulse', {})
@@ -600,12 +604,9 @@ def _run_temperature_sweep(cfg, H, time_points):
     eta_temp_err = np.zeros(len(temperatures))
 
     print(f"\n📊 Starting Flattened Parallel Temperature Sweep ({len(temperatures) * n_traj_sweep * 2} trajectories)...")
-    try:
-        n_cpus = multiprocessing.cpu_count()
-    except Exception:
-        n_cpus = 1
-    n_jobs = max(1, int((n_cpus if n_cpus else 1) * 2 / 3))
-
+    
+    n_jobs = get_safe_n_jobs(ESTIMATED_TRAJ_MEMORY_GB)
+    logger.info(f"Using {n_jobs} parallel workers for temperature sweep (Hardware-limited)")
     
     # Build task list: each task is one trajectory (filtered or broadband) at one T
     tasks = []
@@ -656,6 +657,8 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     """
     from core.hops_simulator import HopsSimulator
     from core.constants import FMO_SITE_ENERGIES_7
+    from utils.parallel_utils import get_safe_n_jobs
+    from core.constants import ESTIMATED_TRAJ_MEMORY_GB
 
     bath = cfg['bath']
     dyn = cfg['dynamics']
@@ -691,11 +694,9 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     # _run_single_disorder moved to module level
 
     print(f"\n🎲 Starting Parallel Disorder Sampling ({n_samples} realizations)...")
-    try:
-        n_cpus = multiprocessing.cpu_count()
-    except Exception:
-        n_cpus = 1
-    n_jobs = max(1, int((n_cpus if n_cpus else 1) * 2 / 3))
+    
+    n_jobs = get_safe_n_jobs(ESTIMATED_TRAJ_MEMORY_GB)
+    logger.info(f"Using {n_jobs} parallel workers for disorder sampling (Hardware-limited)")
 
     seeds = [rng_seed + i for i in range(n_samples)]
     

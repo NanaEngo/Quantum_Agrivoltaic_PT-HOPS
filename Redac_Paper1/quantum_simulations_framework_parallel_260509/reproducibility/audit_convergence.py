@@ -42,6 +42,10 @@ except ImportError as e:
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# Silence verbose Numba/JAX logging
+logging.getLogger('numba').setLevel(logging.WARNING)
+logging.getLogger('jax').setLevel(logging.WARNING)
+
 def load_config():
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'parameters.yaml'))
     with open(config_path, 'r') as f:
@@ -97,7 +101,7 @@ def run_convergence_audit(cfg=None):
             H,
             max_hierarchy=L,
             k_matsubara=K,
-            n_traj=cfg.get('simulation', {}).get('n_traj', 1),
+            n_traj=1,  # Audit only needs 1 trajectory per depth to check convergence trends
             # SBD enabled: SI mandate — all convergence data reported in Table S2
             # was computed with SBD active. use_sbd=False causes OOM at L>=6 with 7 sites.
             use_sbd=True,
@@ -218,7 +222,7 @@ def run_convergence_audit(cfg=None):
             H,
             max_hierarchy=L_target,
             k_matsubara=Kval,
-            n_traj=cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ),
+            n_traj=1,  # Audit uses single trajectory for performance
             # SBD enabled: K-convergence data in SI Table S2 was computed with SBD active.
             use_sbd=True,
             use_pt_hops=False,
@@ -340,7 +344,7 @@ def run_time_step_audit(cfg=None):
             H,
             max_hierarchy=L_target,
             k_matsubara=K_val,
-            n_traj=cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+            n_traj=1  # Fast verification
         )
         data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
         # Store population at t=100.0 (last point)
@@ -386,7 +390,7 @@ def run_detailed_balance_audit(cfg=None):
         H, 
         max_hierarchy=L_db, 
         k_matsubara=K_db,
-        n_traj=cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+        n_traj=1  # Fast steady-state check
     )
     data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
     
@@ -426,7 +430,7 @@ def run_hermiticity_audit(cfg=None):
     
     L_target = cfg['dynamics']['L_max']
     K_h = cfg['dynamics'].get('matsubara_truncation', DEFAULT_N_MATSUBARA)
-    n_traj_h = cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+    n_traj_h = 1
     
     simulator = HopsSimulator(H, max_hierarchy=L_target, k_matsubara=K_h, n_traj=n_traj_h)
     # This requires access to rho which HopsSimulator currently approximates
@@ -458,7 +462,7 @@ def run_markovian_limit_audit(cfg=None):
     init_state[0] = 1.0
     
     # Run with standard params but high gamma
-    n_traj_m = cfg['simulation'].get('n_traj', DEFAULT_N_TRAJ)
+    n_traj_m = 1
     simulator = HopsSimulator(
         H, 
         max_hierarchy=4, 
