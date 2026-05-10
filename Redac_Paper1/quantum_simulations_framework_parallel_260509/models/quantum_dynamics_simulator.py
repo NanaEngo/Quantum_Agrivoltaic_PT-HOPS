@@ -641,6 +641,8 @@ class QuantumDynamicsSimulator:
         coherences = np.zeros(n_times)
         qfi_values = np.zeros(n_times)
         entropy_values = np.zeros(n_times)
+        purity_values = np.zeros(n_times)
+        linear_entropy_values = np.zeros(n_times)
         ipr_values = np.zeros(n_times)
         bipartite_ent_values = np.zeros(n_times)
         multipartite_ent_values = np.zeros(n_times)
@@ -664,11 +666,12 @@ class QuantumDynamicsSimulator:
 
             density_matrices.append(rho)
             populations[i, :] = np.real(np.diag(rho))
+            
+            # Using QuantumAnalysisSuite for all metrics
             coherences[i] = self.analyzer.calculate_coherence_measure(rho)
-
-            # IPR = 1 / Σ_n ρ_nn²  (manuscript Fig. 1c)
-            diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
-            ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
+            purity_values[i] = self.analyzer.calculate_purity(rho)
+            linear_entropy_values[i] = self.analyzer.calculate_linear_entropy(rho)
+            ipr_values[i] = self.analyzer.calculate_ipr(rho)
 
             try:
                 qfi_values[i] = self.analyzer.calculate_qfi(rho, self.H_raw)
@@ -724,6 +727,21 @@ class QuantumDynamicsSimulator:
         return {
             "t_axis": t_axis,
             "density_matrices": density_matrices,
+            "populations": populations,
+            "coherences": coherences,
+            "qfi": qfi_values,
+            "entropy": entropy_values,
+            "purity": purity_values,
+            "linear_entropy": linear_entropy_values,
+            "ipr": ipr_values,
+            "bipartite_ent": bipartite_ent_values,
+            "multipartite_ent": multipartite_ent_values,
+            "pairwise_concurrence": pairwise_concurrence_values,
+            "discord": discord_values,
+            "fidelity": fidelity_values,
+            "mandel_q": mandel_q_values,
+            "simulator": "QuantumDynamicsSimulator (MesoHOPS)",
+        }
             "populations": populations,
             "coherences": coherences,
             "qfi": qfi_values,

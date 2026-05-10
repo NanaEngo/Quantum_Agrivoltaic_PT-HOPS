@@ -1,7 +1,7 @@
 import logging
 import numpy as np
 import scipy.linalg as la
-from typing import List, Optional
+from typing import List, Optional, Dict, Any, Union
 from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
@@ -86,6 +86,24 @@ class QuantumAnalysisSuite:
         eigenvals = np.clip(eigenvals, a_min=1e-12, a_max=None)
         entropy = -np.sum(eigenvals * np.log(eigenvals))
         return float(entropy)
+
+    @staticmethod
+    def calculate_purity(rho: NDArray[np.complex128]) -> float:
+        """Calculate the purity of a quantum state: tr(rho^2)."""
+        purity = np.real(np.trace(rho @ rho))
+        return float(purity)
+
+    @classmethod
+    def calculate_linear_entropy(cls, rho: NDArray[np.complex128]) -> float:
+        """Calculate the linear entropy of a quantum state: 1 - tr(rho^2)."""
+        return 1.0 - cls.calculate_purity(rho)
+
+    @staticmethod
+    def calculate_ipr(rho: NDArray[np.complex128]) -> float:
+        """Calculate the Inverse Participation Ratio (IPR)."""
+        diag = np.real(np.diag(rho))
+        sum_sq = np.sum(diag ** 2)
+        return float(1.0 / sum_sq if sum_sq > 1e-12 else 1.0)
 
     @classmethod
     def calculate_concurrence(cls, rho: NDArray[np.complex128]) -> float:
@@ -236,3 +254,34 @@ class QuantumAnalysisSuite:
                 L_dag = L.conj().T
                 d_rho += p * (L @ rho @ L_dag - 0.5 * (L_dag @ L @ rho + rho @ L_dag @ L))
         return d_rho
+
+    @staticmethod
+    def spectral_density_drude_lorentz(omega: Union[float, NDArray[np.float64]], lambda_reorg: float, gamma: float) -> Union[float, NDArray[np.float64]]:
+        """Drude-Lorentz spectral density J(omega) = (2 * lambda * gamma * omega) / (omega^2 + gamma^2)."""
+        omega_arr = np.asarray(omega)
+        J = (2 * lambda_reorg * gamma * omega_arr) / (omega_arr**2 + gamma**2)
+        if np.isscalar(omega):
+            return 0.0 if omega == 0 else float(J)
+        J[omega_arr == 0] = 0
+        return J
+
+    @staticmethod
+    def spectral_density_vibronic(omega: Union[float, NDArray[np.float64]], omega_mode: float, lambda_mode: float, gamma_mode: float) -> Union[float, NDArray[np.float64]]:
+        """Underdamped vibronic mode spectral density."""
+        omega_arr = np.asarray(omega)
+        numerator = 2 * lambda_mode * omega_mode * gamma_mode * omega_arr
+        denominator = (omega_arr**2 - omega_mode**2)**2 + omega_arr**2 * gamma_mode**2
+        J = numerator / denominator
+        if np.isscalar(omega):
+            return 0.0 if omega == 0 else float(J)
+        J[omega_arr == 0] = 0
+        return J
+
+    @staticmethod
+    def spectral_density_total(omega: Union[float, NDArray[np.float64]], lambda_reorg: float, gamma: float, vibronic_modes: Optional[List[Dict[str, float]]] = None) -> Union[float, NDArray[np.float64]]:
+        """Total spectral density combining Drude-Lorentz and vibronic modes."""
+        J_total = QuantumAnalysisSuite.spectral_density_drude_lorentz(omega, lambda_reorg, gamma)
+        if vibronic_modes:
+            for mode in vibronic_modes:
+                J_total += QuantumAnalysisSuite.spectral_density_vibronic(omega, mode['omega'], mode['lambda'], mode['gamma'])
+        return J_total
