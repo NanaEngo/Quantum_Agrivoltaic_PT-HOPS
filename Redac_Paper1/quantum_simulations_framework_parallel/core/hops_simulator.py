@@ -72,21 +72,11 @@ try:
         DEFAULT_TEMPERATURE,
         DEFAULT_VIBRONIC_DAMPING,
         DEFAULT_VIBRONIC_FREQUENCIES,
-        DEFAULT_SBD_BUNDLES,
-        DEFAULT_N_TRAJ,
-        FFT_NOISE_BUFFER_FS,
         PULSE_CENTRAL_FREQ,
         PULSE_FWHM,
         PULSE_RELATIVE_DELAY,
         PULSE_TYPE,
         PULSE_AMPLITUDE,
-        MEMORY_FRACTION_LIMIT,
-        MESOHOPS_SEED,
-        MESOHOPS_EARLY_STEPS,
-        MESOHOPS_INCHWORM_CAP,
-        DEFAULT_MAX_TIME,
-        DEFAULT_TIME_STEP,
-        ESTIMATED_TRAJ_MEMORY_GB,
     )
 except ImportError:
     from .constants import (
@@ -98,28 +88,12 @@ except ImportError:
         DEFAULT_TEMPERATURE,
         DEFAULT_VIBRONIC_DAMPING,
         DEFAULT_VIBRONIC_FREQUENCIES,
-        DEFAULT_SBD_BUNDLES,
-        DEFAULT_N_TRAJ,
-        FFT_NOISE_BUFFER_FS,
         PULSE_CENTRAL_FREQ,
         PULSE_FWHM,
         PULSE_RELATIVE_DELAY,
         PULSE_TYPE,
         PULSE_AMPLITUDE,
-        MEMORY_FRACTION_LIMIT,
-        MESOHOPS_SEED,
-        MESOHOPS_EARLY_STEPS,
-        MESOHOPS_INCHWORM_CAP,
-        DEFAULT_MAX_TIME,
-        DEFAULT_TIME_STEP,
-        ESTIMATED_TRAJ_MEMORY_GB,
     )
-
-try:
-    import psutil
-    HAS_PSUTIL = True
-except ImportError:
-    HAS_PSUTIL = False
 
 try:
     from utils.logging_config import get_logger
@@ -212,16 +186,8 @@ class HopsSimulator:
         self.k_matsubara = k_matsubara
         self.use_mesohops = MESOHOPS_AVAILABLE and use_mesohops
         self.use_pt_hops = kwargs.pop("use_pt_hops", False)
-        # SI mandate: all production runs use SBD (see SI Section S1, Table S1).
-        # Override with use_sbd=False only for exact-reference unit tests.
-        self.use_sbd = kwargs.pop("use_sbd", True)
-        
-        # Enforce SBD from L>=2 whenever the number of sites, even for tests
-        if self.max_hierarchy >= 2:
-            self.use_sbd = True
-            
-        self.n_traj = kwargs.pop("n_traj", kwargs.get("n_trajectories", DEFAULT_N_TRAJ))
-        self.sbd_bundles_per_site = kwargs.get("sbd_bundles_per_site", 2)
+        self.use_sbd = kwargs.pop("use_sbd", False)
+        self.sbd_bundles_per_site = kwargs.pop("sbd_bundles_per_site", 2)
         self.system = None
         self.fallback_sim: Optional[Any] = None
 
@@ -431,7 +397,7 @@ class HopsSimulator:
                 qds_kwargs.setdefault("gamma_dl", kwargs.get("drude_cutoff", DEFAULT_DRUDE_CUTOFF))
                 qds_kwargs.setdefault("max_hier", self.max_hierarchy)
                 qds_kwargs.setdefault("k_matsubara", self.k_matsubara)
-                qds_kwargs.setdefault("n_traj", self.n_traj)
+                qds_kwargs.setdefault("n_traj", 10)
 
                 self.fallback_sim = QuantumDynamicsSimulator(self.hamiltonian, **qds_kwargs)
                 logger.info("QuantumDynamicsSimulator (HOPS-based) initialized as fallback")
@@ -458,7 +424,6 @@ class HopsSimulator:
         self,
         time_points: NDArray[np.float64],
         initial_state: Optional[NDArray[np.float64]] = None,
-        strict_mode: bool = False,
         **kwargs: Any,
     ) -> Dict[str, Any]:
         """
@@ -492,34 +457,18 @@ class HopsSimulator:
                 logger.debug("Attempting MesoHOPS simulation")
                 return self._simulate_with_mesohops(time_points, initial_state, **kwargs)
             except (RuntimeError, ModuleNotFoundError) as e:
-                if strict_mode:
-                    logger.error(f"MesoHOPS simulation failed in strict_mode: {e}")
-                    raise
                 logger.error(f"MesoHOPS simulation failed mid-run, falling back to SimpleQuantumDynamicsSimulator: {e}")
                 logger.info("Falling back to custom simulator...")
 
         # Fallback to custom simulator
         if self.fallback_sim is not None:
             logger.warning("Using fallback simulator. Results will not show L-dependence.")
-            # Strip HopsSimulator-only kwargs that the fallback doesn't understand
-            _HOPS_ONLY = {"n_traj", "show_progress", "desc", "seed", "strict_mode"}
-            fallback_kwargs = {k: v for k, v in kwargs.items() if k not in _HOPS_ONLY}
-            try:
-                return self.fallback_sim.simulate_dynamics(
-                    time_points=time_points, initial_state=initial_state, **fallback_kwargs
-                )
-            except Exception as e2:
-                if strict_mode:
-                    logger.error(f"Primary fallback failed in strict_mode: {e2}")
-                    raise
-                logger.error(f"Primary fallback also failed: {e2}. Trying SimpleQuantumDynamicsSimulator.")
-                if SimpleQuantumDynamicsSimulator is not None:
-                    simple = SimpleQuantumDynamicsSimulator(self.hamiltonian, temperature=self.temperature)
-                    return simple.simulate_dynamics(time_points=time_points, initial_state=initial_state)
-        elif SimpleQuantumDynamicsSimulator is not None:
-            logger.warning("No fallback_sim set; using SimpleQuantumDynamicsSimulator directly.")
-            simple = SimpleQuantumDynamicsSimulator(self.hamiltonian, temperature=self.temperature)
-            return simple.simulate_dynamics(time_points=time_points, initial_state=initial_state)
+            # Remove aggressive filtering so fallback receives all physics params
+            fallback_kwargs = dict(kwargs)
+            # Use keyword args to avoid arg-order mismatch between fallback implementations
+            return self.fallback_sim.simulate_dynamics(
+                time_points=time_points, initial_state=initial_state, **fallback_kwargs
+            )
         else:
             raise RuntimeError("No simulator available")
 
@@ -571,23 +520,26 @@ class HopsSimulator:
             }
 
             # Set up noise parameters based on test examples
-            t_max = float(np.max(time_points)) if len(time_points) > 0 else DEFAULT_MAX_TIME
+            t_max = float(np.max(time_points)) if len(time_points) > 0 else 500.0
             # Use explicit dt if provided to handle arbitrary time grids safely
-            dt_save = kwargs.get("dt", float(time_points[1] - time_points[0]) if len(time_points) > 1 else DEFAULT_TIME_STEP)
+            dt_save = kwargs.get("dt", float(time_points[1] - time_points[0]) if len(time_points) > 1 else 0.5)
 
             noise_param = {
-                "SEED": kwargs.get("seed", MESOHOPS_SEED),
+                "SEED": kwargs.get("seed", 42),
                 "MODEL": "FFT_FILTER",
-                "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),  # must be float
-                "TAU": float(dt_save * 0.5),                 # must be float
+                "TLEN": t_max + 50.0,  # 50 fs buffer is sufficient for FFT_FILTER stability
+                # TAU must equal tau * integrator_step (RK uses integrator_step=0.5).
+                # propagate(t_max, dt_save) passes tau=dt_save, so the internal
+                # sub-step is dt_save * 0.5. TAU must divide that sub-step evenly.
+                "TAU": dt_save * 0.5,
             }
 
             # Set up integrator parameters based on test examples
             integrator_param = {
                 "INTEGRATOR": "RUNGE_KUTTA",
                 "EARLY_ADAPTIVE_INTEGRATOR": "INCH_WORM",
-                "EARLY_INTEGRATOR_STEPS": MESOHOPS_EARLY_STEPS,
-                "INCHWORM_CAP": MESOHOPS_INCHWORM_CAP,
+                "EARLY_INTEGRATOR_STEPS": 5,
+                "INCHWORM_CAP": 5,
                 "STATIC_BASIS": None,
             }
 
@@ -611,30 +563,9 @@ class HopsSimulator:
                 pass
 
             # ── Run ensemble of trajectories (Parallelized) ─────────────────────
-<<<<<<< Updated upstream:Redac_Paper1/quantum_simulations_framework_parallel_260509/core/hops_simulator.py
-            # Ensemble size: use kwarg, then self.n_traj, then fallback to 1
-            n_traj = kwargs.get("n_traj", self.n_traj if hasattr(self, "n_traj") else 1)
-            cpu_count = multiprocessing.cpu_count()
-            
-            # Memory-aware parallelization (User mandate: max 2/3 of available RAM)
-            if HAS_PSUTIL:
-                mem_avail_gb = psutil.virtual_memory().available / (1024**3)
-                mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
-                # Estimate trajectories that can fit in the memory limit
-                n_mem_jobs = max(1, int(mem_limit_gb / ESTIMATED_TRAJ_MEMORY_GB))
-                n_jobs = min(n_mem_jobs, cpu_count)
-                logger.info(f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB)")
-            else:
-                n_jobs = max(1, int(cpu_count * 0.5)) if n_traj > 1 else 1
-                logger.warning(f"psutil not available; using conservative n_jobs: {n_jobs}")
-
-            if n_traj == 1:
-                n_jobs = 1
-=======
             n_traj = kwargs.get("n_traj", 1)
             # n_jobs=1: parallelism disabled for OOM diagnosis — re-enable once memory is confirmed stable
             n_jobs = 1
->>>>>>> Stashed changes:Redac_Paper1/quantum_simulations_framework_parallel/core/hops_simulator.py
 
             # Determine seeds
             seeds = kwargs.get("seeds", list(range(n_traj)))
@@ -657,14 +588,14 @@ class HopsSimulator:
                     trajectory.initialize(initial_state.copy())
                     trajectory.propagate(t_max, dt_save)
                     
+                    # Return essential data
                     return {
                         "psi_traj": np.array(trajectory.storage.data["psi_traj"]),
                         "t_axis": np.array(trajectory.storage.data["t_axis"]),
                         "pop_site": np.array(trajectory.storage.data.get("pop_site", []))
                     }
                 except Exception as e:
-                    import traceback
-                    logger.error(f"Parallel trajectory {seed} failed: {e}\n{traceback.format_exc()}")
+                    logger.error(f"Parallel trajectory {seed} failed: {e}")
                     return None
 
             if HAS_JOBLIB and n_jobs > 1:
@@ -736,7 +667,6 @@ class HopsSimulator:
                 "t_axis": t_axis,
                 "populations": populations,
                 "coherences": coherences,
-                "density_matrices": density_matrices,
                 "qfi": qfi_values,
                 "entropy": entropy_values,
                 "ipr": ipr_values,

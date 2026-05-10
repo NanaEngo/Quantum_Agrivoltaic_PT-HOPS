@@ -312,13 +312,14 @@ class SBD_HopsTrajectory(HopsTrajectory):
             # We use the diagonal indices to identify sites for this FMO model
             site_to_modes = {}
             for i, L in enumerate(raw_l_hier):
-                # Convert sparse to dense if needed before calling np.diag
-                L_dense = L.toarray() if hasattr(L, 'toarray') else np.asarray(L)
-                diag = np.abs(np.diag(L_dense))
+                # Identify site by the index of the largest diagonal element.
+                # For off-diagonal coupling operators, use the row of the largest element.
+                diag = np.abs(np.diag(L))
                 if diag.max() > 1e-12:
                     site_idx = int(np.argmax(diag))
                 else:
-                    site_idx = int(np.argmax(np.abs(L_dense).sum(axis=1)))
+                    # Off-diagonal operator: use row of largest absolute element
+                    site_idx = int(np.argmax(np.abs(L).sum(axis=1)))
                 if site_idx not in site_to_modes:
                     site_to_modes[site_idx] = []
                 site_to_modes[site_idx].append(raw_gw[i])
@@ -337,9 +338,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
                     for g, w in zip(bundled_gs, bundled_ws):
                         new_gw.append((g, w))
                         # Reconstruct the L operator for this site
-                        # C-7 FIX: Ensure L_op is a 2D dense array even if raw_l_hier contains sparse matrices
-                        L_shape = raw_l_hier[0].shape
-                        L_op = np.zeros(L_shape, dtype=complex)
+                        L_op = np.zeros_like(raw_l_hier[0])
                         L_op[site_idx, site_idx] = 1.0
                         new_l_hier.append(L_op)
                         new_l_noise.append(L_op)
@@ -347,9 +346,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
                     # Not enough modes to bundle, keep as is
                     for g, w in modes:
                         new_gw.append((g, w))
-                        # C-7 FIX: Also applied here for consistency
-                        L_shape = raw_l_hier[0].shape
-                        L_op = np.zeros(L_shape, dtype=complex)
+                        L_op = np.zeros_like(raw_l_hier[0])
                         L_op[site_idx, site_idx] = 1.0
                         new_l_hier.append(L_op)
                         new_l_noise.append(L_op)
@@ -364,14 +361,6 @@ class SBD_HopsTrajectory(HopsTrajectory):
                 f"SBD Compression complete: {len(raw_gw)} → {len(new_gw)} modes total "
                 f"({n_bundles_per_site} bundles per site)."
             )
-
-            # C-8 FIX: Update hierarchy_param to match the new mode count
-            if hierarchy_param and "STATIC_FILTERS" in hierarchy_param:
-                for filter_entry in hierarchy_param["STATIC_FILTERS"]:
-                    if filter_entry[0] == "Triangular":
-                        # filter_entry[1] is [boolean_list, k_max]
-                        filter_entry[1][0] = [True] * len(new_gw)
-                        logger.info(f"Updated STATIC_FILTERS for SBD: {len(new_gw)} booleans.")
 
         # Fallback to standard trajectory initialization with the bundled parameters
         super().__init__(
