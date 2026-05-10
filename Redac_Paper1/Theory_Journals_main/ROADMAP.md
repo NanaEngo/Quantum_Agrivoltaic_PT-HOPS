@@ -91,7 +91,7 @@ All manuscripts passed the following checks:
 
 - [x] **AI-language removal** — no superlatives, hype, or AI-generated patterns
 - [x] **Mechanism precision** — filter acts on driving field (state preparation), not on $J_{\rm bath}(\omega)$
-- [x] **Consistent data** — 500 disorder realizations throughout
+- [x] **Consistent data** — 100 disorder realizations throughout
 - [x] **Limitations section** — single-exciton manifold, site-independent baths, phenomenological trapping
 - [x] **Data availability statement** — present in all four manuscripts
 - [x] **Expanded references** — Tanimura (1989), Ishizaki (2009), Cao (2020), Strathearn (2018), Chin (2013), Duan (2017)

@@ -30,7 +30,7 @@
 ### Severe-Referee Refinement
 - [x] Removed AI-generated language patterns
 - [x] Corrected polaron mechanism (filter → driving field, not bath spectral density)
-- [x] Standardized 500 disorder realizations
+- [x] Standardized 100 disorder realizations
 - [x] Added limitations section to all manuscripts
 - [x] Added data availability statement to all manuscripts
 - [x] Expanded references (Tanimura, Ishizaki, Cao, Strathearn, Chin, Duan)

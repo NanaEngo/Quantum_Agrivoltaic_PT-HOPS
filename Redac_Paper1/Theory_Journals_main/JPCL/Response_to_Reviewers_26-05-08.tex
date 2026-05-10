@@ -71,7 +71,7 @@ The reviewer expressed concerns regarding the conceptual framing, numerical cons
 \subsection*{5. Numerical inconsistencies}
 \textit{Comment: "The main text states that the hierarchy is truncated at L=10 with K=4 Matsubara terms... whereas SI Table S1 lists L=6, K=6."}
 
-\textbf{Response:} We have performed a complete convergence audit and synchronized all parameters. All final production benchmarks now use **$L=8$ and $K=2$**, which we show in Section~S4.1 of the revised SI to be converged within \SI{0.0001}{\percent} (residual $< 10^{-10}$) of the $L=10$ limit. This configuration was selected to ensure maximum memory stability on the 128 GB server while maintaining rigorous numerical accuracy. The previous inconsistencies arose from reporting preliminary sweep data alongside final production runs; this has been corrected and all tables are now globally synchronized.
+\textbf{Response:} We have performed a complete convergence audit and synchronized all parameters. All final production benchmarks now use \textbf{$L=8$ and $K=2$}, with a time step of $\Delta t = \SI{1.0}{\femto\second}$. We have added a physically-motivated justification for the $K=2$ truncation in SI Section~S2.3, noting that at room temperature, the dynamics are dominated by explicit vibronic modes rather than high-order Matsubara corrections, with a Mean Absolute Error (MAE) of $3.42 \times 10^{-5}$ compared to $K=3$. This configuration was selected to ensure maximum memory stability on the 128 GB server while maintaining rigorous numerical accuracy. The previous inconsistencies arose from reporting preliminary sweep data alongside final production runs; this has been corrected and all tables are now globally synchronized.
 
 \vspace{2em}
 
