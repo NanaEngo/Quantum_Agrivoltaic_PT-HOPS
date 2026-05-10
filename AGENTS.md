@@ -27,7 +27,12 @@ mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_paral
 chmod +x run_cluster.sh
 ./run_cluster.sh
 ```
-Monitoring: `tail -f reproducibility_cluster.log`
+**Figure 2 Sweep (Server-Side):**
+```bash
+chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh
+./Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh
+```
+Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fig 2)
 
 ### Hardware Management
 The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallelization.
@@ -58,7 +63,8 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - `figure_generator.py`: Overhauled to support JPCL legibility standards (600 DPI, Time [fs] units, Panel labels (a)-(f), comparison traces)
 - `environmental_factors.py`: Replaced seasonal "Time (days)" cycle with physically motivated static temperature sweeps (FR11)
 - **Production Ensemble**: Successfully executed the $L=8, K=2$ production ensemble via `main.py` (verified via 100-trajectory results in `reproducibility/results/`).
-- **Publication Figures**: Generated final `Quantum_dynamics.png` and `ETR_Under_Environmental_Effects.pdf` using the overhauled `FigureGenerator`.
+- **Environmental Sweep Hardening**: Implemented sequential execution (`n_jobs=1`) and robust **Resume Logic** in `run_temp_sweep_only.py` to recover from OOM errors during high-rigor $L=8$ production runs.
+- **Publication Figures**: Generated final `Quantum_dynamics.png` and `ETR_Under_Environmental_Effects.pdf` (pending final sweep completion).
 - **FMO Schematic**: Created the promised FMO structural schematic (`FMO_Schematic_JPCL.png`).
 
 ### ⚠️ Requires MesoHOPS environment (cannot be done without real solver)

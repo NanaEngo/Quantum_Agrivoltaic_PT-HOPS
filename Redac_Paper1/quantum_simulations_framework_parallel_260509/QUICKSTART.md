@@ -24,7 +24,19 @@ Run the full JPCL production ensemble ($L=8, K=2, N=100$) including all figures:
 mamba run -n MesoHOP-sim python reproducibility/main.py --parallel --skip-audit
 ```
 
-### 2. The Verification Suite
+### 2. Environmental Robustness (Figure 2)
+Run the temperature sweep and disorder sampling for Figure 2. This includes **Resume Logic** to handle interruptions:
+
+```bash
+# Laptop/Sequential (Safe)
+mamba run -n MesoHOP-sim python reproducibility/run_temp_sweep_only.py
+
+# Server/Parallel (High Performance)
+chmod +x reproducibility/run_temp_sweep_cluster.sh
+./reproducibility/run_temp_sweep_cluster.sh
+```
+
+### 3. The Verification Suite
 Run the 12-test validation suite required for the Supporting Information:
 
 ```bash
@@ -58,7 +70,8 @@ This file is the **Single Source of Truth**. All physics parameters are centrali
 ## ⚠️ Troubleshooting
 
 **Out of Memory (RAM):**
-If parallel workers crash, reduce `n_workers` in `parallel_config.yaml`. The system calculates a safe worker count based on `BASE_TRAJ_MEMORY_GB` (~4.0 GB for $L=8$), but manual overrides may be needed for highly constrained systems.
+If parallel workers crash, reduce `n_workers` in `parallel_config.yaml`. 
+- For the Figure 2 sweep, use `run_temp_sweep_only.py`. It defaults to sequential mode and includes **Resume Logic** to pick up from the last completed trajectory after a crash.
 
 **MesoHOPS Not Found:**
 Ensure you are using the `mamba run -n MesoHOP-sim` wrapper. This ensures all C-extensions and environment variables are correctly loaded.

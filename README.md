@@ -22,9 +22,11 @@ mamba run -n MesoHOP-sim python -c "import mesohops; print(f'MesoHOPS {mesohops.
 
 | Mode | Command | Target Hardware |
 | :--- | :--- | :--- |
-| **Laptop** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml` | 16GB RAM, 4+ Cores |
-| **Production** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --parallel --skip-audit` | 128GB RAM, 24+ Cores |
-| **Cluster** | `sbatch Redac_Paper1/quantum_simulations_framework_parallel_260509/run_cluster.sh` | HPC (SLURM) |
+| **Laptop (Verification)** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml` | 16GB RAM, 4+ Cores |
+| **Production (Main)** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py --parallel --skip-audit` | 128GB RAM, 24+ Cores |
+| **Figure 2 Sweep (Safe)** | `mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_only.py` | 16GB RAM (Sequential) |
+| **Figure 2 Sweep (Server)**| `./Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/run_temp_sweep_cluster.sh` | Cluster (Parallel + Resume) |
+| **Cluster (Generic)** | `sbatch Redac_Paper1/quantum_simulations_framework_parallel_260509/run_cluster.sh` | HPC (SLURM) |
 
 ### 2. Monitoring & Live Logs
 
@@ -104,8 +106,9 @@ All simulations read from a single centralized configuration. Do not hardcode ph
 ## ⚠️ Troubleshooting
 
 **Out of Memory (OOM):**
-If a production run crashes, check available RAM: `free -h`.
-Reduce `n_workers` in `parallel_config.yaml` or use the `--n-traj 10` override for testing.
+If a production run crashes, check available RAM: `free -h`. 
+- **Main Pipeline:** Reduce `n_workers` in `parallel_config.yaml`.
+- **Figure 2 Sweep:** Use the standalone `run_temp_sweep_only.py`. It defaults to sequential execution (1 worker) and includes **Resume Logic** to pick up from where the crash occurred.
 
 **MesoHOPS Fallback:**
 If you see "MesoHOPS NOT found", ensure your `PYTHONPATH` includes the framework directory or use the `mamba run` wrapper as shown above.
