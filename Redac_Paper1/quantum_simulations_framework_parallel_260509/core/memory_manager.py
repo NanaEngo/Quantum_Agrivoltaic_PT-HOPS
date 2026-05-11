@@ -1,8 +1,10 @@
 """
 Memory-aware job scheduling for quantum dynamics simulations.
 
-This module provides intelligent memory management and job scheduling to prevent
-out-of-memory (OOM) errors in parallel quantum trajectory simulations.
+This module provides intelligent memory management and job scheduling to prevent 
+out-of-memory (OOM) errors during large-scale parallel quantum trajectory 
+simulations. It calculates resource requirements based on hierarchy depth 
+and provides batching strategies to optimize throughput on restricted hardware.
 """
 
 import os
@@ -170,66 +172,34 @@ class MemoryAwareJobScheduler:
             return 64.0
 
 
-def validate_memory_configuration(cfg: Dict[str, Any]) -> None:
+def validate_memory_configuration(cfg: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Validate memory configuration from parameters.yaml before simulation.
+    Validate the memory configuration and return optimized execution parameters.
+
+    This function cross-references the simulation physics parameters (L, K) 
+    with the available system RAM and CPU cores to determine the safest and 
+    most efficient parallelization strategy.
 
     Parameters
     ----------
     cfg : Dict[str, Any]
-        Configuration dictionary from parameters.yaml
+        Configuration dictionary containing 'dynamics' and 'simulation' 
+        parameter blocks.
+
+    Returns
+    -------
+    Dict[str, Any]
+        Dictionary containing optimized execution parameters:
+        - n_jobs: Number of parallel processes to spawn.
+        - batch_size: Number of trajectories to process per batch.
+        - n_batches: Total number of sequential batches required.
+        - memory_per_traj_gb: Estimated memory footprint per trajectory.
 
     Raises
     ------
     ValueError
-        If configuration is invalid or memory constraints violated
-    """
-    L = cfg['dynamics']['L_max']
-    K = cfg['dynamics']['matsubara_truncation']
-    n_traj = cfg['simulation']['n_traj']
-
-    scheduler = MemoryAwareJobScheduler(L, K, n_traj)
-    info = scheduler.validate_and_adapt()
-
-    print("✓ Validation configuration mémoire:")
-    print(f"  L={L}, K={K}, n_traj={n_traj}")
-    print(f"  Mémoire/traj: {info['memory_per_traj_gb']:.2f} GB")
-    print(f"  RAM disponible: {info['available_ram_gb']:.1f} GB")
-    print(f"  RAM limite (2/3): {info['ram_limit_gb']:.1f} GB")
-    print(f"  n_jobs parallèle: {info['n_jobs']}")
-    print(f"  Batches: {info['n_batches']} × {info['batch_size']} traj")
-
-    if info['warnings']:
-        print("  ⚠️ Avertissements:")
-        for warning in info['warnings']:
-            print(f"    - {warning}")
-    else:
-        print("  ✓ Configuration optimale (pas d'avertissement)")
-
-
-def cleanup_memory() -> None:
-    """
-    Force garbage collection and memory cleanup between batches.
-    """
-    gc.collect()
-    if HAS_PSUTIL:
-        # Log memory usage after cleanup
-        mem = psutil.virtual_memory()
-        print(f"  🧹 Mémoire nettoyée: {mem.available / (1024**3):.1f} GB disponible")
-
-
-def validate_memory_configuration(cfg: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Validate memory configuration and return adapted parameters.
-
-    Args:
-        cfg: Configuration dictionary with dynamics and simulation keys
-
-    Returns:
-        Dictionary with validation results and adapted parameters
-
-    Raises:
-        MemoryError: If configuration is invalid or memory constraints violated
+        If the memory requirements for a single trajectory exceed the 
+        available system limits.
     """
     L = cfg['dynamics']['L_max']
     K = cfg['dynamics']['matsubara_truncation']
@@ -254,3 +224,16 @@ def validate_memory_configuration(cfg: Dict[str, Any]) -> Dict[str, Any]:
         print("  ✓ Configuration optimale (pas d'avertissement)")
 
     return info
+
+
+def cleanup_memory() -> None:
+    """
+    Manually trigger garbage collection and log available system memory.
+
+    Should be called between batches in large simulations to prevent 
+    fragmentation and accumulated memory usage from stalled processes.
+    """
+    gc.collect()
+    if HAS_PSUTIL:
+        mem = psutil.virtual_memory()
+        print(f"  🧹 Mémoire nettoyée: {mem.available / (1024**3):.1f} GB disponible")

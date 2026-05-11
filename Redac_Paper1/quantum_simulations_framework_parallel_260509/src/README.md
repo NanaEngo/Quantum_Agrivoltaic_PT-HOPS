@@ -1,47 +1,48 @@
-# Source Code Directory
-> Last updated: 2026-05-11
+# Simulation Framework Architecture (`src/`)
 
-This directory contains the reorganized source code for the Quantum Agrivoltaic PT-HOPS framework.
+This directory contains the modular source code for the Quantum Agrivoltaic 
+PT-HOPS framework. The architecture is designed for high-performance non-Markovian 
+dynamics, supporting both CPU-based stochastic trajectory methods and GPU-accelerated 
+ensemble averaging.
 
-## Structure
+---
 
-- **core/** — Core quantum dynamics infrastructure
-  - Constants, Hamiltonian factory, HOPS simulator, GPU dynamics
+## 📂 Domain-Driven Structure
 
-- **quantum/** — Quantum analysis and metrics
-  - Analysis suite, spectroscopy, spectral optimization, multi-scale transformation
+### 1. `core/` — Numerical Foundations
+- **`hops_simulator.py`**: The primary orchestrator for PT-HOPS/SBD trajectory generation.
+- **`hamiltonian_factory.py`**: High-precision exciton-vibronic Hamiltonian construction for photosynthetic complexes.
+- **`gpu_dynamics.py`**: JAX/CUDA-accelerated kernels for massive ensemble propagation.
+- **`constants.py`**: Centralized physical constants ($k_B$, $\hbar$) and unit conversions.
 
-- **agrivoltaic/** — Agrivoltaic domain-specific models
-  - Coupling model, environmental factors, LCA, biodegradability, eco-design, techno-economic
+### 2. `quantum/` — Advanced Dynamics
+- **`analysis.py`**: Metrics for population kinetics, quantum coherence, and energy transfer efficiency (ETE).
+- **`spectroscopy.py`**: Simulated linear absorption and 2D electronic spectroscopy (2DES) signals.
+- **`spectral_optimization.py`**: Algorithms for engineering bath spectral densities to maximize transport.
 
-- **analysis/** — General analysis tools
-  - Sensitivity analysis, convergence analysis, performance analysis
+### 3. `agrivoltaic/` — Photosynthetic Models
+- **`coupling_model.py`**: Theoretical bridge between exciton dynamics and photovoltaic yield metrics.
+- **`environmental_factors.py`**: Modeling of static/dynamic temperature and spectral irradiance effects.
+- **`biodegradability_analyzer.py`**: Environmental impact assessment for material sustainability.
 
-- **optimization/** — Optimization algorithms
-  - Spectral optimization, parameter optimization, ensemble optimization
+### 4. `extensions/` — Solver Enhancements
+- **`stochastic_bundling.py`**: Implementation of Stochastically Bundled Dissipators (SBD) for hierarchy compression.
+- **`mesohops_adapters.py`**: Version-agnostic adapters for the underlying MesoHOPS solver suite.
 
-- **io/** — Data input/output
-  - CSV storage, HDF5 storage, metadata management, validators
+### 5. `io/` & `visualization/`
+- **`csv_storage.py`**: Hardened serialization with SHA-256 metadata integrity and Git-provenance tracking.
+- **`figure_generator.py`**: Publication-grade plotting engine (600 DPI) using the JPCL aesthetic theme.
 
-- **visualization/** — Visualization and plotting
-  - Figure generator, FMO schematic, theme, colors, formatters
+---
 
-- **extensions/** — External tool integrations
-  - MesoHOPS adapters, stochastic bundling, ORCA wrapper, GPU backends
+## 📜 Development Standards
 
-## Usage
+- **Numerical Integrity:** Strict enforcement of $L \ge 8, K \ge 2$ for all production-grade simulations.
+- **Code Style:** All documentation follows the **NumPy Docstring Format**.
+- **Type Safety:** Python 3.10+ static typing (mypy) is utilized throughout the API surface.
+- **Coordinate Systems:** Energy is standardized in cm⁻¹, time in femtoseconds (fs), and temperature in Kelvin (K).
 
-Import modules using absolute paths:
+---
+**Last Updated:** 2026-05-11  
+**Status:** Canonical Framework (v1.6-production)
 
-```python
-from src.core.hops_simulator import HopsSimulator
-from src.quantum.analysis import QuantumAnalysisSuite
-from src.agrivoltaic.coupling_model import AgrivoltaicCouplingModel
-```
-
-## Notes
-
-- All modules follow consistent naming conventions
-- Clear separation of concerns
-- Explicit dependency hierarchy
-- Comprehensive documentation

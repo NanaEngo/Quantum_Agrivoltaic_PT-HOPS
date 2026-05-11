@@ -1,3 +1,13 @@
+"""
+Environmental Impact Modeling for Agrivoltaic Systems.
+
+This module provides the EnvironmentalFactors class, which models the influence 
+of external conditions (temperature, humidity, dust, and wind) on the 
+performance of hybrid OPV-PSU systems. It implements phenomenological models 
+to adjust energy conversion efficiencies and electron transport rates based 
+on varying climate profiles.
+"""
+
 import logging
 import os
 from datetime import datetime
@@ -24,26 +34,25 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentalFactors:
-    r"""
-    Class to model environmental factors that affect agrivoltaic system performance.
+    """
+    Environmental impact simulator for agrivoltaic performance metrics.
 
-    Mathematical Framework:
-    Environmental factors in agrivoltaic systems include:
+    This class provides a suite of models to quantify how environmental 
+    stressors degrade the performance of organic photovoltaics and 
+    photosynthetic units. It supports both time-dependent degradation 
+    (dust accumulation) and state-dependent efficiency scaling (temperature 
+    and humidity).
 
-    1. Dust accumulation: modeled as time-dependent attenuation following a power law
-       A(t) = A_0 * (1 + \alpha * t^\beta)
+    Mathematical Framework
+    ----------------------
+    1. Dust accumulation: Saturation-limited growth with reset events:
+       d(t) = d_sat * (1 - exp(-k * t))
 
-    2. Temperature effects: affect OPV efficiency and photosynthetic performance
-       \eta(T) = \eta_ref * [1 - \gamma * (T - T_ref)]
+    2. Temperature scaling: Linear efficiency degradation:
+       η(T) = η_ref * [1 - α * (T - T_ref)]
 
-    3. Humidity effects: impact charge transport and photosynthetic activity
-
-    4. Wind effects: influence heat dissipation and dust removal
-
-    5. Precipitation: affects dust levels and temperature
-
-    These factors are combined into a comprehensive environmental impact model
-    that modifies the base performance metrics of the agrivoltaic system.
+    3. Humidity scaling: Optimization-centered parabolic/linear scaling:
+       η_h = η_0 * (1 - β * |h - h_opt|)
     """
 
     def __init__(self):

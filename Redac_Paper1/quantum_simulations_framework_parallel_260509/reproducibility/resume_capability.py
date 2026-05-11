@@ -1,8 +1,11 @@
 """
-Resume Capability Module for Quantum Agrivoltaic PT-HOPS Pipeline
+Fault-Tolerant Pipeline Execution and Resumption.
 
-Provides checkpoint management, state tracking, and recovery from OOM/failures.
-Enables step-by-step result saving and resumption from last successful checkpoint.
+This module provides the structural framework for resilient long-running 
+simulations. It implements checkpointing, state persistence, and incremental 
+result saving, allowing the `reproducibility` pipeline to recover gracefully 
+from system interruptions, hardware failures, or Out-of-Memory (OOM) events 
+typical of high-L hierarchy runs.
 """
 
 import os
@@ -18,7 +21,20 @@ logger = logging.getLogger(__name__)
 
 
 class ExecutionCheckpoint:
-    """Manages execution state and checkpoints for pipeline recovery."""
+    """
+    State manager for simulation workflow persistence.
+
+    This class tracks the completion status of individual pipeline steps 
+    (e.g., 'convergence_audit', 'fmo_ensemble') and stores the associated 
+    metadata in a JSON-based state file. It enables the `--resume` 
+    functionality in the main pipeline.
+
+    Parameters
+    ----------
+    checkpoint_dir : str, optional
+        The directory where checkpoint and state files are stored. 
+        Default is "reproducibility/checkpoints".
+    """
     
     def __init__(self, checkpoint_dir: str = "reproducibility/checkpoints"):
         """

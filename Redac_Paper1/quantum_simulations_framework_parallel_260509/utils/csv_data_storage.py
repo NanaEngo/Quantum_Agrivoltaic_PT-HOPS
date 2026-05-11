@@ -1,8 +1,10 @@
 """
-CSV Data Storage Module for Quantum Agrivoltaics Simulations.
+Reproducible Data Storage and Provenance Tracking.
 
-This module provides tools for storing quantum simulation results to CSV files
-with comprehensive metadata and proper formatting.
+This module provides the CSVDataStorage class, designed to manage simulation 
+outputs with high numerical precision and comprehensive metadata. It implements 
+schema validation and SHA-256 configuration hashing to ensure that all 
+results are fully traceable back to their simulation parameters and git state.
 """
 
 import logging
@@ -18,8 +20,18 @@ logger = logging.getLogger(__name__)
 
 class CSVDataStorage:
     """
-    Class for storing simulation results to CSV files with metadata.
-    Enforces schema validation and provenance tracking for reproducibility.
+    Manager for structured data persistence and provenance tracking.
+
+    This class enforces strict schema validation for simulation outputs and 
+    automatically attaches metadata (git SHA, configuration hash, timestamps) 
+    to saved files. It ensures that data remains portable and identifiable 
+    throughout the research lifecycle.
+
+    Attributes
+    ----------
+    REQUIRED_COLUMNS : set
+        Columns that must be present in a quantum dynamics DataFrame for 
+        validation to pass (e.g., 'time_fs', 'coherences').
     """
     REQUIRED_COLUMNS = {'time_fs', 'coherences'}
 

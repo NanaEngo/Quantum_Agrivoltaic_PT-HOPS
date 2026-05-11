@@ -1,8 +1,10 @@
 """
-Figure Generator Module for Quantum Agrivoltaics Simulations.
+Publication-Quality Figure Generation Suite.
 
-This module provides tools for generating publication-quality figures
-from quantum simulation results.
+This module provides the FigureGenerator class, optimized for generating 
+manuscript-ready graphics (600 DPI, PDF/PNG formats) according to JPCL 
+submission standards. It includes specialized plotting routines for quantum 
+dynamics, spectral density engineering, and environmental robustness.
 """
 
 import logging
@@ -19,7 +21,18 @@ logger = logging.getLogger(__name__)
 
 class FigureGenerator:
     """
-    Class for generating publication-quality figures from simulation results.
+    Orchestrator for JPCL-compliant scientific visualization.
+
+    This class manages the generation of complex multi-panel figures, 
+    ensuring consistent themes, color palettes, and resolution standards 
+    across the entire research project. It automatically integrates with the 
+    defined project theme (utils/theme.py).
+
+    Parameters
+    ----------
+    figures_dir : str, optional
+        The root directory where generated figures will be stored. 
+        Default is "../Graphics/".
     """
 
     def __init__(self, figures_dir: str = "../Graphics/"):

@@ -1,8 +1,11 @@
 """
-SensitivityAnalyzer: Comprehensive sensitivity analysis for quantum agrivoltaics.
+Sensitivity Analysis and Uncertainty Quantification.
 
-This module provides tools for sensitivity analysis and uncertainty quantification
-in quantum agrivoltaic simulations.
+This module provides the SensitivityAnalyzer class, designed to evaluate the 
+robustness of agrivoltaic performance metrics under parameter variation. 
+It supports local sensitivity analysis (varying one parameter at a time) 
+and Monte Carlo simulations for global uncertainty quantification, facilitating 
+the identification of critical design bottlenecks in quantum-enhanced systems.
 """
 
 import logging
@@ -41,29 +44,29 @@ logger = logging.getLogger(__name__)
 
 class SensitivityAnalyzer:
     """
-    Comprehensive sensitivity analysis and uncertainty quantification for
-    quantum agrivoltaics simulations.
+    Orchestrator for sensitivity and uncertainty analysis in agrivoltaic systems.
 
-    This class provides methods for:
-    - Local sensitivity analysis (varying one parameter at a time)
-    - Monte Carlo uncertainty quantification
-    - Comprehensive sensitivity reporting
+    This class provides a high-level interface for probing the response of 
+    quantum dynamics (coherence, population transfer) and agrivoltaic 
+    performance (PCE, ETR) to fluctuations in environmental or physical 
+    parameters.
 
     Parameters
     ----------
     quantum_simulator : Any
-        Quantum dynamics simulator instance
+        An instance of HopsSimulator or a compatible quantum dynamics solver.
     agrivoltaic_model : Any
-        Agrivoltaic coupling model instance
+        An instance of AgrivoltaicCouplingModel or a compatible model.
 
     Attributes
     ----------
     quantum_simulator : Any
-        The quantum simulator instance
+        The active quantum simulator instance.
     agrivoltaic_model : Any
-        The agrivoltaic model instance
-    param_ranges : dict
-        Dictionary of parameter ranges for sensitivity analysis
+        The active agrivoltaic model instance.
+    param_ranges : Dict[str, Tuple[float, float]]
+        Definition of the search space for each sensitivity parameter, 
+        mapping parameter names to (min, max) tuples.
     """
 
     def __init__(self, quantum_simulator, agrivoltaic_model):

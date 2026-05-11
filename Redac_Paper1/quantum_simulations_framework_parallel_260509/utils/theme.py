@@ -1,3 +1,13 @@
+"""
+JPCL Publication Theme and Colorblind-Safe Palettes.
+
+This module provides the design system for simulation graphics, ensuring 
+compliance with American Chemical Society (ACS) and Journal of Physical 
+Chemistry Letters (JPCL) formatting requirements. It integrates with the 
+scienceplots library to provide clean, high-resolution (600 DPI) scientific 
+visualizations.
+"""
+
 import matplotlib.pyplot as plt
 import logging
 
@@ -11,9 +21,19 @@ _SCIENCE_STYLES = ['science', 'no-latex']
 
 def apply_jpcl_theme():
     """
-    Apply JPCL (ACS) publication standards to matplotlib.
-    Uses scienceplots 'science' style as base, then overrides with
-    ACS-specific values (column widths, DPI, colorblind-safe palette).
+    Apply JPCL (ACS) publication standards to the global matplotlib state.
+
+    This function configures the matplotlib RC parameters to match the 
+    formatting requirements of the Journal of Physical Chemistry Letters. 
+    It enforces specific font families (Arial/Helvetica), font sizes, line 
+    widths, and high-resolution output (600 DPI) suitable for archival 
+    publication.
+
+    Notes
+    -----
+    The theme uses the 'science' and 'nature' styles from the scienceplots 
+    library as a foundation. If scienceplots is unavailable, it falls back 
+    to standard seaborn or ggplot styles.
     """
     # Apply scienceplots base style if available
     try:

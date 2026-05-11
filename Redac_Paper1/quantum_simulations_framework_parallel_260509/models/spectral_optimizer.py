@@ -1,8 +1,11 @@
 """
-Spectral Optimizer for Quantum Agrivoltaic Systems.
+Spectral Optimization Engine for Hybrid Agrivoltaic Systems.
 
-This module implements optimization algorithms for spectral splitting
-in agrivoltaic systems to maximize combined OPV and PSU performance.
+This module provides the SpectralOptimizer class, which leverages global 
+optimization algorithms (Differential Evolution) to design spectral splitting 
+filters. The objective is to maximize the combined performance of organic 
+photovoltaics (PCE) and photosynthetic units (ETR) by strategically 
+partitioning the solar irradiance.
 """
 
 import logging
@@ -40,18 +43,24 @@ logger = logging.getLogger(__name__)
 
 class SpectralOptimizer:
     """
-    Spectral optimizer for agrivoltaic systems.
+    Heuristic optimization framework for spectral splitting filter design.
 
-    Mathematical Framework:
-    The optimization problem seeks to maximize a weighted objective function:
+    This class implements an objective-driven optimization routine that 
+    finds the optimal set of Gaussian filter parameters (amplitude, center, 
+    width) to maximize the joint efficiency of the agrivoltaic system.
 
-    max_{T(λ)} [w₁ * PCE(T) + w₂ * ETR(T)]
+    Mathematical Framework
+    ----------------------
+    The optimizer minimizes the negative of the weighted performance index:
+        min_{T(λ)} -[w_PCE * PCE(T) + w_ETR * ETR(T)]
 
-    subject to 0 ≤ T(λ) ≤ 1 for all wavelengths λ
+    subject to:
+        0 ≤ T(λ) ≤ 1,  ∀ λ ∈ [300, 1100] nm
 
-    where PCE(T) is the power conversion efficiency of the OPV system,
-    ETR(T) is the electron transport rate of the PSU system,
-    and w₁, w₂ are weighting factors.
+    where:
+        - PCE(T) is the Power Conversion Efficiency of the OPV.
+        - ETR(T) is the Electron Transport Rate of the PSU.
+        - w_PCE, w_ETR are weighting factors (defaulting to 0.5/0.5).
     """
 
     def __init__(

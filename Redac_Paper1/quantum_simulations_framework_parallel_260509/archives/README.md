@@ -1,26 +1,42 @@
-# Archives Directory
-> Last updated: 2026-05-11
+# 📁 Archives & Legacy Components (`archives/`)
+> **Last updated:** 2026-05-11
 
-This directory contains archived code that is no longer part of the active codebase.
+This directory contains deprecated modules, experimental prototypes, and legacy scripts that have been removed from the active simulation framework to maintain repository hygiene and performance.
 
-## Subdirectories
+---
 
-- **obsolete/** — Code that is no longer used
-- **experimental/** — Experimental and work-in-progress code
-- **notebooks/** — Archived Jupyter notebooks
-- **duplicates/** — Duplicate implementations (consolidated into main codebase)
-- **incomplete_tests/** — Placeholder test files
+## 📂 Archived Categories
 
-## How to Restore
+### 1. `obsolete/`
+Code that has been completely superseded by newer, more efficient implementations (e.g., non-parallelized HOPS solvers).
+- **Status:** Should not be used for any new simulations.
 
-If you need to restore any archived files:
+### 2. `experimental/`
+Work-in-progress code and high-risk prototypes.
+- **Status:** Use with caution; these modules may lack proper validation or unit tests.
+
+### 3. `duplicates/` & `incomplete_tests/`
+Consolidated logic and placeholder tests from previous development cycles.
+- **Status:** Retained solely for historical reference during the JPCL revision process.
+
+---
+
+## 🛠️ Restoration Procedure
+
+While these files are removed from the active path, they remain fully accessible via Git:
 
 ```bash
-git checkout HEAD -- archives/<path>/<filename>
+# To view a specific archived file
+cat Redac_Paper1/quantum_simulations_framework_parallel_260509/archives/obsolete/<filename>
+
+# To restore a file to the active directory
+cp Redac_Paper1/quantum_simulations_framework_parallel_260509/archives/<path>/<filename> ./
 ```
 
-## Notes
+---
 
-- All archived files remain in Git history
-- Do not use archived code in production
-- Consider deleting after 6 months if not needed
+## 📜 Maintenance Policy
+
+- **Safety:** Archived files must not be imported by any active production script.
+- **Cleanup:** Components in `obsolete/` will be evaluated for permanent removal following the successful publication of the JPCL manuscript.
+

@@ -1,9 +1,10 @@
 """
-Agrivoltaic Coupling Model
+Agrivoltaic Coupling Model: Integrated OPV-PSU Simulation.
 
-This module implements the agrivoltaic coupling model that combines
-organic photovoltaics (OPV) with photosynthetic units (PSU) to create
-a quantum-enhanced agrivoltaic system with realistic efficiency values.
+This module implements a multi-scale model for quantum-enhanced agrivoltaic systems. 
+It couples Organic Photovoltaic (OPV) excitonic dynamics with Photosynthetic 
+Unit (PSU) energy transfer (FMO complex), enabling the optimization of spectral 
+splitting filters to maximize land-use efficiency and combined energy/crop yields.
 """
 
 import logging
@@ -47,6 +48,7 @@ from src.core.constants import (
 )
 import os
 from datetime import datetime
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -72,45 +74,43 @@ class AgrivoltaicCouplingModel:
 
     def __init__(
         self,
-        fmo_hamiltonian,
-        temperature=DEFAULT_TEMPERATURE,
-        solar_spectrum=None,
-        opv_bandgap=DEFAULT_OPV_BANDGAP,
-        opv_absorption_coeff=DEFAULT_OPV_ABSORPTION,
-        n_opv_sites=DEFAULT_N_OPV_SITES,
+        fmo_hamiltonian: np.ndarray,
+        temperature: float = DEFAULT_TEMPERATURE,
+        solar_spectrum: Optional[tuple[np.ndarray, np.ndarray]] = None,
+        opv_bandgap: float = DEFAULT_OPV_BANDGAP,
+        opv_absorption_coeff: float = DEFAULT_OPV_ABSORPTION,
+        n_opv_sites: int = DEFAULT_N_OPV_SITES,
     ):
         """
-        Initialize the agrivoltaic coupling model with realistic parameters.
+        Initialize the agrivoltaic coupling model.
 
-        Mathematical Framework:
-        The agrivoltaic coupling model combines two energy harvesting systems:
+        This constructor sets up the hybrid Hamiltonian system, combining the 
+        tight-binding model of the OPV active layer with the exciton-vibronic 
+        parameters of the FMO complex. It also initializes the environmental 
+        parameters and spectral response functions.
 
-        1. Organic Photovoltaic (OPV) system: Harvests high-energy photons
-           with power conversion efficiency (PCE) dependent on absorbed spectrum
-
-        2. Photosynthetic Unit (PSU): Harvests remaining photons optimized
-           for photosynthetic efficiency, measured as Electron Transport Rate (ETR)
-
-        The total system performance is evaluated using a spectral transmission
-        function T(λ) that determines which photons go to OPV vs PSU:
-
-        I_OPV(λ) = I_sun(λ) * T(λ)        (transmitted to OPV)
-        I_PSU(λ) = I_sun(λ) * [1 - T(λ)]  (absorbed by PSU)
-
-        Parameters:
-        -----------
-        fmo_hamiltonian : 2D array
-            FMO Hamiltonian matrix
+        Parameters
+        ----------
+        fmo_hamiltonian : np.ndarray
+            The 7x7 or 8x8 FMO Hamiltonian matrix in cm⁻¹.
         temperature : float, optional
-            Temperature in Kelvin, default is 295
-        solar_spectrum : tuple, optional
-            Wavelength array and irradiance array
+            Ambient temperature in Kelvin. Default is 295.0 K.
+        solar_spectrum : Optional[tuple[np.ndarray, np.ndarray]], optional
+            A tuple of (wavelengths_nm, irradiance_mW_cm2_nm). If None, 
+            a standard AM1.5G spectrum is approximated.
         opv_bandgap : float, optional
-            OPV bandgap in eV, default is 1.9 (for better efficiency)
+            The electronic bandgap of the OPV material in eV. Default is 1.9 eV.
         opv_absorption_coeff : float, optional
-            OPV absorption coefficient, default is 1.0
+            Scaling factor for the OPV absorption strength. Default is 1.0.
         n_opv_sites : int, optional
-            Number of OPV sites for Hamiltonian model (default: 4)
+            Number of discrete sites for the OPV Hamiltonian model. Default is 4.
+
+        Notes
+        -----
+        The model uses a spectral transmission function T(λ) to partition 
+        the solar irradiance:
+            I_absorbed_by_PSU(λ) = I_sun(λ) * T(λ)
+            I_absorbed_by_OPV(λ) = I_sun(λ) * (1 - T(λ))
         """
         self.fmo_hamiltonian = fmo_hamiltonian
         self.temperature = temperature
@@ -218,14 +218,19 @@ class AgrivoltaicCouplingModel:
 
         return R_opv
 
-    def _calculate_psu_response(self):
+    def _calculate_psu_response(self) -> np.ndarray:
         """
-        Calculate the photosynthetic unit spectral response function.
+        Model the photosynthetic action spectrum (PAS) for the PSU.
 
-        Returns:
-        --------
-        R_psu : array
-            PSU spectral response
+        The response function incorporates the distinct absorption peaks of 
+        Chlorophyll a/b in the blue (400-500 nm) and red (600-700 nm) regions, 
+        with a characteristic 'green valley' and NIR tail.
+
+        Returns
+        -------
+        np.ndarray
+            The dimensionless spectral response of the PSU across the 
+            defined wavelength range.
         """
         R_psu = np.zeros_like(self.lambda_range, dtype=float)
 

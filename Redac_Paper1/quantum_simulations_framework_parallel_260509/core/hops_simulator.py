@@ -1,8 +1,12 @@
 """
 HopsSimulator: Unified quantum dynamics simulator with MesoHOPS integration.
 
-This module provides the HopsSimulator class which uses MesoHOPS as the default
-simulation engine with automatic fallback to QuantumDynamicsSimulator.
+This module provides the HopsSimulator class, which serves as the primary orchestrator 
+for non-Markovian quantum dynamics simulations. It leverages MesoHOPS for high-rigor 
+Hierarchy of Pure States (HOPS) calculations, supporting advanced features like 
+Stochastically Bundled Dissipators (SBD) and Process Tensor (PT) noise models.
+Automatic fallback mechanisms are included to ensure simulation continuity even if 
+MesoHOPS is unavailable.
 """
 
 import sys
@@ -137,7 +141,15 @@ except ImportError:
 
 
 def get_mesohops_version() -> Optional[str]:
-    """Return the installed MesoHOPS version or None if not available."""
+    """
+    Retrieve the version string of the installed MesoHOPS package.
+
+    Returns
+    -------
+    Optional[str]
+        The version string (e.g., '1.6.0') if MesoHOPS is installed, 
+        otherwise None.
+    """
     try:
         import mesohops
 
@@ -232,58 +244,71 @@ def _run_single_traj_worker(
 
 class HopsSimulator:
     """
-    Unified simulator that uses MesoHOPS by default with fallback.
+    Unified simulator orchestrator with MesoHOPS integration and automated fallback.
 
-    This class provides a consistent interface for quantum dynamics simulations,
-    automatically using MesoHOPS when available and falling back to the custom
-    QuantumDynamicsSimulator when needed.
+    This class provides a high-level API for simulating the non-Markovian dynamics 
+    of open quantum systems. It specializes in solving the stochastic Schrödinger 
+    equation using the HOPS method, optimized for large-scale photosynthetic 
+    complexes (like FMO) and agrivoltaic coupling models.
 
     Parameters
     ----------
     hamiltonian : NDArray[np.float64]
-        System Hamiltonian matrix in cm⁻¹. Must be square and Hermitian.
+        The system Hamiltonian matrix in cm⁻¹. Must be a square, Hermitian matrix 
+        representing the site energies and electronic couplings.
     temperature : float, optional
-        Temperature in Kelvin (default: 295.0)
+        Ambient temperature in Kelvin. Influences the bath correlation functions 
+        and Matsubara frequency distribution. Default is 295.0 K.
     use_mesohops : bool, optional
-        Whether to use MesoHOPS if available (default: True)
+        Whether to attempt using MesoHOPS as the primary solver. Default is True.
     max_hierarchy : int, optional
-        Maximum hierarchy level for MesoHOPS (default: 10)
-    **kwargs : dict
-        Additional arguments passed to underlying simulator
-
-    Notes
-    -----
-    Energy shift: the Hamiltonian is internally zero-shifted by subtracting the
-    mean diagonal energy before passing it to MesoHOPS:
-
-        H_shifted = H - mean(diag(H)) · I
-
-    For the FMO complex this removes ~12 400 cm⁻¹ from all site energies,
-    preventing rapid oscillations exp(-iHt/ℏ) that cause numerical overflow in
-    the integrator. All physical observables (populations, coherences, QFI) are
-    invariant to this uniform energy shift.
+        Maximum depth (L) for the hierarchy of pure states. Higher values increase 
+        numerical rigor at the cost of memory and compute. Default is 8.
+    k_matsubara : int, optional
+        Number of Matsubara terms (K) used to approximate the low-temperature 
+        corrections of the bath correlation function. Default is 2.
+    **kwargs : Any
+        Additional configuration parameters:
+        - n_traj (int): Number of trajectories for ensemble averaging.
+        - use_sbd (bool): Enable Stochastically Bundled Dissipators (SBD).
+        - use_pt_hops (bool): Enable Process Tensor noise models.
+        - sbd_bundles_per_site (int): Number of bundles per site for SBD.
 
     Attributes
     ----------
     hamiltonian : NDArray[np.float64]
-        The system Hamiltonian (unshifted, as provided by the caller)
+        The original (unshifted) system Hamiltonian.
     temperature : float
-        Simulation temperature
+        Simulation temperature in Kelvin.
+    max_hierarchy : int
+        Current hierarchy truncation depth (L).
+    k_matsubara : int
+        Number of Matsubara terms (K).
     use_mesohops : bool
-        Whether MesoHOPS is being used
-    system : Optional[HopsSystem]
-        MesoHOPS system object (if initialized)
-    fallback_sim : Optional[QuantumDynamicsSimulator]
-        Fallback simulator (if initialized)
+        Status flag for MesoHOPS availability and usage.
+    system_param : dict
+        MesoHOPS-compatible system configuration dictionary.
+    fallback_sim : Optional[Any]
+        Instance of a fallback simulator if primary solver fails.
+
+    Notes
+    -----
+    The simulator automatically applies a uniform energy shift to the Hamiltonian 
+    diagonal to improve numerical stability. This prevents rapid phase oscillations 
+    that could lead to integrator overflow, while preserving all physical observables.
+
+    Physics Reference:
+    - HOPS: Suess et al., Phys. Rev. Lett. 113, 150403 (2014)
+    - SBD: Targeted for JPCL submission jz-2026-00994t.
 
     Examples
     --------
     >>> import numpy as np
-    >>> from src.core.hops_simulator import HopsSimulator
-    >>> hamiltonian = np.array([[1, 0.5], [0.5, 1]])
-    >>> simulator = HopsSimulator(hamiltonian, temperature=DEFAULT_TEMPERATURE)
-    >>> time_points = np.linspace(0, 100, 100)
-    >>> results = simulator.simulate_dynamics(time_points)
+    >>> H = np.array([[100, 20], [20, 150]])
+    >>> sim = HopsSimulator(H, temperature=300, max_hierarchy=4)
+    >>> results = sim.simulate_dynamics(np.linspace(0, 1000, 100))
+    >>> print(results['populations'].shape)
+    (100, 2)
     """
 
     def __init__(
@@ -645,6 +670,8 @@ class HopsSimulator:
             Array of time points for simulation
         initial_state : Optional[NDArray[np.float64]]
             Initial quantum state (default: None)
+        strict_mode : bool, optional
+            If True, raise exceptions instead of falling back to simpler simulators.
         **kwargs : dict
             Additional simulation parameters
 
@@ -940,8 +967,23 @@ class HopsSimulator:
             logger.error(f"MesoHOPS simulation failed: {e}")
             raise RuntimeError(f"MesoHOPS simulation failed: {e}") from e
 
-    def _calculate_von_neumann_entropy(self, rho: NDArray[np.float64]) -> float:
-        """Calculate the von Neumann entropy: -Tr[rho * log(rho)]."""
+    def _calculate_von_neumann_entropy(self, rho: NDArray[np.complex128]) -> float:
+        """
+        Calculate the von Neumann entropy of the system.
+
+        The entropy is defined as S = -Tr[ρ log(ρ)], providing a measure of 
+        quantum decoherence and entanglement with the environment.
+
+        Parameters
+        ----------
+        rho : NDArray[np.complex128]
+            Density matrix of the quantum system.
+
+        Returns
+        -------
+        float
+            Von Neumann entropy in bits (natural log base).
+        """
         # Get eigenvalues of the density matrix
         eigenvals = np.linalg.eigvals(rho)
         # Take real part and ensure non-negative

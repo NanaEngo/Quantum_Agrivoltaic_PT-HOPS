@@ -1,3 +1,13 @@
+"""
+Stochastically Bundled Dissipators (SBD) for HOPS.
+
+This module implements the Stochastic Bundling methodology for Hierarchical 
+of Pure States (HOPS). SBD reduces the numerical complexity of many-mode 
+non-Markovian environments by clustering bath correlation function poles 
+into effective 'bundles', enabling high-rigor simulations with manageable 
+hierarchy sizes.
+"""
+
 import logging
 from dataclasses import dataclass
 from typing import List, Tuple
@@ -23,9 +33,19 @@ class StochasticBundle:
 
 class StochasticallyBundledDissipator:
     """
-    Implements the Stochastically Bundled Dissipators (SBD) logic.
-    Instead of associating a hierarchy index with each individual mode,
-    this class aggregates correlation function poles into distinct bundles.
+    Manager for Stochastic Bundling of environmental modes.
+
+    This class provides the logic for compressing the dimensionality of the 
+    bath hierarchy. By grouping modes with similar temporal decay 
+    characteristics (frequencies), SBD significantly reduces the number of 
+    differential equations required to solve the adHOPS equations while 
+    preserving the spectral features of the bath.
+
+    Parameters
+    ----------
+    n_bundles : int, optional
+        The target number of bundles to compress the environment into. 
+        Default is 5.
     """
 
     def __init__(self, n_bundles: int = 5):

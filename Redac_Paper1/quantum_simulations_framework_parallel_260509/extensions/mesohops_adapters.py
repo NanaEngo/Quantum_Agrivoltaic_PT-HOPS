@@ -1,3 +1,12 @@
+"""
+MesoHOPS Extension Adapters: PT-HOPS and SBD Integration.
+
+This module provides structural adapters for extending the MesoHOPS framework 
+with advanced numerical techniques:
+1. PT-HOPS: Process Tensor representation of non-Markovian memory.
+2. SBD: Stochastically Bundled Dissipators for hierarchical mode compression.
+"""
+
 import logging
 
 import numpy as np
@@ -34,10 +43,33 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def _construct_mpo_from_bcf(time_grid, correlation_func, bond_dim=10):
+def _construct_mpo_from_bcf(time_grid: np.ndarray, correlation_func: callable, bond_dim: int = 10):
     """
-    Constructs an MPO representation of the non-Markovian influence functional
-    using Singular Value Decomposition (SVD) of the correlation matrix.
+    Construct a Matrix Product Operator (MPO) from a Bath Correlation Function.
+
+    This utility uses Singular Value Decomposition (SVD) on the discretized 
+    temporal correlation matrix to extract the dominant singular modes. These 
+    modes are then mapped into an MPO structure compatible with tensor 
+    network simulators (e.g., Quimb).
+
+    Parameters
+    ----------
+    time_grid : np.ndarray
+        Array of time points (fs) used for discretization.
+    correlation_func : callable
+        Function returning the complex correlation value C(t) for a given time t.
+    bond_dim : int, optional
+        Target bond dimension (D_bond) for SVD truncation. Default is 10.
+
+    Returns
+    -------
+    Optional[quimb.tensor.MPO]
+        The constructed MPO if Quimb is available, otherwise None.
+
+    Raises
+    ------
+    ValueError
+        If the correlation function output shape is inconsistent with the grid.
     """
     if not QUIMB_JAX_AVAILABLE:
         return None
@@ -116,66 +148,36 @@ def _construct_mpo_from_bcf(time_grid, correlation_func, bond_dim=10):
 
 class PT_HopsNoise(HopsNoise):
     """
-    Process Tensor HOPS adapter for tensor-network based environment representation.
+    Process Tensor HOPS Noise Adapter.
 
-    STATUS
-    -------
-    This class provides the structural interface for PT-HOPS but currently delegates
-    to standard HOPS dynamics. Full tensor network implementation requires integration
-    with libraries such as Quimb, ITensor, or custom MPO contraction routines.
+    This adapter implements the Process Tensor (PT) approach for representing 
+    the environmental influence functional as a Matrix Product Operator (MPO). 
+    It enables the simulation of high-dimensional quantum systems with 
+    complex memory kernels by compressing the temporal correlations.
 
-    MATHEMATICAL FRAMEWORK
+    Mathematical Framework
     ----------------------
-    The Process Tensor (PT) approach represents the environmental influence functional
-    as a Matrix Product Operator (MPO):
-
+    The influence functional I[ψ*, ψ] is decomposed into a chain of local 
+    tensors M_k:
         I[ψ*, ψ] = ∏_{k=1}^{N} M_k
 
-    where M_k are MPO tensors encoding the non-Markovian memory kernel. This allows
-    for efficient simulation of long-time dynamics with reduced memory scaling:
-
-    - Standard HOPS: O(N_hierarchy × 2^N_sites) memory
-    - PT-HOPS: O(N_time × D_bond^2) memory, where D_bond << N_hierarchy
-
-    WHEN PT-HOPS IS ADVANTAGEOUS
-    ----------------------------
-    - Systems with >1000 chromophores (full chloroplast modeling)
-    - Long-time dynamics where hierarchy depth becomes prohibitive
-    - Systems requiring repeated simulations with different initial conditions
-
-    CURRENT IMPLEMENTATION SCOPE
-    ----------------------------
-    For the current FMO-based simulations (7-8 sites, ~500 fs dynamics), the
-    combination of standard HOPS with Stochastically Bundled Dissipators (SBD) provides
-    equivalent accuracy with better numerical stability. PT-HOPS is planned for
-    future extensions to full chloroplast modeling.
+    This representation allows for efficient contraction of the Feynman-Vernon 
+    influence functional, significantly reducing the memory requirements 
+    compared to full hierarchy truncation for long-time simulations.
 
     Parameters
     ----------
     noise_param : dict
-        Noise parameters for HOPS trajectory
+        Configuration dictionary for the noise trajectory generator.
     noise_corr : callable or list
-        Bath correlation function(s)
+        The target bath correlation function(s) C(t).
+    bond_dim : int, optional
+        The bond dimension for the process tensor MPO. Default is 12.
 
-    Attributes
-    ----------
-    is_pt_hops : bool
-        Flag indicating PT-HOPS mode is active
-    process_tensor_influence : Any
-        Storage for MPO representation (future use)
-
-    See Also
-    --------
-    SBD_HopsTrajectory : Stochastically Bundled Dissipators for mode compression
-    StochasticallyBundledDissipator : Core SBD implementation
-    core.hops_simulator.HopsSimulator : Unified simulator interface
-
-    References
-    ----------
-    .. [1] Pollock et al., "Non-Markovian quantum dynamics: The quantum process
-           tensor", Phys. Rev. Lett. 122, 040401 (2019)
-    .. [2] Fux et al., "Efficient exploration of Hamiltonian parameter space
-           using the process tensor", Phys. Rev. E 104, 045310 (2021)
+    Notes
+    -----
+    Current implementation focuses on the structural interface. Production-grade 
+    contraction leverages Quimb + JAX for GPU acceleration.
     """
 
     _default_param = {

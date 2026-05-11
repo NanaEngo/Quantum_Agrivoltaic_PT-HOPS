@@ -1,9 +1,10 @@
 """
-Quantum Dynamics Simulator using MesoHOPS for Agrivoltaic Systems.
+Quantum Dynamics Simulator (QDS) Fallback Engine.
 
-This module implements non-Markovian quantum dynamics simulations using the
-MesoHOPS (Mesoscale Hierarchy of Pure States) framework for simulating
-energy transfer in photosynthetic systems and quantum-enhanced agrivoltaics.
+This module implements the non-Markovian quantum dynamics fallback engine, 
+leveraging MesoHOPS for high-rigor trajectory propagation. It provides 
+a robust implementation of the adaptive Hierarchy of Pure States (adHOPS) 
+algorithm, optimized for parallel execution on multi-core systems.
 """
 
 from src.quantum.analysis import QuantumAnalysisSuite
@@ -169,27 +170,34 @@ except ImportError:
 
 def _bcf_dl_to_exp_pairs(lam: float, gamma: float, T: float, k: int) -> list:
     """
-    Robustly convert Drude-Lorentz bath parameters to exponential pairs (g, w).
+    Convert Drude-Lorentz bath parameters to complex exponential pairs (g, w).
 
-    Probes the installed MesoHOPS API signature to handle version differences,
-    specifically detecting support for Matsubara corrections (v1.6+).
+    This function performs a sum-of-exponentials decomposition of the bath 
+    correlation function, incorporating Matsubara frequency corrections for 
+    finite-temperature accuracy. It is version-aware and adjusts its 
+    behavior based on the installed MesoHOPS package version.
 
     Parameters
     ----------
     lam : float
-        Reorganization energy lambda in cm^-1.
+        Reorganization energy λ_D in cm⁻¹.
     gamma : float
-        Drude-Lorentz cutoff frequency in cm^-1.
+        Drude-Lorentz cutoff frequency γ_D in cm⁻¹.
     T : float
         Temperature in Kelvin.
     k : int
-        Number of Matsubara terms to include.
+        Number of Matsubara terms (K) to include for low-temperature correction.
 
     Returns
     -------
     list
-        A flat list of [g0, w0, g1, w1, ...] representing the complex exponential
-        decomposition parameters of the bath correlation function.
+        A flat list of [g0, w0, g1, w1, ...] representing the complex coefficients 
+        and frequencies of the exponential expansion.
+
+    Raises
+    ------
+    ImportError
+        If MesoHOPS bath conversion utilities cannot be found.
     """
     import inspect
     
@@ -468,10 +476,11 @@ class QuantumDynamicsSimulator:
 
     def _get_memory_estimate(self) -> float:
         """
-        Dynamically estimate memory per trajectory based on hierarchy depth (L)
-        and Matsubara terms (K). 
-        
-        Reference: L=8, K=2 -> BASE_TRAJ_MEMORY_GB.
+        Estimate the peak memory footprint per HOPS trajectory.
+
+        Calculates the expected RAM usage (in GB) based on hierarchy depth (L) 
+        and the number of Matsubara terms (K). This estimate is used by the 
+        scheduler to prevent OOM errors during parallel execution.
 
         Returns
         -------

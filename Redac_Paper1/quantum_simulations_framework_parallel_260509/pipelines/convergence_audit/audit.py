@@ -1,3 +1,13 @@
+"""
+Numerical Rigor and Convergence Auditing Suite.
+
+This module provides a comprehensive suite of numerical audits to verify the 
+stability and accuracy of the quantum dynamics simulations. It specifically 
+addresses reviewer concerns regarding hierarchy truncation (L), Matsubara 
+term convergence (K), and physical consistency (trace preservation, 
+positivity, and detailed balance).
+"""
+
 import os
 import sys
 
@@ -46,7 +56,15 @@ logger = logging.getLogger(__name__)
 logging.getLogger('numba').setLevel(logging.WARNING)
 logging.getLogger('jax').setLevel(logging.WARNING)
 
-def load_config():
+def load_config() -> Dict[str, Any]:
+    """
+    Load simulation parameters for the audit suite.
+
+    Returns
+    -------
+    dict
+        Parsed configuration dictionary from 'parameters.yaml'.
+    """
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'parameters.yaml'))
     with open(config_path, 'r') as f:
         return yaml.safe_load(f)

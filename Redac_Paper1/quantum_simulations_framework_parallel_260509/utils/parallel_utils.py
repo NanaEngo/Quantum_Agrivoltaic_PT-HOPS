@@ -1,6 +1,11 @@
 """
-Parallel execution utilities for quantum dynamics simulations.
-Optimized for dual Xeon Gold 6136 (48 cores) + NVIDIA RTX A4000.
+Parallel Execution and Hardware-Aware Scaling Utilities.
+
+This module provides high-level abstractions for parallelizing quantum dynamics 
+simulations across CPU and GPU backends. It is specifically optimized for 
+high-performance workstations (e.g., dual Xeon Gold 6136 with 48 cores) and 
+implements intelligent memory-safe job scheduling to prevent OOM errors 
+during large-scale adHOPS ensemble runs.
 """
 
 import os
@@ -21,17 +26,27 @@ os.environ['OMP_NUM_THREADS'] = '2'
 
 def get_safe_n_jobs(memory_per_traj_gb: float = 2.0) -> int:
     """
-    Calculate the number of parallel workers that can safely run without OOM.
-    
+    Calculate the optimal number of parallel workers based on hardware limits.
+
+    This function prevents Out-of-Memory (OOM) errors by calculating 'RAM slots' 
+    based on available system memory and the estimated footprint of a single 
+    HOPS trajectory. It returns the minimum of CPU-limited and RAM-limited slots.
+
     Parameters
     ----------
-    memory_per_traj_gb : float
-        Estimated memory consumption per trajectory in GB.
-        
+    memory_per_traj_gb : float, optional
+        Estimated peak RAM consumption per trajectory in GB. Default is 2.0 GB.
+
     Returns
     -------
-    n_jobs : int
-        Number of parallel workers.
+    int
+        The number of parallel workers (n_jobs) that can safely execute 
+        concurrently.
+
+    Notes
+    -----
+    The calculation adheres to `CPU_COUNT_FRACTION` and `MEMORY_FRACTION_LIMIT` 
+    defined in `core/constants.py` (typically 66% of total resources).
     """
     import multiprocessing
     

@@ -1,7 +1,10 @@
 """
-Logging configuration for quantum agrivoltaic simulations.
+Unified Logging and Observability Framework.
 
-Provides standardized logging setup across the entire package.
+This module provides a centralized configuration for the simulation's logging 
+subsystem. It ensures that all components across the 
+`quantum_simulations_framework` hierarchy use a consistent format, 
+log level, and persistence strategy (file + console).
 """
 
 import logging
@@ -17,29 +20,36 @@ def setup_logging(
     format_string: Optional[str] = None,
 ) -> logging.Logger:
     """
-    Configure logging for the quantum agrivoltaics package.
+    Initialize the global logging state for the simulation framework.
+
+    This function sets up handlers for both console and file output, defines 
+    the formatting template, and sets the base log level. It is typically 
+    called once at the entry point of the application (e.g., in main.py).
 
     Parameters
     ----------
-    level : int
-        Logging level (default: logging.INFO)
-    log_file : Optional[str]
-        Path to log file. If None, no file logging is configured.
-    log_to_console : bool
-        Whether to log to console (default: True)
-    format_string : Optional[str]
-        Custom format string. If None, uses default format.
+    level : int, optional
+        The threshold for logging events (e.g., logging.DEBUG, logging.INFO). 
+        Default is logging.INFO.
+    log_file : str, optional
+        Filesystem path to the target log file. If None, only console 
+        logging is active.
+    log_to_console : bool, optional
+        If True, directs logs to stdout. Default is True.
+    format_string : str, optional
+        A custom strftime-style formatting template. If None, a standard 
+        package-level format is applied.
 
     Returns
     -------
     logging.Logger
-        The configured root logger for the package.
+        The root package-level logger.
 
-    Examples
-    --------
-    >>> from utils.logging_config import setup_logging
-    >>> logger = setup_logging(level=logging.DEBUG, log_file="simulation.log")
-    >>> logger.info("Simulation started")
+    Notes
+    -----
+    This implementation clears any existing handlers on the 
+    `quantum_simulations_framework` logger to prevent duplicated messages 
+    during repeated configuration calls.
     """
     if format_string is None:
         format_string = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

@@ -1,6 +1,10 @@
 """
 GPU-accelerated quantum dynamics using CUDA (CuPy primary, JAX fallback).
-Optimized for NVIDIA RTX A4000 (Ampere architecture, 16 GB VRAM).
+
+This module provides high-performance backends for propagating quantum density 
+matrices on NVIDIA GPUs. It is specifically optimized for the Ampere architecture 
+(e.g., NVIDIA RTX A4000) and supports batch execution of multiple independent 
+trajectories using vectorized operations (vmap/JIT).
 """
 
 import logging
@@ -48,7 +52,13 @@ GPU_BACKEND = 'cupy' if CUPY_AVAILABLE else ('jax' if JAX_AVAILABLE else 'none')
 
 
 class GPUQuantumDynamics:
-    """GPU-accelerated quantum dynamics simulator using JAX."""
+    """
+    GPU-accelerated quantum dynamics simulator using JAX/CuPy backends.
+
+    This class encapsulates the Hamiltonian and provides JIT-compiled methods 
+    for solving the Liouville-von Neumann equation. It enables massive 
+    parallelization across thousands of GPU threads.
+    """
     
     def __init__(self, hamiltonian: np.ndarray, temperature: float = DEFAULT_TEMPERATURE,
                  use_gpu: bool = True):
@@ -212,21 +222,27 @@ class GPUQuantumDynamics:
 
 def gpu_ensemble_average(trajectories: np.ndarray, axis: int = 0, backend: str = 'auto') -> np.ndarray:
     """
-    Compute ensemble average on GPU using CuPy or JAX.
-    
+    Compute the ensemble average of quantum trajectories using GPU acceleration.
+
     Parameters
     ----------
     trajectories : np.ndarray
-        Array of trajectories (n_traj, n_times, ...)
-    axis : int
-        Axis to average over
-    backend : str
-        GPU backend ('auto', 'cupy', 'jax', or 'cpu')
-    
+        Multi-dimensional array of trajectories. Typically of shape 
+        (n_traj, n_times, n_sites, n_sites).
+    axis : int, optional
+        The axis along which to compute the mean (usually the trajectory axis). 
+        Default is 0.
+    backend : str, optional
+        The hardware backend to use:
+        - 'auto': Use CuPy if available, else JAX, else CPU.
+        - 'cupy': Force CuPy execution.
+        - 'jax': Force JAX execution.
+        - 'cpu': Force standard NumPy execution.
+
     Returns
     -------
-    average : np.ndarray
-        Ensemble-averaged trajectory
+    np.ndarray
+        The ensemble-averaged density matrices.
     """
     if backend == 'auto':
         backend = GPU_BACKEND
@@ -245,19 +261,22 @@ def gpu_ensemble_average(trajectories: np.ndarray, axis: int = 0, backend: str =
 
 def gpu_batch_coherence(density_matrices: np.ndarray, backend: str = 'auto') -> np.ndarray:
     """
-    Compute coherence for batch of density matrices on GPU.
-    
+    Compute the L1-norm coherence for a batch of density matrices on GPU.
+
+    Coherence is calculated as the sum of the absolute values of the 
+    off-diagonal elements of the density matrix: C(ρ) = Σᵢ≠ⱼ |ρᵢⱼ|.
+
     Parameters
     ----------
     density_matrices : np.ndarray
-        Array of density matrices (batch_size, n_times, n, n)
-    backend : str
-        GPU backend ('auto', 'cupy', 'jax', or 'cpu')
-    
+        Batch of density matrices, shape (batch_size, n_times, n_sites, n_sites).
+    backend : str, optional
+        Hardware backend to use ('auto', 'cupy', 'jax', or 'cpu').
+
     Returns
     -------
-    coherences : np.ndarray
-        Coherence values (batch_size, n_times)
+    np.ndarray
+        Coherence values for each batch and time point, shape (batch_size, n_times).
     """
     if backend == 'auto':
         backend = GPU_BACKEND
@@ -300,5 +319,4 @@ def gpu_batch_coherence(density_matrices: np.ndarray, backend: str = 'auto') -> 
                 rho = density_matrices[b, t]
                 mask = 1.0 - np.eye(n)
                 coherences[b, t] = np.sum(np.abs(rho * mask))
-        return coherences
         return coherences
