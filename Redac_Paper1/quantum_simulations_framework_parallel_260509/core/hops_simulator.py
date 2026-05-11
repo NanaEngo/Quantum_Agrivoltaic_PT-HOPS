@@ -52,6 +52,13 @@ except ImportError:
         SBD_HopsTrajectory = None
         PT_HopsNoise = None
 
+# Import memory manager
+try:
+    from .memory_manager import MemoryAwareJobScheduler, cleanup_memory
+except ImportError:
+    MemoryAwareJobScheduler = None
+    cleanup_memory = None
+
 # Import fallback simulators from models package (absolute import)
 try:
     from models import QuantumDynamicsSimulator, SimpleQuantumDynamicsSimulator
@@ -783,25 +790,28 @@ class HopsSimulator:
             # ── Run ensemble of trajectories (Parallelized) ─────────────────────
             # Ensemble size: use kwarg, then self.n_traj, then fallback to 1
             n_traj = kwargs.get("n_traj", self.n_traj if hasattr(self, "n_traj") else 1)
-            cpu_count = multiprocessing.cpu_count()
 
-            # Memory-aware parallelization (User mandate: max 2/3 of available RAM)
-            if HAS_PSUTIL:
-                mem_avail_gb = psutil.virtual_memory().available / (1024**3)
-                mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
-                # Dynamic estimate based on L and K
-                traj_mem_gb = self._get_memory_estimate()
-                n_mem_jobs = max(1, int(mem_limit_gb / traj_mem_gb))
-                n_jobs = min(n_mem_jobs, cpu_count)
-                logger.info(
-                    f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB, Est/Traj: {traj_mem_gb:.1f}GB)"
-                )
+            # ✅ NEW: Memory-aware job scheduling with validation
+            if MemoryAwareJobScheduler is not None:
+                scheduler = MemoryAwareJobScheduler(max_hierarchy, k_matsubara, n_traj)
+                sched_info = scheduler.validate_and_adapt()
+                n_jobs = sched_info['n_jobs']
+                batch_size = sched_info['batch_size']
+                n_batches = sched_info['n_batches']
+
+                logger.info(f"Memory Plan: {n_batches} batch(es) de {batch_size} traj | "
+                            f"n_jobs={n_jobs} workers | "
+                            f"{sched_info['memory_per_traj_gb']:.1f}GB/traj")
+
+                # Log warnings if any
+                for warning in sched_info['warnings']:
+                    logger.warning(f"Memory Warning: {warning}")
             else:
-                n_jobs = max(1, int(cpu_count * 0.5)) if n_traj > 1 else 1
-                logger.warning(f"psutil not available; using conservative n_jobs: {n_jobs}")
-
-            if n_traj == 1:
-                n_jobs = 1
+                # Fallback to basic parallelization
+                n_jobs = min(n_traj, multiprocessing.cpu_count())
+                batch_size = n_traj
+                n_batches = 1
+                logger.warning("MemoryAwareJobScheduler not available, using basic parallelization")
 
             # Determine seeds
             seeds = kwargs.get("seeds", list(range(n_traj)))
@@ -819,22 +829,39 @@ class HopsSimulator:
                 "time_points": time_points,
             }
 
-            if HAS_JOBLIB and n_jobs > 1:
-                logger.info(f"Running ensemble of {n_traj} trajectories on {n_jobs} cores...")
+            # ✅ NEW: Batch-wise execution to prevent queue explosion
+            all_results = []
+            for batch_idx in range(n_batches):
+                start_seed = batch_idx * batch_size
+                end_seed = min(start_seed + batch_size, n_traj)
+                batch_seeds = list(range(start_seed, end_seed))
 
-                # Setup tqdm progress bar
-                iterable = seeds
-                if HAS_TQDM and kwargs.get("show_progress", True):
-                    desc = kwargs.get("desc", "Trajectories")
-                    iterable = tqdm(seeds, desc=desc, unit="traj", leave=False)
+                logger.info(f"Batch {batch_idx+1}/{n_batches}: seeds {start_seed}-{end_seed-1}")
 
-                traj_results = Parallel(n_jobs=n_jobs)(
-                    delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
-                )
-            else:
-                traj_results = [
-                    _run_single_traj_worker(s, **worker_args) for s in seeds
-                ]
+                if HAS_JOBLIB and n_jobs > 1:
+                    # Setup tqdm progress bar for this batch
+                    iterable = batch_seeds
+                    if HAS_TQDM and kwargs.get("show_progress", True):
+                        desc = f"Batch {batch_idx+1}/{n_batches}"
+                        iterable = tqdm(batch_seeds, desc=desc, unit="traj", leave=False)
+
+                    batch_results = Parallel(n_jobs=n_jobs)(
+                        delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
+                    )
+                else:
+                    batch_results = [
+                        _run_single_traj_worker(s, **worker_args) for s in batch_seeds
+                    ]
+
+                # Filter failed trajectories and add to results
+                valid_results = [r for r in batch_results if r is not None]
+                all_results.extend(valid_results)
+
+                # Memory cleanup between batches
+                if cleanup_memory is not None:
+                    cleanup_memory()
+
+            traj_results = all_results
 
             # Filter failed trajectories
             traj_results = [r for r in traj_results if r is not None]

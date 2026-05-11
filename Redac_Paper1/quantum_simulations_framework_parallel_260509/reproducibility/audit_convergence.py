@@ -495,7 +495,21 @@ def run_markovian_limit_audit(cfg=None):
     return {"is_monotonic": is_monotonic, "status": status}
 
 if __name__ == "__main__":
-    run_convergence_audit()
+    # Load configuration first
+    cfg = load_config()
+
+    # ✅ NEW: Memory configuration validation
+    print("🔍 Validation configuration mémoire...")
+    try:
+        from core.memory_manager import validate_memory_configuration
+        validate_memory_configuration(cfg)
+        print("✅ Configuration mémoire validée\n")
+    except Exception as e:
+        print(f"❌ Erreur validation mémoire: {e}")
+        sys.exit(1)
+
+    # Run all audits
+    run_convergence_audit(cfg)
     run_time_step_audit()
     run_detailed_balance_audit()
     run_hermiticity_audit()
