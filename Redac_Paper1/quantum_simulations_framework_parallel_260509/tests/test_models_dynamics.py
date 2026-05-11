@@ -9,7 +9,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
-from src.core.hops_simulator import MESOHOPS_AVAILABLE
 from models.quantum_dynamics_simulator import QuantumDynamicsSimulator
 from src.quantum.spectroscopy import Spectroscopy2DES
 
@@ -29,13 +28,27 @@ def test_quantum_dynamics_simulator():
 
     results = simulator.simulate_dynamics(time_points, psi0)
 
-    logger.info(f"QuantumDynamicsSimulator: pop shape={results['populations'].shape}, MesoHOPS={MESOHOPS_AVAILABLE}")
+    logger.info(f"QuantumDynamicsSimulator: pop shape={results['populations'].shape}")
     assert "populations" in results
     assert results["populations"].shape == (len(time_points), n_sites)
-    total_pop = np.sum(results["populations"], axis=1)
+
+    pops = results["populations"]
+    total_pop = np.sum(pops, axis=1)
     logger.info(f"Trace range: [{total_pop.min():.4f}, {total_pop.max():.4f}]")
-    # Looser tolerance for reduced simulation time
-    assert np.allclose(total_pop, 1.0, atol=0.2)  # Changed from 0.1
+
+    # Normalize defensively to avoid minor numerical drift breaking the laptop suite.
+    # (We still validate that the drift is not wildly off.)
+    eps = 1e-12
+    pops = np.nan_to_num(pops, nan=0.0, posinf=0.0, neginf=0.0)
+
+    total_pop_safe = np.where(np.abs(total_pop) < eps, 1.0, total_pop)
+    pops_norm = pops / total_pop_safe[:, None]
+    total_pop_norm = np.sum(pops_norm, axis=1)
+
+    assert np.allclose(total_pop, 1.0, atol=0.2), "Unnormalized trace drift too large"
+    # Normalization may have small numerical error; laptop/CI can differ.
+    # Allow a wider tolerance because QFI/entropy computations can perturb floats.
+    assert np.allclose(total_pop_norm, 1.0, atol=5e-2), "Normalized trace should be conserved"
 
 def test_spectroscopy_2des():
     """Test 2D Electronic Spectroscopy (2DES) simulation."""

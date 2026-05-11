@@ -45,59 +45,119 @@ def test_config_validation_failure():
                     load_and_validate_config()
 
 def test_environment_check():
-    """Test the environment check logic."""
-    # Test when MesoHOPS is available
-    with patch("reproducibility.main.check_environment", return_value=True):
+    """Test the environment check logic by controlling import of mesohops."""
+    # Case 1: mesohops available
+    mesohops_mock = MagicMock()
+    mesohops_mock.__version__ = "1.6"
+    with patch.dict(sys.modules, {"mesohops": mesohops_mock}):
         result = check_environment()
         logger.info(f"Environment check (MesoHOPS present): {result}")
-        assert result == True
+        assert result is True
 
-    # Test when MesoHOPS is unavailable
-    with patch("reproducibility.main.check_environment", return_value=False):
-        result = check_environment()
-        logger.info(f"Environment check (MesoHOPS absent): {result}")
-        assert result == False
+    # Case 2: mesohops unavailable
+    # Ensure 'mesohops' isn't already cached in sys.modules
+    with patch.dict(sys.modules, {}, clear=False):
+        real_import = __import__
+
+        def _import_block(name, *args, **kwargs):
+            if name == "mesohops":
+                raise ImportError("mesohops not installed")
+            return real_import(name, *args, **kwargs)
+
+        with patch("builtins.__import__", side_effect=_import_block):
+            result = check_environment()
+            logger.info(f"Environment check (MesoHOPS absent): {result}")
+            assert result is False
 
 @patch("reproducibility.main.run_convergence_audit")
 @patch("reproducibility.main.run_full_fmo_simulation")
 @patch("reproducibility.main.generate_figures")
 @patch("reproducibility.main.load_and_validate_config")
 @patch("reproducibility.main.check_environment")
-def test_full_pipeline_flow(mock_env, mock_cfg, mock_gen_figs, mock_sim, mock_audit):
+def test_full_pipeline_flow(mock_check_environment, mock_load_cfg, mock_generate_figures, mock_run_sim, mock_run_audit):
     """Verify the main execution sequence."""
     from reproducibility.main import main
 
-    # Setup mocks
-    mock_env.return_value = True
+    mock_check_environment.return_value = True
+
     cfg_dict = {
-        "dynamics": {"L_max": DEFAULT_MAX_HIERARCHY, "matsubara_truncation": DEFAULT_N_MATSUBARA, "convergence_threshold": 1e-5},
-        "bath": {"temperature": DEFAULT_TEMPERATURE}
+        "dynamics": {
+            "L_max": DEFAULT_MAX_HIERARCHY,
+            "matsubara_truncation": DEFAULT_N_MATSUBARA,
+            "convergence_threshold": 1e-5,
+            # required by run_full_fmo_simulation
+            "time_max": 2.0,
+            "time_step": 1.0,
+            "sbd_bundles_per_site": 2,
+        },
+        "bath": {
+            "temperature": DEFAULT_TEMPERATURE,
+            "reorganization_energy": 35.0,
+            "drude_cutoff": 500.0,
+            # keep minimal arrays to avoid simulator-side work if any function is called accidentally
+            "vibronic_frequencies": [100.0],
+            "huang_rhys_factors": [0.1],
+            "vibronic_damping": [10.0],
+        },
+        "pulse": {"fwhm": 50.0, "center_freq": 12000.0},
+        "spectral_filter": {
+            "band_centers_nm": [750, 820],
+            "bandwidth_cm": 100.0,
+            "weights": [0.5, 0.5],
+        },
+        "simulation": {"n_traj": 1, "n_traj_temp_sweep": 1, "n_disorder_samples": 1},
     }
-    mock_cfg.return_value = cfg_dict
-    mock_audit.return_value = {"audit_maes": {8: 1e-7}, "csv_path": "audit.csv"}
-    mock_sim.return_value = ({"filtered": {}, "broadband": {}}, np.array([0, 1]))
+
+    mock_load_cfg.return_value = cfg_dict
+    mock_run_audit.return_value = {"audit_maes": {8: 1e-7}, "csv_path": "audit.csv"}
+    mock_run_sim.return_value = ({"filtered": {}, "broadband": {}}, np.array([0, 1]))
+    mock_generate_figures.return_value = None
 
     with patch("sys.exit") as mock_exit:
-        main()
-        logger.info(f"Pipeline steps called — audit:{mock_audit.called}, sim:{mock_sim.called}, figs:{mock_gen_figs.called}")
-        mock_audit.assert_called_once()
-        mock_sim.assert_called_once()
-        mock_gen_figs.assert_called_once()
+        with patch.object(sys, "argv", ["main.py"]):
+            main()
+
+        logger.info(
+            f"Pipeline steps called — audit:{mock_run_audit.called}, sim:{mock_run_sim.called}, figs:{mock_generate_figures.called}"
+        )
+        mock_run_audit.assert_called_once()
+        mock_run_sim.assert_called_once()
+        mock_generate_figures.assert_called_once()
         mock_exit.assert_not_called()
 
 def test_pipeline_exits_on_no_mesohops():
     """Ensure the pipeline exits if MesoHOPS is missing."""
+    cfg_dict = {
+        "dynamics": {
+            "L_max": DEFAULT_MAX_HIERARCHY,
+            "matsubara_truncation": DEFAULT_N_MATSUBARA,
+            "convergence_threshold": 1e-5,
+            "time_max": 2.0,
+            "time_step": 1.0,
+            "sbd_bundles_per_site": 2,
+        },
+        "bath": {
+            "temperature": DEFAULT_TEMPERATURE,
+            "reorganization_energy": 35.0,
+            "drude_cutoff": 500.0,
+            "vibronic_frequencies": [100.0],
+            "huang_rhys_factors": [0.1],
+            "vibronic_damping": [10.0],
+        },
+        "simulation": {"n_traj": 1, "n_traj_temp_sweep": 1, "n_disorder_samples": 1},
+    }
+
     with patch("reproducibility.main.check_environment", return_value=False):
-        with patch("src.core.hops_simulator.MESOHOPS_AVAILABLE", False):
-            with patch("reproducibility.main.load_and_validate_config"):
-                with patch("sys.exit") as mock_exit:
-                    from reproducibility.main import main
+        with patch("reproducibility.main.load_and_validate_config", return_value=cfg_dict):
+            with patch("sys.exit") as mock_exit:
+                from reproducibility.main import main
+                with patch.object(sys, "argv", ["main.py"]):
                     try:
                         main()
                     except SystemExit:
                         pass
-                    logger.info(f"sys.exit called with: {mock_exit.call_args}")
-                    mock_exit.assert_called_with(1)
+                logger.info(f"sys.exit called with: {mock_exit.call_args}")
+                mock_exit.assert_called_with(1)
 
 if __name__ == "__main__":
     pytest.main([__file__])

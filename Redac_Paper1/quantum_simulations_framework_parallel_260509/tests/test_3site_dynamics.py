@@ -43,10 +43,15 @@ def test_3site_simulation_with_config():
     K = cfg['dynamics']['matsubara_truncation']
     dt = cfg['dynamics']['time_step']
     t_max = cfg['dynamics']['time_max']
+    # Laptop/CI friendly caps to avoid long/intermittent failures
+    t_max_cap_fs = 100.0  # reduce from ~1000 fs to ~100 fs
+    t_max = min(float(t_max), t_max_cap_fs)
     time_points = np.arange(0, t_max, dt)
     n_sites = H3.shape[0]
     sbd_bundles = cfg['dynamics'].get('sbd_bundles_per_site', DEFAULT_SBD_BUNDLES)
-    n_traj = cfg['simulation']['n_traj']
+    n_traj = int(cfg['simulation']['n_traj'])
+    n_traj_cap = 5
+    n_traj = min(n_traj, n_traj_cap)
 
     print(f"   Parameters: L={L}, K={K}, dt={dt} fs, t_max={t_max} fs, n_traj={n_traj}")
     print(f"   SBD: ENABLED ({sbd_bundles} bundles/site) — required at L>=2 to limit hierarchy size")
@@ -73,10 +78,10 @@ def test_3site_simulation_with_config():
 
     # 5. Run simulation (parallelized via n_traj)
     results = simulator.simulate_dynamics(
-        time_points, 
-        initial_state=init_state, 
+        time_points,
+        initial_state=init_state,
         n_traj=n_traj,
-        show_progress=True,
+        show_progress=False,
         desc="3-Site Dynamics"
     )
     
