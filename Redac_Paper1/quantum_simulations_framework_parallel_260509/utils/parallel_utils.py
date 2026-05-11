@@ -40,7 +40,7 @@ def get_safe_n_jobs(memory_per_traj_gb: float = 2.0) -> int:
     mem_fraction = 0.66
     
     try:
-        from core.constants import CPU_COUNT_FRACTION, MEMORY_FRACTION_LIMIT
+        from src.core.constants import CPU_COUNT_FRACTION, MEMORY_FRACTION_LIMIT
         cpu_fraction = CPU_COUNT_FRACTION
         mem_fraction = MEMORY_FRACTION_LIMIT
     except ImportError:

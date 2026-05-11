@@ -88,7 +88,7 @@ csv_path = csv_storage.save_biodegradability_analysis(eco_data, filename_prefix=
             if "import pandas as pd" in source:
                 source = source.replace(
                     "import pandas as pd",
-                    "import pandas as pd\nfrom models.techno_economic_model import TechnoEconomicModel\nfrom models.spectroscopy_2des import Spectroscopy2DES",
+                    "import pandas as pd\nfrom src.agrivoltaic.techno_economic_model import TechnoEconomicModel\nfrom src.quantum.spectroscopy import Spectroscopy2DES",
                 )
 
             if "simulator = HopsSimulator(" in source:

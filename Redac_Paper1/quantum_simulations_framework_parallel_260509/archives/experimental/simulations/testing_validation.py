@@ -9,7 +9,7 @@ import logging
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from core.constants import DEFAULT_TEMPERATURE
+from src.core.constants import DEFAULT_TEMPERATURE
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,12 +18,12 @@ import pandas as pd
 # Import required classes
 # Import required classes
 try:
-    from core.hops_simulator import HopsSimulator
+    from src.core.hops_simulator import HopsSimulator
 except ImportError:
     HopsSimulator = None
 
 try:
-    from models.agrivoltaic_coupling_model import AgrivoltaicCouplingModel
+    from src.agrivoltaic.coupling_model import AgrivoltaicCouplingModel
 except ImportError:
     AgrivoltaicCouplingModel = None
 

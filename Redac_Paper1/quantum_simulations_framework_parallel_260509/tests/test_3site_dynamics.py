@@ -10,9 +10,9 @@ CURRENT_DIR = Path(__file__).parent
 FRAMEWORK_DIR = CURRENT_DIR.parent
 sys.path.insert(0, str(FRAMEWORK_DIR))
 
-from core.hops_simulator import HopsSimulator
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from core.constants import DEFAULT_TEMPERATURE, DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_SBD_BUNDLES
+from src.core.hops_simulator import HopsSimulator
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.constants import DEFAULT_TEMPERATURE, DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_SBD_BUNDLES
 
 def test_3site_simulation_with_config():
     """

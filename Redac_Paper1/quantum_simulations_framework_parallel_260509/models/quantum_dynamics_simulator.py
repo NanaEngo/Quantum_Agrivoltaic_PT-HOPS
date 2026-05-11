@@ -6,7 +6,7 @@ MesoHOPS (Mesoscale Hierarchy of Pure States) framework for simulating
 energy transfer in photosynthetic systems and quantum-enhanced agrivoltaics.
 """
 
-from models.quantum_analysis import QuantumAnalysisSuite
+from src.quantum.analysis import QuantumAnalysisSuite
 import logging
 import os
 from datetime import datetime
@@ -22,7 +22,7 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
-from core.constants import (
+from src.core.constants import (
         DEFAULT_MAX_HIERARCHY, DEFAULT_N_MATSUBARA, DEFAULT_TEMPERATURE,
         DEFAULT_REORGANIZATION_ENERGY, DEFAULT_DRUDE_CUTOFF,
         DEFAULT_N_TRAJ, DEFAULT_MAX_TIME, MEMORY_FRACTION_LIMIT, 
@@ -733,19 +733,6 @@ class QuantumDynamicsSimulator:
             "entropy": entropy_values,
             "purity": purity_values,
             "linear_entropy": linear_entropy_values,
-            "ipr": ipr_values,
-            "bipartite_ent": bipartite_ent_values,
-            "multipartite_ent": multipartite_ent_values,
-            "pairwise_concurrence": pairwise_concurrence_values,
-            "discord": discord_values,
-            "fidelity": fidelity_values,
-            "mandel_q": mandel_q_values,
-            "simulator": "QuantumDynamicsSimulator (MesoHOPS)",
-        }
-            "populations": populations,
-            "coherences": coherences,
-            "qfi": qfi_values,
-            "entropy": entropy_values,
             "ipr": ipr_values,
             "bipartite_ent": bipartite_ent_values,
             "multipartite_ent": multipartite_ent_values,

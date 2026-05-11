@@ -7,9 +7,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from core.constants import FMO_COUPLINGS, FMO_SITE_ENERGIES_7, FMO_SITE_ENERGIES_8
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from core.hops_simulator import HopsSimulator
+from src.core.constants import FMO_COUPLINGS, FMO_SITE_ENERGIES_7, FMO_SITE_ENERGIES_8
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.hops_simulator import HopsSimulator
 from reproducibility.main import load_and_validate_config
 
 logger = get_test_logger("test_core")

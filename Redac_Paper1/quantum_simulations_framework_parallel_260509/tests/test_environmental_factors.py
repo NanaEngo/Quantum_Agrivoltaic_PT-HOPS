@@ -10,8 +10,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from models.environmental_factors import EnvironmentalFactors
-from core.constants import ENVIRONMENTAL_T_REF, DEFAULT_PCE, DEFAULT_ETR
+from src.agrivoltaic.environmental_factors import EnvironmentalFactors
+from src.core.constants import ENVIRONMENTAL_T_REF, DEFAULT_PCE, DEFAULT_ETR
 from reproducibility.main import load_and_validate_config
 
 logger = get_test_logger("test_environmental_factors")

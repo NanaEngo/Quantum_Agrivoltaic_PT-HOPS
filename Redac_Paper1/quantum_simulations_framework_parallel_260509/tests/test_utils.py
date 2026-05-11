@@ -9,11 +9,11 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from utils.csv_data_storage import CSVDataStorage
-from utils.figure_generator import FigureGenerator
+from src.io.csv_storage import CSVDataStorage
+from src.visualization.figure_generator import FigureGenerator
 from utils.logging_config import get_logger, setup_logging
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from core.constants import DEFAULT_DPI, PREVIEW_DPI
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
 
 logger = get_test_logger("test_utils")
 

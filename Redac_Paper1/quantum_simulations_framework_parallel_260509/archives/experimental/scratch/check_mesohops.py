@@ -6,7 +6,7 @@ import os
 sys.path.append(os.getcwd())
 
 try:
-    from core.constants import MESOHOPS_AVAILABLE
+    from src.core.constants import MESOHOPS_AVAILABLE
     print(f"core.constants.MESOHOPS_AVAILABLE: {MESOHOPS_AVAILABLE}")
 except ImportError as e:
     print(f"Failed to import from core.constants: {e}")
@@ -18,7 +18,7 @@ except ImportError as e:
     print(f"mesohops not available: {e}")
 
 try:
-    from models.quantum_dynamics_simulator import MESOHOPS_AVAILABLE as QDS_MESO
+    from src.quantum.analysis import MESOHOPS_AVAILABLE as QDS_MESO
     print(f"models.quantum_dynamics_simulator.MESOHOPS_AVAILABLE: {QDS_MESO}")
 except ImportError as e:
     print(f"Failed to import from models.quantum_dynamics_simulator: {e}")

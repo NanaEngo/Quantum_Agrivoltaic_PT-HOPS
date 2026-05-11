@@ -8,8 +8,8 @@ import numpy as np
 sys.path.insert(0, "/home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260509")
 
 try:
-    from core.hops_simulator import HopsSimulator
-    from core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import HopsSimulator
+    from src.core.hamiltonian_factory import create_fmo_hamiltonian
     
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     print("Hamiltonian created.")

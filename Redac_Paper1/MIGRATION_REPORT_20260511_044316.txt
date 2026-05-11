@@ -1,0 +1,114 @@
+IMPORT MIGRATION REPORT
+================================================================================
+Date: 2026-05-11T04:43:16.491336
+Total files scanned: 104
+Files migrated: 52
+Files skipped: 8
+Errors: 0
+
+MIGRATED FILES:
+--------------------------------------------------------------------------------
+  core/gpu_dynamics.py
+    Backup: core/gpu_dynamics.py.bak
+  core/hamiltonian_factory.py
+    Backup: core/hamiltonian_factory.py.bak
+  core/hops_simulator.py
+    Backup: core/hops_simulator.py.bak
+  extensions/mesohops_adapters.py
+    Backup: extensions/mesohops_adapters.py.bak
+  models/agrivoltaic_coupling_model.py
+    Backup: models/agrivoltaic_coupling_model.py.bak
+  models/biodegradability_analyzer.py
+    Backup: models/biodegradability_analyzer.py.bak
+  models/eco_design_analyzer.py
+    Backup: models/eco_design_analyzer.py.bak
+  models/environmental_factors.py
+    Backup: models/environmental_factors.py.bak
+  models/lca_analyzer.py
+    Backup: models/lca_analyzer.py.bak
+  models/quantum_dynamics_simulator.py
+    Backup: models/quantum_dynamics_simulator.py.bak
+  models/sensitivity_analyzer.py
+    Backup: models/sensitivity_analyzer.py.bak
+  models/simple_quantum_dynamics_simulator.py
+    Backup: models/simple_quantum_dynamics_simulator.py.bak
+  models/spectral_optimizer.py
+    Backup: models/spectral_optimizer.py.bak
+  models/spectroscopy_2des.py
+    Backup: models/spectroscopy_2des.py.bak
+  models/techno_economic_model.py
+    Backup: models/techno_economic_model.py.bak
+  reproducibility/audit_convergence.py
+    Backup: reproducibility/audit_convergence.py.bak
+  reproducibility/main.py
+    Backup: reproducibility/main.py.bak
+  reproducibility/optimize.py
+    Backup: reproducibility/optimize.py.bak
+  reproducibility/run_temp_sweep_only.py
+    Backup: reproducibility/run_temp_sweep_only.py.bak
+  tests/test_3site_dynamics.py
+    Backup: tests/test_3site_dynamics.py.bak
+  tests/test_core.py
+    Backup: tests/test_core.py.bak
+  tests/test_environmental_factors.py
+    Backup: tests/test_environmental_factors.py.bak
+  tests/test_integration_pipeline.py
+    Backup: tests/test_integration_pipeline.py.bak
+  tests/test_models_agri.py
+    Backup: tests/test_models_agri.py.bak
+  tests/test_models_analysis.py
+    Backup: tests/test_models_analysis.py.bak
+  tests/test_models_dynamics.py
+    Backup: tests/test_models_dynamics.py.bak
+  tests/test_utils.py
+    Backup: tests/test_utils.py.bak
+  utils/figure_generator.py
+    Backup: utils/figure_generator.py.bak
+  utils/import_standardizer.py
+    Backup: utils/import_standardizer.py.bak
+  utils/parallel_utils.py
+    Backup: utils/parallel_utils.py.bak
+  archives/experimental/scratch/check_mesohops.py
+    Backup: archives/experimental/scratch/check_mesohops.py.bak
+  archives/experimental/scratch/debug_init.py
+    Backup: archives/experimental/scratch/debug_init.py.bak
+  archives/experimental/simulations/testing_validation.py
+    Backup: archives/experimental/simulations/testing_validation.py.bak
+  pipelines/convergence_audit/audit.py
+    Backup: pipelines/convergence_audit/audit.py.bak
+  pipelines/jpcl_resubmission/main.py
+    Backup: pipelines/jpcl_resubmission/main.py.bak
+  pipelines/temperature_sweep/sweep.py
+    Backup: pipelines/temperature_sweep/sweep.py.bak
+  scripts/maintenance/patch_notebook_standardization.py
+    Backup: scripts/maintenance/patch_notebook_standardization.py.bak
+  scripts/maintenance/sync_ipynb.py
+    Backup: scripts/maintenance/sync_ipynb.py.bak
+  src/agrivoltaic/biodegradability_analyzer.py
+    Backup: src/agrivoltaic/biodegradability_analyzer.py.bak
+  src/agrivoltaic/coupling_model.py
+    Backup: src/agrivoltaic/coupling_model.py.bak
+  src/agrivoltaic/eco_design_analyzer.py
+    Backup: src/agrivoltaic/eco_design_analyzer.py.bak
+  src/agrivoltaic/environmental_factors.py
+    Backup: src/agrivoltaic/environmental_factors.py.bak
+  src/agrivoltaic/lca_analyzer.py
+    Backup: src/agrivoltaic/lca_analyzer.py.bak
+  src/agrivoltaic/techno_economic_model.py
+    Backup: src/agrivoltaic/techno_economic_model.py.bak
+  src/analysis/sensitivity_analyzer.py
+    Backup: src/analysis/sensitivity_analyzer.py.bak
+  src/core/gpu_dynamics.py
+    Backup: src/core/gpu_dynamics.py.bak
+  src/core/hamiltonian_factory.py
+    Backup: src/core/hamiltonian_factory.py.bak
+  src/core/hops_simulator.py
+    Backup: src/core/hops_simulator.py.bak
+  src/extensions/mesohops_adapters.py
+    Backup: src/extensions/mesohops_adapters.py.bak
+  src/quantum/spectral_optimization.py
+    Backup: src/quantum/spectral_optimization.py.bak
+  src/quantum/spectroscopy.py
+    Backup: src/quantum/spectroscopy.py.bak
+  src/visualization/figure_generator.py
+    Backup: src/visualization/figure_generator.py.bak

@@ -52,8 +52,8 @@ def sweep_filter_wavelengths(cfg, center_wavelengths_nm=None, n_traj=5):
     results : list of dict
         Each dict: {'lambda1': float, 'lambda2': float, 'eta': float}
     """
-    from core.hops_simulator import HopsSimulator, MESOHOPS_AVAILABLE
-    from core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import HopsSimulator, MESOHOPS_AVAILABLE
+    from src.core.hamiltonian_factory import create_fmo_hamiltonian
 
     if not MESOHOPS_AVAILABLE:
         print("❌ MesoHOPS required for optimization. Activate MesoHOP-sim environment.")

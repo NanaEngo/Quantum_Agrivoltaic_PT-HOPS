@@ -14,7 +14,7 @@ import pytest
 # ── Log file location (same directory as simulation logs) ─────────────────────
 _LOG_DIR = Path(__file__).parent.parent / "reproducibility" / "logs"
 _LOG_DIR.mkdir(parents=True, exist_ok=True)
-_LOG_FILE = _LOG_DIR / f"tests_{datetime.now().strftime('%Y%m%d')}.log"
+_LOG_FILE = _LOG_DIR / f"tests_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
 _FMT = "%(asctime)s [%(levelname)s] %(name)s — %(message)s"
 _formatter = logging.Formatter(_FMT, datefmt="%H:%M:%S")

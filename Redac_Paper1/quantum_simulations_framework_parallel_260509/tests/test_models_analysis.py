@@ -7,12 +7,12 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from models.biodegradability_analyzer import BiodegradabilityAnalyzer
-from models.eco_design_analyzer import EcoDesignAnalyzer
-from models.lca_analyzer import LCAAnalyzer
-from models.techno_economic_model import TechnoEconomicModel
-from core.constants import DEFAULT_PCE, DEFAULT_ETR, DEFAULT_SYSTEM_LIFETIME
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.agrivoltaic.biodegradability_analyzer import BiodegradabilityAnalyzer
+from src.agrivoltaic.eco_design_analyzer import EcoDesignAnalyzer
+from src.agrivoltaic.lca_analyzer import LCAAnalyzer
+from src.agrivoltaic.techno_economic_model import TechnoEconomicModel
+from src.core.constants import DEFAULT_PCE, DEFAULT_ETR, DEFAULT_SYSTEM_LIFETIME
 
 logger = get_test_logger("test_models_analysis")
 

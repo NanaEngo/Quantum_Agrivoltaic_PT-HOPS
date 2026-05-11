@@ -8,9 +8,10 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from models.quantum_dynamics_simulator import MESOHOPS_AVAILABLE, QuantumDynamicsSimulator
-from models.spectroscopy_2des import Spectroscopy2DES
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.hops_simulator import MESOHOPS_AVAILABLE
+from models.quantum_dynamics_simulator import QuantumDynamicsSimulator
+from src.quantum.spectroscopy import Spectroscopy2DES
 
 logger = get_test_logger("test_models_dynamics")
 
@@ -23,6 +24,7 @@ def test_quantum_dynamics_simulator():
     time_points = np.linspace(0, 100, 20)
     psi0 = np.zeros(n_sites, dtype=complex)
     psi0[0] = 1.0
+    psi0 = psi0.reshape(-1)
 
     if not MESOHOPS_AVAILABLE:
         results = simulator.simulate_dynamics(time_points, psi0)

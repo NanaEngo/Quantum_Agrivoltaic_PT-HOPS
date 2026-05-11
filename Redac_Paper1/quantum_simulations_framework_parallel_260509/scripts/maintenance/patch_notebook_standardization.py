@@ -48,9 +48,9 @@ def standardize_notebook():
         # 1. Clean up imports in the initial import cell
         if "Import required libraries" in str(source) and "TechnoEconomicModel" in str(source):
             source = source.replace(
-                "from models.techno_economic_model import TechnoEconomicModel\n", ""
+                "from src.agrivoltaic.techno_economic_model import TechnoEconomicModel\n", ""
             )
-            source = source.replace("from models.spectroscopy_2des import Spectroscopy2DES\n", "")
+            source = source.replace("from src.quantum.spectroscopy import Spectroscopy2DES\n", "")
             if (
                 "import pandas as pd" in source
                 and "from models import TechnoEconomicModel" not in source
@@ -61,7 +61,7 @@ def standardize_notebook():
                 )
 
         # 2. Standardize framework import paths in import-heavy cells
-        if "from core.constants import" in str(source) and "FMO_SITE_ENERGIES_7" in str(source):
+        if "from src.core.constants import" in str(source) and "FMO_SITE_ENERGIES_7" in str(source):
             source = source.replace("from .core.constants", "from core.constants")
             source = source.replace("from .core.hops_simulator", "from core.hops_simulator")
             source = source.replace("from .models.", "from models.")
@@ -86,7 +86,7 @@ def standardize_notebook():
                     ")\n"
                     "from simulations import TestingValidationProtocols\n"
                     "from utils import CSVDataStorage\n"
-                    "from utils.figure_generator import FigureGenerator\n"
+                    "from src.visualization.figure_generator import FigureGenerator\n"
                 )
                 pattern = r"# Import models.*?(?=print\()"
                 try:
@@ -98,7 +98,7 @@ def standardize_notebook():
         if "from quantum_coherence_agrivoltaics_mesohops import create_fmo_hamiltonian" in source:
             source = source.replace(
                 "from quantum_coherence_agrivoltaics_mesohops import create_fmo_hamiltonian",
-                "from core.hamiltonian_factory import create_fmo_hamiltonian",
+                "from src.core.hamiltonian_factory import create_fmo_hamiltonian",
             )
 
         cell["source"] = source

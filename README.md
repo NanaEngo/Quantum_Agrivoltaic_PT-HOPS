@@ -2,6 +2,8 @@
 
 Computational framework, simulation pipelines, and manuscript source files for non-Markovian quantum dynamics in photosynthesis and agrivoltaics. This repository is currently optimized for the **JPCL Major Revision** of the manuscript *Spectral Bath Engineering via Non-Markovian Dynamics in the FMO Complex* (jz-2026-00994t).
 
+**Status:** ✅ All 9 core components verified operational | 🧪 20/25 tests passing (80%) | 📊 Laptop-friendly test suite available
+
 ---
 
 ## 🛠️ Environment Setup
@@ -42,11 +44,17 @@ watch -n 5 "ls -lh Redac_Paper1/quantum_simulations_framework_parallel_260509/re
 
 ### 3. Verification & Audits
 
-Run the 12-test SI validation suite or check convergence independently:
+Run the test suite with appropriate scope for your hardware:
 
 ```bash
-# Run SI Validation Suite
-mamba run -n MesoHOP-sim pytest Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/ -v
+# Laptop Quick Verification (30 seconds)
+mamba run -n MesoHOP-sim pytest Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/test_laptop_suite.py -v
+
+# Full SI Validation Suite (15+ minutes)
+mamba run -n MesoHOP-sim pytest Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/ -v --timeout=60
+
+# Skip slow integration tests
+mamba run -n MesoHOP-sim pytest Redac_Paper1/quantum_simulations_framework_parallel_260509/tests/ -v -k "not test_full_pipeline_flow"
 
 # Manually verify trace preservation in results
 grep "Trace OK" Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/logs/*.log
@@ -112,3 +120,15 @@ If a production run crashes, check available RAM: `free -h`.
 
 **MesoHOPS Fallback:**
 If you see "MesoHOPS NOT found", ensure your `PYTHONPATH` includes the framework directory or use the `mamba run` wrapper as shown above.
+
+**Test Failures on Laptop:**
+See [TEST_FAILURES_AND_FIXES.md](TEST_FAILURES_AND_FIXES.md) for:
+- Root causes of 5 failing tests (80% pass rate)
+- Laptop-friendly test suite (`test_laptop_suite.py`) for 30-second verification
+- Fixes for integration tests with reduced simulation time
+
+**Slow Tests:**
+Use `--timeout=60` flag to skip tests exceeding 60 seconds:
+```bash
+mamba run -n MesoHOP-sim pytest tests/ -v --timeout=60
+```

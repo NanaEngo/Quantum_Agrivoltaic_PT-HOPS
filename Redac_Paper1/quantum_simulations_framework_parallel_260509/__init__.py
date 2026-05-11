@@ -11,12 +11,10 @@ __version__ = "1.0.0"
 from .core.constants import *
 from .core.hops_simulator import HopsSimulator
 from .models import *
-from .simulations.testing_validation import TestingValidationProtocols
 from .utils.logging_config import get_logger, setup_logging
 
 __all__ = [
     "HopsSimulator",
-    "TestingValidationProtocols",
     "setup_logging",
     "get_logger",
 ]

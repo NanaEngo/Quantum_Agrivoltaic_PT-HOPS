@@ -8,7 +8,7 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 import scipy.linalg as la
-from core.constants import (
+from src.core.constants import (
     DEFAULT_MAX_TIME,
     DEFAULT_TEMPERATURE,
     DEFAULT_TIME_POINTS,

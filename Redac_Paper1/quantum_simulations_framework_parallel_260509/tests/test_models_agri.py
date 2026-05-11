@@ -7,11 +7,11 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from core.hamiltonian_factory import create_fmo_hamiltonian
-from models.agrivoltaic_coupling_model import AgrivoltaicCouplingModel
-from models.environmental_factors import EnvironmentalFactors
-from models.spectral_optimizer import SpectralOptimizer
-from core.constants import (
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.agrivoltaic.coupling_model import AgrivoltaicCouplingModel
+from src.agrivoltaic.environmental_factors import EnvironmentalFactors
+from src.quantum.spectral_optimization import SpectralOptimizer
+from src.core.constants import (
     DEFAULT_N_OPV_SITES,
     DEFAULT_N_PSU_SITES,
     DEFAULT_PCE,
