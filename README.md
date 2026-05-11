@@ -1,4 +1,5 @@
 # Quantum Dynamics & Spectral Bath Engineering
+> Last updated: 2026-05-11
 
 Computational framework, simulation pipelines, and manuscript source files for non-Markovian quantum dynamics in photosynthesis and agrivoltaics. This repository is currently optimized for the **JPCL Major Revision** of the manuscript *Spectral Bath Engineering via Non-Markovian Dynamics in the FMO Complex* (jz-2026-00994t).
 

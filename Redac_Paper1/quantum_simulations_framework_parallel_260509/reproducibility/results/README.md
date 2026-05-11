@@ -1,4 +1,5 @@
 # convergence results/
+> Last updated: 2026-05-11
 
 ## ⚠️ IMPORTANT — No valid convergence data exists yet
 

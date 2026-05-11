@@ -1,4 +1,5 @@
 # data/converged/
+> Last updated: 2026-05-11
 
 Valid L=10, K=10 simulation outputs go here as HDF5 (.h5) files.
 

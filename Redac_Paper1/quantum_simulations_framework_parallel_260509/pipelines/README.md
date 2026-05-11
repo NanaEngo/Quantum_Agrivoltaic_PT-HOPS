@@ -1,4 +1,5 @@
 # Reproducibility Pipelines
+> Last updated: 2026-05-11
 
 This directory contains complete reproducible workflows for the Quantum Agrivoltaic PT-HOPS framework.
 

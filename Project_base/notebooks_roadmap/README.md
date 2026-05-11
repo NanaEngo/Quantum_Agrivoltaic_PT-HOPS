@@ -1,4 +1,5 @@
 # Notebook Development Roadmap
+> Last updated: 2026-05-11
 
 This directory contains 12 Jupyter notebooks implementing the core methodologies of the PhD thesis
 **"Quantum Engineering of Symbiotic Agrivoltaic Systems"** with focus on eco-design and non-Markovian quantum dynamics.

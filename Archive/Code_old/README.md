@@ -1,4 +1,5 @@
 # Quantum Agrivoltaics Simulation Framework
+> Last updated: 2026-05-11
 
 This framework implements a complete simulation system for quantum-enhanced agrivoltaic systems based on the Process Tensor-HOPS (PT-HOPS) approach.
 

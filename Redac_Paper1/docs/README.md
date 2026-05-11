@@ -1,4 +1,5 @@
 # Quantum-Enhanced Agrivoltaics: Spectral Bath Engineering via Non-Markovian Dynamics
+> Last updated: 2026-05-11
 
 Research framework, simulation codebase, and manuscript source for the **JPCL Major Revision** (jz-2026-00994t).
 

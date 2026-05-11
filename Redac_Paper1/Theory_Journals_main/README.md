@@ -1,4 +1,5 @@
 # Theory Journal Submission — Implementation Guide
+> Last updated: 2026-05-11
 
 **Strategy:** Option B — Target computational/theoretical journals  
 **Primary Target:** Journal of Physical Chemistry Letters (JPCL)  

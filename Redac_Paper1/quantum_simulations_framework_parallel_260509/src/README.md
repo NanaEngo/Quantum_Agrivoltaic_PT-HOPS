@@ -1,4 +1,5 @@
 # Source Code Directory
+> Last updated: 2026-05-11
 
 This directory contains the reorganized source code for the Quantum Agrivoltaic PT-HOPS framework.
 
