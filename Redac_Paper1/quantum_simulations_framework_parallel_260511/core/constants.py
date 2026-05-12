@@ -199,6 +199,7 @@ DEFAULT_WORKERS: Final[int] = -1  # Use all available cores
 MEMORY_FRACTION_LIMIT: Final[float] = 0.66  # Use at most 2/3 of available RAM
 BASE_TRAJ_MEMORY_GB: Final[float] = 6.0  # Reference memory for L=8, K=2 production
 MIN_TRAJ_MEMORY_GB: Final[float] = 0.5   # Minimum floor for memory estimation
+MAX_N_JOBS: Final[int] = 10              # Hard cap on parallel trajectories to prevent OOM
 
 # =============================================================================
 # FILE PATHS

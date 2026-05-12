@@ -88,6 +88,7 @@ try:
         DEFAULT_TIME_STEP,
         BASE_TRAJ_MEMORY_GB,
         MIN_TRAJ_MEMORY_GB,
+        MAX_N_JOBS,
     )
 except ImportError:
     from .constants import (
@@ -115,6 +116,7 @@ except ImportError:
         DEFAULT_TIME_STEP,
         BASE_TRAJ_MEMORY_GB,
         MIN_TRAJ_MEMORY_GB,
+        MAX_N_JOBS,
     )
 
 try:
@@ -334,14 +336,13 @@ class HopsSimulator:
         if self.fallback_sim is None:
             self._init_fallback(**kwargs)
 
-    def _get_memory_estimate(self) -> float:
+    def _get_memory_estimate(self, n_hierarchy_modes: int = 21) -> float:
         """
-        Dynamically estimate memory per trajectory based on hierarchy depth (L)
-        and Matsubara terms (K).
+        Dynamically estimate memory per trajectory based on hierarchy depth (L),
+        Matsubara terms (K), and the actual number of hierarchy modes.
 
-        The scaling relies on heuristics: memory scales quadratically with max hierarchy
-        depth and linearly with the number of Matsubara terms. Safety buffers are applied 
-        to prevent system out-of-memory (OOM) errors.
+        Reference point: 21 modes (3 DL × 7 sites, no vibronic) at L=8, K=2 → 6.0 GB.
+        Full FMO run: 189 modes (3 DL + 24 vibronic × 7 sites) → scales ~9× → ~54 GB/traj.
 
         Returns
         -------
@@ -350,20 +351,23 @@ class HopsSimulator:
         """
         l_ref = 8.0
         k_ref = 2.0
-        
+        n_modes_ref = 21.0  # reference: 3 DL modes × 7 sites (audit baseline)
+
         # Quadratic scaling with L (approximate growth of hierarchy states)
         l_factor = (self.max_hierarchy / l_ref) ** 2
         # Linear scaling with K (minimum factor 0.5 to avoid under-estimation)
         k_factor = max(0.5, self.k_matsubara / k_ref)
-        
-        estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor
-        
+        # Linear scaling with number of hierarchy modes
+        modes_factor = max(1.0, n_hierarchy_modes / n_modes_ref)
+
+        estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor * modes_factor
+
         # Apply platform-specific safety buffer if RAM is low
         if HAS_PSUTIL:
             total_ram_gb = psutil.virtual_memory().total / (1024**3)
             if total_ram_gb < 16.0:
                 estimate *= 1.5  # 50% more conservative on low-RAM systems
-                
+
         return max(MIN_TRAJ_MEMORY_GB, estimate)
 
     @staticmethod
@@ -789,10 +793,11 @@ class HopsSimulator:
             if HAS_PSUTIL:
                 mem_avail_gb = psutil.virtual_memory().available / (1024**3)
                 mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
-                # Dynamic estimate based on L and K
-                traj_mem_gb = self._get_memory_estimate()
+                # Dynamic estimate based on L, K, and actual hierarchy mode count
+                n_hierarchy_modes = len(self.system_param.get("GW_SYSBATH", [])) if hasattr(self, "system_param") and self.system_param else 21
+                traj_mem_gb = self._get_memory_estimate(n_hierarchy_modes)
                 n_mem_jobs = max(1, int(mem_limit_gb / traj_mem_gb))
-                n_jobs = min(n_mem_jobs, cpu_count)
+                n_jobs = min(n_mem_jobs, cpu_count, MAX_N_JOBS)
                 logger.info(
                     f"Memory-aware n_jobs: {n_jobs} (Avail: {mem_avail_gb:.1f}GB, Limit: {mem_limit_gb:.1f}GB, Est/Traj: {traj_mem_gb:.1f}GB)"
                 )
