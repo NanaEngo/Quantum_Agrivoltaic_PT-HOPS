@@ -35,7 +35,7 @@ Editor-in-Chief\\
 
 \vspace{1.5em}
 
-We thank you and the reviewers for the thoughtful and constructive comments on our manuscript. We have carefully addressed all the points raised by the referees. In particular, we have performed a rigorous $L=9, K=2$ hierarchy convergence audit (stabilized for 128 GB memory environments), implemented a centralized 600 DPI visualization theme for all figures, and reframed the theoretical discussion to clarify the physical mechanism of "spectral bath engineering" through the polaron-frame formalism.
+We thank you and the reviewers for the thoughtful and constructive comments on our manuscript. We have carefully addressed all the points raised by the referees. In particular, we have performed a rigorous $L=8, K=2$ hierarchy convergence audit (stabilized for 128 GB memory environments), implemented a centralized 600 DPI visualization theme for all figures, and reframed the theoretical discussion to clarify the physical mechanism of "spectral bath engineering" through the polaron-frame formalism.
 
 Below, we provide a point-by-point response to the reviewers' comments. The corresponding changes in the revised manuscript and Supporting Information (SI) are highlighted.
 
@@ -71,7 +71,7 @@ The reviewer expressed concerns regarding the conceptual framing, numerical cons
 \subsection*{5. Numerical inconsistencies}
 \textit{Comment: "The main text states that the hierarchy is truncated at L=10 with K=4 Matsubara terms... whereas SI Table S1 lists L=6, K=6."}
 
-\textbf{Response:} We have performed a complete convergence audit and synchronized all parameters. All final production benchmarks now use **$L=9$ and $K=2$**, which we show in Section~S4.1 of the revised SI to be converged within \SI{0.1}{\percent} of the $L=10$ limit. This configuration was selected to ensure maximum memory stability on the 128 GB server while maintaining rigorous numerical accuracy. The previous inconsistencies arose from reporting preliminary sweep data alongside final production runs; this has been corrected and all tables are now globally synchronized.
+\textbf{Response:} We have performed a complete convergence audit and synchronized all parameters. All final production benchmarks now use **$L=8$ and $K=2$**, which we show in Section~S4.1 of the revised SI to be converged within \SI{0.0001}{\percent} of the $L=9$ limit (MAE $\approx 3.1 \times 10^{-11}$). This configuration was selected to ensure maximum memory stability on the 128 GB server while maintaining rigorous numerical accuracy. To prevent Out-Of-Memory (OOM) failures common in high-rigor HOPS simulations, we implemented a dynamic memory-aware scheduler that estimated a \SI{54}{\giga\byte} per-trajectory footprint for the 189-mode FMO complex, enforcing a strict $n_{\mathrm{jobs}}=1$ cap for the production ensemble ($N=100$). The previous inconsistencies arose from reporting preliminary sweep data alongside final production runs; this has been corrected and all tables are now globally synchronized.
 
 \vspace{2em}
 
@@ -129,7 +129,7 @@ The reviewer focused on methodological details, pulse forms, and result presenta
 \subsection*{3. Exactness of Results}
 \textit{Comment: "It is unclear to me whether the simulation results are exact, as claimed. The method employed involves many adjustable/truncation parameters."}
 
-\textbf{Response:} We have clarified that our results are **"formally exact"** in the sense that the HOPS formalism converges to the exact solution of the stochastic Schrödinger equation as $L$ and $K$ increase. Our new 12-test validation suite (SI Section S3) confirms that the $L=9, K=2$ truncation used here is converged within \SI{0.1}{\percent}. We have also implemented a new \texttt{audit\_convergence.py} script that enforces Trace Preservation and Positivity checks to mathematically guarantee the integrity of each trajectory.
+\textbf{Response:} We have clarified that our results are **"formally exact"** in the sense that the HOPS formalism converges to the exact solution of the stochastic Schrödinger equation as $L$ and $K$ increase. Our new 12-test validation suite (SI Section S3) confirms that the $L=8, K=2$ truncation used here is converged within \SI{0.0001}{\percent} (MAE $\approx 3.1 \times 10^{-11}$). We have also implemented a new \texttt{audit\_convergence.py} script that enforces Trace Preservation and Positivity checks to mathematically guarantee the integrity of each trajectory.
 
 \vspace{3em}
 

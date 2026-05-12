@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-05-10
+**Last updated:** 2026-05-12
 
 ## Project Overview
 
@@ -36,7 +36,7 @@ Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fi
 
 ### Repository Hygiene (STRICT)
 **The canonical directory for all simulation work is:**
-`Redac_Paper1/quantum_simulations_framework_parallel_260509/`
+`Redac_Paper1/quantum_simulations_framework_parallel_260512/`
 
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
@@ -90,17 +90,17 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 | File | Purpose |
 |------|---------|
-| `Redac_Paper1/Theory_Journals_main/JPCL/Manuscript_JPCL_26-05-08.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-05-10 |
-| `Redac_Paper1/Theory_Journals_main/JPCL/SI_JPCL_26-05-08.tex` | Revised Supporting Information — updated 2026-05-10 (η aligned = 0.20) |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Response_to_Reviewers_26-05-08.tex` | Point-by-point response letter |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Cover_Letter_JPCL_26-05-08.tex` | Cover letter (includes formatting response + cover art) |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Manuscript_JPCL_26-05-10.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-05-12 |
+| `Redac_Paper1/Theory_Journals_main/JPCL/SI_JPCL_26-05-10.tex` | Revised Supporting Information — updated 2026-05-12 |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Response_to_Reviewers_26-05-08.tex` | Point-by-point response letter — updated 2026-05-12 |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Cover_Letter_JPCL_26-05-08.tex` | Cover letter — updated 2026-05-12 |
 | `Redac_Paper1/Theory_Journals_main/JPCL/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260509/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260509/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260509/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260512/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260512/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260512/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260512/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -138,14 +138,14 @@ Quantum_Agrivoltaic_PT-HOPS/
 ├── .gitignore
 ├── Redac_Paper1/
 │   ├── Theory_Journals_main/JPCL/     # All JPCL submission files (dated filenames)
-│   │   ├── Manuscript_JPCL_26-05-08.tex
-│   │   ├── SI_JPCL_26-05-08.tex
+│   │   ├── Manuscript_JPCL_26-05-10.tex
+│   │   ├── SI_JPCL_26-05-10.tex
 │   │   ├── Response_to_Reviewers_26-05-08.tex
 │   │   ├── Cover_Letter_JPCL_26-05-08.tex
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework_parallel_260509/ # Simulation codebase
+│   └── quantum_simulations_framework_parallel_260512/ # Simulation codebase
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.
