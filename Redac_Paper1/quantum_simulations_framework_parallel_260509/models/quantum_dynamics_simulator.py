@@ -111,7 +111,7 @@ def _qds_run_single_traj(
             "SEED": seed_val,
             "MODEL": "FFT_FILTER",
             "TLEN": t_max + max(100.0, 5.0 / gamma_dl),
-            "TAU": dt_save,
+            "TAU": dt_save * 0.5,
         }
         hierarchy_param = {"MAXHIER": max_hier}
         integration_param = {

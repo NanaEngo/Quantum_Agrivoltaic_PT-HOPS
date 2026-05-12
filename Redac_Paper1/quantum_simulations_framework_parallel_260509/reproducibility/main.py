@@ -36,7 +36,7 @@ import argparse
 import logging
 import yaml
 import numpy as np
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from src.core.constants import (
     DEFAULT_DPI,
     PREVIEW_DPI,
@@ -408,6 +408,10 @@ def _build_initial_state_for_label(H: np.ndarray, label: str, pulse_cfg: Dict[st
     )
     return psi0
 
+
+def run_step3_full_simulation(cfg):
+    """
+    Run the full FMO ensemble simulation for both filtered and broadband excitation.
 
     FIX H-1: returns results['filtered']['t_axis'] as the canonical time axis,
     not the stale t_save from the inner broadband loop.

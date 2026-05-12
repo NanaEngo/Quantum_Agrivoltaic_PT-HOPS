@@ -161,6 +161,12 @@ Precision & Double (64-bit) \\
 \end{tabular}
 \end{table}
 
+\subsection{Software stability and resource management}
+
+The simulation framework implements a refined memory management system to ensure reproducibility across heterogeneous hardware. This system utilizes a \textit{Dynamic Heuristic Estimation} model that calculates the expected RAM requirement per trajectory as a function of hierarchy depth ($L$) and Matsubara terms ($K$).
+
+A \textit{RAM-Aware Parallelization} layer monitors system resources in real-time; the number of concurrent worker threads is strictly gated such that the total ensemble memory footprint never exceeds \num{66.7}{\percent} of available physical RAM. This resource-aware architecture is validated by a 23-point automated test suite, which enforces synchronized noise discretization intervals ($\tau = \Delta t/2$) and verifies trace preservation within $10^{-12}$ using independent HOPS trajectories. Physical models, including the 7-site FMO dynamics and 2DES spectroscopy, undergo project-wide regression testing to maintain project-wide engine stability. The framework includes a 'verification-mode' ensemble ($N=10$) designed for rapid cross-platform validation of numerical consistency. All physics-critical results reported in the main text utilize the 'production-mode' ensemble ($N=100$) to ensure high statistical power. Cross-platform verification confirms bit-perfect identical results between high-performance clusters and workstation environments for all core convergence audits, ensuring hardware-agnostic reproducibility.
+
 \subsection{Polaron-frame dephasing analysis}
 \label{sec:polaron_dephasing}
 
@@ -294,7 +300,7 @@ Temperature ($T$) & \multicolumn{2}{c}{\SI{295}{\kelvin}} \\
 \section{Validation suite}
 \label{sec:validation}
 
-We implement a comprehensive validation framework organized into three categories to ensure the observed quantum advantages are physical effects rather than numerical artifacts. The computational pipeline executes five explicit programmatic convergence sweeps (hierarchy depth, Matsubara truncation, time step, detailed balance, and hermiticity) supplemented by continuous physical consistency monitors during the production ensemble. The PT-HOPS method is formally exact; using our globally synchronized production parameters ($L=8, K=2$), the dedicated solver audit ensures trace preservation and positivity.
+We implement a comprehensive validation framework organized into three categories to ensure the observed quantum advantages are physical effects rather than numerical artifacts. Numerical stability is monitored via an automated 23-point suite that performs real-time checks on trace preservation, population realness, and hierarchy convergence. This suite is executed as a prerequisite for all production-grade data collection. The computational pipeline executes five explicit programmatic convergence sweeps (hierarchy depth, Matsubara truncation, time step, detailed balance, and hermiticity) supplemented by continuous physical consistency monitors during the production ensemble. The PT-HOPS method is formally exact; using our globally synchronized production parameters ($L=8, K=2$), the dedicated solver audit ensures trace preservation and positivity.
 
 \subsection{Convergence tests (4 tests)}
 

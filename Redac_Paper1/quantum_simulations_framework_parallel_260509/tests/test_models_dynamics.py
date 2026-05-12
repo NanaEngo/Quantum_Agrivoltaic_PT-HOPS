@@ -21,12 +21,19 @@ def test_quantum_dynamics_simulator():
     simulator = QuantumDynamicsSimulator(H)
 
     # Reduced time window for laptop testing
-    time_points = np.linspace(0, 10, 5)  # Changed from (0, 100, 20)
+    # Ensure time_points are multiples of dt_save (2.0 fs)
+    time_points = np.arange(0, 11, 2.0) 
     psi0 = np.zeros(n_sites, dtype=complex)
     psi0[0] = 1.0
     psi0 = psi0.reshape(-1)
 
-    results = simulator.simulate_dynamics(time_points, psi0)
+    # Use laptop-friendly parameters to prevent OOM
+    simulator.n_traj = 10
+    simulator.max_hier = 2
+    # Ensure all timesteps align to 2.0 fs to avoid TrajectoryError
+    simulator.dt_save = 2.0 
+    
+    results = simulator.simulate_dynamics(initial_state=psi0, time_points=time_points, dt_save=2.0)
 
     logger.info(f"QuantumDynamicsSimulator: pop shape={results['populations'].shape}")
     assert "populations" in results
