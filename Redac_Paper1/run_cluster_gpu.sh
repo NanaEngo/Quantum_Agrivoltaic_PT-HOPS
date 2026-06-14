@@ -8,7 +8,7 @@
 
 # ── Fix 1: anchor all paths to the script's own directory ─────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FRAMEWORK_DIR="$SCRIPT_DIR/quantum_simulations_framework_parallel_260512"
+FRAMEWORK_DIR="$SCRIPT_DIR/quantum_simulations_framework_parallel_260612"
 MAIN_SCRIPT="$FRAMEWORK_DIR/reproducibility/main.py"
 
 # ── Fix 2: log goes inside the framework's log directory ──────────────────────

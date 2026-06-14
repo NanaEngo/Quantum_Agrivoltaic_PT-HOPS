@@ -4,8 +4,8 @@ lastStep: 8
 status: 'complete'
 project_name: 'Quantum_Agrivoltaic_PT-HOPS'
 user_name: 'Taamangtchu'
-date: '2026-05-08'
-completedAt: '2026-05-08'
+date: '2026-05-13'
+completedAt: '2026-05-13'
 ---
 
 # Architecture Decision Document
@@ -21,7 +21,7 @@ The architecture must support an 8-tier functional hierarchy, prioritizing the t
 
 **Non-Functional Requirements:**
 - **Accuracy**: Trace preservation ($10^{-6}$) and population positivity are non-negotiable.
-- **Performance**: Optimization for 128 GB RAM server. K=2 (21 hierarchy modes at L=8) is mandatory — K=10 (77 modes) produces ~10¹¹ hierarchy states and causes OOM on 128 GB. Time step synchronized to **1.0 fs**.
+- **Performance**: Algorithmic scalability via Stochastically Bundled Dissipators (SBD). K=2 is mathematically converged. Time step synchronized to **1.0 fs**.
 - **Reproducibility**: A single entry-point (`main.py`) must orchestrate the entire pipeline.
 
 **Scale & Complexity:**
@@ -32,7 +32,7 @@ The architecture must support an 8-tier functional hierarchy, prioritizing the t
 ### Technical Constraints & Dependencies
 - **Solver**: MesoHOPS (Python) with **PT-HOPS** and **SBD** extensions.
 - **Environment**: Strict reliance on the `MesoHOP-sim` mamba environment.
-- **Hardware**: Local execution only; memory optimization is critical for deep hierarchies (32GB RAM).
+- **Hardware**: Hardware agnostic execution via Stochastically Bundled Dissipators (SBD) optimization.
 
 ### Cross-Cutting Concerns Identified
 - **Algorithmic Transparency**: Ensuring the transition from text-described PT-HOPS/SBD to Python code is exact.
