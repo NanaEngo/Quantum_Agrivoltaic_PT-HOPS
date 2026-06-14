@@ -187,8 +187,8 @@ def _run_single_traj_worker(
         Time interval for saving state data during propagation.
     time_points : NDArray[np.float64]
         Array of explicit time points at which noise is evaluated.
-    mem_limit_gb : float
-        Per-process virtual memory limit in GB (0 = no limit).
+    mem_limit_gb : float, optional
+        Per-process virtual memory limit in GB (default: 0.0, no limit).
 
     Returns
     -------

@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-13 (Session 3b — Test bugs fixed, pytest verified)
+**Last updated:** 2026-06-14 (Session 3c — MesoHOPS SBD fix, post-processing stability, production launch)
 
 ## Project Overview
 
@@ -84,11 +84,12 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - `environmental_factors.py`: Replaced seasonal "Time (days)" cycle with physically motivated static temperature sweeps (FR11)
 - **Code Merge & Data Reconciliation (2026-05-10)**: Merged server-side best practices (Python 3.10+ type hints, NumPy-style docstrings, `np.diag` initialization) into `core/hamiltonian_factory.py`. Local `quantum_simulations_framework_parallel_260612/` confirmed as the canonical reference with all improvements incorporated. Production CSV format verified identical (local=server). SI `η` value aligned: Test 10 corrected from 0.22(4) to 0.20(4) to match production ensemble average.
 - **CSV Format Verified**: Both local and server CSVs use the same column schema (`time_fs` + 7 site populations + `coherences` + broadband columns). No compatibility patch needed for figure generator.
-### ✅ R2 Audit (2026-06-13)
-- **Transfer Yield Definition (Rev 3 Pt 1)**: Changed from `1.0 - data['populations'][-1, 0]` to `data['populations'][-1, FMO_TARGET_SITE]` (Site 3, index 2 = RC exit). Applied across `reproducibility/main.py`, `pipelines/jpcl_resubmission/main.py`, and `reproducibility/optimize.py`.
-- **FMO_TARGET_SITE Constant**: Added `FMO_TARGET_SITE = 2` to `core/constants.py` to provide a single source of truth for the target site definition.
-- **Spectral Density Discrete Modes (Rev 3 Pt 2)**: Enhanced `utils/figure_generator.py:plot_bath_spectral_density()` to plot discrete triangular markers at each of the 12 Kleinekathöfer/Coker vibronic mode frequencies, with labeled vertical guide lines.
-- **AGENTS.md Hygiene**: Fixed all stale `260509` path references to `260612`; updated status date.
+### ✅ R3 Audit (2026-06-14)
+- **SBD Trajectory Fix**: Fixed `TrajectoryError` due to time step mismatch (`TAU`/`dt` consistency) in `hops_simulator.py`.
+- **Worker Post-processing Stability**: Added defensive array shape filtering (`psi_data_filtered`) to handle inhomogeneous trajectory results in parallel workers.
+- **Adaptive Hierarchy**: Enabled `ADAPTIVE_H` and `ADAPTIVE_S` in `eom_param` for robust hierarchical propagation.
+- **Production Safety**: Forced `MAX_N_JOBS=1` in `constants.py` to prevent OOM on server.
+- **Documentation**: Updated `AGENTS.md` to mandate `rsync` protocol after local codebase changes.
 
 ### ⚠️ Requires MesoHOPS environment (cannot be done without real solver)
 - (None) — All high-rigor production tasks have been completed.
