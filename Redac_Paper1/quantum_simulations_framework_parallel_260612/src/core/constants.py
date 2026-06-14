@@ -234,7 +234,7 @@ BASE_PYTHON_OVERHEAD_GB: Final[float] = (
     2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
 )
 MAX_N_JOBS: Final[int] = (
-    8  # Upper bound; MemoryAwareJobScheduler selects actual n_jobs dynamically
+    1  # Force séquentiel pour production (OOM prevention)
 )
 
 

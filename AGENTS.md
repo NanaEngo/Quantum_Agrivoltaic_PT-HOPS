@@ -38,6 +38,11 @@ Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fi
 **The canonical directory for all simulation work is:**
 `Redac_Paper1/quantum_simulations_framework_parallel_260612/`
 
+**ALWAYS SYNC AFTER CHANGES**: After every local modification to the codebase, you MUST synchronize the files to the server using `rsync` to ensure the production environment is up-to-date:
+```bash
+rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260612/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
+```
+
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
 - `Redac_Paper1/quantum_simulations_framework_parallel/` (DELETED)

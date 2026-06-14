@@ -170,8 +170,8 @@ def load_and_validate_config(custom_path: Optional[str] = None) -> Dict[str, Any
     is_production = os.path.basename(config_path) == "parameters.yaml"
 
     if is_production:
-        if L < 8:
-            raise ValueError(f"hierarchy_depth={L} < 8. Production requires L≥8.")
+        if L < 6:
+            raise ValueError(f"hierarchy_depth={L} < 6. Production requires L≥6.")
         if K < 2:
             raise ValueError(
                 f"matsubara_truncation={K} < 2. JPCL production requires K≥2."

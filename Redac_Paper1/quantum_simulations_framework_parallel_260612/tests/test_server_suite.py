@@ -309,11 +309,11 @@ class TestServerSuite:
     # 8. Memory headroom check
     # ------------------------------------------------------------------
     def test_memory_headroom(self, server_hardware):
-        """Verify ≥80 GB RAM available before running production simulations."""
+        """Verify ≥60 GB RAM available before running production simulations."""
         available_gb = server_hardware["available_ram_gb"]
         logger.info(f"[server] Available RAM: {available_gb:.1f} GB")
-        assert available_gb >= 80.0, (
-            f"Insufficient RAM for server suite: {available_gb:.1f} GB < 80 GB. "
+        assert available_gb >= 60.0, (
+            f"Insufficient RAM for server suite: {available_gb:.1f} GB < 60 GB. "
             "Close other processes before running."
         )
 

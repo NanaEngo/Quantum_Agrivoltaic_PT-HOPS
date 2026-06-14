@@ -8,16 +8,16 @@
 
 ### Connexion
 ```bash
-ssh penavora@100.73.21.40
+ssh nanaengo@100.73.21.40
 ```
 
 ### Transfert du code
 ```bash
 # Depuis le laptop (code canonique)
 tar czf /tmp/quantum_sim_fw.tar.gz \
-  Redac_Paper1/quantum_simulations_framework_parallel_260612/
-scp /tmp/quantum_sim_fw.tar.gz penavora@100.73.21.40:~/
-ssh penavora@100.73.21.40 "cd ~/ && tar xzf quantum_sim_fw.tar.gz"
+  /quantum_simulations_framework_parallel_260612/
+scp /tmp/quantum_sim_fw.tar.gz nanaengo@100.73.21.40:~/
+ssh nanaengo@100.73.21.40 "cd ~/ && tar xzf quantum_sim_fw.tar.gz"
 ```
 
 ---
@@ -45,7 +45,7 @@ ssh penavora@100.73.21.40 "cd ~/ && tar xzf quantum_sim_fw.tar.gz"
 
 ### Lancement
 ```bash
-cd ~/Redac_Paper1/quantum_simulations_framework_parallel_260612
+cd ~/quantum_simulations_framework_parallel_260612
 nohup ~/miniforge3/envs/MesoHOP-sim/bin/python \
   reproducibility/main.py --parallel --skip-audit \
   > ~/production_run.log 2>&1 &
@@ -68,7 +68,7 @@ pkill -f "main.py --parallel"
 ## 4. Figure 2 — Temperature Sweep
 
 ```bash
-cd ~/Redac_Paper1/quantum_simulations_framework_parallel_260612
+cd ~/quantum_simulations_framework_parallel_260612
 nohup ~/miniforge3/envs/MesoHOP-sim/bin/python \
   reproducibility/run_temp_sweep_only.py \
   > ~/sweep_cluster.log 2>&1 &
@@ -104,9 +104,9 @@ sudo reboot
 
 ```bash
 # Depuis le laptop
-scp penavora@100.73.21.40:~/Redac_Paper1/quantum_simulations_framework_parallel_260612/data/converged/*.csv \
+scp nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/data/converged/*.csv \
   ./data/converged/
-scp penavora@100.73.21.40:~/Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/*.csv \
+scp nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/reproducibility/results/*.csv \
   ./reproducibility/results/
 ```
 

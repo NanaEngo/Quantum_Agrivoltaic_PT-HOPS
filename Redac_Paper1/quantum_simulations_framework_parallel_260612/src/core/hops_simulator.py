@@ -221,6 +221,7 @@ def _run_single_traj_worker(
 
         # Enable adaptive hierarchy (before initialization)
         if hasattr(trajectory, "make_adaptive"):
+            logger.info("Calling trajectory.make_adaptive()")
             trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
 
         if use_pt_hops and pt_hops_noise_class is not None:
@@ -233,10 +234,19 @@ def _run_single_traj_worker(
 
         trajectory.initialize(initial_state.copy())
         trajectory.propagate(t_max, dt_save)
-
+        
+        # Extract physical subspace defensively
+        n_sites = initial_state.shape[0]
+        psi_data = trajectory.storage.data["psi_traj"]
+        t_data = trajectory.storage.data["t_axis"]
+        
+        # Filtre défensif : on ne garde que les éléments de la bonne taille
+        valid_data = [psi[:n_sites] for psi in psi_data if len(psi) >= n_sites]
+        valid_t = [t for i, t in enumerate(t_data) if len(psi_data[i]) >= n_sites]
+        
         return {
-            "psi_traj": np.array(trajectory.storage.data["psi_traj"]),
-            "t_axis": np.array(trajectory.storage.data["t_axis"]),
+            "psi_traj": np.stack(valid_data),
+            "t_axis": np.array(valid_t),
             "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
         }
     except Exception as e:
@@ -826,9 +836,14 @@ class HopsSimulator:
             }
 
             # Set up EOM parameters - use NORMALIZED NONLINEAR for better numerical stability
+            adaptive = kwargs.get("adaptive", True)
             eom_param = {
                 "EQUATION_OF_MOTION": "NORMALIZED NONLINEAR",
                 "TIME_DEPENDENCE": False,
+                "ADAPTIVE_H": adaptive,
+                "ADAPTIVE_S": adaptive,
+                "DELTA_A": kwargs.get("delta_a", 1e-3),
+                "DELTA_S": kwargs.get("delta_s", 1e-3),
             }
 
             # Set up noise parameters based on test examples
@@ -847,7 +862,7 @@ class HopsSimulator:
                 "SEED": kwargs.get("seed", MESOHOPS_SEED),
                 "MODEL": "FFT_FILTER",
                 "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),
-                "TAU": float(dt_save),
+                "TAU": float(dt_save) / 2.0,  # Réversion : TAU = dt_save / 2.0 (fonctionnel)
                 "INTERPOLATE": False,
                 "RAND_MODEL": "SUM_GAUSSIAN",
                 "STORE_RAW_NOISE": False,

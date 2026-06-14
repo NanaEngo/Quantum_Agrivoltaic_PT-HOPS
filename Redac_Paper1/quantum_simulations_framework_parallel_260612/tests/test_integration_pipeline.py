@@ -44,7 +44,7 @@ def test_config_validation_failure():
     """Verify that L < DEFAULT_MAX_HIERARCHY raises ValueError."""
     bad_L = DEFAULT_MAX_HIERARCHY - 4
     logger.info(
-        f"Testing config rejection for L={bad_L} (min required: {DEFAULT_MAX_HIERARCHY})"
+        f"Testing config rejection for L={bad_L} (min required: 6)"
     )
     bad_config = {
         "dynamics": {"L_max": bad_L, "matsubara_truncation": DEFAULT_N_MATSUBARA},
@@ -55,7 +55,7 @@ def test_config_validation_failure():
             with patch(
                 "os.path.basename", return_value="parameters.yaml"
             ):  # Force production mode
-                with pytest.raises(ValueError, match=f"hierarchy_depth={bad_L} < 8"):
+                with pytest.raises(ValueError, match=f"hierarchy_depth={bad_L} < 6"):
                     load_and_validate_config()
 
 

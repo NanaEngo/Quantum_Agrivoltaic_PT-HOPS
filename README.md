@@ -70,7 +70,7 @@ All dynamics simulations read from:
 
 - **Hierarchy Depth:** $L=8$ (Converged to MAE $\approx \num{3.10e-11}$)
 - **Matsubara Terms:** $K=2$ (Physically sufficient at \qty{295}{\kelvin})
-- **Time Step:** $\Delta t = 1.0$ fs
+- **Time Step:** $\Delta t = 0.5$ fs
 - **Bath Model:** 12-mode vibronic bath (Kleinekathöfer/Coker)
 
 ---
