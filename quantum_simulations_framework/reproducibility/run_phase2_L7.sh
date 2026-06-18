@@ -66,8 +66,8 @@ echo "  Running alongside Phase 1 (no cleanup)"
 echo "============================================"
 echo ""
 
-# ===== TEMPERATURE SWEEP =====
-for T in 285 290 300 305 310; do
+# ===== TEMPERATURE SWEEP (from T290, T285 already completed) =====
+for T in 290 300 305 310; do
     run_sweep "T${T}" $N_ROB "cfg['bath']['temperature'] = float($T)"
 done
 
