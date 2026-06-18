@@ -12,7 +12,7 @@ CONFIG_BASE="$FRAMEWORK_DIR/config/server_production.yaml"
 PYTHON="$HOME/miniforge3/envs/MesoHOP-sim/bin/python"
 MAIN="$FRAMEWORK_DIR/reproducibility/main.py"
 RESULTS="$FRAMEWORK_DIR/reproducibility/results"
-N_ROB=10
+N_ROB=15
 PARALLEL="--parallel"
 OMP_NUM_THREADS=24
 MKL_NUM_THREADS=24
@@ -27,6 +27,7 @@ run_sweep() {
     local log="$FRAMEWORK_DIR/reproducibility/sweep_${label}_$(timestamp).log"
 
     # Build modified YAML (L=7 + sweep parameter)
+    # n_disorder_samples=1 to skip costly disorder sampling in Phase 2
     $PYTHON -c "
 import yaml, copy
 with open('$CONFIG_BASE') as f:
@@ -34,6 +35,7 @@ with open('$CONFIG_BASE') as f:
 cfg['dynamics']['L_max'] = 7
 cfg['simulation']['n_traj'] = $n_traj
 cfg['simulation']['n_traj_temp_sweep'] = $n_traj
+cfg['simulation']['n_disorder_samples'] = 1
 $3
 with open('$yaml', 'w') as f:
     yaml.dump(cfg, f, default_flow_style=False)
@@ -64,8 +66,8 @@ echo "  Running alongside Phase 1 (no cleanup)"
 echo "============================================"
 echo ""
 
-# ===== TEMPERATURE SWEEP =====
-for T in 285 290 300 305 310; do
+# ===== TEMPERATURE SWEEP (skip T285 done) =====
+for T in 290 300 305 310; do
     run_sweep "T${T}" $N_ROB "cfg['bath']['temperature'] = float($T)"
 done
 
