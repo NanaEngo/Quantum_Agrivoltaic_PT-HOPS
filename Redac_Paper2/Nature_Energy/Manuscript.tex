@@ -27,7 +27,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage[version=4]{siunitx}
+\usepackage{siunitx}
 \usepackage{physics}
 \usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
@@ -86,9 +86,7 @@
 % =============================================================================
 
 \textbf{Editorial Summary}\\
-Smart photovoltaic panels that selectively transmit only the specific colours of light most useful for photosynthesis could simultaneously boost crop growth and generate renewable electricity. By integrating a semi-transparent organic solar cell with a nanoscale plasmonic cavity, the system actively shapes the transmitted spectrum rather than passively blocking light. Quantum mechanical simulations show that this spectral shaping extends the lifetime of quantum coherence in the photosynthetic machinery by 50\%, enhancing the efficiency of light-to-biomass conversion. The ``smart shield'' also reduces water loss from crops by 28\% and cuts carbon emissions by more than double compared to conventional semi-transparent solar panels. A cooperative ownership model makes the technology affordable for smallholder farmers in developing economies, with investment costs recovered within 3.5 years.
-
-\maketitle
+Smart photovoltaic panels that selectively transmit only the specific colours of light most useful for photosynthesis could simultaneously boost crop growth and generate renewable electricity. By integrating a semi-transparent organic solar cell with a nanoscale plasmonic cavity, the system actively shapes the transmitted spectrum rather than passively blocking light. Quantum mechanical simulations show that this spectral shaping extends the lifetime of quantum coherence in the photosynthetic machinery by \SI{50}{\percent} and enhances the efficiency of light-to-biomass conversion. The ``smart shield'' also reduces water loss from crops by \SI{28}{\percent} and reduces carbon emissions by more than a factor of two compared to conventional semi-transparent solar panels. A cooperative ownership model makes the technology affordable for smallholder farmers in developing economies, with investment costs recovered within \SI{3.5}{\year}.
 
 % =============================================================================
 % ABSTRACT
@@ -96,11 +94,11 @@ Smart photovoltaic panels that selectively transmit only the specific colours of
 
 \begin{abstract}
 Land-use conflicts between photovoltaic panels and crops limit conventional agrivoltaics.
-We propose a quantum-engineered solution: a semi-transparent organic photovoltaic layer integrated with a nanoparticle-on-mirror plasmonic cavity that acts as an active spectral shaper rather than a passive shade.
+We propose a quantum-engineered solution: a semi-transparent organic photovoltaic layer integrated with a nanoparticle-on-mirror plasmonic cavity that acts as an active spectral shaper rather than providing passive shading.
 By transmitting narrow bands at \SI{750}{\nm} and \SI{820}{\nm}, the system prepares polaron-dressed vibronic states in the Fenna--Matthews--Olson complex, extending excitonic coherence lifetimes by \SI{50}{\percent} and increasing forward transfer yields by \SI{25}{\percent} at \SI{295}{\kelvin}.
-A \SI{9}{\times}\SI{9}{} dressed Hamiltonian captures the collective strong-coupling regime; Floquet Stark detuning and optomechanically induced transparency protect the complex from exciton overload.
-This ``smart shield'' reduces crop evapotranspiration by \SI{28}{\percent} and yields a Net Ecological Benefit of \SI{12.4}{\kg\ CO2e\per\m\squared\per\yr} --- \SI{2.4}{\times} greater than static shading.
-Cooperative ownership models amortize capital expenditure within \SI{3.5}{\yr}; BB84 quantum key distribution secures IoT telemetry with a \SI{4.8}{\percent} quantum bit error rate.
+A \numproduct{9x9} dressed Hamiltonian captures the collective strong-coupling regime; Floquet Stark detuning and optomechanically induced transparency protect the complex from exciton overload.
+This ``smart shield'' reduces crop evapotranspiration by \SI{28}{\percent} and yields a Net Ecological Benefit of \SI{12.4}{\kg\ CO2e\per\m\squared\per\year} --- \SI{2.4}{\times} greater than static shading.
+Cooperative ownership models amortize capital expenditure within \SI{3.5}{\year}; BB84 quantum key distribution secures IoT telemetry with a \SI{4.8}{\percent} quantum bit error rate.
 Coordinated vibronic light-harvesting thus bridges quantum coherence engineering with agricultural sustainability.
 \end{abstract}
 
@@ -111,7 +109,7 @@ Coordinated vibronic light-harvesting thus bridges quantum coherence engineering
 \section*{Introduction}
 
 Agrivoltaics --- co-locating photovoltaic (PV) panels and crops on the same land --- addresses growing competition between food production and renewable energy~\cite{Goetzberger1981,Dupraz2011}.
-Standard semi-transparent PV systems act as static optical filters: they reduce total irradiance uniformly, trading electricity for crop yield without exploiting the spectral dimension of the light-sharing problem~\cite{Thompson2020,Alshareef2024}.
+Standard semi-transparent PV systems act as static optical filters: they reduce total irradiance uniformly, trading electricity for crop yield without exploiting the spectral dimension of the spectral light-management challenge~\cite{Thompson2020,Alshareef2024}.
 Photosynthetic apparatus in green plants and bacteria evolved under a spectrally structured photon flux, where specific wavelengths drive charge separation while others dissipate as heat~\cite{Blankenship2011b}.
 This spectral specificity creates an opportunity: if the PV layer transmits only the wavelengths most useful for photosynthesis while harvesting the remainder, the dual-use conflict becomes a synergy.
 
@@ -126,7 +124,7 @@ Single-photon experiments have confirmed that quantum coherence persists in indi
 Here we extend this principle in three directions.
 
 First, we introduce an 8-site FMO model with a non-Hermitian reaction center trap on sites 3 and 4, enabling quantitative computation of the forward transfer yield $\Phi_{\mathrm{FT}}$ as the time-integrated population captured by the reaction center.
-Second, we embed the FMO complex in a nanoparticle-on-mirror (NPoM) plasmonic cavity~\cite{Chikkaraddy2016} that couples the biological light-harvesting system to the organic photovoltaic (OPV) layer through strong coherent coupling, forming a \SI{9}{\times}\SI{9}{} dressed Hamiltonian.
+Second, we embed the FMO complex in a nanoparticle-on-mirror (NPoM) plasmonic cavity~\cite{Chikkaraddy2016} that couples the biological light-harvesting system to the organic photovoltaic (OPV) layer through strong coherent coupling, forming a \numproduct{9x9} dressed Hamiltonian.
 Third, we incorporate dynamic photo-protection mechanisms --- Floquet Stark detuning and optomechanically induced transparency (OMIT) --- that mimic the non-photochemical quenching used by plants under high light stress.
 
 The microscopic quantum optimization is then mapped onto a macroscopic multi-scale lifecycle assessment.
@@ -178,10 +176,10 @@ g_0 = g_{\mathrm{ref}} \sqrt{\frac{V_{\mathrm{ref}}}{V_{\mathrm{mode}}}},
 \end{equation}
 with $g_{\mathrm{ref}} = \SI{120}{\per\cm}$ at $V_{\mathrm{ref}} = \SI{1}{\nm\cubed}$~\cite{Chikkaraddy2016}.
 At the sub-nanometer mode volumes accessible in NPoM cavities ($V_{\mathrm{mode}} < \SI{1}{\nm\cubed}$), $g_0$ exceeds \SI{200}{\per\cm}$. For gold NPoM cavities, the plasmon decay rate $\kappa \approx \SI{800}{\per\cm}$ (corresponding to a quality factor $Q \approx 15$)~\cite{Chikkaraddy2016} and the exciton dephasing rate $\gamma \approx \SI{80}{\per\cm}$ at \SI{295}{\kelvin}~\cite{Ishizaki2009}. Although $g_0/\kappa \sim 0.25$ places the bare system below the strong-coupling threshold, the collective coupling of $N \sim 10^2$ FMO chromophores within the hot spot volume enhances the effective coupling to $g_{\mathrm{eff}} = g_0\sqrt{N} \sim \SI{2000}{\per\cm}$, firmly in the collective strong-coupling regime~\cite{Chikkaraddy2016}. This cooperative enhancement enables the coherent dressing of the FMO excitonic manifold by the cavity mode.
-A numerical guardrail caps $g_0$ at \SI{1000}{\per\cm}$ when $V_{\mathrm{mode}} \to 0$ to prevent divergences.
+A numerical bound caps $g_0$ at \SI{1000}{\per\cm} when $V_{\mathrm{mode}} \to 0$ to prevent divergences.
 Recent advances in quantum-tunnel-junction plasmonic sources have demonstrated that such sub-nanometer cavities can be self-illuminating, eliminating the need for bulky external optics~\cite{Lee2025}.
 
-The dressed Hamiltonian expands to \SI{9}{\times}\SI{9}{}:
+The dressed Hamiltonian expands to \numproduct{9x9}:
 \begin{equation}
 \hat{H}_{\mathrm{dressed}} = 
 \begin{pmatrix}
@@ -230,7 +228,7 @@ T_{\mathrm{OMIT}}(I) = T_0 \left(1 + \frac{I}{I_{\mathrm{sat}}}\right)^{-1},
 \end{equation}
 where $I$ is the incident flux and $I_{\mathrm{sat}} = \SI{800}{\W\per\m\squared}$.
 At \SI{1000}{\W\per\m\squared}, the transmission drops to \SI{64}{\percent} of baseline (\Cref{fig:npq_switch}b), providing dynamic protection against exciton overload.
-At zero flux (night mode), both mechanisms return to zero without singularities (\Cref{SI-sec:npq}).
+At zero flux (night mode), both mechanisms vanish smoothly without numerical singularities (\Cref{SI-sec:npq}).
 
 \subsection*{In Situ SERS Optomechanical Diagnostics}
 
@@ -246,7 +244,7 @@ The relative intensities encode the instantaneous exciton population distributio
 
 The spectrally selective OPV layer functions as a ``smart shield'' that blocks ultraviolet and near-infrared radiation while transmitting photosynthetically active bands.
 We parameterize the greenhouse microclimate using the FAO-56 Penman--Monteith equation~\cite{Allen1998} adapted for shaded conditions (see Methods).
-Under standard conditions (\SI{600}{\W\per\m\squared}, \SI{25}{\celsius}, \SI{60}{\percent} humidity, wind speed reduced to \SI{0.2}{\m\per\s} inside the greenhouse (approximately 10\% of external, consistent with FAO-56 protected-crop guidelines~\cite{Allen1998})), the open-field evapotranspiration is \SI{4.5}{\mm\per\day}.
+Under standard conditions (\SI{600}{\W\per\m\squared}, \SI{25}{\celsius}, \SI{60}{\percent} humidity, wind speed reduced to \SI{0.2}{\m\per\s} inside the greenhouse (approximately \SI{10}{\percent} of external, consistent with FAO-56 protected-crop guidelines~\cite{Allen1998})), the open-field evapotranspiration is \SI{4.5}{\mm\per\day}.
 With the OPV smart shield ($f_{\mathrm{shade}} = 0.35$, $R_n$ reduced proportionally), $\mathrm{ET}_c$ drops to \SI{3.2}{\mm\per\day} --- a \SI{28}{\percent} reduction --- translating to \SI{1.3}{\mm\per\day} in water savings (\Cref{fig:lca_comparison}a).
 The crop coefficient $K_c = 0.85$ is chosen in the mid-range of FAO-56 greenhouse values \cite{Allen1998}, consistent with partial-shade conditions for leafy vegetables.
 
@@ -268,25 +266,25 @@ where $E_{\mathrm{PV}}$ is the electrical energy generated, $I_{\mathrm{grid}} =
 
 We compare three scenarios (\Cref{fig:lca_comparison}b):
 \begin{itemize}
-\item \textbf{Scenario A (Quantum OPV):} Selective spectral filter with NPoM strong coupling. $F_{\mathrm{mfg}} = \SI{8.5}{\kg\ CO2e\per\m\squared\per\yr}$ (graphene + plasmonic nanoparticles).
-\item \textbf{Scenario B (Static shading):} Non-selective semi-transparent PV. $F_{\mathrm{mfg}} = \SI{5.0}{\kg\ CO2e\per\m\squared\per\yr}$.
+\item \textbf{Scenario A (Quantum OPV):} Selective spectral filter with NPoM strong coupling. $F_{\mathrm{mfg}} = \SI{8.5}{\kg\ CO2e\per\m\squared\per\year}$ (graphene + plasmonic nanoparticles).
+\item \textbf{Scenario B (Static shading):} Non-selective semi-transparent PV. $F_{\mathrm{mfg}} = \SI{5.0}{\kg\ CO2e\per\m\squared\per\year}$.
 \item \textbf{Scenario C (Open field):} No PV, no manufacturing footprint, no electricity generation.
 \end{itemize}
 
-Scenario A achieves $\mathrm{NEB} = \SI{12.4 \pm 1.8}{\kg\ CO2e\per\m\squared\per\yr}$ (uncertainty propagated from $\Phi_{\mathrm{FT}}$ error, $R_n$ variability, and $\pm\SI{15}{\percent}$ manufacturing footprint tolerance), compared to $\SI{5.1 \pm 0.9}{\kg\ CO2e\per\m\squared\per\yr}$ for Scenario B (\Cref{fig:lca_comparison}c). The dominant contribution to the uncertainty is the manufacturing footprint tolerance ($\pm\SI{15}{\percent}$), followed by $\Phi_{\mathrm{FT}}$ variability ($\pm\SI{3}{\percent}$).
-The \SI{2.4}{\times} improvement arises from three synergistic factors: (1) the \SI{25}{\percent} quantum yield enhancement translates directly to higher crop biomass via the excitonic yield multiplier; (2) the \SI{28}{\percent} evapotranspiration reduction saves \SI{1300}{\L\per\m\squared\per\yr} of irrigation water; and (3) the generated electricity displaces grid carbon at \SI{450}{\g\ CO2e\per\kWh}.
+Scenario A achieves $\mathrm{NEB} = \SI{12.4 \pm 1.8}{\kg\ CO2e\per\m\squared\per\year}$ (uncertainty propagated from $\Phi_{\mathrm{FT}}$ error, $R_n$ variability, and $\pm\SI{15}{\percent}$ manufacturing footprint tolerance), compared to $\SI{5.1 \pm 0.9}{\kg\ CO2e\per\m\squared\per\year}$ for Scenario B (\Cref{fig:lca_comparison}c). The dominant contribution to the uncertainty is the manufacturing footprint tolerance ($\pm\SI{15}{\percent}$), followed by $\Phi_{\mathrm{FT}}$ variability ($\pm\SI{3}{\percent}$).
+The \SI{2.4}{\times} improvement arises from three synergistic factors: (1) the \SI{25}{\percent} quantum yield enhancement translates directly to higher crop biomass via the excitonic yield multiplier; (2) the \SI{28}{\percent} evapotranspiration reduction saves \SI{1300}{\L\per\m\squared\per\year} of irrigation water; and (3) the generated electricity displaces grid carbon at \SI{450}{\g\ CO2e\per\kWh}.
 
 The excitonic yield $\Phi_{\mathrm{FT}}$ is capped at \SI{95}{\percent} to prevent unphysical biomass exceeding the open-field reference; this cap reflects the biological limit that photochemistry saturates at high excitation density due to the finite number of open reaction centers~\cite{Renger2003}.
-Socioeconomic analysis (\Cref{SI-sec:socioeconomic}) shows that a cooperative of 5 smallholders with a \SI{30}{\percent} carbon-linked subsidy achieves a CAPEX payback period of \SI{3.5}{\yr}, compared to \SI{8.2}{\yr} for individual ownership --- bringing high-tech quantum agrivoltaics within reach of resource-limited farmers.
+Socioeconomic analysis (\Cref{SI-sec:socioeconomic}) shows that a cooperative of 5 smallholders with a \SI{30}{\percent} carbon-linked subsidy achieves a CAPEX payback period of \SI{3.5}{\year}, compared to \SI{8.2}{\year} for individual ownership --- bringing high-tech quantum agrivoltaics within reach of resource-limited farmers.
 
 \subsection*{Secure IoT Telemetry via BB84 Quantum Key Distribution}
 
 Field-to-cloud telemetry is secured using a simulated BB84 quantum key distribution protocol~\cite{Bennett1984}.
-Alice (sensor node) prepares random polarization states (rectilinear or diagonal basis) and transmits them over a noisy channel ($5\%$ noise rate modeled after field-deployed QKD systems~\cite{Zahidy2024}).
+Alice (sensor node) prepares random polarization states (rectilinear or diagonal basis) and transmits them over a noisy channel (\SI{5}{\percent} noise rate modeled after field-deployed QKD systems~\cite{Zahidy2024}).
 Bob (cloud server) measures in random bases, and the sifted key is extracted from matching-basis events.
 The quantum bit error rate (QBER) is estimated on a sample fraction; if QBER exceeds the \SI{11}{\percent} threshold, key generation aborts to prevent eavesdropping (\Cref{SI-sec:qkd}).
 
-With a noise rate of $5\%$, the protocol achieves successful key exchange (QBER = \SI{4.8}{\percent}) and generates a \SI{256}{\bit} symmetric key per session --- sufficient for AES-256 encrypted telemetry.
+With a noise rate of \SI{5}{\percent}, the protocol achieves successful key exchange (QBER = \SI{4.8}{\percent}) and generates a \SI{256}{\bit} symmetric key per session --- sufficient for AES-256 encrypted telemetry.
 Field trials of BB84 using deterministic single-photon sources have demonstrated stable key generation over installed fiber links~\cite{Zahidy2024}, supporting the practical feasibility of this approach for agricultural IoT networks.
 In the event of QKD failure (e.g., high channel noise from extreme weather), a fail-safe local irrigation routine activates, preventing water supply interruption to crops.
 The runtime overhead of the BB84 simulation is negligible for resource-limited IoT nodes (\Cref{SI-sec:qkd}).
@@ -306,19 +304,19 @@ We verified this by applying the protocol to a minimal three-site excitonic trim
 This suggests that any molecular aggregate satisfying the resonance condition --- including synthetic J-aggregates, light-harvesting complexes from plants, and conjugated polymer domains in OPVs --- could benefit from spectral coherence protection.
 
 \textbf{The ``quantum divide.''} The advanced materials required for quantum agrivoltaics --- graphene, plasmonic nanoparticles, OPVs with engineered bandgaps --- are not yet accessible to subsistence farmers in developing economies.
-Our cooperative cost-sharing model demonstrates that with a carbon-linked subsidy of \SI{30}{\percent} and a cooperative of 5 members, the payback period drops below \SI{4}{\yr}, making the technology economically viable.
+Our cooperative cost-sharing model demonstrates that with a carbon-linked subsidy of \SI{30}{\percent} and a cooperative of 5 members, the payback period drops below \SI{4}{\year}, making the technology economically viable.
 We propose a tiered subsidy framework where the NEB itself serves as the verifiable metric for subsidy qualification, creating a direct incentive loop between quantum yield improvements and farmer access.
 
-\textbf{Prior art and positioning.} Previous agrivoltaic studies have focused on light-sharing through passive spectral filtering~\cite{Thompson2020} or crop selection~\cite{Dupraz2011}.
+\textbf{Prior art and positioning.} Previous agrivoltaic studies have focused on spectral light management through passive filtering~\cite{Thompson2020} or crop selection~\cite{Dupraz2011}.
 Semi-transparent OPVs with power conversion efficiencies exceeding \SI{15}{\percent} and \SI{40}{\percent} average visible transmittance have recently been demonstrated through blade-coating scale-up methods~\cite{Ravishankar2024}, and complementary work on semitransparent organic photovoltaics for greenhouse applications has shown power conversion efficiencies above \SI{12}{\percent}~\cite{Alshareef2024}.
 Our contribution is to add an active, quantum-coherent dimension to the spectral filter: the OPV is no longer a passive absorber but an active spectral shaper that prepares coherence-protected states in the photosynthetic apparatus.
 This approach differs from prior quantum biology studies~\cite{Scholes2015} that treat the environment as a fixed noise source; here, the photonic environment itself is engineered through the NPoM cavity to maximize coherence protection.
 
 \textbf{Limitations.} Several approximations constrain our analysis.
 The quantum dynamics are restricted to the single-exciton manifold.
-The bath is treated as site-independent, and the reaction center trapping is modeled as a phenomenological Lindblad-like rate. The strong coupling analysis neglects Ohmic losses in the gold NPoM cavity. For the plasmonic hot spot under typical solar illumination (\SI{600}{\W\per\m\squared}), photothermal heating is expected to produce a localized temperature rise of a few kelvin~\cite{Baffou2020}, which should not denature the FMO complex but warrants experimental verification.
+The bath is treated as site-independent, and the reaction center trapping is modeled as a phenomenological Lindblad-like rate. The strong coupling analysis neglects Ohmic losses in the gold NPoM cavity. For the plasmonic hot spot under typical solar illumination (\SI{600}{\W\per\m\squared}), photothermal heating is expected to produce a localized temperature rise of a few kelvin~\cite{Baffou2020}, which should not denature the FMO complex but merits experimental verification.
 The FAO-56 model, while standard, does not capture transient stomatal responses to fluctuating light.
-The BB84 simulation assumes a single-photon source, which in practice would require attenuated laser pulses. For $N=256$ sifted bits at QBER=$4.8\%$, finite-key effects reduce the secure key length to approximately 128 bits after privacy amplification, which remains sufficient for AES-256 seed refresh every 24 hours.
+The BB84 simulation assumes a single-photon source, which in practice would require attenuated laser pulses. For $N=256$ sifted bits at QBER=\SI{4.8}{\percent}, finite-key effects reduce the secure key length to approximately \num{128} bits after privacy amplification, which remains sufficient for AES-256 seed refresh every \SI{24}{\hour}.
 
 \textbf{Outlook.} The integration of quantum coherence engineering with agricultural sustainability opens a new axis for agrivoltaic design.
 Future work should explore: (1) full multi-exciton dynamics under realistic solar spectra; (2) experimental verification via 2DES with spatial light modulator pulse shaping~\cite{Gunthardt2023,Sebastian2024}; (3) field trials of graphene-based NPoM coatings on greenhouse cladding; and (4) integration with blockchain-verified carbon credit markets where the NEB serves as a tradable asset.
@@ -344,7 +342,7 @@ Crop evapotranspiration is computed using the standard FAO-56 Penman--Monteith e
 \mathrm{ET}_c = \frac{0.408 \Delta R_n + \gamma \frac{900}{T+273} u (e_s - e_a)}{\Delta + \gamma(1 + 0.34 u)} \, K_c,
 \end{equation}
 with $R_n$ attenuated by the OPV shading factor $f_{\mathrm{shade}} = 0.35$.
-Wind speed within the greenhouse is reduced to approximately $10\%$ of external values, consistent with standard protected-crop microclimate parameterizations~\cite{Allen1998}.
+Wind speed within the greenhouse is reduced to approximately \SI{10}{\percent} of external values, consistent with standard protected-crop microclimate parameterizations~\cite{Allen1998}.
 Temperature is fixed at \SI{25}{\celsius} and relative humidity at \SI{60}{\percent} unless specified otherwise.
 
 \subsection*{BB84 QKD Simulation}
@@ -353,7 +351,7 @@ The BB84 protocol is implemented as a Python simulation of polarization-state pr
 Alice prepares $4 \times N$ random bits (for $N = 256$ key length) in random rectilinear or diagonal bases.
 Bob measures in random bases, and matching-basis events are retained for key sifting.
 QBER is estimated on a sample fraction (minimum 1 bit, maximum 50 bits).
-If QBER exceeds $11\%$, key generation aborts and a fail-safe local irrigation routine is triggered.
+If QBER exceeds \SI{11}{\percent}, key generation aborts and a fail-safe local irrigation routine is triggered.
 
 \subsection*{Data Availability}
 
@@ -386,7 +384,7 @@ Serge Guy Nana Engo: 0000-0000-0000-0000
 \centering
 \includegraphics[width=\columnwidth]{Figure1_Quantum_Dynamics.png}
 \caption{\textbf{Quantum dynamics of the 8-site FMO complex coupled to an NPoM plasmonic cavity.}
-\textbf{(a)} Energy level diagram of the \SI{9}{\times}\SI{9}{} dressed Hamiltonian showing the 8 FMO excitonic states coupling to the plasmon mode with strength $g_0$.
+\textbf{(a)} Energy level diagram of the \numproduct{9x9} dressed Hamiltonian showing the 8 FMO excitonic states coupling to the plasmon mode with strength $g_0$.
 \textbf{(b)} Exciton population dynamics under dual-band filtered excitation at \SI{295}{\kelvin}. Solid lines: filtered; dashed lines: broadband.
 \textbf{(c)} Reaction center trapping yield $\Phi_{\mathrm{FT}}$ as a function of time.
 \textbf{(d)} $l_1$-norm coherence $C_{l_1}(t)$ showing \SI{50}{\percent} lifetime extension under filtered excitation.
@@ -409,8 +407,8 @@ All data: $L=8$, $K=2$, $n=100$ disorder realizations.}
 \includegraphics[width=\columnwidth]{Figure3_LCA_NEB_Comparison.png}
 \caption{\textbf{Water--Energy--Food nexus assessment.}
 \textbf{(a)} FAO-56 evapotranspiration comparison: open field ($\mathrm{ET}_c = \SI{4.5}{\mm\per\day}$) vs.\ OPV smart shield ($\mathrm{ET}_c = \SI{3.2}{\mm\per\day}$), a \SI{28}{\percent} reduction.
-\textbf{(b)} Net Ecological Benefit comparison across three scenarios: Quantum OPV (A), Static shading (B), Open field (C). Scenario A achieves \SI{12.4}{\kg\ CO2e\per\m\squared\per\yr}, a \SI{2.4}{\times} improvement over Scenario B.
-\textbf{(c)} Cooperative payback period as a function of subsidy rate and cooperative size. For 5 members with \SI{30}{\percent} subsidy, payback = \SI{3.5}{\yr}.}
+\textbf{(b)} Net Ecological Benefit comparison across three scenarios: Quantum OPV (A), Static shading (B), Open field (C). Scenario A achieves \SI{12.4}{\kg\ CO2e\per\m\squared\per\year}, a \SI{2.4}{\times} improvement over Scenario B.
+\textbf{(c)} Cooperative payback period as a function of subsidy rate and cooperative size. For 5 members with \SI{30}{\percent} subsidy, payback = \SI{3.5}{\year}.}
 \label{fig:lca_comparison}
 \end{figure}
 

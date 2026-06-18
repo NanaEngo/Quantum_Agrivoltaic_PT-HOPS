@@ -14,7 +14,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs,physics,bm,multirow}
-\usepackage[version=4]{siunitx}
+\usepackage{siunitx}
 \usepackage{xcolor}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
@@ -353,7 +353,7 @@ T_0 \left(1 + \frac{I}{I_{\mathrm{sat}}}\right)^{-1}, & I > 0,
 where $I_{\mathrm{sat}} = \SI{800}{\W\per\m\squared}$.
 The piecewise definition at $I=0$ ensures continuity: $T_{\mathrm{OMIT}}(0) = T_0$, corresponding to the undriven cavity transmission.
 At high flux (\SI{1000}{\W\per\m\squared}), $T = T_0 \times (1 + 1000/800)^{-1} = 0.44\,T_0$, i.e., transmission drops to \SI{44}{\percent} of baseline.
-The time-dependent flux follows \SI{24}{\hour} solar cycles, and the OMIT response is instantaneous on agricultural timescales.
+The time-dependent flux follows $\SI{24}{\hour}$ solar cycles, and the OMIT response is instantaneous on agricultural timescales.
 
 \subsection{Night Mode (Zero Flux)}
 
@@ -379,7 +379,7 @@ The capital expenditure (CAPEX) for the quantum agrivoltaic system (Scenario~A) 
 \item \textbf{OPV module:} \SI{80}{\per\m\squared} (blade-coated semi-transparent polymer cells)
 \item \textbf{Installation and mounting:} \SI{50}{\per\m\squared}
 \item \textbf{Electronics and IoT:} \SI{30}{\per\m\squared} (sensors, microcontroller, QKD module)
-\item \textbf{Contingency (15\%):} \SI{42}{\per\m\squared}
+\item \textbf{Contingency (\SI{15}{\percent}):} \SI{42}{\per\m\squared}
 \end{itemize}
 Total CAPEX: \SI{322}{\per\m\squared}.
 
@@ -391,7 +391,7 @@ The system size is assumed to scale with cooperative membership: a 5-member coop
 The payback period is computed as:
 
 \begin{equation}
-P = \frac{C_{\mathrm{total}} (1 - s)}{N \times (R_{\mathrm{elec}} + R_{\mathrm{water}} + R_{\mathrm{crop}}),
+P = \frac{C_{\mathrm{total}} (1 - s)}{N \times (R_{\mathrm{elec}} + R_{\mathrm{water}} + R_{\mathrm{crop}})},
 \label{eq:SI_payback}
 \end{equation}
 
@@ -417,7 +417,7 @@ Table~\ref{tab:SI_payback} summarizes the payback period for various cooperative
 \label{tab:SI_payback}
 \begin{tabular}{lcccc}
 \toprule
-$N$ & $s = 0\%$ & $s = 20\%$ & $s = 30\%$ & $s = 50\%$ \\
+$N$ & $s = \SI{0}{\percent}$ & $s = \SI{20}{\percent}$ & $s = \SI{30}{\percent}$ & $s = \SI{50}{\percent}$ \\
 \midrule
 1 (individual) & 14.2 & 10.8 & 8.2 & 5.1 \\
 3 & 7.8 & 5.9 & 4.5 & 2.8 \\
@@ -435,7 +435,7 @@ This model is conservative: it does not account for potential revenue from the N
 We propose a tiered subsidy framework where the NEB serves as the verifiable metric for subsidy qualification:
 
 \begin{itemize}
-\item \textbf{Tier~1 (NEB $<$ \SI{5}{\kg\ CO2e\per\m\squared\per\yr}):} No subsidy
+\item \textbf{Tier~1 (NEB $<$ \SI{5}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{0}{\percent} subsidy
 \item \textbf{Tier~2 (NEB \SIrange{5}{10}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{15}{\percent} subsidy
 \item \textbf{Tier~3 (NEB $>$ \SI{10}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{30}{\percent} subsidy
 \end{itemize}
@@ -455,11 +455,11 @@ The BB84 protocol~\cite{Bennett1984} is implemented as follows:
 
 \begin{enumerate}
 \item \textbf{Preparation:} Alice (sensor node) generates $4N = 1024$ random bits (for $N = 256$ final key length) and encodes each bit in one of four polarization states: $|H\rangle$, $|V\rangle$ (rectilinear basis, $+$) or $|D\rangle$, $|A\rangle$ (diagonal basis, $\times$).
-\item \textbf{Transmission:} The quantum states are transmitted over a noisy classical channel with a simulated depolarizing noise rate of $p = 5\%$, modeling the decoherence in field-deployed fiber links~\cite{Zahidy2024}.
+\item \textbf{Transmission:} The quantum states are transmitted over a noisy classical channel with a simulated depolarizing noise rate of $p = \SI{5}{\percent}$, modeling the decoherence in field-deployed fiber links~\cite{Zahidy2024}.
 \item \textbf{Measurement:} Bob (cloud server) measures each received qubit in a randomly chosen basis ($+$ or $\times$), independent of Alice's preparation basis.
 \item \textbf{Sifting:} Alice and Bob publicly announce their basis choices and retain only events where bases match (approximately $2N = 512$ bits remain).
 \item \textbf{Parameter estimation:} A random sample (minimum 1 bit, maximum 50 bits) of the sifted key is disclosed to estimate the quantum bit error rate (QBER). The sample fraction follows $f_{\mathrm{sample}} = \min(50/N, 0.2)$.
-\item \textbf{Key generation:} If QBER $< 11\%$ (the security threshold), the remaining sifted bits form the raw key. Error correction and privacy amplification reduce the key to $N = 256$ bits.
+\item \textbf{Key generation:} If QBER $< \SI{11}{\percent}$ (the security threshold), the remaining sifted bits form the raw key. Error correction and privacy amplification reduce the key to $N = 256$ bits.
 \end{enumerate}
 
 \subsection{Error Threshold and Security}
