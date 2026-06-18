@@ -1,0 +1,37 @@
+# parameters.yaml - Configuration file for Quantum Agrivoltaics Paper 2
+# Unified parameters for microclimate, quantum solver, LCA, and security.
+
+simulation:
+  temperature_k: 295.0
+  solar_flux_threshold: 800.0  # W/m2 for NPQ trigger
+
+quantum:
+  solver:
+    hierarchy_depth: 8  # L=8 for production convergence (Paper 1 standard)
+    time_step_fs: 0.5   # dt=0.5 fs to resolve auxiliary decay timescale
+  fmo:
+    sites: 8
+    coupling_reaction_center: 0.15  # Gamma_RC in ps-1
+    mode_volume_nm3: 0.8
+  floquet:
+    driving_amplitude: 0.05
+    driving_frequency: 1.2
+  sers:
+    optomechanical_coupling: 0.01
+
+microclimate:
+  greenhouse:
+    shading_factor: 0.35
+    crop_coefficient: 0.85
+
+lca:
+  cooperative:
+    coop_members: 5
+    capex_subsidy_rate: 0.30
+  carbon:
+    grid_intensity_gco2_kwh: 450.0
+
+security:
+  qkd:
+    channel_noise_rate: 0.05
+    key_length_bits: 256
