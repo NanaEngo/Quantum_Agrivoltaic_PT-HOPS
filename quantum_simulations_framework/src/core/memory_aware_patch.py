@@ -205,6 +205,7 @@ def apply_memory_aware_patching():
 
         all_results = []
         import time as _time
+        import threading as _threading
 
         for batch_idx in range(n_batches):
             start_seed = batch_idx * batch_size
@@ -215,6 +216,23 @@ def apply_memory_aware_patching():
                 f"Executing batch {batch_idx + 1}/{n_batches}: "
                 f"seeds {start_seed}–{end_seed - 1} ({len(batch_seeds)} traj)"
             )
+
+            # Periodic progress logger (every 60s during batch execution)
+            _batch_start = _time.time()
+            _progress_stop = _threading.Event()
+
+            def _log_progress():
+                while not _progress_stop.wait(60):
+                    elapsed = _time.time() - _batch_start
+                    logger.info(
+                        f"[PROGRESS] Batch {batch_idx + 1}/{n_batches} "
+                        f"elapsed={elapsed/60:.1f} min | "
+                        f"workers={n_jobs} | "
+                        f"traj={len(batch_seeds)}"
+                    )
+
+            _progress_thread = _threading.Thread(target=_log_progress, daemon=True)
+            _progress_thread.start()
 
             # Create iterable with progress bar if available
             iterable = batch_seeds
@@ -240,6 +258,7 @@ def apply_memory_aware_patching():
                     f"{n_valid} ok, {n_failed} failed / {len(batch_seeds)} total"
                 )
             except MemoryError:
+                _progress_stop.set()
                 _batch_elapsed = _time.time() - _batch_t0
                 logger.critical(
                     f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
@@ -254,6 +273,7 @@ def apply_memory_aware_patching():
                     delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
                 )
             except Exception as e:
+                _progress_stop.set()
                 import traceback, sys
                 _batch_elapsed = _time.time() - _batch_t0
                 print(
@@ -267,6 +287,9 @@ def apply_memory_aware_patching():
                     f"type={type(e).__name__} | error={e}"
                 )
                 raise
+
+            # Stop progress logger
+            _progress_stop.set()
 
             # Filter successful results
             valid_results = [r for r in batch_results if r is not None]
