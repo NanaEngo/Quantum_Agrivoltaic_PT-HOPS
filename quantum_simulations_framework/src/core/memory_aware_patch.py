@@ -224,11 +224,26 @@ def apply_memory_aware_patching():
             def _log_progress():
                 while not _progress_stop.wait(60):
                     elapsed = _time.time() - _batch_start
+                    import os as _os
+                    _ppid = _os.getpid()
+                    _children = 0
+                    try:
+                        for _p in _os.listdir('/proc'):
+                            if _p.isdigit():
+                                try:
+                                    _stat = open(f'/proc/{_p}/status').read()
+                                    if f'PPid:\t{_ppid}' in _stat:
+                                        _children += 1
+                                except (OSError, IOError):
+                                    pass
+                    except (OSError, IOError):
+                        pass
+                    _done = len(batch_seeds) - _children
                     logger.info(
                         f"[PROGRESS] Batch {batch_idx + 1}/{n_batches} "
                         f"elapsed={elapsed/60:.1f} min | "
-                        f"workers={n_jobs} | "
-                        f"traj={len(batch_seeds)}"
+                        f"{_done}/{len(batch_seeds)} done | "
+                        f"{_children} workers remaining"
                     )
 
             _progress_thread = _threading.Thread(target=_log_progress, daemon=True)
