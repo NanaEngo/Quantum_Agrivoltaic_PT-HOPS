@@ -196,7 +196,13 @@ def _run_single_traj_worker(
         Dictionary containing trajectory state ('psi_traj'), time axis ('t_axis'), and
         site populations ('pop_site'). Returns None if execution fails.
     """
-    if mem_limit_gb > 0:
+    # RLIMIT_AS is ONLY safe in subprocesses (n_jobs > 1).
+    # When running in the main process (joblib SequentialBackend for n_jobs=1),
+    # setting it restricts the entire Python runtime, breaking subprocess calls
+    # (git, etc.) and pandas I/O. Skip entirely for n_jobs=1.
+    import os as _os
+    _is_subprocess = _os.environ.get("JOBLIB_START_METHOD") is not None or _os.environ.get("LOKY_PROCESS") is not None
+    if mem_limit_gb > 0 and _is_subprocess:
         try:
             import resource
 
@@ -211,49 +217,128 @@ def _run_single_traj_worker(
             pass
 
     try:
+        import time as _time
+        _t0 = _time.time()
+
         # Deep copy of params to avoid process collisions
         import copy
 
         local_traj_kwargs = copy.deepcopy(traj_kwargs)
         local_traj_kwargs["noise_param"]["SEED"] = seed
 
-        trajectory = TrajectoryClass(**local_traj_kwargs)
-
-        # Enable adaptive hierarchy (before initialization)
-        if hasattr(trajectory, "make_adaptive"):
-            logger.info("Calling trajectory.make_adaptive()")
-            trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
-
-        if use_pt_hops and pt_hops_noise_class is not None:
-            pt_noise = pt_hops_noise_class(
-                local_traj_kwargs["noise_param"], system_param["PARAM_NOISE1"]
+        # --- Step 1: Trajectory construction ---
+        _t1 = _time.time()
+        try:
+            trajectory = TrajectoryClass(**local_traj_kwargs)
+            logger.info(
+                f"Traj {seed}: constructed in {_time.time()-_t1:.1f}s | "
+                f"n_hmodes={len(local_traj_kwargs.get('system_param',{}).get('GW_SYSBATH',[]))}"
             )
-            if hasattr(trajectory, "noise"):
-                trajectory.noise = pt_noise
-            pt_noise._prepare_noise(system_param["L_NOISE1"], time_points=time_points)
+        except Exception as e:
+            import traceback, sys
+            print(f"[MESOHOPS_FAIL] seed={seed} | stage=trajectory_init | error={e}")
+            traceback.print_exc(file=sys.stdout)
+            raise
 
-        trajectory.initialize(initial_state.copy())
-        trajectory.propagate(t_max, dt_save)
-        
-        # Extract physical subspace defensively
-        n_sites = initial_state.shape[0]
-        psi_data = trajectory.storage.data["psi_traj"]
-        t_data = trajectory.storage.data["t_axis"]
-        
-        # Filtre défensif : on ne garde que les éléments de la bonne taille
-        valid_data = [psi[:n_sites] for psi in psi_data if len(psi) >= n_sites]
-        valid_t = [t for i, t in enumerate(t_data) if len(psi_data[i]) >= n_sites]
-        
-        return {
-            "psi_traj": np.stack(valid_data),
-            "t_axis": np.array(valid_t),
-            "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
-        }
+        # --- Step 2: Adaptive hierarchy ---
+        _t2 = _time.time()
+        try:
+            if hasattr(trajectory, "make_adaptive"):
+                logger.info(f"Traj {seed}: calling make_adaptive()")
+                trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
+                logger.info(f"Traj {seed}: make_adaptive done in {_time.time()-_t2:.1f}s")
+        except Exception as e:
+            import traceback, sys
+            print(f"[MESOHOPS_FAIL] seed={seed} | stage=make_adaptive | error={e}")
+            traceback.print_exc(file=sys.stdout)
+            raise
+
+        # --- Step 3: PT-HOPS noise (optional) ---
+        if use_pt_hops and pt_hops_noise_class is not None:
+            try:
+                pt_noise = pt_hops_noise_class(
+                    local_traj_kwargs["noise_param"], system_param["PARAM_NOISE1"]
+                )
+                if hasattr(trajectory, "noise"):
+                    trajectory.noise = pt_noise
+                pt_noise._prepare_noise(system_param["L_NOISE1"], time_points=time_points)
+                logger.info(f"Traj {seed}: PT-HOPS noise prepared")
+            except Exception as e:
+                import traceback, sys
+                print(f"[MESOHOPS_FAIL] seed={seed} | stage=pt_hops_noise | error={e}")
+                traceback.print_exc(file=sys.stdout)
+                raise
+
+        # --- Step 4: Initialize ---
+        _t3 = _time.time()
+        try:
+            trajectory.initialize(initial_state.copy())
+            logger.info(f"Traj {seed}: initialized in {_time.time()-_t3:.1f}s")
+        except Exception as e:
+            import traceback, sys
+            print(f"[MESOHOPS_FAIL] seed={seed} | stage=initialize | error={e}")
+            traceback.print_exc(file=sys.stdout)
+            raise
+
+        # --- Step 5: Propagate (core computation) ---
+        _t4 = _time.time()
+        try:
+            trajectory.propagate(t_max, dt_save)
+            _elapsed = _time.time() - _t4
+            _total = _time.time() - _t0
+            # Try to get memory info
+            _rss_mb = 0
+            try:
+                import os as _os
+                _rss_mb = int(_os.getpid())  # dummy, won't work
+            except Exception:
+                pass
+            logger.info(
+                f"Traj {seed}: propagate done in {_elapsed:.1f}s "
+                f"(total={_total:.1f}s) | t_max={t_max} dt_save={dt_save}"
+            )
+        except Exception as e:
+            import traceback, sys
+            _elapsed = _time.time() - _t4
+            _total = _time.time() - _t0
+            print(
+                f"[MESOHOPS_FAIL] seed={seed} | stage=propagate | "
+                f"elapsed={_elapsed:.1f}s | total={_total:.1f}s | "
+                f"t_max={t_max} | dt_save={dt_save} | error={e}"
+            )
+            traceback.print_exc(file=sys.stdout)
+            raise
+
+        # --- Step 6: Extract results ---
+        _t5 = _time.time()
+        try:
+            n_sites = initial_state.shape[0]
+            psi_data = trajectory.storage.data["psi_traj"]
+            t_data = trajectory.storage.data["t_axis"]
+
+            valid_data = [psi[:n_sites] for psi in psi_data if len(psi) >= n_sites]
+            valid_t = [t for i, t in enumerate(t_data) if len(psi_data[i]) >= n_sites]
+
+            logger.info(
+                f"Traj {seed}: extracted {len(valid_data)}/{len(psi_data)} frames "
+                f"in {_time.time()-_t5:.1f}s"
+            )
+
+            return {
+                "psi_traj": np.stack(valid_data),
+                "t_axis": np.array(valid_t),
+                "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
+            }
+        except Exception as e:
+            import traceback, sys
+            print(f"[MESOHOPS_FAIL] seed={seed} | stage=extract | error={e}")
+            traceback.print_exc(file=sys.stdout)
+            raise
+
     except Exception as e:
         import traceback
 
-        # We use print here as logger might not be fully configured in worker processes
-        print(f"Parallel trajectory {seed} failed: {e}\n{traceback.format_exc()}")
+        print(f"[MESOHOPS_FAIL] seed={seed} | error={e}\n{traceback.format_exc()}")
         return None
 
 

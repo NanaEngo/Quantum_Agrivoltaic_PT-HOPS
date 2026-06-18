@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-14 (Session 3c — MesoHOPS SBD fix, post-processing stability, production launch)
+**Last updated:** 2026-06-18 (Session 4 — Convergence sweeps, SBD=3 default, parallel Phase 1)
 
 ## Project Overview
 
@@ -16,31 +16,31 @@ This repository contains two active research projects:
 
 ### Local Execution (Laptop Mode - Fast Verification)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --config laptop_parameters.yaml
+mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --config quantum_simulations_framework/config/laptop_parameters.yaml
 ```
 
 ### Local/Cluster Execution (Production Mode - Publication Data)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --parallel --skip-audit
+mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --parallel --skip-audit
 ```
 ```bash
-chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
-./Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
+chmod +x quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
+./quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
 ```
 **Figure 2 Sweep (Server-Side):**
 ```bash
-chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
-./Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
+chmod +x quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
+./quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
 ```
 Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fig 2)
 
 ### Repository Hygiene (STRICT)
-**The canonical directory for all simulation work is:**
-`Redac_Paper1/quantum_simulations_framework_parallel_260612/`
+**The canonical shared simulation framework is:**
+`quantum_simulations_framework/` (common to both Paper 1 and Paper 2)
 
 **ALWAYS SYNC AFTER CHANGES**: After every local modification to the codebase, you MUST synchronize the files to the server using `rsync` to ensure the production environment is up-to-date:
 ```bash
-rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260612/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
+rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
 ```
 
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
@@ -56,15 +56,16 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 ---
 
-## JPCL Revision — Current Status (2026-06-13 — Session 3b)
+## JPCL Revision — Current Status (2026-06-18 — Session 4)
 
+> [!IMPORTANT]
 > [!IMPORTANT]
 > **SOURCE OF TRUTH (REVISION R2)**: The absolute canonical source of truth for the revised manuscript is `Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13`. All modifications to the LaTeX files, Response letters, and SI must be done exclusively in this directory.
 
 ### ✅ Completed fixes
 - **Serialization/Pickling Hardening**: Refactored parallel trajectory workers in `hops_simulator.py` and `quantum_dynamics_simulator.py` to module-level functions, enabling 100% compatibility with `joblib`/`multiprocessing` backends.
 - **Vibronic Fallback Fix**: Synchronized `QuantumDynamicsSimulator` (fallback) to correctly load the 12-mode Kleinekathöfer vibronic bath instead of defaulting to DL-only.
-- **SBD Resolution**: Increased `sbd_bundles_per_site` from 2 to 6 to preserve vibronic spectral features while maintaining memory tractability.
+- **SBD Resolution**: Set `sbd_bundles_per_site` to 3 balancing tractability (C(24,7)=346K states) vs spectral resolution.
 - **L=8, K=2 Synchronization**: Standardized across manuscript body, SI Tables S1 & S4, `constants.py`, and `parameters.yaml`.
 - **SI K-Convergence Note**: Added physically-motivated justification for $K=2$ truncation (MAE = 3.32e-05) in SI Section S2.3.
 - **Hierarchy Depth Sync**: Confirmed $L=8$ across all documents (MAE = 3.10e-11 for $L=8$ relative difference).
@@ -84,6 +85,17 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - `environmental_factors.py`: Replaced seasonal "Time (days)" cycle with physically motivated static temperature sweeps (FR11)
 - **Code Merge & Data Reconciliation (2026-05-10)**: Merged server-side best practices (Python 3.10+ type hints, NumPy-style docstrings, `np.diag` initialization) into `core/hamiltonian_factory.py`. Local `quantum_simulations_framework_parallel_260612/` confirmed as the canonical reference with all improvements incorporated. Production CSV format verified identical (local=server). SI `η` value aligned: Test 10 corrected from 0.22(4) to 0.20(4) to match production ensemble average.
 - **CSV Format Verified**: Both local and server CSVs use the same column schema (`time_fs` + 7 site populations + `coherences` + broadband columns). No compatibility patch needed for figure generator.
+### ✅ Production Run (2026-06-13→15)
+- **200/200 trajectories completed** with η=0.39±0.04 (2.2× higher than old η=0.18 after vibronic bath bug fix).
+- Convergence: η(L=6)=0.74831, η(L=7)=0.74912, η(L=8)=0.74915 — MAE=3.0×10⁻⁵.
+### ✅ Session 4 — Parameter Tuning & Sweep Fixes (2026-06-18)
+- **SBD=3 default**: Changed `parameters.yaml` and `constants.py` from SBD=6 to SBD=3.
+- **`--skip-temp-sweep` flag**: Added to `main.py` to skip temperature sweep in convergence runs.
+- **`effective_jobs` fix**: `memory_aware_patch.py` now uses `min(n_jobs, len(batch_seeds))` to prevent deadlock with N=1.
+- **Cleanup function**: `cleanup_joblib()` kills orphan LokyProcess workers between sweeps.
+- **Zombie cleanup**: Killed 4 orphan workers consuming ~86 GB RAM and 53 GB swap.
+- **Parallel sweeps**: Created `run_phase1_parallel.sh` for concurrent K=3 + dt=2.0 execution.
+- **Phase 1 progress**: L=7 ✅ (17 juin), K=1 ❌ (tué, bloqué large bande), K=3 🔄, dt=2.0 🔄.
 ### ✅ R3 Audit (2026-06-14)
 - **SBD Trajectory Fix**: Fixed `TrajectoryError` due to time step mismatch (`TAU`/`dt` consistency) in `hops_simulator.py`.
 - **Worker Post-processing Stability**: Added defensive array shape filtering (`psi_data_filtered`) to handle inhomogeneous trajectory results in parallel workers.
@@ -120,11 +132,11 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - ✅ Laptop test (L=3, N=4, 200 fs) verified — damped oscillations confirmed.
 - ✅ 3 pre-existing test bugs fixed.
 ### ⏳ Pending (Requires MesoHOPS Server)
-- [x] Run full production simulation on server (100 trajectories) — **en cours** (2026-06-13 16:06)
-- [ ] Regenerate Figures 2 & 3 with production data showing damping.
-- [ ] Create `JPCL_Submission_Package_2026-06-13/` with renamed manuscripts (if needed after server run).
+- [x] ~~Run full production simulation on server (100 trajectories)~~ — 200/200 terminé, η=0.39±0.04
+- [ ] Regenerate Figures 2 & 3 with production data (après Phase 2)
+- [ ] Phase 1 convergence sweeps: L=7 ✅, K=1 ❌, K=3 🔄, dt=2.0 🔄, dt=1.0 ⏳
+- [ ] Phase 2 robustness sweeps (température, bain, filtre) — après Phase 1
 - [ ] Fix GPU driver mismatch (NVML v580.159).
-- [ ] Install Numba upgrade (≥0.63) si nécessaire sur le serveur.
 
 ---
 
@@ -132,17 +144,21 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 | File | Purpose |
 |------|---------|
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Manuscript_JPCL_26-06-13.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-06-13 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/SI_JPCL_26-06-13.tex` | Revised Supporting Information — updated 2026-06-13 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Response_to_Reviewers_26-06-13.tex` | Point-by-point response letter — updated 2026-06-13 (**Source of truth**) |
+| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Manuscript_JPCL_26-06-17.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-06-17 (**Source of truth**) |
+| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/SI_JPCL_26-06-17.tex` | Revised Supporting Information — updated 2026-06-17 (**Source of truth**) |
+| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Response_to_Reviewers_26-06-17.tex` | Point-by-point response letter — updated 2026-06-17 (**Source of truth**) |
 | `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Cover_Letter_JPCL_26-06-13.tex` | Cover letter — updated 2026-06-13 (**Source of truth**) |
 | `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
+| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
+| `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `quantum_simulations_framework/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `quantum_simulations_framework/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
+| `quantum_simulations_framework/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -162,7 +178,8 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 **Current canonical values:**
 - Hierarchy depth: **L_max = 8**
 - Matsubara terms: **K = 2**
-- Time step: **Δt = 1.0 fs**
+- SBD bundles: **3** per site
+- Time step: **Δt = 0.5 fs**
 - Pulse FWHM: **50 fs**, centered at t = 0
 - Temperature: **295 K**
 - Reorganization energy (Drude-Lorentz): **λ_D = 35 cm⁻¹**, γ_D = 50 cm⁻¹
@@ -194,7 +211,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework_parallel_260612/ # Simulation codebase
+│   └── quantum_simulations_framework/ # Shared simulation framework (Papers 1 & 2)
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.
@@ -203,6 +220,9 @@ Quantum_Agrivoltaic_PT-HOPS/
 │       ├── reproducibility/
 │       │   ├── main.py                # Entry point
 │       │   ├── audit_convergence.py   # L=9,10,11 audit
+│       │   ├── run_comprehensive_sweep.sh  # Full sweep orchestrator
+│       │   ├── run_phase1_continue.sh      # Phase 1 suite (skip L7)
+│       │   ├── run_phase1_parallel.sh      # Phase 1 parallèle (K=3 || dt=2.0)
 │       │   └── results/               # Valid results go here (see README.md inside)
 │       └── tests/
 ├── notebooks/                         # Anderson model Jupyter notebooks
@@ -229,14 +249,14 @@ Quantum_Agrivoltaic_PT-HOPS/
 **Access:** `ssh penavora@100.73.21.40` (via Tailscale)
 **OS:** Ubuntu 24.04
 **Hardware:** 48 CPU cores, 125 GB RAM, 1× NVIDIA GPU (driver mismatch NVML, à corriger)
-**Codebase:** `~/Redac_Paper1/quantum_simulations_framework_parallel_260612/`
+**Codebase:** `~/quantum_simulations_framework_parallel_260612/` (Paper 1 — JPCL revision), `~/quantum_simulations_framework/` (canonical)
 **Conda env:** `MesoHOP-sim` (créé le 2026-06-13, Python 3.12, mesohops v1.7.0)
 **Dependencies:** numpy, scipy, pandas, matplotlib, joblib, tqdm, psutil, pyyaml
 
 ### Transférer le code vers le serveur
 ```bash
 # Depuis le laptop
-tar czf /tmp/quantum_sim_fw.tar.gz Redac_Paper1/quantum_simulations_framework_parallel_260612/
+tar czf /tmp/quantum_sim_fw.tar.gz quantum_simulations_framework/
 scp /tmp/quantum_sim_fw.tar.gz penavora@100.73.21.40:~/
 ssh penavora@100.73.21.40 "cd ~/ && tar xzf quantum_sim_fw.tar.gz"
 ```
@@ -245,8 +265,15 @@ ssh penavora@100.73.21.40 "cd ~/ && tar xzf quantum_sim_fw.tar.gz"
 ```bash
 nohup ~/miniforge3/envs/MesoHOP-sim/bin/python reproducibility/main.py --parallel --skip-audit > ~/production_run.log 2>&1 &
 ```
-**Statut:** En cours — 50 batchs × 2 traj, 53.9 GB/traj, 2 workers/batch
+**Statut:** Terminé — 200/200 trajectories, η=0.39±0.04
 **Monitorer:** `tail -f ~/production_run.log`
+
+### Campaigne de sweep Phase 1 (2026-06-18)
+```bash
+nohup bash reproducibility/run_phase1_parallel.sh > ~/phase1_parallel.log 2>&1 &
+```
+**Statut:** K=3 🔄 + dt=2.0 🔄 en parallèle, dt=1.0 ⏳
+**Monitorer:** `tail -f ~/phase1_parallel.log`
 
 ### GPU Driver Fix (TODO)
 ```bash

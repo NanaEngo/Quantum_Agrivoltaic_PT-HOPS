@@ -860,7 +860,7 @@ class HopsSimulator:
                 "SEED": kwargs.get("seed", MESOHOPS_SEED),
                 "MODEL": "FFT_FILTER",
                 "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),
-                "TAU": float(dt_save),
+                "TAU": float(dt_save) / 2.0,  # Diviser par 2 pour concordance FFT
                 "INTERPOLATE": False,
                 "RAND_MODEL": "SUM_GAUSSIAN",
                 "STORE_RAW_NOISE": False,

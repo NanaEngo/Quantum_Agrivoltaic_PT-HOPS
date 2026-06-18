@@ -131,7 +131,7 @@ class CSVDataStorage:
                 .strip()[:12]
             )
             metadata["git_commit_sha"] = git_sha
-        except (subprocess.CalledProcessError, FileNotFoundError):
+        except (subprocess.CalledProcessError, FileNotFoundError, MemoryError):
             metadata["git_commit_sha"] = "unknown"
 
         # FIX H-7: output_dir is already created in __init__; do not call
@@ -140,6 +140,15 @@ class CSVDataStorage:
         filepath = os.path.join(
             self.output_dir, f"{safe_prefix}_{config_hash}_{timestamp}.csv"
         )
+
+        # Defensive trim: ensure time_points and populations have matching lengths
+        n_pop = populations.shape[0] if populations.ndim > 0 else 1
+        n_time = len(time_points)
+        if n_pop < n_time:
+            time_points = time_points[:n_pop]
+        elif n_pop > n_time:
+            populations = populations[:n_time]
+            coherences = coherences[:n_time]
 
         # Create DataFrame with time series data
         data_dict = {"time_fs": time_points}
@@ -170,6 +179,7 @@ class CSVDataStorage:
             else:
                 data_dict[metric_name] = [metric_values] * len(time_points)
 
+        print(f"DEBUG data_dict lengths: { {k: len(v) if hasattr(v, '__len__') else 'no_len' for k, v in data_dict.items()} }")
         df = pd.DataFrame(data_dict)
 
         # Validate schema before saving

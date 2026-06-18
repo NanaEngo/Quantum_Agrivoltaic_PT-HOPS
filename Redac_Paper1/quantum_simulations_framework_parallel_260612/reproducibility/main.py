@@ -25,6 +25,11 @@ Outputs
 import os
 import sys
 
+# Disable Numba CUDA to prevent NVML version mismatch SIGSEGV on the server
+# since a server reboot is not possible at the moment.
+os.environ["NUMBA_DISABLE_CUDA"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+
 # Ensure framework is importable regardless of CWD - MUST BE BEFORE ANY OTHER IMPORTS
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
@@ -1139,7 +1144,7 @@ def _generate_spectral_figure(cfg, output_dir):
     logger.info(f"Figure 1e saved to {pdf_path}")
 
 
-def generate_figures(cfg, sim_results, time_points):
+def generate_figures(cfg, sim_results, time_points, skip_temp_sweep=False):
     """Generate all publication figures and save to JPCL directory.
 
     FIX C-3: Figure 2 temperature sweep and disorder histogram are now computed
@@ -1215,10 +1220,14 @@ def generate_figures(cfg, sim_results, time_points):
     try:
         H, _ = create_fmo_hamiltonian(include_reaction_center=False)
 
-        print("\n  [Fig 2a] Running temperature sweep (285–310 K)...")
-        temperatures, eta_temp, eta_temp_err = _run_temperature_sweep(
-            cfg, H, time_points
-        )
+        if not skip_temp_sweep:
+            print("\n  [Fig 2a] Running temperature sweep (285–310 K)...")
+            temperatures, eta_temp, eta_temp_err = _run_temperature_sweep(
+                cfg, H, time_points
+            )
+        else:
+            print("\n  [Fig 2a] SKIPPING temperature sweep (--skip-temp-sweep)")
+            temperatures, eta_temp, eta_temp_err = [], [], []
 
         n_disorder = cfg.get("simulation", {}).get(
             "n_disorder_samples", DEFAULT_N_DISORDER
@@ -1278,6 +1287,9 @@ def main():
     )
     parser.add_argument("--n-traj", type=int, help="Override n_traj from config")
     parser.add_argument("--n-traj-sweep", type=int, help="Override n_traj_temp_sweep")
+    parser.add_argument(
+        "--skip-temp-sweep", action="store_true", help="Skip temperature sweep (Fig 2a)"
+    )
     args = parser.parse_args()
 
     # Step 1: Validate config
@@ -1337,7 +1349,7 @@ def main():
     sim_results, time_points = run_full_fmo_simulation(cfg)
 
     # Step 4: Generate and save all figures
-    generate_figures(cfg, sim_results, time_points)
+    generate_figures(cfg, sim_results, time_points, skip_temp_sweep=getattr(args, "skip_temp_sweep", False))
 
     print("\n" + "=" * 60)
     print("  Pipeline complete.")

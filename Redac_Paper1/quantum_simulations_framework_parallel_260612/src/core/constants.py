@@ -234,7 +234,7 @@ BASE_PYTHON_OVERHEAD_GB: Final[float] = (
     2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
 )
 MAX_N_JOBS: Final[int] = (
-    1  # Force séquentiel pour production (OOM prevention)
+    16  # Production: L=8 SBD(3) — 16 workers for ~70% CPU utilization
 )
 
 

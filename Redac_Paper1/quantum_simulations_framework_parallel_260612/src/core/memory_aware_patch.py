@@ -93,7 +93,7 @@ def apply_memory_aware_patching():
         batch_size = sched_info["batch_size"]
         n_batches = sched_info["n_batches"]
 
-        scheduler.print_report()
+        scheduler.print_report(n_hierarchy_modes)
 
         # NOTE: RLIMIT_AS is set inside each worker (_run_single_traj_worker) via
         # the mem_limit_gb parameter — NOT here in the parent process.
@@ -204,6 +204,7 @@ def apply_memory_aware_patching():
         )
 
         all_results = []
+        import time as _time
 
         for batch_idx in range(n_batches):
             start_seed = batch_idx * batch_size
@@ -225,24 +226,46 @@ def apply_memory_aware_patching():
                     pass
 
             # Run batch
+            _batch_t0 = _time.time()
             try:
-                batch_results = Parallel(n_jobs=n_jobs)(
+                effective_jobs = min(n_jobs, len(batch_seeds))
+                batch_results = Parallel(n_jobs=effective_jobs)(
                     delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
                 )
+                _batch_elapsed = _time.time() - _batch_t0
+                n_valid = sum(1 for r in batch_results if r is not None)
+                n_failed = sum(1 for r in batch_results if r is None)
+                logger.info(
+                    f"Batch {batch_idx + 1} done in {_batch_elapsed:.1f}s: "
+                    f"{n_valid} ok, {n_failed} failed / {len(batch_seeds)} total"
+                )
             except MemoryError:
+                _batch_elapsed = _time.time() - _batch_t0
                 logger.critical(
-                    f"Batch {batch_idx + 1} ran out of memory! "
-                    f"Need ~{sched_info['memory_per_traj_gb']:.1f} GB/traj, "
+                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"type=MemoryError | "
+                    f"mem_per_traj={sched_info['memory_per_traj_gb']:.1f} GB | "
                     f"limit={sched_info['ram_limit_gb']:.1f} GB. "
                     f"Reducing parallelism and retrying..."
                 )
                 gc.collect()
-                n_jobs_reduced = max(1, n_jobs // 2)
+                n_jobs_reduced = min(max(1, n_jobs // 2), len(batch_seeds))
                 batch_results = Parallel(n_jobs=n_jobs_reduced)(
                     delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
                 )
             except Exception as e:
-                logger.error(f"Batch {batch_idx + 1} failed: {e}")
+                import traceback, sys
+                _batch_elapsed = _time.time() - _batch_t0
+                print(
+                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"type={type(e).__name__} | error={e}",
+                    file=sys.stderr,
+                )
+                traceback.print_exc(file=sys.stderr)
+                logger.error(
+                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"type={type(e).__name__} | error={e}"
+                )
                 raise
 
             # Filter successful results

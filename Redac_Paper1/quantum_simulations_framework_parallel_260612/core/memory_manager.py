@@ -24,6 +24,7 @@ from .constants import (
     MIN_TRAJ_MEMORY_GB,
     MEMORY_FRACTION_LIMIT,
     CPU_COUNT_FRACTION,
+    MAX_N_JOBS,
 )
 
 logger = logging.getLogger(__name__)
@@ -98,7 +99,7 @@ class MemoryAwareJobScheduler:
         # 3. Calculate maximum parallel jobs
         n_jobs_raw = int(limit_gb / mem_per_traj) if mem_per_traj > 0 else 0
         cpu_limit = int(os.cpu_count() * CPU_COUNT_FRACTION)
-        n_jobs = min(n_jobs_raw, cpu_limit) if n_jobs_raw >= 1 else 0
+        n_jobs = min(n_jobs_raw, cpu_limit, MAX_N_JOBS) if n_jobs_raw >= 1 else 0
 
         # 4. Validate feasibility
         if n_jobs < 1:
@@ -143,8 +144,12 @@ class MemoryAwareJobScheduler:
         Reference: 21 modes (3 DL × 7 sites, no vibronic) at L=8, K=2, 1000 fs → 6.0 GB.
         Full FMO: 189 modes (3 DL + 24 vibronic × 7 sites) at L=8, K=2, 1000 fs → ~54 GB/traj.
         For small L (≤4), uses exact C(modes+L, L) ratio to avoid overestimation.
+
+        NOTE: SBD compression reduces effective modes to sbd_bundles_per_site × n_sites.
+        For sbd_bundles=3, the max effective is 21. We cap at 21 to reflect this.
         """
-        n = float(n_hierarchy_modes)
+        # Capped at 21: SBD (3 bundles × 7 sites) compresses 105 raw modes → 21 effective
+        n = min(float(n_hierarchy_modes), 21.0)
         L = float(self.L_max)
 
         if L <= 4 and n > 21:
@@ -175,10 +180,10 @@ class MemoryAwareJobScheduler:
 
         return max(MIN_TRAJ_MEMORY_GB, estimate)
 
-    def print_report(self) -> None:
+    def print_report(self, n_hierarchy_modes: int = 189) -> None:
         """Log a human-readable summary of the scheduling plan."""
         try:
-            info = self.validate_and_adapt()
+            info = self.validate_and_adapt(n_hierarchy_modes)
         except ValueError as e:
             logger.error(f"Memory plan infeasible: {e}")
             return

@@ -23,12 +23,12 @@ bath:
   vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
 
 dynamics:
-  L_max: 3  # L=3: Laptop-safe (Production requires L=8)
-  matsubara_truncation: 2   # K=2: converged at T=295 K
-  time_max: 200.0  # Shortened for rapid laptop verification (Step 1-2 only)
-  time_step: 2.0  # Improved stability for 1500 cm^-1 modes (10 points/period)
-  convergence_threshold: 1.0e-3  # Loose for laptop
-  sbd_bundles_per_site: 2
+  L_max: 5
+  matsubara_truncation: 2
+  time_max: 500.0
+  time_step: 1.0
+  convergence_threshold: 1.0e-4
+  sbd_bundles_per_site: 3  # 3 bundles × 7 sites = 21 modes → C(26,5)=66K states
 
 simulation:
   n_traj: 4  # Small ensemble for laptop speed

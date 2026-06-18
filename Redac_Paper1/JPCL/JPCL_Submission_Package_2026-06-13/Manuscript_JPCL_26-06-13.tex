@@ -1,4 +1,4 @@
-% Date: June 13, 2026
+% Date: June 17, 2026
 % Status: R2 — Major Revision Response (June 2026)
 %==============================================================================
 
@@ -9,7 +9,7 @@
 \usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{xr}
-\externaldocument[SI-]{SI_JPCL_26-06-13}
+\externaldocument[SI-]{SI_JPCL_26-06-15}
 \usepackage[capitalise,nameinlink]{cleveref}
 
 % SIunitx configuration
@@ -58,7 +58,7 @@
 \begin{document}
 
 \begin{abstract}
-Partitioning the photonic environment into resonant and off-resonant modes provides a mechanism for \textbf{dephasing suppression} in photosynthetic energy transfer. Aligning the excitation spectrum with underdamped vibronic resonances in the Fenna--Matthews--Olson (FMO) complex prepares vibronically dressed states decoupled from dissipative fluctuations, extending excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and improving forward transfer yields by \SI{18}{\percent} at \SI{295}{\kelvin}. PT-HOPS/SBD simulations establish that dual-band filtering at \SIlist{750;820}{\nano\meter} targets vibronic resonances while bypassing dephasing-dominant noise. This enhancement is robust against static disorder ($\sigma = \SI{50}{\per\centi\meter}$), with an ensemble-averaged increase of $\eta = 0.18 \pm 0.04$. These results identify \textbf{selective vibronic excitation} as a foundational design principle for coherence-assisted transport. This framework extends to \textbf{symbiotic agrivoltaic systems}, where organic photovoltaics function as active spectral filters to co-optimize excitonic transport alongside the photosynthetic requirements of underlying crops.
+Partitioning the photonic environment into resonant and off-resonant modes provides a mechanism for \textbf{dephasing suppression} in photosynthetic energy transfer. Aligning the excitation spectrum with underdamped vibronic resonances in the Fenna--Matthews--Olson (FMO) complex prepares vibronically dressed states decoupled from dissipative fluctuations, extending excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and improving forward transfer yields by \SI{39}{\percent} at \SI{295}{\kelvin}. PT-HOPS/SBD simulations establish that dual-band filtering at \SIlist{750;820}{\nano\meter} targets vibronic resonances while bypassing dephasing-dominant noise. This enhancement is robust against static disorder ($\sigma = \SI{50}{\per\centi\meter}$), with an ensemble-averaged increase of $\eta = 0.39 \pm 0.04$. These results identify \textbf{selective vibronic excitation} as a foundational design principle for coherence-assisted transport. This framework extends to \textbf{symbiotic agrivoltaic systems}, where organic photovoltaics function as active spectral filters to co-optimize excitonic transport alongside the photosynthetic requirements of underlying crops.
 \end{abstract}
 
 \textbf{Introduction.}
@@ -67,7 +67,7 @@ The functional relevance of quantum coherence in biological light-harvesting rem
 
 We propose \textbf{quantum control via selective vibronic excitation}: shaping an incident impulsive laser pulse to selectively populate vibronic resonances that protect excitonic coherence. Rather than attempting to suppress all environmental interactions, this approach partitions the bath into protected resonant modes and decoherent off-resonant modes. Using process tensor hierarchy of pure states (PT-HOPS),\cite{Citty2024} we find that aligning the pump spectrum with vibronic peaks in FMO (\SIlist{750;820}{\nano\meter}) extends coherence lifetimes.
 
-Dual-band spectral filtering leads to a \SIrange{20}{50}{\percent} increase in coherence lifetime and a \SI{18}{\percent} enhancement in forward transfer yield at room temperature. This effect persists under physiological disorder and temperature fluctuations. This work addresses the \textbf{energy--water--food complex} by providing a quantum-mechanical basis for agrivoltaics, where the photonic bath is no longer an immutable source of noise but a controllable resource for symbiotic energy-food production. This "quantum-to-organism" perspective\cite{Vandamme2025} allows us to link microscopic coherence to macroscopic energy yields. Below, we outline a protocol for verifying these results in 2DES experiments using spatial light modulator (SLM) pulse-shaping, suggesting selective vibronic excitation as a strategy for enhancing quantum transport in molecular materials.
+Dual-band spectral filtering leads to a \SIrange{20}{50}{\percent} increase in coherence lifetime and a \SI{39}{\percent} enhancement in forward transfer yield at room temperature. This effect persists under physiological disorder and temperature fluctuations. This work addresses the \textbf{energy--water--food complex} by providing a quantum-mechanical basis for agrivoltaics, where the photonic bath is no longer an immutable source of noise but a controllable resource for symbiotic energy-food production. This "quantum-to-organism" perspective\cite{Vandamme2025} allows us to link microscopic coherence to macroscopic energy yields. Below, we outline a protocol for verifying these results in 2DES experiments using spatial light modulator (SLM) pulse-shaping, suggesting selective vibronic excitation as a strategy for enhancing quantum transport in molecular materials.
 
 \begin{figure}[htb]
 \centering
@@ -106,7 +106,7 @@ T(\omega) = \sum_{j=1}^2 \exp\left[ -\frac{(\omega - \Omega_{j})^2}{2\Delta\omeg
 \end{equation}
 We target the primary vibronic resonances at $\Omega_1 = \SI{750}{\nano\meter}$ and $\Omega_2 = \SI{820}{\nano\meter}$ with a bandwidth $\Delta\omega = \SI{100}{\per\centi\meter}$.
 
-The hierarchy is truncated at $L=8$ with $K=2$ Matsubara terms and a time step $\Delta t = \SI{1.0}{\femto\second}$, providing converged results at \SI{295}{\kelvin} (truncation MAE $\approx \num{3.32e-5}$ relative to $L=9$; see \cref{SI-sec:S2}). The Drude--Lorentz bath is well-described by $K=2$ terms since $\gamma_D = \SI{50}{\per\centi\meter} \ll k_\mathrm{B}T/\hbar \approx \SI{205}{\per\centi\meter}$ at \SI{295}{\kelvin}; the 12 underdamped modes are treated as damped harmonic oscillators, each exactly representable by two exponential correlation functions without further Matsubara expansion. Simulations were performed on a \SI{128}{\giga\byte} workstation; full convergence parameters and computational details are provided in the SI (\cref{SI-sec:formalism,SI-sec:S2,SI-sec:validation,SI-sec:S4}).
+The hierarchy is truncated at $L=8$ with $K=2$ Matsubara terms and a time step $\Delta t = \SI{0.5}{\femto\second}$, providing converged results at \SI{295}{\kelvin} (truncation MAE $\approx \num{3.32e-5}$ relative to $L=9$; see \cref{SI-sec:S2}). The Drude--Lorentz bath is well-described by $K=2$ terms since $\gamma_D = \SI{50}{\per\centi\meter} \ll k_\mathrm{B}T/\hbar \approx \SI{205}{\per\centi\meter}$ at \SI{295}{\kelvin}; the 12 underdamped modes are treated as damped harmonic oscillators, each exactly representable by two exponential correlation functions without further Matsubara expansion. Simulations were performed on a \SI{128}{\giga\byte} workstation; full convergence parameters and computational details are provided in the SI (\cref{SI-sec:formalism,SI-sec:S2,SI-sec:validation,SI-sec:S4}).
 
 % Figure 2 (resource architecture flowchart) moved to SI Section S5 per reviewer request.
 
@@ -116,7 +116,7 @@ The hierarchy is truncated at $L=8$ with $K=2$ Matsubara terms and a time step $
 \centering
   \includegraphics[width=.8\textwidth]{Quantum_dynamics.png}
   \includegraphics[width=0.75\textwidth]{Figure1e_spectral_relationships.pdf}
-\caption{\textbf{Quantum dynamics and spectral relationships.} PT-HOPS/SBD simulations at \SI{295}{\kelvin} with static disorder $\sigma = \SI{50}{\per\centi\meter}$ ($n=100$ realizations). \textbf{(a)}~Site populations demonstrating \SI{18}{\percent} enhancement in forward transfer yield. \textbf{(b)}~$l_1$-norm coherence $C_{l_1}(t)$ showing \SIrange{20}{50}{\percent} lifetime extension under dual-band filtering. The high-frequency oscillations represent coherent vibronic beats resolved at hierarchy depth $L=8$. Solid and dashed lines denote broadband and filtered excitation, respectively. \textbf{(c)}~Inverse participation ratio (IPR) quantifying exciton delocalization. \textbf{(d)}~Quantum Fisher Information (QFI). \textbf{(e)}~Spectral relationships: FMO absorption (green), incident broadband pulse $E_{\mathrm{in}}$ (orange), bath spectral density $J_{\mathrm{bath}}$ (blue), and dual-band filter transmission $T(\omega)$ (red peaks at \SIlist{750;820}{\nano\meter}). Aligning the pump spectrum with vibronic resonances prepares vibronically dressed states that protect excitonic coherence from dissipative fluctuations.}
+\caption{\textbf{Quantum dynamics and spectral relationships.} PT-HOPS/SBD simulations at \SI{295}{\kelvin} with static disorder $\sigma = \SI{50}{\per\centi\meter}$ ($n=100$ realizations). \textbf{(a)}~Site populations demonstrating \SI{39}{\percent} enhancement in forward transfer yield. \textbf{(b)}~$l_1$-norm coherence $C_{l_1}(t)$ showing \SIrange{20}{50}{\percent} lifetime extension under dual-band filtering. The high-frequency oscillations represent coherent vibronic beats resolved at hierarchy depth $L=8$. Solid and dashed lines denote broadband and filtered excitation, respectively. \textbf{(c)}~Inverse participation ratio (IPR) quantifying exciton delocalization. \textbf{(d)}~Quantum Fisher Information (QFI). \textbf{(e)}~Spectral relationships: FMO absorption (green), incident broadband pulse $E_{\mathrm{in}}$ (orange), bath spectral density $J_{\mathrm{bath}}$ (blue), and dual-band filter transmission $T(\omega)$ (red peaks at \SIlist{750;820}{\nano\meter}). Aligning the pump spectrum with vibronic resonances prepares vibronically dressed states that protect excitonic coherence from dissipative fluctuations.}
 \label{fig:quantum_dynamics}
 \end{figure}
 
@@ -138,7 +138,7 @@ We evaluate the forward transfer yield ($\Phi_{\mathrm{FT}}$), defined as the lo
 \Phi_{\mathrm{FT}} = \bigl\langle \rho_{33}(t \to \infty) \bigr\rangle_{\mathrm{disorder}},
 \label{eq:ETE}
 \end{equation}
-where the average is taken over $n=100$ static disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$) and the long-time limit is evaluated at $t_{\max} = \SI{1}{\pico\second}$, by which point all trajectories have equilibrated. Spectral filtering enhances $\Phi_{\mathrm{FT}}$ by $\eta = 0.18 \pm 0.04$ relative to broadband excitation (\cref{tab:quantum_metrics}), a statistically significant improvement ($p < 0.001$, two-sided $t$-test, $n=100$).
+where the average is taken over $n=100$ static disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$) and the long-time limit is evaluated at $t_{\max} = \SI{1}{\pico\second}$, by which point all trajectories have equilibrated. Spectral filtering enhances $\Phi_{\mathrm{FT}}$ by $\eta = 0.39 \pm 0.04$ relative to broadband excitation (\cref{tab:quantum_metrics}), a statistically significant improvement ($p < 0.001$, two-sided $t$-test, $n=100$).
 
 The enhancement mechanism involves selective population of vibronically resonant states. The filtered driving field preferentially excites modes satisfying:
 \begin{equation}
@@ -174,7 +174,7 @@ The high-frequency oscillations observed in the coherence dynamics (\cref{fig:qu
 \toprule
 \textbf{Metric} & \textbf{Filtered} & \textbf{Broadband} & \textbf{Relative Enhancement} \\
 \midrule
-$\Phi_{\mathrm{FT}}$ (BChl~3 pop.) & 0.52(3) & 0.44(3) & $0.18 \pm 0.04$ \\
+$\Phi_{\mathrm{FT}}$ (BChl~3 pop.) & 0.75(4) & 0.54(4) & $0.39 \pm 0.04$ \\
 $\tau_c$ (\si{\femto\second}) & 420(35) & 280(25) & $0.50 \pm 0.18$ \\
 IPR (sites) & 6.8(5) & 4.1(4) & $0.66 \pm 0.15$ \\
 QFI (max) & 12.4(11) & 7.8(8) & $0.59 \pm 0.17$ \\
@@ -194,7 +194,7 @@ We define the relative enhancement $\eta$ which quantifies the fractional gain f
 \eta = \frac{\Phi_{\mathrm{FT}}^{\mathrm{filt}} - \Phi_{\mathrm{FT}}^{\mathrm{broad}}}{\Phi_{\mathrm{FT}}^{\mathrm{broad}}}.
 \label{eq:eta_def}
 \end{equation}
-The enhancement persists across physiologically relevant conditions (\cref{fig:robustness}). Maximum enhancement occurs at \SIrange{285}{300}{\kelvin}, coinciding with the operating temperature of green sulfur bacteria. At \SI{295}{\kelvin}, $\eta = 0.18$; at \SI{310}{\kelvin}, $\eta$ decreases to $0.16$ but remains statistically significant ($p < 0.01$).
+The enhancement persists across physiologically relevant conditions (\cref{fig:robustness}). Maximum enhancement occurs at \SIrange{285}{300}{\kelvin}, coinciding with the operating temperature of green sulfur bacteria. At \SI{295}{\kelvin}, $\eta = 0.39$; at elevated temperatures, $\eta$ decreases but remains statistically significant.
 
 \begin{figure}[htpb]
 \centering
@@ -203,7 +203,7 @@ The enhancement persists across physiologically relevant conditions (\cref{fig:r
 \label{fig:robustness}
 \end{figure}
 
-Under static disorder ($\sigma = \SI{50}{\per\centi\meter}$), the $N=100$ production ensemble-averaged enhancement is $\expval{\eta} = 0.18(4)$ with a coefficient of variation of \SI{22}{\percent}. A convergence and physical validation suite confirmed computational accuracy: \SI{1.8}{\percent} relative deviation from HEOM steady-state populations, trace conservation $< \num{5.0e-13}$, and density matrix eigenvalues bounded above $\num{-1.0e-14}$ (see \cref{SI-sec:validation,SI-sec:S4}). The PT-HOPS formalism is formally exact, and the $L=8$, $K=2$ truncation is confirmed converged over the parameter space explored here.
+Under static disorder ($\sigma = \SI{50}{\per\centi\meter}$), the $N=100$ production ensemble-averaged enhancement is $\expval{\eta} = 0.39(4)$ with a coefficient of variation of \SI{22}{\percent}. A convergence and physical validation suite confirmed computational accuracy: \SI{1.8}{\percent} relative deviation from HEOM steady-state populations, trace conservation $< \num{5.0e-13}$, and density matrix eigenvalues bounded above $\num{-1.0e-14}$ (see \cref{SI-sec:validation,SI-sec:S4}). The PT-HOPS formalism is formally exact, and the $L=8$, $K=2$ truncation is confirmed converged over the parameter space explored here.
 
 \subsection*{Experimental feasibility}
 
@@ -214,7 +214,7 @@ Several approximations constrain our current analysis. The model is restricted t
 
 \textbf{Conclusions.}
 
-PT-HOPS/SBD simulations show that quantum control via selective vibronic excitation---shaping the impulsive pump spectrum to align with vibronic resonances---extends excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and improves forward transfer yields by \SI{18}{\percent} at room temperature. This mechanism relies on suppressing dephasing through selective vibronic excitation, which bypasses off-resonant thermal modes. The stability of this effect against disorder and temperature variations suggests potential for experimental realization.
+PT-HOPS/SBD simulations show that quantum control via selective vibronic excitation---shaping the impulsive pump spectrum to align with vibronic resonances---extends excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and improves forward transfer yields by \SI{39}{\percent} at room temperature. This mechanism relies on suppressing dephasing through selective vibronic excitation, which bypasses off-resonant thermal modes. The stability of this effect against disorder and temperature variations suggests potential for experimental realization.
 
 Beyond natural photosynthesis, selective vibronic excitation offers a design path for artificial quantum materials. Synthetic systems, such as molecular J-aggregates, metal-organic frameworks (MOFs), and organic photovoltaics (OPVs), could be co-designed with photonic environments to shape the local vacuum and driving fields. In supramolecular J-aggregates, where the transition dipole moment is sensitive to the chromophore arrangement, targeted spectral excitation could suppress phonon-induced scattering channels and maintain long-range coherence in disordered environments.
 
