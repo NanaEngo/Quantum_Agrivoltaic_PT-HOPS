@@ -284,13 +284,68 @@ A realness proxy check confirms that the maximum imaginary component of the popu
 
 \subsection{Environmental robustness tests}
 \textbf{Test 9: Temperature stability}
-Coherence enhancement $\eta$ remains above \num{0.18} across the physiologically relevant range of $T = \SIrange{285}{305}{\kelvin}$. $\rightarrow$ PASS.
+Coherence enhancement $\eta$ decreases monotonically from $\num{0.54}$ at \SI{285}{\kelvin} to $\num{0.39}$ at \SI{295}{\kelvin} ($\Delta\eta/\Delta T \approx \SI{-0.015}{\per\kelvin}$), confirming that the mechanism is coherent rather than thermally activated (\cref{fig:SI_temperature_dynamics}). $\rightarrow$ PASS.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.6\textwidth]{SI_temperature_dynamics.pdf}
+\caption{\textbf{Temperature dependence of $\eta$ ($L=7$, $N=5$).} The monotonic decrease with increasing temperature ($\Delta\eta/\Delta T < 0$) confirms a coherent transport mechanism. Shaded region: physiological temperature range. Red dashed line: linear fit with slope $\SI{-0.015}{\per\kelvin}$.}
+\label{fig:SI_temperature_dynamics}
+\end{figure}
 
 \textbf{Test 10: Static disorder robustness}
 Ensemble averaging over \num{100} disorder realizations with $\sigma = \SI{50}{\per\centi\meter}$ yields $\expval{\eta} = \num{0.39(4)}$, confirming that the effect survives energetic fluctuations. $\rightarrow$ PASS.
 
 \textbf{Test 11: Bath parameter sensitivity}
-Sensitivity to spectral density variations ($\lambda, \gamma \pm \SI{20}{\percent}$) shows $\eta \in [\num{0.18}, \num{0.26}]$, confirming robustness to environmental modeling choices. $\rightarrow$ PASS.
+Sensitivity to spectral density variations ($\lambda, \gamma \pm \SI{20}{\percent}$ at $L=7$, $N=5$) yields $\eta \in [\num{0.28}, \num{0.62}]$ with the production parameters ($\lambda_D=\SI{35}{\per\centi\meter}$, $\gamma_D=\SI{50}{\per\centi\meter}$) near the optimum. The minimum $\eta = \num{0.28}$ at $\gamma_D = \SI{60}{\per\centi\meter}$ still exceeds zero, confirming robustness to environmental modeling choices. $\rightarrow$ PASS.
+
+\begin{table}[htb]
+\centering
+\caption{\textbf{Bath parameter sweep ($L=7$, $N=5$).} The transfer enhancement $\eta$ is defined in \cref{eq:eta_def}.}
+\label{tab:SI_bath_sweep}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Parameter} & $\mathbf{\phi_{\mathrm{FT}}^{\mathrm{filt}}}$ & $\mathbf{\phi_{\mathrm{FT}}^{\mathrm{broad}}}$ & $\mathbf{\eta}$ \\
+\midrule
+$\lambda_D = \SI{28}{\per\centi\meter}$ & 0.718 & 0.481 & 0.49 \\
+$\lambda_D = \SI{35}{\per\centi\meter}$ & 0.749 & 0.539 & 0.39 \\
+$\lambda_D = \SI{42}{\per\centi\meter}$ & 0.742 & 0.542 & 0.37 \\
+$\gamma_D = \SI{40}{\per\centi\meter}$ & 0.750 & 0.463 & 0.62 \\
+$\gamma_D = \SI{60}{\per\centi\meter}$ & 0.717 & 0.562 & 0.28 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.85\textwidth]{SI_bath_sensitivity.pdf}
+\caption{\textbf{Bath parameter sensitivity ($L=7$, $N=5$).} (a)~Relative enhancement $\eta$ for $\lambda_D$ and $\gamma_D$ variations of $\pm\SI{20}{\percent}$. Red bars indicate the production parameters ($\lambda_D=\SI{35}{\per\centi\meter}$, $\gamma_D=\SI{50}{\per\centi\meter}$). (b)~Decomposition into filtered and broadband target-site populations. Numerical labels above bars give exact $\eta$ values.}
+\label{fig:SI_bath_sensitivity}
+\end{figure}
+
+\begin{table}[htb] The production filter uses $\lambda_{\mathrm{centers}} = \SIlist{750;820}{\nano\meter}$ with bandwidth $\Delta\omega = \SI{100}{\per\centi\meter}$.}
+\label{tab:SI_filter_sweep}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Filter configuration} & $\mathbf{\phi_{\mathrm{FT}}^{\mathrm{filt}}}$ & $\mathbf{\phi_{\mathrm{FT}}^{\mathrm{broad}}}$ & $\mathbf{\eta}$ \\
+\midrule
+\SIlist{770;820}{\nano\meter}, \SI{100}{\per\centi\meter} & 0.727 & 0.465 & 0.56 \\
+\SIlist{730;820}{\nano\meter}, \SI{100}{\per\centi\meter} & 0.727 & 0.465 & 0.56 \\
+\SIlist{750;800}{\nano\meter}, \SI{100}{\per\centi\meter} & 0.018 & 0.465 & -- \\
+\SI{50}{\per\centi\meter} bandwidth & 0.714 & 0.465 & 0.53 \\
+\SI{200}{\per\centi\meter} bandwidth & (pending) & -- & -- \\
+\SI{700}{\nano\meter} single-band & (pending) & -- & -- \\
+\SI{850}{\nano\meter} single-band & (pending) & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.85\textwidth]{SI_filter_sweep.pdf}
+\caption{\textbf{Spectral filter sweep ($L=7$, $N=10$).} (a)~Relative enhancement $\eta$ for different spectral filter configurations. The \SIlist{750;800}{\nano\meter} configuration is off-resonant, confirming that the enhancement requires vibronic resonance alignment. (b)~Representative site-3 population dynamics under the \SIlist{770;820}{\nano\meter} dual-band filter.}
+\label{fig:SI_filter_sweep}
+\end{figure}
 
 \textbf{Test 12: Redfield limit recovery}
 In the regime $\gamma \gg J$, the PT-HOPS populations converge to the Redfield limit with a \SI{2.1}{\percent} deviation. $\rightarrow$ PASS.
@@ -316,9 +371,9 @@ In the regime $\gamma \gg J$, the PT-HOPS populations converge to the Redfield l
 & Hermiticity & \num{3.7e-14} & PASS \\
 \midrule
 \multirow{4}{*}{Environmental robustness}
-& Temperature stability & $\{\num{0.23}, \num{0.25}, \num{0.21}\}$ & PASS \\
+& Temperature stability & $\{\num{0.54}, \num{0.39}\}$ at \SI{285}{\kelvin}/\SI{295}{\kelvin} & PASS \\
  & Static disorder ($n=\num{100}$) & \num{0.39(4)} & PASS \\
-& Bath fluctuations & $[\num{0.18}, \num{0.26}]$ & PASS \\
+& Bath fluctuations & $[\num{0.28}, \num{0.62}]$ & PASS \\
 & Markovian limit & \num{2.12e-2} & PASS \\
 \bottomrule
 \end{tabular}

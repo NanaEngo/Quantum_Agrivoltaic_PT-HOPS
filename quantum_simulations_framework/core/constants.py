@@ -234,7 +234,7 @@ BASE_PYTHON_OVERHEAD_GB: Final[float] = (
     2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
 )
 MAX_N_JOBS: Final[int] = (
-    16  # Production: L=8 SBD(3) — 16 workers for ~70% CPU utilization
+    24  # Phase 2 boost: L=7 SBD(3) filter sweeps — 24 workers for ~100% CPU
 )
 
 # =============================================================================

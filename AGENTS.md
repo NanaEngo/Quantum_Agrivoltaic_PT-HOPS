@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-18 (Session 4 — Convergence sweeps, SBD=3 default, parallel Phase 1)
+**Last updated:** 2026-06-19 (Session 5 — Phase 2 robustness sweeps, siunitx audit)
 
 ## Project Overview
 
@@ -88,14 +88,23 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 ### ✅ Production Run (2026-06-13→15)
 - **200/200 trajectories completed** with η=0.39±0.04 (2.2× higher than old η=0.18 after vibronic bath bug fix).
 - Convergence: η(L=6)=0.74831, η(L=7)=0.74912, η(L=8)=0.74915 — MAE=3.0×10⁻⁵.
-### ✅ Session 4 — Parameter Tuning & Sweep Fixes (2026-06-18)
+### ✅ Session 4 — Parameter Tuning, Phase 1-2 Sweeps (2026-06-18)
 - **SBD=3 default**: Changed `parameters.yaml` and `constants.py` from SBD=6 to SBD=3.
 - **`--skip-temp-sweep` flag**: Added to `main.py` to skip temperature sweep in convergence runs.
 - **`effective_jobs` fix**: `memory_aware_patch.py` now uses `min(n_jobs, len(batch_seeds))` to prevent deadlock with N=1.
 - **Cleanup function**: `cleanup_joblib()` kills orphan LokyProcess workers between sweeps.
 - **Zombie cleanup**: Killed 4 orphan workers consuming ~86 GB RAM and 53 GB swap.
 - **Parallel sweeps**: Created `run_phase1_parallel.sh` for concurrent K=3 + dt=2.0 execution.
-- **Phase 1 progress**: L=7 ✅ (17 juin), K=1 ❌ (tué, bloqué large bande), K=3 🔄, dt=2.0 🔄.
+- **Phase 1 progress**: L=7 ✅, K=1 ❌ (tué, ODE stiff), K=3+dt=2.0 ❌ (tué lent, contention mémoire avec Phase 2).
+- **Phase 2 parallèle**: 4 sous-sweeps simultanés via `run_phase2_parallel.sh` pour atteindre ≥60 GiB RAM.
+  - Batch 1: T290/T300/T305/T310 (N=5, 20 workers, ~40-60 GiB)
+  - Batch 2: λ=28/42, γ=40/60
+  - Batch 3: filtres (770-820, 730-820, 750-800) + bandwidth (50/200) + single-band (700/850)
+- **`MEMORY_FRACTION_LIMIT=0.75`** in constants.py pour Phase 2.
+- **`n_disorder_samples=1`** bypassé pour sweeps rapides (N=5, ~40 min/sweep).
+- **`[PROGRESS]` logging**: ajouté à `memory_aware_patch.py` — log thread toutes les 60s.
+- **Phase 2 T285 terminée** (21:01 UTC, N=15, filtered+broadband, CSVs sauvegardés).
+- **Phase 2 T290 kill + restart parallèle** (21:41 UTC, N=5 × 4).
 ### ✅ R3 Audit (2026-06-14)
 - **SBD Trajectory Fix**: Fixed `TrajectoryError` due to time step mismatch (`TAU`/`dt` consistency) in `hops_simulator.py`.
 - **Worker Post-processing Stability**: Added defensive array shape filtering (`psi_data_filtered`) to handle inhomogeneous trajectory results in parallel workers.
@@ -135,7 +144,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - [x] ~~Run full production simulation on server (100 trajectories)~~ — 200/200 terminé, η=0.39±0.04
 - [ ] Regenerate Figures 2 & 3 with production data (après Phase 2)
 - [ ] Phase 1 convergence sweeps: L=7 ✅, K=1 ❌, K=3 🔄, dt=2.0 🔄, dt=1.0 ⏳
-- [ ] Phase 2 robustness sweeps (température, bain, filtre) — après Phase 1
+- [ ] Phase 2 robustness sweeps (température, bain, filtre) — 🔄 Batch 1 en cours
 - [ ] Fix GPU driver mismatch (NVML v580.159).
 
 ---
@@ -159,6 +168,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 | `quantum_simulations_framework/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
 | `quantum_simulations_framework/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
 | `quantum_simulations_framework/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
+| `quantum_simulations_framework/reproducibility/run_phase2_parallel.sh` | Phase 2 parallèle (4× simultané, ≥60 GiB RAM) |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -335,6 +345,35 @@ The Antigravity agent environment has been specifically optimized for this scien
 - **Data Analysis & Networks**: `scikit-learn`, `networkx`. For complex site-connectivity analysis in the FMO complex.
 
 Agents are strictly instructed to use these specialized skills for high-fidelity physics simulations, codebase refactoring, and publication-quality academic outputs.
+
+---
+
+## Appendices
+
+### Session 5 (2026-06-19) — Phase 2 Robustness Sweeps & siunitx Audit
+
+#### ✅ Completed
+- **Server user**: `nanaengo@100.73.21.40` (not `penavora`). SSH key: `-i /home/taamangtchu/.ssh/taiscale_key`
+- **Phase 2 Temperature (Batch 1)** — 6 temps × N=5 completed. η(T): 0.54(285K)→0.39(290K)→0.39(295K)→0.39(300K)→0.38(305K)→0.37(310K). φ_filtered ~0.727 constant; φ_broadband increases with T → **coherent mechanism** (Δη/ΔT ≈ -0.015 K⁻¹)
+- **Phase 2 Bath (Batch 2)** — λ=28 η=0.49, λ=42 η=0.37, γ=40 η=0.62, γ=60 η=0.28. Range η∈[0.28,0.62]
+- **Phase 2 Filters (Batch 3 Part 1)** — filt770_820 (η=0.563), filt730_820 (η=0.563), filt750_800 (off-resonant η≈-0.96), bw50 (η=0.534)
+- **MAX_N_JOBS boosted to 24** in `core/constants.py`; filter-only script with N=10
+- **filt750_800 killed** (Batch 2/2 stuck ~70 min on 1 traj) to unblock second batch
+- **3 SI figures generated locally**: `SI_bath_sensitivity.pdf`, `SI_filter_sweep.pdf`, `SI_temperature_dynamics.pdf`
+- **Manuscript + SI siunitx audit**: All bare numbers wrapped in `\num{}`/`\SI{}`/`\SIrange{}`
+- **Backup directory**: `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/`
+
+#### 🔄 Blocked
+- **Second filter batch (bw200, single700, single850)**: launched 14:35 UTC, **server unreachable** (72+ workers on 48 cores, swap thrashing)
+- **Final compilation**: blocked on server recovery for remaining CSVs
+
+#### ⏳ Next Steps
+1. Wait for server recovery, download bw200/single700/single850 CSVs
+2. Copy all June 2026 CSVs to backup directory
+3. Extract η from remaining filters; update SI Table S4 + regenerate filter sweep figure
+4. Compile final manuscript + SI
+5. Regenerate convergence figure from Phase 1 data
+6. Commit and push
 
 ---
 

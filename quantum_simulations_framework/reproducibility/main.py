@@ -903,15 +903,6 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
         "disorder_sigma_cm", DEFAULT_DISORDER_SIGMA
     )  # cm⁻¹
 
-    vib_freqs = bath.get("vibronic_frequencies", [])
-    bath.get("huang_rhys_factors", [])
-    vib_damping_raw = bath.get("vibronic_damping", DEFAULT_VIBRONIC_DAMPING_VAL)
-    (
-        np.array(vib_damping_raw, dtype=float)
-        if isinstance(vib_damping_raw, list)
-        else np.full(len(vib_freqs), float(vib_damping_raw))
-    )
-
     np.random.default_rng(rng_seed)  # FIX H-3: seeded RNG for reproducibility
     disorder_samples = []
 
