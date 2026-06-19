@@ -237,6 +237,9 @@ Vibronic mode 10 & 1220 & 0.005 \\
 Vibronic mode 11 & 1350 & 0.004 \\
 Vibronic mode 12 & 1500 & 0.003 \\
 \midrule
+Vibronic contribution ($\sum_k S_k\omega_k$) & \multicolumn{2}{c}{\SI{93}{\per\centi\meter}} \\
+Total reorganization ($\lambda_{\mathrm{total}}$)  & \multicolumn{2}{c}{\SI{128}{\per\centi\meter}} \\
+\midrule
 Temperature ($T$) & \multicolumn{2}{c}{\SI{295}{\kelvin}} \\
 \bottomrule
 \end{tabular}
@@ -251,7 +254,7 @@ Temperature ($T$) & \multicolumn{2}{c}{\SI{295}{\kelvin}} \\
 \section{Validation suite}
 \label{sec:validation}
 
-We implement a comprehensive validation framework organized into three categories to ensure the observed quantum advantages are physical effects rather than numerical artifacts. Numerical stability is monitored via an automated 23-point suite that performs real-time checks on trace preservation, population realness, and hierarchy convergence. This suite is executed as a prerequisite for all production-grade data collection. The computational pipeline executes five explicit programmatic convergence sweeps (hierarchy depth, Matsubara truncation, time step, detailed balance, and hermiticity) supplemented by continuous physical consistency monitors during the production ensemble. The PT-HOPS method is formally exact; using our globally synchronized production parameters ($L=8, K=2$), the dedicated solver audit ensures trace preservation and positivity.
+We implement a comprehensive validation framework organized into three categories to ensure the observed quantum advantages are physical effects rather than numerical artifacts. Numerical stability is monitored via an automated suite performing checks on trace preservation, population realness, and hierarchy convergence. Five explicit convergence sweeps (hierarchy depth, Matsubara truncation, time step, detailed balance, and Hermiticity) are executed, supplemented by continuous physical consistency monitors during the production ensemble. The PT-HOPS method is formally exact; using our globally synchronized production parameters ($L=8, K=2$), the dedicated solver audit ensures trace preservation and positivity.
 
 \subsection{Convergence tests}
 
@@ -280,7 +283,7 @@ Density matrix eigenvalues were monitored at each time step. The minimum eigenva
 Steady-state populations were compared with the analytical Boltzmann distribution. A maximum deviation of \SI{2.3}{\percent} confirms that thermal equilibrium is correctly reproduced. $\rightarrow$ PASS.
 
 \textbf{Test 8: Hermiticity preservation}
-A realness proxy check confirms that the maximum imaginary component of the populations remains bounded at \num{3.7e-14}, verifying that the physical observables maintain strict mathematical validity and effective hermiticity throughout the propagation. $\rightarrow$ PASS.
+A realness proxy check confirms that the maximum imaginary component of the populations remains bounded at \num{3.7e-14}, verifying that the physical observables maintain strict mathematical validity and effective Hermiticity throughout the propagation. $\rightarrow$ PASS.
 
 \subsection{Environmental robustness tests}
 \textbf{Test 9: Temperature stability}
@@ -436,7 +439,7 @@ The SBD method groups the 15 explicit bath modes per site (3 Drude--Lorentz + 12
 
 \subsection{Full convergence validation suite}
 
-To ensure the physical integrity of the 189-mode FMO ensemble dynamics, we performed a comprehensive validation suite on the production trajectories ($L=8, K=2$). \cref{tab:SI_7site_convergence} summarizes the results of these tests, confirming that the simulation maintains strict numerical stability and physical consistency throughout the \SI{1000}{\femto\second} propagation.
+To ensure the physical integrity of the 12-mode FMO ensemble dynamics, we performed a comprehensive validation suite on the production trajectories ($L=8, K=2$). \cref{tab:SI_7site_convergence} summarizes the results of these tests, confirming that the simulation maintains strict numerical stability and physical consistency throughout the \SI{1000}{\femto\second} propagation.
 
 \begin{table}[h]
 \centering
@@ -569,7 +572,7 @@ Quantitatively, for the 12-mode Kleinekathöfer model at \SI{295}{\kelvin}, the 
 \lambda_{\mathrm{res}}^{\mathrm{broad}} &= \SI{35}{\per\centi\meter} + \sum_{k=1}^{12} S_k \omega_k \approx \SI{53}{\per\centi\meter}, \label{eq:SI_lambda_broad} \\
 \lambda_{\mathrm{res}}^{\mathrm{filt}} &= \SI{35}{\per\centi\meter} + \sum_{k \notin \mathcal{S}} S_k \omega_k \approx \SI{40}{\per\centi\meter}. \label{eq:SI_lambda_filt}
 \end{align}
-The \SI{20}{\percent} reduction in $\lambda_{\mathrm{res}}$ translates to the reported \SI{50}{\percent} coherence lifetime extension ($\tau_c \propto 1/\lambda_{\mathrm{res}}$ in the high-temperature limit). In our PT-HOPS/SBD simulation framework, this protection is captured natively. The solver treats the interaction with the full bath non-perturbatively, and the resulting trajectories exhibit the suppressed decoherence predicted by the vibronic-basis analysis when the pulse spectrum matches the vibronic resonances.
+The \SI{20}{\percent} reduction in $\lambda_{\mathrm{res}}$ translates to the reported \SI{50}{\percent} coherence lifetime extension ($\tau_c \propto 1/\lambda_{\mathrm{res}}$ to leading order in the Markovian dephasing limit). In our PT-HOPS/SBD simulation framework, this protection is captured natively. The solver treats the interaction with the full bath non-perturbatively, and the resulting trajectories exhibit the suppressed decoherence predicted by the vibronic-basis analysis when the pulse spectrum matches the vibronic resonances.
 
 %==============================================================================
 % SECTION S8: FINITE PULSE DURATION EFFECTS
