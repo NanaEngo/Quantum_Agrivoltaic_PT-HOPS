@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-19 (Session 5 — Phase 2 robustness sweeps, siunitx audit)
+**Last updated:** 2026-06-20 (Session 6 — Phase 3 convergence finalize, JPCL R2 submission ready)
 
 ## Project Overview
 
@@ -350,7 +350,13 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 
 ## Appendices
 
-### Session 5 (2026-06-19) — Phase 2 Robustness Sweeps & siunitx Audit
+### Session 6 (2026-06-20) — Phase 3 convergence finalize
+- **L=6, L=7, L=8 convergence**: Finalized SBD=3 values (η_L6=0.2188, η_L7=0.3897, η_L8=0.3860). Convergence is complete.
+- **Table S7/Figure S5/S6**: Updated in `SI_JPCL_26-06-17.tex` and regenerated.
+- **`single850` added**: Filter sweep SI figure updated.
+- **Manuscript/SI**: Final compilation and Git push. Submission ready.
+- **Data Transfer**: All June CSVs synced locally.
+- **Analysis**: `ANALYSIS_20260620.md` created.
 
 #### ✅ Completed
 - **Server user**: `nanaengo@100.73.21.40` (not `penavora`). SSH key: `-i /home/taamangtchu/.ssh/taiscale_key`
