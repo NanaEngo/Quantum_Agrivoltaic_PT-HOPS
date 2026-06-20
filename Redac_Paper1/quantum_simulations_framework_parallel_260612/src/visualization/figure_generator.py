@@ -101,6 +101,9 @@ class FigureGenerator:
             kwargs["baseline_populations"] = kwargs["baseline_populations"][:n_t]
         if "baseline_coherences" in kwargs:
             kwargs["baseline_coherences"] = kwargs["baseline_coherences"][:n_t]
+        for key in list(kwargs.keys()):
+            if key.startswith("baseline_") and isinstance(kwargs[key], np.ndarray):
+                kwargs[key] = kwargs[key][:n_t]
 
         # Create subplots
         n_cols = 2
