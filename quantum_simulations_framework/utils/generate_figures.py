@@ -26,8 +26,8 @@ plt.rcParams.update(
     }
 )
 
-OUT = "Graphics"
-DATA = "simulation_data"
+OUT = "/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/utils/Graphics"
+DATA = "/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results"
 
 
 def latest(pattern):
@@ -36,10 +36,10 @@ def latest(pattern):
 
 
 # Load CSV data
-qd = pd.read_csv(latest("quantum_dynamics_*.csv"))
-so = pd.read_csv(latest("spectral_optimization_*.csv"))
-ed = pd.read_csv(latest("eco_design_results_*.csv"))
-env = pd.read_csv(latest("environmental_effects_*.csv"))
+qd = pd.read_csv(latest("fmo_dynamics_*.csv"))
+# so = pd.read_csv(latest("spectral_optimization_*.csv"))
+# ed = pd.read_csv(latest("eco_design_results_*.csv"))
+# env = pd.read_csv(latest("environmental_effects_*.csv"))
 
 # Fix types
 qd["time_fs"] = pd.to_numeric(qd["time_fs"], errors="coerce")
@@ -47,8 +47,9 @@ time_ps = qd["time_fs"].values / 1000.0
 
 # Extract population and metric columns
 pop_cols = [f"population_site_{i}" for i in range(1, 8)]
+qd[pop_cols] = qd[pop_cols].apply(pd.to_numeric, errors='coerce')
 pops = qd[pop_cols].values
-coherence = qd["coherences"].values
+coherence = pd.to_numeric(qd["coherences"], errors='coerce').values
 qfi = qd["qfi"].values
 entropy = qd["entropy"].values
 # Compute purity from populations (Tr[rho^2] ~ sum(p_i^2) for diagonal)
@@ -154,7 +155,7 @@ print("✓ Figure_3")
 # ============================================================
 # FIGURE 2: Quantum Metrics Evolution (4 panels)
 # ============================================================
-fig, axes = plt.subplots(2, 2, figsize=(7.5, 6))
+fig, axes = plt.subplots(2, 2, figsize=(7.5, 6), facecolor='white')
 
 ax = axes[0, 0]
 for i in range(7):
@@ -164,6 +165,7 @@ ax.set_ylabel("Population")
 ax.set_title("(a) Site populations", fontweight="bold")
 ax.legend(ncol=2, frameon=False, fontsize=7)
 ax.set_xlim(0, 1.0)
+ax.set_facecolor('white')
 
 ax = axes[0, 1]
 ax.plot(time_ps, coherence, color=C["blue"], lw=1.5)
@@ -180,19 +182,16 @@ ax.set_xlabel("Time (ps)")
 ax.set_ylabel("$l_1$-norm coherence")
 ax.set_title("(b) Coherence evolution", fontweight="bold")
 ax.set_xlim(0, 1.0)
+ax.set_facecolor('white')
 
 ax = axes[1, 0]
-ax2 = ax.twinx()
 ax.plot(time_ps, purity, color=C["purple"], lw=1.5, label="Purity")
-ax2.plot(time_ps, entropy, color=C["orange"], lw=1.5, label="Entropy")
 ax.set_xlabel("Time (ps)")
 ax.set_ylabel("Purity $\\mathrm{Tr}[\\rho^2]$", color=C["purple"])
-ax2.set_ylabel("Entropy $S$", color=C["orange"])
-ax.set_title("(c) Purity & entropy", fontweight="bold")
-h1, l1 = ax.get_legend_handles_labels()
-h2, l2 = ax2.get_legend_handles_labels()
-ax.legend(h1 + h2, l1 + l2, frameon=False, loc="center right")
+ax.set_title("(c) Purity evolution", fontweight="bold")
+ax.legend(frameon=False, loc="center right")
 ax.set_xlim(0, 1.0)
+ax.set_facecolor('white')
 
 ax = axes[1, 1]
 qfi_norm = qfi / qfi[0] if qfi[0] != 0 else qfi
@@ -203,134 +202,29 @@ ax.set_ylabel("Normalised QFI ($F_Q / F_{Q,0}$)")
 ax.set_title("(d) Quantum Fisher Information", fontweight="bold")
 ax.annotate(f"$F_{{Q,0}} = {qfi[0]:.0f}$", xy=(0.5, 0.85), fontsize=8, color=C["red"])
 ax.set_xlim(0, 1.0)
+ax.set_facecolor('white')
 
 plt.tight_layout()
-fig.savefig(f"{OUT}/Quantum_Metrics_Evolution.pdf")
+fig.savefig(f"{OUT}/Quantum_Metrics_Evolution.pdf", facecolor='white', bbox_inches="tight")
 plt.close()
-print("✓ Quantum_Metrics_Evolution")
+print("✓ Quantum_Metrics_Evolution (Refined)")
 
 # ============================================================
-# FIGURE 3: Pareto Front PCE vs ETR
+# FIGURE 3: Pareto Front PCE vs ETR (SKIPPED)
 # ============================================================
-fig, ax = plt.subplots(figsize=(5.5, 4.5))
-np.random.seed(42)
-n = 50
-pce_r = np.linspace(0.12, 0.24, n)
-etr_r = 0.35 - 0.95 * (pce_r - 0.12) + np.random.normal(0, 0.015, n)
-etr_r = np.clip(etr_r, 0.08, 0.38)
-
-ax.scatter(
-    pce_r * 100,
-    etr_r * 100,
-    c=etr_r * 100,
-    cmap="RdYlGn",
-    s=40,
-    edgecolors="k",
-    linewidth=0.5,
-    zorder=3,
-)
-for pv, ev, lab, col in [
-    (18.2, 25, "Balanced", C["blue"]),
-    (22.1, 12, "Energy", C["red"]),
-    (15.4, 33, "Agriculture", C["green"]),
-]:
-    ax.scatter(pv, ev, c=col, s=120, marker="*", edgecolors="k", lw=0.8, zorder=5)
-    ax.annotate(
-        lab,
-        xy=(pv, ev),
-        xytext=(pv + 1, ev + 2),
-        fontsize=8,
-        fontweight="bold",
-        color=col,
-        arrowprops=dict(arrowstyle="->", color=col, lw=0.8),
-    )
-
-# Extract PCE and ETR from metric/value format
-so_vals = pd.to_numeric(so["value"], errors="coerce")
-so_dict = dict(zip(so["metric"], so_vals))
-csv_pce = so_dict["PCE"] * 100
-csv_etr_enh = (so_dict["ETR"] - 0.60) / 0.60 * 100  # enhancement over baseline ~0.60
-ax.scatter(
-    csv_pce, csv_etr_enh, c=C["gold"], s=150, marker="D", edgecolors="k", lw=1, zorder=6
-)
-ax.annotate(
-    f"CSV optimum\n({csv_pce:.1f}%, {csv_etr_enh:.0f}%)",
-    xy=(csv_pce, csv_etr_enh),
-    xytext=(csv_pce - 3, csv_etr_enh - 10),
-    fontsize=8,
-    color=C["gold"],
-    arrowprops=dict(arrowstyle="->", color=C["gold"], lw=0.8),
-)
-
-ax.set_xlabel("Power Conversion Efficiency, PCE (%)")
-ax.set_ylabel("ETR Enhancement (%)")
-ax.set_title("Pareto Frontier: PCE–ETR Co-optimisation", fontweight="bold")
-ax.grid(True, alpha=0.2)
-plt.tight_layout()
-fig.savefig(f"{OUT}/Pareto_Front__PCE_vs_ETR_Trade_off.pdf")
-plt.close()
+"""
+# fig, ax = plt.subplots(figsize=(5.5, 4.5))
+...
 print("✓ Pareto_Front")
-
+"""
 # ============================================================
-# FIGURE 4: Environmental Effects (3 panels)
+# FIGURE 4: Environmental Effects (3 panels) (SKIPPED)
 # ============================================================
-fig, axes = plt.subplots(1, 3, figsize=(10, 3.5))
-
-ax = axes[0]
-temps = np.array([280, 285, 290, 295, 300, 305, 310])
-etr_e = np.array([18, 20, 23, 25, 24, 22, 19])
-err = np.array([2.0, 1.8, 1.5, 1.2, 1.3, 1.6, 2.1])
-ax.errorbar(temps, etr_e, yerr=err, fmt="o-", color=C["blue"], capsize=3, ms=5, lw=1.2)
-ax.fill_between(temps, etr_e - err, etr_e + err, alpha=0.15, color=C["blue"])
-ax.axvline(x=295, ls=":", color=C["red"], alpha=0.5)
-ax.set_xlabel("Temperature (K)")
-ax.set_ylabel("ETR Enhancement (%)")
-ax.set_title("(a) Temperature", fontweight="bold")
-
-ax = axes[1]
-sig = np.array([0, 10, 25, 50, 75, 100])
-etr_d = np.array([25, 24.5, 23, 20, 16, 13])
-err_d = np.array([1.0, 1.2, 1.5, 2.0, 2.5, 3.0])
-ax.errorbar(sig, etr_d, yerr=err_d, fmt="s-", color=C["green"], capsize=3, ms=5, lw=1.2)
-ax.fill_between(sig, etr_d - err_d, etr_d + err_d, alpha=0.15, color=C["green"])
-ax.set_xlabel("Static disorder $\\sigma$ (cm$^{-1}$)")
-ax.set_ylabel("ETR Enhancement (%)")
-ax.set_title("(b) Disorder", fontweight="bold")
-
-ax = axes[2]
-zones = [
-    "Temp.",
-    "Subtrop.",
-    "Trop.",
-    "Desert",
-    "Yaoundé",
-    "Abidjan",
-    "Abuja",
-    "Dakar",
-    "N'Djam.",
-]
-etr_g = [22, 24, 25, 20, 23, 24, 22, 19, 18]
-eg_err = [1.5, 1.3, 1.2, 1.8, 1.4, 1.3, 1.5, 2.0, 2.2]
-cols_g = [C["blue"]] * 4 + [C["orange"]] * 5
-ax.bar(
-    range(len(zones)),
-    etr_g,
-    yerr=eg_err,
-    capsize=2,
-    color=cols_g,
-    edgecolor="k",
-    linewidth=0.5,
-    alpha=0.85,
-)
-ax.set_xticks(range(len(zones)))
-ax.set_xticklabels(zones, rotation=45, ha="right", fontsize=7)
-ax.set_ylabel("ETR Enhancement (%)")
-ax.set_title("(c) Geographic zones", fontweight="bold")
-
-plt.tight_layout()
-fig.savefig(f"{OUT}/ETR_Under_Environmental_Effects.pdf")
-plt.close()
+"""
+# fig, axes = plt.subplots(1, 3, figsize=(10, 3.5))
+...
 print("✓ ETR_Under_Environmental_Effects")
+"""
 
 # ============================================================
 # SI FIGURES
