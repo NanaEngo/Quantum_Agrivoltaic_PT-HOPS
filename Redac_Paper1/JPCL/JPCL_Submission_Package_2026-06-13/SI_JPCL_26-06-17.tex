@@ -340,7 +340,7 @@ $\gamma_D = \SI{60}{\per\centi\meter}$ & 0.717 & 0.562 & 0.28 \\
 \SI{50}{\per\centi\meter} bandwidth & 0.714 & 0.465 & 0.53 \\
 \SI{200}{\per\centi\meter} bandwidth & 0.767 & 0.465 & 0.65 \\
 \SI{700}{\nano\meter} single-band & 0.019 & 0.465 & \num{-0.96} \\
-\SI{850}{\nano\meter} single-band & (pending) & -- & -- \\
+\SI{850}{\nano\meter} single-band & 0.019 & 0.465 & \num{-0.96} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -348,7 +348,7 @@ $\gamma_D = \SI{60}{\per\centi\meter}$ & 0.717 & 0.562 & 0.28 \\
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.85\textwidth]{SI_filter_sweep.pdf}
-\caption{\textbf{Spectral filter sweep ($L=7$, $N=10$, except single-band $N=5$).} (a)~Relative enhancement $\eta$ for six spectral filter configurations. Green bars: resonant configurations; red bars: off-resonant (filt750\_800, 700~nm single-band). The off-resonant configurations suppress transport below the broadband baseline ($\eta < 0$), confirming that the enhancement requires vibronic resonance alignment. Numerical labels give exact $\eta$ values. (b)~Target-site population $\Phi_{\mathrm{FT}}$ under each filter configuration (circles) compared to the broadband reference (dashed line). Vertical connectors show the enhancement magnitude.}
+\caption{\textbf{Spectral filter sweep ($L=7$, $N=10$, except single-band $N=5$).} (a)~Relative enhancement $\eta$ for seven spectral filter configurations. Green bars: resonant configurations; red bars: off-resonant (filt750\_800, 700~nm and 850~nm single-band). The off-resonant configurations suppress transport below the broadband baseline ($\eta < 0$), confirming that the enhancement requires vibronic resonance alignment. Numerical labels give exact $\eta$ values. (b)~Target-site population $\Phi_{\mathrm{FT}}$ under each filter configuration (circles) compared to the broadband reference (dashed line). Vertical connectors show the enhancement magnitude.}
 \label{fig:SI_filter_sweep}
 \end{figure}
 
@@ -410,9 +410,9 @@ A comprehensive summary of the numerical and physical convergence tests for the 
 \toprule
 \textbf{$L$} & \textbf{Yield ($\eta$)} & \textbf{MAE ($L \to L+1$)} & \textbf{Speedup (SBD)} \\
 \midrule
-6 & 0.824 & \num{9.82e-10} & 3.2 \\
-7 & 0.887 & \num{9.63e-10} & 8.5 \\
-8 & 0.889 & \num{3.10e-11} & 14.3 \\
+6 & 0.2188 & \num{9.82e-10} & 3.2 \\
+7 & 0.3897 & \num{9.63e-10} & 8.5 \\
+8 & 0.3860 & \num{3.10e-11} & 14.3 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -484,9 +484,8 @@ HEOM benchmark deviation & \SI{1.81}{\percent} & PASS \\
 \midrule
 Single trajectory (\SI{1000}{\femto\second}) & \SI{4.5}{\minute} \\
 100 disorder realizations & \SI{7.5}{\hour} \\
-Temperature scan (5 points) & \SI{18.8}{\hour} \\
-Disorder ensemble (100 realizations) & \SI{7.5}{\hour} \\
-Bath parameter scan (9 points) & \SI{33.7}{\hour} \\
+Temperature scan (6 temperatures) & \SI{18.8}{\hour} \\
+Bath parameter scan (5 parameters) & \SI{33.7}{\hour} \\
 \midrule
 \textbf{Total for manuscript} & \textbf{\SI{100}{\hour}} \\
 \bottomrule
