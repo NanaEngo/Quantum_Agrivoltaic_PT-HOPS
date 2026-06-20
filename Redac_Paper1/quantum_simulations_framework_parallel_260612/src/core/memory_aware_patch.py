@@ -13,6 +13,7 @@ Changes:
 
 import gc
 import logging
+import sys
 from typing import Dict, Any, Optional
 import numpy as np
 from numpy.typing import NDArray
@@ -221,7 +222,8 @@ def apply_memory_aware_patching():
             if kwargs.get("show_progress", True):
                 try:
                     desc = f"{kwargs.get('desc', 'Trajectories')} (batch {batch_idx + 1}/{n_batches})"
-                    iterable = tqdm(batch_seeds, desc=desc, unit="traj", leave=False)
+                    iterable = tqdm(batch_seeds, desc=desc, unit="traj",
+                                    leave=False, disable=not sys.stderr.isatty())
                 except Exception:
                     pass
 

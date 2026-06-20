@@ -20,10 +20,12 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
+import sys
+
 try:
     from tqdm.auto import tqdm
 
-    HAS_TQDM = True
+    HAS_TQDM = sys.stderr.isatty()
 except ImportError:
     HAS_TQDM = False
 
