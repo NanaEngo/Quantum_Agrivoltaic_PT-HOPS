@@ -304,7 +304,7 @@ Sensitivity to spectral density variations ($\lambda, \gamma \pm \SI{20}{\percen
 
 \begin{table}[htb]
 \centering
-\caption{\textbf{Bath parameter sweep ($L=7$, $N=5$).} The transfer enhancement $\eta$ is defined in \cref{eq:eta_def}.}
+\caption{\textbf{Bath parameter sweep ($L=7$, $N=5$).} The transfer enhancement $\eta$ is defined in \cref{Main-eq:eta_def}.}
 \label{tab:SI_bath_sweep}
 \begin{tabular}{lccc}
 \toprule
@@ -326,7 +326,9 @@ $\gamma_D = \SI{60}{\per\centi\meter}$ & 0.717 & 0.562 & 0.28 \\
 \label{fig:SI_bath_sensitivity}
 \end{figure}
 
-\begin{table}[htb] The production filter uses $\lambda_{\mathrm{centers}} = \SIlist{750;820}{\nano\meter}$ with bandwidth $\Delta\omega = \SI{100}{\per\centi\meter}$.}
+\begin{table}[htb]
+\centering
+\caption{The production filter uses $\lambda_{\mathrm{centers}} = \SIlist{750;820}{\nano\meter}$ with bandwidth $\Delta\omega = \SI{100}{\per\centi\meter}$.}
 \label{tab:SI_filter_sweep}
 \begin{tabular}{lccc}
 \toprule
@@ -374,7 +376,7 @@ In the regime $\gamma \gg J$, the PT-HOPS populations converge to the Redfield l
 & Hermiticity & \num{3.7e-14} & PASS \\
 \midrule
 \multirow{4}{*}{Environmental robustness}
- & Temperature stability & $\{\num{0.543}, \num{0.387}, \num{0.381}, \num{0.374}, \num{0.391}\}$ at \SIrange{285}{310}{\kelvin} & PASS \\
+ & Temperature stability & $\eta \in [\num{0.374}, \num{0.543}]$ across \SIrange{285}{310}{\kelvin} & PASS \\
  & Static disorder ($n=\num{100}$) & \num{0.39(4)} & PASS \\
 & Bath fluctuations & $[\num{0.28}, \num{0.62}]$ & PASS \\
 & Markovian limit & \num{2.12e-2} & PASS \\
@@ -501,45 +503,6 @@ All simulations performed on AMD Ryzen 5 5500U (6 cores, 12 threads) with \SI{40
 \label{sec:S6}
 
 To further validate the robustness of the selective vibronic excitation mechanism, we performed an additional sensitivity test in the strong system-bath coupling regime by artificially increasing the Drude-Lorentz reorganization energy to $\lambda_D = \SI{100}{\per\centi\meter}$. Even in this highly dissipative regime, the filtered excitation protocol maintains a coherence enhancement of $\eta \approx 0.12$. While the absolute coherence lifetime is reduced due to the stronger solvent fluctuations, the relative protection afforded by the vibronic dressing mechanism persists, confirming that the resonance condition $\Delta E \approx \omega_v$ effectively shields the transport dynamics from pure dephasing.
-
-%==============================================================================
-% SECTION S7: ADDITIONAL QUANTUM METRICS
-%==============================================================================
-
-\section{Ensemble-averaged quantum metrics}
-\label{sec:S7}
-
-% To provide a more comprehensive characterization of the quantum state under filtered illumination, we analyze the evolution of the von Neumann entropy and purity. These metrics quantify the degree of decoherence and the ``purity'' of the excitonic state, respectively.
-
-% \subsection{Von Neumann entropy}
-
-% The von Neumann entropy $S_{\mathrm{vN}}(t)$ is defined as:
-% \begin{equation}
-% S_{\mathrm{vN}}(t) = -\Tr[\vb*{\rho}(t)\ln\vb*{\rho}(t)].
-% \label{eq:SI_von_neumann}
-% \end{equation}
-
-% Under filtered illumination, the ensemble-averaged entropy at $t = \SI{500}{\femto\second}$ is $S_{\mathrm{vN}} = 0.51(6)$, compared to $S_{\mathrm{vN}} = 0.73(7)$ for broadband excitation. The \SI{30}{\percent} reduction in entropy indicates a more ordered quantum state, consistent with the suppressed dephasing mechanism.
-
-% \subsection{Purity}
-
-% The purity $P(t)$ is defined as:
-% \begin{equation}
-% P(t) = \Tr[\vb*{\rho}(t)^2].
-% \label{eq:SI_purity}
-% \end{equation}
-
-% Under filtered illumination, we find $P(t = \SI{500}{\femto\second}) = 0.82(4)$, while broadband excitation yields $P = 0.71(5)$. Higher purity values indicate that the system remains closer to a coherent superposition for longer durations, directly supporting the reported coherence lifetime extensions.
-
-% \subsection{Mandel Q parameter}
-
-% The Mandel $Q$ parameter characterizes the photon statistics and excitonic bunching:
-% \begin{equation}
-% Q_{\mathrm{Mandel}} = \frac{\expval{(\Delta n)^2} - \expval{n}}{\expval{n}}.
-% \label{eq:SI_mandel}
-% \end{equation}
-
-% Under filtered illumination, we observe enhanced bunching ($Q_{\mathrm{Mandel}} = 0.34(5)$), suggesting that the spectral filter selectively populates states that maintain stronger temporal correlations.
 
 %==============================================================================
 % SECTION S7: VIBRONIC-BASIS ANALYSIS
