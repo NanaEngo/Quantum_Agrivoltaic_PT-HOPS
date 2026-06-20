@@ -50,23 +50,12 @@ def generate_temperature_dynamics():
     ax.set_title(r"Temperature Dependence of $\eta$ ($L=7$, $N=15$)", fontsize=12)
     ax.legend(loc="upper right", frameon=False, fontsize=9)
     ax.grid(True, alpha=0.3)
-    ax.errorbar(T, eta, yerr=eta_err, fmt="o-", color=colors[0],
-                capsize=4, capthick=1.5, elinewidth=1.5, markersize=7,
-                linewidth=2.0)
-    ax.fill_between(T, eta - eta_err, eta + eta_err, alpha=0.15, color=colors[0])
-    ax.axvspan(285, 310, alpha=0.08, color="green", label="Physiological range")
-    ax.axhline(0.38, color="gray", linestyle="--", linewidth=1, alpha=0.5, label="η ≈ 0.38 (plateau)")
-    ax.set_xlabel("Temperature [K]", fontsize=11)
-    ax.set_ylabel(r"Relative Enhancement $\eta$", fontsize=11)
-    ax.set_title(r"Temperature Dependence of $\eta$ ($L=7$, $N=15$)", fontsize=12)
-    ax.legend(loc="upper right", frameon=False, fontsize=9)
-    ax.grid(True, alpha=0.3)
     fig.tight_layout()
     save_fig(fig, "SI_temperature_dynamics")
 
 
 def generate_filter_sweep():
-    """Figure S5: filter sweep with all 6 configurations + broadband reference."""
+    """Figure S5: filter sweep with all 7 configurations + broadband reference."""
     labels = [
         "[770,820] nm\n100 cm$^{-1}$",
         "[730,820] nm\n100 cm$^{-1}$",
@@ -74,19 +63,21 @@ def generate_filter_sweep():
         "BW 50 cm$^{-1}$",
         "BW 200 cm$^{-1}$",
         "700 nm single",
+        "850 nm single",
     ]
-    phi_filt = np.array([0.7274, 0.7274, 0.0181, 0.7136, 0.7671, 0.0195])
+    phi_filt = np.array([0.7274, 0.7274, 0.0181, 0.7136, 0.7671, 0.0195, 0.0195])
     phi_broad = 0.4653
     eta_vals = (phi_filt - phi_broad) / phi_broad
     x = np.arange(len(labels))
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 4))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
 
     green = "#009E73"
     red = "#D55E00"
     bar_colors = [green] * len(eta_vals)
     bar_colors[2] = red
     bar_colors[5] = red
+    bar_colors[6] = red
 
     bars = ax1.bar(x, eta_vals, width=0.55, color=bar_colors, edgecolor="black", linewidth=0.5)
     ax1.axhline(0, color="gray", linewidth=0.5)
@@ -122,9 +113,34 @@ def generate_filter_sweep():
     save_fig(fig, "SI_filter_sweep")
 
 
+def generate_convergence_hierarchy():
+    """Figure S6: η(L) convergence with SBD=3 hierarchy depths."""
+    L_vals = np.array([6, 7, 8])
+    phi_filt = np.array([0.7172, 0.7274, 0.7543])
+    phi_broad = np.array([0.5884, 0.5234, 0.5442])
+    eta_vals = (phi_filt - phi_broad) / phi_broad
+
+    fig, ax = plt.subplots(1, 1, figsize=(5, 3.5))
+    ax.plot(L_vals, eta_vals, "o-", color=colors[0], markersize=8,
+            linewidth=2.0, markerfacecolor=colors[0])
+    ax.axhline(0, color="gray", linewidth=0.5)
+    ax.set_xlabel("Hierarchy Depth $L$", fontsize=11)
+    ax.set_ylabel(r"Relative Enhancement $\eta$", fontsize=11)
+    ax.set_title("Hierarchy Depth Convergence ($N=5$)", fontsize=12)
+    ax.set_xticks(L_vals)
+    ax.grid(True, alpha=0.3)
+    for i, eta in enumerate(eta_vals):
+        ax.annotate(f"{eta:.4f}", (L_vals[i], eta_vals[i]),
+                    textcoords="offset points", xytext=(0, -18),
+                    ha="center", va="top", fontsize=9, fontweight="bold")
+    fig.tight_layout()
+    save_fig(fig, "convergence_hierarchy")
+
+
 if __name__ == "__main__":
     print("Regenerating SI figures...")
     print(f"Output directory: {OUTPUT_DIR}")
     generate_temperature_dynamics()
     generate_filter_sweep()
+    generate_convergence_hierarchy()
     print("Done.")
