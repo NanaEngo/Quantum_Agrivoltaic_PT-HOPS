@@ -72,21 +72,21 @@ Below we provide a point-by-point response. Changes in the revised manuscript an
 
 \textbf{Response:} The $\mathcal{O}(1)$ size-invariance claim has been removed. The scaling of PT-HOPS with SBD is polynomial in system size. Matsubara convergence is justified because $\gamma_D = \SI{50}{\per\centi\meter}$ lies below the first Matsubara frequency $\nu_1 \approx \SI{205}{\per\centi\meter}$ at \SI{295}{\kelvin}; the expansion converges rapidly at $K=2$ (MAE $= \num{3.32e-05}$ relative to $K=3$; SI Section~S2.3).
 
-\subsection*{Additional Robustness Analysis (Phase 2)}
+\subsection*{Additional robustness analysis}
 
-In response to the reviewers' request for a thorough assessment of parameter sensitivity, we have performed comprehensive robustness sweeps (Phase 2). All sweeps use $L=7$, $K=2$, SBD=3, $\Delta t = \SI{0.5}{\femto\second}$, $N=10$ trajectories (except temperature: $N=5$), with the production $\lambda_D = \SI{35}{\per\centi\meter}$, $\gamma_D = \SI{50}{\per\centi\meter}$, 12 vibronic modes.
+In response to the reviewers' request for a thorough assessment of parameter sensitivity, we have performed comprehensive robustness sweeps. All sweeps use $L=7$, $K=2$, SBD=3, $\Delta t = \SI{0.5}{\femto\second}$, 12 vibronic modes, with the production $\lambda_D = \SI{35}{\per\centi\meter}$, $\gamma_D = \SI{50}{\per\centi\meter}$. The temperature sweep uses $N=15$ trajectories per point; all other sweeps use $N=10$.
 
-\textbf{Temperature dependence.} $\eta(T)$ decreases monotonically from $\num{0.543}$ at \SI{285}{\kelvin} to $\num{0.386}$ at \SI{295}{\kelvin} ($\Delta\eta/\Delta T \approx \SI{-0.015}{\per\kelvin}$). The negative slope confirms a coherent transport mechanism: thermal agitation destroys vibronic coherences faster at higher temperatures. This data is presented in SI Fig.~S6.
+\textbf{Temperature dependence.} $\eta(T)$ drops sharply from $\num{0.543}$ at \SI{285}{\kelvin} to $\num{0.387}$ at \SI{290}{\kelvin} ($\Delta\eta/\Delta T \approx \SI{-0.031}{\per\kelvin}$), then plateaus at $\eta \approx \num{0.38}\pm\num{0.01}$ from \SI{290}{\kelvin} to \SI{310}{\kelvin}. The negative slope confirms a coherent transport mechanism: thermal agitation reduces vibronic coherences faster at lower temperatures. The high-temperature plateau ($\eta \approx \num{0.38}$) demonstrates robustness across the full physiological range. Data is presented in SI Fig.~S6.
 
 \textbf{Bath parameter sensitivity.} Varying $\lambda_D$ and $\gamma_D$ by $\pm\SI{20}{\percent}$ yields $\eta \in [\num{0.28}, \num{0.62}]$. The production parameters are near-optimal; even the minimum $\eta = \num{0.28}$ ($\gamma_D = \SI{60}{\per\centi\meter}$) remains positive. Results are tabulated in SI Table~S3 and visualized in SI Fig.~S7.
 
-\textbf{Spectral filter sweep.} Seven filter configurations were tested at $N=10$:
+\textbf{Spectral filter sweep.} Six filter configurations were tested at $N=10$ (single-band 850~nm acquisition in progress):
 \begin{itemize}
     \item Dual-band filters targeting vibronic resonances: $\eta = \num{0.56}$ (both \SIlist{770;820}{\nano\meter} and \SIlist{730;820}{\nano\meter}).
-    \item Broader bandwidth (\SI{200}{\per\centi\meter}): $\eta = \num{0.65}$ (increased photon flux).
+    \item Broader bandwidth (\SI{200}{\per\centi\meter}): $\eta = \num{0.65}$ (increased photon capture).
     \item Narrower bandwidth (\SI{50}{\per\centi\meter}): $\eta = \num{0.53}$.
-    \item Single-band filters: $\eta = \num{0.53}$ (\SI{700}{\nano\meter}) and $\eta = \num{0.52}$ (\SI{850}{\nano\meter}) — pending final acquisition.
-    \item Off-resonant control (\SIlist{750;800}{\nano\meter}): $\eta = \num{-0.96}$, confirming that enhancement requires vibronic resonance alignment.
+    \item Single-band 700~nm (off-resonant): $\eta = \num{-0.96}$, confirming that excitation outside the FMO Qy absorption band suppresses enhancement.
+    \item Off-resonant control (\SIlist{750;800}{\nano\meter}): $\eta = \num{-0.96}$.
 \end{itemize}
 These results are reported in SI Table~S4 and SI Fig.~S8.
 
