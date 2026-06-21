@@ -7,17 +7,17 @@ import numpy as np
 import pandas as pd
 
 from src.core.constants import (
-    ENVIRONMENTAL_DUST_SAT_FACTOR,
-    ENVIRONMENTAL_HUMIDITY_OPT,
-    ENVIRONMENTAL_T_REF,
     DEFAULT_DUST_RATE,
     DEFAULT_DUST_SATURATION,
+    ENVIRONMENTAL_DUST_SAT_FACTOR,
+    ENVIRONMENTAL_HUMIDITY_OPT,
+    ENVIRONMENTAL_PRECIP_CLEAN_FACTOR,
+    ENVIRONMENTAL_PRECIP_PROB,
+    ENVIRONMENTAL_T_REF,
+    HUMIDITY_COEFF,
     TEMP_COEFF_OPV,
     TEMP_COEFF_PSU,
-    HUMIDITY_COEFF,
     WIND_SPEED_FACTOR,
-    ENVIRONMENTAL_PRECIP_PROB,
-    ENVIRONMENTAL_PRECIP_CLEAN_FACTOR,
 )
 
 logger = logging.getLogger(__name__)
@@ -57,9 +57,7 @@ class EnvironmentalFactors:
         self.wind_speed_factor = WIND_SPEED_FACTOR  # Factor for dust removal
         logger.debug("EnvironmentalFactors initialized with default parameters")
 
-    def dust_accumulation_model(
-        self, time_days, initial_dust=0.1, weather_conditions="normal"
-    ):
+    def dust_accumulation_model(self, time_days, initial_dust=0.1, weather_conditions="normal"):
         """
         Model dust accumulation over time with weather effects.
 
@@ -115,9 +113,7 @@ class EnvironmentalFactors:
 
         return dust_thickness
 
-    def temperature_effects_model(
-        self, temperatures, base_efficiency, efficiency_type="opv"
-    ):
+    def temperature_effects_model(self, temperatures, base_efficiency, efficiency_type="opv"):
         r"""
         Model temperature effects on system efficiency.
 
@@ -191,9 +187,7 @@ class EnvironmentalFactors:
         humidity_deviation = np.abs(humidity_values - optimal_humidity)
 
         # Apply humidity effects
-        efficiency = base_efficiency * (
-            1 - self.humidity_coefficient * humidity_deviation
-        )
+        efficiency = base_efficiency * (1 - self.humidity_coefficient * humidity_deviation)
 
         # Ensure efficiency remains positive
         efficiency = np.clip(efficiency, 0, base_efficiency)
@@ -293,17 +287,11 @@ class EnvironmentalFactors:
         # Combine all effects
         # For simplicity, using average dust effect across wavelengths
         dust_factor = (
-            1
-            - (dust_profile / self.dust_saturation_thickness)
-            * ENVIRONMENTAL_DUST_SAT_FACTOR
+            1 - (dust_profile / self.dust_saturation_thickness) * ENVIRONMENTAL_DUST_SAT_FACTOR
         )
 
-        pce_env = (
-            base_pce * dust_factor * (pce_temp / base_pce) * (pce_humidity / base_pce)
-        )
-        etr_env = (
-            base_etr * dust_factor * (etr_temp / base_etr) * (etr_humidity / base_etr)
-        )
+        pce_env = base_pce * dust_factor * (pce_temp / base_pce) * (pce_humidity / base_pce)
+        etr_env = base_etr * dust_factor * (etr_temp / base_etr) * (etr_humidity / base_etr)
 
         return pce_env, etr_env, dust_profile
 
@@ -405,9 +393,7 @@ class EnvironmentalFactors:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-        fig.suptitle(
-            "Environmental Effects on Exciton Transport", fontsize=16, fontweight="bold"
-        )
+        fig.suptitle("Environmental Effects on Exciton Transport", fontsize=16, fontweight="bold")
 
         # (a) Temperature Profile
         ax1 = axes[0]
@@ -421,12 +407,8 @@ class EnvironmentalFactors:
 
         # (b) Humidity Profile
         ax2 = axes[1]
-        ax2.plot(
-            humidity_values * 100, etr_humidity * 100, "g-", linewidth=2, label="ETR"
-        )
-        ax2.plot(
-            humidity_values * 100, pce_humidity * 100, "b--", linewidth=2, label="PCE"
-        )
+        ax2.plot(humidity_values * 100, etr_humidity * 100, "g-", linewidth=2, label="ETR")
+        ax2.plot(humidity_values * 100, pce_humidity * 100, "b--", linewidth=2, label="PCE")
         ax2.set_xlabel("Relative Humidity [%]", fontsize=12)
         ax2.set_ylabel("Efficiency [%]", fontsize=12)
         ax2.set_title("(b) Humidity Profile", fontsize=14, fontweight="bold")

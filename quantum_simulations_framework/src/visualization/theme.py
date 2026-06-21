@@ -8,8 +8,9 @@ scienceplots library to provide clean, high-resolution (600 DPI) scientific
 visualizations.
 """
 
-import matplotlib.pyplot as plt
 import logging
+
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
@@ -67,9 +68,7 @@ def apply_jpcl_theme():
         "text.usetex": False,
     }
     plt.rcParams.update(jpcl_params)
-    logger.info(
-        "JPCL Publication Theme applied (600 DPI, Arial/Sans, scienceplots base)."
-    )
+    logger.info("JPCL Publication Theme applied (600 DPI, Arial/Sans, scienceplots base).")
 
 
 def get_color_palette():

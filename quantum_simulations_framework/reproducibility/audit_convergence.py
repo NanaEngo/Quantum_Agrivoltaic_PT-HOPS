@@ -9,35 +9,36 @@ term convergence (K), and physical consistency (trace preservation,
 positivity, and detailed balance).
 """
 
-from typing import Any, Dict
 import os
 import sys
+from typing import Any, Dict
 
 # Add framework to path - MUST BE BEFORE FRAMEWORK IMPORTS
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if _FRAMEWORK_DIR not in sys.path:
     sys.path.insert(0, _FRAMEWORK_DIR)
 
-import yaml
-import numpy as np
 import logging
 
+import numpy as np
+import yaml
+
 try:
-    from src.core.hops_simulator import HopsSimulator, MESOHOPS_AVAILABLE
-    from src.core.hamiltonian_factory import create_fmo_hamiltonian
     from src.core.constants import (
-        KB_CM_K,
-        MAE_THRESHOLD,
-        MAE_THRESHOLD_LOOSE,
-        TRACE_THRESHOLD,
-        POPS_REAL_THRESHOLD,
-        DEFAULT_TIME_LONG,
-        DEFAULT_TEMPERATURE,
-        MARKOVIAN_DRUDE_CUTOFF,
         AUDIT_TIME_WINDOW,
         DEFAULT_AUDIT_RESOLUTION,
         DEFAULT_N_MATSUBARA,
+        DEFAULT_TEMPERATURE,
+        DEFAULT_TIME_LONG,
+        KB_CM_K,
+        MAE_THRESHOLD,
+        MAE_THRESHOLD_LOOSE,
+        MARKOVIAN_DRUDE_CUTOFF,
+        POPS_REAL_THRESHOLD,
+        TRACE_THRESHOLD,
     )
+    from src.core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import MESOHOPS_AVAILABLE, HopsSimulator
 
     try:
         from tqdm.auto import tqdm as _tqdm
@@ -45,14 +46,13 @@ try:
 
         def _tqdm(iterable, **kwargs):
             return iterable
+
 except ImportError as e:
     print(f"❌ Framework import error: {e}")
     sys.exit(1)
 
 # Setup Logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Silence verbose Numba/JAX logging
@@ -69,9 +69,7 @@ def load_config() -> Dict[str, Any]:
     dict
         Parsed configuration dictionary from 'parameters.yaml'.
     """
-    config_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "parameters.yaml")
-    )
+    config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "parameters.yaml"))
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
@@ -89,9 +87,7 @@ def run_convergence_audit(cfg=None):
 
     # Guard: require real MesoHOPS
     if not MESOHOPS_AVAILABLE:
-        logger.error(
-            "MesoHOPS is NOT available. Convergence audit requires the real solver."
-        )
+        logger.error("MesoHOPS is NOT available. Convergence audit requires the real solver.")
         print("❌ FATAL: MesoHOPS not found. Activate the MesoHOP-sim environment:")
         print("   mamba run -n MesoHOP-sim python reproducibility/audit_convergence.py")
         sys.exit(1)
@@ -110,7 +106,7 @@ def run_convergence_audit(cfg=None):
     # Ensure depths are at least 1
     depths = [max(1, d) for d in depths]
     # Remove duplicates if L_target is very small
-    depths = sorted(list(set(depths)))
+    depths = sorted(set(depths))
     results = {}
     coherences = {}
 
@@ -179,9 +175,7 @@ def run_convergence_audit(cfg=None):
         mean_trace = np.mean(traces)
         if mean_trace < TRACE_THRESHOLD:  # catastrophic loss — indicates solver failure
             logger.error(f"L={L}: Catastrophic trace loss! Mean trace={mean_trace:.4f}")
-            print(
-                f"❌ FATAL: Catastrophic trace loss at L={L} (mean trace={mean_trace:.4f})"
-            )
+            print(f"❌ FATAL: Catastrophic trace loss at L={L} (mean trace={mean_trace:.4f})")
             sys.exit(1)
         logger.info(
             f"L={L}: mean trace={mean_trace:.4f} (single trajectory — stochastic norm loss expected)"
@@ -198,9 +192,7 @@ def run_convergence_audit(cfg=None):
         min_pop = np.min(pops)
         if min_pop < -1e-3:  # Numerical noise floor for single trajectories
             logger.error(f"L={L}: Positivity violated! Min population: {min_pop:.2e}")
-            print(
-                f"❌ FATAL: Positivity failed at L={L} (min population {min_pop:.2e} < -1e-3)"
-            )
+            print(f"❌ FATAL: Positivity failed at L={L} (min population {min_pop:.2e} < -1e-3)")
             sys.exit(1)
 
     print("✅ Positivity checks passed for all depths.")
@@ -220,18 +212,14 @@ def run_convergence_audit(cfg=None):
     # for small systems/short times can be extremely close, triggering false positives.
     if len(depths) >= 2:
         max_diff_first = np.max(safe_diff(results[depths[0]], results[depths[1]]))
-        logger.info(
-            f"Audit Diagnostic: max|L{depths[0]} - L{depths[1]}| = {max_diff_first:.2e}"
-        )
+        logger.info(f"Audit Diagnostic: max|L{depths[0]} - L{depths[1]}| = {max_diff_first:.2e}")
 
         if max_diff_first < 1e-18:  # Truly zero/identical
             logger.error(
                 f"FAKE DATA DETECTED: L={depths[0]} and L={depths[1]} populations are identical. "
                 "The simulator fell back to a non-hierarchy solver."
             )
-            print(
-                "❌ FATAL: Convergence data is invalid (all depths produce identical results)."
-            )
+            print("❌ FATAL: Convergence data is invalid (all depths produce identical results).")
             print(
                 "   This means MesoHOPS hierarchy is not being used. Check solver initialization."
             )
@@ -240,9 +228,7 @@ def run_convergence_audit(cfg=None):
     # Check last two depths
     if len(depths) >= 2:
         max_diff_last = np.max(safe_diff(results[depths[-2]], results[depths[-1]]))
-        logger.info(
-            f"Audit Diagnostic: max|L{depths[-2]} - L{depths[-1]}| = {max_diff_last:.2e}"
-        )
+        logger.info(f"Audit Diagnostic: max|L{depths[-2]} - L{depths[-1]}| = {max_diff_last:.2e}")
 
         if max_diff_last < 1e-18:  # Truly zero/identical
             logger.error(
@@ -252,9 +238,7 @@ def run_convergence_audit(cfg=None):
             print(
                 f"❌ FATAL: L={depths[-2]} and L={depths[-1]} results are identical — hierarchy depth has no effect."
             )
-            print(
-                "   Check that HopsSimulator is passing MAXHIER correctly to MesoHOPS."
-            )
+            print("   Check that HopsSimulator is passing MAXHIER correctly to MesoHOPS.")
             sys.exit(1)
 
     # Compare convergence
@@ -267,9 +251,7 @@ def run_convergence_audit(cfg=None):
     diff_target = diffs.get(depths[-1], 0.0)
 
     if diff_target < cfg["dynamics"]["convergence_threshold"]:
-        print(
-            f"✅ SUCCESS: L={depths[-1]} is numerically converged (residual < threshold)."
-        )
+        print(f"✅ SUCCESS: L={depths[-1]} is numerically converged (residual < threshold).")
     else:
         print(
             f"⚠️ WARNING: Residual {diff_target:.2e} exceeds threshold. Further truncation check recommended."
@@ -281,7 +263,7 @@ def run_convergence_audit(cfg=None):
     K_target = cfg["dynamics"].get("matsubara_truncation", DEFAULT_N_MATSUBARA)
     matsubara_list = [max(1, K_target - 1), K_target, K_target + 1]
     # Ensure uniqueness if K_target=1
-    matsubara_list = sorted(list(set(matsubara_list)))
+    matsubara_list = sorted(set(matsubara_list))
 
     print(f"\n🧪 K-Matsubara Convergence Audit (L={L_target} fixed)...")
     k_results = {}
@@ -328,9 +310,7 @@ def run_convergence_audit(cfg=None):
 
     # Handle edge case K_target=1 (only 2 points in list)
     if len(matsubara_list) >= 3:
-        diff_prev_k = np.mean(
-            safe_diff(k_results[matsubara_list[1]], k_results[matsubara_list[0]])
-        )
+        diff_prev_k = np.mean(safe_diff(k_results[matsubara_list[1]], k_results[matsubara_list[0]]))
         diff_target_k = np.mean(
             safe_diff(k_results[matsubara_list[2]], k_results[matsubara_list[1]])
         )
@@ -344,9 +324,7 @@ def run_convergence_audit(cfg=None):
         k_label_prev = "N/A"
         k_label_target = f"K={matsubara_list[0]} → K={matsubara_list[1]}"
 
-    print(
-        f"\n📊 K-Matsubara Convergence Results (L={L_target}, T={DEFAULT_TEMPERATURE:.0f} K):"
-    )
+    print(f"\n📊 K-Matsubara Convergence Results (L={L_target}, T={DEFAULT_TEMPERATURE:.0f} K):")
     print(f"   MAE ({k_label_prev}) : {diff_prev_k:.2e}")
     print(f"   MAE ({k_label_target}) : {diff_target_k:.2e}")
 
@@ -435,9 +413,7 @@ def run_time_step_audit(cfg=None):
             k_matsubara=K_val,
             n_traj=1,  # Fast verification
         )
-        data = simulator.simulate_dynamics(
-            time_points, initial_state=init_state, strict_mode=True
-        )
+        data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
         # Store population at t=100.0 (last point)
         results[dt] = data["populations"][-1, :]
 
@@ -485,9 +461,7 @@ def run_detailed_balance_audit(cfg=None):
         k_matsubara=K_db,
         n_traj=1,  # Fast steady-state check
     )
-    data = simulator.simulate_dynamics(
-        time_points, initial_state=init_state, strict_mode=True
-    )
+    data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
 
     # Use density matrix for exact exciton populations
     if "density_matrices" in data:
@@ -528,14 +502,10 @@ def run_hermiticity_audit(cfg=None):
     K_h = cfg["dynamics"].get("matsubara_truncation", DEFAULT_N_MATSUBARA)
     n_traj_h = 1
 
-    simulator = HopsSimulator(
-        H, max_hierarchy=L_target, k_matsubara=K_h, n_traj=n_traj_h
-    )
+    simulator = HopsSimulator(H, max_hierarchy=L_target, k_matsubara=K_h, n_traj=n_traj_h)
     # This requires access to rho which HopsSimulator currently approximates
     # but we can check if populations sum to 1 and are real.
-    data = simulator.simulate_dynamics(
-        time_points, initial_state=init_state, strict_mode=True
-    )
+    data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
     pops = data["populations"]
 
     # Check if any population has an imaginary part (should be 0)
@@ -570,9 +540,7 @@ def run_markovian_limit_audit(cfg=None):
         drude_cutoff=MARKOVIAN_DRUDE_CUTOFF,
         n_traj=n_traj_m,
     )
-    data = simulator.simulate_dynamics(
-        time_points, initial_state=init_state, strict_mode=True
-    )
+    data = simulator.simulate_dynamics(time_points, initial_state=init_state, strict_mode=True)
 
     # In Markovian limit, populations should decay exponentially
     # We just check for monotonic decay of site 1 as a proxy for physical behavior

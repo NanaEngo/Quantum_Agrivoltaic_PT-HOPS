@@ -51,9 +51,7 @@ class StochasticallyBundledDissipator:
     def __init__(self, n_bundles: int = 5):
         self.n_bundles = n_bundles
         self.bundles: List[StochasticBundle] = []
-        logger.info(
-            f"Initialized StochasticallyBundledDissipator with {n_bundles} bundles."
-        )
+        logger.info(f"Initialized StochasticallyBundledDissipator with {n_bundles} bundles.")
 
     def discretize_spectral_density(
         self, modes: List[Tuple[float, float]]
@@ -77,9 +75,7 @@ class StochasticallyBundledDissipator:
                 bundle = StochasticBundle(
                     bundle_id=i,
                     center_frequency=mode[0],
-                    effective_coupling=abs(
-                        mode[1]
-                    ),  # use magnitude for physical coupling
+                    effective_coupling=abs(mode[1]),  # use magnitude for physical coupling
                     modes=[mode],
                     variance=0.0,
                 )
@@ -101,9 +97,7 @@ class StochasticallyBundledDissipator:
 
         for _iteration in range(100):  # max 100 Lloyd iterations
             # Assignment step: assign each mode to the nearest centroid
-            new_labels = np.argmin(
-                np.abs(frequencies[:, None] - centroids[None, :]), axis=1
-            )
+            new_labels = np.argmin(np.abs(frequencies[:, None] - centroids[None, :]), axis=1)
             if np.array_equal(new_labels, labels):
                 break  # converged
             labels = new_labels

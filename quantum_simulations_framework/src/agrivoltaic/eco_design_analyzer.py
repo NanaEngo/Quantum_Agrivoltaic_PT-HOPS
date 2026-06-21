@@ -13,27 +13,28 @@ from typing import Any, Dict, List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from src.io.orca_wrapper import OrcaRunner
+
 from src.core.constants import (
-    DEFAULT_PCE,
     BDE_THRESHOLD_ECO,
-    DEFAULT_DPI,
-    PREVIEW_DPI,
-    TARGET_BIODEGRADABILITY,
-    TARGET_LC50,
-    DEFAULT_MOLECULAR_WEIGHT,
-    DEFAULT_LC50,
-    REF_CHEMICAL_POTENTIAL,
-    REF_CHEMICAL_HARDNESS,
-    REF_ELECTROPHILICITY,
-    REF_FUKUI_NUC,
-    REF_FUKUI_ELEC,
-    BINDEX_WEIGHT_NUC,
+    BINDEX_SIZE_DECAY,
     BINDEX_WEIGHT_ELEC,
+    BINDEX_WEIGHT_NUC,
     BINDEX_WEIGHT_REACT,
     BINDEX_WEIGHT_SIZE,
-    BINDEX_SIZE_DECAY,
+    DEFAULT_DPI,
+    DEFAULT_LC50,
+    DEFAULT_MOLECULAR_WEIGHT,
+    DEFAULT_PCE,
+    PREVIEW_DPI,
+    REF_CHEMICAL_HARDNESS,
+    REF_CHEMICAL_POTENTIAL,
+    REF_ELECTROPHILICITY,
+    REF_FUKUI_ELEC,
+    REF_FUKUI_NUC,
+    TARGET_BIODEGRADABILITY,
+    TARGET_LC50,
 )
+from src.io.orca_wrapper import OrcaRunner
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +88,7 @@ class EcoDesignAnalyzer:
             self.orca_runner = OrcaRunner(orca_path)
         else:
             # Try default path from audit
-            self.orca_runner = OrcaRunner("/home/taamangtchu/orca_6_1_0/orca")
+            self.orca_runner = OrcaRunner("/home/taamangtchu/opt/orca_6_1_1/orca")
 
         # Reference values for reactivity descriptors
         self.reference_values = {
@@ -116,9 +117,7 @@ class EcoDesignAnalyzer:
         """
         Evaluate sustainability using genuine DFT calculations via Orca.
         """
-        logger.info(
-            f"Starting genuine DFT-based sustainability evaluation for {material_name}"
-        )
+        logger.info(f"Starting genuine DFT-based sustainability evaluation for {material_name}")
 
         # 1. Run 3-state DFT to get Fukui functions and orbital energies
         results = self.orca_runner.calculate_reactivity_descriptors(
@@ -393,13 +392,9 @@ class EcoDesignAnalyzer:
 
         # Calculate sustainability scores
         pce_score = min(1.0, pce / self.target_pce)
-        biodegradability_score = min(
-            1.0, b_index / 70.0
-        )  # B-index > 70 considered good
+        biodegradability_score = min(1.0, b_index / 70.0)  # B-index > 70 considered good
         toxicity_score = min(1.0, lc50 / self.target_lc50)  # LC50 > 400 mg/L is target
-        sustainability_score = (
-            0.4 * pce_score + 0.3 * biodegradability_score + 0.3 * toxicity_score
-        )
+        sustainability_score = 0.4 * pce_score + 0.3 * biodegradability_score + 0.3 * toxicity_score
 
         return {
             "material_name": material_name,
@@ -527,9 +522,7 @@ class EcoDesignAnalyzer:
             )
 
             material["environmental_impact"] = environmental_impact
-            material["eco_efficiency_ratio"] = material["pce"] / (
-                1 + environmental_impact
-            )
+            material["eco_efficiency_ratio"] = material["pce"] / (1 + environmental_impact)
 
         # Sort by eco-efficiency ratio
         materials_data.sort(key=lambda x: x["eco_efficiency_ratio"], reverse=True)
@@ -583,12 +576,8 @@ class EcoDesignAnalyzer:
                     "sustainability_score": material["sustainability_score"],
                     "environmental_impact": material.get("environmental_impact", 0.0),
                     "eco_efficiency_ratio": material.get("eco_efficiency_ratio", 0.0),
-                    "chemical_potential": material["global_indices"][
-                        "chemical_potential"
-                    ],
-                    "chemical_hardness": material["global_indices"][
-                        "chemical_hardness"
-                    ],
+                    "chemical_potential": material["global_indices"]["chemical_potential"],
+                    "chemical_hardness": material["global_indices"]["chemical_hardness"],
                     "electrophilicity": material["global_indices"]["electrophilicity"],
                     "molecular_weight": material["molecular_weight"],
                 }
@@ -657,9 +646,7 @@ class EcoDesignAnalyzer:
         plt.colorbar(scatter, ax=ax1, label="Sustainability Score")
 
         # Add target lines
-        ax1.axhline(
-            y=70, color="red", linestyle="--", alpha=0.5, label="Good Biodegradability"
-        )
+        ax1.axhline(y=70, color="red", linestyle="--", alpha=0.5, label="Good Biodegradability")
         ax1.axvline(
             x=self.target_pce,
             color="red",
@@ -671,9 +658,7 @@ class EcoDesignAnalyzer:
 
         # Plot 2: Sustainability scores
         ax2 = axes[0, 1]
-        bars = ax2.bar(
-            range(n_materials), sustainability_scores[:10], alpha=0.7, color="green"
-        )
+        bars = ax2.bar(range(n_materials), sustainability_scores[:10], alpha=0.7, color="green")
         ax2.set_xlabel("Material Rank")
         ax2.set_ylabel("Sustainability Score")
         ax2.set_title("Sustainability Scores (Top 10)")
@@ -697,9 +682,7 @@ class EcoDesignAnalyzer:
 
         # Plot 3: Eco-efficiency ratio
         ax3 = axes[1, 0]
-        bars2 = ax3.bar(
-            range(n_materials), eco_efficiency_ratios[:10], alpha=0.7, color="blue"
-        )
+        bars2 = ax3.bar(range(n_materials), eco_efficiency_ratios[:10], alpha=0.7, color="blue")
         ax3.set_xlabel("Material Rank")
         ax3.set_ylabel("Eco-Efficiency Ratio")
         ax3.set_title("Eco-Efficiency Ratio (Top 10)")
@@ -723,12 +706,8 @@ class EcoDesignAnalyzer:
 
         # Plot 4: Chemical properties
         ax4 = axes[1, 1]
-        chem_potentials = [
-            m["global_indices"]["chemical_potential"] for m in materials[:10]
-        ]
-        chem_hardnesses = [
-            m["global_indices"]["chemical_hardness"] for m in materials[:10]
-        ]
+        chem_potentials = [m["global_indices"]["chemical_potential"] for m in materials[:10]]
+        chem_hardnesses = [m["global_indices"]["chemical_hardness"] for m in materials[:10]]
 
         x_pos = np.arange(len(chem_potentials))
         width = 0.35

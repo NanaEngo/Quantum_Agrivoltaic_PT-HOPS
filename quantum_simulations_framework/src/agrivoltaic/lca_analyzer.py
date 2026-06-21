@@ -13,24 +13,25 @@ from typing import Any, Dict, Optional
 
 import matplotlib.pyplot as plt
 import pandas as pd
+
 from src.core.constants import (
     DEFAULT_SYSTEM_LIFETIME,
-    SOLAR_IRRADIANCE_ANNUAL,
-    LCA_MANUFACTURING_ENERGY_BASE,
-    LCA_CARBON_INTENSITY_MFG,
-    LCA_CARBON_INTENSITY_GRID,
-    LCA_TOXICITY_FACTOR,
-    LCA_RESOURCE_DEPLETION_FACTOR,
-    LCA_MAINTENANCE_FACTOR,
-    LCA_CLEANING_FACTOR,
-    LCA_RECYCLING_RATE,
-    LCA_LANDFILL_IMPACT,
-    LCA_RECYCLING_ENERGY_FACTOR,
-    LCA_CARBON_CREDIT_RECYCLE,
-    MJ_TO_KWH,
     KWH_TO_MJ,
+    LCA_CARBON_CREDIT_RECYCLE,
+    LCA_CARBON_INTENSITY_GRID,
+    LCA_CARBON_INTENSITY_MFG,
+    LCA_CLEANING_FACTOR,
+    LCA_LANDFILL_IMPACT,
+    LCA_MAINTENANCE_FACTOR,
+    LCA_MANUFACTURING_ENERGY_BASE,
+    LCA_RECYCLING_ENERGY_FACTOR,
+    LCA_RECYCLING_RATE,
+    LCA_RESOURCE_DEPLETION_FACTOR,
+    LCA_TOXICITY_FACTOR,
+    MJ_TO_KWH,
     SILICON_PV_CARBON,
     SILICON_PV_EPBT,
+    SOLAR_IRRADIANCE_ANNUAL,
 )
 
 logger = logging.getLogger(__name__)
@@ -168,9 +169,7 @@ class LCAAnalyzer:
 
         toxicity = material_mass * self.lca_parameters["material_toxicity_factor"]
 
-        resource_depletion = (
-            material_mass * self.lca_parameters["resource_depletion_factor"]
-        )
+        resource_depletion = material_mass * self.lca_parameters["resource_depletion_factor"]
 
         impact = {
             "energy_mj": manufacturing_energy,
@@ -218,9 +217,7 @@ class LCAAnalyzer:
         )
 
         cleaning_energy = (
-            baseline_energy
-            * self.lca_parameters["cleaning_energy_factor"]
-            * operational_time
+            baseline_energy * self.lca_parameters["cleaning_energy_factor"] * operational_time
         )
 
         total_energy = maintenance_energy + cleaning_energy
@@ -353,9 +350,7 @@ class LCAAnalyzer:
             manufacturing_energy, material_mass, carbon_intensity
         )
 
-        operational = self.calculate_operational_impact(
-            operational_time, maintenance_frequency
-        )
+        operational = self.calculate_operational_impact(operational_time, maintenance_frequency)
 
         end_of_life = self.calculate_end_of_life_impact(material_mass)
 
@@ -384,21 +379,15 @@ class LCAAnalyzer:
         )  # gCO2eq/kWh
 
         energy_payback_time = (
-            manufacturing["energy_mj"] / (annual_energy * KWH_TO_MJ)
-            if annual_energy > 0
-            else 0
+            manufacturing["energy_mj"] / (annual_energy * KWH_TO_MJ) if annual_energy > 0 else 0
         )  # years (convert kWh to MJ)
 
         eroi = (lifetime_energy * KWH_TO_MJ) / total_energy if total_energy > 0 else 0
 
         # Comparison to silicon PV
         comparison = {
-            "carbon_ratio": (
-                carbon_footprint / self.lca_parameters["reference_silicon_carbon"]
-            ),
-            "epbt_ratio": (
-                energy_payback_time / self.lca_parameters["reference_silicon_epbt"]
-            ),
+            "carbon_ratio": (carbon_footprint / self.lca_parameters["reference_silicon_carbon"]),
+            "epbt_ratio": (energy_payback_time / self.lca_parameters["reference_silicon_epbt"]),
         }
 
         results = {
@@ -452,9 +441,7 @@ class LCAAnalyzer:
         max_carbon = 100.0  # gCO2eq/kWh
         max_epbt = 5.0  # years
 
-        carbon_score = max(
-            0, 1 - lca_results["carbon_footprint_gco2eq_per_kwh"] / max_carbon
-        )
+        carbon_score = max(0, 1 - lca_results["carbon_footprint_gco2eq_per_kwh"] / max_carbon)
         epbt_score = max(0, 1 - lca_results["energy_payback_time_years"] / max_epbt)
         eroi_score = min(1, lca_results["eroi"] / 10.0)  # Normalize to 10
 
@@ -465,9 +452,7 @@ class LCAAnalyzer:
 
         # Weighted overall score
         # 40% biodegradability, 30% LCA, 30% performance
-        overall_score = (
-            0.4 * biodegradability_score + 0.3 * lca_score + 0.3 * performance_score
-        )
+        overall_score = 0.4 * biodegradability_score + 0.3 * lca_score + 0.3 * performance_score
 
         scores = {
             "overall_score": overall_score,
@@ -575,43 +560,29 @@ class LCAAnalyzer:
             "annual_irradiance_kwh_per_m2": self.annual_irradiance,
             "total_carbon_kg_co2eq": lca_results.get("total_carbon_kg_co2eq", 0),
             "total_energy_mj": lca_results.get("total_energy_mj", 0),
-            "lifetime_energy_kwh_per_m2": lca_results.get(
-                "lifetime_energy_kwh_per_m2", 0
-            ),
+            "lifetime_energy_kwh_per_m2": lca_results.get("lifetime_energy_kwh_per_m2", 0),
             "carbon_footprint_gco2eq_per_kwh": lca_results.get(
                 "carbon_footprint_gco2eq_per_kwh", 0
             ),
-            "energy_payback_time_years": lca_results.get(
-                "energy_payback_time_years", 0
-            ),
+            "energy_payback_time_years": lca_results.get("energy_payback_time_years", 0),
             "eroi": lca_results.get("eroi", 0),
             "manufacturing_carbon_kg_co2eq": lca_results.get("manufacturing", {}).get(
                 "carbon_kg_co2eq", 0
             ),
-            "manufacturing_energy_mj": lca_results.get("manufacturing", {}).get(
-                "energy_mj", 0
-            ),
+            "manufacturing_energy_mj": lca_results.get("manufacturing", {}).get("energy_mj", 0),
             "operational_carbon_kg_co2eq": lca_results.get("operational", {}).get(
                 "carbon_kg_co2eq", 0
             ),
-            "operational_energy_mj": lca_results.get("operational", {}).get(
-                "energy_mj", 0
+            "operational_energy_mj": lca_results.get("operational", {}).get("energy_mj", 0),
+            "eol_carbon_kg_co2eq": lca_results.get("end_of_life", {}).get("carbon_kg_co2eq", 0),
+            "eol_recycled_mass": lca_results.get("end_of_life", {}).get("recycled_mass", 0),
+            "eol_landfill_mass": lca_results.get("end_of_life", {}).get("landfill_mass", 0),
+            "comparison_to_silicon_carbon": lca_results.get("comparison_to_silicon", {}).get(
+                "carbon_ratio", 0
             ),
-            "eol_carbon_kg_co2eq": lca_results.get("end_of_life", {}).get(
-                "carbon_kg_co2eq", 0
+            "comparison_to_silicon_epbt": lca_results.get("comparison_to_silicon", {}).get(
+                "epbt_ratio", 0
             ),
-            "eol_recycled_mass": lca_results.get("end_of_life", {}).get(
-                "recycled_mass", 0
-            ),
-            "eol_landfill_mass": lca_results.get("end_of_life", {}).get(
-                "landfill_mass", 0
-            ),
-            "comparison_to_silicon_carbon": lca_results.get(
-                "comparison_to_silicon", {}
-            ).get("carbon_ratio", 0),
-            "comparison_to_silicon_epbt": lca_results.get(
-                "comparison_to_silicon", {}
-            ).get("epbt_ratio", 0),
         }
 
         # Create DataFrame and save
@@ -675,8 +646,7 @@ class LCAAnalyzer:
         values = [
             lca_results.get("energy_payback_time_years", 0),
             lca_results.get("eroi", 0),
-            lca_results.get("carbon_footprint_gco2eq_per_kwh", 0)
-            / 10,  # Scale for vis.
+            lca_results.get("carbon_footprint_gco2eq_per_kwh", 0) / 10,  # Scale for vis.
         ]
         bars = ax2.bar(
             metrics,
@@ -803,18 +773,14 @@ if __name__ == "__main__":
     )
 
     print("\n=== LCA Results ===")
-    print(
-        f"Carbon footprint: {results['carbon_footprint_gco2eq_per_kwh']:.1f} gCO2eq/kWh"
-    )
+    print(f"Carbon footprint: {results['carbon_footprint_gco2eq_per_kwh']:.1f} gCO2eq/kWh")
     print(f"Energy payback time: {results['energy_payback_time_years']:.2f} years")
     print(f"Energy return on investment: {results['eroi']:.1f}")
     carbon_ratio = results["comparison_to_silicon"]["carbon_ratio"]
     print(f"vs Silicon PV - Carbon: {carbon_ratio:.2f}x")
 
     # Calculate sustainability score
-    scores = lca.calculate_sustainability_score(
-        results, biodegradability_score=0.7, pce=0.18
-    )
+    scores = lca.calculate_sustainability_score(results, biodegradability_score=0.7, pce=0.18)
 
     print(f"\nOverall sustainability score: {scores['overall_score']:.3f}")
 

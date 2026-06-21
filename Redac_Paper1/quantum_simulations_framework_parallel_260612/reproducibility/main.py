@@ -25,10 +25,9 @@ Outputs
 import os
 import sys
 
-# Disable Numba CUDA to prevent NVML version mismatch SIGSEGV on the server
-# since a server reboot is not possible at the moment.
-os.environ["NUMBA_DISABLE_CUDA"] = "1"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# GPU auto-detection — the NVML driver mismatch has been fixed on the server.
+# Previously set NUMBA_DISABLE_CUDA and CUDA_VISIBLE_DEVICES to prevent SIGSEGV;
+# they are no longer needed as nvidia-smi now runs cleanly.
 
 # Ensure framework is importable regardless of CWD - MUST BE BEFORE ANY OTHER IMPORTS
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

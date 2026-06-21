@@ -3,10 +3,11 @@ Standalone script to run ONLY the Figure 2 temperature sweep and disorder sampli
 Reads configuration from parameters.yaml, respecting the n_workers parameter.
 """
 
+import logging
 import os
 import sys
+
 import numpy as np
-import logging
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
@@ -15,17 +16,15 @@ if _FRAMEWORK_DIR not in sys.path:
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
 
+import argparse
+
 from reproducibility.main import load_and_validate_config
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
 from src.visualization.figure_generator import FigureGenerator
 
-import argparse
-
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Standalone Temperature Sweep (JPCL Figure 2)"
-    )
+    parser = argparse.ArgumentParser(description="Standalone Temperature Sweep (JPCL Figure 2)")
     parser.add_argument(
         "--parallel",
         action="store_true",
@@ -63,8 +62,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 import glob
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
 from joblib import Parallel, delayed
 
 
@@ -94,8 +94,9 @@ def get_completed_tasks(pattern="temp_sweep_progress_*.csv"):
 
 
 def run_sweep_with_resume(cfg, H, time_points):
-    from reproducibility.main import _run_trajectory_worker
     from multiprocessing import Manager
+
+    from reproducibility.main import _run_trajectory_worker
 
     bath = cfg["bath"]
     dyn = cfg["dynamics"]
@@ -154,7 +155,7 @@ def run_sweep_with_resume(cfg, H, time_points):
             for T, label, s in tasks
         )
         # Update completed dict with new results
-        for (T, label, s), phi in zip(tasks, results_flat):
+        for (T, label, s), phi in zip(tasks, results_flat, strict=False):
             if phi is not None:
                 completed[(float(T), label, s)] = phi
 
@@ -181,8 +182,9 @@ def run_sweep_with_resume(cfg, H, time_points):
 
 
 def run_disorder_with_resume(cfg, H, time_points):
-    from reproducibility.main import _run_single_disorder
     from multiprocessing import Manager
+
+    from reproducibility.main import _run_single_disorder
 
     bath = cfg["bath"]
     dyn = cfg["dynamics"]

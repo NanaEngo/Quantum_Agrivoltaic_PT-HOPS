@@ -28,20 +28,18 @@ def config():
     return load_and_validate_config()
 
 
-def test_temperature_sweep_range(env_model):
+@pytest.mark.parametrize("tech", ["opv", "psu"])
+def test_temperature_sweep_range(env_model, tech):
     """Verify that temperature sweeps handle the JPCL range correctly (285-310 K)."""
-    temps = np.linspace(285, 310, 6)
+    N_SWEEP = 6
+    temps = np.linspace(285, 310, N_SWEEP)
     base_eff = DEFAULT_PCE
 
-    opv_eff = env_model.temperature_effects_model(temps, base_eff, "opv")
-    logger.info(f"OPV efficiency sweep: {opv_eff.round(4)}")
-    assert len(opv_eff) == 6
-    assert np.all(opv_eff <= base_eff)
-    assert opv_eff[0] > opv_eff[-1], "Efficiency should decrease with temperature"
-
-    psu_eff = env_model.temperature_effects_model(temps, base_eff, "psu")
-    logger.info(f"PSU efficiency sweep: {psu_eff.round(4)}")
-    assert psu_eff[0] > psu_eff[-1]
+    eff = env_model.temperature_effects_model(temps, base_eff, tech)
+    logger.info(f"{tech.upper()} efficiency sweep: {eff.round(4)}")
+    assert len(eff) == N_SWEEP
+    assert np.all(eff <= base_eff)
+    assert eff[0] > eff[-1], "Efficiency should decrease with temperature"
 
 
 def test_dust_saturation(env_model):

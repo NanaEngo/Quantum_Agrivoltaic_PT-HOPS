@@ -6,11 +6,11 @@ __title__ = "MemoryAwareJobScheduler"
 __author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
-import os
 import gc
 import logging
-import resource
-from typing import Dict, Any
+import math
+import os
+from typing import Any, Dict
 
 try:
     import psutil
@@ -21,10 +21,10 @@ except ImportError:
 
 from .constants import (
     BASE_TRAJ_MEMORY_GB,
-    MIN_TRAJ_MEMORY_GB,
-    MEMORY_FRACTION_LIMIT,
     CPU_COUNT_FRACTION,
     MAX_N_JOBS,
+    MEMORY_FRACTION_LIMIT,
+    MIN_TRAJ_MEMORY_GB,
 )
 
 logger = logging.getLogger(__name__)
@@ -119,13 +119,9 @@ class MemoryAwareJobScheduler:
         if n_batches > 1:
             warnings.append(f"{n_batches} batches nécessaires (dépassement mémoire)")
         if mem_per_traj > limit_gb * 0.8:
-            warnings.append(
-                f"Mémoire/traj élevée: {mem_per_traj:.1f}GB (>80% de limite)"
-            )
+            warnings.append(f"Mémoire/traj élevée: {mem_per_traj:.1f}GB (>80% de limite)")
         if n_jobs < os.cpu_count() * CPU_COUNT_FRACTION:
-            warnings.append(
-                f"Parallélisme limité: {n_jobs}/{os.cpu_count()} cœurs utilisés"
-            )
+            warnings.append(f"Parallélisme limité: {n_jobs}/{os.cpu_count()} cœurs utilisés")
 
         return {
             "n_jobs": n_jobs,
@@ -139,37 +135,25 @@ class MemoryAwareJobScheduler:
 
     def _estimate_memory(self, n_hierarchy_modes: int = 189) -> float:
         """
-        Estimate memory per trajectory.
+        Estimate memory per trajectory using exact combinatorial scaling.
 
-        Reference: 21 modes (3 DL × 7 sites, no vibronic) at L=8, K=2, 1000 fs → 6.0 GB.
-        Full FMO: 189 modes (3 DL + 24 vibronic × 7 sites) at L=8, K=2, 1000 fs → ~54 GB/traj.
-        For small L (≤4), uses exact C(modes+L, L) ratio to avoid overestimation.
+        Reference: 21 effective modes (SBD=3 × 7 sites) at L=8, K=2, 1000 fs → 6.0 GB.
+        Hierarchy size = C(n_modes + L, L). Ratio vs reference C(29, 8) gives memory.
 
         NOTE: SBD compression reduces effective modes to sbd_bundles_per_site × n_sites.
         For sbd_bundles=3, the max effective is 21. We cap at 21 to reflect this.
         """
-        # Capped at 21: SBD (3 bundles × 7 sites) compresses 105 raw modes → 21 effective
         n = min(float(n_hierarchy_modes), 21.0)
-        L = float(self.L_max)
+        L = self.L_max
 
-        if L <= 4 and n > 21:
-            import math
+        hier_ref = math.comb(29, 8)  # C(21+8, 8) = 4,292,145 → 6.0 GB
+        hier_actual = math.comb(int(n + L), L)
+        ratio = hier_actual / hier_ref
+        estimate = BASE_TRAJ_MEMORY_GB * ratio
 
-            def comb(x, k):
-                return math.comb(int(x), int(k))
+        k_factor = max(0.5, self.K_max / 2.0)
+        estimate *= k_factor
 
-            hier_ref = comb(29, 8)  # C(21+8, 8) = 4,292,145
-            hier_actual = comb(n + L, L)
-            ratio = hier_actual / hier_ref
-            estimate = BASE_TRAJ_MEMORY_GB * ratio
-        else:
-            L_ref, K_ref, n_modes_ref = 8.0, 2.0, 21.0
-            l_factor = (L / L_ref) ** 2
-            k_factor = max(0.5, self.K_max / K_ref)
-            modes_factor = max(1.0, n / n_modes_ref)
-            estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor * modes_factor
-
-        # Scale with simulation time
         time_factor = self.time_max_fs / 1000.0
         estimate *= time_factor
 
@@ -196,38 +180,6 @@ class MemoryAwareJobScheduler:
         for w in info.get("warnings", []):
             logger.warning(f"Memory Warning: {w}")
 
-    def set_process_mem_limit(
-        self, mem_per_traj_gb: float, margin: float = 1.2
-    ) -> bool:
-        """
-        Set a per-process virtual memory limit via resource.setrlimit.
-
-        This kills the worker process if it exceeds the limit, preventing
-        the OS OOM-killer from taking down unrelated processes.
-
-        Parameters
-        ----------
-        mem_per_traj_gb : float
-            Estimated memory per trajectory in GB.
-        margin : float
-            Safety margin (default 1.2 = 20% headroom above estimate).
-
-        Returns
-        -------
-        bool
-            True if limit was set successfully.
-        """
-        try:
-            limit_bytes = int(mem_per_traj_gb * margin * (1024**3))
-            resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
-            logger.info(
-                f"Per-process memory limit set to {mem_per_traj_gb * margin:.1f} GB"
-            )
-            return True
-        except (ValueError, resource.error) as e:
-            logger.warning(f"Could not set RLIMIT_AS: {e}")
-            return False
-
     def _get_available_ram(self) -> float:
         """
         Get available RAM in GB.
@@ -240,8 +192,13 @@ class MemoryAwareJobScheduler:
         if HAS_PSUTIL:
             return psutil.virtual_memory().available / (1024**3)
         else:
-            # Conservative fallback
-            return 64.0
+            import os as _os
+
+            pages = _os.sysconf("SC_PHYS_PAGES")
+            page_size = _os.sysconf("SC_PAGE_SIZE")
+            if pages > 0 and page_size > 0:
+                return pages * page_size / (1024**3) * 0.5
+            return 8.0
 
 
 def validate_memory_configuration(cfg: Dict[str, Any]) -> Dict[str, Any]:
@@ -290,13 +247,44 @@ def validate_memory_configuration(cfg: Dict[str, Any]) -> Dict[str, Any]:
     logger.info(f"  Batches: {info['n_batches']} × {info['batch_size']} traj")
 
     if info["warnings"]:
-        logger.warning("  ⚠️ Avertissements:")
+        logger.warning("  [!] Avertissements:")
         for warning in info["warnings"]:
             logger.warning(f"    - {warning}")
     else:
-        logger.info("  ✓ Configuration optimale (pas d'avertissement)")
+        logger.info("  [OK] Configuration optimale")
 
     return info
+
+
+def log_memory_pressure(threshold_percent: float = 80.0) -> bool:
+    """
+    Log current memory pressure and return True if usage exceeds threshold.
+
+    Parameters
+    ----------
+    threshold_percent : float
+        Memory usage percentage that triggers a warning (default 80%%).
+
+    Returns
+    -------
+    bool
+        True if memory usage exceeds the threshold, False otherwise.
+    """
+    if not HAS_PSUTIL:
+        return False
+    mem = psutil.virtual_memory()
+    used_pct = mem.percent
+    logger.info(
+        f"Memory pressure: {used_pct:.0f}%% used "
+        f"({mem.used / (1024**3):.1f}/{mem.total / (1024**3):.1f} GB)"
+    )
+    if used_pct > threshold_percent:
+        logger.warning(
+            f"High memory pressure: {used_pct:.0f}%% > {threshold_percent:.0f}%% "
+            f"threshold — consider reducing n_jobs or batch_size"
+        )
+        return True
+    return False
 
 
 def cleanup_memory() -> None:
@@ -309,6 +297,34 @@ def cleanup_memory() -> None:
     gc.collect()
     if HAS_PSUTIL:
         mem = psutil.virtual_memory()
-        logger.info(
-            f"  🧹 Mémoire nettoyée: {mem.available / (1024**3):.1f} GB disponible"
-        )
+        logger.info(f"  Memoire nettoyee: {mem.available / (1024**3):.1f} GB disponible")
+
+
+def cleanup_joblib() -> None:
+    """
+    Kill orphaned Loky worker processes to prevent memory leaks between sweeps.
+
+    Long-running parameter sweeps can leave zombie LokyProcess workers alive,
+    consuming RAM and swap. This function finds and terminates them via psutil.
+    """
+    if not HAS_PSUTIL:
+        logger.warning("psutil not available; cannot clean orphan workers")
+        return
+    import signal
+
+    killed = 0
+    current_pid = os.getpid()
+    for proc in psutil.process_iter(["pid", "name", "ppid"]):
+        try:
+            name = proc.info.get("name", "") or ""
+            ppid = proc.info.get("ppid", 0)
+            if "loky" in name.lower() or "LokyProcess" in name:
+                if proc.pid != current_pid and ppid != current_pid:
+                    os.kill(proc.pid, signal.SIGKILL)
+                    killed += 1
+                    logger.info(f"Killed orphan Loky worker PID {proc.pid}")
+        except (psutil.NoSuchProcess, ProcessLookupError, OSError):
+            pass
+    if killed > 0:
+        logger.info(f"cleanup_joblib: {killed} orphan worker(s) terminated")
+    gc.collect()

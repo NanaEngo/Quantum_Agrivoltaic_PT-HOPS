@@ -1,7 +1,8 @@
 import logging
+from typing import Dict, List, Optional, Union
+
 import numpy as np
 import scipy.linalg as la
-from typing import List, Optional, Dict, Union
 from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
@@ -14,9 +15,7 @@ class QuantumAnalysisSuite:
     """
 
     @staticmethod
-    def calculate_etr(
-        populations: NDArray[np.float64], time_points: NDArray[np.float64]
-    ) -> float:
+    def calculate_etr(populations: NDArray[np.float64], time_points: NDArray[np.float64]) -> float:
         """
         Calculate the Electron Transfer Rate (ETR) from population dynamics.
 
@@ -231,9 +230,7 @@ class QuantumAnalysisSuite:
         return float((variance - mean_occ) / mean_occ)
 
     @staticmethod
-    def calculate_fidelity(
-        rho: NDArray[np.complex128], sigma: NDArray[np.complex128]
-    ) -> float:
+    def calculate_fidelity(rho: NDArray[np.complex128], sigma: NDArray[np.complex128]) -> float:
         """Calculate quantum fidelity between two states."""
         try:
             sqrt_rho = la.sqrtm(rho)
@@ -264,12 +261,10 @@ class QuantumAnalysisSuite:
     ) -> NDArray[np.complex128]:
         """Implement Stochastically Bundled Dissipators (SBD)."""
         d_rho = np.zeros_like(rho, dtype=complex)
-        for L, p in zip(l_bundled, p_alpha):
+        for L, p in zip(l_bundled, p_alpha, strict=False):
             if p > 0:
                 L_dag = L.conj().T
-                d_rho += p * (
-                    L @ rho @ L_dag - 0.5 * (L_dag @ L @ rho + rho @ L_dag @ L)
-                )
+                d_rho += p * (L @ rho @ L_dag - 0.5 * (L_dag @ L @ rho + rho @ L_dag @ L))
         return d_rho
 
     @staticmethod
@@ -309,9 +304,7 @@ class QuantumAnalysisSuite:
         vibronic_modes: Optional[List[Dict[str, float]]] = None,
     ) -> Union[float, NDArray[np.float64]]:
         """Total spectral density combining Drude-Lorentz and vibronic modes."""
-        J_total = QuantumAnalysisSuite.spectral_density_drude_lorentz(
-            omega, lambda_reorg, gamma
-        )
+        J_total = QuantumAnalysisSuite.spectral_density_drude_lorentz(omega, lambda_reorg, gamma)
         if vibronic_modes:
             for mode in vibronic_modes:
                 J_total += QuantumAnalysisSuite.spectral_density_vibronic(

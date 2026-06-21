@@ -25,10 +25,9 @@ Outputs
 import os
 import sys
 
-# Disable Numba CUDA to prevent NVML version mismatch SIGSEGV on the server
-# since a server reboot is not possible at the moment.
-os.environ["NUMBA_DISABLE_CUDA"] = "1"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# GPU auto-detection — the NVML driver mismatch has been fixed on the server.
+# NUMBA_DISABLE_CUDA and CUDA_VISIBLE_DEVICES were previously set to prevent
+# SIGSEGV; they are no longer needed as nvidia-smi now runs cleanly.
 
 # Ensure framework is importable regardless of CWD - MUST BE BEFORE ANY OTHER IMPORTS
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -40,32 +39,34 @@ if _SCRIPT_DIR not in sys.path:
 
 import argparse
 import logging
-import yaml
+import multiprocessing
+from datetime import datetime
+from typing import Any, Dict, Optional, Tuple
+
 import numpy as np
-from typing import Optional, Dict, Any, Tuple
+import yaml
+from joblib import Parallel, delayed
+
 from src.core.constants import (
+    DEFAULT_DISORDER_SIGMA,
     DEFAULT_DPI,
-    PREVIEW_DPI,
-    GAUSSIAN_TBW_FS,
-    LIGHT_SPEED_CMS,
+    DEFAULT_DRUDE_CUTOFF,
+    DEFAULT_N_DISORDER,
+    DEFAULT_N_TRAJ,
+    DEFAULT_N_TRAJ_SWEEP,
+    DEFAULT_REORGANIZATION_ENERGY,
+    DEFAULT_SBD_BUNDLES,
+    DEFAULT_VIBRONIC_DAMPING_VAL,
     FILTER_BAND_CENTERS_NM,
     FILTER_BANDWIDTH_CM,
     FILTER_WEIGHTS,
+    FMO_TARGET_SITE,
+    GAUSSIAN_TBW_FS,
+    LIGHT_SPEED_CMS,
+    PREVIEW_DPI,
     PULSE_CENTRAL_FREQ,
     PULSE_FWHM,
-    DEFAULT_DISORDER_SIGMA,
-    DEFAULT_DRUDE_CUTOFF,
-    DEFAULT_REORGANIZATION_ENERGY,
-    DEFAULT_N_TRAJ,
-    DEFAULT_SBD_BUNDLES,
-    DEFAULT_VIBRONIC_DAMPING_VAL,
-    DEFAULT_N_TRAJ_SWEEP,
-    DEFAULT_N_DISORDER,
-    FMO_TARGET_SITE,
 )
-from datetime import datetime
-import multiprocessing
-from joblib import Parallel, delayed
 
 # Force unbuffered stdout/stderr so log lines appear immediately
 try:
@@ -77,14 +78,10 @@ except AttributeError:
 _LOG_DIR = os.path.join(_SCRIPT_DIR, "logs")
 os.makedirs(_LOG_DIR, exist_ok=True)
 
-_LOG_FILE = os.path.join(
-    _LOG_DIR, f"execution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-)
+_LOG_FILE = os.path.join(_LOG_DIR, f"execution_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 
 # Root logger: INFO to both file and stdout, both flushed after every record
-_fmt = logging.Formatter(
-    "%(asctime)s [%(levelname)s] %(name)s — %(message)s", datefmt="%H:%M:%S"
-)
+_fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s — %(message)s", datefmt="%H:%M:%S")
 
 
 class _FlushingStreamHandler(logging.StreamHandler):
@@ -178,9 +175,7 @@ def load_and_validate_config(custom_path: Optional[str] = None) -> Dict[str, Any
         if L < 6:
             raise ValueError(f"hierarchy_depth={L} < 6. Production requires L≥6.")
         if K < 2:
-            raise ValueError(
-                f"matsubara_truncation={K} < 2. JPCL production requires K≥2."
-            )
+            raise ValueError(f"matsubara_truncation={K} < 2. JPCL production requires K≥2.")
         logger.info(f"Production Config validated: L={L}, K={K}")
     else:
         logger.info(f"Config loaded: {os.path.basename(config_path)} (L={L}, K={K})")
@@ -281,15 +276,13 @@ def run_convergence_audit(cfg: Dict[str, Any]) -> Dict[str, Any]:
     if audit_data:
         # audit_maes is now a dict {depth: mae}
         maes = audit_data.get("audit_maes", {})
-        depths = sorted(list(maes.keys()))
+        depths = sorted(maes.keys())
         mae_final = maes[depths[-1]] if depths else 0.0
         print(f"  ✅ Validation suite complete. Residual MAE={mae_final:.2e}")
     return audit_data
 
 
-def _dual_band_transmission(
-    omega_cm: np.ndarray, filter_cfg: Dict[str, Any]
-) -> np.ndarray:
+def _dual_band_transmission(omega_cm: np.ndarray, filter_cfg: Dict[str, Any]) -> np.ndarray:
     r"""
     Evaluate the dual-band spectral transmission function $T(\omega)$ (Eq. 3).
 
@@ -321,7 +314,7 @@ def _dual_band_transmission(
     sigma = bandwidth_cm / (2.0 * np.sqrt(2.0 * np.log(2.0)))
 
     T = np.zeros_like(omega_cm, dtype=float)
-    for Omega_j, w_j in zip(band_centers_cm, weights):
+    for Omega_j, w_j in zip(band_centers_cm, weights, strict=False):
         T += float(w_j) * np.exp(-0.5 * ((omega_cm - Omega_j) / sigma) ** 2)
 
     # Normalise peak to 1 so weights are relative amplitudes
@@ -399,9 +392,7 @@ def _build_initial_state_for_label(
         weights = E_eff**2
 
     else:
-        raise ValueError(
-            f"Unknown excitation label '{label}'. Use 'filtered' or 'broadband'."
-        )
+        raise ValueError(f"Unknown excitation label '{label}'. Use 'filtered' or 'broadband'.")
 
     # Normalise weights to unit sum
     total = np.sum(weights)
@@ -448,8 +439,8 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
     NameError when n_traj is misconfigured.
     """
     print("\n[Step 3] Running full FMO simulation (filtered + broadband, ensemble)...")
-    from src.core.hops_simulator import HopsSimulator
     from src.core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import HopsSimulator
     from src.io.csv_storage import CSVDataStorage
 
     dyn = cfg["dynamics"]
@@ -460,6 +451,15 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
 
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     time_points = np.arange(0, dyn["time_max"], dyn["time_step"])
+
+    logger.info("=== FMO Simulation Parameters ===")
+    logger.info(f"  L_max={dyn['L_max']}, K={dyn['matsubara_truncation']}")
+    logger.info(f"  SBD={dyn.get('sbd_bundles_per_site', DEFAULT_SBD_BUNDLES)}")
+    logger.info(f"  T={bath['temperature']} K, dt={dyn['time_step']} fs")
+    logger.info(f"  lambda_D={bath['reorganization_energy']} cm-1")
+    logger.info(f"  gamma_D={bath['drude_cutoff']} cm-1")
+    logger.info(f"  n_vibronic={len(bath.get('vibronic_frequencies', []))}")
+    logger.info(f"  n_traj={n_traj}, t_max={dyn['time_max']} fs")
 
     # FIX C-1: vibronic_damping may be a list (from yaml) or a scalar default.
     # Normalise to a flat (n_modes,) float array before passing to HopsSimulator.
@@ -472,6 +472,7 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
         vib_damping = np.full(len(vib_freqs), float(vib_damping_raw))
 
     results = {}
+    _results_dir = os.path.join(_SCRIPT_DIR, "results")
     for label in ["filtered", "broadband"]:
         print(f"  Preparing {label} excitation...")
         initial_state = _build_initial_state_for_label(H, label, pulse_cfg, filter_cfg)
@@ -494,14 +495,17 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
             vibronic_markovian=dyn.get("vibronic_markovian", False),
         )
 
+        parallel_enabled = cfg.get("parallel", {}).get("enabled", True)
         try:
-            # Use the new parallel ensemble mode
             data = sim.simulate_dynamics(
                 time_points,
                 initial_state=initial_state,
                 n_traj=n_traj,
                 show_progress=True,
                 desc=f"FMO {label}",
+                parallel_enabled=parallel_enabled,
+                output_dir=_results_dir,
+                output_label=label,
             )
 
             results[label] = {
@@ -516,13 +520,10 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
             }
             n_completed = data.get("n_traj_used", n_traj)
 
-            logger.info(
-                f"FMO {label}: {n_completed} trajectories averaged via Parallel Ensemble."
-            )
+            logger.info(f"FMO {label}: {n_completed} trajectories averaged via Parallel Ensemble.")
             print(f"  ✅ {label}: {n_completed} trajectories averaged")
 
             # ── Step-by-step save: persist each label immediately after completion ──
-            _results_dir = os.path.join(_SCRIPT_DIR, "results")
             _step_storage = CSVDataStorage(output_dir=_results_dir)
             _step_path = _step_storage.save_quantum_dynamics_results(
                 data["t_axis"],
@@ -548,7 +549,6 @@ def run_full_fmo_simulation(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], np.nda
             raise
 
     # Save ensemble-averaged results
-    _results_dir = os.path.join(_SCRIPT_DIR, "results")
     storage = CSVDataStorage(output_dir=_results_dir)
     n_min = min(
         results["filtered"]["populations"].shape[0],
@@ -640,9 +640,7 @@ def _run_trajectory_worker(
                 f.write(f"{T:.2f},{label},{seed},{phi:.10e}\n")
         return phi
     except MemoryError:
-        print(
-            f"🚨 OOM: trajectory T={T}, {label}, seed={seed} — reducing parallelism recommended"
-        )
+        print(f"🚨 OOM: trajectory T={T}, {label}, seed={seed} — reducing parallelism recommended")
         return None
     except Exception:
         return None
@@ -705,9 +703,7 @@ def _run_single_disorder(
 
     eta_vals = {}
     for label in ["filtered", "broadband"]:
-        psi0 = _build_initial_state_for_label(
-            H_disordered, label, pulse_cfg, filter_cfg
-        )
+        psi0 = _build_initial_state_for_label(H_disordered, label, pulse_cfg, filter_cfg)
         from src.core.hops_simulator import HopsSimulator
 
         sim = HopsSimulator(
@@ -772,15 +768,13 @@ def _run_temperature_sweep(
     tuple
         (temperatures, eta_values, eta_errors)
     """
-    from src.utils.parallel_utils import get_safe_n_jobs, estimate_memory_per_traj
+    from src.utils.parallel_utils import estimate_memory_per_traj, get_safe_n_jobs
 
     bath = cfg["bath"]
     dyn = cfg["dynamics"]
     pulse_cfg = cfg.get("pulse", {})
     filter_cfg = cfg.get("spectral_filter", None)
-    n_traj_sweep = cfg.get("simulation", {}).get(
-        "n_traj_temp_sweep", DEFAULT_N_TRAJ_SWEEP
-    )
+    n_traj_sweep = cfg.get("simulation", {}).get("n_traj_temp_sweep", DEFAULT_N_TRAJ_SWEEP)
     from multiprocessing import Manager
 
     manager = Manager()
@@ -803,9 +797,7 @@ def _run_temperature_sweep(
     time_max = dyn.get("time_max", 1000.0)
     n_vib = len(bath.get("vibronic_frequencies", []))
     n_modes = 7 * (3 + n_vib)  # 105 for 12-mode FMO
-    n_jobs = get_safe_n_jobs(
-        L_max=L, K_max=K, n_hierarchy_modes=n_modes, time_max_fs=time_max
-    )
+    n_jobs = get_safe_n_jobs(L_max=L, K_max=K, n_hierarchy_modes=n_modes, time_max_fs=time_max)
     logger.info(
         f"Using {n_jobs} parallel workers for temperature sweep (L={L}, K={K}, modes={n_modes})"
     )
@@ -834,9 +826,7 @@ def _run_temperature_sweep(
             if idx >= end:
                 break
 
-        logger.info(
-            f"Batch {batch_idx + 1}/{n_batches}: {len(batch_tasks)} trajectories"
-        )
+        logger.info(f"Batch {batch_idx + 1}/{n_batches}: {len(batch_tasks)} trajectories")
         batch_results = Parallel(n_jobs=n_jobs)(
             delayed(_run_trajectory_worker)(
                 T,
@@ -936,9 +926,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     time_max = dyn.get("time_max", 1000.0)
     n_vib = len(bath.get("vibronic_frequencies", []))
     n_modes = 7 * (3 + n_vib)  # 105 for 12-mode FMO
-    n_jobs = get_safe_n_jobs(
-        L_max=L, K_max=K, n_hierarchy_modes=n_modes, time_max_fs=time_max
-    )
+    n_jobs = get_safe_n_jobs(L_max=L, K_max=K, n_hierarchy_modes=n_modes, time_max_fs=time_max)
     logger.info(
         f"Using {n_jobs} parallel workers for disorder sampling (L={L}, K={K}, modes={n_modes})"
     )
@@ -952,9 +940,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
         start_idx = batch_idx * batch_size
         end_idx = min(start_idx + batch_size, n_samples)
         batch_seeds = seeds[start_idx:end_idx]
-        logger.info(
-            f"Disorder batch {batch_idx + 1}/{n_batches}: seeds {start_idx}–{end_idx - 1}"
-        )
+        logger.info(f"Disorder batch {batch_idx + 1}/{n_batches}: seeds {start_idx}–{end_idx - 1}")
         batch_results = Parallel(n_jobs=n_jobs)(
             delayed(_run_single_disorder)(
                 s,
@@ -981,9 +967,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
         logger.error("All disorder samples failed — returning empty array")
         return np.array([])
 
-    logger.info(
-        f"Disorder sampling complete: {len(disorder_samples)}/{n_samples} succeeded"
-    )
+    logger.info(f"Disorder sampling complete: {len(disorder_samples)}/{n_samples} succeeded")
     return disorder_samples
 
 
@@ -1023,9 +1007,7 @@ def _generate_spectral_figure(cfg, output_dir):
     # Convert cm⁻¹ → rad/s for physical units
     omega = wavenumbers * 2 * np.pi * LIGHT_SPEED_CMS  # rad/s
 
-    lambda_dl_cm = float(
-        bath.get("reorganization_energy", DEFAULT_REORGANIZATION_ENERGY)
-    )
+    lambda_dl_cm = float(bath.get("reorganization_energy", DEFAULT_REORGANIZATION_ENERGY))
     gamma_dl_cm = float(bath.get("drude_cutoff", DEFAULT_DRUDE_CUTOFF))
     lambda_dl = lambda_dl_cm * 2 * np.pi * LIGHT_SPEED_CMS  # rad/s units
     gamma_dl = gamma_dl_cm * 2 * np.pi * LIGHT_SPEED_CMS
@@ -1042,18 +1024,11 @@ def _generate_spectral_figure(cfg, output_dir):
     )
 
     J_vib = np.zeros_like(omega)
-    for freq_cm, S_k, damp_cm in zip(vib_freqs_cm, vib_hr, vib_damp_cm):
+    for freq_cm, S_k, damp_cm in zip(vib_freqs_cm, vib_hr, vib_damp_cm, strict=False):
         w_k = freq_cm * 2 * np.pi * LIGHT_SPEED_CMS
         g_k = damp_cm * 2 * np.pi * LIGHT_SPEED_CMS
         lam_k = S_k * freq_cm * 2 * np.pi * LIGHT_SPEED_CMS
-        J_vib += (
-            2
-            * lam_k
-            * omega
-            * w_k**2
-            * g_k
-            / ((w_k**2 - omega**2) ** 2 + omega**2 * g_k**2)
-        )
+        J_vib += 2 * lam_k * omega * w_k**2 * g_k / ((w_k**2 - omega**2) ** 2 + omega**2 * g_k**2)
 
     J_total = J_dl + J_vib
     J_norm = J_total / J_total.max() if J_total.max() > 0 else J_total
@@ -1067,10 +1042,8 @@ def _generate_spectral_figure(cfg, output_dir):
     sigma_nm = bandwidth_nm / (2.0 * np.sqrt(2.0 * np.log(2.0)))
 
     T_filter = np.zeros_like(wavelengths_nm)
-    for lam_c, w_j in zip(band_centers_nm, weights):
-        T_filter += float(w_j) * np.exp(
-            -0.5 * ((wavelengths_nm - lam_c) / sigma_nm) ** 2
-        )
+    for lam_c, w_j in zip(band_centers_nm, weights, strict=False):
+        T_filter += float(w_j) * np.exp(-0.5 * ((wavelengths_nm - lam_c) / sigma_nm) ** 2)
     if T_filter.max() > 0:
         T_filter /= T_filter.max()
 
@@ -1106,9 +1079,7 @@ def _generate_spectral_figure(cfg, output_dir):
 
     for lam_c in band_centers_nm:
         ax.axvline(x=lam_c, color="red", linestyle=":", alpha=0.6, linewidth=1.0)
-        ax.annotate(
-            f"{lam_c:.0f} nm", xy=(lam_c, 0.92), ha="center", fontsize=9, color="red"
-        )
+        ax.annotate(f"{lam_c:.0f} nm", xy=(lam_c, 0.92), ha="center", fontsize=9, color="red")
 
     ax.set_xlabel("Wavelength (nm)", fontsize=12)
     ax.set_ylabel("Normalised intensity / transmission", fontsize=12)
@@ -1116,9 +1087,7 @@ def _generate_spectral_figure(cfg, output_dir):
     ax.set_ylim(0, 1.1)
     ax.legend(loc="upper left", frameon=False, fontsize=10)
     ax.grid(True, alpha=0.3)
-    ax.set_title(
-        "(e) Spectral relationships", loc="left", fontsize=13, fontweight="bold"
-    )
+    ax.set_title("(e) Spectral relationships", loc="left", fontsize=13, fontweight="bold")
 
     plt.tight_layout()
 
@@ -1159,12 +1128,8 @@ def generate_figures(cfg, sim_results, time_points, skip_temp_sweep=False):
     # Panels: (a) populations, (b) coherences, (c) IPR, (d) QFI
     _n_t = len(filtered["t_axis"])
     quantum_metrics = {
-        "ipr": filtered.get("ipr")
-        if filtered.get("ipr") is not None
-        else np.zeros(_n_t),
-        "qfi": filtered.get("qfi")
-        if filtered.get("qfi") is not None
-        else np.zeros(_n_t),
+        "ipr": filtered.get("ipr") if filtered.get("ipr") is not None else np.zeros(_n_t),
+        "qfi": filtered.get("qfi") if filtered.get("qfi") is not None else np.zeros(_n_t),
     }
     fig1_path = gen.plot_quantum_dynamics(
         filtered["t_axis"],
@@ -1174,12 +1139,8 @@ def generate_figures(cfg, sim_results, time_points, skip_temp_sweep=False):
         filename_prefix="Quantum_dynamics",
         baseline_populations=broadband["populations"],
         baseline_coherences=broadband["coherences"],
-        baseline_ipr=broadband.get("ipr")
-        if broadband.get("ipr") is not None
-        else np.zeros(_n_t),
-        baseline_qfi=broadband.get("qfi")
-        if broadband.get("qfi") is not None
-        else np.zeros(_n_t),
+        baseline_ipr=broadband.get("ipr") if broadband.get("ipr") is not None else np.zeros(_n_t),
+        baseline_qfi=broadband.get("qfi") if broadband.get("qfi") is not None else np.zeros(_n_t),
     )
     print(f"  💾 Figure 1 saved → {fig1_path}")
     logger.info(f"Figure 1 saved to {fig1_path}")
@@ -1210,19 +1171,13 @@ def generate_figures(cfg, sim_results, time_points, skip_temp_sweep=False):
 
         if not skip_temp_sweep:
             print("\n  [Fig 2a] Running temperature sweep (285–310 K)...")
-            temperatures, eta_temp, eta_temp_err = _run_temperature_sweep(
-                cfg, H, time_points
-            )
+            temperatures, eta_temp, eta_temp_err = _run_temperature_sweep(cfg, H, time_points)
         else:
             print("\n  [Fig 2a] SKIPPING temperature sweep (--skip-temp-sweep)")
             temperatures, eta_temp, eta_temp_err = [], [], []
 
-        n_disorder = cfg.get("simulation", {}).get(
-            "n_disorder_samples", DEFAULT_N_DISORDER
-        )
-        print(
-            f"\n  [Fig 2b] Running disorder sampling ({n_disorder} realisations, σ=50 cm⁻¹)..."
-        )
+        n_disorder = cfg.get("simulation", {}).get("n_disorder_samples", DEFAULT_N_DISORDER)
+        print(f"\n  [Fig 2b] Running disorder sampling ({n_disorder} realisations, σ=50 cm⁻¹)...")
         disorder_samples = _build_disorder_samples(
             cfg, H, time_points, n_samples=n_disorder, rng_seed=42
         )
@@ -1253,26 +1208,16 @@ def main():
     # Resource check
     check_system_resources()
 
-    # Apply memory-aware patching to HopsSimulator (batch-wise execution)
-    try:
-        from src.core.memory_aware_patch import apply_memory_aware_patching
-
-        apply_memory_aware_patching()
-        logger.info("Memory-aware patching applied to HopsSimulator.")
-    except ImportError:
-        logger.warning(
-            "Could not apply memory-aware patching; using default execution."
-        )
+    # Memory-aware batch execution is built into HopsSimulator._simulate_with_mesohops
 
     # Argument parsing
     parser = argparse.ArgumentParser(description="JPCL Reproducibility Pipeline")
     parser.add_argument("--config", type=str, help="Path to custom parameters.yaml")
+    parser.add_argument("--skip-audit", action="store_true", help="Skip Step 2 convergence audit")
     parser.add_argument(
-        "--skip-audit", action="store_true", help="Skip Step 2 convergence audit"
+        "--parallel", action="store_true", help="Run with parallel trajectories (default: auto)"
     )
-    parser.add_argument(
-        "--parallel", action="store_true", help="Run with parallel trajectories"
-    )
+    parser.add_argument("--no-parallel", action="store_true", help="Force sequential execution")
     parser.add_argument("--n-traj", type=int, help="Override n_traj from config")
     parser.add_argument("--n-traj-sweep", type=int, help="Override n_traj_temp_sweep")
     parser.add_argument(
@@ -1294,6 +1239,10 @@ def main():
 
         cfg["dynamics"]["L_max"]
         cfg["dynamics"]["matsubara_truncation"]
+        if args.no_parallel:
+            cfg["parallel"] = {"enabled": False}
+        elif args.parallel:
+            cfg["parallel"] = {"enabled": True}
     except Exception as e:
         print(f"  ❌ Config error: {e}")
         sys.exit(1)
@@ -1314,7 +1263,7 @@ def main():
         # FIX H-4: enforce convergence threshold — do not proceed with non-converged data
         convergence_threshold = cfg["dynamics"]["convergence_threshold"]
         maes = audit_data.get("audit_maes", {})
-        depths = sorted(list(maes.keys()))
+        depths = sorted(maes.keys())
         mae_residual = maes[depths[-1]] if depths else 999.0
 
         if mae_residual >= convergence_threshold:
@@ -1337,7 +1286,9 @@ def main():
     sim_results, time_points = run_full_fmo_simulation(cfg)
 
     # Step 4: Generate and save all figures
-    generate_figures(cfg, sim_results, time_points, skip_temp_sweep=getattr(args, "skip_temp_sweep", False))
+    generate_figures(
+        cfg, sim_results, time_points, skip_temp_sweep=getattr(args, "skip_temp_sweep", False)
+    )
 
     print("\n" + "=" * 60)
     print("  Pipeline complete.")

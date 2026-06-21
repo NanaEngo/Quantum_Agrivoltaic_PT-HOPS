@@ -12,12 +12,12 @@ try:
 except ImportError:
     QuantumAnalysisSuite = None
 import logging
+import multiprocessing
 import os
 from datetime import datetime
 from typing import Any, Dict
 
 import numpy as np
-import multiprocessing
 
 try:
     from joblib import Parallel, delayed
@@ -28,28 +28,28 @@ except ImportError:
 
 try:
     from src.core.constants import (
-        DEFAULT_MAX_HIERARCHY,
-        DEFAULT_N_MATSUBARA,
-        DEFAULT_TEMPERATURE,
-        DEFAULT_REORGANIZATION_ENERGY,
-        DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_N_TRAJ,
-        DEFAULT_MAX_TIME,
-        MEMORY_FRACTION_LIMIT,
         BASE_TRAJ_MEMORY_GB,
+        DEFAULT_DRUDE_CUTOFF,
+        DEFAULT_MAX_HIERARCHY,
+        DEFAULT_MAX_TIME,
+        DEFAULT_N_MATSUBARA,
+        DEFAULT_N_TRAJ,
+        DEFAULT_REORGANIZATION_ENERGY,
+        DEFAULT_TEMPERATURE,
+        MEMORY_FRACTION_LIMIT,
         MIN_TRAJ_MEMORY_GB,
     )
 except ImportError:
     from ..src.core.constants import (
-        DEFAULT_MAX_HIERARCHY,
-        DEFAULT_N_MATSUBARA,
-        DEFAULT_TEMPERATURE,
-        DEFAULT_REORGANIZATION_ENERGY,
-        DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_N_TRAJ,
-        DEFAULT_MAX_TIME,
-        MEMORY_FRACTION_LIMIT,
         BASE_TRAJ_MEMORY_GB,
+        DEFAULT_DRUDE_CUTOFF,
+        DEFAULT_MAX_HIERARCHY,
+        DEFAULT_MAX_TIME,
+        DEFAULT_N_MATSUBARA,
+        DEFAULT_N_TRAJ,
+        DEFAULT_REORGANIZATION_ENERGY,
+        DEFAULT_TEMPERATURE,
+        MEMORY_FRACTION_LIMIT,
         MIN_TRAJ_MEMORY_GB,
     )
 
@@ -257,9 +257,7 @@ def _bcf_dl_to_exp_pairs(lam: float, gamma: float, T: float, k: int) -> list:
 
     # Validate output format: must be flat list [g0, w0, g1, w1, ...]
     if not isinstance(dl_modes, (list, np.ndarray)) or len(dl_modes) % 2 != 0:
-        raise RuntimeError(
-            f"MesoHOPS bath conversion returned unexpected format: {type(dl_modes)}"
-        )
+        raise RuntimeError(f"MesoHOPS bath conversion returned unexpected format: {type(dl_modes)}")
 
     return dl_modes
 
@@ -355,9 +353,7 @@ class QuantumDynamicsSimulator:
 
         self.H_raw = np.array(hamiltonian, dtype=complex)
         if self.H_raw.ndim != 2 or self.H_raw.shape[0] != self.H_raw.shape[1]:
-            raise ValueError(
-                f"Hamiltonian must be square, got shape {self.H_raw.shape}"
-            )
+            raise ValueError(f"Hamiltonian must be square, got shape {self.H_raw.shape}")
         self.n_sites = self.H_raw.shape[0]
         if self.n_sites == 0:
             raise ValueError("Hamiltonian must have at least 1 site")
@@ -380,9 +376,7 @@ class QuantumDynamicsSimulator:
         # Drude-Lorentz spectral density (high-temperature limit).
         # k_matsubara=0: High-temperature approximation (standard for 295K)
         # FIX H-6: Use version-agnostic helper to build dl_modes
-        dl_modes = _bcf_dl_to_exp_pairs(
-            lambda_reorg, gamma_dl, temperature, k_matsubara
-        )
+        dl_modes = _bcf_dl_to_exp_pairs(lambda_reorg, gamma_dl, temperature, k_matsubara)
         # Validate output format: must be flat [g0, w0, g1, w1, ...]
         if not isinstance(dl_modes, (list, np.ndarray)) or len(dl_modes) % 2 != 0:
             raise RuntimeError(
@@ -490,8 +484,7 @@ class QuantumDynamicsSimulator:
         noise_param = {
             "SEED": seed,
             "MODEL": "FFT_FILTER",
-            "TLEN": t_max
-            + max(100.0, 5.0 / self.gamma_dl),  # buffer ≥ bath correlation time
+            "TLEN": t_max + max(100.0, 5.0 / self.gamma_dl),  # buffer ≥ bath correlation time
             "TAU": dt_save,  # noise sampling interval = integration timestep
         }
         hierarchy_param = {"MAXHIER": self.max_hier}
@@ -530,9 +523,7 @@ class QuantumDynamicsSimulator:
         l_factor = (self.max_hier / l_ref) ** 2
         k_factor = max(0.5, (self.k_matsubara / k_ref))
         n_hierarchy_modes = (
-            len(self.gw_sysbath)
-            if hasattr(self, "gw_sysbath") and self.gw_sysbath
-            else 189
+            len(self.gw_sysbath) if hasattr(self, "gw_sysbath") and self.gw_sysbath else 189
         )
         modes_factor = max(1.0, n_hierarchy_modes / n_modes_ref)
 
@@ -638,19 +629,19 @@ class QuantumDynamicsSimulator:
         )
 
         # Build picklable argument dict for module-level worker
-        worker_kwargs = dict(
-            gw_sysbath=self.gw_sysbath,
-            l_hier=self.l_hier,
-            l_noise1=self.l_noise1,
-            param_noise1=self.param_noise1,
-            H_shifted=self.H,
-            n_sites=n_sites,
-            max_hier=self.max_hier,
-            gamma_dl=self.gamma_dl,
-            t_max=t_max,
-            dt_save=dt_save,
-            psi_0=psi_0,
-        )
+        worker_kwargs = {
+            "gw_sysbath": self.gw_sysbath,
+            "l_hier": self.l_hier,
+            "l_noise1": self.l_noise1,
+            "param_noise1": self.param_noise1,
+            "H_shifted": self.H,
+            "n_sites": n_sites,
+            "max_hier": self.max_hier,
+            "gamma_dl": self.gamma_dl,
+            "t_max": t_max,
+            "dt_save": dt_save,
+            "psi_0": psi_0,
+        }
 
         all_psi_trajs = []
         t_axis = None
@@ -743,25 +734,19 @@ class QuantumDynamicsSimulator:
                 entropy_values[i] = 0.0
 
             try:
-                bipartite_ent_values[i] = (
-                    self.analyzer.calculate_bipartite_entanglement(rho)
-                )
+                bipartite_ent_values[i] = self.analyzer.calculate_bipartite_entanglement(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Bipartite entanglement calc failed at t={i}: {e}")
                 bipartite_ent_values[i] = 0.0
 
             try:
-                multipartite_ent_values[i] = (
-                    self.analyzer.calculate_multipartite_entanglement(rho)
-                )
+                multipartite_ent_values[i] = self.analyzer.calculate_multipartite_entanglement(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Multipartite entanglement calc failed at t={i}: {e}")
                 multipartite_ent_values[i] = 0.0
 
             try:
-                pairwise_concurrence_values[i] = (
-                    self.analyzer.calculate_pairwise_concurrence(rho)
-                )
+                pairwise_concurrence_values[i] = self.analyzer.calculate_pairwise_concurrence(rho)
             except (np.linalg.LinAlgError, ValueError, TypeError) as e:
                 logger.debug(f"Pairwise concurrence calc failed at t={i}: {e}")
                 pairwise_concurrence_values[i] = 0.0
@@ -782,9 +767,7 @@ class QuantumDynamicsSimulator:
 
             try:
                 # Mandel Q requires vibrational occupations - using population weighted average as dummy
-                mandel_q_values[i] = self.analyzer.calculate_mandel_q_parameter(
-                    populations[i]
-                )
+                mandel_q_values[i] = self.analyzer.calculate_mandel_q_parameter(populations[i])
             except (ValueError, TypeError) as e:
                 logger.debug(f"Mandel Q calc failed at t={i}: {e}")
                 mandel_q_values[i] = 0.0
@@ -896,9 +879,7 @@ def spectral_density_total(omega, lambda_reorg, gamma, vibronic_modes=None):
     # Add vibronic modes if provided
     if vibronic_modes:
         for mode in vibronic_modes:
-            J_vib = spectral_density_vibronic(
-                omega, mode["omega"], mode["lambda"], mode["gamma"]
-            )
+            J_vib = spectral_density_vibronic(omega, mode["omega"], mode["lambda"], mode["gamma"])
             J_total += J_vib
 
     return J_total

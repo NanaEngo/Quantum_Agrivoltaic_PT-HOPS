@@ -23,7 +23,7 @@ class OrcaRunner:
 
     def __init__(
         self,
-        orca_path: str = "/home/taamangtchu/orca_6_1_0/orca",
+        orca_path: str = "/home/taamangtchu/opt/orca_6_1_1/orca",
         work_dir: str = "orca_work",
         nprocs: int = 4,
     ):
@@ -142,9 +142,7 @@ class OrcaRunner:
 
         # Look for the orbital energy table
         # We look for the last occurrence of the orbital table to get converged values
-        tables = re.findall(
-            r"ORBITAL ENERGIES\s+-+.*?\n(.*?)\n\s*\n", content, re.DOTALL
-        )
+        tables = re.findall(r"ORBITAL ENERGIES\s+-+.*?\n(.*?)\n\s*\n", content, re.DOTALL)
         if not tables:
             return {"homo": 0.0, "lumo": 0.0}
 

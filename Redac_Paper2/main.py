@@ -11,9 +11,9 @@ import os
 import sys
 import argparse
 
-# Disable Numba CUDA to avoid driver/NVML mismatch crashes on server
-os.environ["NUMBA_DISABLE_CUDA"] = "1"
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+# GPU auto-detection — the NVML driver mismatch on the simulation server has
+# been fixed. Previously set NUMBA_DISABLE_CUDA and CUDA_VISIBLE_DEVICES to
+# prevent SIGSEGV; no longer needed as nvidia-smi runs cleanly.
 
 # Ensure project root is on the Python path
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

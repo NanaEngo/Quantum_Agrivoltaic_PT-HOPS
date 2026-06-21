@@ -6,12 +6,12 @@ __title__ = "HopsSimulator"
 __author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
+import multiprocessing
 from typing import Any, Dict, Optional
 
 import numpy as np
 import scipy.sparse as sp
 from numpy.typing import NDArray
-import multiprocessing
 
 try:
     from joblib import Parallel, delayed
@@ -47,37 +47,37 @@ except ImportError:
     HopsEOM = None
 
 # Import our custom PT-HOPS and SBD Extensions
+from src.core.constants import (
+    BASE_TRAJ_MEMORY_GB,
+    DEFAULT_DRUDE_CUTOFF,
+    DEFAULT_HUANG_RHYS_FACTORS,
+    DEFAULT_MAX_HIERARCHY,
+    DEFAULT_MAX_TIME,
+    DEFAULT_N_MATSUBARA,
+    DEFAULT_N_TRAJ,
+    DEFAULT_REORGANIZATION_ENERGY,
+    DEFAULT_SBD_BUNDLES,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TIME_STEP,
+    DEFAULT_VIBRONIC_DAMPING,
+    DEFAULT_VIBRONIC_FREQUENCIES,
+    FFT_NOISE_BUFFER_FS,
+    MAX_N_JOBS,
+    MEMORY_FRACTION_LIMIT,
+    MESOHOPS_EARLY_STEPS,
+    MESOHOPS_INCHWORM_CAP,
+    MESOHOPS_SEED,
+    MIN_TRAJ_MEMORY_GB,
+    PULSE_CENTRAL_FREQ,
+    PULSE_FWHM,
+    PULSE_RELATIVE_DELAY,
+    PULSE_TYPE,
+)
 from src.extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
 
 # Import fallback simulators from src.quantum package
 from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
 from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
-
-from src.core.constants import (
-    DEFAULT_DRUDE_CUTOFF,
-    DEFAULT_HUANG_RHYS_FACTORS,
-    DEFAULT_MAX_HIERARCHY,
-    DEFAULT_N_MATSUBARA,
-    DEFAULT_REORGANIZATION_ENERGY,
-    DEFAULT_TEMPERATURE,
-    DEFAULT_VIBRONIC_DAMPING,
-    DEFAULT_VIBRONIC_FREQUENCIES,
-    DEFAULT_N_TRAJ,
-    FFT_NOISE_BUFFER_FS,
-    PULSE_CENTRAL_FREQ,
-    PULSE_FWHM,
-    PULSE_RELATIVE_DELAY,
-    PULSE_TYPE,
-    MEMORY_FRACTION_LIMIT,
-    MESOHOPS_SEED,
-    MESOHOPS_EARLY_STEPS,
-    MESOHOPS_INCHWORM_CAP,
-    DEFAULT_MAX_TIME,
-    DEFAULT_TIME_STEP,
-    BASE_TRAJ_MEMORY_GB,
-    MIN_TRAJ_MEMORY_GB,
-    MAX_N_JOBS,
-)
 
 try:
     import psutil
@@ -158,7 +158,8 @@ def _run_single_traj_worker(
     # setting it restricts the entire Python runtime, breaking subprocess calls
     # (git, etc.) and pandas I/O. Skip entirely for n_jobs=1.
     import os as _os
-    _is_subprocess = _os.environ.get("JOBLIB_START_METHOD") is not None or _os.environ.get("LOKY_PROCESS") is not None
+
+    _is_subprocess = multiprocessing.parent_process() is not None
     if mem_limit_gb > 0 and _is_subprocess:
         try:
             import resource
@@ -175,6 +176,7 @@ def _run_single_traj_worker(
 
     try:
         import time as _time
+
         _t0 = _time.time()
 
         # Deep copy of params to avoid process collisions
@@ -188,11 +190,13 @@ def _run_single_traj_worker(
         try:
             trajectory = TrajectoryClass(**local_traj_kwargs)
             logger.info(
-                f"Traj {seed}: constructed in {_time.time()-_t1:.1f}s | "
-                f"n_hmodes={len(local_traj_kwargs.get('system_param',{}).get('GW_SYSBATH',[]))}"
+                f"Traj {seed}: constructed in {_time.time() - _t1:.1f}s | "
+                f"n_hmodes={len(local_traj_kwargs.get('system_param', {}).get('GW_SYSBATH', []))}"
             )
         except Exception as e:
-            import traceback, sys
+            import sys
+            import traceback
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=trajectory_init | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -203,9 +207,11 @@ def _run_single_traj_worker(
             if hasattr(trajectory, "make_adaptive"):
                 logger.info(f"Traj {seed}: calling make_adaptive()")
                 trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
-                logger.info(f"Traj {seed}: make_adaptive done in {_time.time()-_t2:.1f}s")
+                logger.info(f"Traj {seed}: make_adaptive done in {_time.time() - _t2:.1f}s")
         except Exception as e:
-            import traceback, sys
+            import sys
+            import traceback
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=make_adaptive | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -221,7 +227,9 @@ def _run_single_traj_worker(
                 pt_noise._prepare_noise(system_param["L_NOISE1"], time_points=time_points)
                 logger.info(f"Traj {seed}: PT-HOPS noise prepared")
             except Exception as e:
-                import traceback, sys
+                import sys
+                import traceback
+
                 print(f"[MESOHOPS_FAIL] seed={seed} | stage=pt_hops_noise | error={e}")
                 traceback.print_exc(file=sys.stdout)
                 raise
@@ -230,9 +238,11 @@ def _run_single_traj_worker(
         _t3 = _time.time()
         try:
             trajectory.initialize(initial_state.copy())
-            logger.info(f"Traj {seed}: initialized in {_time.time()-_t3:.1f}s")
+            logger.info(f"Traj {seed}: initialized in {_time.time() - _t3:.1f}s")
         except Exception as e:
-            import traceback, sys
+            import sys
+            import traceback
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=initialize | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -247,6 +257,7 @@ def _run_single_traj_worker(
             _rss_mb = 0
             try:
                 import os as _os
+
                 _rss_mb = int(_os.getpid())  # dummy, won't work
             except Exception:
                 pass
@@ -255,7 +266,9 @@ def _run_single_traj_worker(
                 f"(total={_total:.1f}s) | t_max={t_max} dt_save={dt_save}"
             )
         except Exception as e:
-            import traceback, sys
+            import sys
+            import traceback
+
             _elapsed = _time.time() - _t4
             _total = _time.time() - _t0
             print(
@@ -278,7 +291,7 @@ def _run_single_traj_worker(
 
             logger.info(
                 f"Traj {seed}: extracted {len(valid_data)}/{len(psi_data)} frames "
-                f"in {_time.time()-_t5:.1f}s"
+                f"in {_time.time() - _t5:.1f}s"
             )
 
             return {
@@ -287,7 +300,9 @@ def _run_single_traj_worker(
                 "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
             }
         except Exception as e:
-            import traceback, sys
+            import sys
+            import traceback
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=extract | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -380,7 +395,7 @@ class HopsSimulator:
             self.use_sbd = True
 
         self.n_traj = kwargs.pop("n_traj", kwargs.get("n_trajectories", DEFAULT_N_TRAJ))
-        self.sbd_bundles_per_site = kwargs.get("sbd_bundles_per_site", 2)
+        self.sbd_bundles_per_site = kwargs.get("sbd_bundles_per_site", DEFAULT_SBD_BUNDLES)
         self.vibronic_markovian = kwargs.get("vibronic_markovian", False)
         self.system = None
         self.fallback_sim: Optional[Any] = None
@@ -478,6 +493,7 @@ class HopsSimulator:
             decomposition pairs for the Drude-Lorentz spectral density.
         """
         import inspect
+
         from mesohops.util.bath_corr_functions import bcf_convert_dl_to_exp
 
         try:
@@ -517,9 +533,7 @@ class HopsSimulator:
             n_sites = self.hamiltonian.shape[0]
 
             # Get bath parameters from kwargs or use defaults
-            lambda_reorg = kwargs.get(
-                "reorganization_energy", DEFAULT_REORGANIZATION_ENERGY
-            )
+            lambda_reorg = kwargs.get("reorganization_energy", DEFAULT_REORGANIZATION_ENERGY)
             gamma_cutoff = kwargs.get("drude_cutoff", DEFAULT_DRUDE_CUTOFF)
 
             # Define system-bath coupling operators (Lindblad operators)
@@ -573,9 +587,7 @@ class HopsSimulator:
                     try:
                         import importlib
 
-                        _mod = importlib.import_module(
-                            "mesohops.util.bath_corr_functions"
-                        )
+                        _mod = importlib.import_module("mesohops.util.bath_corr_functions")
                         _ud_bcf = getattr(_mod, _fname, None)
                         if _ud_bcf is not None:
                             break
@@ -588,8 +600,7 @@ class HopsSimulator:
                         try:
                             ud_modes = _ud_bcf(lambda_vib, damp, freq, self.temperature)
                             ud_pairs = [
-                                [ud_modes[i], ud_modes[i + 1]]
-                                for i in range(0, len(ud_modes), 2)
+                                [ud_modes[i], ud_modes[i + 1]] for i in range(0, len(ud_modes), 2)
                             ]
                         except Exception as _e:
                             logger.warning(
@@ -676,7 +687,7 @@ class HopsSimulator:
                 "lambda": float(hr) * float(omega),
                 "gamma": float(gamma),
             }
-            for omega, hr, gamma in zip(vib_freqs, vib_hr, vib_damping)
+            for omega, hr, gamma in zip(vib_freqs, vib_hr, vib_damping, strict=False)
             if float(omega) > 0.0
         ]
 
@@ -695,18 +706,14 @@ class HopsSimulator:
                     "vibronic_modes": vibronic_modes if vibronic_modes else None,
                 }
 
-                self.fallback_sim = QuantumDynamicsSimulator(
-                    self.hamiltonian, **qds_kwargs
-                )
+                self.fallback_sim = QuantumDynamicsSimulator(self.hamiltonian, **qds_kwargs)
                 logger.info(
                     f"QuantumDynamicsSimulator (HOPS-based) initialized as fallback "
                     f"({len(vibronic_modes)} vibronic modes)"
                 )
                 return
             except Exception as e:
-                logger.warning(
-                    f"Failed to initialize QuantumDynamicsSimulator fallback: {e}"
-                )
+                logger.warning(f"Failed to initialize QuantumDynamicsSimulator fallback: {e}")
 
         # Priority 2: SimpleQuantumDynamicsSimulator (no MesoHOPS required, but less accurate)
         if SimpleQuantumDynamicsSimulator is not None:
@@ -719,9 +726,7 @@ class HopsSimulator:
                 )
                 return
             except Exception as e:
-                logger.error(
-                    f"Failed to initialize SimpleQuantumDynamicsSimulator fallback: {e}"
-                )
+                logger.error(f"Failed to initialize SimpleQuantumDynamicsSimulator fallback: {e}")
 
         logger.error("Failed to initialize any fallback simulator")
         self.fallback_sim = None
@@ -759,30 +764,20 @@ class HopsSimulator:
         """
         logger.info(f"Starting dynamics simulation for {len(time_points)} time points")
 
-        if (
-            self.use_mesohops
-            and hasattr(self, "system_param")
-            and self.system_param is not None
-        ):
+        if self.use_mesohops and hasattr(self, "system_param") and self.system_param is not None:
             try:
                 logger.debug("Attempting MesoHOPS simulation")
-                return self._simulate_with_mesohops(
-                    time_points, initial_state, **kwargs
-                )
+                return self._simulate_with_mesohops(time_points, initial_state, **kwargs)
             except (RuntimeError, ModuleNotFoundError) as e:
                 if strict_mode:
                     logger.error(f"MesoHOPS simulation failed in strict_mode: {e}")
                     raise
-                logger.error(
-                    f"MesoHOPS simulation failed mid-run, falling back: {e}"
-                )
+                logger.error(f"MesoHOPS simulation failed mid-run, falling back: {e}")
                 logger.info("Falling back to custom simulator...")
 
         # Fallback to custom simulator
         if self.fallback_sim is not None:
-            logger.warning(
-                "Using fallback simulator. Results will not show L-dependence."
-            )
+            logger.warning("Using fallback simulator. Results will not show L-dependence.")
             # Strip HopsSimulator-only kwargs that the fallback doesn't understand
             _HOPS_ONLY = {"n_traj", "show_progress", "desc", "seed", "strict_mode"}
             fallback_kwargs = {k: v for k, v in kwargs.items() if k not in _HOPS_ONLY}
@@ -817,20 +812,69 @@ class HopsSimulator:
                     result["simulator"] = "INVALID_FALLBACK_" + result.get("simulator", "Simple")
                     return result
         elif SimpleQuantumDynamicsSimulator is not None:
-            logger.warning(
-                "No fallback_sim set; using SimpleQuantumDynamicsSimulator directly."
-            )
-            simple = SimpleQuantumDynamicsSimulator(
-                self.hamiltonian, temperature=self.temperature
-            )
-            result = simple.simulate_dynamics(
-                time_points=time_points, initial_state=initial_state
-            )
+            logger.warning("No fallback_sim set; using SimpleQuantumDynamicsSimulator directly.")
+            simple = SimpleQuantumDynamicsSimulator(self.hamiltonian, temperature=self.temperature)
+            result = simple.simulate_dynamics(time_points=time_points, initial_state=initial_state)
             result["_is_fallback"] = True
             result["simulator"] = "INVALID_FALLBACK_" + result.get("simulator", "Simple")
             return result
         else:
             raise RuntimeError("No simulator available")
+
+    def _save_intermediate_batch(
+        self,
+        valid_results: list,
+        batch_idx: int,
+        n_batches: int,
+        output_dir: str,
+        label: str,
+        n_traj_total: int,
+    ) -> None:
+        """Save partial ensemble average after a batch for crash recovery."""
+        try:
+            import os as _os
+
+            from src.io.csv_storage import CSVDataStorage
+
+            t_axis = valid_results[0]["t_axis"]
+            n_times = len(t_axis)
+            n_sites = self.hamiltonian.shape[0]
+            n_valid = len(valid_results)
+
+            populations = np.zeros((n_times, n_sites))
+            coherences = np.zeros(n_times)
+            for i in range(n_times):
+                rho = np.zeros((n_sites, n_sites), dtype=complex)
+                for res in valid_results:
+                    psi = res["psi_traj"][i, :n_sites]
+                    rho += np.outer(psi, np.conj(psi))
+                rho /= n_valid
+                tr = np.trace(rho).real
+                if tr > 1e-10:
+                    rho /= tr
+                populations[i, :] = np.real(np.diag(rho))
+                coherences[i] = float(np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho))))
+
+            csv_storage = CSVDataStorage(output_dir=_os.path.join(output_dir, "checkpoints"))
+            csv_storage.save_quantum_dynamics_results(
+                t_axis,
+                populations,
+                coherences,
+                {
+                    "batch": batch_idx + 1,
+                    "n_batches": n_batches,
+                    "label": label,
+                    "n_traj_total": n_traj_total,
+                    "n_traj_batch": n_valid,
+                },
+                filename_prefix=f"checkpoint_{label}_batch{batch_idx + 1}",
+            )
+            logger.info(
+                f"Checkpoint saved: batch {batch_idx + 1}/{n_batches} "
+                f"({n_valid} traj) -> {label}/checkpoints/"
+            )
+        except Exception as _cp_exc:
+            logger.warning(f"Intermediate save failed (non-fatal): {_cp_exc}")
 
     def _simulate_with_mesohops(
         self,
@@ -838,16 +882,17 @@ class HopsSimulator:
         initial_state: Optional[NDArray[np.float64]],
         **kwargs: Any,
     ) -> Dict[str, Any]:
+        import time as _time
+
         """
         Internal method to run MesoHOPS simulation with proper quantum dynamics.
 
-        Mathematical Framework:
         Uses the Hierarchy of Pure States (HOPS) method to solve the
-        stochastic Schrödinger equation for non-Markovian open quantum systems:
+        stochastic Schrodinger equation for non-Markovian open quantum systems:
 
-        |ψ(t)⟩ = |ψ(0)⟩ + ∫₀ᵗ dt' [Ĥ_eff(t') + noise terms] |ψ(t')⟩
+        |psi(t)> = |psi(0)> + integral_0^t dt' [H_eff(t') + noise terms] |psi(t')>
 
-        where Ĥ_eff includes the system Hamiltonian and system-bath interactions.
+        where H_eff includes the system Hamiltonian and system-bath interactions.
         """
         # Import required MesoHOPS classes
         if HopsTrajectory is None:
@@ -898,15 +943,15 @@ class HopsSimulator:
             }
 
             # Set up noise parameters based on test examples
-            t_max = (
-                float(np.max(time_points)) if len(time_points) > 0 else DEFAULT_MAX_TIME
-            )
+            t_max = float(np.max(time_points)) if len(time_points) > 0 else DEFAULT_MAX_TIME
             # Use explicit dt if provided to handle arbitrary time grids safely
             dt_save = kwargs.get(
                 "dt",
-                float(time_points[1] - time_points[0])
-                if len(time_points) > 1
-                else DEFAULT_TIME_STEP,
+                (
+                    float(time_points[1] - time_points[0])
+                    if len(time_points) > 1
+                    else DEFAULT_TIME_STEP
+                ),
             )
 
             noise_param = {
@@ -946,20 +991,16 @@ class HopsSimulator:
                 traj_kwargs["n_bundles_per_site"] = kwargs.get(
                     "sbd_bundles_per_site", self.sbd_bundles_per_site
                 )
-                logger.info(
-                    "Engaging SBD_HopsTrajectory for compressed environmental simulation."
-                )
+                logger.info("Engaging SBD_HopsTrajectory for compressed environmental simulation.")
             elif self.use_pt_hops and PT_HopsNoise is not None:
                 logger.info("Engaging PT_HopsNoise for Process Tensor dynamics.")
                 # We will handle PT-HOPS by overriding the noise component after trajectory init
                 pass
 
             # ── Run ensemble of trajectories (Parallelized) ─────────────────────
-            # Ensemble size: use kwarg, then self.n_traj, then fallback to 1
+            _t_start = _time.time()
             n_traj = kwargs.get("n_traj", self.n_traj if hasattr(self, "n_traj") else 1)
             cpu_count = multiprocessing.cpu_count()
-
-            # Memory-aware parallelization (User mandate: max 2/3 of available RAM)
             import gc as _gc
 
             if HAS_PSUTIL:
@@ -980,13 +1021,15 @@ class HopsSimulator:
                 n_jobs = 1
                 logger.warning("psutil not available; running sequentially (n_jobs=1)")
 
-            if n_traj == 1:
+            parallel_enabled = kwargs.get("parallel_enabled", True)
+            if not parallel_enabled:
+                n_jobs = 1
+                logger.info("Parallel execution disabled via parallel_enabled=False")
+            elif n_traj == 1:
                 n_jobs = 1
 
-            # Determine seeds
-            seeds = kwargs.get("seeds", list(range(n_traj)))
+            kwargs.get("seeds", list(range(n_traj)))
 
-            # Prepare arguments for the picklable worker
             worker_args = {
                 "TrajectoryClass": TrajectoryClass,
                 "traj_kwargs": traj_kwargs,
@@ -997,13 +1040,39 @@ class HopsSimulator:
                 "t_max": t_max,
                 "dt_save": dt_save,
                 "time_points": time_points,
+                "mem_limit_gb": traj_mem_gb,
             }
 
-            # Batch-wise execution to prevent joblib queue explosion
-            # (especially important for L≥6 trajectories with large memory footprint)
-            batch_size = max(1, n_jobs)  # One batch = one wave of jobs
+            batch_size = max(1, n_jobs)
             n_batches = (n_traj + batch_size - 1) // batch_size
             all_results = []
+
+            # Optional: periodic [PROGRESS] log thread for long runs (>5 min expected)
+            _progress_thread = None
+            if n_batches > 2 and HAS_JOBLIB and n_jobs > 1:
+
+                def _log_progress():
+                    import threading
+
+                    t = threading.current_thread()
+                    while getattr(t, "_keep_running", True):
+                        _time.sleep(60)
+                        _elapsed = _time.time() - _t_start
+                        _done = sum(1 for r in all_results if r is not None)
+                        logger.info(
+                            f"[PROGRESS] {_done}/{n_traj} traj done "
+                            f"({_elapsed:.0f}s elapsed, "
+                            f"{_done / max(_elapsed, 1):.1f} traj/s)"
+                        )
+
+                import threading as _thr
+
+                _progress_thread = _thr.Thread(target=_log_progress, daemon=True)
+                _progress_thread.start()
+
+            # Optional: output dir for intermediate batch saves
+            _output_dir = kwargs.get("output_dir", None)
+            _label = kwargs.get("output_label", "fmo")
 
             for batch_idx in range(n_batches):
                 start_seed = batch_idx * batch_size
@@ -1015,35 +1084,75 @@ class HopsSimulator:
                 )
 
                 if HAS_JOBLIB and n_jobs > 1:
-                    iterable = batch_seeds
-                    if HAS_TQDM and kwargs.get("show_progress", True):
-                        desc = f"Batch {batch_idx + 1}/{n_batches}"
-                        iterable = tqdm(batch_seeds, desc=desc, unit="traj", leave=False)
-
                     try:
-                        batch_results = Parallel(n_jobs=n_jobs)(
-                            delayed(_run_single_traj_worker)(s, **worker_args)
-                            for s in iterable
-                        )
-                    except MemoryError:
-                        logger.critical(
-                            f"Batch {batch_idx + 1} OOM: retrying with reduced parallelism"
-                        )
-                        _gc.collect()
-                        batch_results = Parallel(n_jobs=max(1, n_jobs // 2))(
-                            delayed(_run_single_traj_worker)(s, **worker_args)
-                            for s in batch_seeds
-                        )
+                        tasks = [
+                            delayed(_run_single_traj_worker)(s, **worker_args) for s in batch_seeds
+                        ]
+                        if HAS_TQDM and kwargs.get("show_progress", True):
+                            bar_fmt = (
+                                "{desc}: {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]"
+                            )
+                            batch_results = list(
+                                tqdm(
+                                    Parallel(n_jobs=n_jobs, return_as="generator")(tasks),
+                                    total=len(tasks),
+                                    desc=f"Batch {batch_idx + 1}/{n_batches}",
+                                    unit="traj",
+                                    leave=False,
+                                    bar_format=bar_fmt,
+                                )
+                            )
+                        else:
+                            batch_results = Parallel(n_jobs=n_jobs)(tasks)
+                    except (MemoryError, Exception) as _oom_err:
+                        _current_n_jobs = n_jobs
+                        while _current_n_jobs >= 1:
+                            logger.critical(
+                                f"Batch {batch_idx + 1} {type(_oom_err).__name__}: retrying with n_jobs={_current_n_jobs // 2}"
+                            )
+                            _gc.collect()
+                            _current_n_jobs = max(1, _current_n_jobs // 2)
+                            try:
+                                tasks = [
+                                    delayed(_run_single_traj_worker)(s, **worker_args)
+                                    for s in batch_seeds
+                                ]
+                                batch_results = Parallel(n_jobs=_current_n_jobs)(tasks)
+                                break
+                            except (MemoryError, Exception):
+                                if _current_n_jobs <= 1:
+                                    raise
                 else:
-                    batch_results = [
-                        _run_single_traj_worker(s, **worker_args) for s in batch_seeds
-                    ]
+                    batch_results = [_run_single_traj_worker(s, **worker_args) for s in batch_seeds]
 
                 valid_results = [r for r in batch_results if r is not None]
                 all_results.extend(valid_results)
+                n_failed = len(batch_results) - len(valid_results)
+                _batch_elapsed = _time.time() - _t_start
 
-                # Memory cleanup between batches
+                mem_info = ""
+                if HAS_PSUTIL:
+                    _mem = psutil.virtual_memory()
+                    mem_info = f" | mem={_mem.used / (1024**3):.0f}/{_mem.total / (1024**3):.0f}GB ({_mem.percent}%)"
+
+                logger.info(
+                    f"Batch {batch_idx + 1}/{n_batches} done: "
+                    f"{len(valid_results)}/{len(batch_results)} ok"
+                    + (f", {n_failed} failed" if n_failed else "")
+                    + f" | {_batch_elapsed:.0f}s{mem_info}"
+                )
+
+                # Intermediate CSV save after each batch
+                if _output_dir is not None and valid_results:
+                    self._save_intermediate_batch(
+                        valid_results, batch_idx, n_batches, _output_dir, _label, n_traj
+                    )
+
                 _gc.collect()
+
+            if _progress_thread is not None:
+                _progress_thread._keep_running = False
+                _progress_thread.join(timeout=5)
 
             traj_results = all_results
 
@@ -1078,9 +1187,7 @@ class HopsSimulator:
 
                 density_matrices.append(rho)
                 populations[i, :] = np.real(np.diag(rho))
-                coherences[i] = float(
-                    np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho)))
-                )
+                coherences[i] = float(np.sum(np.abs(rho)) - np.sum(np.abs(np.diag(rho))))
 
             # Calculate other metrics (QFI, IPR, Entropy)
             qfi_values = np.zeros(n_times)
@@ -1097,7 +1204,11 @@ class HopsSimulator:
                 diag_sq = np.sum(np.real(np.diag(rho)) ** 2)
                 ipr_values[i] = 1.0 / diag_sq if diag_sq > 1e-12 else 1.0
 
-            logger.info(f"Ensemble averaged over {n_valid} trajectories completed.")
+            _t_elapsed = _time.time() - _t_start
+            logger.info(
+                f"Ensemble averaged over {n_valid} trajectories completed "
+                f"in {_t_elapsed:.1f}s ({_t_elapsed / max(n_valid, 1):.1f}s/traj)"
+            )
 
             return {
                 "t_axis": t_axis,
@@ -1219,11 +1330,7 @@ class HopsSimulator:
     @property
     def is_using_mesohops(self) -> bool:
         """Check if MesoHOPS is being used."""
-        return (
-            self.use_mesohops
-            and hasattr(self, "system_param")
-            and self.system_param is not None
-        )
+        return self.use_mesohops and hasattr(self, "system_param") and self.system_param is not None
 
     @property
     def simulator_type(self) -> str:

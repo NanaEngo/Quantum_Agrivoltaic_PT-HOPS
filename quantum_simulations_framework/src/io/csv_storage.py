@@ -37,9 +37,7 @@ class CSVDataStorage:
         os.makedirs(output_dir, exist_ok=True)
         logger.info(f"CSV data storage initialized at {output_dir}")
 
-    def validate_schema(
-        self, df: pd.DataFrame, schema_type: str = "quantum_dynamics"
-    ) -> bool:
+    def validate_schema(self, df: pd.DataFrame, schema_type: str = "quantum_dynamics") -> bool:
         """
         Validate DataFrame schema against expected columns and types.
 
@@ -137,9 +135,7 @@ class CSVDataStorage:
         # FIX H-7: output_dir is already created in __init__; do not call
         # os.makedirs(os.path.dirname(filepath)) here — dirname returns '' when
         # output_dir is a bare name, causing FileNotFoundError.
-        filepath = os.path.join(
-            self.output_dir, f"{safe_prefix}_{config_hash}_{timestamp}.csv"
-        )
+        filepath = os.path.join(self.output_dir, f"{safe_prefix}_{config_hash}_{timestamp}.csv")
 
         # Defensive trim: ensure time_points and populations have matching lengths
         n_pop = populations.shape[0] if populations.ndim > 0 else 1
@@ -163,9 +159,7 @@ class CSVDataStorage:
 
         data_dict["coherences"] = coherences
         for metric_name, metric_values in quantum_metrics.items():
-            if isinstance(metric_values, np.ndarray) and len(metric_values) == len(
-                time_points
-            ):
+            if isinstance(metric_values, np.ndarray) and len(metric_values) == len(time_points):
                 data_dict[metric_name] = metric_values
             elif isinstance(metric_values, np.ndarray):
                 # Truncate or pad to match time_points length
@@ -179,7 +173,6 @@ class CSVDataStorage:
             else:
                 data_dict[metric_name] = [metric_values] * len(time_points)
 
-        print(f"DEBUG data_dict lengths: { {k: len(v) if hasattr(v, '__len__') else 'no_len' for k, v in data_dict.items()} }")
         df = pd.DataFrame(data_dict)
 
         # Validate schema before saving
@@ -196,9 +189,7 @@ class CSVDataStorage:
         with open(filepath, "a") as f:
             f.write(f"\n# METADATA: {json.dumps(metadata)}\n")
 
-        logger.info(
-            f"Hardened results saved with SHA-256 [{config_hash}] at {filepath}"
-        )
+        logger.info(f"Hardened results saved with SHA-256 [{config_hash}] at {filepath}")
         return filepath
 
     def save_spectral_optimization(

@@ -7,41 +7,6 @@ a quantum-enhanced agrivoltaic system with realistic efficiency values.
 """
 
 import logging
-from src.core.constants import (
-    DEFAULT_TEMPERATURE,
-    SOLAR_LAMBDA_MIN,
-    SOLAR_LAMBDA_MAX,
-    SOLAR_TOTAL_IRRADIANCE,
-    DEFAULT_FILL_FACTOR_OPV,
-    DEFAULT_CONVERSION_FACTOR_OPV,
-    EV_TO_CM,
-    DEFAULT_DPI,
-    PREVIEW_DPI,
-    OPV_ACTIVE_REGION_MAX,
-    PCE_MAX_LIMIT,
-    PSU_BLUE_MIN,
-    PSU_BLUE_MAX,
-    PSU_RED_MIN,
-    PSU_RED_MAX,
-    PSU_GREEN_MIN,
-    PSU_GREEN_MAX,
-    ETR_BASE,
-    ETR_SCALE,
-    ETR_SAT_PAR,
-    ETR_MIN,
-    ETR_MAX,
-    DEFAULT_OPV_BANDGAP,
-    DEFAULT_OPV_ABSORPTION,
-    DEFAULT_N_OPV_SITES,
-    DEFAULT_OPV_SITE_ENERGIES,
-    AGRI_SPECTRAL_COUPLING_STRENGTH,
-    PSU_BROADENING_EV,
-    HBAR_EV_FS,
-    OPV_RESPONSE_DECAY_WIDTH,
-    PSU_NIR_DECAY_RATE,
-    PSU_NIR_AMP,
-    DEFAULT_POPSIZE,
-)
 import os
 from datetime import datetime
 
@@ -51,6 +16,42 @@ import pandas as pd
 from scipy.integrate import trapezoid
 from scipy.linalg import expm
 from scipy.optimize import differential_evolution
+
+from src.core.constants import (
+    AGRI_SPECTRAL_COUPLING_STRENGTH,
+    DEFAULT_CONVERSION_FACTOR_OPV,
+    DEFAULT_DPI,
+    DEFAULT_FILL_FACTOR_OPV,
+    DEFAULT_N_OPV_SITES,
+    DEFAULT_OPV_ABSORPTION,
+    DEFAULT_OPV_BANDGAP,
+    DEFAULT_OPV_SITE_ENERGIES,
+    DEFAULT_POPSIZE,
+    DEFAULT_TEMPERATURE,
+    ETR_BASE,
+    ETR_MAX,
+    ETR_MIN,
+    ETR_SAT_PAR,
+    ETR_SCALE,
+    EV_TO_CM,
+    HBAR_EV_FS,
+    OPV_ACTIVE_REGION_MAX,
+    OPV_RESPONSE_DECAY_WIDTH,
+    PCE_MAX_LIMIT,
+    PREVIEW_DPI,
+    PSU_BLUE_MAX,
+    PSU_BLUE_MIN,
+    PSU_BROADENING_EV,
+    PSU_GREEN_MAX,
+    PSU_GREEN_MIN,
+    PSU_NIR_AMP,
+    PSU_NIR_DECAY_RATE,
+    PSU_RED_MAX,
+    PSU_RED_MIN,
+    SOLAR_LAMBDA_MAX,
+    SOLAR_LAMBDA_MIN,
+    SOLAR_TOTAL_IRRADIANCE,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -119,9 +120,7 @@ class AgrivoltaicCouplingModel:
 
         # Default parameters for OPV Hamiltonian (realistic values)
         self.opv_params = {
-            "site_energies": np.array(
-                DEFAULT_OPV_SITE_ENERGIES
-            ),  # eV (optimized for efficiency)
+            "site_energies": np.array(DEFAULT_OPV_SITE_ENERGIES),  # eV (optimized for efficiency)
             "coupling_matrix": np.array(
                 [
                     [0.0, 0.08, 0.04, 0.02],  # Reduced couplings for stability
@@ -163,17 +162,13 @@ class AgrivoltaicCouplingModel:
                 elif 400 <= lam <= OPV_ACTIVE_REGION_MAX:  # Visible
                     solar_irradiance[i] = 1.7 - 0.3 * abs(lam - 550) / 150
                 elif OPV_ACTIVE_REGION_MAX <= lam <= SOLAR_LAMBDA_MAX:  # NIR
-                    solar_irradiance[i] = 1.4 * np.exp(
-                        -0.002 * (lam - OPV_ACTIVE_REGION_MAX)
-                    )
+                    solar_irradiance[i] = 1.4 * np.exp(-0.002 * (lam - OPV_ACTIVE_REGION_MAX))
                 else:
                     solar_irradiance[i] = 0.0
 
             # Normalize to standard irradiance (1000 W/m² = 100 mW/cm²)
             integral = trapezoid(solar_irradiance, lambda_range)
-            solar_irradiance = (
-                solar_irradiance * SOLAR_TOTAL_IRRADIANCE / integral
-            )  # mW/cm²/nm
+            solar_irradiance = solar_irradiance * SOLAR_TOTAL_IRRADIANCE / integral  # mW/cm²/nm
             self.lambda_range = lambda_range
             self.solar_spec = solar_irradiance
         else:
@@ -247,9 +242,7 @@ class AgrivoltaicCouplingModel:
                 R_psu[i] = ETR_MIN
             else:  # Beyond 700 nm
                 # Decreasing efficiency in NIR
-                R_psu[i] = PSU_NIR_AMP * np.exp(
-                    -PSU_NIR_DECAY_RATE * (lam - PSU_RED_MAX)
-                )
+                R_psu[i] = PSU_NIR_AMP * np.exp(-PSU_NIR_DECAY_RATE * (lam - PSU_RED_MAX))
 
         # Normalize to maximum of 1
         if np.max(R_psu) > 0:
@@ -310,9 +303,7 @@ class AgrivoltaicCouplingModel:
         j_sc = self.calculate_opv_current(transmission_func)
 
         # Define realistic parameters
-        fill_factor = (
-            DEFAULT_FILL_FACTOR_OPV  # Improved fill factor for efficient systems
-        )
+        fill_factor = DEFAULT_FILL_FACTOR_OPV  # Improved fill factor for efficient systems
         input_power = trapezoid(self.solar_spec, self.lambda_range)  # mW/cm²
 
         # Calculate efficiency with realistic conversion
@@ -398,9 +389,7 @@ class AgrivoltaicCouplingModel:
             width = max(width, 1.0)  # Minimum width
 
             # Add Gaussian filter contribution
-            gaussian_filter = A * np.exp(
-                -((self.lambda_range - center) ** 2) / (2 * width**2)
-            )
+            gaussian_filter = A * np.exp(-((self.lambda_range - center) ** 2) / (2 * width**2))
             # Multiple filters multiply transmission (more blocking)
             transmission = transmission * (1 - gaussian_filter)
 
@@ -409,9 +398,7 @@ class AgrivoltaicCouplingModel:
 
         return transmission
 
-    def create_filter_transmission(
-        self, center_wavelength, fwhm, amplitude=1.0, shape="gaussian"
-    ):
+    def create_filter_transmission(self, center_wavelength, fwhm, amplitude=1.0, shape="gaussian"):
         """
         Create a transmission function for a single filter.
 
@@ -450,9 +437,7 @@ class AgrivoltaicCouplingModel:
                 if np.isscalar(wavelengths):
                     wavelengths = np.array([wavelengths])
 
-                T = 1 - amplitude / (
-                    1 + ((wavelengths - center_wavelength) / gamma) ** 2
-                )
+                T = 1 - amplitude / (1 + ((wavelengths - center_wavelength) / gamma) ** 2)
                 return np.clip(T, 0.0, 1.0)
 
         elif shape == "tophat":
@@ -476,18 +461,12 @@ class AgrivoltaicCouplingModel:
 
     def _create_opv_hamiltonian(self):
         """Create OPV subsystem Hamiltonian."""
-        H = (
-            np.diag(self.opv_params["site_energies"])
-            + self.opv_params["coupling_matrix"]
-        )
+        H = np.diag(self.opv_params["site_energies"]) + self.opv_params["coupling_matrix"]
         return H
 
     def _create_psu_hamiltonian(self):
         """Create PSU subsystem Hamiltonian based on FMO complex."""
-        H = (
-            np.diag(self.psu_params["site_energies"])
-            + self.psu_params["coupling_matrix"]
-        )
+        H = np.diag(self.psu_params["site_energies"]) + self.psu_params["coupling_matrix"]
         return H
 
     def _construct_agrivoltaic_hamiltonian(
@@ -522,28 +501,20 @@ class AgrivoltaicCouplingModel:
         overall_exc_idx = 1 * n_psu + 1  # Example excited state
 
         if overall_exc_idx < n_opv * n_psu:
-            coupling_matrix[overall_gs_idx, overall_exc_idx] = (
-                spectral_coupling_strength
-            )
-            coupling_matrix[overall_exc_idx, overall_gs_idx] = (
-                spectral_coupling_strength
-            )
+            coupling_matrix[overall_gs_idx, overall_exc_idx] = spectral_coupling_strength
+            coupling_matrix[overall_exc_idx, overall_gs_idx] = spectral_coupling_strength
 
         # Combine all terms
         H_agri = H_opv_full + H_psu_full + coupling_matrix
 
         return H_agri
 
-    def calculate_opv_transmission(
-        self, omega, peak_pos=1.9, peak_width=0.2, max_trans=0.7
-    ):
+    def calculate_opv_transmission(self, omega, peak_pos=1.9, peak_width=0.2, max_trans=0.7):
         """
         Calculate OPV transmission as function of frequency.
         """
         lorentzian = 1.0 / (1 + ((omega - peak_pos) / peak_width) ** 2)
-        transmission = max_trans * (
-            1 - lorentzian
-        )  # High transmission outside absorption band
+        transmission = max_trans * (1 - lorentzian)  # High transmission outside absorption band
         return np.clip(transmission, 0, 1)
 
     def calculate_psu_absorption_from_hamiltonian(self, omega):
@@ -565,9 +536,7 @@ class AgrivoltaicCouplingModel:
 
         return sigma
 
-    def calculate_quantum_transmission_operator(
-        self, omega, T_opv_values, PSU_cross_section
-    ):
+    def calculate_quantum_transmission_operator(self, omega, T_opv_values, PSU_cross_section):
         """
         Calculate quantum transmission operator T_quant(ω).
         """
@@ -583,9 +552,7 @@ class AgrivoltaicCouplingModel:
         # Initialize
         if initial_state is None:
             initial_state = np.zeros(self.n_total, dtype=complex)
-            initial_state[0] = (
-                1.0  # Excitation on OPV site 0, PSU site 0 (tensor product)
-            )
+            initial_state[0] = 1.0  # Excitation on OPV site 0, PSU site 0 (tensor product)
 
         states = [initial_state.astype(complex)]
         current_state = initial_state.astype(complex)
@@ -678,17 +645,13 @@ class AgrivoltaicCouplingModel:
         optimal_pce = self.calculate_opv_efficiency(optimal_transmission)
         optimal_etr = self.calculate_psu_efficiency(optimal_transmission)
 
-        logger.info(
-            f"Optimization completed: PCE={optimal_pce:.4f}, ETR={optimal_etr:.4f}"
-        )
+        logger.info(f"Optimization completed: PCE={optimal_pce:.4f}, ETR={optimal_etr:.4f}")
 
         return {
             "optimal_params": result.x,
             "optimal_pce": optimal_pce,
             "optimal_etr": optimal_etr,
-            "transmission_func": lambda lambdas: self.calculate_spectral_transmission(
-                result.x
-            ),
+            "transmission_func": lambda lambdas: self.calculate_spectral_transmission(result.x),
             "success": result.success,
             "message": result.message,
         }
@@ -735,9 +698,7 @@ class AgrivoltaicCouplingModel:
                 "opv_response": self.R_opv,
                 "psu_response": self.R_psu,
                 "transmission": transmission_spectrum,
-                "opv_absorbed": self.solar_spec
-                * (1 - transmission_spectrum)
-                * self.R_opv,
+                "opv_absorbed": self.solar_spec * (1 - transmission_spectrum) * self.R_opv,
                 "psu_absorbed": self.solar_spec * transmission_spectrum * self.R_psu,
             }
         )
@@ -872,12 +833,8 @@ class AgrivoltaicCouplingModel:
         ax3 = axes[1, 0]
         opv_absorbed = self.solar_spec * transmission_spectrum * self.R_opv
         psu_absorbed = self.solar_spec * (1 - transmission_spectrum) * self.R_psu
-        ax3.plot(
-            self.lambda_range, opv_absorbed, "blue", linewidth=2, label="OPV Absorbed"
-        )
-        ax3.plot(
-            self.lambda_range, psu_absorbed, "green", linewidth=2, label="PSU Absorbed"
-        )
+        ax3.plot(self.lambda_range, opv_absorbed, "blue", linewidth=2, label="OPV Absorbed")
+        ax3.plot(self.lambda_range, psu_absorbed, "green", linewidth=2, label="PSU Absorbed")
         ax3.set_xlabel("Wavelength (nm)", fontsize=10)
         ax3.set_ylabel("Absorbed Irradiance (mW/cm²/nm)", fontsize=10)
         ax3.set_title("Absorbed Spectra by Components", fontsize=12)
@@ -907,12 +864,8 @@ class AgrivoltaicCouplingModel:
             )
 
         # Add target lines for realistic values
-        ax4.axhline(
-            y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)"
-        )
-        ax4.axhline(
-            y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)"
-        )
+        ax4.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax4.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
 
         plt.tight_layout()
 
@@ -964,6 +917,4 @@ if __name__ == "__main__":
 
     # Test with optimized splitting
     result = model.optimize_spectral_splitting(n_filters=2, maxiter=20)
-    print(
-        f"Optimized - PCE: {result['optimal_pce']:.4f}, ETR: {result['optimal_etr']:.4f}"
-    )
+    print(f"Optimized - PCE: {result['optimal_pce']:.4f}, ETR: {result['optimal_etr']:.4f}")

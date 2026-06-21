@@ -5,15 +5,16 @@ from typing import Any, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from src.core.constants import (
+    DEFAULT_DPI,
     DEFAULT_SPECTRAL_RESOLUTION,
     DEFAULT_W_BUFFER,
-    DEFAULT_DPI,
     PREVIEW_DPI,
-    T_DECAY_DIAGONAL,
-    T_DECAY_CROSS,
-    SPECTROSCOPY_LINEWIDTH_SCALE,
     SPECTROSCOPY_CROSS_PEAK_AMP,
+    SPECTROSCOPY_LINEWIDTH_SCALE,
+    T_DECAY_CROSS,
+    T_DECAY_DIAGONAL,
 )
 
 logger = logging.getLogger(__name__)
@@ -67,15 +68,11 @@ class Spectroscopy2DES:
         for i, Ei in enumerate(energies):
             for j, Ej in enumerate(energies):
                 # Transition strength based on eigenstate overlap (Simplified dipole proxy)
-                dipole_strength = np.sum(np.abs(states[:, i])) * np.sum(
-                    np.abs(states[:, j])
-                )
+                dipole_strength = np.sum(np.abs(states[:, i])) * np.sum(np.abs(states[:, j]))
 
                 if i == j:
                     # Diagonal peak
-                    intensity = dipole_strength * np.exp(
-                        -waiting_time / T_DECAY_DIAGONAL
-                    )
+                    intensity = dipole_strength * np.exp(-waiting_time / T_DECAY_DIAGONAL)
                 else:
                     # Cross-peak (Energy Transfer)
                     intensity = (

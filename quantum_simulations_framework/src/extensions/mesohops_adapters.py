@@ -44,9 +44,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def _construct_mpo_from_bcf(
-    time_grid: np.ndarray, correlation_func: callable, bond_dim: int = 10
-):
+def _construct_mpo_from_bcf(time_grid: np.ndarray, correlation_func: callable, bond_dim: int = 10):
     """
     Construct a Matrix Product Operator (MPO) from a Bath Correlation Function.
 
@@ -214,9 +212,7 @@ class PT_HopsNoise(HopsNoise):
     def __init__(self, noise_param, noise_corr, bond_dim=12):
         self.__locked__ = False
         # Pass noise_corr to parent instead of empty dict
-        super().__init__(
-            noise_param, noise_corr if isinstance(noise_corr, dict) else {}
-        )
+        super().__init__(noise_param, noise_corr if isinstance(noise_corr, dict) else {})
         self.noise_corr = noise_corr
         self.is_pt_hops = True
         self.bond_dim = bond_dim
@@ -316,9 +312,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
     ):
         # 1. Intercept system parameters to apply SBD compression
         if system_param and "GW_SYSBATH" in system_param and "L_HIER" in system_param:
-            logger.info(
-                "SBD INTERCEPT: Preparing to compress hierarchy and noise modes..."
-            )
+            logger.info("SBD INTERCEPT: Preparing to compress hierarchy and noise modes...")
             raw_gw = system_param["GW_SYSBATH"]
             raw_l_hier = system_param["L_HIER"]
             system_param.get("L_NOISE1", raw_l_hier)
@@ -349,7 +343,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
                     sbd.discretize_spectral_density([(w, g) for g, w in modes])
                     bundled_ws, bundled_gs = sbd.get_bundle_parameters()
 
-                    for g, w in zip(bundled_gs, bundled_ws):
+                    for g, w in zip(bundled_gs, bundled_ws, strict=False):
                         new_gw.append((g, w))
                         # Reconstruct the L operator for this site
                         # C-7 FIX: Ensure L_op is a 2D dense array even if raw_l_hier contains sparse matrices
@@ -386,9 +380,7 @@ class SBD_HopsTrajectory(HopsTrajectory):
                     if filter_entry[0] == "Triangular":
                         # filter_entry[1] is [boolean_list, k_max]
                         filter_entry[1][0] = [True] * len(new_gw)
-                        logger.info(
-                            f"Updated STATIC_FILTERS for SBD: {len(new_gw)} booleans."
-                        )
+                        logger.info(f"Updated STATIC_FILTERS for SBD: {len(new_gw)} booleans.")
 
         # Fallback to standard trajectory initialization with the bundled parameters
         super().__init__(

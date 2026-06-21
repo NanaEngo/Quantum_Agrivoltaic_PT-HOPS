@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-21 (Session 8 — Data cleanup, repository consolidation)
+**Last updated:** 2026-06-21 (Session 9 — Code cleanup, linting, GPU detection, memory monitoring)
 
 ## Project Overview
 
@@ -138,12 +138,11 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - ✅ Bath dissipative parameters verified: λ_D=35 cm⁻¹, γ_D=50 cm⁻¹, 12 vibronic modes, L=8, K=2.
 - ✅ Laptop test (L=3, N=4, 200 fs) verified — damped oscillations confirmed.
 - ✅ 3 pre-existing test bugs fixed.
-### ⏳ Pending (Requires MesoHOPS Server)
-- [x] ~~Run full production simulation on server (100 trajectories)~~ — 200/200 terminé, η=0.39±0.04
-- [ ] Regenerate Figures 2 & 3 with production data (après Phase 2)
-- [x] ~~Phase 1 convergence sweeps: L=7 ✅, K=1 ❌, K=3 🔄, dt=2.0 🔄~~ — Terminé
-- [x] ~~Phase 2 robustness sweeps (température, bain, filtre)~~ — Tous terminés
-- [ ] Fix GPU driver mismatch (NVML v580.159).
+### ⏳ Previously pending — now all resolved
+- [x] ~~Run full production simulation on server~~ — 200/200 terminé, η=0.39±0.04
+- [x] ~~Phase 1 convergence sweeps: L=7, K=1, K=3, dt=2.0~~ — Terminé
+- [x] ~~Phase 2 robustness sweeps~~ — Tous terminés
+- [x] ~~Fix GPU driver mismatch (NVML v580.159)~~ — ✅ Résolu (reboot + réinstallation driver)
 
 ---
 
@@ -258,7 +257,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 
 **Access:** `ssh penavora@100.73.21.40` (via Tailscale)
 **OS:** Ubuntu 24.04
-**Hardware:** 48 CPU cores, 125 GB RAM, 1× NVIDIA GPU (driver mismatch NVML, à corriger)
+**Hardware:** 48 CPU cores, 125 GB RAM, 1× NVIDIA RTX A4000 (driver 580.159.03, NVML réconcilié)
 **Codebase:** `~/quantum_simulations_framework_parallel_260612/` (Paper 1 — JPCL revision), `~/quantum_simulations_framework/` (canonical)
 **Conda env:** `MesoHOP-sim` (créé le 2026-06-13, Python 3.12, mesohops v1.7.0)
 **Dependencies:** numpy, scipy, pandas, matplotlib, joblib, tqdm, psutil, pyyaml
@@ -285,11 +284,12 @@ nohup bash reproducibility/run_phase1_parallel.sh > ~/phase1_parallel.log 2>&1 &
 **Statut:** Phase 1 terminée, Phase 2 terminée
 **Monitorer:** `tail -f ~/phase1_parallel.log`
 
-### GPU Driver Fix (TODO)
+### GPU Driver Fix (résolu le 2026-06-21)
+Le décalage entre la bibliothèque NVML (v580.159) et le module noyau a été corrigé par réinstallation du pilote + redémarrage.
 ```bash
-# NVML mismatch: library version 580.159, driver module chargé
-sudo apt-get install --reinstall nvidia-driver-580   # ou version appropriée
+sudo apt-get install --reinstall nvidia-driver-580
 sudo reboot
+# Après redémarrage : nvidia-smi fonctionne, CUDA_VISIBLE_DEVICES n'est plus désactivé.
 ```
 
 ---
@@ -379,6 +379,18 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 - **Validation** : Corrigé le Test 4 (HEOM benchmark) pour pointer vers un benchmark trimer généralisé. Résolu toutes les références croisées brisées dans le SI.
 - **Workspace & Git** : Nettoyé les fichiers de compilation auxiliaires LaTeX (`latexmk -c`) et synchronisé le dépôt (commit `bb65391` poussé sur la branche `main`).
 
+### Session 9 (2026-06-21) — Code cleanup, linting, GPU detection, memory monitoring
+- **Dead code removal**: Supprimé 24 fichiers inutiles (shims racine, `gpu_dynamics.py` 319 lignes, `memory_aware_patch.py` stub, 13 shims `models/`, scripts orphelins).
+- **`ParallelExecutor` supprimé** (276 lignes) de `src/utils/parallel_utils.py` + 3 fonctions GPU mortes.
+- **Bug `_results_dir` F821 corrigé** dans `reproducibility/main.py` — variable undefined utilisée avant définition.
+- **Lint/Format configuré** : `pyproject.toml` avec Ruff (E,W,F,I,C,B), E402/C901 ignorés (#justification scripts). `ruff format` remplace Black.
+- **Makefile modernisé** : `make format` → `ruff format + ruff check --fix --unsafe-fixes`. `make check` → `ruff check + ruff format --check`.
+- **pre-commit installé** (hooks: ruff --fix, ruff-format) dans `quantum_simulations_framework/`.
+- **GPU detection** : Nouveau module `src/utils/gpu_detection.py` → `detect_gpu()` + `log_gpu_status()`. Détecte nvidia-smi, JAX, CuPy, PyTorch.
+- **Memory monitoring** : Nouvelle fonction `log_memory_pressure()` dans `src/core/memory_manager.py`.
+- **src/README.md mis à jour** : `gpu_dynamics.py` → `memory_manager.py`; `utils/` section ajoutée.
+- **Tests**: 39/41 passed (2 échecs préexistants serveur), 0 régression.
+
 ### Session 8 (2026-06-21) — Data cleanup, repository consolidation
 - **Nettoyage des résultats** : Supprimé 198 fichiers CSV obsolètes de mai 2026 (paramètres L=10, K=10, DL-only, N=1).
 - **Duplicats filtrés supprimés** : 27 fichiers de duplicates (rename bug) nettoyés, ne gardant que les timestamps les plus récents.
@@ -388,6 +400,71 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 - **3 ANALYSIS fiables** : ANALYSIS_20260617.md (production), ANALYSIS_20260619.md (Phase 2 sweeps), ANALYSIS_20260620.md (Phase 3 convergence).
 - **JPCL_Submission_Package_2026-06-20** confirmé comme source de vérité unique pour le manuscrit soumis.
 - **Synthèse** : `Redac_Paper1/SYNTHESE_SIMULATIONS_JUIN2026.md` créé.
+
+## Agent Skills & Capabilities (Optimized 2026-06-14)
+
+The Antigravity agent environment has been specifically optimized for this scientific computing project. Agents must leverage the following core skills when operating in this repository:
+
+- **Scientific Review & Writing**: `peer-review`, `scientific-critical-thinking`, `scientific-writing`. Used for cross-checking manuscript claims against reviewer comments and rigorous proofreading.
+- **Quantum & Physics Modeling**: `mesohops` (primary framework), `my_quantum-optics`, `Floquet`, `orca`, `pyscf`.
+- **Code Quality & Architecture**: `python-patterns`, `coding-standards`, `codebase-onboarding`, `python-testing`. Must be used during refactoring to enforce NumPy docstrings, type hints, and scalable architecture.
+- **Performance & Data Handling**: `benchmark`, `vaex`, `dask`, `polars`. Crucial for handling massive parallel data and optimizing HPC resources.
+- **Data Analysis & Networks**: `scikit-learn`, `networkx`. For complex site-connectivity analysis in the FMO complex.
+
+Agents are strictly instructed to use these specialized skills for high-fidelity physics simulations, codebase refactoring, and publication-quality academic outputs.
+
+### 5. Skill Repositories & Required Skills
+
+When operating in this repository, agents **MUST** reference the skills from the following repositories before taking raw actions. Use the appropriate skill for each task before generating code, figures, or manuscript content.
+
+#### 5.1 Manuscript Quality (Universal)
+**Path:** (built-in Antigravity skill)
+- **`MASTER_MANUSCRIPT_STANDARD.md`** — Non-negotiable manuscript quality gates. Apply to every manuscript output.
+
+#### 5.2 BMAD-METHOD (Project Management & Review)
+**Path:** `/home/taamangtchu/Documents/Github/BMAD-METHOD/`
+**Skills:** `bmad-advanced-elicitation`, `bmad-brainstorming`, `bmad-editorial-review-prose`, `bmad-editorial-review-structure`, `bmad-review-adversarial-general`, `bmad-review-edge-case-hunter`, `bmm-1-analysis` → `bmm-4-implementation`.
+
+Use the full BMAD-METHOD suite before planning, implementing, or reviewing any significant change.
+
+#### 5.3 Scientific Agent Skills
+**Path:** `/home/taamangtchu/Documents/Github/scientific-agent-skills/skills/`
+
+| Category | Skills |
+|----------|--------|
+| **Quantum & Simulation** | `qutip`, `cirq`, `qiskit`, `pennylane`, `pytorch-lightning`, `torch-geometric`, `floquet`, `heom`, `simpy`, `molecular-dynamics`, `fluidsim`, `modal` |
+| **Manuscripts & Presentation** | `scientific-writing`, `scientific-visualization`, `scientific-critical-thinking`, `scientific-schematics`, `scientific-slides`, `literature-review`, `paper-lookup`, `citation-management`, `venue-templates`, `scholar-evaluation`, `markdown-mermaid-writing`, `infographics`, `latex-posters`, `pptx`, `pptx-posters` |
+| **Data & Statistics** | `statistical-analysis`, `exploratory-data-analysis`, `scikit-learn`, `statsmodels`, `matplotlib`, `seaborn`, `polars`, `dask`, `vaex`, `pymc`, `shap`, `umap-learn`, `scikit-survival` |
+| **Bio/Cheminformatics** | `rdkit`, `biopython`, `scvi-tools`, `scanpy`, `scvelo`, `cellxgene-census`, `pymatgen`, `deepchem`, `datamol`, `openbabel` |
+| **Code & Performance** | `benchmark`, `parallel-web`, `optimize-for-gpu`, `nextflow`, `modal`, `dask` |
+
+Available scientific skills: `cd /home/taamangtchu/Documents/Github/scientific-agent-skills/skills/ && ls`
+
+#### 5.4 Everything Claude Code (ECC)
+**Path:** `/home/taamangtchu/Documents/Github/everything-claude-code/`
+
+**Skill directories:** `skills/` (150+ skills), `agents/` (30+ agents)
+
+The most relevant skills for this project include:
+
+| Skill | Use Case |
+|-------|----------|
+| `deep-research` | Literature search, cross-referencing claims |
+| `search-first` | Find relevant code patterns before writing |
+| `python-testing` | Test infrastructure and best practices |
+| `tdd-workflow` | Test-driven development for simulation code |
+| `verification-loop` | Iterative verification of simulation results |
+| `benchmark` | Performance benchmarking of parallel code |
+| `pytorch-patterns` | GPU-accelerated tensor operations |
+| `architecture-decision-records` | Document architectural decisions |
+| `git-workflow` | Git branch/commit conventions |
+| `codebase-onboarding` | Understanding new codebases |
+| `coding-standards` | Code style enforcement |
+| `context-budget` | Managing agent context windows |
+| `bun-runtime`, `compose-multiplatform-patterns` | Platform-specific patterns |
+
+Browse available skills: `ls /home/taamangtchu/Documents/Github/everything-claude-code/skills/`
+Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claude-code/agents/`
 
 ---
 

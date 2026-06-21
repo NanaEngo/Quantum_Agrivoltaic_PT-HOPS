@@ -73,13 +73,13 @@ class SensitivityAnalyzer:
 
         # Use constants for default ranges
         from src.core.constants import (
-            DEFAULT_TEMPERATURE,
             DEFAULT_DEPHASING_RATE,
-            SENSITIVITY_TEMP_OFFSET,
-            SENSITIVITY_DEPHASING_FACTORS,
+            DEFAULT_TEMPERATURE,
             SENSITIVITY_CENTER_RANGE,
-            SENSITIVITY_WIDTH_RANGE,
+            SENSITIVITY_DEPHASING_FACTORS,
             SENSITIVITY_DUST_RANGE,
+            SENSITIVITY_TEMP_OFFSET,
+            SENSITIVITY_WIDTH_RANGE,
         )
 
         self.param_ranges = {
@@ -108,9 +108,9 @@ class SensitivityAnalyzer:
         pce_values, etr_values, coherence_values = [], [], []
 
         from src.core.constants import (
-            DEFAULT_TEMPERATURE,
-            DEFAULT_DEPHASING_RATE,
             AUDIT_TIME_WINDOW,
+            DEFAULT_DEPHASING_RATE,
+            DEFAULT_TEMPERATURE,
             SENSITIVITY_POINTS_DEFAULT,
         )
 
@@ -122,17 +122,11 @@ class SensitivityAnalyzer:
                 if HopsSimulator is not None:
                     sim = HopsSimulator(
                         self.quantum_simulator.hamiltonian,
-                        temperature=current_params.get(
-                            "temperature", DEFAULT_TEMPERATURE
-                        ),
-                        dephasing_rate=current_params.get(
-                            "dephasing_rate", DEFAULT_DEPHASING_RATE
-                        ),
+                        temperature=current_params.get("temperature", DEFAULT_TEMPERATURE),
+                        dephasing_rate=current_params.get("dephasing_rate", DEFAULT_DEPHASING_RATE),
                     )
                     # Use a short representative time window
-                    time_points = np.linspace(
-                        0, AUDIT_TIME_WINDOW, SENSITIVITY_POINTS_DEFAULT
-                    )
+                    time_points = np.linspace(0, AUDIT_TIME_WINDOW, SENSITIVITY_POINTS_DEFAULT)
                     result = sim.simulate_dynamics(time_points=time_points)
                     # Extract coherences from result
                     cohers = result.get("coherences", np.array([0]))
@@ -144,29 +138,19 @@ class SensitivityAnalyzer:
                 if self.agrivoltaic_model is not None:
                     # Use dynamic transmission calculation
                     trans = self.agrivoltaic_model.calculate_spectral_transmission()
-                    pce_values.append(
-                        self.agrivoltaic_model.calculate_opv_efficiency(trans)
-                    )
-                    etr_values.append(
-                        self.agrivoltaic_model.calculate_psu_efficiency(trans)
-                    )
+                    pce_values.append(self.agrivoltaic_model.calculate_opv_efficiency(trans))
+                    etr_values.append(self.agrivoltaic_model.calculate_psu_efficiency(trans))
                 else:
                     pce_values.append(0.0)
                     etr_values.append(0.0)
 
             elif param_name == "dust_thickness":
                 if hasattr(self.agrivoltaic_model, "update_environmental_conditions"):
-                    self.agrivoltaic_model.update_environmental_conditions(
-                        dust_thickness=val
-                    )
+                    self.agrivoltaic_model.update_environmental_conditions(dust_thickness=val)
                 if self.agrivoltaic_model is not None:
                     trans = self.agrivoltaic_model.calculate_spectral_transmission()
-                    pce_values.append(
-                        self.agrivoltaic_model.calculate_opv_efficiency(trans)
-                    )
-                    etr_values.append(
-                        self.agrivoltaic_model.calculate_psu_efficiency(trans)
-                    )
+                    pce_values.append(self.agrivoltaic_model.calculate_opv_efficiency(trans))
+                    etr_values.append(self.agrivoltaic_model.calculate_psu_efficiency(trans))
                 else:
                     pce_values.append(0.0)
                     etr_values.append(0.0)
@@ -195,9 +179,7 @@ class SensitivityAnalyzer:
             param_uncertainties = dict.fromkeys(self.param_ranges.keys(), 0.1)
 
         pce_samples, etr_samples = [], []
-        base_params = {
-            key: (val[0] + val[1]) / 2 for key, val in self.param_ranges.items()
-        }
+        base_params = {key: (val[0] + val[1]) / 2 for key, val in self.param_ranges.items()}
 
         for _ in range(n_samples):
             sampled_params = {}
@@ -211,12 +193,8 @@ class SensitivityAnalyzer:
             # Calculate PCE and ETR with sampled parameters
             if self.agrivoltaic_model is not None:
                 trans = self.agrivoltaic_model.calculate_spectral_transmission()
-                pce_samples.append(
-                    self.agrivoltaic_model.calculate_opv_efficiency(trans)
-                )
-                etr_samples.append(
-                    self.agrivoltaic_model.calculate_psu_efficiency(trans)
-                )
+                pce_samples.append(self.agrivoltaic_model.calculate_opv_efficiency(trans))
+                etr_samples.append(self.agrivoltaic_model.calculate_psu_efficiency(trans))
 
         pce_samples = np.array(pce_samples)
         etr_samples = np.array(etr_samples)
@@ -242,16 +220,12 @@ class SensitivityAnalyzer:
             },
         }
 
-    def comprehensive_sensitivity_report(
-        self, n_points: int = 10
-    ) -> Dict[str, Dict[str, Any]]:
+    def comprehensive_sensitivity_report(self, n_points: int = 10) -> Dict[str, Dict[str, Any]]:
         """
         Generate comprehensive sensitivity report for all parameters.
         """
         report = {}
-        base_params = {
-            key: (val[0] + val[1]) / 2 for key, val in self.param_ranges.items()
-        }
+        base_params = {key: (val[0] + val[1]) / 2 for key, val in self.param_ranges.items()}
 
         param_names = list(self.param_ranges.keys())
 
@@ -374,7 +348,9 @@ class SensitivityAnalyzer:
             ax2.tick_params(axis="y", labelcolor="r")
             ax.grid(alpha=0.3)
 
-            sens_text = f"PCE Sens: {data['pce_sensitivity']:.3f}\nETR Sens: {data['etr_sensitivity']:.3f}"
+            sens_text = (
+                f"PCE Sens: {data['pce_sensitivity']:.3f}\nETR Sens: {data['etr_sensitivity']:.3f}"
+            )
             ax.text(
                 0.02,
                 0.98,

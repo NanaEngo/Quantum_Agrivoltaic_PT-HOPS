@@ -1,16 +1,17 @@
 import logging
 from typing import Any, Dict
+
 from src.core.constants import (
-    DEFAULT_DISCOUNT_RATE,
-    DEFAULT_SYSTEM_LIFETIME,
-    DEFAULT_ELECTRICITY_PRICE,
-    DEFAULT_CROP_PRICE_KG,
     DEFAULT_BASE_CROP_YIELD,
     DEFAULT_CAPEX_KW,
+    DEFAULT_CROP_PRICE_KG,
+    DEFAULT_DISCOUNT_RATE,
+    DEFAULT_ELECTRICITY_PRICE,
     DEFAULT_OPEX_KW_YR,
-    SOLAR_IRRADIANCE_ANNUAL,
-    SHADING_BOOST_FACTOR,
+    DEFAULT_SYSTEM_LIFETIME,
     HECTARE_TO_M2,
+    SHADING_BOOST_FACTOR,
+    SOLAR_IRRADIANCE_ANNUAL,
 )
 
 logger = logging.getLogger(__name__)
@@ -86,10 +87,7 @@ class TechnoEconomicModel:
 
         # Apply a mild shading benefit to water retention
         crop_yield_kg_yr = (
-            base_crop_yield_kg_per_ha
-            * area_hectares
-            * effective_light_ratio
-            * SHADING_BOOST_FACTOR
+            base_crop_yield_kg_per_ha * area_hectares * effective_light_ratio * SHADING_BOOST_FACTOR
         )
         agricultural_revenue_yr = crop_yield_kg_yr * self.crop_price_per_kg
 
@@ -104,10 +102,7 @@ class TechnoEconomicModel:
         # Calculate NPV
         cash_flows = [net_cash_flow_yr] * int(self.system_lifetime)
         npv = -capex + sum(
-            [
-                cf / (1 + self.discount_rate) ** t
-                for t, cf in enumerate(cash_flows, start=1)
-            ]
+            [cf / (1 + self.discount_rate) ** t for t, cf in enumerate(cash_flows, start=1)]
         )
 
         # Calculate ROI
@@ -115,9 +110,7 @@ class TechnoEconomicModel:
         roi = (total_net_profit / capex) * 100.0 if capex > 0 else 0
 
         # Payback period
-        payback_period = (
-            capex / net_cash_flow_yr if net_cash_flow_yr > 0 else float("inf")
-        )
+        payback_period = capex / net_cash_flow_yr if net_cash_flow_yr > 0 else float("inf")
 
         # Levelized Cost of Energy over purely PV side
         total_discounted_cost = capex + sum(
@@ -132,11 +125,7 @@ class TechnoEconomicModel:
                 for t in range(1, int(self.system_lifetime) + 1)
             ]
         )
-        lcoe = (
-            total_discounted_cost / total_discounted_energy
-            if total_discounted_energy > 0
-            else 0
-        )
+        lcoe = total_discounted_cost / total_discounted_energy if total_discounted_energy > 0 else 0
 
         return {
             "area_hectares": area_hectares,

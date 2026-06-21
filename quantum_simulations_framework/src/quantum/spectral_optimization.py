@@ -15,24 +15,25 @@ import numpy as np
 import pandas as pd
 from scipy.integrate import trapezoid
 from scipy.optimize import differential_evolution
+
 from src.core.constants import (
-    SOLAR_LAMBDA_MIN,
-    SOLAR_LAMBDA_MAX,
-    OPV_ACTIVE_REGION_MIN,
-    OPV_ACTIVE_REGION_MAX,
     DEFAULT_DPI,
-    PREVIEW_DPI,
+    DEFAULT_MAXITER,
+    DEFAULT_POPSIZE,
+    FILTER_WIDTH_MAX,
+    FILTER_WIDTH_MIN,
+    OPV_ACTIVE_REGION_MAX,
+    OPV_ACTIVE_REGION_MIN,
     OPV_MAX_EFFICIENCY,
     OPV_UTILIZATION_FACTOR,
+    PREVIEW_DPI,
     PSU_MAX_EFFICIENCY,
-    PSU_UTILIZATION_FACTOR,
     PSU_MIN_EFFICIENCY,
-    FILTER_WIDTH_MIN,
-    FILTER_WIDTH_MAX,
-    SIMPLE_TRANS_PSU_FAVOR,
+    PSU_UTILIZATION_FACTOR,
     SIMPLE_TRANS_OPV_FAVOR,
-    DEFAULT_POPSIZE,
-    DEFAULT_MAXITER,
+    SIMPLE_TRANS_PSU_FAVOR,
+    SOLAR_LAMBDA_MAX,
+    SOLAR_LAMBDA_MIN,
 )
 
 logger = logging.getLogger(__name__)
@@ -81,9 +82,9 @@ class SpectralOptimizer:
         self.w_pce, self.w_etr = weights
 
         # Validate inputs
-        assert (
-            len(self.solar_spec) == len(self.opv_response) == len(self.psu_response)
-        ), "All arrays must have the same length"
+        assert len(self.solar_spec) == len(self.opv_response) == len(self.psu_response), (
+            "All arrays must have the same length"
+        )
 
         logger.info(
             f"SpectralOptimizer initialized with {len(self.lambda_range)} wavelength points"
@@ -229,9 +230,7 @@ class SpectralOptimizer:
             width = max(width, 1.0)  # Minimum width
 
             # Add Gaussian filter contribution
-            gaussian_filter = A * np.exp(
-                -((self.lambda_range - center) ** 2) / (2 * width**2)
-            )
+            gaussian_filter = A * np.exp(-((self.lambda_range - center) ** 2) / (2 * width**2))
             # Multiple filters multiply transmission (more blocking)
             transmission = transmission * (1 - gaussian_filter)
 
@@ -306,16 +305,12 @@ class SpectralOptimizer:
             "nit": result.nit,
         }
 
-        logger.info(
-            f"Optimization completed: PCE={optimal_pce:.4f}, ETR={optimal_etr:.4f}"
-        )
+        logger.info(f"Optimization completed: PCE={optimal_pce:.4f}, ETR={optimal_etr:.4f}")
         logger.info(f"Success: {result.success}, Message: {result.message}")
 
         return results
 
-    def evaluate_single_transmission(
-        self, transmission: np.ndarray
-    ) -> Dict[str, float]:
+    def evaluate_single_transmission(self, transmission: np.ndarray) -> Dict[str, float]:
         """
         Evaluate a given transmission spectrum.
 
@@ -392,9 +387,7 @@ class SpectralOptimizer:
             transmission = np.ones_like(self.lambda_range)
             # Add some filtering in PSU peak regions to improve PSU efficiency
             psu_peak_regions = (self.lambda_range > 600) & (self.lambda_range < 700)
-            transmission[psu_peak_regions] = (
-                SIMPLE_TRANS_PSU_FAVOR  # Block some red light for PSU
-            )
+            transmission[psu_peak_regions] = SIMPLE_TRANS_PSU_FAVOR  # Block some red light for PSU
         else:
             # Favor PSU - block more light from OPV
             transmission = np.zeros_like(self.lambda_range)
@@ -402,9 +395,7 @@ class SpectralOptimizer:
             opv_peak_regions = (self.lambda_range > OPV_ACTIVE_REGION_MIN) & (
                 self.lambda_range < 500
             )
-            transmission[opv_peak_regions] = (
-                SIMPLE_TRANS_OPV_FAVOR  # Allow some blue light for OPV
-            )
+            transmission[opv_peak_regions] = SIMPLE_TRANS_OPV_FAVOR  # Allow some blue light for OPV
 
         return np.clip(transmission, 0.0, 1.0)
 
@@ -518,12 +509,8 @@ class SpectralOptimizer:
             )
 
         # Add target lines
-        ax1.axhline(
-            y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)"
-        )
-        ax1.axhline(
-            y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)"
-        )
+        ax1.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax1.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
 
         # Plot 2: Optimal transmission spectrum
         ax2 = axes[0, 1]

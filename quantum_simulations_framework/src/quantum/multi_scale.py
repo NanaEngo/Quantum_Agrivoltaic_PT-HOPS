@@ -28,9 +28,7 @@ class MultiScaleTransformer:
 
     def __init__(self, coherence_length_nm: float = 20.0):
         self.coherence_length_nm = coherence_length_nm
-        logger.info(
-            f"MultiScaleTransformer initialized with L_coh = {coherence_length_nm} nm"
-        )
+        logger.info(f"MultiScaleTransformer initialized with L_coh = {coherence_length_nm} nm")
 
     def scale_to_organelle(
         self,
@@ -45,9 +43,7 @@ class MultiScaleTransformer:
         scaling_factor = np.exp(-network_size_nm / self.coherence_length_nm)
 
         # Effective efficiency accounting for structural losses in the chloroplast
-        organelle_efficiency = (
-            molecular_efficiency * scaling_factor * (1.0 - structural_complexity)
-        )
+        organelle_efficiency = molecular_efficiency * scaling_factor * (1.0 - structural_complexity)
 
         return {
             "molecular_efficiency": molecular_efficiency,

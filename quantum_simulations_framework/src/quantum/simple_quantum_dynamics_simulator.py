@@ -7,6 +7,7 @@ import logging
 from typing import Any, Dict, Optional
 
 import numpy as np
+
 try:
     from src.core.constants import (
         DEFAULT_MAX_TIME,
@@ -46,13 +47,8 @@ class SimpleQuantumDynamicsSimulator:
 
     def __init__(self, hamiltonian, temperature=DEFAULT_TEMPERATURE):
         self.hamiltonian = np.array(hamiltonian, dtype=complex)
-        if (
-            self.hamiltonian.ndim != 2
-            or self.hamiltonian.shape[0] != self.hamiltonian.shape[1]
-        ):
-            raise ValueError(
-                f"Hamiltonian must be square, got shape {self.hamiltonian.shape}"
-            )
+        if self.hamiltonian.ndim != 2 or self.hamiltonian.shape[0] != self.hamiltonian.shape[1]:
+            raise ValueError(f"Hamiltonian must be square, got shape {self.hamiltonian.shape}")
         self.n_sites = self.hamiltonian.shape[0]
         if self.n_sites == 0:
             raise ValueError("Hamiltonian must have at least 1 site")
@@ -134,9 +130,7 @@ class SimpleQuantumDynamicsSimulator:
             rho_t = np.outer(psi_t, psi_t.conj())
             populations[i, :] = np.real(np.diag(rho_t))
             # Coherence: L1 norm of off-diagonal elements (vectorised)
-            coherences[i] = float(
-                np.sum(np.abs(rho_t)) - np.sum(np.abs(np.diag(rho_t)))
-            )
+            coherences[i] = float(np.sum(np.abs(rho_t)) - np.sum(np.abs(np.diag(rho_t))))
             # QFI for pure state: 4·Var_ψ(H) = 4(⟨H²⟩-⟨H⟩²)
             H_psi = self.h_shifted @ psi_t
             exp_H = np.real(np.vdot(psi_t, H_psi))

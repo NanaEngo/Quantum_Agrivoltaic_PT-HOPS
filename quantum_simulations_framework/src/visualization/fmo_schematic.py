@@ -5,10 +5,11 @@ Generate FMO Complex Schematic for JPCL Figures.
 Draws the 7-site BChl arrangement in the FMO monomer.
 """
 
+import logging
+import os
+
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
-import os
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +37,7 @@ def generate_fmo_schematic(output_path):
 
     # Draw connections (coherent)
     for i, pos1 in enumerate(fmo_positions):
-        for j, pos2 in enumerate(fmo_positions[i + 1 :], i + 1):
+        for _j, pos2 in enumerate(fmo_positions[i + 1 :], i + 1):
             ax.plot(
                 [pos1[0], pos2[0]],
                 [pos1[1], pos2[1]],

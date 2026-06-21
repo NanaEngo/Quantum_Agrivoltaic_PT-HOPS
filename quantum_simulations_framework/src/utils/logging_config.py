@@ -9,6 +9,7 @@ log level, and persistence strategy (file + console).
 
 import logging
 import sys
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Optional
 
@@ -18,66 +19,60 @@ def setup_logging(
     log_file: Optional[str] = None,
     log_to_console: bool = True,
     format_string: Optional[str] = None,
+    file_level: Optional[int] = None,
+    max_bytes: int = 10 * 1024 * 1024,
+    backup_count: int = 5,
 ) -> logging.Logger:
     """
     Initialize the global logging state for the simulation framework.
 
-    This function sets up handlers for both console and file output, defines
-    the formatting template, and sets the base log level. It is typically
-    called once at the entry point of the application (e.g., in main.py).
+    Sets up handlers for both console (INFO) and file (DEBUG) output with
+    rotation, defines the formatting template, and sets the base log level.
 
     Parameters
     ----------
-    level : int, optional
-        The threshold for logging events (e.g., logging.DEBUG, logging.INFO).
-        Default is logging.INFO.
+    level : int
+        Base log level (default: INFO).
     log_file : str, optional
-        Filesystem path to the target log file. If None, only console
-        logging is active.
-    log_to_console : bool, optional
+        Filesystem path to the target log file. If None, file logging disabled.
+    log_to_console : bool
         If True, directs logs to stdout. Default is True.
     format_string : str, optional
-        A custom strftime-style formatting template. If None, a standard
-        package-level format is applied.
+        Custom formatting template.
+    file_level : int, optional
+        Log level for file handler (default: DEBUG for more detail on disk).
+    max_bytes : int
+        Max size per log file before rotation (default: 10 MB).
+    backup_count : int
+        Number of rotated log files to keep (default: 5).
 
     Returns
     -------
     logging.Logger
         The root package-level logger.
-
-    Notes
-    -----
-    This implementation clears any existing handlers on the
-    `quantum_simulations_framework` logger to prevent duplicated messages
-    during repeated configuration calls.
     """
     if format_string is None:
-        format_string = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        format_string = "%(asctime)s [%(levelname)s] %(name)s — %(message)s"
 
-    # Create formatter
-    formatter = logging.Formatter(format_string)
+    formatter = logging.Formatter(format_string, datefmt="%H:%M:%S")
 
-    # Get the package logger
     logger = logging.getLogger("quantum_simulations_framework")
     logger.setLevel(level)
-
-    # Remove existing handlers to avoid duplicates
     logger.handlers = []
 
-    # Console handler
     if log_to_console:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(level)
         console_handler.setFormatter(formatter)
+        console_handler.addFilter(lambda r: r.levelno >= level)
         logger.addHandler(console_handler)
 
-    # File handler
     if log_file is not None:
         log_path = Path(log_file)
         log_path.parent.mkdir(parents=True, exist_ok=True)
 
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setLevel(level)
+        file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
+        file_handler.setLevel(file_level or logging.DEBUG)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

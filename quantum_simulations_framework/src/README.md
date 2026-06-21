@@ -12,7 +12,7 @@ ensemble averaging.
 ### 1. `core/` — Numerical Foundations
 - **`hops_simulator.py`**: The primary orchestrator for PT-HOPS/SBD trajectory generation.
 - **`hamiltonian_factory.py`**: High-precision exciton-vibronic Hamiltonian construction for photosynthetic complexes.
-- **`gpu_dynamics.py`**: JAX/CUDA-accelerated kernels for massive ensemble propagation.
+- **`memory_manager.py`**: `MemoryAwareJobScheduler` — OOM prevention with RLIMIT_AS per worker.
 - **`constants.py`**: Centralized physical constants ($k_B$, $\hbar$) and unit conversions.
 
 ### 2. `quantum/` — Advanced Dynamics
@@ -32,6 +32,13 @@ ensemble averaging.
 ### 5. `io/` & `visualization/`
 - **`csv_storage.py`**: Hardened serialization with SHA-256 metadata integrity and Git-provenance tracking.
 - **`figure_generator.py`**: Publication-grade plotting engine (600 DPI) using the JPCL aesthetic theme.
+
+---
+
+### 6. `utils/` — Infrastructure
+- **`parallel_utils.py`**: Memory-aware job count estimation (`estimate_memory_per_traj`, `get_safe_n_jobs`).
+- **`gpu_detection.py`**: Unified GPU hardware detection (JAX, CuPy, PyTorch, nvidia-smi).
+- **`logging_config.py`**: Structured logging with rotation and test-failure capture.
 
 ---
 

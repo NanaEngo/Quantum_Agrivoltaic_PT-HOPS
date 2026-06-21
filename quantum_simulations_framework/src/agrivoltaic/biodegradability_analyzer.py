@@ -11,14 +11,15 @@ from typing import Dict, Optional, Tuple
 import numpy as np
 from numpy.typing import NDArray
 from scipy.linalg import eig
+
 from src.core.constants import (
-    BIO_WEIGHT_NUC,
-    BIO_WEIGHT_ELEC,
-    BIO_WEIGHT_DUAL,
-    BIO_WEIGHT_SOFTNESS,
-    BIO_WEIGHT_MAX_FUKUI,
-    BIO_SOFTNESS_SCALE,
     BIO_MAX_FUKUI_SCALE,
+    BIO_SOFTNESS_SCALE,
+    BIO_WEIGHT_DUAL,
+    BIO_WEIGHT_ELEC,
+    BIO_WEIGHT_MAX_FUKUI,
+    BIO_WEIGHT_NUC,
+    BIO_WEIGHT_SOFTNESS,
 )
 
 logger = logging.getLogger(__name__)
@@ -254,9 +255,7 @@ class BiodegradabilityAnalyzer:
         if np.isfinite(e_homo) and np.isfinite(e_lumo):
             chemical_potential = -(e_homo + e_lumo) / 2
             chemical_hardness = (e_lumo - e_homo) / 2
-            chemical_softness = (
-                1.0 / (2 * chemical_hardness) if chemical_hardness != 0 else 0
-            )
+            chemical_softness = 1.0 / (2 * chemical_hardness) if chemical_hardness != 0 else 0
             electronegativity = -chemical_potential
         else:
             chemical_potential = 0.0
@@ -279,9 +278,7 @@ class BiodegradabilityAnalyzer:
 
         return indices
 
-    def calculate_biodegradability_score(
-        self, weights: Optional[Dict[str, float]] = None
-    ) -> float:
+    def calculate_biodegradability_score(self, weights: Optional[Dict[str, float]] = None) -> float:
         """
         Calculate a composite biodegradability score based on quantum descriptors.
 
@@ -331,23 +328,16 @@ class BiodegradabilityAnalyzer:
         fukui_electrophilic = np.mean(np.abs(f_plus)) if len(f_plus) > 0 else 0
         dual_avg = np.mean(np.abs(dual_desc)) if len(dual_desc) > 0 else 0
         global_softness = (
-            global_indices["chemical_softness"]
-            if global_indices["chemical_hardness"] != 0
-            else 0
+            global_indices["chemical_softness"] if global_indices["chemical_hardness"] != 0 else 0
         )
-        max_fukui = (
-            max(np.max(np.abs(f_plus)), np.max(np.abs(f_minus)))
-            if len(f_plus) > 0
-            else 0
-        )
+        max_fukui = max(np.max(np.abs(f_plus)), np.max(np.abs(f_minus))) if len(f_plus) > 0 else 0
 
         # Calculate weighted score
         score = (
             weights["fukui_nucleophilic"] * fukui_nucleophilic
             + weights["fukui_electrophilic"] * fukui_electrophilic
             + weights["dual_descriptor"] * dual_avg
-            + weights["global_softness"]
-            * min(1.0, global_softness * BIO_SOFTNESS_SCALE)
+            + weights["global_softness"] * min(1.0, global_softness * BIO_SOFTNESS_SCALE)
             + weights["max_fukui"] * min(1.0, max_fukui * BIO_MAX_FUKUI_SCALE)
         )
 

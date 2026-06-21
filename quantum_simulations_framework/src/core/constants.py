@@ -30,8 +30,8 @@ LIGHT_SPEED_CMS: Final[float] = 2.99792458e10  # cm/s
 # =============================================================================
 DEFAULT_SBD_BUNDLES: Final[int] = (
     3  # SBD bundles per site — confirmed optimal by 2026-06 campaign
-       # C(24,7)=346K states at L=8. SBD=6 would be ×3 memory with marginal
-       # spectral improvement. See SYNTHESE_SIMULATIONS_JUIN2026 §3.4, §8.
+    # C(24,7)=346K states at L=8. SBD=6 would be ×3 memory with marginal
+    # spectral improvement. See SYNTHESE_SIMULATIONS_JUIN2026 §3.4, §8.
 )
 
 # Dephasing rate (used by sensitivity_analyzer)
@@ -44,9 +44,7 @@ DEFAULT_N_TRAJ: Final[int] = 100  # ensemble trajectories (parameters.yaml: n_tr
 MARKOVIAN_DRUDE_CUTOFF: Final[float] = 500.0  # cm^-1 (gamma >> J → Markovian)
 
 # FFT noise buffer for MesoHOPS trajectory stability
-FFT_NOISE_BUFFER_FS: Final[float] = (
-    50.0  # fs buffer added to TLEN for FFT_FILTER stability
-)
+FFT_NOISE_BUFFER_FS: Final[float] = 50.0  # fs buffer added to TLEN for FFT_FILTER stability
 
 # Static disorder standard deviation (parameters.yaml: disorder_sigma_cm)
 DEFAULT_DISORDER_SIGMA: Final[float] = 50.0  # cm^-1 (Gaussian diagonal disorder)
@@ -55,8 +53,8 @@ DEFAULT_DISORDER_SIGMA: Final[float] = 50.0  # cm^-1 (Gaussian diagonal disorder
 DEFAULT_TIME_POINTS: Final[int] = 501  # 0–1000 fs at step=2 fs → linspace(0,1000,501)
 DEFAULT_TIME_STEP: Final[float] = (
     0.2  # femtoseconds — recommended dt for stiff-ODE stability
-         # (see SYNTHESE_SIMULATIONS_JUIN2026 §2 — 'dt=0.5 fs est grand pour
-         #  l\'ODE stiff ; dt=0.2 fs recommande pour les simulations')
+    # (see SYNTHESE_SIMULATIONS_JUIN2026 §2 — 'dt=0.5 fs est grand pour
+    #  l\'ODE stiff ; dt=0.2 fs recommande pour les simulations')
 )
 DEFAULT_MAX_TIME: Final[float] = 1000.0  # femtoseconds
 DEFAULT_TIME_LONG: Final[float] = 5000.0  # femtoseconds for thermalization checks
@@ -71,9 +69,7 @@ FREQ_TO_PHASE: Final[float] = 0.188365156
 # =============================================================================
 
 DEFAULT_MAX_HIERARCHY: Final[int] = 8  # Capped at L=8 to prevent OOM on 128GB nodes
-DEFAULT_N_MATSUBARA: Final[int] = (
-    2  # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹)
-)
+DEFAULT_N_MATSUBARA: Final[int] = 2  # K=2: converged at T=295 K (ν₁≈1300 cm⁻¹ >> γ_D=50 cm⁻¹)
 
 # Ensemble parameters
 DEFAULT_N_TRAJ_SWEEP: Final[int] = 10
@@ -101,9 +97,7 @@ MESOHOPS_INCHWORM_CAP: Final[int] = 5
 
 # Standard FMO site energies (cm^-1) - Adolphs & Renger 2006
 # Reference: DOI: 10.1529/biophysj.105.079483
-FMO_SITE_ENERGIES_7: Final[np.ndarray] = np.array(
-    [12410, 12530, 12210, 12320, 12480, 12630, 12440]
-)
+FMO_SITE_ENERGIES_7: Final[np.ndarray] = np.array([12410, 12530, 12210, 12320, 12480, 12630, 12440])
 
 FMO_SITE_ENERGIES_8: Final[np.ndarray] = np.array(
     [12410, 12530, 12210, 12320, 12480, 12630, 12440, 11700]  # Last is RC
@@ -209,9 +203,7 @@ SOLAR_TOTAL_IRRADIANCE: Final[float] = 100.0  # mW/cm^2 (AM1.5G)
 # Environmental Reference Values
 ENVIRONMENTAL_T_REF: Final[float] = 298.15  # Kelvin (25°C STC)
 ENVIRONMENTAL_HUMIDITY_OPT: Final[float] = 0.45  # Optimal relative humidity
-ENVIRONMENTAL_DUST_SAT_FACTOR: Final[float] = (
-    0.3  # Max efficiency loss from dust saturation
-)
+ENVIRONMENTAL_DUST_SAT_FACTOR: Final[float] = 0.3  # Max efficiency loss from dust saturation
 
 # =============================================================================
 # LASER PULSE SPECIFICATIONS (Reviewer 3 Compliance)
@@ -234,12 +226,9 @@ DEFAULT_WORKERS: Final[int] = -1  # Use all available cores
 MEMORY_FRACTION_LIMIT: Final[float] = 0.66  # Use at most 2/3 of available RAM
 BASE_TRAJ_MEMORY_GB: Final[float] = 6.0  # Reference memory for L=8, K=2 production
 MIN_TRAJ_MEMORY_GB: Final[float] = 0.5  # Minimum floor for memory estimation
-BASE_PYTHON_OVERHEAD_GB: Final[float] = (
-    2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
-)
+BASE_PYTHON_OVERHEAD_GB: Final[float] = 2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
 MAX_N_JOBS: Final[int] = (
-    16  # Production: L=8 SBD(3) — 16 workers for ~70% CPU utilization
-       # Use 24 for parameter sweeps (Phase 2, see SYNTHESE_SIMULATIONS_JUIN2026 §8)
+    24  # Production + sweeps: L=8 SBD(3) — 24 workers optimal per §8 of SYNTHESE_SIMULATIONS_JUIN2026
 )
 
 
@@ -318,9 +307,7 @@ GAUSSIAN_TBW_FS: Final[float] = 14700.0  # Gaussian Time-Bandwidth constant (cm^
 # Thresholds for validation
 MAE_THRESHOLD: Final[float] = 1e-2
 MAE_THRESHOLD_LOOSE: Final[float] = 0.05
-TRACE_THRESHOLD: Final[float] = (
-    0.5  # Threshold for single-trajectory trace preservation
-)
+TRACE_THRESHOLD: Final[float] = 0.5  # Threshold for single-trajectory trace preservation
 POPS_REAL_THRESHOLD: Final[float] = 1e-12
 
 # =============================================================================
@@ -356,9 +343,7 @@ HUMIDITY_COEFF: Final[float] = 0.001
 WIND_SPEED_FACTOR: Final[float] = 0.01
 
 # Physics conversion
-TIME_PHASE_CONVERSION: Final[float] = (
-    0.0333564  # ps/cm (1/c) used in fallback simulator
-)
+TIME_PHASE_CONVERSION: Final[float] = 0.0333564  # ps/cm (1/c) used in fallback simulator
 
 # =============================================================================
 # TECHNO-ECONOMIC & LCA PARAMETERS

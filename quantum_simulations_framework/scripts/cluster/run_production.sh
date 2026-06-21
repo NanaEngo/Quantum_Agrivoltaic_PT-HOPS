@@ -11,9 +11,9 @@ LOG_FILE="$HOME/production_run.log"
 PYTHON="$HOME/miniforge3/envs/MesoHOP-sim/bin/python"
 PARAMS="$BASE_DIR/parameters.yaml"
 
-# Disable CUDA to bypass NVML SIGSEGV
-export NUMBA_DISABLE_CUDA=1
-export CUDA_VISIBLE_DEVICES=""
+# NVML driver mismatch has been fixed; GPU auto-detection is now safe.
+# Previously set NUMBA_DISABLE_CUDA=1 + CUDA_VISIBLE_DEVICES="" to bypass SIGSEGV.
+# Numba/JAX will auto-detect CUDA and fall back to CPU if unavailable.
 
 # Default flags
 FLAGS="--skip-audit"

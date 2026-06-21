@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+
 from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
 
 logger = logging.getLogger(__name__)
@@ -52,9 +53,7 @@ class FigureGenerator:
             logger.warning("JPCL theme not found, using defaults.")
             self.colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
 
-        logger.info(
-            f"Figure generator initialized at {figures_dir} with 600 DPI standards."
-        )
+        logger.info(f"Figure generator initialized at {figures_dir} with 600 DPI standards.")
 
     def plot_quantum_dynamics(
         self,
@@ -104,9 +103,11 @@ class FigureGenerator:
             k: (
                 v[:n_t]
                 if isinstance(v, np.ndarray) and len(v) >= n_t
-                else np.pad(v, (0, max(0, n_t - len(v))), constant_values=np.nan)
-                if isinstance(v, np.ndarray)
-                else v
+                else (
+                    np.pad(v, (0, max(0, n_t - len(v))), constant_values=np.nan)
+                    if isinstance(v, np.ndarray)
+                    else v
+                )
             )
             for k, v in quantum_metrics.items()
         }
@@ -122,9 +123,7 @@ class FigureGenerator:
         n_rows = 1 + (n_metrics + 1) // 2
 
         fig, axes = plt.subplots(n_rows, n_cols, figsize=(16, 5 * n_rows))
-        fig.suptitle(
-            "Quantum Dynamics Simulation Results", fontsize=16, fontweight="bold"
-        )
+        fig.suptitle("Quantum Dynamics Simulation Results", fontsize=16, fontweight="bold")
 
         # Ensure axes is always a 2D array for consistent indexing
         if n_rows == 1:
@@ -145,9 +144,7 @@ class FigureGenerator:
                 )
             ax0.set_xlabel("Time [fs]", fontsize=12)
             ax0.set_ylabel("Population", fontsize=12)
-            ax0.set_title(
-                "(a) Population Dynamics", loc="left", fontsize=14, fontweight="bold"
-            )
+            ax0.set_title("(a) Population Dynamics", loc="left", fontsize=14, fontweight="bold")
             ax0.grid(True, alpha=0.3)
         else:
             for i in range(min(n_sites, len(self.colors))):
@@ -183,10 +180,7 @@ class FigureGenerator:
         ax1 = axes[0, 1]
         if coherences is not None:
             ax1.plot(time_points, coherences, "r-", linewidth=2.0, label="Filtered")
-            if (
-                "baseline_coherences" in kwargs
-                and kwargs["baseline_coherences"] is not None
-            ):
+            if "baseline_coherences" in kwargs and kwargs["baseline_coherences"] is not None:
                 ax1.plot(
                     time_points,
                     kwargs["baseline_coherences"],
@@ -207,9 +201,7 @@ class FigureGenerator:
             )
         ax1.set_xlabel("Time [fs]", fontsize=12)
         ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=12)
-        ax1.set_title(
-            "(b) Coherence Evolution", loc="left", fontsize=14, fontweight="bold"
-        )
+        ax1.set_title("(b) Coherence Evolution", loc="left", fontsize=14, fontweight="bold")
         ax1.grid(True, alpha=0.3)
 
         # Plot quantum metrics
@@ -347,9 +339,7 @@ class FigureGenerator:
                 peak_val = np.interp(w_v, omega_cm, J_total / J_max)
                 peak_vals.append(peak_val)
                 # Vertical guide line for each mode
-                ax.axvline(
-                    x=w_v, color=self.colors[2], linestyle=":", alpha=0.5, linewidth=0.8
-                )
+                ax.axvline(x=w_v, color=self.colors[2], linestyle=":", alpha=0.5, linewidth=0.8)
                 if peak_val > 0.05:
                     ax.annotate(
                         f"{int(w_v)}",
@@ -502,9 +492,7 @@ class FigureGenerator:
             transmission_func = optimization_results["transmission_func"]
             transmission_values = transmission_func(wavelengths)
 
-            ax2.plot(
-                wavelengths, irradiances, "orange", label="Solar Spectrum", linewidth=2
-            )
+            ax2.plot(wavelengths, irradiances, "orange", label="Solar Spectrum", linewidth=2)
             ax2_twin = ax2.twinx()
             ax2_twin.plot(
                 wavelengths,
@@ -582,12 +570,8 @@ class FigureGenerator:
             )
 
         # Add target lines for realistic values
-        ax4.axhline(
-            y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)"
-        )
-        ax4.axhline(
-            y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)"
-        )
+        ax4.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax4.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
         ax4.legend()
 
         plt.tight_layout()
@@ -660,12 +644,8 @@ class FigureGenerator:
             )
 
         # Add target lines for realistic values
-        ax1.axhline(
-            y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)"
-        )
-        ax1.axhline(
-            y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)"
-        )
+        ax1.axhline(y=0.20, color="red", linestyle="--", alpha=0.7, label="OPV Target (20%)")
+        ax1.axhline(y=0.90, color="red", linestyle="--", alpha=0.7, label="PSU Target (90%)")
         ax1.legend()
 
         # Plot 2: Spectral data if available
@@ -673,9 +653,7 @@ class FigureGenerator:
         if "wavelength" in spectral_data and "transmission" in spectral_data:
             wavelengths = spectral_data["wavelength"]
             transmission = spectral_data["transmission"]
-            ax2.plot(
-                wavelengths, transmission, "purple", linewidth=2, label="Transmission"
-            )
+            ax2.plot(wavelengths, transmission, "purple", linewidth=2, label="Transmission")
             ax2.fill_between(
                 wavelengths,
                 transmission,
@@ -760,9 +738,7 @@ class FigureGenerator:
         plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
         plt.close()
 
-        logger.info(
-            f"Agrivoltaic performance figures saved to {pdf_path} and {png_path}"
-        )
+        logger.info(f"Agrivoltaic performance figures saved to {pdf_path} and {png_path}")
         return pdf_path
 
     def plot_environmental_robustness(
@@ -826,14 +802,10 @@ class FigureGenerator:
             alpha=0.2,
             color=self.colors[0],
         )
-        ax0.axvspan(
-            285, 300, alpha=0.1, color="green", label="Optimal Range (285-300 K)"
-        )
+        ax0.axvspan(285, 300, alpha=0.1, color="green", label="Optimal Range (285-300 K)")
         ax0.set_xlabel("Temperature [K]", fontsize=12)
         ax0.set_ylabel(r"Relative Enhancement $\eta$", fontsize=12)
-        ax0.set_title(
-            "(a) Temperature Dependence", loc="left", fontsize=13, fontweight="bold"
-        )
+        ax0.set_title("(a) Temperature Dependence", loc="left", fontsize=13, fontweight="bold")
         ax0.legend(loc="lower left", frameon=False, fontsize=10)
         ax0.grid(True, alpha=0.3)
 
@@ -885,9 +857,7 @@ class FigureGenerator:
         plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
         plt.close()
 
-        logger.info(
-            f"Environmental robustness figures saved to {pdf_path} and {png_path}"
-        )
+        logger.info(f"Environmental robustness figures saved to {pdf_path} and {png_path}")
         return pdf_path
 
     def plot_thermal_stability(
@@ -935,9 +905,7 @@ class FigureGenerator:
         ax.tick_params(axis="y", labelcolor="b")
 
         # Plot ETR vs temperature
-        ax_twin.plot(
-            temperatures, etr_values, "r-", linewidth=2, label="ETR", marker="s"
-        )
+        ax_twin.plot(temperatures, etr_values, "r-", linewidth=2, label="ETR", marker="s")
         ax_twin.set_ylabel("ETR", color="r")
         ax_twin.tick_params(axis="y", labelcolor="r")
 

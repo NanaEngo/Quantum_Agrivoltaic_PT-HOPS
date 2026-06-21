@@ -11,8 +11,15 @@ Defaults:
     --n-traj 1 for convergence sweeps, 20 for robustness sweeps
 """
 
-import os, sys, json, yaml, copy, subprocess, time, glob, argparse, shutil
+import argparse
+import copy
+import glob
+import os
+import subprocess
+import sys
 from datetime import datetime
+
+import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(BASE_DIR, "config", "server_production.yaml")
@@ -21,6 +28,7 @@ MAIN_PY = os.path.join(BASE_DIR, "reproducibility", "main.py")
 
 with open(CONFIG_PATH) as f:
     BASE_CFG = yaml.safe_load(f)
+
 
 def run_sweep(label, cfg_mods, n_traj=1, parallel=True, dry_run=False):
     """Run a sweep with modified config."""
@@ -54,8 +62,9 @@ def run_sweep(label, cfg_mods, n_traj=1, parallel=True, dry_run=False):
     sys.stdout.flush()
 
     with open(logfile, "w") as lf:
-        proc = subprocess.run(cmd, cwd=BASE_DIR, stdout=lf, stderr=subprocess.STDOUT,
-                              timeout=86400)  # 24h timeout per sweep
+        proc = subprocess.run(
+            cmd, cwd=BASE_DIR, stdout=lf, stderr=subprocess.STDOUT, timeout=86400
+        )  # 24h timeout per sweep
 
     if proc.returncode != 0:
         print(f"  ⚠ {label} returned code {proc.returncode}")
@@ -70,6 +79,7 @@ def run_sweep(label, cfg_mods, n_traj=1, parallel=True, dry_run=False):
         print(f"  → Tagged: {tagged}")
 
     os.remove(tmp_yaml)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -101,7 +111,9 @@ def main():
         # 4. Bath sensitivity: λ_D ± 20%
         lam_base = BASE_CFG["bath"]["reorganization_energy"]
         for lam in [lam_base * 0.8, lam_base * 1.2]:
-            sweeps.append((f"lambda{lam:.0f}", {"bath.reorganization_energy": lam}, args.n_traj_robust))
+            sweeps.append(
+                (f"lambda{lam:.0f}", {"bath.reorganization_energy": lam}, args.n_traj_robust)
+            )
 
         # 5. Bath sensitivity: γ_D ± 20%
         gam_base = BASE_CFG["bath"]["drude_cutoff"]
@@ -119,7 +131,9 @@ def main():
             "filt750_800": ([750.0, 800.0],),
         }
         for fname, (centers,) in filters.items():
-            sweeps.append((fname, {"spectral_filter.band_centers_nm": list(centers)}, args.n_traj_robust))
+            sweeps.append(
+                (fname, {"spectral_filter.band_centers_nm": list(centers)}, args.n_traj_robust)
+            )
 
         # 8. Chirp test (emulated by varying filter bandwidth)
         for bw in [50.0, 200.0]:
@@ -127,19 +141,25 @@ def main():
 
         # 9. Single-band filters (negative controls)
         for nm in [700, 850]:
-            sweeps.append((f"single{nm}", {
-                "spectral_filter.band_centers_nm": [float(nm)],
-                "spectral_filter.bandwidth_cm": 100.0
-            }, args.n_traj_robust))
+            sweeps.append(
+                (
+                    f"single{nm}",
+                    {
+                        "spectral_filter.band_centers_nm": [float(nm)],
+                        "spectral_filter.bandwidth_cm": 100.0,
+                    },
+                    args.n_traj_robust,
+                )
+            )
 
     total_trajs = sum(n for _, _, n in sweeps)
-    print(f"=== Comprehensive Sweep Plan ===")
+    print("=== Comprehensive Sweep Plan ===")
     print(f"  Total sweeps: {len(sweeps)}")
     print(f"  Total trajectories: {total_trajs} (filtered+broadband combined)")
     print()
 
     for i, (label, mods, n) in enumerate(sweeps):
-        print(f"  [{i+1}/{len(sweeps)}] {label}: n_traj={n}")
+        print(f"  [{i + 1}/{len(sweeps)}] {label}: n_traj={n}")
         for k, v in mods.items():
             print(f"      {k} = {v}")
 
@@ -150,10 +170,11 @@ def main():
     print("\n=== Starting sweeps ===")
     for i, (label, mods, n) in enumerate(sweeps):
         run_sweep(label, mods, n_traj=n, parallel=True)
-        print(f"  [{i+1}/{len(sweeps)}] Done — {label}")
+        print(f"  [{i + 1}/{len(sweeps)}] Done — {label}")
         sys.stdout.flush()
 
     print("\n=== All sweeps completed ===")
+
 
 if __name__ == "__main__":
     main()

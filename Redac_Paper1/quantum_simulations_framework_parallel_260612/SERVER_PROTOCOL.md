@@ -82,20 +82,15 @@ nohup ~/miniforge3/envs/MesoHOP-sim/bin/python \
 |-----------|-----------|-------|
 | CPU | 48 cœurs | AMD64 |
 | RAM | 125 GB (119 GB dispo) | |
-| GPU | 1× NVIDIA | **Driver mismatch** (NVML v580.159 vs module) |
+| GPU | 1× NVIDIA RTX A4000 | **Driver 580.159.03 — OK** (NVML réconcilié après reboot) |
 | Stockage | ~200 GB dispo | |
 
-### GPU — Fix du driver
+### GPU — Driver (résolu)
+Le décalage NVML v580.159 vs module noyau a été corrigé par :
 ```bash
-# Vérifier la version NVIDIA installée
-cat /proc/driver/nvidia/version
-dpkg -l | grep nvidia-driver
-
-# Réinstaller (choisir la version appropriée)
 sudo apt-get install --reinstall nvidia-driver-580
-# ou
-sudo apt-get install --reinstall nvidia-driver-585
 sudo reboot
+# nvidia-smi fonctionne maintenant sans erreur.
 ```
 
 ---

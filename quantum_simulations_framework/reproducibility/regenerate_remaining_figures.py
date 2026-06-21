@@ -17,14 +17,15 @@ All data loaded from verified L=8 production CSVs (hash 790eaa0832f2)
 and L=7 temperature/bath/filter sweep CSVs.
 """
 
+import argparse
+import glob
 import os
 import sys
-import glob
-import argparse
 
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import norm as _norm
@@ -37,8 +38,9 @@ _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
 _RESULTS_DIR = os.path.join(_SCRIPT_DIR, "results")
 # Output directory — configurable via QSF_OUTPUT_DIR env var (for server deployment)
 _DEFAULT_FIGURES = os.path.abspath(
-    os.path.join(_FRAMEWORK_DIR, "..",
-                 "Redac_Paper1", "JPCL_Submission_Package_2026-06-20", "Figures")
+    os.path.join(
+        _FRAMEWORK_DIR, "..", "Redac_Paper1", "JPCL_Submission_Package_2026-06-20", "Figures"
+    )
 )
 _FIGURES_DIR = os.environ.get("QSF_OUTPUT_DIR", _DEFAULT_FIGURES)
 os.makedirs(_FIGURES_DIR, exist_ok=True)
@@ -50,21 +52,23 @@ if _FRAMEWORK_DIR not in sys.path:
 # ──────────────────────────────────────────────────────────────────────
 # Publication theme
 # ──────────────────────────────────────────────────────────────────────
-plt.rcParams.update({
-    "font.size": 10,
-    "font.family": "sans-serif",
-    "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
-    "axes.labelsize": 11,
-    "axes.titlesize": 11,
-    "xtick.labelsize": 9,
-    "ytick.labelsize": 9,
-    "legend.fontsize": 8,
-    "figure.dpi": 600,
-    "savefig.dpi": 600,
-    "savefig.bbox": "tight",
-    "axes.linewidth": 0.8,
-    "lines.linewidth": 1.2,
-})
+plt.rcParams.update(
+    {
+        "font.size": 10,
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "axes.labelsize": 11,
+        "axes.titlesize": 11,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 8,
+        "figure.dpi": 600,
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+        "axes.linewidth": 0.8,
+        "lines.linewidth": 1.2,
+    }
+)
 
 COLORS = ["#2166AC", "#E69F00", "#009E73", "#D55E00", "#7B3294", "#56B4E9"]
 
@@ -96,6 +100,7 @@ def _save_fig(fig, name):
 # FIGURE 2: ETR_Under_Environmental_Effects
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_etr_figure():
     """
     Figure 2: Environmental robustness.
@@ -110,8 +115,8 @@ def generate_etr_figure():
     eta_temp = np.array([0.543, 0.387, 0.386, 0.381, 0.374, 0.391], dtype=float)
     eta_temp_err = np.full(6, 0.04, dtype=float)
 
-    print(f"  Temperature sweep η (L=7, N=15):")
-    for T, eta, err in zip(temperatures, eta_temp, eta_temp_err):
+    print("  Temperature sweep η (L=7, N=15):")
+    for T, eta, err in zip(temperatures, eta_temp, eta_temp_err, strict=False):
         print(f"    T={T:.0f}K: η = {eta:.3f} ± {err:.3f}")
 
     # ── Panel (b): Disorder histogram (L=8 production, N=100) ─────────
@@ -128,29 +133,37 @@ def generate_etr_figure():
 
     # ── Create 2-panel figure ─────────────────────────────────────────
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
-    fig.suptitle("Environmental Robustness of Spectral Bath Engineering",
-                 fontsize=14, fontweight="bold")
+    fig.suptitle(
+        "Environmental Robustness of Spectral Bath Engineering", fontsize=14, fontweight="bold"
+    )
 
     # Panel (a): Temperature dependence
     ax0 = axes[0]
-    ax0.errorbar(temperatures, eta_temp, yerr=eta_temp_err,
-                 fmt="o-", color=COLORS[0], capsize=4, capthick=1.5,
-                 elinewidth=1.5, markersize=6, linewidth=2.0)
-    ax0.fill_between(temperatures, eta_temp - eta_temp_err,
-                     eta_temp + eta_temp_err, alpha=0.2, color=COLORS[0])
-    ax0.axvspan(285, 300, alpha=0.1, color="green",
-                label="Optimal Range (285-300 K)")
+    ax0.errorbar(
+        temperatures,
+        eta_temp,
+        yerr=eta_temp_err,
+        fmt="o-",
+        color=COLORS[0],
+        capsize=4,
+        capthick=1.5,
+        elinewidth=1.5,
+        markersize=6,
+        linewidth=2.0,
+    )
+    ax0.fill_between(
+        temperatures, eta_temp - eta_temp_err, eta_temp + eta_temp_err, alpha=0.2, color=COLORS[0]
+    )
+    ax0.axvspan(285, 300, alpha=0.1, color="green", label="Optimal Range (285-300 K)")
     ax0.set_xlabel("Temperature [K]", fontsize=12)
     ax0.set_ylabel(r"Relative Enhancement $\eta$", fontsize=12)
-    ax0.set_title("(a) Temperature Dependence", loc="left",
-                  fontsize=13, fontweight="bold")
+    ax0.set_title("(a) Temperature Dependence", loc="left", fontsize=13, fontweight="bold")
     ax0.legend(loc="lower left", frameon=False, fontsize=10)
     ax0.grid(True, alpha=0.3)
 
     # Panel (b): Disorder histogram
     ax1 = axes[1]
-    ax1.hist(disorder_samples, bins=15, color=COLORS[1],
-             edgecolor="black", alpha=0.7, density=True)
+    ax1.hist(disorder_samples, bins=15, color=COLORS[1], edgecolor="black", alpha=0.7, density=True)
 
     # Gaussian fit
     xmin, xmax = ax1.get_xlim()
@@ -158,12 +171,17 @@ def generate_etr_figure():
     p = _norm.pdf(x, mean_eta, std_eta)
     ax1.plot(x, p, "k--", linewidth=2, label="Gaussian Fit")
 
-    ax1.axvline(mean_eta, color="red", linestyle="dashed",
-                linewidth=2, label=f"Mean: {mean_eta:.2f}")
+    ax1.axvline(
+        mean_eta, color="red", linestyle="dashed", linewidth=2, label=f"Mean: {mean_eta:.2f}"
+    )
     ax1.set_xlabel(r"Relative Enhancement $\eta$", fontsize=12)
     ax1.set_ylabel("Probability Density", fontsize=12)
-    ax1.set_title(r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)",
-                  loc="left", fontsize=13, fontweight="bold")
+    ax1.set_title(
+        r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)",
+        loc="left",
+        fontsize=13,
+        fontweight="bold",
+    )
     ax1.legend(loc="upper right", frameon=False, fontsize=10)
     ax1.grid(True, alpha=0.3)
 
@@ -175,6 +193,7 @@ def generate_etr_figure():
 # SI: Bath Sensitivity Figure
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_si_bath_sensitivity():
     """
     SI Figure: Bath parameter sensitivity.
@@ -184,8 +203,13 @@ def generate_si_bath_sensitivity():
     print("\n=== Generating SI_bath_sensitivity ===")
 
     # Verified values from L=7 bath sweep CSVs (June 19)
-    labels = [r"$\lambda$=28", r"$\lambda$=35 (prod)",
-              r"$\lambda$=42", r"$\gamma$=40", r"$\gamma$=60"]
+    labels = [
+        r"$\lambda$=28",
+        r"$\lambda$=35 (prod)",
+        r"$\lambda$=42",
+        r"$\gamma$=40",
+        r"$\gamma$=60",
+    ]
     eta_vals = np.array([0.49, 0.39, 0.37, 0.62, 0.28])
     phi_filt = np.array([0.7180, 0.749, 0.7421, 0.7503, 0.7165])
     phi_broad = np.array([0.4805, 0.539, 0.5420, 0.4633, 0.5616])
@@ -197,46 +221,75 @@ def generate_si_bath_sensitivity():
     # Panel (a): η values
     bar_colors = [COLORS[2]] * len(eta_vals)
     bar_colors[prod_idx] = COLORS[0]  # Production in blue
-    bars = ax1.bar(range(len(eta_vals)), eta_vals, width=0.55,
-                   color=bar_colors, edgecolor="black", linewidth=0.5)
+    bars = ax1.bar(
+        range(len(eta_vals)),
+        eta_vals,
+        width=0.55,
+        color=bar_colors,
+        edgecolor="black",
+        linewidth=0.5,
+    )
     ax1.axhline(0, color="gray", linewidth=0.5)
-    for i, (val, bar) in enumerate(zip(eta_vals, bars)):
+    for _i, (val, bar) in enumerate(zip(eta_vals, bars, strict=False)):
         offset = 0.03 if val >= 0 else -0.06
-        ax1.text(bar.get_x() + bar.get_width() / 2, val + offset,
-                 f"{val:.2f}", ha="center", va="bottom" if val >= 0 else "top",
-                 fontsize=9, fontweight="bold")
+        ax1.text(
+            bar.get_x() + bar.get_width() / 2,
+            val + offset,
+            f"{val:.2f}",
+            ha="center",
+            va="bottom" if val >= 0 else "top",
+            fontsize=9,
+            fontweight="bold",
+        )
 
     ax1.set_xticks(range(len(labels)))
     ax1.set_xticklabels(labels, fontsize=9)
     ax1.set_ylabel(r"Relative Enhancement $\eta$", fontsize=11)
-    ax1.set_title("(a) Bath Parameter Sensitivity",
-                  loc="left", fontsize=12, fontweight="bold")
+    ax1.set_title("(a) Bath Parameter Sensitivity", loc="left", fontsize=12, fontweight="bold")
     ax1.grid(True, alpha=0.3, axis="y")
 
     # Panel (b): Population decomposition
     x = np.arange(len(labels))
     w = 0.35
-    ax2.bar(x - w / 2, phi_filt, w, color=COLORS[0], edgecolor="black",
-            linewidth=0.5, alpha=0.85, label="Filtered")
-    ax2.bar(x + w / 2, phi_broad, w, color="gray", edgecolor="black",
-            linewidth=0.5, alpha=0.5, label="Broadband")
+    ax2.bar(
+        x - w / 2,
+        phi_filt,
+        w,
+        color=COLORS[0],
+        edgecolor="black",
+        linewidth=0.5,
+        alpha=0.85,
+        label="Filtered",
+    )
+    ax2.bar(
+        x + w / 2,
+        phi_broad,
+        w,
+        color="gray",
+        edgecolor="black",
+        linewidth=0.5,
+        alpha=0.5,
+        label="Broadband",
+    )
 
     # Mark production point
-    ax2.scatter([prod_idx - w / 2], [phi_filt[prod_idx]],
-                color="red", s=50, marker="*", zorder=5)
-    ax2.scatter([prod_idx + w / 2], [phi_broad[prod_idx]],
-                color="red", s=50, marker="*", zorder=5)
+    ax2.scatter([prod_idx - w / 2], [phi_filt[prod_idx]], color="red", s=50, marker="*", zorder=5)
+    ax2.scatter([prod_idx + w / 2], [phi_broad[prod_idx]], color="red", s=50, marker="*", zorder=5)
 
     for i in range(len(labels)):
-        ax2.annotate(f"{eta_vals[i]:.2f}",
-                     xy=(i, max(phi_filt[i], phi_broad[i]) + 0.02),
-                     ha="center", fontsize=7, fontweight="bold", color="red")
+        ax2.annotate(
+            f"{eta_vals[i]:.2f}",
+            xy=(i, max(phi_filt[i], phi_broad[i]) + 0.02),
+            ha="center",
+            fontsize=7,
+            fontweight="bold",
+            color="red",
+        )
 
     ax2.set_xticks(x)
     ax2.set_xticklabels(labels, fontsize=9)
     ax2.set_ylabel(r"$\Phi_{\mathrm{FT}}$ (Site 3 population)", fontsize=11)
-    ax2.set_title("(b) Target Population Decomposition",
-                  loc="left", fontsize=12, fontweight="bold")
+    ax2.set_title("(b) Target Population Decomposition", loc="left", fontsize=12, fontweight="bold")
     ax2.legend(frameon=False, fontsize=9)
     ax2.grid(True, alpha=0.3)
 
@@ -247,6 +300,7 @@ def generate_si_bath_sensitivity():
 # ══════════════════════════════════════════════════════════════════════
 # SI: Full 7-site dynamics (FigureS4)
 # ══════════════════════════════════════════════════════════════════════
+
 
 def generate_si_7site_dynamics():
     """
@@ -264,11 +318,11 @@ def generate_si_7site_dynamics():
     t_ps = t_fs / 1000.0
 
     # Filtered data
-    pop_filt = np.column_stack([ec[f"population_site_{i+1}"].values for i in range(7)])
+    pop_filt = np.column_stack([ec[f"population_site_{i + 1}"].values for i in range(7)])
     coh_filt = ec["coherences"].values
 
     # Broadband data
-    pop_broad = np.column_stack([bc[f"population_site_{i+1}"].values for i in range(7)])
+    pop_broad = np.column_stack([bc[f"population_site_{i + 1}"].values for i in range(7)])
     coh_broad = bc["coherences"].values
 
     # Trim to common length
@@ -358,12 +412,23 @@ def generate_si_7site_dynamics():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Regenerate remaining ETR and SI figures.")
-    parser.add_argument("--results-dir", "-r", type=str, default=_RESULTS_DIR,
-                        help="Path to results CSV directory")
-    parser.add_argument("--output-dir", "-o", type=str, default=_FIGURES_DIR,
-                        help="Path to output figures directory")
-    parser.add_argument("--hash", "-s", type=str, default=PRODUCTION_HASH,
-                        help="Configuration hash for L=8 production data")
+    parser.add_argument(
+        "--results-dir", "-r", type=str, default=_RESULTS_DIR, help="Path to results CSV directory"
+    )
+    parser.add_argument(
+        "--output-dir",
+        "-o",
+        type=str,
+        default=_FIGURES_DIR,
+        help="Path to output figures directory",
+    )
+    parser.add_argument(
+        "--hash",
+        "-s",
+        type=str,
+        default=PRODUCTION_HASH,
+        help="Configuration hash for L=8 production data",
+    )
     args = parser.parse_args()
 
     # Override globals

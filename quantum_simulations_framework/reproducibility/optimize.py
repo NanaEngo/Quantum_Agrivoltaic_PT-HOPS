@@ -5,13 +5,14 @@ Explores optimal vibronic coupling and laser excitation regimes.
 Usage: mamba run -n MesoHOP-sim python reproducibility/optimize.py
 """
 
+import csv
+import logging
 import os
 import sys
-import csv
-import yaml
-import numpy as np
-import logging
 from datetime import datetime
+
+import numpy as np
+import yaml
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
@@ -22,9 +23,7 @@ _LOG_DIR = os.path.join(_SCRIPT_DIR, "logs")
 os.makedirs(_LOG_DIR, exist_ok=True)
 
 logging.basicConfig(
-    filename=os.path.join(
-        _LOG_DIR, f"optimize_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-    ),
+    filename=os.path.join(_LOG_DIR, f"optimize_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"),
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
@@ -56,14 +55,12 @@ def sweep_filter_wavelengths(cfg, center_wavelengths_nm=None, n_traj=5):
     results : list of dict
         Each dict: {'lambda1': float, 'lambda2': float, 'eta': float}
     """
-    from src.core.hops_simulator import HopsSimulator, MESOHOPS_AVAILABLE
-    from src.core.hamiltonian_factory import create_fmo_hamiltonian
     from src.core.constants import FMO_TARGET_SITE
+    from src.core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import MESOHOPS_AVAILABLE, HopsSimulator
 
     if not MESOHOPS_AVAILABLE:
-        print(
-            "❌ MesoHOPS required for optimization. Activate MesoHOP-sim environment."
-        )
+        print("❌ MesoHOPS required for optimization. Activate MesoHOP-sim environment.")
         sys.exit(1)
 
     if center_wavelengths_nm is None:

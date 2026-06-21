@@ -10,16 +10,16 @@ import numpy as np
 
 try:
     from src.core.constants import (
+        FMO_COUPLINGS,
         FMO_SITE_ENERGIES_7,
         FMO_SITE_ENERGIES_8,
-        FMO_COUPLINGS,
         KB_CM_K,
     )
 except ImportError:
     from .constants import (
+        FMO_COUPLINGS,
         FMO_SITE_ENERGIES_7,
         FMO_SITE_ENERGIES_8,
-        FMO_COUPLINGS,
         KB_CM_K,
     )
 
@@ -46,9 +46,7 @@ def create_fmo_hamiltonian(
     site_energies : np.ndarray
         Site energies array (n_sites,) in cm⁻¹.
     """
-    site_energies = (
-        FMO_SITE_ENERGIES_8 if include_reaction_center else FMO_SITE_ENERGIES_7
-    )
+    site_energies = FMO_SITE_ENERGIES_8 if include_reaction_center else FMO_SITE_ENERGIES_7
     n_sites = len(site_energies)
 
     # Use np.diag for clean diagonal initialization (server best practice)
