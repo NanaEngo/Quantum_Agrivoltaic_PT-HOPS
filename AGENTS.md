@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-21 (Session 7 — Removal of 3-site model, SI restructuring, Git push)
+**Last updated:** 2026-06-21 (Session 8 — Data cleanup, repository consolidation)
 
 ## Project Overview
 
@@ -16,36 +16,34 @@ This repository contains two active research projects:
 
 ### Local Execution (Laptop Mode - Fast Verification)
 ```bash
-mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --config quantum_simulations_framework/config/laptop_parameters.yaml
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel_260612/laptop_parameters.yaml
 ```
 
 ### Local/Cluster Execution (Production Mode - Publication Data)
 ```bash
-mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --parallel --skip-audit
+mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --parallel --skip-audit
 ```
-```bash
-chmod +x quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
-./quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
-```
+
 **Figure 2 Sweep (Server-Side):**
 ```bash
-chmod +x quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
-./quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
+chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
+./Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
 ```
-Monitoring: `tail -f reproducibility_cluster.log` (or `sweep_cluster.log` for Fig 2)
+Monitoring: `tail -f reproducibility_cluster.log`
 
 ### Repository Hygiene (STRICT)
-**The canonical shared simulation framework is:**
-`quantum_simulations_framework/` (common to both Paper 1 and Paper 2)
+**The canonical simulation framework is:**
+`Redac_Paper1/quantum_simulations_framework_parallel_260612/` (Paper 1 — JPCL revision)
 
 **ALWAYS SYNC AFTER CHANGES**: After every local modification to the codebase, you MUST synchronize the files to the server using `rsync` to ensure the production environment is up-to-date:
 ```bash
-rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
+rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260612/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
 ```
 
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
 - `Redac_Paper1/quantum_simulations_framework_parallel/` (DELETED)
+- `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework_parallel_260612/` (DELETED — moved to `_deleted_root_duplicate_260612/`)
 
 If these directories appear, delete them immediately and check for stale path references in `AGENTS.md`, `ROADMAP.md`, or `README.md`.
 
@@ -56,11 +54,11 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 ---
 
-## JPCL Revision — Current Status (2026-06-18 — Session 4)
+## JPCL Revision — Current Status (2026-06-21 — Session 8)
 
 > [!IMPORTANT]
 > [!IMPORTANT]
-> **SOURCE OF TRUTH (REVISION R2)**: The absolute canonical source of truth for the revised manuscript is `Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13`. All modifications to the LaTeX files, Response letters, and SI must be done exclusively in this directory.
+> **SOURCE OF TRUTH (REVISION R2 — SUBMITTED)**: The absolute canonical source of truth for the revised, submitted manuscript is `Redac_Paper1/JPCL_Submission_Package_2026-06-20/`. All modifications to the LaTeX files, Response letters, and SI must be done exclusively in this directory.
 
 ### ✅ Completed fixes
 - **Serialization/Pickling Hardening**: Refactored parallel trajectory workers in `hops_simulator.py` and `quantum_dynamics_simulator.py` to module-level functions, enabling 100% compatibility with `joblib`/`multiprocessing` backends.
@@ -143,8 +141,8 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 ### ⏳ Pending (Requires MesoHOPS Server)
 - [x] ~~Run full production simulation on server (100 trajectories)~~ — 200/200 terminé, η=0.39±0.04
 - [ ] Regenerate Figures 2 & 3 with production data (après Phase 2)
-- [ ] Phase 1 convergence sweeps: L=7 ✅, K=1 ❌, K=3 🔄, dt=2.0 🔄, dt=1.0 ⏳
-- [ ] Phase 2 robustness sweeps (température, bain, filtre) — 🔄 Batch 1 en cours
+- [x] ~~Phase 1 convergence sweeps: L=7 ✅, K=1 ❌, K=3 🔄, dt=2.0 🔄~~ — Terminé
+- [x] ~~Phase 2 robustness sweeps (température, bain, filtre)~~ — Tous terminés
 - [ ] Fix GPU driver mismatch (NVML v580.159).
 
 ---
@@ -153,22 +151,24 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 | File | Purpose |
 |------|---------|
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Manuscript_JPCL_26-06-17.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-06-17 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/SI_JPCL_26-06-17.tex` | Revised Supporting Information — updated 2026-06-17 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Response_to_Reviewers_26-06-17.tex` | Point-by-point response letter — updated 2026-06-17 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/Cover_Letter_JPCL_26-06-13.tex` | Cover letter — updated 2026-06-13 (**Source of truth**) |
-| `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/references.bib` | BibTeX references |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Manuscript_JPCL_26-06-20.tex` | Revised manuscript (achemso, JPCL Letter format) — updated 2026-06-20 (**Source of truth**) |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/SI_JPCL_26-06-20.tex` | Revised Supporting Information — updated 2026-06-20 (**Source of truth**) |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Response_to_Reviewers_26-06-20.tex` | Point-by-point response letter — updated 2026-06-20 (**Source of truth**) |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Cover_Letter_JPCL_26-06-20.tex` | Cover letter — updated 2026-06-20 (**Source of truth**) |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `quantum_simulations_framework/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
-| `quantum_simulations_framework/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
-| `quantum_simulations_framework/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
-| `quantum_simulations_framework/reproducibility/run_phase2_parallel.sh` | Phase 2 parallèle (4× simultané, ≥60 GiB RAM) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh` | Temperature sweep Fig 2 |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase2_parallel.sh` | Phase 2 parallèle (4× simultané, ≥60 GiB RAM) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260620.md` | Final data analysis report (Phase 3, convergence) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260619.md` | Phase 2 robustness sweeps (temperature, bath, filter) |
+| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260617.md` | Production run (L=8, K=2, SBD=3, N=100) |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -206,13 +206,13 @@ Quantum_Agrivoltaic_PT-HOPS/
 ├── README.md                          # Project overview
 ├── .gitignore
 ├── Redac_Paper1/
-│   ├── JPCL/
-│   │   └── JPCL_Submission_Package_2026-06-13/ # Source of truth for manuscript
-│   │       ├── Manuscript_JPCL_26-06-13.tex
-│   │       ├── SI_JPCL_26-06-13.tex
-│   │       ├── Response_to_Reviewers_26-06-13.tex
-│   │       ├── Cover_Letter_JPCL_26-06-13.tex
-│   │       └── references.bib
+│   ├── JPCL_Submission_Package_2026-06-20/ # Source of truth for manuscript
+│   │   ├── Manuscript_JPCL_26-06-20.tex
+│   │   ├── SI_JPCL_26-06-20.tex
+│   │   ├── Response_to_Reviewers_26-06-20.tex
+│   │   ├── Cover_Letter_JPCL_26-06-20.tex
+│   │   ├── references.bib
+│   │   └── Figures/
 │   ├── Theory_Journals_main/JPCL/     # Old JPCL submission files (dated filenames)
 │   │   ├── Manuscript_JPCL_26-05-10.tex
 │   │   ├── SI_JPCL_26-05-10.tex
@@ -221,7 +221,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework/ # Shared simulation framework (Papers 1 & 2)
+│   └── quantum_simulations_framework_parallel_260612/ # Simulation framework (Paper 1)
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.
@@ -229,11 +229,11 @@ Quantum_Agrivoltaic_PT-HOPS/
 │       ├── utils/                     # FigureGenerator, theme, logging
 │       ├── reproducibility/
 │       │   ├── main.py                # Entry point
-│       │   ├── audit_convergence.py   # L=9,10,11 audit
+│       │   ├── audit_convergence.py   # L=7,8,9 audit
 │       │   ├── run_comprehensive_sweep.sh  # Full sweep orchestrator
 │       │   ├── run_phase1_continue.sh      # Phase 1 suite (skip L7)
 │       │   ├── run_phase1_parallel.sh      # Phase 1 parallèle (K=3 || dt=2.0)
-│       │   └── results/               # Valid results go here (see README.md inside)
+│       │   └── results/               # Valid results (72 CSVs, June 2026)
 │       └── tests/
 ├── notebooks/                         # Anderson model Jupyter notebooks
 ├── manuscrit/                         # Anderson model PRB publication
@@ -282,7 +282,7 @@ nohup ~/miniforge3/envs/MesoHOP-sim/bin/python reproducibility/main.py --paralle
 ```bash
 nohup bash reproducibility/run_phase1_parallel.sh > ~/phase1_parallel.log 2>&1 &
 ```
-**Statut:** K=3 🔄 + dt=2.0 🔄 en parallèle, dt=1.0 ⏳
+**Statut:** Phase 1 terminée, Phase 2 terminée
 **Monitorer:** `tail -f ~/phase1_parallel.log`
 
 ### GPU Driver Fix (TODO)
@@ -369,23 +369,25 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 - **Manuscript + SI siunitx audit**: All bare numbers wrapped in `\num{}`/`\SI{}`/`\SIrange{}`
 - **Backup directory**: `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/`
 
-#### 🔄 Blocked
-- **Second filter batch (bw200, single700, single850)**: launched 14:35 UTC, **server unreachable** (72+ workers on 48 cores, swap thrashing)
-- **Final compilation**: blocked on server recovery for remaining CSVs
-
-#### ⏳ Next Steps
-1. Wait for server recovery, download bw200/single700/single850 CSVs
-2. Copy all June 2026 CSVs to backup directory
-3. Extract η from remaining filters; update SI Table S4 + regenerate filter sweep figure
-4. Compile final manuscript + SI
-5. Regenerate convergence figure from Phase 1 data
-6. Commit and push
+#### ✅ Completed subsequently
+- **Second filter batch (bw200, single700, single850)**: all completed (bw200 η=0.648, single700 η=-0.958, single850 η=-0.958)
+- **Final compilation**: completed and submitted
 
 ### Session 7 (2026-06-21) — Simplification et retrait du modèle à 3 sites
 - **Retrait du modèle à 3 sites** : Supprimé le modèle "jouet" à 3 sites (excitonic trimer) du manuscrit principal et du document SI. Cette initiative interne a été écartée car le modèle complet à 7 sites fonctionne parfaitement et s'avère plus robuste scientifiquement.
 - **Restructuration du SI** : Promu la section décrivant la dynamique du modèle de production complet à 7 sites (Figure S4) au rang de section autonome (Section S11).
 - **Validation** : Corrigé le Test 4 (HEOM benchmark) pour pointer vers un benchmark trimer généralisé. Résolu toutes les références croisées brisées dans le SI.
 - **Workspace & Git** : Nettoyé les fichiers de compilation auxiliaires LaTeX (`latexmk -c`) et synchronisé le dépôt (commit `bb65391` poussé sur la branche `main`).
+
+### Session 8 (2026-06-21) — Data cleanup, repository consolidation
+- **Nettoyage des résultats** : Supprimé 198 fichiers CSV obsolètes de mai 2026 (paramètres L=10, K=10, DL-only, N=1).
+- **Duplicats filtrés supprimés** : 27 fichiers de duplicates (rename bug) nettoyés, ne gardant que les timestamps les plus récents.
+- **Données pré-production supprimées** : 14 CSVs non-catalogués (c1d5574ea9f8, c84c39025701, fa6ddb531a34).
+- **Fichier 3-site supprimé** : `simulation_data/3site_dynamics_results.csv` et `data/simulations/3site_dynamics_results.csv`.
+- **Résultats crédibles conservés** : 72 CSVs de juin 2026 (convergence, production, température, bain, filtres).
+- **3 ANALYSIS fiables** : ANALYSIS_20260617.md (production), ANALYSIS_20260619.md (Phase 2 sweeps), ANALYSIS_20260620.md (Phase 3 convergence).
+- **JPCL_Submission_Package_2026-06-20** confirmé comme source de vérité unique pour le manuscrit soumis.
+- **Synthèse** : `Redac_Paper1/SYNTHESE_SIMULATIONS_JUIN2026.md` créé.
 
 ---
 
