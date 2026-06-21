@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-20 (Session 6 — Phase 3 convergence finalize, JPCL R2 submission ready)
+**Last updated:** 2026-06-21 (Session 7 — Removal of 3-site model, SI restructuring, Git push)
 
 ## Project Overview
 
@@ -380,6 +380,12 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 4. Compile final manuscript + SI
 5. Regenerate convergence figure from Phase 1 data
 6. Commit and push
+
+### Session 7 (2026-06-21) — Simplification et retrait du modèle à 3 sites
+- **Retrait du modèle à 3 sites** : Supprimé le modèle "jouet" à 3 sites (excitonic trimer) du manuscrit principal et du document SI. Cette initiative interne a été écartée car le modèle complet à 7 sites fonctionne parfaitement et s'avère plus robuste scientifiquement.
+- **Restructuration du SI** : Promu la section décrivant la dynamique du modèle de production complet à 7 sites (Figure S4) au rang de section autonome (Section S11).
+- **Validation** : Corrigé le Test 4 (HEOM benchmark) pour pointer vers un benchmark trimer généralisé. Résolu toutes les références croisées brisées dans le SI.
+- **Workspace & Git** : Nettoyé les fichiers de compilation auxiliaires LaTeX (`latexmk -c`) et synchronisé le dépôt (commit `bb65391` poussé sur la branche `main`).
 
 ---
 
