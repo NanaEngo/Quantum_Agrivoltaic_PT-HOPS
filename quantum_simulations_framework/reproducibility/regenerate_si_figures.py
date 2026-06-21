@@ -10,7 +10,7 @@ from datetime import datetime
 import os, sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from utils.theme import apply_jpcl_theme, get_color_palette
+from src.visualization.theme import apply_jpcl_theme, get_color_palette
 from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
 
 # Output directory — configurable via QSF_OUTPUT_DIR env var (for server deployment)

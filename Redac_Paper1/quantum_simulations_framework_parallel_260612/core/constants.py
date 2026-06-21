@@ -3,7 +3,7 @@ Physical and simulation constants for quantum agrivoltaic simulations.
 """
 
 __title__ = "Physical Constants"
-__author__ = "JPCL Revision Team"
+__author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
 from typing import Final

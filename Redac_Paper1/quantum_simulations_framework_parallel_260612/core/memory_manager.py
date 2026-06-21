@@ -3,7 +3,7 @@ Memory-aware job scheduling for quantum dynamics simulations.
 """
 
 __title__ = "MemoryAwareJobScheduler"
-__author__ = "JPCL Revision Team"
+__author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
 import os

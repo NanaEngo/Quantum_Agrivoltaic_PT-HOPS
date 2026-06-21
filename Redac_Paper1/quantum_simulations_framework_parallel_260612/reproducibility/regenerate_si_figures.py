@@ -15,7 +15,7 @@ from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
 
 OUTPUT_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__), "..", "..", "..",
-    "Redac_Paper1", "JPCL", "JPCL_Submission_Package_2026-06-13"
+    "Redac_Paper1", "JPCL_Submission_Package_2026-06-20", "Figures"
 ))
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

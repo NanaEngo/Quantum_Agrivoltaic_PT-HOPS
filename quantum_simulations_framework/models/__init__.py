@@ -1,71 +1,25 @@
 """
 Models module for quantum agrivoltaic simulations.
 
-This module contains model classes for analyzing molecular systems,
-biodegradability, environmental factors, sensitivity analysis,
-LCA, techno-economics, and spectroscopy.
+⚠️ RE-EXPORT MODULE — Canonical sources are in src/agrivoltaic/, src/quantum/,
+   src/analysis/. This module re-exports all public symbols for backward
+   compatibility.
 """
 
-try:
-    from .agrivoltaic_coupling_model import AgrivoltaicCouplingModel
-except ImportError:
-    AgrivoltaicCouplingModel = None
+from src.agrivoltaic.coupling_model import AgrivoltaicCouplingModel
+from src.agrivoltaic.biodegradability_analyzer import BiodegradabilityAnalyzer
+from src.agrivoltaic.eco_design_analyzer import EcoDesignAnalyzer
+from src.agrivoltaic.environmental_factors import EnvironmentalFactors
+from src.agrivoltaic.lca_analyzer import LCAAnalyzer
+from src.agrivoltaic.techno_economic_model import TechnoEconomicModel
+from src.analysis.sensitivity_analyzer import SensitivityAnalyzer
+from src.quantum.multi_scale import MultiScaleTransformer
+from src.quantum.spectral_optimization import SpectralOptimizer
+from src.quantum.spectroscopy import Spectroscopy2DES
 
-try:
-    from .biodegradability_analyzer import BiodegradabilityAnalyzer
-except ImportError:
-    BiodegradabilityAnalyzer = None
-
-try:
-    from .eco_design_analyzer import EcoDesignAnalyzer
-except ImportError:
-    EcoDesignAnalyzer = None
-
-try:
-    from .environmental_factors import EnvironmentalFactors
-except ImportError:
-    EnvironmentalFactors = None
-
-try:
-    from .lca_analyzer import LCAAnalyzer
-except ImportError:
-    LCAAnalyzer = None
-
-try:
-    from .multi_scale_transformer import MultiScaleTransformer
-except ImportError:
-    MultiScaleTransformer = None
-
-try:
-    from .quantum_dynamics_simulator import QuantumDynamicsSimulator
-except ImportError:
-    QuantumDynamicsSimulator = None
-
-try:
-    from .sensitivity_analyzer import SensitivityAnalyzer
-except ImportError:
-    SensitivityAnalyzer = None
-
-try:
-    from .simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
-except ImportError:
-    SimpleQuantumDynamicsSimulator = None
-
-try:
-    from .spectral_optimizer import SpectralOptimizer
-except ImportError:
-    SpectralOptimizer = None
-
-try:
-    from .spectroscopy_2des import Spectroscopy2DES
-except ImportError:
-    Spectroscopy2DES = None
-
-try:
-    from .techno_economic_model import TechnoEconomicModel
-except ImportError:
-    TechnoEconomicModel = None
-
+# Re-exported from src/quantum/ for backward compatibility
+from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
+from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
 
 __all__ = [
     "AgrivoltaicCouplingModel",

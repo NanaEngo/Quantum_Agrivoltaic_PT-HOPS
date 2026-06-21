@@ -7,7 +7,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pytest
-from utils.orca_wrapper import OrcaRunner
+from src.io.orca_wrapper import OrcaRunner
 
 # Detect Orca executable: check PATH first, then common fallback paths
 _ORCA_EXEC = shutil.which("orca") or os.path.expanduser("~/orca_6_1_0/orca")

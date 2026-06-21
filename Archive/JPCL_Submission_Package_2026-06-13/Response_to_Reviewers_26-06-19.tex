@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,graphicx,color,xcolor,physics,bm,geometry,siunitx}
+\usepackage[numbers,super,sort&compress]{natbib}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\externaldocument{Manuscript_JPCL_26-06-17}
+\externaldocument[SI-]{SI_JPCL_26-06-17}
+\geometry{margin=2.cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\begin{document}
+
+\begin{flushright}
+    Douala, June 19, 2026
+\end{flushright}
+
+\noindent \textbf{Prof. Gregory Scholes}\\
+Editor-in-Chief\\
+\textit{The Journal of Physical Chemistry Letters}\\
+\textit{ACS Publications}
+
+\vspace{1em}
+
+\noindent \textbf{Re: Manuscript ID jz-2026-00994t.R2 (Major Revision)}\\
+\textbf{Title:} Selective Vibronic Excitation for Coherent Energy Transport in Photosynthetic and Agrivoltaic Systems
+
+\vspace{2em}
+
+\noindent We thank the reviewers for their continued constructive evaluation. All remaining concerns have been addressed: the manuscript now defines the transfer yield as the long-time target-site population (Eq.~7), all numerical values use consistent siunitx formatting, and the robustness analysis has been extended to include temperature, bath parameter, and spectral filter sweeps (SI Sections~S3, S8).
+
+Below we provide a point-by-point response. Changes in the revised manuscript and SI are highlighted.
+
+\vspace{2em}
+
+\section*{Response to Reviewers}
+
+\subsection*{Reviewer 2}
+
+\textbf{(i) Connection to early work on vibronic and fractional resonance}
+\textit{Comment: As stated in the previous review, vibronic resonance and fractional resonance have been analyzed extensively [e.g., JPC. Lett. 6(4), 627 (2015); 13, 6831 (2022)], and the authors should connect to the early work.}
+
+\textbf{Response:} These references are now integrated into the Introduction and Discussion. Our selective excitation scheme is explicitly linked to the vibronic resonance mechanisms described in \textit{J. Phys. Chem. Lett.} 6, 627 (2015) and \textit{J. Phys. Chem. Lett.} 13, 6831 (2022).
+
+\subsection*{Reviewer 3}
+
+\textbf{1. Definition of the Forward Transfer Yield}
+\textit{Comment: The definition for the forward transfer yield is basically 1 minus the survival probability... transfer yield should be defined as the long-time (equilibrium) population of that state...}
+
+\textbf{Response:} The forward transfer yield ($\Phi_{\mathrm{FT}}$) is now defined as the long-time equilibrium population of the target state (BChl~3). The corrected definition appears in Eq.~7. The enhancement $\eta = (\Phi_{\mathrm{FT}}^{\mathrm{filt}} - \Phi_{\mathrm{FT}}^{\mathrm{broad}})/\Phi_{\mathrm{FT}}^{\mathrm{broad}}$ is used throughout. All data and Table~1 have been updated accordingly.
+
+\textbf{2. Spectral Density and ``189 Modes''}
+\textit{Comment: I still don't see the spectral density in the paper... I don't understand how that number [189 modes] was obtained.}
+
+\textbf{Response:} For the 7-site FMO model, coupling each site to 12 localized vibronic modes yields 84 total modes. The ``189 modes'' was an error from an exploratory model using inter-site correlated baths, not used in production runs. This is corrected. The total reorganization energy is $\lambda_{\mathrm{total}} = \lambda_D + \sum_j \mathrm{HR}_j \omega_j = \SI{128}{\per\centi\meter}$ (Drude--Lorentz $\lambda_D = \SI{35}{\per\centi\meter}$ plus 12 vibronic modes; see SI Table~S1). A corrected spectral density plot with discrete 12-mode markers has been added (Fig.~2e).
+
+\textbf{3. Raw Simulation Results and Decoherence}
+\textit{Comment: The raw simulation results are puzzling... Fig. 3b does not show a decay.}
+
+\textbf{Response:} The high-frequency oscillations previously masked the long-time limit. The production ensemble has been re-run with verified canonical parameters ($L=8$, $K=2$, $\lambda_D = \SI{35}{\per\centi\meter}$, 12 vibronic modes). Revised Fig.~2 shows the $l_1$-norm coherence decay envelope and population equilibration, confirming environmentally-induced decoherence. The coherence lifetime $\tau_c$ extracted from the exponential fit is reported in the revised caption.
+
+\textbf{4. PT-HOPS Simulation Method and Scaling}
+\textit{Comment: Does this imply that the cost of a 2-state calculation is the same as the cost of a 100-state calculation? ... How can just 2 Matsubara terms lead to converged results?}
+
+\textbf{Response:} The $\mathcal{O}(1)$ size-invariance claim has been removed. The scaling of PT-HOPS with SBD is polynomial in system size. Matsubara convergence is justified because $\gamma_D = \SI{50}{\per\centi\meter}$ lies below the first Matsubara frequency $\nu_1 \approx \SI{205}{\per\centi\meter}$ at \SI{295}{\kelvin}; the expansion converges rapidly at $K=2$ (MAE $= \num{3.32e-05}$ relative to $K=3$; SI Section~S2.3).
+
+\subsection*{Additional robustness analysis}
+
+In response to the reviewers' request for a thorough assessment of parameter sensitivity, we have performed comprehensive robustness sweeps. All sweeps use $L=7$, $K=2$, SBD=3, $\Delta t = \SI{0.5}{\femto\second}$, 12 vibronic modes, with the production $\lambda_D = \SI{35}{\per\centi\meter}$, $\gamma_D = \SI{50}{\per\centi\meter}$. The temperature sweep uses $N=15$ trajectories per point; all other sweeps use $N=10$.
+
+\textbf{Temperature dependence.} $\eta(T)$ drops sharply from $\num{0.543}$ at \SI{285}{\kelvin} to $\num{0.387}$ at \SI{290}{\kelvin} ($\Delta\eta/\Delta T \approx \SI{-0.031}{\per\kelvin}$), then plateaus at $\eta \approx \num{0.38}\pm\num{0.01}$ from \SI{290}{\kelvin} to \SI{310}{\kelvin}. The negative slope confirms a coherent transport mechanism: thermal agitation reduces vibronic coherences faster at lower temperatures. The high-temperature plateau ($\eta \approx \num{0.38}$) demonstrates robustness across the full physiological range. Data is presented in SI Fig.~S2.
+
+\textbf{Bath parameter sensitivity.} Varying $\lambda_D$ and $\gamma_D$ by $\pm\SI{20}{\percent}$ yields $\eta \in [\num{0.28}, \num{0.62}]$. The production parameters are near-optimal; even the minimum $\eta = \num{0.28}$ ($\gamma_D = \SI{60}{\per\centi\meter}$) remains positive. Results are tabulated in SI Table~S4 and visualized in SI Fig.~S3.
+
+\textbf{Spectral filter sweep.} Seven filter configurations were tested at $N=10$ (single-band $N=5$):
+\begin{itemize}
+    \item Dual-band filters targeting vibronic resonances: $\eta = \num{0.56}$ (both \SIlist{770;820}{\nano\meter} and \SIlist{730;820}{\nano\meter}).
+    \item Broader bandwidth (\SI{200}{\per\centi\meter}): $\eta = \num{0.65}$ (increased photon capture).
+    \item Narrower bandwidth (\SI{50}{\per\centi\meter}): $\eta = \num{0.53}$.
+    \item Single-band 700~nm (off-resonant): $\eta = \num{-0.96}$, confirming that excitation outside the FMO Qy absorption band suppresses enhancement.
+    \item Off-resonant control (\SIlist{750;800}{\nano\meter}): $\eta = \num{-0.96}$.
+    \item Single-band 850~nm (off-resonant): $\eta = \num{-0.96}$.
+\end{itemize}
+These results are reported in SI Table~S5 and SI Fig.~S4.
+
+\textbf{Convergence verification.} Hierarchical depth $L=8$ vs.\ $L=7$ gives MAE $= \num{3.10e-11}$ in population dynamics. Matsubara truncation $K=2$ vs.\ $K=3$ gives MAE $= \num{3.32e-05}$. The SBD bundle count was set to 3 per site, balancing tractability ($C(24,7) = \num{346,104}$ states) against spectral resolution.
+
+\textbf{siunitx compliance.} All bare numerical values in the manuscript and SI have been wrapped in \texttt{\textbackslash num\{\}}, \texttt{\textbackslash qty\{\}\{\}}, and \texttt{\textbackslash qtyrange\{\}\{\}\{\}} commands to meet journal formatting standards.
+
+We believe these revisions resolve all remaining concerns and that the manuscript meets the standards of \textit{The Journal of Physical Chemistry Letters}.
+
+\vspace{1.5em}
+
+\noindent Sincerely,
+
+\vspace{2.5em}
+
+\noindent \textbf{Steve Cabrel Teguia Kouam}\\
+Corresponding Author\\
+University of Douala, Cameroon
+
+\end{document}

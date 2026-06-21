@@ -9,7 +9,7 @@ system performance, eco-design, and techno-economic viability.
 __version__ = "1.0.0"
 
 from .core.constants import *
-from .core.hops_simulator import HopsSimulator
+from src.core.hops_simulator import HopsSimulator
 from .models import *
 from .utils.logging_config import get_logger, setup_logging
 

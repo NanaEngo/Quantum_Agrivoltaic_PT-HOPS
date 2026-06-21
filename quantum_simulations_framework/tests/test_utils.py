@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from conftest import get_test_logger
 from src.io.csv_storage import CSVDataStorage
 from src.visualization.figure_generator import FigureGenerator
-from utils.logging_config import get_logger, setup_logging
+from src.utils.logging_config import get_logger, setup_logging
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
 from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
 

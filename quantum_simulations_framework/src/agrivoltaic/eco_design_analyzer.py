@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from utils.orca_wrapper import OrcaRunner
+from src.io.orca_wrapper import OrcaRunner
 from src.core.constants import (
     DEFAULT_PCE,
     BDE_THRESHOLD_ECO,

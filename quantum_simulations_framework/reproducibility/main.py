@@ -772,7 +772,7 @@ def _run_temperature_sweep(
     tuple
         (temperatures, eta_values, eta_errors)
     """
-    from utils.parallel_utils import get_safe_n_jobs, estimate_memory_per_traj
+    from src.utils.parallel_utils import get_safe_n_jobs, estimate_memory_per_traj
 
     bath = cfg["bath"]
     dyn = cfg["dynamics"]
@@ -893,7 +893,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
     -------
     disorder_samples : np.ndarray  shape (n_samples,)
     """
-    from utils.parallel_utils import get_safe_n_jobs
+    from src.utils.parallel_utils import get_safe_n_jobs
 
     bath = cfg["bath"]
     dyn = cfg["dynamics"]
@@ -1076,7 +1076,7 @@ def _generate_spectral_figure(cfg, output_dir):
 
     # ── Plot ─────────────────────────────────────────────────────────────────
     try:
-        from utils.theme import apply_jpcl_theme, get_color_palette
+        from src.visualization.theme import apply_jpcl_theme, get_color_palette
 
         apply_jpcl_theme()
         get_color_palette()
@@ -1164,9 +1164,6 @@ def generate_figures(cfg, sim_results, time_points, skip_temp_sweep=False):
         else np.zeros(_n_t),
         "qfi": filtered.get("qfi")
         if filtered.get("qfi") is not None
-        else np.zeros(_n_t),
-        "entropy": filtered.get("entropy")
-        if filtered.get("entropy") is not None
         else np.zeros(_n_t),
     }
     fig1_path = gen.plot_quantum_dynamics(

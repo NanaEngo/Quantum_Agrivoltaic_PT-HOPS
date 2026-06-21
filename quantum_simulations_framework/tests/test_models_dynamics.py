@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
-from models.quantum_dynamics_simulator import QuantumDynamicsSimulator
+from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
 from src.quantum.spectroscopy import Spectroscopy2DES
 
 logger = get_test_logger("test_models_dynamics")

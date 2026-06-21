@@ -48,7 +48,7 @@ def parse_args():
 _ARGS = parse_args()
 
 # Monkeypatch parallel_utils based on CLI flags
-import utils.parallel_utils as pu
+import src.utils.parallel_utils as pu
 
 if _ARGS.n_jobs is not None:
     pu.get_safe_n_jobs = lambda *args, **kwargs: _ARGS.n_jobs

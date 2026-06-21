@@ -44,7 +44,7 @@ class FigureGenerator:
 
         # Apply JPCL Publication Standards
         try:
-            from utils.theme import apply_jpcl_theme, get_color_palette
+            from src.visualization.theme import apply_jpcl_theme, get_color_palette
 
             apply_jpcl_theme()
             self.colors = get_color_palette()

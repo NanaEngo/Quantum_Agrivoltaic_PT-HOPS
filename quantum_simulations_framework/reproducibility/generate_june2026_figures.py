@@ -37,10 +37,7 @@ if _FRAMEWORK_DIR not in sys.path:
 # ──────────────────────────────────────────────────────────────────────
 # Core Constants
 # ──────────────────────────────────────────────────────────────────────
-try:
-    from core.constants import DEFAULT_VIBRONIC_FREQUENCIES, DEFAULT_HUANG_RHYS_FACTORS
-except ImportError:
-    from src.core.constants import DEFAULT_VIBRONIC_FREQUENCIES, DEFAULT_HUANG_RHYS_FACTORS
+from src.core.constants import DEFAULT_VIBRONIC_FREQUENCIES, DEFAULT_HUANG_RHYS_FACTORS
 
 # Submission package output — dedicated Figures/ subfolder
 # Configurable via env var QSF_OUTPUT_DIR (for server deployment).

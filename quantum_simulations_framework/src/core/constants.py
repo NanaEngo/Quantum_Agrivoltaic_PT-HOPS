@@ -3,7 +3,7 @@ Physical and simulation constants for quantum agrivoltaic simulations.
 """
 
 __title__ = "Physical Constants"
-__author__ = "JPCL Revision Team"
+__author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
 from typing import Final
@@ -29,7 +29,9 @@ LIGHT_SPEED_CMS: Final[float] = 2.99792458e10  # cm/s
 # HIERARCHY / SBD PARAMETERS
 # =============================================================================
 DEFAULT_SBD_BUNDLES: Final[int] = (
-    6  # SBD bundles per site (SI mandate: all production runs use SBD)
+    3  # SBD bundles per site — confirmed optimal by 2026-06 campaign
+       # C(24,7)=346K states at L=8. SBD=6 would be ×3 memory with marginal
+       # spectral improvement. See SYNTHESE_SIMULATIONS_JUIN2026 §3.4, §8.
 )
 
 # Dephasing rate (used by sensitivity_analyzer)
@@ -52,7 +54,9 @@ DEFAULT_DISORDER_SIGMA: Final[float] = 50.0  # cm^-1 (Gaussian diagonal disorder
 # Time
 DEFAULT_TIME_POINTS: Final[int] = 501  # 0–1000 fs at step=2 fs → linspace(0,1000,501)
 DEFAULT_TIME_STEP: Final[float] = (
-    0.5  # femtoseconds (0.5 fs recommended for stability with 12-mode bath)
+    0.2  # femtoseconds — recommended dt for stiff-ODE stability
+         # (see SYNTHESE_SIMULATIONS_JUIN2026 §2 — 'dt=0.5 fs est grand pour
+         #  l\'ODE stiff ; dt=0.2 fs recommande pour les simulations')
 )
 DEFAULT_MAX_TIME: Final[float] = 1000.0  # femtoseconds
 DEFAULT_TIME_LONG: Final[float] = 5000.0  # femtoseconds for thermalization checks
@@ -235,6 +239,7 @@ BASE_PYTHON_OVERHEAD_GB: Final[float] = (
 )
 MAX_N_JOBS: Final[int] = (
     16  # Production: L=8 SBD(3) — 16 workers for ~70% CPU utilization
+       # Use 24 for parameter sweeps (Phase 2, see SYNTHESE_SIMULATIONS_JUIN2026 §8)
 )
 
 

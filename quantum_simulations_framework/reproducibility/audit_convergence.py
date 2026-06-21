@@ -594,7 +594,7 @@ if __name__ == "__main__":
     # ✅ NEW: Memory configuration validation
     print("🔍 Validation configuration mémoire...")
     try:
-        from core.memory_manager import validate_memory_configuration
+        from src.core.memory_manager import validate_memory_configuration
 
         validate_memory_configuration(cfg)
         print("✅ Configuration mémoire validée\n")

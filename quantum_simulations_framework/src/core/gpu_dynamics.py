@@ -39,6 +39,9 @@ try:
 except ImportError:
     JAX_AVAILABLE = False
     jax = None
+    # Define no-op decorators when JAX is not available so @jit doesn't crash
+    jit = lambda fn: fn  # type: ignore
+    vmap = lambda fn: fn  # type: ignore
     logger.warning("Neither CuPy nor JAX available, GPU acceleration disabled")
 
 # Determine GPU backend
@@ -87,7 +90,6 @@ class GPUQuantumDynamics:
     @jit
     def _liouvillian_step_gpu(rho, H, dt):
         """Single Liouvillian time step on GPU (JIT-compiled)."""
-        # Commutator: -i[H, ρ]
         commutator = -1j * (jnp.matmul(H, rho) - jnp.matmul(rho, H))
         return rho + dt * commutator
 
@@ -137,24 +139,18 @@ class GPUQuantumDynamics:
             f"GPU batch simulation: {batch_size} trajectories, {n_times} time points"
         )
 
-        # Transfer to GPU
         rho_batch = jnp.array(initial_states, dtype=jnp.complex64)
         H_gpu = self.H_gpu.astype(jnp.complex64)
 
-        # Vectorized time evolution
         if method == "rk4":
-
             def step_func(rho):
                 return self._rk4_step_gpu(rho, H_gpu, dt)
         else:
-
             def step_func(rho):
                 return self._liouvillian_step_gpu(rho, H_gpu, dt)
 
-        # Vectorize over batch dimension
         batched_step = vmap(step_func)
 
-        # Time evolution loop
         trajectories = []
         rho_current = rho_batch
 
@@ -163,7 +159,6 @@ class GPUQuantumDynamics:
             if i < n_times - 1:
                 rho_current = batched_step(rho_current)
 
-        # Stack and transfer back to CPU
         trajectories_gpu = jnp.stack(trajectories, axis=1)
         trajectories_cpu = np.array(trajectories_gpu)
 
@@ -187,7 +182,6 @@ class GPUQuantumDynamics:
             for t in range(n_times):
                 trajectories[b, t] = rho
                 if t < n_times - 1:
-                    # Simple Euler step
                     commutator = -1j * (self.H @ rho - rho @ self.H)
                     rho = rho + dt * commutator
 
@@ -208,17 +202,14 @@ class GPUQuantumDynamics:
             Populations (batch_size, n_times, n)
         """
         if not self.use_gpu:
-            # CPU fallback
             return np.real(np.diagonal(density_matrices, axis1=2, axis2=3))
 
-        # GPU computation
         rho_gpu = jnp.array(density_matrices)
 
         @jit
         def extract_diag(rho):
             return jnp.real(jnp.diagonal(rho, axis1=-2, axis2=-1))
 
-        # Vectorize over batch and time dimensions
         batched_diag = vmap(vmap(extract_diag))
         populations_gpu = batched_diag(rho_gpu)
 

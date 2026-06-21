@@ -3,7 +3,7 @@ HopsSimulator: Unified quantum dynamics simulator with MesoHOPS integration.
 """
 
 __title__ = "HopsSimulator"
-__author__ = "JPCL Revision Team, Mesoscience Lab"
+__author__ = "Nana Engo et al."
 __version__ = "1.0.0"
 
 import gc
