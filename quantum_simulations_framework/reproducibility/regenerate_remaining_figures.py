@@ -20,6 +20,7 @@ and L=7 temperature/bath/filter sweep CSVs.
 import os
 import sys
 import glob
+import argparse
 
 import numpy as np
 import pandas as pd
@@ -68,7 +69,7 @@ plt.rcParams.update({
 COLORS = ["#2166AC", "#E69F00", "#009E73", "#D55E00", "#7B3294", "#56B4E9"]
 
 # Production hash for L=8 data
-PRODUCTION_HASH = "790eaa0832f2"
+PRODUCTION_HASH = os.environ.get("QSF_PRODUCTION_HASH", "790eaa0832f2")
 
 
 def _load_latest_csv(pattern):
@@ -348,127 +349,7 @@ def generate_si_7site_dynamics():
 # ══════════════════════════════════════════════════════════════════════
 # SI: Three-site model dynamics
 # ══════════════════════════════════════════════════════════════════════
-
-def generate_3site_dynamics():
-    """
-    SI Figure: Three-site model dynamics.
-    Uses the 3site_dynamics_results.csv from simulation_data/ if available,
-    otherwise creates a representative figure from Table S11 data.
-    """
-    print("\n=== Generating 3site_dynamics ===")
-
-    # Check for 3-site data in simulation_data or results
-    data_paths = [
-        os.path.join(_FRAMEWORK_DIR, "..", "..",
-                     "quantum_simulations_framework", "simulation_data",
-                     "3site_dynamics_results.csv"),
-        os.path.join(_RESULTS_DIR, "3site_dynamics_results.csv"),
-    ]
-
-    data_loaded = False
-    for dp in data_paths:
-        if os.path.exists(dp):
-            print(f"  Loading 3-site data from: {dp}")
-            df = pd.read_csv(dp)
-            data_loaded = True
-            break
-
-    if data_loaded:
-        # Use actual 3-site simulation data
-        t_fs = df["time_fs"].values
-        t_ps = t_fs / 1000.0
-        pop_filt = np.column_stack([df.get(f"filtered_pop_site_{i+1}", np.zeros_like(t_fs))
-                                    for i in range(3)])
-        pop_broad = np.column_stack([df.get(f"broadband_pop_site_{i+1}", np.zeros_like(t_fs))
-                                     for i in range(3)])
-        coh_cols = [c for c in df.columns if "coherence" in c.lower()]
-        coh_filt = df.get(coh_cols[0], np.zeros_like(t_fs)) if coh_cols else np.zeros_like(t_fs)
-        coh_broad = df.get(coh_cols[1], np.zeros_like(t_fs)) if len(coh_cols) > 1 else np.zeros_like(t_fs)
-    else:
-        # Generate representative figure from SI Table S11 values
-        print("  ⚠️  No 3-site CSV found — figure shows representative data, NOT actual simulation output.", file=sys.stderr)
-        print("  Using representative data from SI Table S11 values.", file=sys.stderr)
-        t_fs = np.linspace(0, 1000, 2000)
-        t_ps = t_fs / 1000.0
-        decay = np.exp(-t_fs / 800)
-        # Filtered: Φ_FT = 76.3%, Broadband: Φ_FT = 64.7%
-        pop_filt = np.column_stack([
-            0.76 * decay + 0.1 * np.sin(2 * np.pi * t_fs / 200) * decay,
-            0.15 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 1) * decay,
-            0.09 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 2) * decay,
-        ])
-        pop_broad = np.column_stack([
-            0.65 * decay + 0.15 * np.sin(2 * np.pi * t_fs / 180) * decay,
-            0.20 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 1) * decay,
-            0.15 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 2) * decay,
-        ])
-        coh_filt = (2.5 * decay + 0.5 * np.sin(2 * np.pi * t_fs / 200) * decay)
-        coh_broad = (3.5 * np.exp(-t_fs / 300) + 0.8 * np.sin(2 * np.pi * t_fs / 180) * decay)
-
-    # Trim to common length
-    n_min = min(len(t_ps), pop_filt.shape[0], pop_broad.shape[0],
-                len(coh_filt), len(coh_broad))
-    t_ps = t_ps[:n_min]
-    pop_filt = pop_filt[:n_min]
-    pop_broad = pop_broad[:n_min]
-    coh_filt = coh_filt[:n_min]
-    coh_broad = coh_broad[:n_min]
-
-    fig, axes = plt.subplots(2, 2, figsize=(8, 6))
-
-    # (a) Population evolution
-    ax = axes[0, 0]
-    for i in range(3):
-        ax.plot(t_ps, pop_filt[:, i], lw=1.5,
-                label=f"Site {i+1} (Filtered)")
-    ax.plot(t_ps, pop_broad[:, 0], "--", color="gray", lw=1.2,
-            label="Site 1 (Broadband)")
-    ax.set_xlabel("Time (ps)")
-    ax.set_ylabel("Population")
-    ax.set_title("(a) Population Evolution", fontweight="bold")
-    ax.legend(frameon=False, fontsize=7)
-    ax.set_xlim(0, 1.0)
-    ax.grid(True, alpha=0.15)
-
-    # (b) Coherence
-    ax = axes[0, 1]
-    ax.plot(t_ps, coh_filt, color=COLORS[0], lw=1.5, label="Filtered")
-    ax.plot(t_ps, coh_broad, "--", color="gray", lw=1.2, label="Broadband")
-    ax.set_xlabel("Time (ps)")
-    ax.set_ylabel(r"$C_{l_1}$-norm coherence")
-    ax.set_title("(b) Coherence Evolution", fontweight="bold")
-    ax.legend(frameon=False)
-    ax.set_xlim(0, 1.0)
-    ax.grid(True, alpha=0.15)
-
-    # (c) Off-resonant control
-    ax = axes[1, 0]
-    off_res = coh_broad * 0.95 + 0.05 * np.sin(2 * np.pi * t_ps * 5)
-    ax.plot(t_ps, off_res, color=COLORS[3], lw=1.5,
-            label="Off-resonant filter")
-    ax.plot(t_ps, coh_broad, "--", color="gray", lw=1.2, label="Broadband")
-    ax.set_xlabel("Time (ps)")
-    ax.set_ylabel(r"$C_{l_1}$-norm coherence")
-    ax.set_title("(c) Off-Resonant Filter Control", fontweight="bold")
-    ax.legend(frameon=False)
-    ax.set_xlim(0, 1.0)
-    ax.grid(True, alpha=0.15)
-
-    # (d) Entropy
-    ax = axes[1, 1]
-    entropy_filt = 0.5 * (1 - np.exp(-t_ps / 0.3)) + 0.05 * np.sin(2 * np.pi * t_ps * 3) * np.exp(-t_ps / 0.2)
-    entropy_broad = 0.7 * (1 - np.exp(-t_ps / 0.25)) + 0.08 * np.sin(2 * np.pi * t_ps * 2) * np.exp(-t_ps / 0.15)
-    ax.plot(t_ps, entropy_filt, color=COLORS[0], lw=1.5, label="Filtered")
-    ax.plot(t_ps, entropy_broad, "--", color="gray", lw=1.2, label="Broadband")
-    ax.set_xlabel("Time (ps)")
-    ax.set_ylabel("Von Neumann Entropy")
-    ax.set_title("(d) Entropy Evolution", fontweight="bold")
-    ax.legend(frameon=False)
-    ax.set_xlim(0, 1.0)
-    ax.grid(True, alpha=0.15)
-
-    plt.tight_layout(pad=1.0)
-    _save_fig(fig, "3site_dynamics")
+# (3-site dynamics code removed per manuscript restructuring)
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -476,15 +357,30 @@ def generate_3site_dynamics():
 # ══════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Regenerate remaining ETR and SI figures.")
+    parser.add_argument("--results-dir", "-r", type=str, default=_RESULTS_DIR,
+                        help="Path to results CSV directory")
+    parser.add_argument("--output-dir", "-o", type=str, default=_FIGURES_DIR,
+                        help="Path to output figures directory")
+    parser.add_argument("--hash", "-s", type=str, default=PRODUCTION_HASH,
+                        help="Configuration hash for L=8 production data")
+    args = parser.parse_args()
+
+    # Override globals
+    _RESULTS_DIR = args.results_dir
+    _FIGURES_DIR = args.output_dir
+    PRODUCTION_HASH = args.hash
+
     print("=" * 60)
     print("  Regenerating remaining figures from verified CSV data")
-    print(f"  Output: {_FIGURES_DIR}")
+    print(f"  Results Dir: {_RESULTS_DIR}")
+    print(f"  Output Dir : {_FIGURES_DIR}")
+    print(f"  Hash Target: {PRODUCTION_HASH if PRODUCTION_HASH else 'Auto-detect latest'}")
     print("=" * 60)
 
     generate_etr_figure()
     generate_si_bath_sensitivity()
     generate_si_7site_dynamics()
-    generate_3site_dynamics()
 
     print("\n" + "=" * 60)
     print("  All remaining figures regenerated!")

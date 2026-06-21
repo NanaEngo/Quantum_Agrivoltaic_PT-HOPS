@@ -1,8 +1,10 @@
 """
-Figure Generator Module for Quantum Agrivoltaics Simulations.
+Publication-Quality Figure Generation Suite.
 
-This module provides tools for generating publication-quality figures
-from quantum simulation results.
+This module provides the FigureGenerator class, optimized for generating
+manuscript-ready graphics (600 DPI, PDF/PNG formats) according to JPCL
+submission standards. It includes specialized plotting routines for quantum
+dynamics, spectral density engineering, and environmental robustness.
 """
 
 import logging
@@ -19,7 +21,18 @@ logger = logging.getLogger(__name__)
 
 class FigureGenerator:
     """
-    Class for generating publication-quality figures from simulation results.
+    Orchestrator for JPCL-compliant scientific visualization.
+
+    This class manages the generation of complex multi-panel figures,
+    ensuring consistent themes, color palettes, and resolution standards
+    across the entire research project. It automatically integrates with the
+    defined project theme (utils/theme.py).
+
+    Parameters
+    ----------
+    figures_dir : str, optional
+        The root directory where generated figures will be stored.
+        Default is "../Graphics/".
     """
 
     def __init__(self, figures_dir: str = "../Graphics/"):
@@ -108,14 +121,10 @@ class FigureGenerator:
         # Subsequent rows: 2 metrics per row
         n_rows = 1 + (n_metrics + 1) // 2
 
-        # Create subplots
-        n_cols = 2
-        # Row 0: populations and coherences
-        # Subsequent rows: 2 metrics per row
-        n_rows = 1 + (n_metrics + 1) // 2
-
         fig, axes = plt.subplots(n_rows, n_cols, figsize=(16, 5 * n_rows))
-        # REMOVED fig.suptitle for professional journal standard
+        fig.suptitle(
+            "Quantum Dynamics Simulation Results", fontsize=16, fontweight="bold"
+        )
 
         # Ensure axes is always a 2D array for consistent indexing
         if n_rows == 1:
@@ -124,7 +133,7 @@ class FigureGenerator:
         # Plot populations over time
         ax0 = axes[0, 0]
         if n_sites == 1:
-            ax0.plot(time_points, populations, color=self.colors[0], linewidth=2.5)
+            ax0.plot(time_points, populations, color=self.colors[0], linewidth=2.0)
             if "baseline_populations" in kwargs:
                 ax0.plot(
                     time_points,
@@ -134,10 +143,10 @@ class FigureGenerator:
                     linewidth=1.5,
                     label="Broadband",
                 )
-            ax0.set_xlabel("Time [fs]", fontsize=14, fontweight="bold")
-            ax0.set_ylabel("Population", fontsize=14, fontweight="bold")
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
             ax0.set_title(
-                "(a) Population Dynamics", loc="left", fontsize=16, fontweight="bold"
+                "(a) Population Dynamics", loc="left", fontsize=14, fontweight="bold"
             )
             ax0.grid(True, alpha=0.3)
         else:
@@ -147,7 +156,7 @@ class FigureGenerator:
                     populations[:, i],
                     label=f"Site {i + 1}",
                     color=self.colors[i],
-                    linewidth=2.5,
+                    linewidth=2.0,
                 )
             if "baseline_populations" in kwargs:
                 # Just plot site 1 of broadband as an example trace to avoid clutter
@@ -159,21 +168,21 @@ class FigureGenerator:
                     linewidth=1.5,
                     label="Site 1 (Broadband)",
                 )
-            ax0.set_xlabel("Time [fs]", fontsize=14, fontweight="bold")
-            ax0.set_ylabel("Population", fontsize=14, fontweight="bold")
+            ax0.set_xlabel("Time [fs]", fontsize=12)
+            ax0.set_ylabel("Population", fontsize=12)
             ax0.set_title(
                 "(a) Exciton Transport Dynamics",
                 loc="left",
-                fontsize=16,
+                fontsize=14,
                 fontweight="bold",
             )
-            ax0.legend(loc="upper right", frameon=False, fontsize=12)
+            ax0.legend(loc="upper right", frameon=False, fontsize=10)
             ax0.grid(True, alpha=0.3)
 
         # Plot coherences
         ax1 = axes[0, 1]
         if coherences is not None:
-            ax1.plot(time_points, coherences, "r-", linewidth=2.5, label="Filtered")
+            ax1.plot(time_points, coherences, "r-", linewidth=2.0, label="Filtered")
             if (
                 "baseline_coherences" in kwargs
                 and kwargs["baseline_coherences"] is not None
@@ -186,7 +195,7 @@ class FigureGenerator:
                     linewidth=1.5,
                     label="Broadband",
                 )
-                ax1.legend(frameon=False, fontsize=12)
+                ax1.legend(frameon=False, fontsize=10)
         else:
             ax1.text(
                 0.5,
@@ -196,14 +205,16 @@ class FigureGenerator:
                 va="center",
                 transform=ax1.transAxes,
             )
-        ax1.set_xlabel("Time [fs]", fontsize=14, fontweight="bold")
-        ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=14, fontweight="bold")
+        ax1.set_xlabel("Time [fs]", fontsize=12)
+        ax1.set_ylabel("Coherence ($l_1$-norm)", fontsize=12)
         ax1.set_title(
-            "(b) Coherence Evolution", loc="left", fontsize=16, fontweight="bold"
+            "(b) Coherence Evolution", loc="left", fontsize=14, fontweight="bold"
         )
         ax1.grid(True, alpha=0.3)
 
         # Plot quantum metrics
+        # FIX M-6: generate panel labels dynamically so IndexError cannot occur
+        # when quantum_metrics has more than 4 entries (the old hardcoded list).
         panel_labels = [f"({chr(ord('c') + i)})" for i in range(len(quantum_metrics))]
         for i, (metric_name, metric_values) in enumerate(quantum_metrics.items()):
             row = 1 + i // n_cols
@@ -215,7 +226,7 @@ class FigureGenerator:
                     ax.plot(
                         time_points,
                         metric_values,
-                        linewidth=2.5,
+                        linewidth=2.0,
                         color=self.colors[i % len(self.colors)],
                     )
                     if (
@@ -230,7 +241,7 @@ class FigureGenerator:
                             linewidth=1.5,
                             label="Broadband",
                         )
-                        ax.legend(frameon=False, fontsize=12)
+                        ax.legend(frameon=False, fontsize=10)
                 else:
                     ax.text(
                         0.5,
@@ -241,16 +252,12 @@ class FigureGenerator:
                         transform=ax.transAxes,
                     )
 
-                ax.set_xlabel("Time [fs]", fontsize=14, fontweight="bold")
-                ax.set_ylabel(
-                    metric_name.replace("_", " ").title(),
-                    fontsize=14,
-                    fontweight="bold",
-                )
+                ax.set_xlabel("Time [fs]", fontsize=12)
+                ax.set_ylabel(metric_name.replace("_", " ").title(), fontsize=12)
                 ax.set_title(
-                    f"{panel_labels[i]} {metric_name.replace('_', ' ').title()}",
+                    f"{panel_labels[i]} {metric_name.replace('_', ' ').title()} Evolution",
                     loc="left",
-                    fontsize=16,
+                    fontsize=14,
                     fontweight="bold",
                 )
                 ax.grid(True, alpha=0.3)
@@ -262,7 +269,12 @@ class FigureGenerator:
             if row < n_rows:
                 fig.delaxes(axes[row, col])
 
-        plt.tight_layout()
+        # Turn off minor ticks to prevent slow rendering/warnings for large range data (e.g., QFI)
+        for ax in fig.get_axes():
+            ax.xaxis.set_minor_locator(plt.NullLocator())
+            ax.yaxis.set_minor_locator(plt.NullLocator())
+
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
         # Save figures in multiple formats
         plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
@@ -283,6 +295,11 @@ class FigureGenerator:
         """
         Plot the bath spectral density with component breakdown and vibronic mode annotations.
         Matches the style of SI Figure S1.
+
+        The 12 discrete vibronic modes (Kleinekathöfer/Coker model) are shown as
+        individual Lorentzian peaks and vertical markers, following Rev 3 Pt 2:
+        the spectral density must clearly display the discrete mode distribution
+        rather than appearing as a linear function.
         """
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         pdf_path = os.path.join(self.figures_dir, f"{filename_prefix}_{timestamp}.pdf")
@@ -322,22 +339,37 @@ class FigureGenerator:
             label="Total $J(\\omega)$",
         )
 
-        # Annotate vibronic peaks
+        # Annotate individual vibronic modes as discrete peaks (Rev 3 Pt 2)
+        # Show each of the 12 Kleinekathöfer/Coker modes with markers
         if vibronic_peaks:
+            peak_vals = []
             for w_v in vibronic_peaks:
                 peak_val = np.interp(w_v, omega_cm, J_total / J_max)
+                peak_vals.append(peak_val)
+                # Vertical guide line for each mode
                 ax.axvline(
-                    x=w_v, color=self.colors[2], linestyle=":", alpha=0.6, linewidth=1
+                    x=w_v, color=self.colors[2], linestyle=":", alpha=0.5, linewidth=0.8
                 )
-                if peak_val > 0.1:
+                if peak_val > 0.05:
                     ax.annotate(
                         f"{int(w_v)}",
-                        xy=(w_v, peak_val + 0.02),
-                        fontsize=8,
+                        xy=(w_v, peak_val + 0.03),
+                        fontsize=7,
                         ha="center",
                         color=self.colors[2],
                         fontweight="bold",
+                        rotation=90,
                     )
+            # Stem markers at each discrete vibronic frequency
+            ax.plot(
+                vibronic_peaks,
+                peak_vals,
+                "v",
+                color=self.colors[2],
+                markersize=6,
+                zorder=5,
+                label="Vibronic Modes (12)",
+            )
 
         ax.set_xlabel("Wavenumber (cm$^{-1}$)", fontweight="bold")
         ax.set_ylabel("Normalized Spectral Density", fontweight="bold")

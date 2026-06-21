@@ -17,6 +17,7 @@ Validation: prints Φ_filt, Φ_broad, η and cross-checks against ANALYSIS_20260
 import os
 import sys
 import glob
+import argparse
 
 import numpy as np
 import pandas as pd
@@ -25,11 +26,21 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # ──────────────────────────────────────────────────────────────────────
-# Paths
+# Paths & Environment
 # ──────────────────────────────────────────────────────────────────────
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
 _RESULTS_DIR = os.path.join(_SCRIPT_DIR, "results")
+if _FRAMEWORK_DIR not in sys.path:
+    sys.path.insert(0, _FRAMEWORK_DIR)
+
+# ──────────────────────────────────────────────────────────────────────
+# Core Constants
+# ──────────────────────────────────────────────────────────────────────
+try:
+    from core.constants import DEFAULT_VIBRONIC_FREQUENCIES, DEFAULT_HUANG_RHYS_FACTORS
+except ImportError:
+    from src.core.constants import DEFAULT_VIBRONIC_FREQUENCIES, DEFAULT_HUANG_RHYS_FACTORS
 
 # Submission package output — dedicated Figures/ subfolder
 # Configurable via env var QSF_OUTPUT_DIR (for server deployment).
@@ -136,7 +147,8 @@ EXPECTED_PHI_BROAD_L8 = 0.5442
 EXPECTED_ETA_L8 = 0.3860
 
 # Production config hash for L=8 data (June 17 production run, hash: 790eaa0832f2)
-PRODUCTION_HASH = "790eaa0832f2"
+# Fallback logic handles dynamic hash resolution if not set.
+PRODUCTION_HASH = os.environ.get("QSF_PRODUCTION_HASH", "790eaa0832f2")
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -152,13 +164,11 @@ def compute_spectral_density(omega_cm,
     Returns (J_total, J_dl, J_vib_total)  all in arb. units.
     """
     if vib_freqs is None:
-        vib_freqs = np.array([180, 220, 280, 350, 520, 575, 720,
-                              1050, 1185, 1220, 1350, 1500])
+        vib_freqs = DEFAULT_VIBRONIC_FREQUENCIES
     if vib_hr is None:
-        vib_hr = np.array([0.05, 0.045, 0.03, 0.025, 0.02, 0.015,
-                           0.01, 0.008, 0.005, 0.005, 0.004, 0.003])
+        vib_hr = DEFAULT_HUANG_RHYS_FACTORS
     if vib_damp is None:
-        vib_damp = np.full(12, 10.0)
+        vib_damp = np.full(len(vib_freqs), 10.0)
 
     # Drude-Lorentz
     J_dl = 2.0 * lambda_dl * gamma_dl * omega_cm / (omega_cm**2 + gamma_dl**2)
@@ -578,9 +588,25 @@ def generate_si_spectral_density(output_dir):
 # ══════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Regenerate publication figures from June 2026 data.")
+    parser.add_argument("--results-dir", "-r", type=str, default=_RESULTS_DIR,
+                        help="Path to results CSV directory")
+    parser.add_argument("--output-dir", "-o", type=str, default=_SUBMISSION_DIR,
+                        help="Path to output figures directory")
+    parser.add_argument("--hash", "-s", type=str, default=PRODUCTION_HASH,
+                        help="Configuration hash for L=8 production data")
+    args = parser.parse_args()
+
+    # Override globals
+    _RESULTS_DIR = args.results_dir
+    _SUBMISSION_DIR = args.output_dir
+    PRODUCTION_HASH = args.hash
+
     print("=" * 60)
     print("  Regenerating publication figures from June 2026 data")
-    print(f"  Output: {_SUBMISSION_DIR}")
+    print(f"  Results Dir: {_RESULTS_DIR}")
+    print(f"  Output Dir : {_SUBMISSION_DIR}")
+    print(f"  Hash Target: {PRODUCTION_HASH if PRODUCTION_HASH else 'Auto-detect latest'}")
     print("=" * 60)
 
     generate_quantum_dynamics(_SUBMISSION_DIR)
