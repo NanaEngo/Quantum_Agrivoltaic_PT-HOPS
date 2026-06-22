@@ -47,6 +47,14 @@ import numpy as np
 import yaml
 from joblib import Parallel, delayed
 
+try:
+    from tqdm.auto import tqdm as _tqdm
+except ImportError:
+
+    def _tqdm(iterable, **kwargs):
+        return iterable
+
+
 from src.core.constants import (
     DEFAULT_DISORDER_SIGMA,
     DEFAULT_DPI,
@@ -827,7 +835,7 @@ def _run_temperature_sweep(
                 break
 
         logger.info(f"Batch {batch_idx + 1}/{n_batches}: {len(batch_tasks)} trajectories")
-        batch_results = Parallel(n_jobs=n_jobs)(
+        batch_results = Parallel(n_jobs=n_jobs, return_as="generator")(
             delayed(_run_trajectory_worker)(
                 T,
                 label,
@@ -843,7 +851,9 @@ def _run_temperature_sweep(
             )
             for T, label, s in batch_tasks
         )
-        results_flat.extend(batch_results)
+        results_flat.extend(
+            _tqdm(batch_results, desc=f"Temp batch {batch_idx + 1}", total=len(batch_tasks))
+        )
         # Memory cleanup between batches
         import gc
 
@@ -908,18 +918,9 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
 
     manager = Manager()
     lock = manager.Lock()
+    # _tqdm imported at module level
 
-    # Attempt to import tqdm for progress tracking
-    try:
-        from tqdm.auto import tqdm as _tqdm
-    except ImportError:
-
-        def _tqdm(iterable, **kwargs):
-            return iterable
-
-    # _run_single_disorder moved to module level
-
-    print(f"\n🎲 Starting Parallel Disorder Sampling ({n_samples} realizations)...")
+    logger.info(f"Starting Parallel Disorder Sampling ({n_samples} realizations)...")
 
     L = dyn["L_max"]
     K = dyn["matsubara_truncation"]
@@ -941,7 +942,7 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
         end_idx = min(start_idx + batch_size, n_samples)
         batch_seeds = seeds[start_idx:end_idx]
         logger.info(f"Disorder batch {batch_idx + 1}/{n_batches}: seeds {start_idx}–{end_idx - 1}")
-        batch_results = Parallel(n_jobs=n_jobs)(
+        batch_results = Parallel(n_jobs=n_jobs, return_as="generator")(
             delayed(_run_single_disorder)(
                 s,
                 lock,
@@ -956,7 +957,9 @@ def _build_disorder_samples(cfg, H, time_points, n_samples=100, rng_seed=42):
             )
             for s in batch_seeds
         )
-        results.extend(batch_results)
+        results.extend(
+            _tqdm(batch_results, desc=f"Disorder batch {batch_idx + 1}", total=len(batch_seeds))
+        )
         import gc
 
         gc.collect()

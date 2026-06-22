@@ -417,10 +417,12 @@ class EnvironmentalFactors:
 
         plt.tight_layout()
 
-        filename = f"{filename_prefix}_{timestamp}.pdf"
-        filepath = os.path.join(figures_dir, filename)
-        plt.savefig(filepath, dpi=600, bbox_inches="tight")
+        base = f"{filename_prefix}_{timestamp}"
+        pdf_path = os.path.join(figures_dir, f"{base}.pdf")
+        png_path = os.path.join(figures_dir, f"{base}.png")
+        plt.savefig(pdf_path, dpi=600, bbox_inches="tight")
+        plt.savefig(png_path, dpi=300, bbox_inches="tight")
         plt.close()
 
-        logger.info(f"Environmental parameter sweeps saved to {filepath}")
-        return filepath
+        logger.info(f"Environmental parameter sweeps saved to {pdf_path}")
+        return pdf_path

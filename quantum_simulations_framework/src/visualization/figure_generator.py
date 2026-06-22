@@ -370,8 +370,8 @@ class FigureGenerator:
         ax.grid(True, alpha=0.2)
 
         plt.tight_layout()
-        plt.savefig(pdf_path, dpi=DEFAULT_DPI)
-        plt.savefig(png_path, dpi=PREVIEW_DPI)
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Spectral density figure saved to {pdf_path}")
@@ -423,8 +423,8 @@ class FigureGenerator:
         ax.grid(True, alpha=0.3, linestyle="--")
 
         plt.tight_layout()
-        plt.savefig(pdf_path, dpi=DEFAULT_DPI)
-        plt.savefig(png_path, dpi=PREVIEW_DPI)
+        plt.savefig(pdf_path, dpi=DEFAULT_DPI, bbox_inches="tight")
+        plt.savefig(png_path, dpi=PREVIEW_DPI, bbox_inches="tight")
         plt.close()
 
         logger.info(f"Convergence audit figure saved to {pdf_path}")

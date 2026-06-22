@@ -11,10 +11,12 @@ import logging
 
 import numpy as np
 
+logger = logging.getLogger(__name__)
+
 try:
     from mesohops.noise.hops_noise import HopsNoise
 except ImportError:
-    logging.warning(
+    logger.warning(
         "MesoHOPS not found in environment. Using mock classes for adapter structural mapping."
     )
 
@@ -40,8 +42,6 @@ try:
     QUIMB_JAX_AVAILABLE = True
 except ImportError:
     QUIMB_JAX_AVAILABLE = False
-
-logger = logging.getLogger(__name__)
 
 
 def _construct_mpo_from_bcf(time_grid: np.ndarray, correlation_func: callable, bond_dim: int = 10):

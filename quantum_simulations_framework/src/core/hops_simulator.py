@@ -434,11 +434,16 @@ class HopsSimulator:
             sched = MemoryAwareJobScheduler(self.max_hierarchy, self.k_matsubara, 1)
             return sched._estimate_memory(n_hierarchy_modes)
         except Exception:
-            l_ref, k_ref, n_modes_ref = 8.0, 2.0, 21.0
-            l_factor = (self.max_hierarchy / l_ref) ** 2
-            k_factor = max(0.5, self.k_matsubara / k_ref)
-            modes_factor = max(1.0, n_hierarchy_modes / n_modes_ref)
-            estimate = BASE_TRAJ_MEMORY_GB * l_factor * k_factor * modes_factor
+            import math
+
+            n = min(float(n_hierarchy_modes), 21.0)
+            L = self.max_hierarchy
+            hier_ref = math.comb(29, 8)
+            hier_actual = math.comb(int(n + L), L)
+            ratio = hier_actual / hier_ref
+            estimate = BASE_TRAJ_MEMORY_GB * ratio
+            k_factor = max(0.5, self.k_matsubara / 2.0)
+            estimate *= k_factor
             return max(MIN_TRAJ_MEMORY_GB, estimate)
 
     @staticmethod
@@ -1149,6 +1154,12 @@ class HopsSimulator:
                     )
 
                 _gc.collect()
+                try:
+                    from src.core.memory_manager import log_memory_pressure
+
+                    log_memory_pressure()
+                except ImportError:
+                    pass
 
             if _progress_thread is not None:
                 _progress_thread._keep_running = False
