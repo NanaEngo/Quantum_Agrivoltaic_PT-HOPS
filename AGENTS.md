@@ -468,6 +468,34 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 
 ---
 
+## Session 10 (2026-06-22) — Paper 2 Integration & Production Setup
+
+### Projet 2 : Quantum Agrivoltaics (Nature Energy)
+
+Le projet `Redac_Paper2/` est un projet indépendant qui intègre 5 domaines :
+- **Dynamique quantique** : PT-HOPS/SBD via `quantum_simulations_framework/`
+- **Microclimat agricole** : FAO-56 Penman-Monteith
+- **Cycle de vie (LCA)** : Net Ecological Benefit (NEB), amortissement coopératif
+- **Sécurité IoT** : BB84 QKD, capteurs GQD
+- **Diagnostic SERS** : Spectroscopie Raman in situ
+
+#### ✅ Fixes effectués
+- **Bug MesoHOPS adaptatif** : `trajectory.storage.data["psi_traj"]` → `trajectory.storage["psi_traj"]` (décompression adaptative)
+- **Bug import framework** : `__init__.py` ajouté à `framework/src/` (résout conflit de résolution de package)
+- **Import test** : `import importlib` → `import importlib.util` (Python 3.12)
+- **dt cohérent** : Manuscrit `0.5 fs` → `0.2 fs` (aligné sur `parameters.yaml`)
+- **Vent serre** : Facteur 10% appliqué dans `orchestrator.py` (`WIND_SPEED_GREENHOUSE_FACTOR`)
+- **LaTeX** : Compatibilité siunitx v3, `acknowledgement` → `acknowledgements`
+- **Code quality** : Imports relatifs, constantes nommées, `ruff format`
+
+#### ✅ Tests
+- **Local** : 16/16 passed
+- **Serveur** : 16/16 passed (incluant `test_mesohops_solver_propagation`)
+
+#### 📄 Documentation créée
+- `Redac_Paper2/SYNTHESE_PROJET2.md` — État complet du Projet 2
+- `Redac_Paper2/run_production_paper2.sh` — Script d'orchestration production serveur
+
 ## License
 
 MIT License

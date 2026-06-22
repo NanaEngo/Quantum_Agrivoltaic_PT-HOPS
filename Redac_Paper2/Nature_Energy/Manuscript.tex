@@ -98,7 +98,7 @@ Smart photovoltaic panels that selectively transmit only the specific colours of
 Land-use conflicts between photovoltaic panels and crops limit conventional agrivoltaics.
 We propose a quantum-engineered solution: a semi-transparent organic photovoltaic layer integrated with a nanoparticle-on-mirror plasmonic cavity that acts as an active spectral shaper rather than providing passive shading.
 By transmitting narrow bands at \SI{750}{\nm} and \SI{820}{\nm}, the system prepares polaron-dressed vibronic states in the Fenna--Matthews--Olson complex, extending excitonic coherence lifetimes by \SI{50}{\percent} and increasing forward transfer yields by \SI{25}{\percent} at \SI{295}{\kelvin}.
-A \numproduct{9x9} dressed Hamiltonian captures the collective strong-coupling regime; Floquet Stark detuning and optomechanically induced transparency protect the complex from exciton overload.
+A $9 \times 9$ dressed Hamiltonian captures the collective strong-coupling regime; Floquet Stark detuning and optomechanically induced transparency protect the complex from exciton overload.
 This ``smart shield'' reduces crop evapotranspiration by \SI{28}{\percent} and yields a Net Ecological Benefit of \SI{12.4}{\kg\ CO2e\per\m\squared\per\yr} --- \SI{2.4}{\times} greater than static shading.
 Cooperative ownership models amortize capital expenditure within \SI{3.5}{\yr}; BB84 quantum key distribution secures IoT telemetry with a \SI{4.8}{\percent} quantum bit error rate.
 Coordinated vibronic light-harvesting thus bridges quantum coherence engineering with agricultural sustainability.
@@ -126,7 +126,7 @@ Single-photon experiments have confirmed that quantum coherence persists in indi
 Here we extend this principle in three directions.
 
 First, we introduce an 8-site FMO model with a non-Hermitian reaction center trap on sites 3 and 4, enabling quantitative computation of the forward transfer yield $\Phi_{\mathrm{FT}}$ as the time-integrated population captured by the reaction center.
-Second, we embed the FMO complex in a nanoparticle-on-mirror (NPoM) plasmonic cavity~\cite{Chikkaraddy2016} that couples the biological light-harvesting system to the organic photovoltaic (OPV) layer through strong coherent coupling, forming a \numproduct{9x9} dressed Hamiltonian.
+Second, we embed the FMO complex in a nanoparticle-on-mirror (NPoM) plasmonic cavity~\cite{Chikkaraddy2016} that couples the biological light-harvesting system to the organic photovoltaic (OPV) layer through strong coherent coupling, forming a $9 \times 9$ dressed Hamiltonian.
 Third, we incorporate dynamic photo-protection mechanisms --- Floquet Stark detuning and optomechanically induced transparency (OMIT) --- that mimic the non-photochemical quenching used by plants under high light stress.
 
 The microscopic quantum optimization is then mapped onto a macroscopic multi-scale lifecycle assessment.
@@ -181,7 +181,7 @@ At the sub-nanometer mode volumes accessible in NPoM cavities ($V_{\mathrm{mode}
 A numerical bound caps $g_0$ at \SI{1000}{\per\cm} when $V_{\mathrm{mode}} \to 0$ to prevent divergences.
 Recent advances in quantum-tunnel-junction plasmonic sources have demonstrated that such sub-nanometer cavities can be self-illuminating, eliminating the need for bulky external optics~\cite{Lee2025}.
 
-The dressed Hamiltonian expands to \numproduct{9x9}:
+The dressed Hamiltonian expands to $9 \times 9$:
 \begin{equation}
 \hat{H}_{\mathrm{dressed}} = 
 \begin{pmatrix}
@@ -195,7 +195,7 @@ Figure~\ref{fig:quantum_dynamics}a shows the energy level diagram.
 
 \subsection*{Non-Markovian Quantum Dynamics}
 
-We propagate the 9-site dressed system using the PT-HOPS/SBD formalism with production parameters: hierarchy depth $L=8$, $K=2$ Matsubara terms, time step $\Delta t = \SI{0.5}{\fs}$, and $n=100$ disorder realizations ($\sigma = \SI{50}{\per\cm}$ static disorder)~\cite{Varvelo2021,Citty2024}.
+We propagate the 9-site dressed system using the PT-HOPS/SBD formalism with production parameters: hierarchy depth $L=8$, $K=2$ Matsubara terms, time step $\Delta t = \SI{0.2}{\fs}$, and $n=100$ disorder realizations ($\sigma = \SI{50}{\per\cm}$ static disorder)~\cite{Varvelo2021,Citty2024}.
 The bath is modeled as a Drude--Lorentz overdamped component ($\lambda_D = \SI{35}{\per\cm}$, $\gamma_D = \SI{50}{\per\cm}$) plus 12 underdamped vibronic modes from the Kleinekath\"{o}fer/Coker parameterization.
 Convergence is verified through hierarchy depth sweeps ($L=6,7,8$) and Matsubara truncation tests ($K=1,2,3$); the maximum relative error between $L=7$ and $L=8$ populations is $\num{3.1e-11}$, and between $K=2$ and $K=3$ is $\num{3.3e-5}$ (\Cref{SI-sec:convergence}).
 
@@ -333,7 +333,7 @@ The ``quantum-to-organism'' framework established here provides the theoretical 
 \subsection*{PT-HOPS/SBD Quantum Dynamics}
 
 All quantum dynamics simulations use the Process Tensor Hierarchy of Pure States with Stochastically Bundled Dissipators as implemented in the open-source MesoHOPS library (v1.7)~\cite{Varvelo2021}.
-The hierarchy depth is $L = 8$ with $K = 2$ Matsubara terms and a time step $\Delta t = \SI{0.5}{\fs}$, established as the production standard for converged dynamics at \SI{295}{\kelvin}~\cite{Kouam2026}.
+The hierarchy depth is $L = 8$ with $K = 2$ Matsubara terms and a time step $\Delta t = \SI{0.2}{\fs}$, established as the production standard for converged dynamics at \SI{295}{\kelvin}~\cite{Kouam2026}.
 Static disorder is modeled as Gaussian fluctuations of the site energies with standard deviation $\sigma = \SI{50}{\per\cm}$, sampled over $n = 100$ realizations.
 The bath spectral density follows the 12-mode Kleinekath\"{o}fer/Coker parameterization with a Drude--Lorentz background ($\lambda_D = \SI{35}{\per\cm}$, $\gamma_D = \SI{50}{\per\cm}$) and 12 underdamped vibronic modes (frequencies \SIrange{180}{1500}{\per\cm}, Huang--Rhys factors $S_k = \numrange{0.003}{0.050}$).
 
@@ -386,7 +386,7 @@ Serge Guy Nana Engo: 0000-0000-0000-0000
 \centering
 \includegraphics[width=\columnwidth]{Figure1_Quantum_Dynamics.png}
 \caption{\textbf{Quantum dynamics of the 8-site FMO complex coupled to an NPoM plasmonic cavity.}
-\textbf{(a)} Energy level diagram of the \numproduct{9x9} dressed Hamiltonian showing the 8 FMO excitonic states coupling to the plasmon mode with strength $g_0$.
+\textbf{(a)} Energy level diagram of the $9 \times 9$ dressed Hamiltonian showing the 8 FMO excitonic states coupling to the plasmon mode with strength $g_0$.
 \textbf{(b)} Exciton population dynamics under dual-band filtered excitation at \SI{295}{\kelvin}. Solid lines: filtered; dashed lines: broadband.
 \textbf{(c)} Reaction center trapping yield $\Phi_{\mathrm{FT}}$ as a function of time.
 \textbf{(d)} $l_1$-norm coherence $C_{l_1}(t)$ showing \SI{50}{\percent} lifetime extension under filtered excitation.

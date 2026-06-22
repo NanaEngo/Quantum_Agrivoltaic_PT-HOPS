@@ -1,8 +1,9 @@
 import os
+
 from Redac_Paper2.src.config_loader import load_config
-from Redac_Paper2.src.microclimate.fao56 import GreenhouseEvapotranspiration
-from Redac_Paper2.src.lca.neb import NetEcologicalBenefit
 from Redac_Paper2.src.lca.database import AmortizationAnalysis
+from Redac_Paper2.src.lca.neb import NetEcologicalBenefit
+from Redac_Paper2.src.microclimate.fao56 import GreenhouseEvapotranspiration
 
 
 def test_greenhouse_evapotranspiration():

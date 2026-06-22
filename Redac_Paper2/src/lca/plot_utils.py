@@ -1,7 +1,8 @@
 import os
+
+import h5py
 import matplotlib.pyplot as plt
 import numpy as np
-import h5py
 
 
 class Paper2FigureGenerator:
@@ -28,8 +29,9 @@ class Paper2FigureGenerator:
         with h5py.File(h5_file_path, "r") as f:
             populations = f["dynamics/populations"][:]
             rc_yield = f["dynamics/rc_yield"][:]
+            dt_fs = f["dynamics"].attrs.get("time_step_fs", 0.2)
 
-        time_points = np.arange(len(populations)) * 5.0  # 5 fs step size
+        time_points = np.arange(len(populations)) * dt_fs
 
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
@@ -38,7 +40,7 @@ class Paper2FigureGenerator:
             ax1.plot(
                 time_points,
                 populations[:, i],
-                label=f"Site {i+1}",
+                label=f"Site {i + 1}",
                 linewidth=1.8,
                 color=self.colors[i % len(self.colors)],
             )
@@ -58,9 +60,7 @@ class Paper2FigureGenerator:
         )
         ax2.set_xlabel("Time (fs)", fontweight="bold")
         ax2.set_ylabel("Trapping Yield", fontweight="bold")
-        ax2.set_title(
-            "(b) Reaction Center Energy Capture", loc="left", fontweight="bold"
-        )
+        ax2.set_title("(b) Reaction Center Energy Capture", loc="left", fontweight="bold")
         ax2.grid(True, alpha=0.3)
         ax2.legend(frameon=False)
 
@@ -90,9 +90,7 @@ class Paper2FigureGenerator:
         )
         ax.set_ylabel("Raman Intensity (a.u.)", fontweight="bold")
         ax.set_xlabel("Vibrational Mode Signature", fontweight="bold")
-        ax.set_title(
-            "In Situ Optomechanical SERS Diagnostic", fontweight="bold", pad=15
-        )
+        ax.set_title("In Situ Optomechanical SERS Diagnostic", fontweight="bold", pad=15)
         ax.grid(axis="y", alpha=0.3)
 
         # Label values on top of bars
@@ -111,9 +109,7 @@ class Paper2FigureGenerator:
         plt.close()
         return out_path
 
-    def plot_figure_3_lca_neb(
-        self, scenario_a: dict, scenario_b: dict, scenario_c: dict
-    ) -> str:
+    def plot_figure_3_lca_neb(self, scenario_a: dict, scenario_b: dict, scenario_c: dict) -> str:
         """
         Produces Figure 3: WEF Nexus Net Ecological Benefit (NEB) Comparison
         Compares Scenarios A, B, and C across Net Carbon Avoided and Effective Biomass.
@@ -159,9 +155,7 @@ class Paper2FigureGenerator:
             alpha=0.85,
         )
 
-        ax1.set_ylabel(
-            "Avoided Emissions (kg CO2e / m2 yr)", color="#1f77b4", fontweight="bold"
-        )
+        ax1.set_ylabel("Avoided Emissions (kg CO2e / m2 yr)", color="#1f77b4", fontweight="bold")
         ax1.tick_params(axis="y", labelcolor="#1f77b4")
         ax2.set_ylabel(
             "Effective Crop Biomass Harvested (kg / m2 yr)",
@@ -172,9 +166,7 @@ class Paper2FigureGenerator:
 
         ax1.set_xticks(x)
         ax1.set_xticklabels(scenarios, fontweight="bold")
-        ax1.set_title(
-            "WEF Nexus Life Cycle Assessment Comparison", fontweight="bold", pad=15
-        )
+        ax1.set_title("WEF Nexus Life Cycle Assessment Comparison", fontweight="bold", pad=15)
 
         # Combine legends
         lines1, labels1 = ax1.get_legend_handles_labels()

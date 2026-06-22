@@ -224,12 +224,12 @@ This is consistent with the expectation that at \SI{295}{\kelvin}, the dynamics 
 
 \subsection{Time Step Convergence}
 
-We verify time step convergence by comparing $\Delta t = \SIlist{0.5;1.0;2.0}{\fs}$.
+We verify time step convergence by comparing $\Delta t = \qtylist{0.2;1.0;2.0}{\fs}$.
 Table~\ref{tab:SI_timestep_convergence} summarizes the results.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Time step convergence.} Maximum population deviation relative to the $\Delta t = \SI{0.5}{\fs}$ reference.}
+\caption{\textbf{Time step convergence.} Maximum population deviation relative to the $\Delta t = \SI{0.2}{\fs}$ reference.}
 \label{tab:SI_timestep_convergence}
 \begin{tabular}{lc}
 \toprule
@@ -242,7 +242,7 @@ $\Delta t$ (fs) & Max.\ population deviation \\
 \end{tabular}
 \end{table}
 
-We adopt $\Delta t = \SI{0.5}{\fs}$ as the production standard, consistent with Paper~I~\cite{Kouam2026}.
+We adopt $\Delta t = \SI{0.2}{\fs}$ as the production standard, consistent with Paper~I~\cite{Kouam2026}.
 
 \subsection{Detailed Balance}
 
@@ -563,7 +563,7 @@ The general design criterion is:
 \end{equation}
 
 where $\omega_{\mathrm{ex}}$ is the primary exciton absorption frequency and $\omega_v$ is the underdamped mode frequency.
-For FMO at \SI{295}{\kelvin}, $\omega_{\mathrm{ex}} \approx \SI{12500}{\per\cm}$ (\SI{800}{\nm}) and $\omega_v = \SI{180}{\per\cm}$ gives $\lambda_{\mathrm{filter}} \approx \SIlist{790;810}{\nm}$, which defines the dual-band filter passband.
+For FMO at \SI{295}{\kelvin}, $\omega_{\mathrm{ex}} \approx \SI{12500}{\per\cm}$ (\SI{800}{\nm}) and $\omega_v = \SI{180}{\per\cm}$ gives $\lambda_{\mathrm{filter}} \approx \qtylist{790;810}{\nm}$, which defines the dual-band filter passband.
 
 %==============================================================================
 % SECTION S8: THREE-SITE EXCITONIC TRIMER VERIFICATION

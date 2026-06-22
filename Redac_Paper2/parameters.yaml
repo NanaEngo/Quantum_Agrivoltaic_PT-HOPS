@@ -7,8 +7,11 @@ simulation:
 
 quantum:
   solver:
-    hierarchy_depth: 8  # L=8 for production convergence (Paper 1 standard)
-    time_step_fs: 0.5   # dt=0.5 fs to resolve auxiliary decay timescale
+    hierarchy_depth: 8       # L=8 for production convergence (Paper 1 standard)
+    time_step_fs: 0.2        # dt=0.2 fs to resolve auxiliary decay timescale
+    simulation_duration_fs: 100.0  # total simulation window (fs)
+    n_traj: 2                # number of Monte Carlo trajectories
+    sbd_bundles_per_site: 3  # SBD compression bundles (Paper 1 standard)
   fmo:
     sites: 8
     coupling_reaction_center: 0.15  # Gamma_RC in ps-1
@@ -23,6 +26,10 @@ microclimate:
   greenhouse:
     shading_factor: 0.35
     crop_coefficient: 0.85
+  default_temp_c: 25.0
+  default_rh_pct: 60.0
+  default_wind_speed_m_s: 1.5
+  baseline_water_mm: 5.0
 
 lca:
   cooperative:
@@ -30,6 +37,23 @@ lca:
     capex_subsidy_rate: 0.30
   carbon:
     grid_intensity_gco2_kwh: 450.0
+  pv_efficiency: 0.15
+  pv_fill_factor: 0.8
+  reference_biomass_kg: 12.0
+  default_capex: 25000.0
+  default_annual_revenue: 6000.0
+  scenario_b_yield_factor: 0.8
+  scenario_b_water_factor: 0.9
+  scenario_b_power_factor: 1.1
+  scenario_b_biomass_kg: 10.0
+  scenario_c_yield_factor: 0.7
+  scenario_c_water_liters: 0.0
+  scenario_c_power_kwh: 0.0
+  scenario_c_biomass_kg: 12.0
+
+output:
+  dynamics_h5: data/converged/production_dynamics.h5
+  graphics_dir: Graphics
 
 security:
   qkd:

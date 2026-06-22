@@ -47,7 +47,32 @@ except ImportError:
     HopsEOM = None
 
 # Import our custom PT-HOPS and SBD Extensions
-from src.core.constants import (
+# Supports three import contexts:
+#   1. Relative (from ..extensions)  — core is subpackage of src
+#   2. Absolute with src (from src.extensions) — framework root in sys.path
+#   3. Absolute bare (from extensions) — src/ in sys.path
+try:
+    from ..extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
+except ImportError:
+    try:
+        from src.extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
+    except ImportError:
+        from extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
+try:
+    from ..quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
+except ImportError:
+    try:
+        from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
+    except ImportError:
+        from quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
+try:
+    from ..quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
+except ImportError:
+    try:
+        from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
+    except ImportError:
+        from quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
+from .constants import (
     BASE_TRAJ_MEMORY_GB,
     DEFAULT_DRUDE_CUTOFF,
     DEFAULT_HUANG_RHYS_FACTORS,
@@ -73,11 +98,6 @@ from src.core.constants import (
     PULSE_RELATIVE_DELAY,
     PULSE_TYPE,
 )
-from src.extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
-
-# Import fallback simulators from src.quantum package
-from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
-from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
 
 try:
     import psutil
@@ -86,7 +106,13 @@ try:
 except ImportError:
     HAS_PSUTIL = False
 
-from src.utils.logging_config import get_logger
+try:
+    from src.utils.logging_config import get_logger
+except ImportError:
+    try:
+        from ..utils.logging_config import get_logger
+    except ImportError:
+        from utils.logging_config import get_logger
 
 
 def get_mesohops_version() -> Optional[str]:
@@ -283,9 +309,12 @@ def _run_single_traj_worker(
         _t5 = _time.time()
         try:
             n_sites = initial_state.shape[0]
-            psi_data = trajectory.storage.data["psi_traj"]
+            # Use storage["psi_traj"] (via __getitem__) to trigger adaptive decompression.
+            # Direct access storage.data["psi_traj"] would return sparse aux-only data.
+            psi_data = trajectory.storage["psi_traj"]
             t_data = trajectory.storage.data["t_axis"]
 
+            psi_data = np.atleast_2d(np.asarray(psi_data))
             valid_data = [psi[:n_sites] for psi in psi_data if len(psi) >= n_sites]
             valid_t = [t for i, t in enumerate(t_data) if len(psi_data[i]) >= n_sites]
 
@@ -400,16 +429,18 @@ class HopsSimulator:
         self.system = None
         self.fallback_sim: Optional[Any] = None
 
-        # D-4 FIX: validate Hermiticity before any simulation work.
-        # A non-Hermitian Hamiltonian produces complex eigenvalues and unphysical
-        # dynamics that are hard to diagnose downstream. Catch it here.
+        # D-4 FIX: validate Hermiticity before any simulation work (unless disabled).
+        # Paper 2 uses non-Hermitian Hamiltonians (imaginary trapping terms on diagonal).
+        # strict_hermiticity=False bypasses this check.
+        strict_hermiticity = kwargs.get("strict_hermiticity", True)
         H = np.asarray(hamiltonian)
-        if H.ndim == 2 and H.shape[0] == H.shape[1]:
+        if strict_hermiticity and H.ndim == 2 and H.shape[0] == H.shape[1]:
             max_asymmetry = np.max(np.abs(H - H.conj().T))
             if max_asymmetry > 1e-8:
                 raise ValueError(
                     f"Hamiltonian is not Hermitian: max|H - H†| = {max_asymmetry:.2e}. "
-                    "Check units and construction (should be in cm⁻¹, symmetric couplings)."
+                    "Check units and construction (should be in cm⁻¹, symmetric couplings). "
+                    "Pass strict_hermiticity=False to bypass."
                 )
 
         logger.debug(

@@ -12,9 +12,7 @@ class AmortizationAnalysis:
         self.coop_members = config.lca.cooperative.coop_members
         self.subsidy_rate = config.lca.cooperative.capex_subsidy_rate
 
-    def calculate_payback_years(
-        self, initial_capex: float, annual_revenue: float
-    ) -> float:
+    def calculate_payback_years(self, initial_capex: float, annual_revenue: float) -> float:
         """
         Calculates CAPEX payback years accounting for cooperative cost division and subsidies.
         """

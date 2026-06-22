@@ -1,0 +1,9 @@
+data/converged/
+logs/
+coverage_html/
+Graphics/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.h5
+*.png

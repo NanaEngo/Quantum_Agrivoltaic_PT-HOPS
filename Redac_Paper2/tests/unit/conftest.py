@@ -1,6 +1,7 @@
 """Pytest fixtures for Quantum Agrivoltaics Paper 2 unit tests."""
 
 import os
+
 import pytest
 from Redac_Paper2.src.config_loader import ConfigModel, load_config
 

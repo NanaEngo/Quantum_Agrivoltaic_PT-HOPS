@@ -7,7 +7,7 @@
 %          Nguenang J.-P., Nana Engo S.G.
 % =============================================================================
 % MASTER MANUSCRIPT STANDARD COMPLIANCE: DRAFT STAGE
-% - [ ] Quality Gate 1: Compilation
+% - [x] Quality Gate 1: Compilation
 % - [ ] Quality Gate 2: Journal compliance
 % - [ ] Quality Gate 3: Writing style (AI-ism scan)
 % - [ ] Quality Gate 4: LaTeX technical
@@ -27,7 +27,7 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{booktabs}
-\usepackage[version=4]{siunitx}
+\usepackage{siunitx}
 \usepackage{physics}
 \usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
@@ -185,7 +185,7 @@ Figure~\ref{fig:quantum_dynamics}a shows the energy level diagram.
 
 \subsection*{Non-Markovian Quantum Dynamics}
 
-We propagate the 9-site dressed system using the PT-HOPS/SBD formalism with production parameters: hierarchy depth $L=8$, $K=2$ Matsubara terms, time step $\Delta t = \SI{0.5}{\fs}$, and $n=100$ disorder realizations ($\sigma = \SI{50}{\per\cm}$ static disorder)~\cite{Varvelo2021,Citty2024}.
+We propagate the 9-site dressed system using the PT-HOPS/SBD formalism with production parameters: hierarchy depth $L=8$, $K=2$ Matsubara terms, time step $\Delta t = \SI{0.2}{\fs}$, and $n=100$ disorder realizations ($\sigma = \SI{50}{\per\cm}$ static disorder)~\cite{Varvelo2021,Citty2024}.
 The bath is modeled as a Drude--Lorentz overdamped component ($\lambda_D = \SI{35}{\per\cm}$, $\gamma_D = \SI{50}{\per\cm}$) plus 12 underdamped vibronic modes from the Kleinekath\"{o}fer/Coker parameterization.
 Convergence is verified through hierarchy depth sweeps ($L=6,7,8$) and Matsubara truncation tests ($K=1,2,3$); the maximum relative error between $L=7$ and $L=8$ populations is $\num{3.1e-11}$, and between $K=2$ and $K=3$ is $\num{3.3e-5}$ (\Cref{SI-sec:convergence}).
 
@@ -329,7 +329,7 @@ The ``quantum-to-organism'' framework established here provides the theoretical 
 \subsection*{PT-HOPS/SBD Quantum Dynamics}
 
 All quantum dynamics simulations use the Process Tensor Hierarchy of Pure States with Stochastically Bundled Dissipators as implemented in the open-source MesoHOPS library (v1.7)~\cite{Varvelo2021}.
-The hierarchy depth is $L = 8$ with $K = 2$ Matsubara terms and a time step $\Delta t = \SI{0.5}{\fs}$, established as the production standard for converged dynamics at \SI{295}{\kelvin}~\cite{Kouam2026}.
+The hierarchy depth is $L = 8$ with $K = 2$ Matsubara terms and a time step $\Delta t = \SI{0.2}{\fs}$, established as the production standard for converged dynamics at \SI{295}{\kelvin}~\cite{Kouam2026}.
 Static disorder is modeled as Gaussian fluctuations of the site energies with standard deviation $\sigma = \SI{50}{\per\cm}$, sampled over $n = 100$ realizations.
 The bath spectral density follows the 12-mode Kleinekath\"{o}fer/Coker parameterization with a Drude--Lorentz background ($\lambda_D = \SI{35}{\per\cm}$, $\gamma_D = \SI{50}{\per\cm}$) and 12 underdamped vibronic modes (frequencies \SIrange{180}{1500}{\per\cm}, Huang--Rhys factors $S_k = \numrange{0.003}{0.050}$).
 
@@ -356,7 +356,7 @@ If QBER exceeds $11\%$, key generation aborts and a fail-safe local irrigation r
 Simulation parameters and analysis scripts are available from the corresponding author upon reasonable request.
 The PT-HOPS/SBD implementation is based on the open-source MesoHOPS library at \url{https://github.com/steve-teguia/MesoHOPS}.
 
-\begin{acknowledgement}
+\begin{acknowledgements}
 This work was supported by the University of Yaound\'{e}~I and the University of Douala.
 Computational resources were provided by the penavoraserver cluster (ThinkStation P720, 128~GB RAM, 48~cores).
 We thank the MesoHOPS development team for numerical framework support.

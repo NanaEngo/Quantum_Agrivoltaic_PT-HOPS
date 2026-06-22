@@ -1,15 +1,12 @@
-import pytest
-import numpy as np
+import importlib.util
 import os
+
+import numpy as np
+import pytest
 from Redac_Paper2.src.config_loader import load_config
 from Redac_Paper2.src.quantum_interface.hamiltonian import FmoHamiltonian
 
-# Check if MesoHOPS is available for solver propagation tests
-try:
-    from mesohops.trajectory.hops_trajectory import HopsTrajectory
-    MESOHOPS_AVAILABLE = True
-except ImportError:
-    MESOHOPS_AVAILABLE = False
+MESOHOPS_AVAILABLE = importlib.util.find_spec("mesohops") is not None
 
 
 def test_fmo_hamiltonian_properties():
@@ -36,7 +33,7 @@ def test_fmo_hamiltonian_properties():
     # All inter-site couplings should be non-zero (no missing pairs)
     for i in range(8):
         for j in range(i + 1, 8):
-            assert H[i, j] != 0.0, f"Missing coupling between sites {i+1} and {j+1}"
+            assert H[i, j] != 0.0, f"Missing coupling between sites {i + 1} and {j + 1}"
 
 
 def test_fmo_hamiltonian_coupling_validation():
@@ -50,7 +47,7 @@ def test_fmo_hamiltonian_coupling_validation():
     def broken_init(self):
         """Like _initialize_base_hamiltonian but with a removed coupling."""
         self.H_base = np.zeros((8, 8), dtype=complex)
-        import numpy as _np
+
         energies = [280, 420, 0, 110, 270, 500, 310, 200]
         for i in range(8):
             self.H_base[i, i] = energies[i]
@@ -99,6 +96,7 @@ def test_fmo_hamiltonian_coupling_validation():
     config = load_config(config_path)
 
     import pytest
+
     with pytest.raises(ValueError, match="Missing inter-site couplings"):
         FmoHamiltonian(config)
 
@@ -205,9 +203,7 @@ def test_stability_audit_and_hdf5():
     assert audit.audit_trajectory(invalid_rho) is False
 
     # 2. Test HDF5 Serialization
-    test_h5_path = os.path.join(
-        os.path.dirname(__file__), "../../data/converged/test_traj.h5"
-    )
+    test_h5_path = os.path.join(os.path.dirname(__file__), "../../data/converged/test_traj.h5")
     fake_pops = np.ones((10, 8)) * 0.125
     fake_yield = np.linspace(0, 0.9, 10)
 
