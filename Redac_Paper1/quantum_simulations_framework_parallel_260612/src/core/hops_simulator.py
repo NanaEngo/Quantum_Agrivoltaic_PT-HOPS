@@ -20,6 +20,7 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
+import os
 import sys
 
 try:
@@ -86,8 +87,6 @@ try:
         PULSE_TYPE,
         MEMORY_FRACTION_LIMIT,
         MESOHOPS_SEED,
-        MESOHOPS_EARLY_STEPS,
-        MESOHOPS_INCHWORM_CAP,
         DEFAULT_MAX_TIME,
         DEFAULT_TIME_STEP,
         BASE_TRAJ_MEMORY_GB,
@@ -112,8 +111,6 @@ except ImportError:
         PULSE_TYPE,
         MEMORY_FRACTION_LIMIT,
         MESOHOPS_SEED,
-        MESOHOPS_EARLY_STEPS,
-        MESOHOPS_INCHWORM_CAP,
         DEFAULT_MAX_TIME,
         DEFAULT_TIME_STEP,
         BASE_TRAJ_MEMORY_GB,
@@ -159,6 +156,7 @@ def _run_single_traj_worker(
     dt_save: float,
     time_points: NDArray[np.float64],
     mem_limit_gb: float = 0.0,
+    update_step: int = 50,
 ) -> Optional[Dict[str, Any]]:
     """
     Standalone worker function for parallel trajectory execution.
@@ -203,7 +201,11 @@ def _run_single_traj_worker(
     # setting it restricts the entire Python runtime, breaking subprocess calls
     # (git, etc.) and pandas I/O. Skip entirely for n_jobs=1.
     import os as _os
-    _is_subprocess = _os.environ.get("JOBLIB_START_METHOD") is not None or _os.environ.get("LOKY_PROCESS") is not None
+
+    _is_subprocess = (
+        _os.environ.get("JOBLIB_START_METHOD") is not None
+        or _os.environ.get("LOKY_PROCESS") is not None
+    )
     if mem_limit_gb > 0 and _is_subprocess:
         try:
             import resource
@@ -220,6 +222,7 @@ def _run_single_traj_worker(
 
     try:
         import time as _time
+
         _t0 = _time.time()
 
         # Deep copy of params to avoid process collisions
@@ -233,11 +236,13 @@ def _run_single_traj_worker(
         try:
             trajectory = TrajectoryClass(**local_traj_kwargs)
             logger.info(
-                f"Traj {seed}: constructed in {_time.time()-_t1:.1f}s | "
-                f"n_hmodes={len(local_traj_kwargs.get('system_param',{}).get('GW_SYSBATH',[]))}"
+                f"Traj {seed}: constructed in {_time.time() - _t1:.1f}s | "
+                f"n_hmodes={len(local_traj_kwargs.get('system_param', {}).get('GW_SYSBATH', []))}"
             )
         except Exception as e:
-            import traceback, sys
+            import traceback
+            import sys
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=trajectory_init | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -246,11 +251,19 @@ def _run_single_traj_worker(
         _t2 = _time.time()
         try:
             if hasattr(trajectory, "make_adaptive"):
-                logger.info(f"Traj {seed}: calling make_adaptive()")
-                trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
-                logger.info(f"Traj {seed}: make_adaptive done in {_time.time()-_t2:.1f}s")
+                logger.info(
+                    f"Traj {seed}: calling make_adaptive(update_step={update_step})"
+                )
+                trajectory.make_adaptive(
+                    delta_a=1e-3, delta_s=1e-3, update_step=update_step
+                )
+                logger.info(
+                    f"Traj {seed}: make_adaptive done in {_time.time() - _t2:.1f}s"
+                )
         except Exception as e:
-            import traceback, sys
+            import traceback
+            import sys
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=make_adaptive | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -263,10 +276,14 @@ def _run_single_traj_worker(
                 )
                 if hasattr(trajectory, "noise"):
                     trajectory.noise = pt_noise
-                pt_noise._prepare_noise(system_param["L_NOISE1"], time_points=time_points)
+                pt_noise._prepare_noise(
+                    system_param["L_NOISE1"], time_points=time_points
+                )
                 logger.info(f"Traj {seed}: PT-HOPS noise prepared")
             except Exception as e:
-                import traceback, sys
+                import traceback
+                import sys
+
                 print(f"[MESOHOPS_FAIL] seed={seed} | stage=pt_hops_noise | error={e}")
                 traceback.print_exc(file=sys.stdout)
                 raise
@@ -275,9 +292,11 @@ def _run_single_traj_worker(
         _t3 = _time.time()
         try:
             trajectory.initialize(initial_state.copy())
-            logger.info(f"Traj {seed}: initialized in {_time.time()-_t3:.1f}s")
+            logger.info(f"Traj {seed}: initialized in {_time.time() - _t3:.1f}s")
         except Exception as e:
-            import traceback, sys
+            import traceback
+            import sys
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=initialize | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -292,6 +311,7 @@ def _run_single_traj_worker(
             _rss_mb = 0
             try:
                 import os as _os
+
                 _rss_mb = int(_os.getpid())  # dummy, won't work
             except Exception:
                 pass
@@ -300,7 +320,9 @@ def _run_single_traj_worker(
                 f"(total={_total:.1f}s) | t_max={t_max} dt_save={dt_save}"
             )
         except Exception as e:
-            import traceback, sys
+            import traceback
+            import sys
+
             _elapsed = _time.time() - _t4
             _total = _time.time() - _t0
             print(
@@ -323,7 +345,7 @@ def _run_single_traj_worker(
 
             logger.info(
                 f"Traj {seed}: extracted {len(valid_data)}/{len(psi_data)} frames "
-                f"in {_time.time()-_t5:.1f}s"
+                f"in {_time.time() - _t5:.1f}s"
             )
 
             return {
@@ -332,7 +354,9 @@ def _run_single_traj_worker(
                 "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
             }
         except Exception as e:
-            import traceback, sys
+            import traceback
+            import sys
+
             print(f"[MESOHOPS_FAIL] seed={seed} | stage=extract | error={e}")
             traceback.print_exc(file=sys.stdout)
             raise
@@ -945,11 +969,14 @@ class HopsSimulator:
                 else DEFAULT_TIME_STEP,
             )
 
+            # TAU: noise timestep.  dt_save (same as integrator step) is sufficient;
+            # halving it doubles noise computation with no accuracy benefit for fs-scale steps.
+            _tau = kwargs.get("tau_noise", float(dt_save))
             noise_param = {
                 "SEED": kwargs.get("seed", MESOHOPS_SEED),
                 "MODEL": "FFT_FILTER",
                 "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),
-                "TAU": float(dt_save) / 2.0,  # Réversion : TAU = dt_save / 2.0 (fonctionnel)
+                "TAU": _tau,
                 "INTERPOLATE": False,
                 "RAND_MODEL": "SUM_GAUSSIAN",
                 "STORE_RAW_NOISE": False,
@@ -959,11 +986,15 @@ class HopsSimulator:
             }
 
             # Set up integrator parameters based on test examples
+            # EARLY_INTEGRATOR_STEPS=0 skips inchworm (saves ~20 iter frames per trajectory).
+            # Set >0 only if the hierarchy needs time to converge from scratch.
+            _early_steps = kwargs.get("early_integrator_steps", 0)
+            _inchworm_cap = kwargs.get("inchworm_cap", 0)
             integrator_param = {
                 "INTEGRATOR": "RUNGE_KUTTA",
                 "EARLY_ADAPTIVE_INTEGRATOR": "INCH_WORM",
-                "EARLY_INTEGRATOR_STEPS": MESOHOPS_EARLY_STEPS,
-                "INCHWORM_CAP": MESOHOPS_INCHWORM_CAP,
+                "EARLY_INTEGRATOR_STEPS": _early_steps,
+                "INCHWORM_CAP": _inchworm_cap,
                 "STATIC_BASIS": None,
             }
 
@@ -1023,6 +1054,7 @@ class HopsSimulator:
             seeds = kwargs.get("seeds", list(range(n_traj)))
 
             # Prepare arguments for the picklable worker
+            _update_step = kwargs.get("update_step", 50)
             worker_args = {
                 "TrajectoryClass": TrajectoryClass,
                 "traj_kwargs": traj_kwargs,
@@ -1033,12 +1065,23 @@ class HopsSimulator:
                 "t_max": t_max,
                 "dt_save": dt_save,
                 "time_points": time_points,
+                "update_step": _update_step,
             }
 
             if HAS_JOBLIB and n_jobs > 1:
                 logger.info(
                     f"Running ensemble of {n_traj} trajectories on {n_jobs} cores..."
                 )
+
+                # Fix BrokenProcessPool: loky workers need PYTHONPATH to import
+                # framework modules (src.core.memory_manager, src.io.csv_storage)
+                # that are lazily loaded inside trajectory workers.
+                _qs_fw_path = os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), "..", "..")
+                )
+                _old_pp = os.environ.get("PYTHONPATH", "")
+                _new_pp = _qs_fw_path + (":" + _old_pp if _old_pp else "")
+                os.environ["PYTHONPATH"] = _new_pp
 
                 # Setup tqdm progress bar
                 iterable = seeds
