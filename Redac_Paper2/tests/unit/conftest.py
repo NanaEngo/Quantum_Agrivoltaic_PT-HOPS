@@ -3,7 +3,7 @@
 import os
 
 import pytest
-from Redac_Paper2.src.config_loader import ConfigModel, load_config
+from src.config_loader import ConfigModel, load_config
 
 
 @pytest.fixture(scope="session")

@@ -1,8 +1,8 @@
 import os
 
-from Redac_Paper2.src.config_loader import load_config
-from Redac_Paper2.src.iot_security.qkd import Bb84Protocol
-from Redac_Paper2.src.iot_security.sensing import (
+from src.config_loader import load_config
+from src.iot_security.qkd import Bb84Protocol
+from src.iot_security.sensing import (
     GqdSensorNetwork,
     WaterStressClassifier,
 )

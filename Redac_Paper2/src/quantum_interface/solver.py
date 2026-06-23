@@ -39,11 +39,16 @@ def _load_hops_simulator():
     if not os.path.isfile(_mod_path):
         return None
 
-    # Temporarily remove Paper 2's "src" so the framework's "src" resolves
-    # via sys.path when importlib.import_module does the lookup.
+    # Temporarily remove Paper 2's "src" from sys.modules so
+    # importlib.import_module looks for it fresh via sys.path.
     _p2_src = sys.modules.pop("src", None)
-    if _QS_FW not in sys.path:
-        sys.path.insert(0, _QS_FW)
+
+    # Ensure the framework root is searched *before* Paper 2's root.
+    # Otherwise importlib finds Paper 2's src/ first on sys.path.
+    _fw_was_in_path = _QS_FW in sys.path
+    if _fw_was_in_path:
+        sys.path.remove(_QS_FW)
+    sys.path.insert(0, _QS_FW)
 
     # Pre-import framework modules that might be lazily loaded during
     # simulation (e.g. src.io.csv_storage), so they are cached in
@@ -64,8 +69,12 @@ def _load_hops_simulator():
     except Exception:
         return None
     finally:
+        # Restore _QS_FW in sys.path to its original position (if it was
+        # there before) or remove it (if we added it).
         if _QS_FW in sys.path:
             sys.path.remove(_QS_FW)
+        if _fw_was_in_path:
+            sys.path.append(_QS_FW)
         if _p2_src is not None:
             sys.modules["src"] = _p2_src
 
@@ -111,6 +120,13 @@ class MesoHopsSolver:
             strict_hermiticity=False,
         )
 
+        # MesoHOPS expects a pure state wavefunction (1D array), not a
+        # density matrix.  Convert if caller passed a 2D density matrix.
+        if initial_density.ndim == 2 and initial_density.shape[0] == initial_density.shape[1]:
+            initial_state = np.sqrt(np.abs(np.diag(initial_density))).astype(np.complex128)
+        else:
+            initial_state = np.asarray(initial_density, dtype=np.complex128)
+
         # Joblib workers (loky) inherit os.environ but not sys.path.
         # Prepend the framework root so subprocesses can resolve
         # "from src.core.memory_manager import ..." etc.
@@ -128,7 +144,7 @@ class MesoHopsSolver:
         try:
             result = sim.simulate_dynamics(
                 time_points=time_points,
-                initial_state=initial_density,
+                initial_state=initial_state,
                 dt=dt,
                 seed=SOLVER_DETERMINISTIC_SEED,
                 parallel_enabled=True,

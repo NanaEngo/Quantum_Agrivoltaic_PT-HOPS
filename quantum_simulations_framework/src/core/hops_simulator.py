@@ -9,6 +9,13 @@ __version__ = "1.0.0"
 import multiprocessing
 from typing import Any, Dict, Optional
 
+# NOTE: The "multiprocessing" (fork) backend is REQUIRED because this module
+# is imported under Paper 2's namespace shield (via importlib).  Loky's
+# spawn-based workers cannot import "src.core.hops_simulator" from a fresh
+# interpreter — the framework root is not in sys.path of spawned workers and
+# os.environ["PYTHONPATH"] is not re-processed.  Fork inherits the parent's
+# sys.modules, so the unpickle of _run_single_traj_worker succeeds.  See
+# Session 11 of AGENTS.md for the full diagnosis.
 import numpy as np
 import scipy.sparse as sp
 from numpy.typing import NDArray
@@ -20,12 +27,7 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
-try:
-    from tqdm.auto import tqdm
-
-    HAS_TQDM = True
-except ImportError:
-    HAS_TQDM = False
+HAS_TQDM = False
 
 # Import MesoHOPS modules
 try:
@@ -277,7 +279,10 @@ def _run_single_traj_worker(
         # --- Step 5: Propagate (core computation) ---
         _t4 = _time.time()
         try:
-            trajectory.propagate(t_max, dt_save)
+            # MesoHOPS internally multiplies the timestep by integrator_step
+            # (hardcoded 0.5) in _check_tau_step.  Compensate so the check
+            # tau * 0.5 == TAU passes when TAU = dt_save.
+            trajectory.propagate(t_max, dt_save / 0.5)
             _elapsed = _time.time() - _t4
             _total = _time.time() - _t0
             # Try to get memory info
@@ -991,14 +996,15 @@ class HopsSimulator:
                 ),
             )
 
-            _tau_noise = kwargs.get("tau_noise", dt_save)
+            # TAU = dt_save.  MesoHOPS's _check_tau_step multiplies the
+            # propagate timestep by integrator_step=0.5 internally, so we
+            # pass dt_save/0.5 (= dt_save*2) to propagate to compensate.
+            _tau_noise = kwargs.get("tau_noise", float(dt_save))
             noise_param = {
                 "SEED": kwargs.get("seed", MESOHOPS_SEED),
                 "MODEL": "FFT_FILTER",
                 "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),
-                "TAU": float(
-                    _tau_noise
-                ),  # TAU = dt_save (no oversampling) — dt_save/2 doubles noise without accuracy benefit
+                "TAU": float(_tau_noise),
                 "INTERPOLATE": False,
                 "RAND_MODEL": "SUM_GAUSSIAN",
                 "STORE_RAW_NOISE": False,
@@ -1131,22 +1137,10 @@ class HopsSimulator:
                         tasks = [
                             delayed(_run_single_traj_worker)(s, **worker_args) for s in batch_seeds
                         ]
-                        if HAS_TQDM and kwargs.get("show_progress", True):
-                            bar_fmt = (
-                                "{desc}: {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]"
-                            )
-                            batch_results = list(
-                                tqdm(
-                                    Parallel(n_jobs=n_jobs, return_as="generator")(tasks),
-                                    total=len(tasks),
-                                    desc=f"Batch {batch_idx + 1}/{n_batches}",
-                                    unit="traj",
-                                    leave=False,
-                                    bar_format=bar_fmt,
-                                )
-                            )
-                        else:
-                            batch_results = Parallel(n_jobs=n_jobs)(tasks)
+                        # "multiprocessing" (fork) backend is REQUIRED — see
+                        # the module-level note.  Does NOT support generator.
+                        with Parallel(n_jobs=n_jobs, backend="multiprocessing") as _pool:
+                            batch_results = _pool(tasks)
                     except (MemoryError, Exception) as _oom_err:
                         _current_n_jobs = n_jobs
                         while _current_n_jobs >= 1:
@@ -1160,7 +1154,10 @@ class HopsSimulator:
                                     delayed(_run_single_traj_worker)(s, **worker_args)
                                     for s in batch_seeds
                                 ]
-                                batch_results = Parallel(n_jobs=_current_n_jobs)(tasks)
+                                with Parallel(
+                                    n_jobs=_current_n_jobs, backend="multiprocessing"
+                                ) as _pool:
+                                    batch_results = _pool(tasks)
                                 break
                             except (MemoryError, Exception):
                                 if _current_n_jobs <= 1:

@@ -638,13 +638,29 @@ Plus Paper 2 `solver.py`: `parallel_enabled=False` → `True` + performance kwar
 | Inchworm disabled | ~1.2-1.5× | No early-time convergence iteration |
 | `TAU=dt_save` (no oversampling) | ~1.3-1.5× | Halves noise FFT calls |
 | **Phase 1+2 cumulative** | **~4-10×** | 100 fs estimated ~1-2 min (was >10 min) |
-| Phase 3 (parallel, 48-core server) | **up to 48× wall-clock** | BrokenProcessPool fixed |
+| Phase 3 (parallel, 48-core server) | **up to 48× wall-clock** | Fork-based multiprocessing backend |
+
+### 🔴 Phase 3 — Parallel execution fix (actual)
+
+**Loky `os.chdir` approach was rejected**: Even with `os.chdir(_FRAMEWORK_ROOT)` before `Parallel()`, Loky's `fork_exec`+`execve` workers could not import `src.core.hops_simulator`. Root cause: Loky workers are created via `_posixsubprocess.fork_exec` which replaces the process image. The child inherits the parent's CWD, and `sys.path[0]=''` (from `-m` invocation) should resolve to CWD, but empirically it did not work (persistent `BrokenProcessPool`).
+
+**Fork-based `multiprocessing` backend is the fix**: `Parallel(n_jobs=n_jobs, backend="multiprocessing")` uses `multiprocessing.Pool` with `fork` semantics. Fork inherits the full parent's `sys.modules`, so `_run_single_traj_worker` is unpickled from `sys.modules["src.core.hops_simulator"]` without any disk I/O. The `with` context manager ensures proper pool cleanup.
+
+**Verified on server** (Paper 2 pipeline, 2026-06-23 21:02 UTC):
+| Metric | Before (Loky) | After (multiprocessing fork) |
+|--------|---------------|------------------------------|
+| n_jobs | 1 (BrokenProcessPool fallback) | 13 (48-core server) |
+| Wall time (2 traj, 40 fs) | ~6s (sequential) | ~6s (parallel — same due to small N) |
+| Memory | 44 GB | 2 GB (copy-on-write sharing) |
+| Cleanup | Orphan workers | `with` context manager |
+| Status | Always falls back to sequential | True parallel execution |
 
 ### 📄 Next Actions
 
-1. **Run benchmark** — verify 100 fs wall-clock time
+1. **Run benchmark** — verify 100 fs wall-clock time (target: <2 min with n_jobs=13)
 2. **Rsync to server** — deploy optimized code to production
 3. **Run production Paper 2** — full 1000 fs, N=100, L=8, K=2, 48 cores
+4. **Sync canonical Paper 2 solver** (`solver.py`, `hops_simulator.py`) to `Redac_Paper2/`
 
 ---
 

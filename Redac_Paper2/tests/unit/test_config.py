@@ -1,6 +1,6 @@
 import os
 
-from Redac_Paper2.src.config_loader import load_config
+from src.config_loader import load_config
 
 
 def test_load_valid_config():
