@@ -3,6 +3,7 @@ import os
 
 import numpy as np
 import pytest
+
 from src.config_loader import load_config
 from src.quantum_interface.hamiltonian import FmoHamiltonian
 

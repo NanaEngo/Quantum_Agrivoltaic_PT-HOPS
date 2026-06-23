@@ -117,3 +117,8 @@ Next/
 *.xdy
 *.run.xml# achemso auxiliary files
 Redac_Paper1/Theory_Journals/JPCL/acs-*.bib
+
+# Large compiled/generated files (never commit)
+*.tar.gz
+*.pdf
+
