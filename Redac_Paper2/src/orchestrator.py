@@ -10,6 +10,7 @@ import subprocess
 import uuid
 from datetime import datetime, timezone
 
+import h5py
 import numpy as np
 
 from .config_loader import load_config
@@ -103,11 +104,17 @@ def run_global_simulation(solar_flux: float) -> None:
     )
     solver = MesoHopsSolver(config)
     density_matrices = solver.propagate_dynamics(
-        H_dressed, psi0, time_points, n_traj=config.quantum.solver.n_traj
+        H_dressed,
+        psi0,
+        time_points,
+        hierarchy_depth=config.quantum.solver.hierarchy_depth,
+        n_traj=config.quantum.solver.n_traj,
     )
 
-    audit = QuantumStabilityAudit(config)
-    is_valid = audit.audit_trajectory(density_matrices)
+    dm_array = np.array(density_matrices)  # shape (n_steps, n_sites, n_sites)
+    audit = QuantumStabilityAudit()
+    audit_result = audit.audit(density_matrices)
+    is_valid = audit_result.get("trace_ok", False) and audit_result.get("positivity_ok", False)
     logger.info(
         "Stability audit: %s", "SUCCESS" if is_valid else "FAILED — see logs/solver_errors.log"
     )
@@ -115,8 +122,8 @@ def run_global_simulation(solar_flux: float) -> None:
     gamma_rc = config.quantum.fmo.coupling_reaction_center
     trapped_pop = np.zeros(n_steps)
     for t in range(n_steps):
-        trapped_pop[t] = sum(density_matrices[t, s, s].real for s in TRAPPING_SITES)
-    trap_yield = len(TRAPPING_SITES) * gamma_rc * np.sum(trapped_pop) * dt_fs
+        trapped_pop[t] = sum(dm_array[t, s, s].real for s in TRAPPING_SITES)
+    trap_yield = gamma_rc * np.sum(trapped_pop) * dt_fs
     trap_yield = min(max(trap_yield, 0.0), MAX_TRAPPING_YIELD)
     logger.info("Reaction center trapping yield (Phi_FT): %.4f", trap_yield)
 
@@ -168,16 +175,18 @@ def run_global_simulation(solar_flux: float) -> None:
     logger.info("CAPEX cooperative payback period: %.2f years", payback)
 
     h5_file = os.path.join(_SCRIPT_DIR, config.output.dynamics_h5)
-    populations = density_matrices.diagonal(axis1=1, axis2=2).real
-    audit.serialize_to_hdf5(
-        h5_file,
-        populations,
-        trapped_pop,
-        run_id=run_id,
-        git_hash=git_hash,
-        timestamp=timestamp,
-        time_step_fs=dt_fs,
-    )
+    os.makedirs(os.path.dirname(h5_file), exist_ok=True)
+    populations = dm_array.diagonal(axis1=1, axis2=2).real
+    cumulative_yield = gamma_rc * np.cumsum(trapped_pop) * dt_fs
+    with h5py.File(h5_file, "w") as f:
+        dyn = f.create_group("dynamics")
+        dyn.create_dataset("populations", data=populations)
+        dyn.create_dataset("trapped_pop", data=trapped_pop)
+        dyn.create_dataset("rc_yield", data=cumulative_yield)
+        dyn.attrs["run_id"] = run_id
+        dyn.attrs["git_hash"] = git_hash
+        dyn.attrs["timestamp"] = timestamp
+        dyn.attrs["time_step_fs"] = dt_fs
     logger.info("Dynamics serialized to HDF5: %s", h5_file)
 
     logger.info("[10] Generating publication figures...")

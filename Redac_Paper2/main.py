@@ -14,6 +14,7 @@ _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPT_DIR not in sys.path:
     sys.path.insert(0, _SCRIPT_DIR)
 
+from src.constants import DEFAULT_SOLAR_FLUX_W_M2
 from src.logging_config import setup_logging
 from src.orchestrator import run_global_simulation
 
@@ -25,8 +26,8 @@ def main() -> None:
     parser.add_argument(
         "--solar-flux",
         type=float,
-        default=950.0,
-        help="Incident solar flux in W/m2 (default: 950.0)",
+        default=DEFAULT_SOLAR_FLUX_W_M2,
+        help=f"Incident solar flux in W/m2 (default: {DEFAULT_SOLAR_FLUX_W_M2})",
     )
     parser.add_argument(
         "--log-file",

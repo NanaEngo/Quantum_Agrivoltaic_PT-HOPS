@@ -140,6 +140,7 @@ def _run_single_traj_worker(
     dt_save: float,
     time_points: NDArray[np.float64],
     mem_limit_gb: float = 0.0,
+    update_step: int = 50,
 ) -> Optional[Dict[str, Any]]:
     """
     Standalone worker function for parallel trajectory execution.
@@ -232,7 +233,7 @@ def _run_single_traj_worker(
         try:
             if hasattr(trajectory, "make_adaptive"):
                 logger.info(f"Traj {seed}: calling make_adaptive()")
-                trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=10)
+                trajectory.make_adaptive(delta_a=1e-3, delta_s=1e-3, update_step=update_step)
                 logger.info(f"Traj {seed}: make_adaptive done in {_time.time() - _t2:.1f}s")
         except Exception as e:
             import sys
@@ -990,11 +991,14 @@ class HopsSimulator:
                 ),
             )
 
+            _tau_noise = kwargs.get("tau_noise", dt_save)
             noise_param = {
                 "SEED": kwargs.get("seed", MESOHOPS_SEED),
                 "MODEL": "FFT_FILTER",
                 "TLEN": float(t_max + FFT_NOISE_BUFFER_FS),
-                "TAU": float(dt_save) / 2.0,  # Réversion : TAU = dt_save / 2.0 (fonctionnel)
+                "TAU": float(
+                    _tau_noise
+                ),  # TAU = dt_save (no oversampling) — dt_save/2 doubles noise without accuracy benefit
                 "INTERPOLATE": False,
                 "RAND_MODEL": "SUM_GAUSSIAN",
                 "STORE_RAW_NOISE": False,
@@ -1007,8 +1011,10 @@ class HopsSimulator:
             integrator_param = {
                 "INTEGRATOR": "RUNGE_KUTTA",
                 "EARLY_ADAPTIVE_INTEGRATOR": "INCH_WORM",
-                "EARLY_INTEGRATOR_STEPS": MESOHOPS_EARLY_STEPS,
-                "INCHWORM_CAP": MESOHOPS_INCHWORM_CAP,
+                "EARLY_INTEGRATOR_STEPS": kwargs.get(
+                    "early_integrator_steps", MESOHOPS_EARLY_STEPS
+                ),
+                "INCHWORM_CAP": kwargs.get("inchworm_cap", MESOHOPS_INCHWORM_CAP),
                 "STATIC_BASIS": None,
             }
 
@@ -1077,6 +1083,7 @@ class HopsSimulator:
                 "dt_save": dt_save,
                 "time_points": time_points,
                 "mem_limit_gb": traj_mem_gb,
+                "update_step": kwargs.get("update_step", 50),
             }
 
             batch_size = max(1, n_jobs)

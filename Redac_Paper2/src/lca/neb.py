@@ -1,5 +1,6 @@
 from ..config_loader import ConfigModel
 from ..constants import (
+    G_TO_KG,
     LCA_FOOTPRINT_A,
     LCA_FOOTPRINT_B,
     LCA_FOOTPRINT_C,
@@ -11,7 +12,7 @@ from ..constants import (
 class NetEcologicalBenefit:
     def __init__(self, config: ConfigModel):
         self.config = config
-        self.grid_intensity = config.lca.carbon.get("grid_intensity_gco2_kwh", 450.0)
+        self.grid_intensity = config.lca.carbon["grid_intensity_gco2_kwh"]
 
     def calculate_scenario_neb(
         self,
@@ -24,7 +25,7 @@ class NetEcologicalBenefit:
         safe_yield = min(excitonic_yield, LCA_MAX_PHYSICAL_YIELD)
         effective_biomass = crop_biomass_kg * (safe_yield / LCA_MAX_PHYSICAL_YIELD)
 
-        carbon_avoided_power = power_generated_kwh * (self.grid_intensity / 1000.0)
+        carbon_avoided_power = power_generated_kwh * (self.grid_intensity / G_TO_KG)
         carbon_avoided_water = water_saved_liters * LCA_WATER_PUMPING_CARBON_FACTOR
 
         if scenario == "A":

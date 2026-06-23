@@ -49,7 +49,7 @@ class GreenhouseEvapotranspiration:
         wind_term = FAO56_WIND_COEFF * wind_speed_m_s
         numerator = (
             FAO56_RADIATION_FACTOR * delta * net_radiation
-            + gamma * (FAO56_TEMP_NUMERATOR / (temp_c + 273.0)) * wind_term * vpd
+            + gamma * (FAO56_TEMP_NUMERATOR / (temp_c - FAO56_ABSOLUTE_ZERO_C)) * wind_term * vpd
         )
         denominator = delta + gamma * (1.0 + FAO56_WIND_TERM_COEFF * wind_term)
 

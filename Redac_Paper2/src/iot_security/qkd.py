@@ -1,7 +1,12 @@
 import numpy as np
 
 from ..config_loader import ConfigModel
-from ..constants import QKD_MAX_SAMPLE_SIZE, QKD_QBER_THRESHOLD, QKD_SAMPLE_DIVISOR
+from ..constants import (
+    QKD_MAX_SAMPLE_SIZE,
+    QKD_QBER_THRESHOLD,
+    QKD_SAMPLE_DIVISOR,
+    QKD_SIFTING_OVERHEAD,
+)
 
 
 class Bb84Protocol:
@@ -12,7 +17,7 @@ class Bb84Protocol:
 
     def simulate_key_exchange(self, seed: int = 42) -> dict:
         np.random.seed(seed)
-        n_raw = self.key_length * 4
+        n_raw = self.key_length * QKD_SIFTING_OVERHEAD
         alice_bits = np.random.randint(0, 2, n_raw)
         alice_bases = np.random.randint(0, 2, n_raw)
         bob_bases = np.random.randint(0, 2, n_raw)
