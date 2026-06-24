@@ -137,12 +137,21 @@ test_quantum_solver.py   ✅  7/7  (Hamiltonien, couplage, NPoM, Floquet, SERS, 
 
 ### Commandes de base
 ```bash
-# Test rapide
-PYTHONPATH=/home/nanaengo ~/miniforge3/envs/MesoHOP-sim/bin/python -m pytest ~/Redac_Paper2/tests/unit/ -v
+# Variables d'environnement (nécessaires pour les imports)
+export PROJECT_DIR="$HOME/Redac_Paper2"
+export FRAMEWORK_DIR="$HOME/quantum_simulations_framework"
+export PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR"
+export OPENBLAS_NUM_THREADS=1  # Évite contention CPU (Session 11)
 
-# Production (N=100, L=8)
-cd ~ && PYTHONPATH=/home/nanaengo nohup ~/miniforge3/envs/MesoHOP-sim/bin/python ~/Redac_Paper2/main.py \
-  --solar-flux 800 --log-file logs/production_run.log > production_run.log 2>&1 &
+# Test rapide
+PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR" ~/miniforge3/envs/MesoHOP-sim/bin/python -m pytest "$PROJECT_DIR/tests/unit/" -v
+
+# Production (N=100, L=8, ~10h estimé)
+cd ~ && OPENBLAS_NUM_THREADS=1 PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR" nohup ~/miniforge3/envs/MesoHOP-sim/bin/python "$PROJECT_DIR/main.py" \
+  --solar-flux 800 --log-file "$PROJECT_DIR/logs/production_run.log" > "$PROJECT_DIR/logs/production_stdout.log" 2>&1 &
+
+# Surveiller
+tail -f "$PROJECT_DIR/logs/production_run.log"
 ```
 
 ### Paramètres de production

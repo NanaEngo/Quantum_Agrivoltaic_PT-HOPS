@@ -42,7 +42,7 @@ dynamics:
   adaptive_basis: true
   delta_a: 1.0e-4  # Hierarchy adaptive threshold
   delta_s: 1.0e-4  # System adaptive threshold
-  update_step: 1   # Frequency of basis updates
+  update_step: 50  # Frequency of basis updates (raised from 1→50: 1.5-2× faster, Session 11)
   save_all_metrics: true # Enable full persistence for Quantum, Agric, and LCA data
 ```
 

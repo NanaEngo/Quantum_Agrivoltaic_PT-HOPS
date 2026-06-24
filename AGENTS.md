@@ -496,7 +496,7 @@ Fichier clé : `Redac_Paper2/src/quantum_interface/solver.py:22-70` (`_load_hops
 - **100 fs** (500 steps) : s'exécute mais prend >10 min (scaling non-linéaire, bottleneck MesoHOPS séquentiel)
 - **HopsSimulator.simulate_dynamics()** : API confirmée (`t_axis`, `populations`, `coherences`, `density_matrices`, `qfi`, `entropy`, `ipr`)
 - **`strict_hermiticity=False`** : nécessaire pour l'Hamiltonien dressé non-hermitien (piégeage imaginaire)
-- **`parallel_enabled=False`** : seule option fiable (BrokenProcessPool si True — cf. ci-dessous)
+- **`parallel_enabled=True`** : fonctionne avec `backend="multiprocessing"` (fork pool)
 
 #### ✅ Hardcoded parameters audit (15+ valeurs corrigées)
 | Fichier | Problème | Fix |
@@ -515,23 +515,17 @@ Fichier clé : `Redac_Paper2/src/quantum_interface/solver.py:22-70` (`_load_hops
 Restants (bas priorité — constantes physiques de la littérature) :
 `TRAPPING_SITES=[2,3]`, `FMO_SITE_ENERGIES_CM`, `SERS_VIBRONIC_SITES_*`, `FAO56_SAT_VAPOR_COEFF` famille.
 
-#### 🔴 Bloqué — BrokenProcessPool en parallèle
-`parallel_enabled=True` → `joblib` lance des sous-processus via `loky`. Le sous-processus hérite de `os.environ` (incluant `PYTHONPATH`) mais construit `sys.path` de zéro (CWD + PYTHONPATH + defaults). Problème : `sys.path[0]` = CWD = `~` (hérité du SSH), et si `~/Redac_Paper2` est un sous-répertoire du CWD ou si le CWD change, le sous-processus peut importer **le mauvais `src`** (Paper 2 au lieu du framework).
+#### ✅ Résolu — BrokenProcessPool en parallèle (Session 11)
+Le blocage `BrokenProcessPool` est résolu via `backend="multiprocessing"` :
+- **Cause racine** : Loky (backend par défaut de joblib) crée les workers via `fork_exec`+`execve` qui remplace l'image processus. Le worker ne peut pas importer `src.core.hops_simulator` car `sys.path` du worker ne contient pas le chemin du framework.
+- **Solution rejetée** : `os.chdir()`, `PYTHONPATH`, `set_start_method("fork")` — Loky ignore tout.
+- **Fix réel** : `Parallel(n_jobs=..., backend="multiprocessing")` utilise `multiprocessing.Pool` avec `fork`. Fork hérite de `sys.modules` complet du parent → `_run_single_traj_worker` se unpickle depuis le cache sans I/O disque.
 
-Même avec `PYTHONPATH=$HOME/quantum_simulations_framework`, les workers avec `n_jobs>1` crashent systématiquement (BrokenProcessPool) et retombent sur `n_jobs=1`. La cause exacte est dans pickle/unpickle des classes MesoHOPS par Loky — les workers n'arrivent pas à ré-importer `SBD_HopsTrajectory` ou `_run_single_traj_worker` depuis le bon `src`.
-
-Solution temporaire : `parallel_enabled=False` (n_jobs=1). Le `os.environ["PYTHONPATH"]` est conservé pour la robustesse en mode séquentiel.
-
-Fix permanent (chantier séparé) : 
-1. Désactiver le CWD dans sys.path des workers Loky (ou changer CWD vers un répertoire sans `src/`)
-2. Ou utiliser `multiprocessing.set_start_method("fork")` qui hérite de `sys.modules`
-3. Ou wrapper l'import framework par `importlib` dans chaque worker directement
-
-#### 🖥️ Serveur — État (2026-06-23 03:49 UTC)
-- **Inactif** : 125 Go RAM libres, GPU A4000 0%, charge CPU ~0.10
-- **Dernière run** (Session 9, Paper 1) : SIGSEGV dans `memory_aware_patch.py` → fallback `SimpleQuantumDynamicsSimulator` avec dt=2.0 fs
-- **Code obsolète** : `solver.py` version manipulation sys.modules (deadlock) — synchro importlib nécessaire
-- **Production Paper 2** : Pas encore lancée
+#### 🖥️ Serveur — État (2026-06-24 10:10 UTC)
+- **Production Paper 2 active** : PID 90416, 8/100 traj, ~10h restant estimé
+- **Load** : 8.0/48 cœurs (stable, 8 workers × 1 thread OpenBLAS)
+- **RAM** : 6 GB / 125 GB utilisés (fork COW)
+- **Log** : `~/paper2_prod_v3.log` (structuré) + `~/paper2_prod_v3_stdout.log` (MesoHOPS) + `~/paper2_prod_opt.log` (versions antérieures)
 
 #### ✅ Fixes précédents (Session 10 début)
 - **Bug MesoHOPS adaptatif** : `trajectory.storage.data["psi_traj"]` → `trajectory.storage["psi_traj"]` (décompression adaptative)
@@ -546,12 +540,12 @@ Fix permanent (chantier séparé) :
 - **Local** : 16/16 passed (Session 10 setup + solver test)
 - **Serveur** : 16/16 passed (Session 10 setup + solver test, avant mise à jour solver.py)
 
-#### 📄 Prochaines actions critiques
-1. **Rsync** : `rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" Redac_Paper2/ nanaengo@100.73.21.40:~/Redac_Paper2/` (après `git add` et sauvegarde)
-2. **Lancer prod serveur** : `nohup bash run_production_paper2.sh > ~/paper2_production.log 2>&1 &` (N=100, L=8, 1000 fs, dt=0.2)
-3. **Git commit/push** : Session 10 fixes (7 fichiers modifiés)
-4. **BrokenProcessPool fix permanent** : modifier `environment` dans `LokyBasedBackend` ou dans `run_production_paper2.sh`
-5. **Tests solver complet** : `test_quantum_solver.py` à corriger (mocking h5py, fixture matplotlib, etc.)
+#### ✅ Prochaines actions (Session 10 — toutes résolues)
+1. ~~**Rsync**~~ ✅ (Session 10+11, multiples rsyncs effectués)
+2. ~~**Lancer prod serveur**~~ ✅ (Session 11 — production PID 90416 active)
+3. ~~**Git commit/push**~~ ✅ (Session 10 + Session 11 commits)
+4. ~~**BrokenProcessPool fix permanent**~~ ✅ `backend="multiprocessing"` (Session 11)
+5. **Tests solver complet** : `test_quantum_solver.py` à corriger (mocking h5py, fixture matplotlib, etc.) — toujours ouvert
 
 ## Session 11 (2026-06-23) — MesoHOPS Performance Optimization: 3-Phase Speedup
 
