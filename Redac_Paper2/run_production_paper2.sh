@@ -120,7 +120,7 @@ run_tests() {
         return
     fi
     cd "$HOME"
-    PYTHONPATH="$HOME" $PYTHON -m pytest "$PROJECT_DIR/tests/unit/" -v --tb=short 2>&1 | tee -a "$LOG_FILE"
+    OPENBLAS_NUM_THREADS=1 PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR" $PYTHON -m pytest "$PROJECT_DIR/tests/unit/" -v --tb=short 2>&1 | tee -a "$LOG_FILE"
     local pytest_exit=${PIPESTATUS[0]}
     if [ $pytest_exit -ne 0 ]; then
         if $TEST_MODE; then
@@ -136,13 +136,14 @@ run_tests() {
 stage_1_simulation() {
     log "[STAGE 1] Lancement de la simulation quantique + pipeline complet..."
     if $DRY_RUN; then
-        log "  (dry-run) PYTHONPATH=$HOME $PYTHON $PROJECT_DIR/main.py --solar-flux $SOLAR_FLUX --log-file ${LOG_DIR}/simulation_${TIMESTAMP}.log"
+        log "  (dry-run) OPENBLAS_NUM_THREADS=1 PYTHONPATH=$PROJECT_DIR:$FRAMEWORK_DIR $PYTHON $PROJECT_DIR/main.py --solar-flux $SOLAR_FLUX --log-file ${LOG_DIR}/simulation_${TIMESTAMP}.log"
         return
     fi
 
     local sim_log="${LOG_DIR}/simulation_${TIMESTAMP}.log"
-    PYTHONPATH="$HOME" nohup $PYTHON "$PROJECT_DIR/main.py" \
+    OPENBLAS_NUM_THREADS=1 PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR" nohup $PYTHON "$PROJECT_DIR/main.py" \
         --solar-flux "$SOLAR_FLUX" \
+        --time-step-fs "$DT_FS" \
         --log-file "$sim_log" \
         > "${LOG_DIR}/simulation_stdout_${TIMESTAMP}.log" 2>&1 &
     local SIM_PID=$!

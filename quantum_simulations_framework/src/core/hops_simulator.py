@@ -924,6 +924,7 @@ class HopsSimulator:
         initial_state: Optional[NDArray[np.float64]],
         **kwargs: Any,
     ) -> Dict[str, Any]:
+        import os as _os
         import time as _time
 
         """
@@ -1134,6 +1135,10 @@ class HopsSimulator:
 
                 if HAS_JOBLIB and n_jobs > 1:
                     try:
+                        # OpenBLAS internally spawns 3.5 threads per process.
+                        # With 14 workers that's 49 threads on 48 cores → load 100+.
+                        # Pin to single thread to avoid oversubscription.
+                        _os.environ["OPENBLAS_NUM_THREADS"] = "1"
                         tasks = [
                             delayed(_run_single_traj_worker)(s, **worker_args) for s in batch_seeds
                         ]

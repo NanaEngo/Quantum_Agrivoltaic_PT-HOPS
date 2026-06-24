@@ -655,12 +655,55 @@ Plus Paper 2 `solver.py`: `parallel_enabled=False` → `True` + performance kwar
 | Cleanup | Orphan workers | `with` context manager |
 | Status | Always falls back to sequential | True parallel execution |
 
-### 📄 Next Actions
+### 🔴 Session 11 Epilogue — Production Run Findings (2026-06-24)
 
-1. **Run benchmark** — verify 100 fs wall-clock time (target: <2 min with n_jobs=13)
-2. **Rsync to server** — deploy optimized code to production
-3. **Run production Paper 2** — full 1000 fs, N=100, L=8, K=2, 48 cores
-4. **Sync canonical Paper 2 solver** (`solver.py`, `hops_simulator.py`) to `Redac_Paper2/`
+**Speedup estimates were optimistic.** The real bottleneck was not MesoHOPS
+optimization (dict lookups, numba, tau) but the sheer compute cost of
+5000-step propagation at L=8 with 135 hierarchy modes. Each trajectory
+takes **~40-50 min** wall-clock on a modern 3 GHz core regardless of JIT.
+
+#### Actual production bottlenecks (in order of impact):
+
+| Issue | Impact | Fix Applied |
+|-------|--------|-------------|
+| OpenBLAS 3.5-thread × 14 workers = 49 threads on 48 cores → load 100+ | ~5× effective slowdown | `OPENBLAS_NUM_THREADS=1` + `MAX_N_JOBS=8` → load 8.0 stable |
+| Numba DEBUG flood (161K lines in 10 min) | ~1.5× I/O slowdown | Removed `--verbose` + filter `numba.*` loggers to WARNING |
+| Logger namespace mismatch (Redac_Paper2.* vs quantum_simulations_framework.*) | Invisible framework progress → no monitoring | Root logger config in `setup_logging()` + `--log-file` |
+| MesoHOPS mesohops override: `EARLY_INTEGRATOR_STEPS=0` → 5 | ~1.1× (minor) | Cannot fix — MesoHOPS enforces minimum 5 |
+
+#### Actual wall-clock timing (Paper 2, 1000 fs, dt=0.2, L=8, K=2, 8 traj/batch):
+
+| Metric | Value |
+|--------|-------|
+| First trajectory (warm JIT cache) | ~45-50 min |
+| Per-batch throughput (8 workers) | ~50 min per 8 traj |
+| Total estimate (100 traj) | **~10-11 hours** |
+| CPU utilization | 8.0/48 cores (16%, clean) |
+| Memory per worker | ~740 MB (fork COW) |
+| Memory total | ~6 GB / 125 GB |
+
+#### Key decision changes from Session 11:
+- `MAX_N_JOBS` reduced from 24 to 8 (constants.py:230)
+- `OPENBLAS_NUM_THREADS=1` set in `hops_simulator.py:1141` before each `Parallel()` call
+- `setup_logging()` configures root logger, not `"Redac_Paper2"` (Paper 2 logging_config.py:22)
+- Numba loggers suppressed to WARNING in `setup_logging()` (logging_config.py:43-44)
+- `run_production_paper2.sh` fixed: `PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR"`, added `OPENBLAS_NUM_THREADS=1`
+- No `--verbose` flag in production launch (removes numba DEBUG)
+- `--log-file` flag required for structured logging from framework workers
+
+#### Production run status (2026-06-24 10:10 UTC):
+- **PID**: 90416, started 09:01:54
+- **Progress**: 8/100 trajectories (batch 1/13 complete)
+- **Current**: Batch 2 running (traj 8-15), ~19 min in
+- **Log file**: `~/paper2_prod_v3.log` (structured) + `~/paper2_prod_v3_stdout.log` (MesoHOPS warnings)
+- **ETA**: ~19:00-20:00 UTC
+
+#### Conclusion:
+The 3-phase optimization reduced CPU contention from load 100+ to load 8.0
+and enabled clean parallel execution, but the fundamental compute cost of
+5000 steps × 135 modes × L=8 is ~45 min/traj. This is a hard physics limit
+of the MesoHOPS algorithm, not an engineering problem. For future runs,
+consider reducing `t_max` or increasing `dt` if physics allows.
 
 ---
 

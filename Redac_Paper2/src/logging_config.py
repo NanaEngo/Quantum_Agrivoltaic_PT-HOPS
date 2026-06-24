@@ -19,15 +19,17 @@ def setup_logging(
 
     formatter = logging.Formatter(format_string, datefmt="%H:%M:%S")
 
-    logger = logging.getLogger("Redac_Paper2")
-    logger.setLevel(level)
-    logger.handlers = []
+    # Configure root logger so both Redac_Paper2.* and
+    # quantum_simulations_framework.* loggers propagate here.
+    root = logging.getLogger()
+    root.setLevel(level)
+    root.handlers.clear()
 
     if log_to_console:
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(level)
         console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
+        root.addHandler(console_handler)
 
     if log_file is not None:
         log_path = Path(log_file)
@@ -35,9 +37,13 @@ def setup_logging(
         file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
         file_handler.setLevel(file_level or logging.DEBUG)
         file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
+        root.addHandler(file_handler)
 
-    return logger
+    # Suppress numba JIT DEBUG flood in verbose mode
+    for _numba_logger in ("numba", "numba.core", "numba.core.ssa", "numba.core.interpreter"):
+        logging.getLogger(_numba_logger).setLevel(logging.WARNING)
+
+    return root
 
 
 def get_logger(name: str) -> logging.Logger:

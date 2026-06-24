@@ -228,7 +228,9 @@ BASE_TRAJ_MEMORY_GB: Final[float] = 6.0  # Reference memory for L=8, K=2 product
 MIN_TRAJ_MEMORY_GB: Final[float] = 0.5  # Minimum floor for memory estimation
 BASE_PYTHON_OVERHEAD_GB: Final[float] = 2.0  # numpy + scipy + OpenBLAS VmSize (~1.25 GB observed)
 MAX_N_JOBS: Final[int] = (
-    24  # Production + sweeps: L=8 SBD(3) — 24 workers optimal per §8 of SYNTHESE_SIMULATIONS_JUIN2026
+    8  # Paper 2 production: L=8 SBD(3) with OPENBLAS_NUM_THREADS=1.
+    # 24 workers × 350% CPU oversubscribed 48-core server (load 100+).
+    # 8 workers × 1 thread = minimal contention, max throughput.
 )
 
 
