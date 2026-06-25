@@ -51,3 +51,12 @@ class SersDiagnostics:
             "740_cm": float(enhancement * sum(populations[s] for s in SERS_VIBRONIC_SITES_740)),
             "1145_cm": float(enhancement * np.sum(populations)),
         }
+
+    def calculate_correlation_metric(self, raman_spectrum: dict, trap_yield: float) -> float:
+        """
+        Calculates the diagnostic correlation metric (eta_diag).
+        eta_diag = I_180 / trap_yield
+        """
+        if trap_yield == 0:
+            return 0.0
+        return float(raman_spectrum["180_cm"] / trap_yield)

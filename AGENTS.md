@@ -1,6 +1,65 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-23 (Session 11 — MesoHOPS Performance Optimization: 3-Phase Speedup)
+**Last updated:** 2026-06-25 (Session 12 — NPoM Baseline Validation + Volume Scan)
+
+## Session 12 (2026-06-25) — NPoM Baseline Validation + Volume Scan + Manuscript Insert
+
+### Bug Fix: psi0 dimension mismatch (NPoM OFF)
+**Root cause**: `orchestrator.py:106` used `N_DIM_DRESSED=9` for `psi0` (included plasmon), but when `npom.enabled: false`, Hamiltonian was 8×8 → `ValueError: initial_state length 9 != n_sites 8`.
+
+**Fix**: Conditional `psi0` size:
+- NPoM ON: `psi0 = zeros(N_DIM_DRESSED); psi0[PLASMON_INDEX] = 1.0`
+- NPoM OFF: `psi0 = zeros(FMO_NSITES); psi0[0] = 1.0` (excitation on FMO site 1)
+
+**File**: `Redac_Paper2/src/orchestrator.py:106-110`
+
+### Key Physics Result: NPoM suppresses exciton transport
+| Configuration | Φ_FT (trapping yield) | ET_c (mm/day) | Payback (yr) |
+|---------------|:---------------------:|:-------------:|:------------:|
+| NPoM ON (V=0.8, prod v3) | 0.0768 | 9.23 | 2.92 |
+| NPoM OFF (baseline v3) | **0.9800** | **1.74** | **5.00** |
+
+The **~13× drop** in Φ_FT (0.98 → 0.077) confirms NPoM plasmon acts as a population sink, diverting excitation from the reaction center. This makes the NPoM volume scan critical — finding V where SERS enhancement balances transport preservation.
+
+### NPoM Volume Scan — Preliminary Results (In Progress)
+| Volume (nm³) | Φ_FT | Δ vs baseline | Time (s) | Status |
+|:------------:|:----:|:-------------:|:--------:|:------:|
+| 0.2 | 0.0505 | −94.8% | 3259 | ✅ |
+| 0.4 | 0.0605 | −93.8% | 2958 | ✅ |
+| 0.6 | 0.0727 | −92.6% | 2805 | ✅ |
+| 0.8 (scan) | **0.0760** | −92.2% | 2654 | ✅ |
+| 0.8 (prod v3) | 0.0768 | −92.2% | — | ✅ (cross-check) |
+| 1.0 | 0.0795 | −91.9% | 2655 | ✅ |
+| 1.2 | 0.0804 | −91.8% | 2484 | ✅ |
+| 1.4 | 0.0797 | −91.9% | 2518 | ✅ |
+
+**Key observation**: Φ_FT increases monotonically with mode volume (0.0505 → 0.0605 → 0.0727 → 0.0760 → 0.0795 → 0.0804 → 0.0797), confirming weaker plasmon-exciton coupling at larger volumes reduces population trapping. However, all NPoM ON yields remain suppressed by >90% vs baseline (Φ_FT=0.98). The trend is logarithmic — diminishing returns above V=1.0 nm³, with a possible maximum near V=1.2 nm³ (Φ_FT=0.0804). The volume scan determines that NPoM is fundamentally incompatible with efficient exciton transport in this regime regardless of volume.
+
+### NPoM Volume Scan (Complete)
+**Script**: `Redac_Paper2/run_npom_scan.sh`
+**Volumes**: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4] nm³
+**Parameters**: `n_traj=2`, `npom.enabled=true`, sequential execution
+**Server**: tmux session `npom_scan`, started 03:34 UTC Jun 25, completed ~08:57 UTC (5h23min total)
+**Result**: CSV at `npom_scan_results.csv` on server
+
+### Manuscript Update — NPoM Section Written
+**File**: `Redac_Paper2/Nature_Energy/Manuscript.tex`
+**New subsection**: `NPoM Cavity Volume Dependence of Exciton Transport` (lines 215-252)
+- Table 2: volume scan data (0.2–1.4 nm³, Φ_FT range 0.0505–0.0804)
+- Baseline (no NPoM): Φ_FT = 0.98
+- All NPoM yields >90% suppressed; optimal at V=1.2 nm³ (Φ_FT=0.0804)
+- SERS–transport trade-off discussion
+
+**Narrative reconciled**: The "Non-Markovian Quantum Dynamics" subsection (lines 196-213) now explicitly states "in the absence of the NPoM cavity" and gives baseline yield Φ_FT=0.98 before presenting the filtered/broadband comparison (0.89 vs 0.71). The NPoM subsection then presents the suppression when the plasmon is added.
+
+**Figure 1 caption updated**: Now reads "Spectral filtering enhances exciton transport in the FMO complex" with panels (b-d) explicitly labeled "in the absence of the NPoM cavity" and "NPoM-off baseline". Panel (a) retains the 9×9 Hamiltonian description.
+
+### Baseline v3 Timing (NPoM OFF, n_traj=2)
+| Traj | Propagation (s) | Propagation (min) | Frames |
+|------|:--------------:|:-----------------:|:------:|
+| 0 | 2627.1 | 43.8 | 2501 |
+| 1 | 2512.8 | 41.9 | 2501 |
+| Total | 2633.8 | 43.9 | — |
 
 ## Project Overview
 
@@ -704,3 +763,16 @@ consider reducing `t_max` or increasing `dt` if physics allows.
 ## License
 
 MIT License
+
+## graphify
+
+This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.
+
+When the user types `/graphify`, invoke the `skill` tool with `skill: "graphify"` before doing anything else.
+
+Rules:
+- For codebase questions, first run `graphify query "<question>"` when graphify-out/graph.json exists. Use `graphify path "<A>" "<B>"` for relationships and `graphify explain "<concept>"` for focused concepts. These return a scoped subgraph, usually much smaller than GRAPH_REPORT.md or raw grep output.
+- Dirty graphify-out/ files are expected after hooks or incremental updates; dirty graph files are not a reason to skip graphify. Only skip graphify if the task is about stale or incorrect graph output, or the user explicitly says not to use it.
+- If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
+- Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
+- After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).

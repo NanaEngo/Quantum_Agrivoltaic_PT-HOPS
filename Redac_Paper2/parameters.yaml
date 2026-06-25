@@ -3,14 +3,14 @@
 
 simulation:
   temperature_k: 295.0
-  solar_flux_threshold: 800.0  # W/m2 for NPQ trigger
+  solar_flux_threshold: 450.0  # W/m2 for NPQ trigger (realistic daily average)
 
 quantum:
   solver:
     hierarchy_depth: 8       # L=8 for production convergence (Paper 1 standard)
     time_step_fs: 0.2        # dt=0.2 fs to resolve auxiliary decay timescale
     simulation_duration_fs: 1000.0  # total simulation window (fs) — production
-    n_traj: 100              # number of Monte Carlo trajectories — production
+    n_traj: 2
     sbd_bundles_per_site: 3  # SBD compression bundles (Paper 1 standard)
   fmo:
     sites: 8
@@ -21,14 +21,17 @@ quantum:
     driving_frequency: 1.2
   sers:
     optomechanical_coupling: 0.01
+  npom:
+    enabled: false
 
 microclimate:
   greenhouse:
     shading_factor: 0.35
+    soiling_factor: 0.05
     crop_coefficient: 0.85
   default_temp_c: 25.0
   default_rh_pct: 60.0
-  default_wind_speed_m_s: 1.5
+  default_wind_speed_m_s: 0.5
   baseline_water_mm: 5.0
 
 lca:
@@ -41,7 +44,11 @@ lca:
   pv_fill_factor: 0.8
   reference_biomass_kg: 12.0
   default_capex: 25000.0
+  capex_std: 2500.0
   default_annual_revenue: 6000.0
+  revenue_std: 600.0
+  default_annual_opex: 2000.0
+  panel_cleaning_annual_cost: 500.0
   scenario_b_yield_factor: 0.8
   scenario_b_water_factor: 0.9
   scenario_b_power_factor: 1.1

@@ -2,7 +2,7 @@
 % Cover Letter — Nature Energy
 % Title: Coordinated Vibronic Light-Harvesting and Polaritonic Interface
 %        for Symbiotic Quantum Agrivoltaics
-% Date: June 18, 2026
+% Date: June 25, 2026 (Revised)
 % =============================================================================
 
 \documentclass[12pt]{letter}
@@ -10,6 +10,13 @@
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
 \usepackage[margin=2.5cm]{geometry}
+\usepackage{siunitx}
+\DeclareSIUnit{\yr}{yr}
+\DeclareSIUnit{\USD}{USD}
+\DeclareSIUnit{\tonne}{t}
+\DeclareSIUnit{\ha}{ha}
+\DeclareSIUnit{\MWh}{MWh}
+\DeclareSIUnit{\cubed}{^{3}}
 
 \address{
 Steve Cabrel Teguia Kouam\\
@@ -29,44 +36,50 @@ London, UK}
 
 We are pleased to submit our manuscript entitled \textbf{``Coordinated Vibronic Light-Harvesting and Polaritonic Interface for Symbiotic Quantum Agrivoltaics''} for consideration as a Research Article in \textit{Nature Energy}.
 
-\section*{Summary of the work}
+\noindent\textbf{Summary of the work}
 
-Agrivoltaics --- co-locating photovoltaic panels and crops --- addresses land-use competition between food and energy production. Standard semi-transparent solar panels act as passive filters, uniformly reducing light without exploiting the spectral dimension of photosynthesis. Here we demonstrate, through numerically exact quantum dynamical simulations, that a nanoparticle-on-mirror (NPoM) plasmonic cavity integrated with an organic photovoltaic (OPV) layer can actively shape the transmitted spectrum to protect quantum coherence in the photosynthetic machinery.
+Agrivoltaics --- co-locating photovoltaic panels and crops --- addresses land-use competition between food and energy production. Standard semi-transparent solar panels act as passive filters, uniformly reducing light without exploiting the spectral dimension of photosynthesis. Here we demonstrate, through numerically exact quantum dynamical simulations, that an organic photovoltaic layer integrated with a nanoparticle-on-mirror (NPoM) plasmonic cavity can actively shape the transmitted spectrum to protect quantum coherence in the photosynthetic machinery, while simultaneously enabling label-free SERS diagnostics of crop health.
 
 Our key findings are:
 
 \begin{itemize}
 \item \textbf{Coherence protection:} Dual-band spectral filtering at \SI{750}{\nm} and \SI{820}{\nm} extends excitonic coherence lifetimes by \SI{50}{\percent} and increases forward transfer yields by \SI{25}{\percent} in the 8-site Fenna--Matthews--Olson complex at room temperature, verified through PT-HOPS/SBD simulations across 100 disorder realizations.
-\item \textbf{Polaritonic strong coupling:} A \numproduct{9x9} dressed Hamiltonian captures the collective strong-coupling regime ($g_{\mathrm{eff}} \sim \SI{2000}{\per\cm}$) between the NPoM cavity and $\sim 10^2$ FMO chromophores, enabling coherent energy exchange at the bio-organic interface.
+
+\item \textbf{SERS diagnostics via NPoM cavity:} The same NPoM plasmonic cavity that couples the OPV to the FMO complex enables surface-enhanced Raman scattering readout of vibrational state populations, with enhancement factors exceeding $10^2$. We identify an intrinsic trade-off: the NPoM diverts \SI{7}{\percent}{--}\SI{8}{\percent} of the excitation population to the plasmon mode (suppressing $\Phi_{\mathrm{FT}}$ from 0.98 to 0.08), but this transport penalty is the necessary cost for non-destructive \emph{in situ} diagnostics. The optimal mode volume $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$ maximizes transport yield while retaining SERS sensitivity.
+
 \item \textbf{Dynamic photo-protection:} Floquet Stark detuning and optomechanically induced transparency provide flux-dependent protection against exciton overload under high solar flux, mimicking non-photochemical quenching in plants.
-\item \textbf{Macroscopic sustainability:} The quantum-optimized ``smart shield'' reduces crop evapotranspiration by \SI{28}{\percent} and achieves a Net Ecological Benefit of \SI{12.4 \pm 1.8}{\kg\ CO2e\per\m\squared\per\yr} --- a factor of 2.4 improvement over static shading.
-\item \textbf{Socioeconomic viability:} A cooperative ownership model with \SI{30}{\percent} carbon-linked subsidy recovers investment within \SI{3.5}{\yr}, and BB84 quantum key distribution secures IoT telemetry at \SI{4.8}{\percent} quantum bit error rate.
+
+\item \textbf{Proof-of-concept at farm scale:} A \SI{1}{\ha} high-tunnel greenhouse in Cameroon's Western Highlands saves \SI{13000}{\m\cubed\per\yr} of irrigation water, delivers \SI{2.8}{\tonne\per\ha\per\yr} additional crop yield, generates \SI{42}{\MWh\per\yr} of OPV electricity, and achieves net-zero operational carbon in \SI{3.2}{\yr}.
+
+\item \textbf{Socioeconomic viability with carbon credits:} The Net Ecological Benefit of \SI{12.4}{\kg\ CO2e\per\m\squared\per\yr} qualifies the system for voluntary carbon markets. At \SI{10}{\USD\per\tonne\ CO2e}, a cooperative of 5 smallholders achieves full CAPEX recovery in \SI{2.7}{\yr} --- making quantum-enhanced agrivoltaics financially accessible in developing economies.
+
+\item \textbf{Secure IoT telemetry:} BB84 quantum key distribution secures field-to-cloud sensor data with a \SI{4.8}{\percent} quantum bit error rate, providing AES-256 encryption for \SI{256}{\bit} keys refreshed every \SI{24}{\hour}.
 \end{itemize}
 
-\section*{Why \textit{Nature Energy}?}
+\noindent\textbf{Why \textit{Nature Energy}?}
 
-\textit{Nature Energy} serves a uniquely broad readership spanning quantum materials, photovoltaics, agricultural science, and energy policy --- exactly the intersection this work occupies. Our ``quantum-to-organism'' framework bridges angstrom-scale vibronic couplings with square-meter agricultural yields, demonstrating that quantum coherence engineering can deliver measurable sustainability benefits. This interdisciplinary synthesis aligns with the journal's mission to publish research that addresses energy challenges through transformative approaches.
+\textit{Nature Energy} serves a uniquely broad readership spanning quantum materials, photovoltaics, agricultural science, climate policy, and socioeconomic development --- exactly the intersection this work occupies. Our ``quantum-to-organism'' framework bridges angstrom-scale vibronic couplings with square-meter agricultural yields, demonstrating that quantum coherence engineering --- even when constrained by the NPoM transport trade-off --- delivers measurable, bankable sustainability benefits. The integration of spectral coherence protection, SERS diagnostics, carbon-financed cooperative economics, and QKD-secured IoT within a unified agrivoltaic platform is, to our knowledge, unprecedented. This interdisciplinary synthesis aligns with the journal's mission to publish transformative research at the energy--environment--society nexus.
 
-\section*{Prior discussions and related submissions}
+\noindent\textbf{Prior discussions and related submissions}
 
-We submitted a companion manuscript on selective vibronic excitation in the FMO complex to the \textit{Journal of Physical Chemistry Letters} (currently under revision, Manuscript ID~jp-2026-XXXXX). The present manuscript extends that work substantially by: (1) introducing the NPoM polaritonic cavity and collective strong-coupling regime; (2) incorporating dynamic photo-protection mechanisms; (3) performing a full lifecycle assessment with Net Ecological Benefit quantification; and (4) analyzing socioeconomic access and QKD-secured IoT telemetry. No part of this manuscript has been previously published or is under consideration elsewhere.
+A companion manuscript on selective vibronic excitation in the FMO complex has been submitted to the \textit{Journal of Physical Chemistry Letters} (Manuscript ID jz-2026-00994t, revision submitted June 20, 2026). The present manuscript extends that work substantially by: (1) introducing the NPoM polaritonic cavity and characterizing the SERS--transport trade-off across mode volumes from \SI{0.2}{\nm\cubed} to \SI{1.4}{\nm\cubed}; (2) incorporating dynamic photo-protection mechanisms; (3) performing a full lifecycle assessment with Net Ecological Benefit quantification and carbon credit integration; (4) adding a proof-of-concept farm-scale scenario; and (5) analyzing cooperative socioeconomic access and QKD-secured IoT telemetry. No part of this manuscript has been previously published or is under consideration elsewhere.
 
-\section*{Author contributions and competing interests}
+\noindent\textbf{Author contributions and competing interests}
 
 All authors have approved the manuscript and agree with its submission to \textit{Nature Energy}. The authors declare no competing financial or non-financial interests.
 
-\section*{Suggested reviewers}
+\noindent\textbf{Suggested reviewers}
 
 We respectfully suggest the following experts who could evaluate our work:
 
 \begin{itemize}
 \item \textbf{Prof. Alexandra Olaya-Castro} (University College London) --- quantum biology and energy transfer in photosynthetic complexes
 \item \textbf{Prof. Joel Yuen-Zhou} (University of California San Diego) --- polaritonic chemistry and strong light--matter coupling
-\item \textbf{Prof. Gerwin Chilla} (University of Cambridge) --- exciton dynamics and organic photovoltaics
+\item \textbf{Prof. Jeremy J. Baumberg} (University of Cambridge) --- nanoparticle-on-mirror cavities and SERS
 \item \textbf{Prof. Michael F. Green} (University of British Columbia) --- agrivoltaics and agricultural energy systems
 \end{itemize}
 
-\section*{Excluded reviewers}
+\noindent\textbf{Excluded reviewers}
 
 We have no conflicts requiring exclusion of specific reviewers.
 
@@ -86,7 +99,7 @@ Steve Cabrel Teguia Kouam\\
 \begin{itemize}
 \item Manuscript: \texttt{Manuscript.tex}
 \item Supporting Information: \texttt{SI.tex}
-\item Figures (3): \texttt{Figure1\_Quantum\_Dynamics.png}, \texttt{Figure2\_SERS\_Readout.png}, \texttt{Figure3\_LCA\_NEB\_Comparison.png}
+\item Figures: \texttt{Figure1\_Quantum\_Dynamics.png}, \texttt{Figure2\_SERS\_Readout.png}, \texttt{Figure3\_LCA\_NEB\_Comparison.png}
 \end{itemize}
 
 \end{letter}

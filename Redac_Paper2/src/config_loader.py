@@ -25,11 +25,16 @@ class SersConfig(BaseModel):
     optomechanical_coupling: float = Field(..., ge=0.0)
 
 
+class NpomConfig(BaseModel):
+    enabled: bool = True
+
+
 class QuantumSection(BaseModel):
     solver: SolverConfig
     fmo: FmoConfig
     floquet: FloquetConfig
     sers: SersConfig
+    npom: NpomConfig
 
 
 class SimulationSection(BaseModel):
@@ -39,6 +44,7 @@ class SimulationSection(BaseModel):
 
 class GreenhouseConfig(BaseModel):
     shading_factor: float = Field(..., ge=0.0, le=1.0)
+    soiling_factor: float = Field(default=0.05, ge=0.0, le=1.0)
     crop_coefficient: float = Field(..., ge=0.0)
 
 
@@ -62,7 +68,11 @@ class LcaSection(BaseModel):
     pv_fill_factor: float = 0.8
     reference_biomass_kg: float = 12.0
     default_capex: float = 25000.0
+    capex_std: float = 2500.0
     default_annual_revenue: float = 6000.0
+    revenue_std: float = 600.0
+    default_annual_opex: float = 2000.0
+    panel_cleaning_annual_cost: float = 500.0
     scenario_b_yield_factor: float = 0.8
     scenario_b_water_factor: float = 0.9
     scenario_b_power_factor: float = 1.1

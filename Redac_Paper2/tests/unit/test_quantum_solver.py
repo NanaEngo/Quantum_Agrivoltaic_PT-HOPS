@@ -153,8 +153,8 @@ def test_floquet_stark_switch():
 
     switch = FloquetStarkSwitch(config)
 
-    # Under solar threshold
-    shift_low = switch.get_stark_detuning(500.0, 1.0)
+    # Under solar threshold (threshold = 450 W/m2 in parameters.yaml)
+    shift_low = switch.get_stark_detuning(400.0, 1.0)
     assert np.allclose(shift_low, 0.0)
 
     # Over solar threshold
@@ -166,8 +166,8 @@ def test_floquet_stark_switch():
     shift_night = switch.get_stark_detuning(0.0, 1.0)
     assert np.allclose(shift_night, 0.0)
 
-    # OMIT transmission check
-    t_normal = switch.apply_omit_attenuation(500.0, 0.8)
+    # OMIT transmission check (below threshold: 400 < 450)
+    t_normal = switch.apply_omit_attenuation(400.0, 0.8)
     assert t_normal == 0.8
 
     t_attenuated = switch.apply_omit_attenuation(1000.0, 0.8)

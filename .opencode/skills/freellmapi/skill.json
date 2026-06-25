@@ -1,0 +1,5 @@
+{
+  "name": "freellmapi",
+  "description": "Accès aux modèles de langage via FreeLLMAPI (agrégateur d'APIs gratuites).",
+  "usage": "Utilisez ce skill pour toute tâche nécessitant un LLM quand aucune autre instruction spécifique n'est donnée. Il envoie les requêtes au serveur FreeLLMAPI local."
+}

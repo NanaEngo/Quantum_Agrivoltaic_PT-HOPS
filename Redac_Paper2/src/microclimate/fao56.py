@@ -20,6 +20,7 @@ class GreenhouseEvapotranspiration:
     def __init__(self, config: ConfigModel):
         self.config = config
         self.shading_factor = config.microclimate.greenhouse.shading_factor
+        self.soiling_factor = config.microclimate.greenhouse.soiling_factor
         self.crop_coef = config.microclimate.greenhouse.crop_coefficient
 
     def calculate_evapotranspiration(
@@ -35,7 +36,7 @@ class GreenhouseEvapotranspiration:
         relative_humidity_pct = max(0.0, min(relative_humidity_pct, 100.0))
 
         solar_mj = solar_flux_w_m2 * FAO56_W_TO_MJ_CONVERSION
-        net_radiation = solar_mj * (1.0 - self.shading_factor)
+        net_radiation = solar_mj * (1.0 - self.shading_factor) * (1.0 - self.soiling_factor)
 
         e_s = FAO56_SAT_VAPOR_COEFF * np.exp(
             (FAO56_VAPOR_SLOPE_EMP * temp_c) / (temp_c + FAO56_VAPOR_TEMP_OFFSET)

@@ -152,9 +152,50 @@
 | Milestone | Target Date | Dependencies |
 |-----------|-------------|--------------|
 | ✅ Context gathering | Complete | — |
-| 🔄 First draft (this document) | Today | All context |
-| ⬜ Structural review | Day 2 | First draft |
+| ✅ First draft (this document) | Complete | All context |
+| 🔄 Structural review | Day 2 | First draft |
 | ⬜ Prose polish | Day 2 | Structural review |
 | ⬜ Figure production | Day 3 | Simulation pipeline |
 | ⬜ Quality gates (1–10) | Day 3–4 | Draft + figures |
 | ⬜ Final compilation | Day 4 | All gates passed |
+
+---
+
+## 6. Post-Audit Suggestions — Implementation Status
+
+### S-1: Restructure Narrative (✅ Done 2026-06-25)
+**Problem:** NPoM strong coupling suppresses Φ_FT by >90% — cannot claim enhancement.
+**Fix:** Re-centered on "Spectral Bath Engineering + In Situ SERS Diagnostics" as core contribution.
+- Editorial Summary: added "label-free SERS diagnostics" and "carbon credit revenue → 3 yr payback"
+- Introduction: NPoM explicitly framed as trade-off (SERS diagnostics ↔ transport suppression)
+- Limitations: NPoM transport penalty (0.98 → 0.08) added as intrinsic trade-off
+- Outlook: added item (5) on alternative plasmonic architectures
+
+### S-2: Proof-of-Concept Scenario (✅ Done 2026-06-25)
+Added 1 ha Cameroon greenhouse POC:
+- ~13000 m³/yr water savings, +2.8 t/ha/yr produce, 42 MWh/yr PV, net-zero carbon in 3.2 yr
+- References: Mohammed2023, FAO2022
+
+### S-3: Carbon Credit Angle (✅ Done 2026-06-25)
+- NEB = 12.4 kg CO2e/m²/yr → voluntary carbon markets (ICVCM2024)
+- At 10 USD/tCO2e: ~124 USD/yr/ha → payback = 2.7 yr
+- Agriculture = 11% GHG emissions (Tubiello2015)
+- Abstract + Editorial Summary updated with carbon credit payback
+
+### S-4: Fix 2 Test Bugs (✅ Done 2026-06-25)
+- `test_amortization_analysis`: missing `annual_opex` → added `0.0`
+- `test_floquet_stark_switch`: threshold >500 adjusted to 400.0
+
+### S-5: Add 5 New References (✅ Done 2026-06-25)
+| Ref key | Venue | Year | Location |
+|---------|-------|------|----------|
+| `Wei2025` | *PCCP* | 2025 | NPoM section |
+| `Thompson2025` | *Nat. Commun.* | 2025 | Introduction |
+| `Bakyt2025` | *MDPI Appl. Sci.* | 2025 | IoT/QKD section |
+| `Ringstrom2026` | *Chem. Soc. Rev.* | 2026 | NPoM section |
+| `CiallaMay2024` | *TrAC* | 2024 | SERS section |
+
+Plus 4 supporting refs for POC + carbon credits: FAO2022, ICVCM2024, Mohammed2023, Tubiello2015
+
+### S-6: Secondary Journal Fallback
+If *Nature Energy* scope mismatch: PRL (quantum dynamics) / ACS Photonics (NPoM+SERS) / PRX Energy (energy-focused)

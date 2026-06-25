@@ -67,6 +67,9 @@ def test_amortization_analysis():
     config = load_config(config_path)
 
     analysis = AmortizationAnalysis(config)
-    payback = analysis.calculate_payback_years(10000.0, 2000.0)
-    # 10000 * 0.7 = 7000. 7000 / 2000 = 3.5 years. Division by coop_members cancels out.
+    payback = analysis.calculate_payback_years(10000.0, 2000.0, 0.0)
+    # net_capex = 10000 * (1 - 0.3) = 7000
+    # capex_per_member = 7000 / 5 = 1400
+    # net_annual_revenue_per_member = (2000 - 0) / 5 = 400
+    # payback = 1400 / 400 = 3.5 years
     assert payback == 3.5
