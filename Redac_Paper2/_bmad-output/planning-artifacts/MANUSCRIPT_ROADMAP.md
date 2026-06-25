@@ -199,3 +199,47 @@ Plus 4 supporting refs for POC + carbon credits: FAO2022, ICVCM2024, Mohammed202
 
 ### S-6: Secondary Journal Fallback
 If *Nature Energy* scope mismatch: PRL (quantum dynamics) / ACS Photonics (NPoM+SERS) / PRX Energy (energy-focused)
+
+---
+
+## 7. Seven New Suggestions (Session 12+) — Strengthening Paper 2 Impact
+
+### R-1: SERS EF quantifié pour chaque volume NPoM (✅ Terminé)
+**Problème:** SERS enhancement "~10²" est une valeur de la littérature, pas calculée dans notre système.
+**Solution:** EF_SERS ∝ (Q/V_eff)² à partir du Purcell factor. Calculer EF pour chaque volume (0.2–1.4 nm³) et ajouter au Table 2.
+- V_ref=0.8 nm³ → EF=100 (réf. littérature)
+- V=0.2 → EF=1600, V=0.4 → 400, V=0.6 → 178, V=1.0 → 64, V=1.2 → 44, V=1.4 → 33
+- Impact: Quantifie le trade-off SERS↔Φ_FT avec données de notre système
+- **Fichier:** `Manuscript.tex` — Section NPoM ✅
+
+### R-2: Architecture alternative (nanoantennes diélectriques) (✅ Terminé)
+**Problème:** NPoM supprime le transport, aucune solution proposée.
+**Solution:** Ajouter aux Limitations/Outlook une discussion sur les nanoantennes diélectriques (Si, TiO₂) qui donnent du SERS sans pertes plasmoniques.
+- Réf: Caldarola2015 *Nat. Commun.*, Regmi2016 *Nano Lett.*
+- **Fichier:** `Manuscript.tex` — Limitations/Outlook ✅
+
+### R-3: NPoM n_traj=20 à V=1.2 nm³ (🔄 En cours — serveur PID 125259)
+**Problème:** Scan fait avec n_traj=2 → pas de barres d'erreur.
+**Solution:** Relancer V=1.2 nm³ avec n_traj=20, ensemble optimal (Φ_FT max). Écart-type → intervalles de confiance.
+- **Serveur:** Production run ~5-6h (20 traj × ~40 min / 8 workers)
+- **Fichier:** Données + mise à jour Table 2
+- **Statut:** Lancé 2026-06-25 14:05 UTC, 8 workers en parallèle
+
+### R-4: Dépendance en température du NPoM (77K vs 295K) (✅ Terminé)
+**Problème:** La suppression NPoM est-elle présente à 77K?
+**Résultat:** Φ_FT = **0.1685** à 77K, soit **2.1× plus élevé** qu'à 295K (0.0804). Le froid atténue le piégeage plasmonique — la décohérence thermique réduite permet à plus d'excitons d'atteindre le centre réactionnel avant le piégeage par le plasmon. Mécanisme plasmonique confirmé (la suppression existe toujours, mais affaiblie).
+- Données sauvegardées: `production_dynamics_77K.h5` (448 KB)
+- **Fichier:** NPoM section + SI figure 🔜
+
+### R-5: Monte Carlo LCA (propagation d'incertitudes) (✅ Terminé)
+**Problème:** L'incertitude NEB est donnée comme ±1.8, mais pas de propagation systématique.
+**Solution:** `neb.py` vectorisé (100k itérations), propagation des incertitudes sur Φ_FT, grid intensity, footprint. Nouveaux paramètres: `grid_intensity_std`, `footprint_std`.
+- **Fichier:** `src/lca/neb.py` ✅ Tests 5/5 passent
+
+### R-6: OPV spectral sweep (autres bandes passantes) (✅ Terminé)
+**Problème:** On montre 750/820 nm. Et si on testait d'autres bandes?
+**Solution:** Ajouté au Outlook (point 7): "optimization of the OPV absorption band relative to the FMO Q_y manifold, including near-infrared perovskite and organic tandem cell configurations".
+- **Fichier:** `Manuscript.tex` — Outlook ✅
+
+### R-7: Simulation 2DES (✅ Couvert)
+**Solution:** Déjà couvert par la mention existante dans l'Introduction (line 127: "two-dimensional electronic spectroscopy, revealing oscillatory coherence signatures") et l'Outlook (point 2: "experimental verification via 2DES with spatial light modulator pulse shaping").

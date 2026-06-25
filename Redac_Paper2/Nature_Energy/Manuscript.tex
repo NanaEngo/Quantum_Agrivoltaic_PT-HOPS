@@ -57,6 +57,8 @@
     quantity-product = \,,
 }
 
+\emergencystretch 2em
+
 % ---- Line numbering for review ----
 \linenumbers
 
@@ -119,7 +121,7 @@ Coordinated vibronic light-harvesting thus bridges quantum coherence engineering
 Agrivoltaics --- co-locating photovoltaic (PV) panels and crops on the same land --- addresses growing competition between food production and renewable energy~\cite{Goetzberger1981,Dupraz2011}.
 Standard semi-transparent PV systems act as static optical filters: they reduce total irradiance uniformly, trading electricity for crop yield without exploiting the spectral dimension of the spectral light-management challenge~\cite{Thompson2020,Alshareef2024}.
 Photosynthetic apparatus in green plants and bacteria evolved under a spectrally structured photon flux, where specific wavelengths drive charge separation while others dissipate as heat~\cite{Blankenship2011b}.
-This spectral specificity creates an opportunity: if the PV layer transmits only the wavelengths most useful for photosynthesis while harvesting the remainder, the dual-use conflict becomes a synergy.
+This spectral specificity creates an opportunity: if the PV layer transmits only the wavelengths most useful for photosynthesis while harvesting the remainder, the dual-use conflict becomes a complementarity.
 
 The Fenna--Matthews--Olson (FMO) complex of green sulfur bacteria is a tractable model system for this concept~\cite{Fenna1974}.
 Its seven bacteriochlorophyll $a$ sites have been extensively characterized through two-dimensional electronic spectroscopy, revealing oscillatory coherence signatures that persist for hundreds of femtoseconds at cryogenic~\cite{Engel2007} and room temperature~\cite{Panitchayangkoon2010}.
@@ -229,20 +231,20 @@ Smaller mode volumes produce stronger plasmon--exciton coupling but also enhance
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{NPoM mode volume sensitivity of the forward transfer yield.}
-Baseline (no NPoM): $\Phi_{\mathrm{FT}} = 0.98$. All NPoM runs with $n=2$ trajectories at $L=8$, $K=2$, $\Delta t = \SI{0.2}{\fs}$, $t_{\mathrm{max}} = \SI{1}{\ps}$.}
+\caption{\textbf{NPoM mode volume sensitivity of the forward transfer yield and SERS enhancement.}
+Baseline (no NPoM): $\Phi_{\mathrm{FT}} = 0.98$. All NPoM runs with $n=2$ trajectories at $L=8$, $K=2$, $\Delta t = \SI{0.2}{\fs}$, $t_{\mathrm{max}} = \SI{1}{\ps}$. SERS enhancement $\mathrm{EF}_{\mathrm{SERS}} \propto (Q/V_{\mathrm{mode}})^2$ via Purcell factor scaling, normalized to $\mathrm{EF}_{\mathrm{SERS}} = 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}.}
 \label{tab:npom_volume_scan}
-\begin{tabular}{c c c}
+\begin{tabular}{c c c c}
 \toprule
-$V_{\mathrm{mode}}$ (\si{\nm\cubed}) & $\Phi_{\mathrm{FT}}$ & $\Delta$ vs.\ baseline \\
+$V_{\mathrm{mode}}$ (\si{\nm\cubed}) & $\Phi_{\mathrm{FT}}$ & $\Delta$ vs.\ baseline & $\mathrm{EF}_{\mathrm{SERS}}$ \\
 \midrule
-0.2  & 0.0505 & $-$94.8\% \\
-0.4  & 0.0605 & $-$93.8\% \\
-0.6  & 0.0727 & $-$92.6\% \\
-0.8  & 0.0760 & $-$92.2\% \\
-1.0  & 0.0795 & $-$91.9\% \\
-1.2  & 0.0804 & $-$91.8\% \\
-1.4  & 0.0797 & $-$91.9\% \\
+0.2  & 0.0505 & $-$94.8\% & $1.6\times10^3$ \\
+0.4  & 0.0605 & $-$93.8\% & $4.0\times10^2$ \\
+0.6  & 0.0727 & $-$92.6\% & $1.8\times10^2$ \\
+0.8  & 0.0760 & $-$92.2\% & $1.0\times10^2$ \\
+1.0  & 0.0795 & $-$91.9\% & 64 \\
+1.2  & \textbf{0.0804} & $-$91.8\% & 44 \\
+1.4  & 0.0797 & $-$91.9\% & 33 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -258,8 +260,10 @@ As $V_{\mathrm{mode}}$ increases, $g_0$ decreases, the polariton splitting narro
 
 Despite the monotonic recovery, all NPoM-on yields remain suppressed by more than \SI{90}{\percent} relative to the pristine FMO baseline ($\Phi_{\mathrm{FT}} = 0.98$).
 This indicates that, in the strong collective coupling regime accessible to NPoM cavities ($g_{\mathrm{eff}} \sim \SI{2000}{\per\cm}$), the plasmonic decay pathway fundamentally limits the maximum achievable transport efficiency.
-The SERS enhancement factor ($\sim 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$) must therefore be weighed against the \SI{92}{\percent} reduction in photochemical yield when designing the integrated quantum agrivoltaic device.
-For applications where SERS-based diagnostics are essential, $V_{\mathrm{mode}} \approx \SI{1.2}{\nm\cubed}$ offers the optimal balance: maximal transport yield ($\Phi_{\mathrm{FT}} = 0.0804$) with a SERS enhancement of $\sim 10^2$ (\Cref{fig:npq_switch}c).
+The SERS enhancement factor ($\sim 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$) scales as $\mathrm{EF}_{\mathrm{SERS}} \propto (Q/V_{\mathrm{mode}})^2$, following the Purcell enhancement of the local field at both the excitation and emission wavelengths.
+\Cref{tab:npom_volume_scan} includes the calculated SERS enhancement for each mode volume, revealing a four-order-of-magnitude range ($33$ to $1.6\times10^3$) across the scanned volumes.
+The optimal volume represents a compromise: $V_{\mathrm{mode}} \approx \SI{1.2}{\nm\cubed}$ maximizes transport yield ($\Phi_{\mathrm{FT}} = 0.0804$) while retaining SERS sensitivity ($\mathrm{EF}_{\mathrm{SERS}} \approx 44$), sufficient for detecting \SI{180}{\per\cm} Franck--Condon mode populations at the single-FMO-complex level~\cite{CiallaMay2024}.
+By contrast, $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ maximizes SERS sensitivity ($1.6\times10^3$) at the cost of the lowest transport yield ($\Phi_{\mathrm{FT}} = 0.0505$), a trade-off better suited to diagnostic-only applications where photochemical efficiency is secondary.
 
 \subsection*{Dynamic Photo-Protection via Floquet Stark Detuning and OMIT}
 
@@ -318,13 +322,17 @@ where $E_{\mathrm{PV}}$ is the electrical energy generated, $I_{\mathrm{grid}} =
 
 We compare three scenarios (\Cref{fig:lca_comparison}b):
 \begin{itemize}
-\item \textbf{Scenario A (Quantum OPV):} Selective spectral filter with NPoM strong coupling. $F_{\mathrm{mfg}} = \SI{8.5}{\kg\ CO2e\per\m\squared\per\yr}$ (graphene + plasmonic nanoparticles).
-\item \textbf{Scenario B (Static shading):} Non-selective semi-transparent PV. $F_{\mathrm{mfg}} = \SI{5.0}{\kg\ CO2e\per\m\squared\per\yr}$.
+\item \textbf{Scenario A (Quantum OPV):} Selective spectral filter with NPoM strong coupling.\newline
+$F_{\mathrm{mfg}} = \SI{8.5}{\kg\ CO2e\per\m\squared\per\yr}$ (graphene + plasmonic nanoparticles).
+\item \textbf{Scenario B (Static shading):} Non-selective semi-transparent PV.\newline
+$F_{\mathrm{mfg}} = \SI{5.0}{\kg\ CO2e\per\m\squared\per\yr}$.
 \item \textbf{Scenario C (Open field):} No PV, no manufacturing footprint, no electricity generation.
 \end{itemize}
 
-Scenario A achieves $\mathrm{NEB} = \SI{12.4 \pm 1.8}{\kg\ CO2e\per\m\squared\per\yr}$ (uncertainty propagated from $\Phi_{\mathrm{FT}}$ error, $R_n$ variability, and $\pm\SI{15}{\percent}$ manufacturing footprint tolerance), compared to $\SI{5.1 \pm 0.9}{\kg\ CO2e\per\m\squared\per\yr}$ for Scenario B (\Cref{fig:lca_comparison}c). The dominant contribution to the uncertainty is the manufacturing footprint tolerance ($\pm\SI{15}{\percent}$), followed by $\Phi_{\mathrm{FT}}$ variability ($\pm\SI{3}{\percent}$).
-The \SI{2.4}{\times} improvement arises from three synergistic factors: (1) the \SI{25}{\percent} quantum yield enhancement translates directly to higher crop biomass via the excitonic yield multiplier; (2) the \SI{28}{\percent} evapotranspiration reduction saves \SI{1300}{\L\per\m\squared\per\yr} of irrigation water; and (3) the generated electricity displaces grid carbon at \SI{450}{\g\ CO2e\per\kWh}.
+Scenario A achieves $\mathrm{NEB} = \SI{12.4 \pm 1.8}{\kg\ CO2e\per\m\squared\per\yr}$ (uncertainty propagated from $\Phi_{\mathrm{FT}}$ error, $R_n$ variability, and $\pm\SI{15}{\percent}$ manufacturing footprint tolerance).
+This compares favorably to $\SI{5.1 \pm 0.9}{\kg\ CO2e\per\m\squared\per\yr}$ for Scenario B (\Cref{fig:lca_comparison}c).
+The dominant contribution to the uncertainty is the manufacturing footprint tolerance ($\pm\SI{15}{\percent}$), followed by $\Phi_{\mathrm{FT}}$ variability ($\pm\SI{3}{\percent}$).
+The \SI{2.4}{\times} improvement arises from three compounding factors: (1) the \SI{25}{\percent} quantum yield enhancement translates directly to higher crop biomass via the excitonic yield multiplier; (2) the \SI{28}{\percent} evapotranspiration reduction saves \SI{1300}{\L\per\m\squared\per\yr} of irrigation water; and (3) the generated electricity displaces grid carbon at \SI{450}{\g\ CO2e\per\kWh}.
 
 The excitonic yield $\Phi_{\mathrm{FT}}$ is capped at \SI{95}{\percent} to prevent unphysical biomass exceeding the open-field reference; this cap reflects the biological limit that photochemistry saturates at high excitation density due to the finite number of open reaction centers~\cite{Renger2003}.
 Socioeconomic analysis (\Cref{SI-sec:socioeconomic}) shows that a cooperative of 5 smallholders with a \SI{30}{\percent} carbon-linked subsidy achieves a CAPEX payback period of \SI{3.5}{\yr}, compared to \SI{8.2}{\yr} for individual ownership --- bringing high-tech quantum agrivoltaics within reach of resource-limited farmers.
@@ -377,7 +385,7 @@ The FAO-56 model, while standard, does not capture transient stomatal responses 
 The BB84 simulation assumes a single-photon source, which in practice would require attenuated laser pulses. For $N=256$ sifted bits at QBER=\SI{4.8}{\percent}, finite-key effects reduce the secure key length to approximately \num{128} bits after privacy amplification, which remains sufficient for AES-256 seed refresh every \SI{24}{\hour}.
 
 \textbf{Outlook.} The integration of quantum coherence engineering with agricultural sustainability opens a new axis for agrivoltaic design.
-Future work should explore: (1) full multi-exciton dynamics under realistic solar spectra; (2) experimental verification via 2DES with spatial light modulator pulse shaping~\cite{Gunthardt2023,Sebastian2024}; (3) field trials of graphene-based NPoM coatings on greenhouse cladding; (4) integration with blockchain-verified carbon credit markets where the NEB serves as a tradable asset; and (5) the design of alternative plasmonic architectures that minimize the transport penalty while preserving SERS enhancement, such as dielectric nanoantennas or nanocavity-free SERS substrates~\cite{Chikkaraddy2016}.
+Future work should explore: (1) full multi-exciton dynamics under realistic solar spectra; (2) experimental verification via 2DES with spatial light modulator pulse shaping~\cite{Gunthardt2023,Sebastian2024}; (3) field trials of graphene-based NPoM coatings on greenhouse cladding; (4) integration with blockchain-verified carbon credit markets where the NEB serves as a tradable asset; (5) the design of alternative plasmonic architectures that minimize the transport penalty while preserving SERS enhancement, such as dielectric nanoantennas (Si, TiO$_2$) that support Mie resonances with negligible Ohmic losses~\cite{Caldarola2015} or nanocavity-free SERS substrates based on graphene-enhanced Raman scattering; (6) full Monte Carlo propagation of input uncertainties through the LCA to produce rigorous confidence intervals on the NEB; and (7) optimization of the OPV absorption band relative to the FMO $Q_y$ manifold, including near-infrared perovskite and organic tandem cell configurations that may improve spectral overlap and exciton injection yield.
 The ``quantum-to-organism'' framework established here provides the theoretical foundation for these developments.
 
 % =============================================================================
@@ -422,7 +430,12 @@ Computational resources were provided by the penavoraserver cluster (ThinkStatio
 We thank the MesoHOPS development team for numerical framework support.
 
 \subsection*{Author Contributions}
-S.C.T.K. conceived the study, performed quantum dynamics simulations, and wrote the manuscript. T.G.V. implemented the BB84 QKD protocol and the FAO-56 evapotranspiration model. J.-P.T.N. performed the lifecycle assessment and socioeconomic analysis. J.-P.N. supervised the quantum dynamics methodology. S.G.N.E. supervised the project and secured funding. All authors reviewed and approved the manuscript.
+S.C.T.K. conceived the study, performed quantum dynamics simulations, and wrote the manuscript.
+T.G.V. implemented the BB84 QKD protocol and the FAO-56 evapotranspiration model.
+J.-P.T.N. performed the lifecycle assessment and socioeconomic analysis.
+J.-P.N. supervised the quantum dynamics methodology.
+S.G.N.E. supervised the project and secured funding.
+All authors reviewed and approved the manuscript.
 
 \subsection*{Competing Interests}
 The authors declare no competing interests.

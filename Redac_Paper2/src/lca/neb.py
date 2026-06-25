@@ -57,41 +57,62 @@ class NetEcologicalBenefit:
         power_generated_kwh_std: float,
         crop_biomass_kg_mean: float,
         crop_biomass_kg_std: float,
-        n_iterations: int = 10000,
+        grid_intensity_std: float | None = None,
+        footprint_std: float | None = None,
+        n_iterations: int = 100000,
     ) -> dict:
         rng = np.random.default_rng(42)
 
+        # Sample all inputs in parallel (vectorized)
         excitonic_yields = rng.normal(excitonic_yield_mean, excitonic_yield_std, n_iterations)
         water_saved = rng.normal(water_saved_liters_mean, water_saved_liters_std, n_iterations)
         power = rng.normal(power_generated_kwh_mean, power_generated_kwh_std, n_iterations)
         biomass = rng.normal(crop_biomass_kg_mean, crop_biomass_kg_std, n_iterations)
 
+        # Add grid intensity uncertainty if provided
+        if grid_intensity_std is not None and grid_intensity_std > 0.0:
+            grid_values = rng.normal(self.grid_intensity, grid_intensity_std, n_iterations)
+            grid_values = np.clip(grid_values, self.grid_intensity * 0.5, self.grid_intensity * 1.5)
+        else:
+            grid_values = np.full(n_iterations, self.grid_intensity)
+
+        # Physical constraints
         excitonic_yields = np.clip(excitonic_yields, 0.0, LCA_MAX_PHYSICAL_YIELD)
         water_saved = np.clip(water_saved, 0.0, None)
         power = np.clip(power, 0.0, None)
         biomass = np.clip(biomass, 0.0, None)
 
-        results = {
-            "effective_biomass_kg": [],
-            "net_benefit_co2_kg": [],
-            "functional_unit": [],
-        }
+        # Vectorized calculation
+        safe_yield = np.minimum(excitonic_yields, LCA_MAX_PHYSICAL_YIELD)
+        effective_biomass = biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD)
+        carbon_avoided_power = power * (grid_values / G_TO_KG)
+        carbon_avoided_water = water_saved * LCA_WATER_PUMPING_CARBON_FACTOR
 
-        for i in range(n_iterations):
-            r = self.calculate_scenario_neb(
-                scenario=scenario,
-                excitonic_yield=excitonic_yields[i],
-                water_saved_liters=water_saved[i],
-                power_generated_kwh=power[i],
-                crop_biomass_kg=biomass[i],
-            )
-            results["effective_biomass_kg"].append(r["effective_biomass_kg"])
-            results["net_benefit_co2_kg"].append(r["net_benefit_co2_kg"])
-            results["functional_unit"].append(r["functional_unit"])
+        if scenario == "A":
+            footprint_base = LCA_FOOTPRINT_A
+        elif scenario == "B":
+            footprint_base = LCA_FOOTPRINT_B
+        else:
+            footprint_base = LCA_FOOTPRINT_C
+            carbon_avoided_power = np.zeros_like(power)
 
+        # Sample footprint uncertainty if provided
+        if footprint_std is not None and footprint_std > 0.0:
+            footprints = rng.normal(footprint_base, footprint_std, n_iterations)
+            footprints = np.clip(footprints, footprint_base * 0.5, footprint_base * 1.5)
+        else:
+            footprints = np.full(n_iterations, footprint_base)
+
+        net_benefit = (carbon_avoided_power + carbon_avoided_water) - footprints
+        functional_unit = power * effective_biomass
+
+        # Build summary statistics
         summary = {}
-        for key, vals in results.items():
-            arr = np.array(vals)
+        for key, arr in [
+            ("effective_biomass_kg", effective_biomass),
+            ("net_benefit_co2_kg", net_benefit),
+            ("functional_unit", functional_unit),
+        ]:
             summary[key] = {
                 "mean": float(np.mean(arr)),
                 "std": float(np.std(arr)),
