@@ -27,8 +27,8 @@ T = 295  # K
 # Qy transition of BChl a peaks around 800 nm
 # FMO has broad absorption with peaks at ~750 nm and ~805 nm
 fmo_absorption = (
-    0.6 * np.exp(-((wavelengths_nm - 750)**2) / (2 * 15**2)) +  # High energy peak
-    1.0 * np.exp(-((wavelengths_nm - 805)**2) / (2 * 20**2))    # Main Qy peak
+    0.6 * np.exp(-((wavelengths_nm - 750) ** 2) / (2 * 15**2))  # High energy peak
+    + 1.0 * np.exp(-((wavelengths_nm - 805) ** 2) / (2 * 20**2))  # Main Qy peak
 )
 
 # ============================================
@@ -36,9 +36,8 @@ fmo_absorption = (
 # ============================================
 # Approximate AM1.5G in visible-NIR region
 # Peak around 500 nm, tailing off to NIR
-solar_norm = (
-    0.8 * np.exp(-((wavelengths_nm - 550)**2) / (2 * 150**2)) +
-    0.4 * np.exp(-((wavelengths_nm - 800)**2) / (2 * 100**2))
+solar_norm = 0.8 * np.exp(-((wavelengths_nm - 550) ** 2) / (2 * 150**2)) + 0.4 * np.exp(
+    -((wavelengths_nm - 800) ** 2) / (2 * 100**2)
 )
 solar_norm = solar_norm / solar_norm.max()
 
@@ -64,8 +63,13 @@ huang_rhys = np.array([0.05, 0.02, 0.01, 0.005])
 J_vibronic = np.zeros_like(omega)
 for w_k, gamma_k, S_k in zip(vibronic_freqs, vibronic_widths, huang_rhys):
     J_vibronic += (
-        2 * np.pi * S_k * omega * w_k * gamma_k /
-        ((omega**2 - w_k**2)**2 + omega**2 * gamma_k**2)
+        2
+        * np.pi
+        * S_k
+        * omega
+        * w_k
+        * gamma_k
+        / ((omega**2 - w_k**2) ** 2 + omega**2 * gamma_k**2)
     )
 
 J_total = J_dl + J_vibronic
@@ -80,7 +84,9 @@ filter_weights = [0.5, 0.5]
 
 T_filter = np.zeros_like(wavelengths_nm)
 for center, width, weight in zip(filter_centers, filter_widths, filter_weights):
-    T_filter += weight * np.exp(-((wavelengths_nm - center)**2) / (2 * (width/2.355)**2))
+    T_filter += weight * np.exp(
+        -((wavelengths_nm - center) ** 2) / (2 * (width / 2.355) ** 2)
+    )
 
 # ============================================
 # Create Figure
@@ -88,37 +94,50 @@ for center, width, weight in zip(filter_centers, filter_widths, filter_weights):
 fig, ax = plt.subplots(figsize=(8, 5))
 
 # Plot with different line styles and colors
-ax.fill_between(wavelengths_nm, 0, fmo_absorption, alpha=0.3, color='green', label='FMO absorption')
-ax.plot(wavelengths_nm, fmo_absorption, 'g-', linewidth=2)
+ax.fill_between(
+    wavelengths_nm, 0, fmo_absorption, alpha=0.3, color="green", label="FMO absorption"
+)
+ax.plot(wavelengths_nm, fmo_absorption, "g-", linewidth=2)
 
-ax.fill_between(wavelengths_nm, 0, solar_norm, alpha=0.2, color='orange', label='Solar irradiance')
-ax.plot(wavelengths_nm, solar_norm, 'orange', linewidth=1.5, linestyle='--')
+ax.fill_between(
+    wavelengths_nm, 0, solar_norm, alpha=0.2, color="orange", label="Solar irradiance"
+)
+ax.plot(wavelengths_nm, solar_norm, "orange", linewidth=1.5, linestyle="--")
 
-ax.fill_between(wavelengths_nm, 0, J_total_norm, alpha=0.2, color='blue', label='Bath spectral density')
-ax.plot(wavelengths_nm, J_total_norm, 'b-', linewidth=1.5, linestyle='-.')
+ax.fill_between(
+    wavelengths_nm,
+    0,
+    J_total_norm,
+    alpha=0.2,
+    color="blue",
+    label="Bath spectral density",
+)
+ax.plot(wavelengths_nm, J_total_norm, "b-", linewidth=1.5, linestyle="-.")
 
-ax.fill_between(wavelengths_nm, 0, T_filter, alpha=0.4, color='red', label='Filter transmission')
-ax.plot(wavelengths_nm, T_filter, 'r-', linewidth=2)
+ax.fill_between(
+    wavelengths_nm, 0, T_filter, alpha=0.4, color="red", label="Filter transmission"
+)
+ax.plot(wavelengths_nm, T_filter, "r-", linewidth=2)
 
 # Mark filter center wavelengths
 for center in filter_centers:
-    ax.axvline(x=center, color='red', linestyle=':', alpha=0.5, linewidth=1)
-    ax.annotate(f'{center} nm', xy=(center, 0.9), ha='center', fontsize=9, color='red')
+    ax.axvline(x=center, color="red", linestyle=":", alpha=0.5, linewidth=1)
+    ax.annotate(f"{center} nm", xy=(center, 0.9), ha="center", fontsize=9, color="red")
 
 # Labels and formatting
-ax.set_xlabel('Wavelength (nm)', fontsize=12, fontweight='bold')
-ax.set_ylabel('Normalized intensity / transmission', fontsize=12, fontweight='bold')
+ax.set_xlabel("Wavelength (nm)", fontsize=12, fontweight="bold")
+ax.set_ylabel("Normalized intensity / transmission", fontsize=12, fontweight="bold")
 ax.set_xlim(600, 900)
 ax.set_ylim(0, 1.1)
-ax.legend(loc='upper right', framealpha=0.9)
+ax.legend(loc="upper right", framealpha=0.9)
 ax.grid(True, alpha=0.3)
 
 # Title
-ax.set_title('(e) Spectral Relationships', fontsize=13, fontweight='bold', loc='left')
+ax.set_title("(e) Spectral Relationships", fontsize=13, fontweight="bold", loc="left")
 
 plt.tight_layout()
-plt.savefig('Figure1e_spectral_relationships.pdf', dpi=300, bbox_inches='tight')
-plt.savefig('Figure1e_spectral_relationships.png', dpi=300, bbox_inches='tight')
+plt.savefig("Figure1e_spectral_relationships.pdf", dpi=300, bbox_inches="tight")
+plt.savefig("Figure1e_spectral_relationships.png", dpi=300, bbox_inches="tight")
 print("Generated Figure1e_spectral_relationships.pdf and .png")
 
 # Also create a combined figure that could be the full Figure 1
@@ -131,29 +150,44 @@ axes = axes.flatten()
 
 # Panel (e) - Spectral relationships (our new figure)
 ax_e = axes[4]
-ax_e.fill_between(wavelengths_nm, 0, fmo_absorption, alpha=0.3, color='green', label='FMO absorption')
-ax_e.plot(wavelengths_nm, fmo_absorption, 'g-', linewidth=2)
-ax_e.fill_between(wavelengths_nm, 0, solar_norm, alpha=0.2, color='orange', label='Solar irradiance')
-ax_e.plot(wavelengths_nm, solar_norm, 'orange', linewidth=1.5, linestyle='--')
-ax_e.fill_between(wavelengths_nm, 0, J_total_norm, alpha=0.2, color='blue', label='Bath spectral density')
-ax_e.plot(wavelengths_nm, J_total_norm, 'b-', linewidth=1.5, linestyle='-.')
-ax_e.fill_between(wavelengths_nm, 0, T_filter, alpha=0.4, color='red', label='Filter transmission')
-ax_e.plot(wavelengths_nm, T_filter, 'r-', linewidth=2)
+ax_e.fill_between(
+    wavelengths_nm, 0, fmo_absorption, alpha=0.3, color="green", label="FMO absorption"
+)
+ax_e.plot(wavelengths_nm, fmo_absorption, "g-", linewidth=2)
+ax_e.fill_between(
+    wavelengths_nm, 0, solar_norm, alpha=0.2, color="orange", label="Solar irradiance"
+)
+ax_e.plot(wavelengths_nm, solar_norm, "orange", linewidth=1.5, linestyle="--")
+ax_e.fill_between(
+    wavelengths_nm,
+    0,
+    J_total_norm,
+    alpha=0.2,
+    color="blue",
+    label="Bath spectral density",
+)
+ax_e.plot(wavelengths_nm, J_total_norm, "b-", linewidth=1.5, linestyle="-.")
+ax_e.fill_between(
+    wavelengths_nm, 0, T_filter, alpha=0.4, color="red", label="Filter transmission"
+)
+ax_e.plot(wavelengths_nm, T_filter, "r-", linewidth=2)
 
 for center in filter_centers:
-    ax_e.axvline(x=center, color='red', linestyle=':', alpha=0.5, linewidth=1)
-    ax_e.annotate(f'{center} nm', xy=(center, 0.9), ha='center', fontsize=8, color='red')
+    ax_e.axvline(x=center, color="red", linestyle=":", alpha=0.5, linewidth=1)
+    ax_e.annotate(
+        f"{center} nm", xy=(center, 0.9), ha="center", fontsize=8, color="red"
+    )
 
-ax_e.set_xlabel('Wavelength (nm)', fontsize=10)
-ax_e.set_ylabel('Normalized intensity', fontsize=10)
+ax_e.set_xlabel("Wavelength (nm)", fontsize=10)
+ax_e.set_ylabel("Normalized intensity", fontsize=10)
 ax_e.set_xlim(600, 900)
 ax_e.set_ylim(0, 1.1)
-ax_e.legend(loc='upper right', fontsize=8)
-ax_e.set_title('(e) Spectral relationships', fontsize=11, fontweight='bold', loc='left')
+ax_e.legend(loc="upper right", fontsize=8)
+ax_e.set_title("(e) Spectral relationships", fontsize=11, fontweight="bold", loc="left")
 
 # Hide unused panel
-axes[5].axis('off')
+axes[5].axis("off")
 
 plt.tight_layout()
-plt.savefig('Figure1_template_with_spectral.png', dpi=300, bbox_inches='tight')
+plt.savefig("Figure1_template_with_spectral.png", dpi=300, bbox_inches="tight")
 print("Generated Figure1_template_with_spectral.png (template)")

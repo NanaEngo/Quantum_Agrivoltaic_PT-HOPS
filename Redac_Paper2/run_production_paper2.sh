@@ -13,15 +13,15 @@
 set -euo pipefail
 
 # ---- Configuration ----
-PROJECT_DIR="$HOME/Redac_Paper2"
-FRAMEWORK_DIR="$HOME/quantum_simulations_framework"
-CONDA_ENV="MesoHOP-sim"
-PYTHON="$HOME/miniforge3/envs/${CONDA_ENV}/bin/python"
-PIP="$HOME/miniforge3/envs/${CONDA_ENV}/bin/pip"
-LOG_DIR="$PROJECT_DIR/logs"
-DATA_DIR="$PROJECT_DIR/data/converged"
-GRAPHICS_DIR="$PROJECT_DIR/Graphics"
-REPORT_DIR="$PROJECT_DIR/reports"
+PROJECT_DIR="${PROJECT_DIR:-$HOME/Redac_Paper2}"
+FRAMEWORK_DIR="${FRAMEWORK_DIR:-$HOME/quantum_simulations_framework}"
+CONDA_ENV="${CONDA_ENV:-MesoHOP-sim}"
+PYTHON="${PYTHON:-$HOME/miniforge3/envs/${CONDA_ENV}/bin/python}"
+PIP="${PIP:-$HOME/miniforge3/envs/${CONDA_ENV}/bin/pip}"
+LOG_DIR="${PROJECT_DIR}/logs"
+DATA_DIR="${PROJECT_DIR}/data/converged"
+GRAPHICS_DIR="${PROJECT_DIR}/Graphics"
+REPORT_DIR="${PROJECT_DIR}/reports"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 RUN_ID="paper2_prod_${TIMESTAMP}"
 LOG_FILE="${LOG_DIR}/${RUN_ID}.log"

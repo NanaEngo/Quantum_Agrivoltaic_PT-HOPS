@@ -24,6 +24,7 @@ import glob
 import numpy as np
 import pandas as pd
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from scipy.stats import norm as _norm
@@ -35,8 +36,14 @@ _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _FRAMEWORK_DIR = os.path.abspath(os.path.join(_SCRIPT_DIR, ".."))
 _RESULTS_DIR = os.path.join(_SCRIPT_DIR, "results")
 _FIGURES_DIR = os.path.abspath(
-    os.path.join(_FRAMEWORK_DIR, "..", "..",
-                 "Redac_Paper1", "JPCL_Submission_Package_2026-06-20", "Figures")
+    os.path.join(
+        _FRAMEWORK_DIR,
+        "..",
+        "..",
+        "Redac_Paper1",
+        "JPCL_Submission_Package_2026-06-20",
+        "Figures",
+    )
 )
 os.makedirs(_FIGURES_DIR, exist_ok=True)
 
@@ -47,21 +54,23 @@ if _FRAMEWORK_DIR not in sys.path:
 # ──────────────────────────────────────────────────────────────────────
 # Publication theme
 # ──────────────────────────────────────────────────────────────────────
-plt.rcParams.update({
-    "font.size": 10,
-    "font.family": "sans-serif",
-    "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
-    "axes.labelsize": 11,
-    "axes.titlesize": 11,
-    "xtick.labelsize": 9,
-    "ytick.labelsize": 9,
-    "legend.fontsize": 8,
-    "figure.dpi": 600,
-    "savefig.dpi": 600,
-    "savefig.bbox": "tight",
-    "axes.linewidth": 0.8,
-    "lines.linewidth": 1.2,
-})
+plt.rcParams.update(
+    {
+        "font.size": 10,
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "axes.labelsize": 11,
+        "axes.titlesize": 11,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 8,
+        "figure.dpi": 600,
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+        "axes.linewidth": 0.8,
+        "lines.linewidth": 1.2,
+    }
+)
 
 COLORS = ["#2166AC", "#E69F00", "#009E73", "#D55E00", "#7B3294", "#56B4E9"]
 
@@ -93,6 +102,7 @@ def _save_fig(fig, name):
 # FIGURE 2: ETR_Under_Environmental_Effects
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_etr_figure():
     """
     Figure 2: Environmental robustness.
@@ -107,7 +117,7 @@ def generate_etr_figure():
     eta_temp = np.array([0.543, 0.387, 0.386, 0.381, 0.374, 0.391], dtype=float)
     eta_temp_err = np.full(6, 0.04, dtype=float)
 
-    print(f"  Temperature sweep η (L=7, N=15):")
+    print("  Temperature sweep η (L=7, N=15):")
     for T, eta, err in zip(temperatures, eta_temp, eta_temp_err):
         print(f"    T={T:.0f}K: η = {eta:.3f} ± {err:.3f}")
 
@@ -125,29 +135,52 @@ def generate_etr_figure():
 
     # ── Create 2-panel figure ─────────────────────────────────────────
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
-    fig.suptitle("Environmental Robustness of Spectral Bath Engineering",
-                 fontsize=14, fontweight="bold")
+    fig.suptitle(
+        "Environmental Robustness of Spectral Bath Engineering",
+        fontsize=14,
+        fontweight="bold",
+    )
 
     # Panel (a): Temperature dependence
     ax0 = axes[0]
-    ax0.errorbar(temperatures, eta_temp, yerr=eta_temp_err,
-                 fmt="o-", color=COLORS[0], capsize=4, capthick=1.5,
-                 elinewidth=1.5, markersize=6, linewidth=2.0)
-    ax0.fill_between(temperatures, eta_temp - eta_temp_err,
-                     eta_temp + eta_temp_err, alpha=0.2, color=COLORS[0])
-    ax0.axvspan(285, 300, alpha=0.1, color="green",
-                label="Optimal Range (285-300 K)")
+    ax0.errorbar(
+        temperatures,
+        eta_temp,
+        yerr=eta_temp_err,
+        fmt="o-",
+        color=COLORS[0],
+        capsize=4,
+        capthick=1.5,
+        elinewidth=1.5,
+        markersize=6,
+        linewidth=2.0,
+    )
+    ax0.fill_between(
+        temperatures,
+        eta_temp - eta_temp_err,
+        eta_temp + eta_temp_err,
+        alpha=0.2,
+        color=COLORS[0],
+    )
+    ax0.axvspan(285, 300, alpha=0.1, color="green", label="Optimal Range (285-300 K)")
     ax0.set_xlabel("Temperature [K]", fontsize=12)
     ax0.set_ylabel(r"Relative Enhancement $\eta$", fontsize=12)
-    ax0.set_title("(a) Temperature Dependence", loc="left",
-                  fontsize=13, fontweight="bold")
+    ax0.set_title(
+        "(a) Temperature Dependence", loc="left", fontsize=13, fontweight="bold"
+    )
     ax0.legend(loc="lower left", frameon=False, fontsize=10)
     ax0.grid(True, alpha=0.3)
 
     # Panel (b): Disorder histogram
     ax1 = axes[1]
-    ax1.hist(disorder_samples, bins=15, color=COLORS[1],
-             edgecolor="black", alpha=0.7, density=True)
+    ax1.hist(
+        disorder_samples,
+        bins=15,
+        color=COLORS[1],
+        edgecolor="black",
+        alpha=0.7,
+        density=True,
+    )
 
     # Gaussian fit
     xmin, xmax = ax1.get_xlim()
@@ -155,12 +188,21 @@ def generate_etr_figure():
     p = _norm.pdf(x, mean_eta, std_eta)
     ax1.plot(x, p, "k--", linewidth=2, label="Gaussian Fit")
 
-    ax1.axvline(mean_eta, color="red", linestyle="dashed",
-                linewidth=2, label=f"Mean: {mean_eta:.2f}")
+    ax1.axvline(
+        mean_eta,
+        color="red",
+        linestyle="dashed",
+        linewidth=2,
+        label=f"Mean: {mean_eta:.2f}",
+    )
     ax1.set_xlabel(r"Relative Enhancement $\eta$", fontsize=12)
     ax1.set_ylabel("Probability Density", fontsize=12)
-    ax1.set_title(r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)",
-                  loc="left", fontsize=13, fontweight="bold")
+    ax1.set_title(
+        r"(b) Disorder Robustness ($\sigma = 50$ cm$^{-1}$)",
+        loc="left",
+        fontsize=13,
+        fontweight="bold",
+    )
     ax1.legend(loc="upper right", frameon=False, fontsize=10)
     ax1.grid(True, alpha=0.3)
 
@@ -172,6 +214,7 @@ def generate_etr_figure():
 # SI: Bath Sensitivity Figure
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_si_bath_sensitivity():
     """
     SI Figure: Bath parameter sensitivity.
@@ -181,8 +224,13 @@ def generate_si_bath_sensitivity():
     print("\n=== Generating SI_bath_sensitivity ===")
 
     # Verified values from L=7 bath sweep CSVs (June 19)
-    labels = [r"$\lambda$=28", r"$\lambda$=35 (prod)",
-              r"$\lambda$=42", r"$\gamma$=40", r"$\gamma$=60"]
+    labels = [
+        r"$\lambda$=28",
+        r"$\lambda$=35 (prod)",
+        r"$\lambda$=42",
+        r"$\gamma$=40",
+        r"$\gamma$=60",
+    ]
     eta_vals = np.array([0.49, 0.39, 0.37, 0.62, 0.28])
     phi_filt = np.array([0.7180, 0.749, 0.7421, 0.7503, 0.7165])
     phi_broad = np.array([0.4805, 0.539, 0.5420, 0.4633, 0.5616])
@@ -194,46 +242,96 @@ def generate_si_bath_sensitivity():
     # Panel (a): η values
     bar_colors = [COLORS[2]] * len(eta_vals)
     bar_colors[prod_idx] = COLORS[0]  # Production in blue
-    bars = ax1.bar(range(len(eta_vals)), eta_vals, width=0.55,
-                   color=bar_colors, edgecolor="black", linewidth=0.5)
+    bars = ax1.bar(
+        range(len(eta_vals)),
+        eta_vals,
+        width=0.55,
+        color=bar_colors,
+        edgecolor="black",
+        linewidth=0.5,
+    )
     ax1.axhline(0, color="gray", linewidth=0.5)
     for i, (val, bar) in enumerate(zip(eta_vals, bars)):
         offset = 0.03 if val >= 0 else -0.06
-        ax1.text(bar.get_x() + bar.get_width() / 2, val + offset,
-                 f"{val:.2f}", ha="center", va="bottom" if val >= 0 else "top",
-                 fontsize=9, fontweight="bold")
+        ax1.text(
+            bar.get_x() + bar.get_width() / 2,
+            val + offset,
+            f"{val:.2f}",
+            ha="center",
+            va="bottom" if val >= 0 else "top",
+            fontsize=9,
+            fontweight="bold",
+        )
 
     ax1.set_xticks(range(len(labels)))
     ax1.set_xticklabels(labels, fontsize=9)
     ax1.set_ylabel(r"Relative Enhancement $\eta$", fontsize=11)
-    ax1.set_title("(a) Bath Parameter Sensitivity",
-                  loc="left", fontsize=12, fontweight="bold")
+    ax1.set_title(
+        "(a) Bath Parameter Sensitivity", loc="left", fontsize=12, fontweight="bold"
+    )
     ax1.grid(True, alpha=0.3, axis="y")
 
     # Panel (b): Population decomposition
     x = np.arange(len(labels))
     w = 0.35
-    ax2.bar(x - w / 2, phi_filt, w, color=COLORS[0], edgecolor="black",
-            linewidth=0.5, alpha=0.85, label="Filtered")
-    ax2.bar(x + w / 2, phi_broad, w, color="gray", edgecolor="black",
-            linewidth=0.5, alpha=0.5, label="Broadband")
+    ax2.bar(
+        x - w / 2,
+        phi_filt,
+        w,
+        color=COLORS[0],
+        edgecolor="black",
+        linewidth=0.5,
+        alpha=0.85,
+        label="Filtered",
+    )
+    ax2.bar(
+        x + w / 2,
+        phi_broad,
+        w,
+        color="gray",
+        edgecolor="black",
+        linewidth=0.5,
+        alpha=0.5,
+        label="Broadband",
+    )
 
     # Mark production point
-    ax2.scatter([prod_idx - w / 2], [phi_filt[prod_idx]],
-                color="red", s=50, marker="*", zorder=5)
-    ax2.scatter([prod_idx + w / 2], [phi_broad[prod_idx]],
-                color="red", s=50, marker="*", zorder=5)
+    ax2.scatter(
+        [prod_idx - w / 2],
+        [phi_filt[prod_idx]],
+        color="red",
+        s=50,
+        marker="*",
+        zorder=5,
+    )
+    ax2.scatter(
+        [prod_idx + w / 2],
+        [phi_broad[prod_idx]],
+        color="red",
+        s=50,
+        marker="*",
+        zorder=5,
+    )
 
     for i in range(len(labels)):
-        ax2.annotate(f"{eta_vals[i]:.2f}",
-                     xy=(i, max(phi_filt[i], phi_broad[i]) + 0.02),
-                     ha="center", fontsize=7, fontweight="bold", color="red")
+        ax2.annotate(
+            f"{eta_vals[i]:.2f}",
+            xy=(i, max(phi_filt[i], phi_broad[i]) + 0.02),
+            ha="center",
+            fontsize=7,
+            fontweight="bold",
+            color="red",
+        )
 
     ax2.set_xticks(x)
     ax2.set_xticklabels(labels, fontsize=9)
     ax2.set_ylabel(r"$\Phi_{\mathrm{FT}}$ (Site 3 population)", fontsize=11)
-    ax2.set_title("(b) Target Population Decomposition",
-                  loc="left", fontsize=12, fontweight="bold")
+    ax2.set_title(
+        "(b) Target Population Decomposition",
+        loc="left",
+        fontsize=12,
+        fontweight="bold",
+    )
     ax2.legend(frameon=False, fontsize=9)
     ax2.grid(True, alpha=0.3)
 
@@ -244,6 +342,7 @@ def generate_si_bath_sensitivity():
 # ══════════════════════════════════════════════════════════════════════
 # SI: Full 7-site dynamics (FigureS4)
 # ══════════════════════════════════════════════════════════════════════
+
 
 def generate_si_7site_dynamics():
     """
@@ -261,11 +360,15 @@ def generate_si_7site_dynamics():
     t_ps = t_fs / 1000.0
 
     # Filtered data
-    pop_filt = np.column_stack([ec[f"population_site_{i+1}"].values for i in range(7)])
+    pop_filt = np.column_stack(
+        [ec[f"population_site_{i + 1}"].values for i in range(7)]
+    )
     coh_filt = ec["coherences"].values
 
     # Broadband data
-    pop_broad = np.column_stack([bc[f"population_site_{i+1}"].values for i in range(7)])
+    pop_broad = np.column_stack(
+        [bc[f"population_site_{i + 1}"].values for i in range(7)]
+    )
     coh_broad = bc["coherences"].values
 
     # Trim to common length
@@ -347,6 +450,7 @@ def generate_si_7site_dynamics():
 # SI: Three-site model dynamics
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_3site_dynamics():
     """
     SI Figure: Three-site model dynamics.
@@ -357,9 +461,14 @@ def generate_3site_dynamics():
 
     # Check for 3-site data in simulation_data or results
     data_paths = [
-        os.path.join(_FRAMEWORK_DIR, "..", "..",
-                     "quantum_simulations_framework", "simulation_data",
-                     "3site_dynamics_results.csv"),
+        os.path.join(
+            _FRAMEWORK_DIR,
+            "..",
+            "..",
+            "quantum_simulations_framework",
+            "simulation_data",
+            "3site_dynamics_results.csv",
+        ),
         os.path.join(_RESULTS_DIR, "3site_dynamics_results.csv"),
     ]
 
@@ -375,37 +484,63 @@ def generate_3site_dynamics():
         # Use actual 3-site simulation data
         t_fs = df["time_fs"].values
         t_ps = t_fs / 1000.0
-        pop_filt = np.column_stack([df.get(f"filtered_pop_site_{i+1}", np.zeros_like(t_fs))
-                                    for i in range(3)])
-        pop_broad = np.column_stack([df.get(f"broadband_pop_site_{i+1}", np.zeros_like(t_fs))
-                                     for i in range(3)])
+        pop_filt = np.column_stack(
+            [
+                df.get(f"filtered_pop_site_{i + 1}", np.zeros_like(t_fs))
+                for i in range(3)
+            ]
+        )
+        pop_broad = np.column_stack(
+            [
+                df.get(f"broadband_pop_site_{i + 1}", np.zeros_like(t_fs))
+                for i in range(3)
+            ]
+        )
         coh_cols = [c for c in df.columns if "coherence" in c.lower()]
-        coh_filt = df.get(coh_cols[0], np.zeros_like(t_fs)) if coh_cols else np.zeros_like(t_fs)
-        coh_broad = df.get(coh_cols[1], np.zeros_like(t_fs)) if len(coh_cols) > 1 else np.zeros_like(t_fs)
+        coh_filt = (
+            df.get(coh_cols[0], np.zeros_like(t_fs))
+            if coh_cols
+            else np.zeros_like(t_fs)
+        )
+        coh_broad = (
+            df.get(coh_cols[1], np.zeros_like(t_fs))
+            if len(coh_cols) > 1
+            else np.zeros_like(t_fs)
+        )
     else:
         # Generate representative figure from SI Table S11 values
-        print("  ⚠️  No 3-site CSV found — figure shows representative data, NOT actual simulation output.", file=sys.stderr)
+        print(
+            "  ⚠️  No 3-site CSV found — figure shows representative data, NOT actual simulation output.",
+            file=sys.stderr,
+        )
         print("  Using representative data from SI Table S11 values.", file=sys.stderr)
         t_fs = np.linspace(0, 1000, 2000)
         t_ps = t_fs / 1000.0
         decay = np.exp(-t_fs / 800)
         # Filtered: Φ_FT = 76.3%, Broadband: Φ_FT = 64.7%
-        pop_filt = np.column_stack([
-            0.76 * decay + 0.1 * np.sin(2 * np.pi * t_fs / 200) * decay,
-            0.15 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 1) * decay,
-            0.09 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 2) * decay,
-        ])
-        pop_broad = np.column_stack([
-            0.65 * decay + 0.15 * np.sin(2 * np.pi * t_fs / 180) * decay,
-            0.20 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 1) * decay,
-            0.15 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 2) * decay,
-        ])
-        coh_filt = (2.5 * decay + 0.5 * np.sin(2 * np.pi * t_fs / 200) * decay)
-        coh_broad = (3.5 * np.exp(-t_fs / 300) + 0.8 * np.sin(2 * np.pi * t_fs / 180) * decay)
+        pop_filt = np.column_stack(
+            [
+                0.76 * decay + 0.1 * np.sin(2 * np.pi * t_fs / 200) * decay,
+                0.15 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 1) * decay,
+                0.09 * (1 - decay) + 0.05 * np.sin(2 * np.pi * t_fs / 200 + 2) * decay,
+            ]
+        )
+        pop_broad = np.column_stack(
+            [
+                0.65 * decay + 0.15 * np.sin(2 * np.pi * t_fs / 180) * decay,
+                0.20 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 1) * decay,
+                0.15 * (1 - decay) + 0.08 * np.sin(2 * np.pi * t_fs / 180 + 2) * decay,
+            ]
+        )
+        coh_filt = 2.5 * decay + 0.5 * np.sin(2 * np.pi * t_fs / 200) * decay
+        coh_broad = (
+            3.5 * np.exp(-t_fs / 300) + 0.8 * np.sin(2 * np.pi * t_fs / 180) * decay
+        )
 
     # Trim to common length
-    n_min = min(len(t_ps), pop_filt.shape[0], pop_broad.shape[0],
-                len(coh_filt), len(coh_broad))
+    n_min = min(
+        len(t_ps), pop_filt.shape[0], pop_broad.shape[0], len(coh_filt), len(coh_broad)
+    )
     t_ps = t_ps[:n_min]
     pop_filt = pop_filt[:n_min]
     pop_broad = pop_broad[:n_min]
@@ -417,10 +552,10 @@ def generate_3site_dynamics():
     # (a) Population evolution
     ax = axes[0, 0]
     for i in range(3):
-        ax.plot(t_ps, pop_filt[:, i], lw=1.5,
-                label=f"Site {i+1} (Filtered)")
-    ax.plot(t_ps, pop_broad[:, 0], "--", color="gray", lw=1.2,
-            label="Site 1 (Broadband)")
+        ax.plot(t_ps, pop_filt[:, i], lw=1.5, label=f"Site {i + 1} (Filtered)")
+    ax.plot(
+        t_ps, pop_broad[:, 0], "--", color="gray", lw=1.2, label="Site 1 (Broadband)"
+    )
     ax.set_xlabel("Time (ps)")
     ax.set_ylabel("Population")
     ax.set_title("(a) Population Evolution", fontweight="bold")
@@ -442,8 +577,7 @@ def generate_3site_dynamics():
     # (c) Off-resonant control
     ax = axes[1, 0]
     off_res = coh_broad * 0.95 + 0.05 * np.sin(2 * np.pi * t_ps * 5)
-    ax.plot(t_ps, off_res, color=COLORS[3], lw=1.5,
-            label="Off-resonant filter")
+    ax.plot(t_ps, off_res, color=COLORS[3], lw=1.5, label="Off-resonant filter")
     ax.plot(t_ps, coh_broad, "--", color="gray", lw=1.2, label="Broadband")
     ax.set_xlabel("Time (ps)")
     ax.set_ylabel(r"$C_{l_1}$-norm coherence")
@@ -454,8 +588,12 @@ def generate_3site_dynamics():
 
     # (d) Entropy
     ax = axes[1, 1]
-    entropy_filt = 0.5 * (1 - np.exp(-t_ps / 0.3)) + 0.05 * np.sin(2 * np.pi * t_ps * 3) * np.exp(-t_ps / 0.2)
-    entropy_broad = 0.7 * (1 - np.exp(-t_ps / 0.25)) + 0.08 * np.sin(2 * np.pi * t_ps * 2) * np.exp(-t_ps / 0.15)
+    entropy_filt = 0.5 * (1 - np.exp(-t_ps / 0.3)) + 0.05 * np.sin(
+        2 * np.pi * t_ps * 3
+    ) * np.exp(-t_ps / 0.2)
+    entropy_broad = 0.7 * (1 - np.exp(-t_ps / 0.25)) + 0.08 * np.sin(
+        2 * np.pi * t_ps * 2
+    ) * np.exp(-t_ps / 0.15)
     ax.plot(t_ps, entropy_filt, color=COLORS[0], lw=1.5, label="Filtered")
     ax.plot(t_ps, entropy_broad, "--", color="gray", lw=1.2, label="Broadband")
     ax.set_xlabel("Time (ps)")

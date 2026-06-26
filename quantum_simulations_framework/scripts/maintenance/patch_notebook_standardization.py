@@ -30,9 +30,7 @@ def standardize_notebook():
 
         # Ensure language metadata
         if "language" not in meta:
-            meta["language"] = (
-                "python" if cell.get("cell_type") == "code" else "markdown"
-            )
+            meta["language"] = "python" if cell.get("cell_type") == "code" else "markdown"
 
         # Ensure a stable unique id exists for each existing cell
         if "id" not in meta or not meta["id"]:
@@ -48,16 +46,12 @@ def standardize_notebook():
         source = cell.get("source", "")
 
         # 1. Clean up imports in the initial import cell
-        if "Import required libraries" in str(source) and "TechnoEconomicModel" in str(
-            source
-        ):
+        if "Import required libraries" in str(source) and "TechnoEconomicModel" in str(source):
             source = source.replace(
                 "from src.agrivoltaic.techno_economic_model import TechnoEconomicModel\n",
                 "",
             )
-            source = source.replace(
-                "from src.quantum.spectroscopy import Spectroscopy2DES\n", ""
-            )
+            source = source.replace("from src.quantum.spectroscopy import Spectroscopy2DES\n", "")
             if (
                 "import pandas as pd" in source
                 and "from models import TechnoEconomicModel" not in source
@@ -68,13 +62,9 @@ def standardize_notebook():
                 )
 
         # 2. Standardize framework import paths in import-heavy cells
-        if "from src.core.constants import" in str(
-            source
-        ) and "FMO_SITE_ENERGIES_7" in str(source):
+        if "from src.core.constants import" in str(source) and "FMO_SITE_ENERGIES_7" in str(source):
             source = source.replace("from .core.constants", "from core.constants")
-            source = source.replace(
-                "from .core.hops_simulator", "from core.hops_simulator"
-            )
+            source = source.replace("from .core.hops_simulator", "from core.hops_simulator")
             source = source.replace("from .models.", "from models.")
             source = source.replace("from .simulations.", "from simulations.")
             source = source.replace("from .utils.", "from utils.")
@@ -101,19 +91,12 @@ def standardize_notebook():
                 )
                 pattern = r"# Import models.*?(?=print\()"
                 try:
-                    source = re.sub(
-                        pattern, model_import + "\n", source, flags=re.DOTALL
-                    )
+                    source = re.sub(pattern, model_import + "\n", source, flags=re.DOTALL)
                 except re.error:
-                    logger.debug(
-                        "Import consolidation pattern did not match for cell %d", idx
-                    )
+                    logger.debug("Import consolidation pattern did not match for cell %d", idx)
 
         # 3. Fix specific broken import occurrences
-        if (
-            "from quantum_coherence_agrivoltaics_mesohops import create_fmo_hamiltonian"
-            in source
-        ):
+        if "from quantum_coherence_agrivoltaics_mesohops import create_fmo_hamiltonian" in source:
             source = source.replace(
                 "from quantum_coherence_agrivoltaics_mesohops import create_fmo_hamiltonian",
                 "from src.core.hamiltonian_factory import create_fmo_hamiltonian",

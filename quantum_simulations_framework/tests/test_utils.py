@@ -9,11 +9,12 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from src.io.csv_storage import CSVDataStorage
-from src.visualization.figure_generator import FigureGenerator
-from src.utils.logging_config import get_logger, setup_logging
-from src.core.hamiltonian_factory import create_fmo_hamiltonian
+
 from src.core.constants import DEFAULT_DPI, PREVIEW_DPI
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.io.csv_storage import CSVDataStorage
+from src.utils.logging_config import get_logger, setup_logging
+from src.visualization.figure_generator import FigureGenerator
 
 logger = get_test_logger("test_utils")
 
@@ -34,9 +35,7 @@ def test_csv_data_storage(tmp_path, fmo_hamiltonian):
     coherences = np.random.rand(10)
     metrics = {"purity": np.random.rand(10)}
 
-    csv_path = storage.save_quantum_dynamics_results(
-        time_fs, populations, coherences, metrics
-    )
+    csv_path = storage.save_quantum_dynamics_results(time_fs, populations, coherences, metrics)
     logger.info(f"CSV saved: {csv_path}")
 
     assert os.path.exists(csv_path)
@@ -75,9 +74,7 @@ def test_figure_generator_dpi(fmo_hamiltonian):
 
         dpi_calls = [call.kwargs.get("dpi") for call in mock_savefig.call_args_list]
         logger.info(f"DPI values used in savefig calls: {dpi_calls}")
-        assert DEFAULT_DPI in dpi_calls, (
-            f"At least one figure must be saved with {DEFAULT_DPI} DPI"
-        )
+        assert DEFAULT_DPI in dpi_calls, f"At least one figure must be saved with {DEFAULT_DPI} DPI"
         assert PREVIEW_DPI in dpi_calls, f"PNG preview should be {PREVIEW_DPI} DPI"
 
     if os.path.exists("test_dpi_plots"):

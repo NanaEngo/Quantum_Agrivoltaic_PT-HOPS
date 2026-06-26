@@ -222,8 +222,13 @@ def apply_memory_aware_patching():
             if kwargs.get("show_progress", True):
                 try:
                     desc = f"{kwargs.get('desc', 'Trajectories')} (batch {batch_idx + 1}/{n_batches})"
-                    iterable = tqdm(batch_seeds, desc=desc, unit="traj",
-                                    leave=False, disable=not sys.stderr.isatty())
+                    iterable = tqdm(
+                        batch_seeds,
+                        desc=desc,
+                        unit="traj",
+                        leave=False,
+                        disable=not sys.stderr.isatty(),
+                    )
                 except Exception:
                     pass
 
@@ -244,7 +249,7 @@ def apply_memory_aware_patching():
             except MemoryError:
                 _batch_elapsed = _time.time() - _batch_t0
                 logger.critical(
-                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"[BATCH_FAIL] batch={batch_idx + 1} | elapsed={_batch_elapsed:.1f}s | "
                     f"type=MemoryError | "
                     f"mem_per_traj={sched_info['memory_per_traj_gb']:.1f} GB | "
                     f"limit={sched_info['ram_limit_gb']:.1f} GB. "
@@ -256,16 +261,18 @@ def apply_memory_aware_patching():
                     delayed(_run_single_traj_worker)(s, **worker_args) for s in iterable
                 )
             except Exception as e:
-                import traceback, sys
+                import traceback
+                import sys
+
                 _batch_elapsed = _time.time() - _batch_t0
                 print(
-                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"[BATCH_FAIL] batch={batch_idx + 1} | elapsed={_batch_elapsed:.1f}s | "
                     f"type={type(e).__name__} | error={e}",
                     file=sys.stderr,
                 )
                 traceback.print_exc(file=sys.stderr)
                 logger.error(
-                    f"[BATCH_FAIL] batch={batch_idx+1} | elapsed={_batch_elapsed:.1f}s | "
+                    f"[BATCH_FAIL] batch={batch_idx + 1} | elapsed={_batch_elapsed:.1f}s | "
                     f"type={type(e).__name__} | error={e}"
                 )
                 raise

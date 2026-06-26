@@ -3,6 +3,7 @@ import os
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Patch
 
 
 class Paper2FigureGenerator:
@@ -72,36 +73,108 @@ class Paper2FigureGenerator:
 
     def plot_figure_2_sers_readout(self, raman_spectrum: dict) -> str:
         """
-        Produces Figure 2: Non-Destructive SERS Molecular Optomechanical Signature
-        Plots characteristic Raman peak intensities corresponding to key FMO vibrational modes.
+        Produces Figure 2: SERS Diagnostics with Agricultural Target Signatures.
+        Bar chart showing 5 signatures: 3 canonical BChl a modes +
+        2 agricultural targets (1435 cm-1 2,4,5-T and CdTe/ZnSe CQD Pb2+).
         """
-        fig, ax = plt.subplots(figsize=(6, 4.5))
+        # ── Mode labels (descriptive) ────────────────────────────────────────
+        mode_labels = [
+            "180 cm⁻¹\n(Franck-Condon)",
+            "740 cm⁻¹\n(Ring def.)",
+            "1145 cm⁻¹\n(C-C stretch)",
+            "1435 cm⁻¹\n(2,4,5-T pest.)",
+            "CQD Pb²⁺\n(Fluor. quench)",
+        ]
+        keys = ["180_cm", "740_cm", "1145_cm", "1435_cm", "cqd_pb2"]
+        intensities = [raman_spectrum.get(k, 0.0) for k in keys]
 
-        modes = list(raman_spectrum.keys())
-        intensities = list(raman_spectrum.values())
+        # ── Color scheme ────────────────────────────────────────────────────
+        # Canonical BChl a modes: steel blue
+        # Agricultural target (Raman): terracotta
+        # Agricultural target (fluorescence): slate brown
+        bar_colors = ["#4C72B0", "#4C72B0", "#4C72B0", "#DD8452", "#937860"]
 
-        ax.bar(
-            modes,
+        fig, ax = plt.subplots(figsize=(8, 5))
+        bars = ax.bar(
+            mode_labels,
             intensities,
-            color=self.colors[1],
+            color=bar_colors,
             edgecolor="black",
-            width=0.4,
+            width=0.55,
             alpha=0.85,
         )
-        ax.set_ylabel("Raman Intensity (a.u.)", fontweight="bold")
-        ax.set_xlabel("Vibrational Mode Signature", fontweight="bold")
-        ax.set_title("In Situ Optomechanical SERS Diagnostic", fontweight="bold", pad=15)
-        ax.grid(axis="y", alpha=0.3)
 
-        # Label values on top of bars
-        for i, val in enumerate(intensities):
-            ax.text(
-                i,
-                val + max(intensities) * 0.02,
-                f"{val:.4f}",
-                ha="center",
-                fontweight="bold",
-            )
+        # ── Value annotations on bars ────────────────────────────────────────
+        max_int = max(intensities) if intensities else 1.0
+        y_offset = max_int * 0.03
+
+        for bar_i, val in zip(bars, intensities, strict=False):
+            if val < 0.001:
+                # Tiny bar (180 cm-1): annotate with arrow + magnified value
+                label = f"{val:.4f}"
+                ax.annotate(
+                    label,
+                    xy=(bar_i.get_x() + bar_i.get_width() / 2, val + 0.0001),
+                    xytext=(0, 40),
+                    textcoords="offset points",
+                    ha="center",
+                    fontweight="bold",
+                    fontsize=8,
+                    arrowprops={"arrowstyle": "->", "color": "gray", "lw": 0.8},
+                )
+            else:
+                ax.text(
+                    bar_i.get_x() + bar_i.get_width() / 2,
+                    val + y_offset,
+                    f"{val:.3f}" if val < 100 else f"{val:.1f}",
+                    ha="center",
+                    fontweight="bold",
+                    fontsize=9,
+                )
+
+        # ── LOD annotations for agricultural targets ─────────────────────────
+        ax.annotate(
+            "LOD = 1 nM",
+            xy=(3, intensities[3]),
+            fontsize=8,
+            color="#DD8452",
+            fontweight="bold",
+            xytext=(35, 10),
+            textcoords="offset points",
+            ha="center",
+            arrowprops={"arrowstyle": "->", "color": "#DD8452", "lw": 0.8},
+        )
+        ax.annotate(
+            "LOD = 31.8 nM",
+            xy=(4, intensities[4]),
+            fontsize=8,
+            color="#937860",
+            fontweight="bold",
+            xytext=(-35, 10),
+            textcoords="offset points",
+            ha="center",
+            arrowprops={"arrowstyle": "->", "color": "#937860", "lw": 0.8},
+        )
+
+        # ── Legend ───────────────────────────────────────────────────────────
+        legend_elements = [
+            Patch(facecolor="#4C72B0", label="Canonical BChl $a$ modes"),
+            Patch(facecolor="#DD8452", label="2,4,5-T pesticide (SERS)"),
+            Patch(facecolor="#937860", label="Pb$^{2+}$ CQD (fluorescence)"),
+        ]
+        ax.legend(handles=legend_elements, loc="upper right", frameon=False, fontsize=9)
+
+        # ── Labels and grid ──────────────────────────────────────────────────
+        ax.set_ylabel(
+            "Raman Intensity / Fluorescence Response (a.u.)",
+            fontweight="bold",
+        )
+        ax.set_title(
+            "In Situ SERS Diagnostics with Agricultural Target Signatures",
+            fontweight="bold",
+            pad=15,
+        )
+        ax.grid(axis="y", alpha=0.3)
 
         plt.tight_layout()
         out_path = os.path.join(self.output_dir, "Figure2_SERS_Readout.png")

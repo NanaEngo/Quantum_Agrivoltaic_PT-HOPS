@@ -43,9 +43,7 @@ def test_config_loading():
 def test_config_validation_failure():
     """Verify that L < DEFAULT_MAX_HIERARCHY raises ValueError."""
     bad_L = DEFAULT_MAX_HIERARCHY - 4
-    logger.info(
-        f"Testing config rejection for L={bad_L} (min required: 6)"
-    )
+    logger.info(f"Testing config rejection for L={bad_L} (min required: 6)")
     bad_config = {
         "dynamics": {"L_max": bad_L, "matsubara_truncation": DEFAULT_N_MATSUBARA},
         "bath": {"temperature": DEFAULT_TEMPERATURE},

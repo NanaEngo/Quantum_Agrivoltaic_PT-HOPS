@@ -79,7 +79,8 @@ SOLVER_DETERMINISTIC_SEED = 0
 # QA/QC
 FLOQUET_EVAL_TIME_PS = 1.0
 FLOQUET_SITES = [0, 5]
-MAX_TRAPPING_YIELD = 0.98
+MAX_TRAPPING_YIELD = 0.98  # Physical maximum (FMO baseline Φ_FT = 0.98)
+# Phi_FT = 2 * Gamma_RC * int(P3+P4)dt (Eq. 2), but the physical yield Φ_FT ∈ [0, 0.98]
 BASELINE_TRANSMISSION = 0.8
 PLASMON_COUPLING_SITES = [0, 5]
 

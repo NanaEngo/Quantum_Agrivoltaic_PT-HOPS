@@ -15,12 +15,12 @@ Validation: prints Φ_filt, Φ_broad, η and cross-checks against ANALYSIS_20260
 """
 
 import os
-import sys
 import glob
 
 import numpy as np
 import pandas as pd
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
@@ -33,35 +33,51 @@ _RESULTS_DIR = os.path.join(_SCRIPT_DIR, "results")
 
 # Submission package output — dedicated Figures/ subfolder
 _SUBMISSION_DIR = os.path.abspath(
-    os.path.join(_FRAMEWORK_DIR, "..", "..",
-                 "Redac_Paper1", "JPCL_Submission_Package_2026-06-20", "Figures")
+    os.path.join(
+        _FRAMEWORK_DIR,
+        "..",
+        "..",
+        "Redac_Paper1",
+        "JPCL_Submission_Package_2026-06-20",
+        "Figures",
+    )
 )
 os.makedirs(_SUBMISSION_DIR, exist_ok=True)
 
 # ──────────────────────────────────────────────────────────────────────
 # Publication theme (JPCL-compliant)
 # ──────────────────────────────────────────────────────────────────────
-plt.rcParams.update({
-    "font.size": 10,
-    "font.family": "sans-serif",
-    "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
-    "axes.labelsize": 11,
-    "axes.titlesize": 11,
-    "xtick.labelsize": 9,
-    "ytick.labelsize": 9,
-    "legend.fontsize": 8,
-    "figure.dpi": 600,
-    "savefig.dpi": 600,
-    "savefig.bbox": "tight",
-    "axes.linewidth": 0.8,
-    "lines.linewidth": 1.2,
-})
+plt.rcParams.update(
+    {
+        "font.size": 10,
+        "font.family": "sans-serif",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "axes.labelsize": 11,
+        "axes.titlesize": 11,
+        "xtick.labelsize": 9,
+        "ytick.labelsize": 9,
+        "legend.fontsize": 8,
+        "figure.dpi": 600,
+        "savefig.dpi": 600,
+        "savefig.bbox": "tight",
+        "axes.linewidth": 0.8,
+        "lines.linewidth": 1.2,
+    }
+)
 
 # Wong 2011 colorblind-safe palette (7 colors for 7 BChl sites)
-SITE_COLORS = ["#E69F00", "#56B4E9", "#009E73", "#F0E442",
-               "#0072B2", "#D55E00", "#CC79A7"]
-C_FILT = "#2166AC"    # blue for filtered
-C_BROAD = "#888888"   # grey for broadband
+SITE_COLORS = [
+    "#E69F00",
+    "#56B4E9",
+    "#009E73",
+    "#F0E442",
+    "#0072B2",
+    "#D55E00",
+    "#CC79A7",
+]
+C_FILT = "#2166AC"  # blue for filtered
+C_BROAD = "#888888"  # grey for broadband
+
 
 # ──────────────────────────────────────────────────────────────────────
 # Helper: find the latest June 2026 CSV matching a pattern
@@ -124,8 +140,9 @@ def _load_csv_safe(path):
 # ──────────────────────────────────────────────────────────────────────
 # Physical constants
 # ──────────────────────────────────────────────────────────────────────
-FMO_SITE_ENERGIES = np.array([12410, 12530, 12210, 12320,
-                              12480, 12630, 12440], dtype=float)  # cm⁻¹
+FMO_SITE_ENERGIES = np.array(
+    [12410, 12530, 12210, 12320, 12480, 12630, 12440], dtype=float
+)  # cm⁻¹
 
 # Expected production values from ANALYSIS_20260620.md (L=8)
 EXPECTED_PHI_FILT_L8 = 0.7543
@@ -140,20 +157,36 @@ PRODUCTION_HASH = "790eaa0832f2"
 # SPECTRAL DENSITY
 # ══════════════════════════════════════════════════════════════════════
 
-def compute_spectral_density(omega_cm,
-                             lambda_dl=35.0, gamma_dl=50.0,
-                             vib_freqs=None, vib_hr=None, vib_damp=None):
+
+def compute_spectral_density(
+    omega_cm, lambda_dl=35.0, gamma_dl=50.0, vib_freqs=None, vib_hr=None, vib_damp=None
+):
     """
     Composite J(ω) = Drude-Lorentz + 12 underdamped vibronic modes.
 
     Returns (J_total, J_dl, J_vib_total)  all in arb. units.
     """
     if vib_freqs is None:
-        vib_freqs = np.array([180, 220, 280, 350, 520, 575, 720,
-                              1050, 1185, 1220, 1350, 1500])
+        vib_freqs = np.array(
+            [180, 220, 280, 350, 520, 575, 720, 1050, 1185, 1220, 1350, 1500]
+        )
     if vib_hr is None:
-        vib_hr = np.array([0.05, 0.045, 0.03, 0.025, 0.02, 0.015,
-                           0.01, 0.008, 0.005, 0.005, 0.004, 0.003])
+        vib_hr = np.array(
+            [
+                0.05,
+                0.045,
+                0.03,
+                0.025,
+                0.02,
+                0.015,
+                0.01,
+                0.008,
+                0.005,
+                0.005,
+                0.004,
+                0.003,
+            ]
+        )
     if vib_damp is None:
         vib_damp = np.full(12, 10.0)
 
@@ -164,16 +197,22 @@ def compute_spectral_density(omega_cm,
     J_vib_total = np.zeros_like(omega_cm)
     for w0, S, g in zip(vib_freqs, vib_hr, vib_damp):
         lam_k = S * w0
-        J_vib_total += (2.0 * lam_k * omega_cm * w0**2 * g
-                        / ((w0**2 - omega_cm**2)**2 + (omega_cm * g)**2))
+        J_vib_total += (
+            2.0
+            * lam_k
+            * omega_cm
+            * w0**2
+            * g
+            / ((w0**2 - omega_cm**2) ** 2 + (omega_cm * g) ** 2)
+        )
 
     J_total = J_dl + J_vib_total
     return J_total, J_dl, J_vib_total
 
 
-def dual_band_transmission(omega_cm,
-                           band_centers_nm=(750.0, 820.0),
-                           bandwidth_cm=100.0):
+def dual_band_transmission(
+    omega_cm, band_centers_nm=(750.0, 820.0), bandwidth_cm=100.0
+):
     """Dual-band Gaussian filter T(ω) [Manuscript Eq. 3], normalised to [0,1]."""
     band_centers_cm = [1.0e7 / lam for lam in band_centers_nm]
     sigma = bandwidth_cm / (2.0 * np.sqrt(2.0 * np.log(2.0)))
@@ -189,31 +228,42 @@ def dual_band_transmission(omega_cm,
 # VALIDATION against ANALYSIS_20260620.md
 # ══════════════════════════════════════════════════════════════════════
 
+
 def validate_production_values(pop_filt, pop_broad, _t_fs=None):
     """
     Compute Φ_filt, Φ_broad, η from the loaded data and cross-check
     against the expected L=8 production values from ANALYSIS_20260620.md.
     """
     # Target site = BChl 3 (index 2)
-    phi_filt = float(pop_filt[-1, 2])   # long-time value
+    phi_filt = float(pop_filt[-1, 2])  # long-time value
     phi_broad = float(pop_broad[-1, 2])
     eta = (phi_filt - phi_broad) / max(phi_broad, 1e-12)
 
-    print(f"\n  ── Validation against ANALYSIS_20260620.md ──")
-    print(f"  Φ_filt  (BChl 3, t→∞) = {phi_filt:.4f}  (expected {EXPECTED_PHI_FILT_L8})")
-    print(f"  Φ_broad (BChl 3, t→∞) = {phi_broad:.4f}  (expected {EXPECTED_PHI_BROAD_L8})")
+    print("\n  ── Validation against ANALYSIS_20260620.md ──")
+    print(
+        f"  Φ_filt  (BChl 3, t→∞) = {phi_filt:.4f}  (expected {EXPECTED_PHI_FILT_L8})"
+    )
+    print(
+        f"  Φ_broad (BChl 3, t→∞) = {phi_broad:.4f}  (expected {EXPECTED_PHI_BROAD_L8})"
+    )
     print(f"  η = {eta:.4f}  (expected {EXPECTED_ETA_L8})")
 
     # Tolerance: 5% relative
     tol = 0.05
     checks = []
-    for val, exp, name in [(phi_filt, EXPECTED_PHI_FILT_L8, "Φ_filt"),
-                           (phi_broad, EXPECTED_PHI_BROAD_L8, "Φ_broad"),
-                           (eta, EXPECTED_ETA_L8, "η")]:
+    for val, exp, name in [
+        (phi_filt, EXPECTED_PHI_FILT_L8, "Φ_filt"),
+        (phi_broad, EXPECTED_PHI_BROAD_L8, "Φ_broad"),
+        (eta, EXPECTED_ETA_L8, "η"),
+    ]:
         if abs(val - exp) / max(abs(exp), 1e-6) > tol:
-            checks.append(f"  ⚠️  {name} = {val:.4f} deviates from expected {exp:.4f} (> {tol*100:.0f}%)")
+            checks.append(
+                f"  ⚠️  {name} = {val:.4f} deviates from expected {exp:.4f} (> {tol * 100:.0f}%)"
+            )
         else:
-            checks.append(f"  ✅ {name} = {val:.4f}  (within {tol*100:.0f}% of expected)")
+            checks.append(
+                f"  ✅ {name} = {val:.4f}  (within {tol * 100:.0f}% of expected)"
+            )
 
     for c in checks:
         print(f"  {c}")
@@ -223,6 +273,7 @@ def validate_production_values(pop_filt, pop_broad, _t_fs=None):
 # ══════════════════════════════════════════════════════════════════════
 # FIGURE 1: Quantum_dynamics.pdf  — 4 panels, NO entropy
 # ══════════════════════════════════════════════════════════════════════
+
 
 def generate_quantum_dynamics(output_dir):
     print("\n=== Generating Quantum_dynamics.pdf (4 panels) ===")
@@ -238,7 +289,9 @@ def generate_quantum_dynamics(output_dir):
     t_ps = t_fs / 1000.0
 
     # Filtered populations (7 sites)
-    pop_filt = np.column_stack([df[f"population_site_{i+1}"].values for i in range(7)])
+    pop_filt = np.column_stack(
+        [df[f"population_site_{i + 1}"].values for i in range(7)]
+    )
     coh_filt = df["coherences"].values
 
     # Broadband data from ensemble CSV (site 1 only + coherence)
@@ -249,25 +302,30 @@ def generate_quantum_dynamics(output_dir):
     broadband_full_available = False
     df_broad = None
     try:
-        broad_csv = _match_csv(csv_path, f"fmo_dynamics_broadband_*{PRODUCTION_HASH}*.csv")
+        broad_csv = _match_csv(
+            csv_path, f"fmo_dynamics_broadband_*{PRODUCTION_HASH}*.csv"
+        )
         print(f"  Broadband CSV: {os.path.basename(broad_csv)}")
         df_broad = _load_csv_safe(broad_csv)
         pop_broad = np.column_stack(
-            [df_broad[f"population_site_{i+1}"].values for i in range(7)]
+            [df_broad[f"population_site_{i + 1}"].values for i in range(7)]
         )
         broadband_full_available = True
     except (FileNotFoundError, KeyError) as exc:
-        print(f"  ⚠️  Full broadband CSV not available ({exc}). "
-              "Using site-1 only (IPR/QFI for broadband will be approximate).")
+        print(
+            f"  ⚠️  Full broadband CSV not available ({exc}). "
+            "Using site-1 only (IPR/QFI for broadband will be approximate)."
+        )
         pop_broad = np.zeros_like(pop_filt)
-        pop_broad[:, 0] = pop_broad_site1[:pop_filt.shape[0]]
+        pop_broad[:, 0] = pop_broad_site1[: pop_filt.shape[0]]
         # Estimate other sites from filtered data scaled by broadband/site1 ratio
         for i in range(1, 7):
             pop_broad[:, i] = pop_filt[:, i] * 0.5  # rough estimate
 
     # Trim all arrays to common length
-    n_min = min(len(t_ps), pop_filt.shape[0], len(coh_filt),
-                pop_broad.shape[0], len(coh_broad))
+    n_min = min(
+        len(t_ps), pop_filt.shape[0], len(coh_filt), pop_broad.shape[0], len(coh_broad)
+    )
     t_ps = t_ps[:n_min]
     t_fs = t_fs[:n_min]
     pop_filt = pop_filt[:n_min]
@@ -298,9 +356,11 @@ def generate_quantum_dynamics(output_dir):
     qfi_broad = 12.4 * (coh_broad / coh_filt_max) ** 2
 
     # Log actual-vs-proxy comparison if available
-    if broadband_full_available and 'qfi' in df_broad.columns:
+    if broadband_full_available and "qfi" in df_broad.columns:
         qfi_actual = df_broad["qfi"].values[:n_min]
-        print(f"  📊 QFI (broadband): proxy={np.mean(qfi_broad):.0f} ± {np.std(qfi_broad):.0f}, actual={np.mean(qfi_actual):.0f} ± {np.std(qfi_actual):.0f}")
+        print(
+            f"  📊 QFI (broadband): proxy={np.mean(qfi_broad):.0f} ± {np.std(qfi_broad):.0f}, actual={np.mean(qfi_actual):.0f} ± {np.std(qfi_actual):.0f}"
+        )
 
     # ── Create 2×2 panel figure ──────────────────────────────────────
     fig, axes = plt.subplots(2, 2, figsize=(7.5, 6))
@@ -308,7 +368,9 @@ def generate_quantum_dynamics(output_dir):
     # Panel (a): Site populations (filtered, all 7 sites)
     ax = axes[0, 0]
     for i in range(7):
-        ax.plot(t_ps, pop_filt[:, i], color=SITE_COLORS[i], lw=1.2, label=f"BChl {i+1}")
+        ax.plot(
+            t_ps, pop_filt[:, i], color=SITE_COLORS[i], lw=1.2, label=f"BChl {i + 1}"
+        )
     ax.set_xlabel("Time (ps)")
     ax.set_ylabel("Population")
     ax.set_title("(a) Site populations", fontweight="bold")
@@ -363,6 +425,7 @@ def generate_quantum_dynamics(output_dir):
 # FIGURE 1e: spectral density J(ω) + filter T(ω) — Rev 3 Pt 2
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_spectral_relationships(output_dir):
     """
     Figure 1(e): two-panel layout.
@@ -379,10 +442,12 @@ def generate_spectral_relationships(output_dir):
     omega_wl = 1e7 / wl_nm
 
     # Parameters from parameters.yaml
-    vib_freqs = np.array([180, 220, 280, 350, 520, 575, 720,
-                          1050, 1185, 1220, 1350, 1500])
-    vib_hr = np.array([0.05, 0.045, 0.03, 0.025, 0.02, 0.015,
-                       0.01, 0.008, 0.005, 0.005, 0.004, 0.003])
+    vib_freqs = np.array(
+        [180, 220, 280, 350, 520, 575, 720, 1050, 1185, 1220, 1350, 1500]
+    )
+    vib_hr = np.array(
+        [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
+    )
 
     # Total reorganization energy: λ_DL + Σ S_k ω_k = 35 + 93 = 128 cm⁻¹
     lambda_total = 35.0 + np.sum(vib_hr * vib_freqs)
@@ -397,21 +462,28 @@ def generate_spectral_relationships(output_dir):
     J_wl_norm = J_wl / J_wl.max()
 
     # FMO absorption
-    fmo_abs = (0.6 * np.exp(-((wl_nm - 750) ** 2) / (2 * 15**2))
-               + 1.0 * np.exp(-((wl_nm - 805) ** 2) / (2 * 20**2)))
+    fmo_abs = 0.6 * np.exp(-((wl_nm - 750) ** 2) / (2 * 15**2)) + 1.0 * np.exp(
+        -((wl_nm - 805) ** 2) / (2 * 20**2)
+    )
 
     # Filter transmission
     T_wl = dual_band_transmission(1e7 / wl_nm)
 
     # ── Create two-panel figure ──────────────────────────────────────
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4.5),
-                                   gridspec_kw={"width_ratios": [1.2, 1]})
+    fig, (ax1, ax2) = plt.subplots(
+        1, 2, figsize=(10, 4.5), gridspec_kw={"width_ratios": [1.2, 1]}
+    )
 
     # ─── Left: J(ω) in cm⁻¹ space ────────────────────────────────────
-    ax1.fill_between(omega_cm, 0, J_dl_norm, alpha=0.2, color="#4477AA",
-                     label="Drude–Lorentz (solvent)")
-    ax1.plot(omega_cm, J_norm, color="#004488", lw=2.0,
-             label=r"Total $J(\omega)$")
+    ax1.fill_between(
+        omega_cm,
+        0,
+        J_dl_norm,
+        alpha=0.2,
+        color="#4477AA",
+        label="Drude–Lorentz (solvent)",
+    )
+    ax1.plot(omega_cm, J_norm, color="#004488", lw=2.0, label=r"Total $J(\omega)$")
 
     # Mark each of the 12 vibronic modes
     for w0 in vib_freqs:
@@ -422,9 +494,15 @@ def generate_spectral_relationships(output_dir):
     # Label the most prominent modes
     for w0 in [180, 220, 280, 350, 575, 720, 1050, 1185, 1500]:
         pv = np.interp(w0, omega_cm, J_norm)
-        ax1.annotate(f"{w0}", xy=(w0, pv + 0.04),
-                     fontsize=6, ha="center", color="#CC6677",
-                     fontweight="bold", rotation=90)
+        ax1.annotate(
+            f"{w0}",
+            xy=(w0, pv + 0.04),
+            fontsize=6,
+            ha="center",
+            color="#CC6677",
+            fontweight="bold",
+            rotation=90,
+        )
 
     # Filter band windows (shaded)
     for lam_c in [750, 820]:
@@ -442,23 +520,33 @@ def generate_spectral_relationships(output_dir):
     # Annotation with total λ
     ax1.annotate(
         rf"$\lambda_{{\mathrm{{total}}}} = {lambda_total:.0f}\ \mathrm{{cm}}^{{-1}}$",
-        xy=(0.65, 0.15), xycoords="axes fraction",
-        fontsize=7, color="#004488", fontweight="bold",
-        bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
-                  edgecolor="#004488", alpha=0.8))
+        xy=(0.65, 0.15),
+        xycoords="axes fraction",
+        fontsize=7,
+        color="#004488",
+        fontweight="bold",
+        bbox=dict(
+            boxstyle="round,pad=0.3", facecolor="white", edgecolor="#004488", alpha=0.8
+        ),
+    )
 
     # ─── Right: wavelength-domain view ───────────────────────────────
     ax2.fill_between(wl_nm, 0, fmo_abs, alpha=0.2, color="#009E73")
     ax2.plot(wl_nm, fmo_abs, color="#009E73", lw=1.5, label="FMO absorption")
-    ax2.plot(wl_nm, J_wl_norm, color="#004488", lw=1.2, alpha=0.7,
-             label=r"Bath $J(\omega)$")
+    ax2.plot(
+        wl_nm, J_wl_norm, color="#004488", lw=1.2, alpha=0.7, label=r"Bath $J(\omega)$"
+    )
     ax2.fill_between(wl_nm, 0, T_wl, alpha=0.3, color="#D55E00")
-    ax2.plot(wl_nm, T_wl, color="#D55E00", lw=2.5,
-             label=r"Filter $T(\omega)$")
+    ax2.plot(wl_nm, T_wl, color="#D55E00", lw=2.5, label=r"Filter $T(\omega)$")
     for lam_c in [750, 820]:
         ax2.axvline(x=lam_c, color="#D55E00", linestyle=":", alpha=0.6, lw=1.0)
-        ax2.annotate(f"{lam_c:.0f} nm", xy=(lam_c, 0.92),
-                     ha="center", fontsize=8, color="#D55E00")
+        ax2.annotate(
+            f"{lam_c:.0f} nm",
+            xy=(lam_c, 0.92),
+            ha="center",
+            fontsize=8,
+            color="#D55E00",
+        )
 
     ax2.set_xlabel("Wavelength (nm)")
     ax2.set_ylabel("Normalized intensity / transmission")
@@ -483,6 +571,7 @@ def generate_spectral_relationships(output_dir):
 # SI: spectral_density.pdf — full 12-mode detail
 # ══════════════════════════════════════════════════════════════════════
 
+
 def generate_si_spectral_density(output_dir):
     """
     SI spectral density figure: all 12 modes individually shown with
@@ -491,10 +580,12 @@ def generate_si_spectral_density(output_dir):
     print("\n=== Generating spectral_density.pdf (SI) ===")
 
     omega_cm = np.linspace(0, 2000, 2000)
-    vib_freqs = np.array([180, 220, 280, 350, 520, 575, 720,
-                          1050, 1185, 1220, 1350, 1500])
-    vib_hr = np.array([0.05, 0.045, 0.03, 0.025, 0.02, 0.015,
-                       0.01, 0.008, 0.005, 0.005, 0.004, 0.003])
+    vib_freqs = np.array(
+        [180, 220, 280, 350, 520, 575, 720, 1050, 1185, 1220, 1350, 1500]
+    )
+    vib_hr = np.array(
+        [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
+    )
 
     J_total, J_dl, J_vib_total = compute_spectral_density(omega_cm)
     J_max = J_total.max() if J_total.max() > 0 else 1.0
@@ -502,48 +593,79 @@ def generate_si_spectral_density(output_dir):
     fig, ax = plt.subplots(figsize=(7, 5))
 
     # Drude-Lorentz background
-    ax.fill_between(omega_cm, 0, J_dl / J_max, alpha=0.25, color="#4477AA",
-                    label=r"Drude–Lorentz ($\lambda_D=35$, $\gamma_D=50$ cm$^{-1}$)")
+    ax.fill_between(
+        omega_cm,
+        0,
+        J_dl / J_max,
+        alpha=0.25,
+        color="#4477AA",
+        label=r"Drude–Lorentz ($\lambda_D=35$, $\gamma_D=50$ cm$^{-1}$)",
+    )
     ax.plot(omega_cm, J_dl / J_max, color="#4477AA", lw=0.8, alpha=0.6)
 
     # Individual vibronic mode peaks
     for w0, S in zip(vib_freqs, vib_hr):
         lam_k = S * w0
         g = 10.0
-        J_k = (2.0 * lam_k * omega_cm * w0**2 * g
-               / ((w0**2 - omega_cm**2)**2 + (omega_cm * g)**2))
+        J_k = (
+            2.0
+            * lam_k
+            * omega_cm
+            * w0**2
+            * g
+            / ((w0**2 - omega_cm**2) ** 2 + (omega_cm * g) ** 2)
+        )
         ax.plot(omega_cm, J_k / J_max, color="#CC6677", lw=0.6, alpha=0.4)
 
     # Total J(ω)
-    ax.plot(omega_cm, J_total / J_max, color="#004488", lw=2.0,
-            label=r"Total $J(\omega)$")
+    ax.plot(
+        omega_cm, J_total / J_max, color="#004488", lw=2.0, label=r"Total $J(\omega)$"
+    )
 
     # Marker for all 12 modes
-    ax.plot(vib_freqs, np.interp(vib_freqs, omega_cm, J_total) / J_max,
-            "v", color="#CC6677", markersize=5, zorder=5,
-            label="12 vibronic modes")
+    ax.plot(
+        vib_freqs,
+        np.interp(vib_freqs, omega_cm, J_total) / J_max,
+        "v",
+        color="#CC6677",
+        markersize=5,
+        zorder=5,
+        label="12 vibronic modes",
+    )
 
     # Annotate all 12 modes
     for w0 in vib_freqs:
         ax.axvline(x=w0, color="#CC6677", linestyle=":", alpha=0.35, lw=0.6)
         pv = np.interp(w0, omega_cm, J_total) / J_max
-        ax.annotate(f"{w0:.0f}", xy=(w0, pv + 0.03),
-                    fontsize=5.5, ha="center", color="#CC6677",
-                    rotation=90, fontweight="bold")
+        ax.annotate(
+            f"{w0:.0f}",
+            xy=(w0, pv + 0.03),
+            fontsize=5.5,
+            ha="center",
+            color="#CC6677",
+            rotation=90,
+            fontweight="bold",
+        )
 
     # Filter windows
     for lam_c in [750, 820]:
         w_c = 1e7 / lam_c
         ax.axvspan(w_c - 150, w_c + 150, alpha=0.06, color="#D55E00")
-    ax.annotate("Dual-band\nfilter windows",
-                xy=(1e7 / 785, 0.85), fontsize=7, ha="center",
-                color="#D55E00", fontweight="bold",
-                bbox=dict(boxstyle="round", facecolor="white", alpha=0.8))
+    ax.annotate(
+        "Dual-band\nfilter windows",
+        xy=(1e7 / 785, 0.85),
+        fontsize=7,
+        ha="center",
+        color="#D55E00",
+        fontweight="bold",
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.8),
+    )
 
     ax.set_xlabel("Wavenumber (cm$^{-1}$)", fontweight="bold")
     ax.set_ylabel("Normalized spectral density $J(\\omega)$", fontweight="bold")
-    ax.set_title("Bath spectral density — 12-mode Kleinekathöfer/Coker model",
-                 fontweight="bold")
+    ax.set_title(
+        "Bath spectral density — 12-mode Kleinekathöfer/Coker model", fontweight="bold"
+    )
     ax.set_xlim(0, 2000)
     ax.set_ylim(0, 1.1)
     ax.legend(loc="upper right", frameon=True, fontsize=8)
@@ -553,11 +675,16 @@ def generate_si_spectral_density(output_dir):
     lambda_total = 35.0 + np.sum(vib_hr * vib_freqs)
     ax.annotate(
         rf"$\lambda_{{\mathrm{{total}}}} = {lambda_total:.0f}\ \mathrm{{cm}}^{{-1}}$",
-        xy=(0.05, 0.95), xycoords="axes fraction",
-        fontsize=9, color="#004488", fontweight="bold",
+        xy=(0.05, 0.95),
+        xycoords="axes fraction",
+        fontsize=9,
+        color="#004488",
+        fontweight="bold",
         va="top",
-        bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
-                  edgecolor="#004488", alpha=0.9))
+        bbox=dict(
+            boxstyle="round,pad=0.3", facecolor="white", edgecolor="#004488", alpha=0.9
+        ),
+    )
 
     plt.tight_layout()
 

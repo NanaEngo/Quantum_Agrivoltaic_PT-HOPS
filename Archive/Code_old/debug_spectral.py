@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from quantum_agrivoltaics_simulations import SpectralOptimizer
 
 # Create a spectral optimizer instance to debug
@@ -11,7 +10,9 @@ print("Debugging spectral optimization components:")
 print(f"Energy range: {so.E_range[:5]}... to ...{so.E_range[-5:]}")
 print(f"Solar spectrum values at start: {so.solar_spec[:5]}")
 print(f"Solar spectrum values at end: {so.solar_spec[-5:]}")
-print(f"Total solar integral: {np.trapezoid(so.solar_spec, dx=so.E_range[1]-so.E_range[0])}")
+print(
+    f"Total solar integral: {np.trapezoid(so.solar_spec, dx=so.E_range[1] - so.E_range[0])}"
+)
 
 # Check quantum response functions
 R_opv = so.opv_quantum_response(so.E_range, bandgap=1.4, max_efficiency=0.8)
@@ -22,7 +23,9 @@ print(f"PSU response integral: {np.trapezoid(R_psu)}")
 # Test with some sample parameters
 test_params = [(1.8, 0.3, 0.5), (2.2, 0.4, 0.6), (2.8, 0.2, 0.4)]  # 3 layers
 T_test = so.multi_layer_transmission(so.E_range, test_params)
-print(f"Sample transmission - min: {np.min(T_test)}, max: {np.max(T_test)}, mean: {np.mean(T_test)}")
+print(
+    f"Sample transmission - min: {np.min(T_test)}, max: {np.max(T_test)}, mean: {np.mean(T_test)}"
+)
 
 # Calculate PCE and ETR with these parameters
 pce_test = so.calculate_pce(T_test)

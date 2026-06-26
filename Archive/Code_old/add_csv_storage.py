@@ -4,17 +4,15 @@ Script to add CSV storage functionality to the quantum coherence agrivoltaics no
 This script adds functions to save simulation data to CSV files and save figures to the figures/ folder.
 """
 
-import os
-import sys
-import json
 import re
+
 
 def add_csv_functions_to_notebook():
     """
     Add CSV storage functionality to the notebook.
     """
     notebook_path = "/media/taamangtchu/MYDATA/Github/Comparative-study-of-the-Anderson-model-in-weak-and-strong-interaction-regimes/Redac_Paper1/quantum_coherence_agrivoltaics_analysis.ipynb"
-    
+
     # CSV storage functions as a string
     csv_functions_code = '''# CSV Data Storage and Figure Saving Functions
 # These functions save simulation results to CSV files and figures to the figures/ folder
@@ -212,47 +210,49 @@ print("You can now save simulation data using the provided functions.")
 '''
 
     # Read the notebook
-    with open(notebook_path, 'r', encoding='utf-8', errors='ignore') as f:
+    with open(notebook_path, "r", encoding="utf-8", errors="ignore") as f:
         content = f.read()
-    
+
     # Find the last code cell before the conclusion
     # Look for the last occurrence of a code cell before the conclusion
     last_code_cell_pattern = r'(\s*{\s*"cell_type": "code",.*?"source": \[.*?^\s*\],\s*"outputs":.*?)(\s*},\s*{\s*"cell_type": "markdown",\s*"metadata":.*?"## 9\. Summary and conclusions")'
-    
+
     # Replace the pattern to insert our new cell
     def insert_csv_cell(match):
         existing_cell = match.group(1)
         conclusion = match.group(2)
-        new_cell = f'''{existing_cell},
+        new_cell = f"""{existing_cell},
 {{
  "cell_type": "code",
  "execution_count": null,
  "metadata": {{}},
  "outputs": [],
  "source": [
-'''
+"""
         # Format the function code with proper escaping for JSON
-        lines = csv_functions_code.split('\n')
+        lines = csv_functions_code.split("\n")
         for i, line in enumerate(lines):
-            escaped_line = line.replace('\\', '\\\\').replace('"', '\\"')
+            escaped_line = line.replace("\\", "\\\\").replace('"', '\\"')
             new_cell += f'  "{escaped_line}\\\\n"'
             if i < len(lines) - 1:
-                new_cell += ',\n'
-        
-        new_cell += f'''
+                new_cell += ",\n"
+
+        new_cell += """
  ]
-}},
-{{
+},
+{
  "cell_type": "markdown",
- "metadata": {{}},
+ "metadata": {},
  "source": [
-'''
-        
+"""
+
         return new_cell + conclusion
-    
+
     # Try to find and replace the last code cell
-    updated_content = re.sub(last_code_cell_pattern, insert_csv_cell, content, flags=re.DOTALL|re.MULTILINE)
-    
+    updated_content = re.sub(
+        last_code_cell_pattern, insert_csv_cell, content, flags=re.DOTALL | re.MULTILINE
+    )
+
     # If the pattern didn't match, we'll append the cell differently
     if updated_content == content:
         # Find the last occurrence of a code cell
@@ -260,45 +260,67 @@ print("You can now save simulation data using the provided functions.")
         if re.search(code_cell_pattern, content, re.DOTALL):
             # Insert our cell before the markdown conclusion
             updated_content = re.sub(
-                code_cell_pattern, 
-                lambda m: m.group(1) + f""",
-{{
+                code_cell_pattern,
+                lambda m: m.group(1)
+                + """,
+{
  "cell_type": "code",
  "execution_count": null,
- "metadata": {{}},
+ "metadata": {},
  "outputs": [],
  "source": [
-""" + '\\\\n",\\\n'.join([f'  "{line.replace(chr(92), chr(92)+chr(92)).replace(chr(34), chr(92)+chr(34))}\\\\n"' for line in csv_functions_code.split('\n')]) + '''
+"""
+                + '\\\\n",\\\n'.join(
+                    [
+                        f'  "{line.replace(chr(92), chr(92) + chr(92)).replace(chr(34), chr(92) + chr(34))}\\\\n"'
+                        for line in csv_functions_code.split("\n")
+                    ]
+                )
+                + """
  ]
 }},
 {
  "cell_type": "markdown",
  "metadata": {},
- "source": ['''
-                , content, 1, re.DOTALL|re.MULTILINE)
-    
+ "source": [""",
+                content,
+                1,
+                re.DOTALL | re.MULTILINE,
+            )
+
     # If still no match, just append to the cells array before the metadata
     if updated_content == content:
         # Find the end of the cells array
         cells_end_pattern = r'(\s*\]\s*,\s*"metadata")'
         updated_content = re.sub(
             cells_end_pattern,
-            lambda m: f""",
-{{
+            lambda m: """,
+{
  "cell_type": "code",
  "execution_count": null,
- "metadata": {{}},
+ "metadata": {},
  "outputs": [],
  "source": [
-""" + '\\\\n",\\\n'.join([f'  "{line.replace(chr(92), chr(92)+chr(92)).replace(chr(34), chr(92)+chr(34))}\\\\n"' for line in csv_functions_code.split('\n')]) + '''
+"""
+            + '\\\\n",\\\n'.join(
+                [
+                    f'  "{line.replace(chr(92), chr(92) + chr(92)).replace(chr(34), chr(92) + chr(34))}\\\\n"'
+                    for line in csv_functions_code.split("\n")
+                ]
+            )
+            + """
  ]
-}]''' + m.group(1)
-            , content, 1, re.DOTALL)
-    
+}]"""
+            + m.group(1),
+            content,
+            1,
+            re.DOTALL,
+        )
+
     # Write the updated notebook
-    with open(notebook_path, 'w', encoding='utf-8') as f:
+    with open(notebook_path, "w", encoding="utf-8") as f:
         f.write(updated_content)
-    
+
     print("CSV storage functions have been added to the notebook.")
     print("The functions will save data to the 'figures/' folder as requested.")
 

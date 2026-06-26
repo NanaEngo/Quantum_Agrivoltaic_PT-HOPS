@@ -59,6 +59,12 @@ class MicroclimateSection(BaseModel):
 class CooperativeConfig(BaseModel):
     coop_members: int = Field(..., ge=1)
     capex_subsidy_rate: float = Field(..., ge=0.0, le=1.0)
+    area_m2: float = Field(default=500.0, gt=0.0)  # V5: 500 m2 micro-module
+    crop_price_per_kg: float = Field(default=4.5, gt=0.0)  # High-value crop price
+    yield_kg_per_m2_yr: float = Field(default=8.2, gt=0.0)  # Floriculture yield
+    discount_rate: float = Field(default=0.12, gt=0.0)  # Risk-adjusted discount rate
+    annual_training_opex_usd: float = Field(default=1200.0, ge=0.0)  # Extension services
+    annual_cleaning_opex_usd: float = Field(default=800.0, ge=0.0)  # OPV panel cleaning
 
 
 class LcaSection(BaseModel):
@@ -84,12 +90,51 @@ class LcaSection(BaseModel):
 
 
 class QkdConfig(BaseModel):
+    channel_type: str = Field(default="fiber")  # V5: "fiber" | "free_space"
     channel_noise_rate: float = Field(..., ge=0.0, le=1.0)
+    security_threshold: float = Field(default=0.11, gt=0.0)  # Shor-Preskill limit
     key_length_bits: int = Field(..., ge=1)
 
 
 class SecuritySection(BaseModel):
     qkd: QkdConfig
+
+
+class DigitalTwinConfig(BaseModel):
+    """
+    V6: Agrivoltaic Digital Twin orchestration parameters (Axe 1).
+
+    Defines the data-fusion refresh cadence and grid synchronisation flags
+    that unify quantum metabolic sensing, FAO-56 microclimate, and OPV
+    energy flux under a single Digital Twin control loop.
+    """
+
+    update_interval_seconds: int = Field(default=60, ge=1)
+    sync_opv_grid: bool = Field(default=True)
+
+
+class PhysicsConfig(BaseModel):
+    """V5: Environmental degradation and sentinel-sensing physics parameters."""
+
+    soiling_decay_rate_per_day: float = Field(default=0.005, ge=0.0)  # OPV attenuation
+    sensing_sentinel_ratio: float = Field(default=0.01, ge=0.0, le=1.0)  # 1% canopy sentinels
+    npom_optimal_mode_volume_nm3: float = Field(default=1.2, gt=0.0)
+
+
+class QuantumSignalConfig(BaseModel):
+    """
+    V6: Quantum Machine Learning / hybrid signal processing (Axe 6).
+
+    Controls the Quantum Kernel and Tensor Network (MPS) parameters for
+    denoising and early-stress detection from noisy SERS/CQD telemetry.
+    """
+
+    kernel_gamma: float = Field(default=0.5, gt=0.0)  # RBF kernel width
+    kernel_regularization: float = Field(default=1e-3, ge=0.0)  # Tikhonov regularisation
+    mps_chi: int = Field(default=16, ge=2, le=256)  # MPS bond dimension
+    mps_sweeps: int = Field(default=5, ge=1, le=100)  # DMRG sweeps (reserved)
+    stress_anomaly_zscore: float = Field(default=2.0, gt=0.0)  # Z-score threshold for alarm
+    noise_sigma_fraction: float = Field(default=0.05, ge=0.0, le=1.0)  # Injected noise fraction
 
 
 class OutputConfig(BaseModel):
@@ -103,6 +148,9 @@ class ConfigModel(BaseModel):
     microclimate: MicroclimateSection
     lca: LcaSection
     security: SecuritySection
+    digital_twin: DigitalTwinConfig = Field(default_factory=DigitalTwinConfig)  # V6: Digital Twin
+    physics: PhysicsConfig = Field(default_factory=PhysicsConfig)  # V5: environmental physics
+    quantum_signal: QuantumSignalConfig = Field(default_factory=QuantumSignalConfig)  # V6: QML
     output: OutputConfig = Field(default_factory=OutputConfig)
 
 

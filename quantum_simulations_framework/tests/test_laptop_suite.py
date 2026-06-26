@@ -6,14 +6,16 @@ Designed for quick verification without full production parameters.
 
 import sys
 from pathlib import Path
+
 import numpy as np
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from src.core.hops_simulator import HopsSimulator
+
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.hops_simulator import HopsSimulator
 
 logger = get_test_logger("test_laptop_suite")
 
@@ -122,9 +124,7 @@ class TestLaptopSuite:
         # Check eigenvalues are real
         evals = np.linalg.eigvalsh(H)
         all_real = np.all(np.isreal(evals))
-        logger.info(
-            f"Eigenvalues real: {all_real}, range=[{evals.min():.4f}, {evals.max():.4f}]"
-        )
+        logger.info(f"Eigenvalues real: {all_real}, range=[{evals.min():.4f}, {evals.max():.4f}]")
         assert all_real, "Eigenvalues not real"
         logger.info("✅ Hamiltonian properties test passed")
 

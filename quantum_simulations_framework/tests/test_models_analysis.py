@@ -7,21 +7,20 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from src.core.hamiltonian_factory import create_fmo_hamiltonian
+
 from src.agrivoltaic.biodegradability_analyzer import BiodegradabilityAnalyzer
 from src.agrivoltaic.eco_design_analyzer import EcoDesignAnalyzer
 from src.agrivoltaic.lca_analyzer import LCAAnalyzer
 from src.agrivoltaic.techno_economic_model import TechnoEconomicModel
-from src.core.constants import DEFAULT_PCE, DEFAULT_ETR, DEFAULT_SYSTEM_LIFETIME
+from src.core.constants import DEFAULT_ETR, DEFAULT_PCE, DEFAULT_SYSTEM_LIFETIME
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
 
 logger = get_test_logger("test_models_analysis")
 
 
 def test_lca_analyzer():
     """Test Life Cycle Assessment impact calculations."""
-    analyzer = LCAAnalyzer(
-        system_lifetime=DEFAULT_SYSTEM_LIFETIME, system_efficiency=DEFAULT_PCE
-    )
+    analyzer = LCAAnalyzer(system_lifetime=DEFAULT_SYSTEM_LIFETIME, system_efficiency=DEFAULT_PCE)
     results = analyzer.calculate_lca_impact(
         manufacturing_energy=1500.0,
         operational_time=float(DEFAULT_SYSTEM_LIFETIME),
@@ -39,9 +38,7 @@ def test_lca_analyzer():
 
 def test_techno_economic_model():
     """Test financial viability calculations."""
-    model = TechnoEconomicModel(
-        discount_rate=0.07, system_lifetime=float(DEFAULT_SYSTEM_LIFETIME)
-    )
+    model = TechnoEconomicModel(discount_rate=0.07, system_lifetime=float(DEFAULT_SYSTEM_LIFETIME))
     results = model.evaluate_project_viability(
         area_hectares=10.0, pv_coverage_ratio=0.3, pce=DEFAULT_PCE, etr=DEFAULT_ETR
     )

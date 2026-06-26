@@ -66,6 +66,7 @@ from models.lca_analyzer import LCAAnalyzer
 try:
     from mesohops.trajectory.hops_trajectory import HopsTrajectory
     from mesohops.basis.hops_basis import HopsBasis
+
     MESOHOPS_AVAILABLE = True
     logger.info("MesoHOPS modules imported successfully")
 except ImportError as e:
@@ -80,6 +81,7 @@ try:
     from models.eco_design_analyzer import EcoDesignAnalyzer
     from utils.csv_data_storage import CSVDataStorage
     from utils.figure_generator import FigureGenerator
+
     logger.info("Framework modules imported successfully")
 except ImportError as e:
     logger.error(f"Failed to import framework modules: {e}")
@@ -92,7 +94,9 @@ except ImportError:
     try:
         from models.environmental_factors import EnvironmentalFactors
     except ImportError:
-        logger.warning("EnvironmentalFactors module not found, using full implementation")
+        logger.warning(
+            "EnvironmentalFactors module not found, using full implementation"
+        )
 
         class EnvironmentalFactors:
             r"""
@@ -128,7 +132,9 @@ except ImportError:
                 self.wind_speed_factor = 0.01  # Factor for dust removal
                 logger.debug("EnvironmentalFactors initialized with default parameters")
 
-            def dust_accumulation_model(self, time_days, initial_dust=0.1, weather_conditions='normal'):
+            def dust_accumulation_model(
+                self, time_days, initial_dust=0.1, weather_conditions="normal"
+            ):
                 """
                 Model dust accumulation over time with weather effects.
 
@@ -156,11 +162,11 @@ except ImportError:
                     Dust thickness over time
                 """
                 # Adjust accumulation rate based on weather
-                if weather_conditions == 'arid':
+                if weather_conditions == "arid":
                     k = self.dust_accumulation_rate * 1.5
-                elif weather_conditions == 'dusty':
+                elif weather_conditions == "dusty":
                     k = self.dust_accumulation_rate * 2.0
-                elif weather_conditions == 'humid':
+                elif weather_conditions == "humid":
                     k = self.dust_accumulation_rate * 0.5
                 else:  # normal
                     k = self.dust_accumulation_rate
@@ -173,7 +179,8 @@ except ImportError:
                     # Apply accumulation
                     current_dust = min(
                         self.dust_saturation_thickness,
-                        current_dust + k * (1 - current_dust / self.dust_saturation_thickness)
+                        current_dust
+                        + k * (1 - current_dust / self.dust_saturation_thickness),
                     )
 
                     # Random precipitation event (5% chance per day)
@@ -184,7 +191,9 @@ except ImportError:
 
                 return dust_thickness
 
-            def temperature_effects_model(self, temperatures, base_efficiency, efficiency_type='opv'):
+            def temperature_effects_model(
+                self, temperatures, base_efficiency, efficiency_type="opv"
+            ):
                 r"""
                 Model temperature effects on system efficiency.
 
@@ -214,7 +223,7 @@ except ImportError:
                 T_ref = 298  # K
 
                 # Select temperature coefficient based on system type
-                if efficiency_type == 'opv':
+                if efficiency_type == "opv":
                     alpha = self.temperature_coefficient_opv
                 else:  # psu
                     alpha = self.temperature_coefficient_psu
@@ -258,7 +267,9 @@ except ImportError:
                 humidity_deviation = np.abs(humidity_values - optimal_humidity)
 
                 # Apply humidity effects
-                efficiency = base_efficiency * (1 - self.humidity_coefficient * humidity_deviation)
+                efficiency = base_efficiency * (
+                    1 - self.humidity_coefficient * humidity_deviation
+                )
 
                 # Ensure efficiency remains positive
                 efficiency = np.clip(efficiency, 0, base_efficiency)
@@ -296,8 +307,14 @@ except ImportError:
                 return adjusted_dust
 
             def combined_environmental_effects(
-                self, time_days, temperatures, humidity_values, wind_speeds,
-                base_pce, base_etr, weather_conditions='normal'
+                self,
+                time_days,
+                temperatures,
+                humidity_values,
+                wind_speeds,
+                base_pce,
+                base_etr,
+                weather_conditions="normal",
             ):
                 r"""
                 Combine all environmental effects into a comprehensive model.
@@ -334,14 +351,16 @@ except ImportError:
                     (pce_env, etr_env, dust_profile) - Adjusted PCE, ETR, and dust profile
                 """
                 # Calculate dust accumulation
-                dust_profile = self.dust_accumulation_model(time_days, weather_conditions=weather_conditions)
+                dust_profile = self.dust_accumulation_model(
+                    time_days, weather_conditions=weather_conditions
+                )
 
                 # Apply wind effects to dust
                 dust_profile = self.wind_effects_model(wind_speeds, dust_profile)
 
                 # Calculate temperature effects
-                pce_temp = self.temperature_effects_model(temperatures, base_pce, 'opv')
-                etr_temp = self.temperature_effects_model(temperatures, base_etr, 'psu')
+                pce_temp = self.temperature_effects_model(temperatures, base_pce, "opv")
+                etr_temp = self.temperature_effects_model(temperatures, base_etr, "psu")
 
                 # Calculate humidity effects
                 pce_humidity = self.humidity_effects_model(humidity_values, base_pce)
@@ -351,8 +370,18 @@ except ImportError:
                 # For simplicity, using average dust effect across wavelengths
                 dust_factor = 1 - (dust_profile / self.dust_saturation_thickness) * 0.3
 
-                pce_env = base_pce * dust_factor * (pce_temp / base_pce) * (pce_humidity / base_pce)
-                etr_env = base_etr * dust_factor * (etr_temp / base_etr) * (etr_humidity / base_etr)
+                pce_env = (
+                    base_pce
+                    * dust_factor
+                    * (pce_temp / base_pce)
+                    * (pce_humidity / base_pce)
+                )
+                etr_env = (
+                    base_etr
+                    * dust_factor
+                    * (etr_temp / base_etr)
+                    * (etr_humidity / base_etr)
+                )
 
                 return pce_env, etr_env, dust_profile
 
@@ -365,8 +394,8 @@ except ImportError:
                 pce_env: np.ndarray,
                 etr_env: np.ndarray,
                 dust_profile: np.ndarray,
-                filename_prefix: str = 'environmental_effects',
-                output_dir: str = '../simulation_data/'
+                filename_prefix: str = "environmental_effects",
+                output_dir: str = "../simulation_data/",
             ) -> str:
                 """
                 Save environmental effects data to CSV.
@@ -400,19 +429,21 @@ except ImportError:
                 os.makedirs(output_dir, exist_ok=True)
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-                df = pd.DataFrame({
-                    'time_days': time_days,
-                    'temperature_k': temperatures,
-                    'humidity': humidity_values,
-                    'wind_speed_m_s': wind_speeds,
-                    'dust_thickness': dust_profile,
-                    'pce_with_environment': pce_env,
-                    'etr_with_environment': etr_env
-                })
+                df = pd.DataFrame(
+                    {
+                        "time_days": time_days,
+                        "temperature_k": temperatures,
+                        "humidity": humidity_values,
+                        "wind_speed_m_s": wind_speeds,
+                        "dust_thickness": dust_profile,
+                        "pce_with_environment": pce_env,
+                        "etr_with_environment": etr_env,
+                    }
+                )
 
                 filename = f"{filename_prefix}_{timestamp}.csv"
                 filepath = os.path.join(output_dir, filename)
-                df.to_csv(filepath, index=False, float_format='%.6e')
+                df.to_csv(filepath, index=False, float_format="%.6e")
 
                 logger.info(f"Environmental data saved to {filepath}")
                 return filepath
@@ -426,8 +457,8 @@ except ImportError:
                 pce_env: np.ndarray,
                 etr_env: np.ndarray,
                 dust_profile: np.ndarray,
-                filename_prefix: str = 'environmental_effects',
-                figures_dir: str = '../Graphics/'
+                filename_prefix: str = "environmental_effects",
+                figures_dir: str = "../Graphics/",
             ) -> str:
                 """
                 Plot environmental effects and save to file.
@@ -462,53 +493,81 @@ except ImportError:
                 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
                 fig, axes = plt.subplots(2, 3, figsize=(16, 10))
-                fig.suptitle('Environmental Effects on Agrivoltaic System', fontsize=16, fontweight='bold')
+                fig.suptitle(
+                    "Environmental Effects on Agrivoltaic System",
+                    fontsize=16,
+                    fontweight="bold",
+                )
 
                 # Row 1: Environmental conditions
                 ax1 = axes[0, 0]
-                ax1.plot(time_days, temperatures, 'r-', linewidth=2)
-                ax1.set_xlabel('Time (days)', fontsize=10)
-                ax1.set_ylabel('Temperature (K)', fontsize=10)
-                ax1.set_title('Temperature Variation', fontsize=11)
+                ax1.plot(time_days, temperatures, "r-", linewidth=2)
+                ax1.set_xlabel("Time (days)", fontsize=10)
+                ax1.set_ylabel("Temperature (K)", fontsize=10)
+                ax1.set_title("Temperature Variation", fontsize=11)
                 ax1.grid(True, alpha=0.3)
 
                 ax2 = axes[0, 1]
-                ax2.plot(time_days, humidity_values, 'b-', linewidth=2)
-                ax2.set_xlabel('Time (days)', fontsize=10)
-                ax2.set_ylabel('Relative Humidity', fontsize=10)
-                ax2.set_title('Humidity Variation', fontsize=11)
+                ax2.plot(time_days, humidity_values, "b-", linewidth=2)
+                ax2.set_xlabel("Time (days)", fontsize=10)
+                ax2.set_ylabel("Relative Humidity", fontsize=10)
+                ax2.set_title("Humidity Variation", fontsize=11)
                 ax2.grid(True, alpha=0.3)
 
                 ax3 = axes[0, 2]
-                ax3.plot(time_days, wind_speeds, 'g-', linewidth=2)
-                ax3.set_xlabel('Time (days)', fontsize=10)
-                ax3.set_ylabel('Wind Speed (m/s)', fontsize=10)
-                ax3.set_title('Wind Speed Variation', fontsize=11)
+                ax3.plot(time_days, wind_speeds, "g-", linewidth=2)
+                ax3.set_xlabel("Time (days)", fontsize=10)
+                ax3.set_ylabel("Wind Speed (m/s)", fontsize=10)
+                ax3.set_title("Wind Speed Variation", fontsize=11)
                 ax3.grid(True, alpha=0.3)
 
                 # Row 2: Effects on system performance
                 ax4 = axes[1, 0]
-                ax4.plot(time_days, dust_profile, 'orange', linewidth=2)
-                ax4.set_xlabel('Time (days)', fontsize=10)
-                ax4.set_ylabel('Dust Thickness', fontsize=10)
-                ax4.set_title('Dust Accumulation', fontsize=11)
+                ax4.plot(time_days, dust_profile, "orange", linewidth=2)
+                ax4.set_xlabel("Time (days)", fontsize=10)
+                ax4.set_ylabel("Dust Thickness", fontsize=10)
+                ax4.set_title("Dust Accumulation", fontsize=11)
                 ax4.grid(True, alpha=0.3)
 
                 ax5 = axes[1, 1]
-                ax5.plot(time_days, pce_env, 'purple', linewidth=2, label='PCE with Env. Effects')
-                ax5.axhline(y=np.mean(pce_env), color='gray', linestyle='--', alpha=0.7, label='Average')
-                ax5.set_xlabel('Time (days)', fontsize=10)
-                ax5.set_ylabel('PCE', fontsize=10)
-                ax5.set_title('PCE Under Environmental Effects', fontsize=11)
+                ax5.plot(
+                    time_days,
+                    pce_env,
+                    "purple",
+                    linewidth=2,
+                    label="PCE with Env. Effects",
+                )
+                ax5.axhline(
+                    y=np.mean(pce_env),
+                    color="gray",
+                    linestyle="--",
+                    alpha=0.7,
+                    label="Average",
+                )
+                ax5.set_xlabel("Time (days)", fontsize=10)
+                ax5.set_ylabel("PCE", fontsize=10)
+                ax5.set_title("PCE Under Environmental Effects", fontsize=11)
                 ax5.legend(fontsize=8)
                 ax5.grid(True, alpha=0.3)
 
                 ax6 = axes[1, 2]
-                ax6.plot(time_days, etr_env, 'brown', linewidth=2, label='ETR with Env. Effects')
-                ax6.axhline(y=np.mean(etr_env), color='gray', linestyle='--', alpha=0.7, label='Average')
-                ax6.set_xlabel('Time (days)', fontsize=10)
-                ax6.set_ylabel('ETR', fontsize=10)
-                ax6.set_title('ETR Under Environmental Effects', fontsize=11)
+                ax6.plot(
+                    time_days,
+                    etr_env,
+                    "brown",
+                    linewidth=2,
+                    label="ETR with Env. Effects",
+                )
+                ax6.axhline(
+                    y=np.mean(etr_env),
+                    color="gray",
+                    linestyle="--",
+                    alpha=0.7,
+                    label="Average",
+                )
+                ax6.set_xlabel("Time (days)", fontsize=10)
+                ax6.set_ylabel("ETR", fontsize=10)
+                ax6.set_title("ETR Under Environmental Effects", fontsize=11)
                 ax6.legend(fontsize=8)
                 ax6.grid(True, alpha=0.3)
 
@@ -516,11 +575,11 @@ except ImportError:
 
                 filename = f"{filename_prefix}_{timestamp}.pdf"
                 filepath = os.path.join(figures_dir, filename)
-                plt.savefig(filepath, dpi=300, bbox_inches='tight')
+                plt.savefig(filepath, dpi=300, bbox_inches="tight")
 
                 png_filename = f"{filename_prefix}_{timestamp}.png"
                 png_filepath = os.path.join(figures_dir, png_filename)
-                plt.savefig(png_filepath, dpi=150, bbox_inches='tight')
+                plt.savefig(png_filepath, dpi=150, bbox_inches="tight")
 
                 plt.close()
 
@@ -531,9 +590,10 @@ except ImportError:
 # Set publication style plots
 try:
     import scienceplots
-    plt.style.use(['science', 'nature'])
+
+    plt.style.use(["science", "nature"])
 except ImportError:
-    plt.style.use(['seaborn-v0_8', 'seaborn-v0_8-notebook'])
+    plt.style.use(["seaborn-v0_8", "seaborn-v0_8-notebook"])
 
 
 def create_fmo_hamiltonian(include_reaction_center: bool = False) -> tuple:
@@ -562,7 +622,9 @@ def create_fmo_hamiltonian(include_reaction_center: bool = False) -> tuple:
         (H, site_energies) where H is the Hamiltonian matrix and site_energies
         is the array of site energies, both in cm^-1
     """
-    logger.debug(f"Creating FMO Hamiltonian (include_reaction_center={include_reaction_center})")
+    logger.debug(
+        f"Creating FMO Hamiltonian (include_reaction_center={include_reaction_center})"
+    )
 
     # Select appropriate site energies
     if include_reaction_center:
@@ -588,8 +650,11 @@ def create_fmo_hamiltonian(include_reaction_center: bool = False) -> tuple:
     return H, site_energies
 
 
-def create_meso_hops_basis(H_fmo: np.ndarray, temperature: float = DEFAULT_TEMPERATURE,
-                           max_hier: int = DEFAULT_MAX_HIERARCHY) -> 'HopsBasis':
+def create_meso_hops_basis(
+    H_fmo: np.ndarray,
+    temperature: float = DEFAULT_TEMPERATURE,
+    max_hier: int = DEFAULT_MAX_HIERARCHY,
+) -> "HopsBasis":
     """
     Create MesoHOPS basis for the FMO Hamiltonian.
 
@@ -618,10 +683,10 @@ def create_meso_hops_basis(H_fmo: np.ndarray, temperature: float = DEFAULT_TEMPE
     logger.debug(f"Creating MesoHOPS basis (T={temperature}K, max_hier={max_hier})")
 
     system = {
-        'hamiltonian': H_fmo,
-        'temperature': temperature,
-        'n_site': H_fmo.shape[0],
-        'n_exciton': 1,
+        "hamiltonian": H_fmo,
+        "temperature": temperature,
+        "n_site": H_fmo.shape[0],
+        "n_exciton": 1,
     }
 
     basis = HopsBasis(system, max_hier)
@@ -630,8 +695,11 @@ def create_meso_hops_basis(H_fmo: np.ndarray, temperature: float = DEFAULT_TEMPE
     return basis
 
 
-def create_meso_hops_trajectory(basis: 'HopsBasis', temperature: float = DEFAULT_TEMPERATURE,
-                                max_hier: int = DEFAULT_MAX_HIERARCHY) -> 'HopsTrajectory':
+def create_meso_hops_trajectory(
+    basis: "HopsBasis",
+    temperature: float = DEFAULT_TEMPERATURE,
+    max_hier: int = DEFAULT_MAX_HIERARCHY,
+) -> "HopsTrajectory":
     """
     Create MesoHOPS trajectory for quantum dynamics simulation.
 
@@ -659,19 +727,16 @@ def create_meso_hops_trajectory(basis: 'HopsBasis', temperature: float = DEFAULT
 
     logger.debug("Creating MesoHOPS trajectory")
 
-    trajectory = HopsTrajectory(
-        basis,
-        temperature=temperature,
-        max_hier=max_hier
-    )
+    trajectory = HopsTrajectory(basis, temperature=temperature, max_hier=max_hier)
 
     logger.info("MesoHOPS trajectory created successfully")
 
     return trajectory
 
 
-def spectral_density_drude_lorentz(omega: np.ndarray, lambda_reorg: float,
-                                   gamma: float, temperature: float) -> np.ndarray:
+def spectral_density_drude_lorentz(
+    omega: np.ndarray, lambda_reorg: float, gamma: float, temperature: float
+) -> np.ndarray:
     """
     Calculate Drude-Lorentz spectral density.
 
@@ -710,8 +775,9 @@ def spectral_density_drude_lorentz(omega: np.ndarray, lambda_reorg: float,
     return J
 
 
-def spectral_density_vibronic(omega: np.ndarray, omega_k: np.ndarray,
-                              S_k: np.ndarray, Gamma_k: np.ndarray) -> np.ndarray:
+def spectral_density_vibronic(
+    omega: np.ndarray, omega_k: np.ndarray, S_k: np.ndarray, Gamma_k: np.ndarray
+) -> np.ndarray:
     """
     Calculate spectral density for discrete vibronic modes.
 
@@ -737,15 +803,20 @@ def spectral_density_vibronic(omega: np.ndarray, omega_k: np.ndarray,
     J_vib = np.zeros_like(omega, dtype=float)
 
     for wk, Sk, Gk in zip(omega_k, S_k, Gamma_k):
-        J_vib += Sk * wk**2 * Gk / ((omega - wk)**2 + Gk**2)
+        J_vib += Sk * wk**2 * Gk / ((omega - wk) ** 2 + Gk**2)
 
     return J_vib
 
 
-def total_spectral_density(omega: np.ndarray, lambda_reorg: float = DEFAULT_REORGANIZATION_ENERGY,
-                           gamma: float = DEFAULT_DRUDE_CUTOFF, temperature: float = DEFAULT_TEMPERATURE,
-                           omega_vib: np.ndarray = None, S_vib: np.ndarray = None,
-                           Gamma_vib: np.ndarray = None) -> np.ndarray:
+def total_spectral_density(
+    omega: np.ndarray,
+    lambda_reorg: float = DEFAULT_REORGANIZATION_ENERGY,
+    gamma: float = DEFAULT_DRUDE_CUTOFF,
+    temperature: float = DEFAULT_TEMPERATURE,
+    omega_vib: np.ndarray = None,
+    S_vib: np.ndarray = None,
+    Gamma_vib: np.ndarray = None,
+) -> np.ndarray:
     """
     Calculate total spectral density combining Drude-Lorentz and vibronic contributions.
 
@@ -804,10 +875,18 @@ GEOGRAPHIC_LOCATIONS = {
     "Desert": {"Arizona": {"lat": 32.0, "climate": "Desert"}},
     "Sub-Saharan Africa": {
         "Yaoundé, Cameroon": {"lat": 3.87, "climate": "Tropical", "aod": (0.3, 0.5)},
-        "N'Djamena, Chad": {"lat": 12.13, "climate": "Sahel/Semi - arid", "aod": (0.4, 0.8)},
+        "N'Djamena, Chad": {
+            "lat": 12.13,
+            "climate": "Sahel/Semi - arid",
+            "aod": (0.4, 0.8),
+        },
         "Abuja, Nigeria": {"lat": 9.06, "climate": "Savanna", "aod": (0.3, 0.6)},
         "Dakar, Senegal": {"lat": 14.69, "climate": "Sahelian", "aod": (0.4, 0.7)},
-        "Abidjan, Ivory Coast": {"lat": 5.36, "climate": "Equatorial", "aod": (0.3, 0.5)},
+        "Abidjan, Ivory Coast": {
+            "lat": 5.36,
+            "climate": "Equatorial",
+            "aod": (0.3, 0.5),
+        },
     },
 }
 
@@ -834,6 +913,7 @@ OPV_MATERIALS = {
 # PARAMETER CONFIGURATION
 # ============================================================================
 
+
 def load_parameter_config(config_path: Path = None) -> dict:
     """
     Load simulation parameters from JSON configuration file.
@@ -849,10 +929,12 @@ def load_parameter_config(config_path: Path = None) -> dict:
         Configuration dictionary with all simulation parameters.
     """
     if config_path is None:
-        config_path = Path(__file__).parent / "data_input" / "quantum_agrivoltaics_params.json"
+        config_path = (
+            Path(__file__).parent / "data_input" / "quantum_agrivoltaics_params.json"
+        )
 
     if config_path.exists():
-        with open(config_path, 'r') as f:
+        with open(config_path, "r") as f:
             config = json.load(f)
         logger.info(f"Configuration loaded from {config_path}")
         return config
@@ -864,6 +946,7 @@ def load_parameter_config(config_path: Path = None) -> dict:
 # ============================================================================
 # OUTPUT DIRECTORY CONFIGURATION
 # ============================================================================
+
 
 def setup_output_directories():
     """
@@ -901,6 +984,7 @@ def setup_output_directories():
 # SUB-SAHARAN ETR ENHANCEMENT ANALYSIS
 # ============================================================================
 
+
 def analyze_subsaharan_etr():
     """
     Analyze Energy Transfer Rate (ETR) enhancement for Sub-Saharan African locations.
@@ -926,10 +1010,12 @@ def analyze_subsaharan_etr():
     for name, data in locations.items():
         logger.info(f"  {name} ({data['lat']}°N)")
         logger.info(f"    - Climate: {data['climate']}")
-        if 'aod' in data:
+        if "aod" in data:
             logger.info(f"    - AOD Range: {data['aod'][0]}-{data['aod'][1]}")
 
-    logger.info("\nNote: See Graphics/SubSaharan_ETR_Enhancement_Analysis.pdf for detailed visualization")
+    logger.info(
+        "\nNote: See Graphics/SubSaharan_ETR_Enhancement_Analysis.pdf for detailed visualization"
+    )
 
 
 # ============================================================================
@@ -974,36 +1060,36 @@ Roadmap:
 # Import other classes from their modules
 __all__ = [
     # Core simulators
-    'HopsSimulator',
-    'QuantumDynamicsSimulator',
+    "HopsSimulator",
+    "QuantumDynamicsSimulator",
     # Models
-    'BiodegradabilityAnalyzer',
-    'SensitivityAnalyzer',
-    'TestingValidationProtocols',
-    'EnvironmentalFactors',
-    'LCAAnalyzer',
-    'AgrivoltaicCouplingModel',
-    'SpectralOptimizer',
-    'EcoDesignAnalyzer',
+    "BiodegradabilityAnalyzer",
+    "SensitivityAnalyzer",
+    "TestingValidationProtocols",
+    "EnvironmentalFactors",
+    "LCAAnalyzer",
+    "AgrivoltaicCouplingModel",
+    "SpectralOptimizer",
+    "EcoDesignAnalyzer",
     # Utilities
-    'CSVDataStorage',
-    'FigureGenerator',
+    "CSVDataStorage",
+    "FigureGenerator",
     # Hamiltonian and spectral functions
-    'create_fmo_hamiltonian',
-    'create_meso_hops_basis',
-    'create_meso_hops_trajectory',
-    'spectral_density_drude_lorentz',
-    'spectral_density_vibronic',
-    'total_spectral_density',
+    "create_fmo_hamiltonian",
+    "create_meso_hops_basis",
+    "create_meso_hops_trajectory",
+    "spectral_density_drude_lorentz",
+    "spectral_density_vibronic",
+    "total_spectral_density",
     # Configuration and data
-    'GEOGRAPHIC_LOCATIONS',
-    'OPV_MATERIALS',
-    'load_parameter_config',
-    'setup_output_directories',
-    'analyze_subsaharan_etr',
-    'FULL_CHLOROPLAST_NOTE',
+    "GEOGRAPHIC_LOCATIONS",
+    "OPV_MATERIALS",
+    "load_parameter_config",
+    "setup_output_directories",
+    "analyze_subsaharan_etr",
+    "FULL_CHLOROPLAST_NOTE",
     # Constants
-    'MESOHOPS_AVAILABLE',
+    "MESOHOPS_AVAILABLE",
 ]
 
 
@@ -1019,9 +1105,15 @@ if __name__ == "__main__":
     logger.info("\nLoading parameter configuration...")
     config = load_parameter_config()
     if config:
-        logger.info(f"  - Temperature: {config.get('simulation_params', {}).get('temperature', 'N/A')} K")
-        logger.info(f"  - Max Hierarchy: {config.get('simulation_params', {}).get('max_hierarchy', 'N/A')}")
-        logger.info(f"  - Target PCE: {config.get('opv_params', {}).get('target_pce', 0) * 100:.1f}%")
+        logger.info(
+            f"  - Temperature: {config.get('simulation_params', {}).get('temperature', 'N/A')} K"
+        )
+        logger.info(
+            f"  - Max Hierarchy: {config.get('simulation_params', {}).get('max_hierarchy', 'N/A')}"
+        )
+        logger.info(
+            f"  - Target PCE: {config.get('opv_params', {}).get('target_pce', 0) * 100:.1f}%"
+        )
 
     # Display Geographic Coverage
     logger.info("\n" + "=" * 60)

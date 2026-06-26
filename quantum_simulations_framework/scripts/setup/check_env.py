@@ -1,5 +1,5 @@
-import sys
 import importlib
+import sys
 
 
 def check_package(package_name):

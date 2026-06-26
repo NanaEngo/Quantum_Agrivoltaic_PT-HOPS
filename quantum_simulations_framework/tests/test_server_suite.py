@@ -25,17 +25,18 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from src.core.hops_simulator import HopsSimulator
-from src.core.hamiltonian_factory import create_fmo_hamiltonian
+
 from src.core.constants import (
     DEFAULT_MAX_HIERARCHY,
+    DEFAULT_MAX_TIME,
     DEFAULT_N_MATSUBARA,
-    DEFAULT_TEMPERATURE,
     DEFAULT_N_TRAJ,
     DEFAULT_SBD_BUNDLES,
+    DEFAULT_TEMPERATURE,
     DEFAULT_TIME_STEP,
-    DEFAULT_MAX_TIME,
 )
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.hops_simulator import HopsSimulator
 
 logger = get_test_logger("test_server_suite")
 
@@ -129,8 +130,7 @@ class TestServerSuite:
         assert sim.use_sbd is True, "SBD must be active at L=8"
         assert sim.max_hierarchy == DEFAULT_MAX_HIERARCHY
         logger.info(
-            f"[server] SBD active: L={sim.max_hierarchy}, "
-            f"bundles/site={DEFAULT_SBD_BUNDLES}"
+            f"[server] SBD active: L={sim.max_hierarchy}, bundles/site={DEFAULT_SBD_BUNDLES}"
         )
 
     # ------------------------------------------------------------------
@@ -147,9 +147,7 @@ class TestServerSuite:
         init_state[0] = 1.0
 
         sim = _make_simulator(H3)
-        time_points = np.arange(
-            0, DEFAULT_MAX_TIME + DEFAULT_TIME_STEP, DEFAULT_TIME_STEP
-        )
+        time_points = np.arange(0, DEFAULT_MAX_TIME + DEFAULT_TIME_STEP, DEFAULT_TIME_STEP)
 
         results = sim.simulate_dynamics(
             time_points,
@@ -161,14 +159,11 @@ class TestServerSuite:
         pops = results["populations"]
         traces = np.sum(pops, axis=1)
         logger.info(
-            f"[server] 3-site: shape={pops.shape}, "
-            f"trace=[{traces.min():.4f}, {traces.max():.4f}]"
+            f"[server] 3-site: shape={pops.shape}, trace=[{traces.min():.4f}, {traces.max():.4f}]"
         )
 
         assert pops.shape == (len(time_points), 3), "Population shape mismatch"
-        assert np.allclose(traces, 1.0, atol=0.05), (
-            "Trace not conserved (server tolerance)"
-        )
+        assert np.allclose(traces, 1.0, atol=0.05), "Trace not conserved (server tolerance)"
         assert np.all(pops >= -1e-6), "Positivity violated"
 
     # ------------------------------------------------------------------
@@ -184,9 +179,7 @@ class TestServerSuite:
         init_state[0] = 1.0
 
         sim = _make_simulator(H)
-        time_points = np.arange(
-            0, DEFAULT_MAX_TIME + DEFAULT_TIME_STEP, DEFAULT_TIME_STEP
-        )
+        time_points = np.arange(0, DEFAULT_MAX_TIME + DEFAULT_TIME_STEP, DEFAULT_TIME_STEP)
 
         results = sim.simulate_dynamics(
             time_points,
@@ -198,14 +191,11 @@ class TestServerSuite:
         pops = results["populations"]
         traces = np.sum(pops, axis=1)
         logger.info(
-            f"[server] 7-site: shape={pops.shape}, "
-            f"trace=[{traces.min():.4f}, {traces.max():.4f}]"
+            f"[server] 7-site: shape={pops.shape}, trace=[{traces.min():.4f}, {traces.max():.4f}]"
         )
 
         assert pops.shape == (len(time_points), 7), "Population shape mismatch"
-        assert np.allclose(traces, 1.0, atol=0.05), (
-            "Trace not conserved (server tolerance)"
-        )
+        assert np.allclose(traces, 1.0, atol=0.05), "Trace not conserved (server tolerance)"
         assert np.all(pops >= -1e-6), "Positivity violated"
 
     # ------------------------------------------------------------------
@@ -351,13 +341,10 @@ class TestServerSuite:
         ensemble_mean = np.mean(all_pops, axis=0)
         traces = np.sum(ensemble_mean, axis=1)
         logger.info(
-            f"[server] Disorder ensemble: mean trace range "
-            f"[{traces.min():.4f}, {traces.max():.4f}]"
+            f"[server] Disorder ensemble: mean trace range [{traces.min():.4f}, {traces.max():.4f}]"
         )
 
-        assert np.allclose(traces, 1.0, atol=0.1), (
-            "Disorder ensemble trace not conserved"
-        )
+        assert np.allclose(traces, 1.0, atol=0.1), "Disorder ensemble trace not conserved"
         assert ensemble_mean.shape == (len(time_points), 7)
 
 

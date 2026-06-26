@@ -7,10 +7,11 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
+
+from reproducibility.main import load_and_validate_config
 from src.core.constants import FMO_COUPLINGS, FMO_SITE_ENERGIES_7
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
 from src.core.hops_simulator import HopsSimulator
-from reproducibility.main import load_and_validate_config
 
 logger = get_test_logger("test_core")
 
@@ -33,9 +34,7 @@ def test_hamiltonian_factory():
     """Verify that the Hamiltonian factory generates valid FMO matrices."""
     H, energies = create_fmo_hamiltonian(include_reaction_center=False)
     n = H.shape[0]
-    logger.info(
-        f"FMO Hamiltonian shape: {H.shape}, Hermitian: {np.allclose(H, H.conj().T)}"
-    )
+    logger.info(f"FMO Hamiltonian shape: {H.shape}, Hermitian: {np.allclose(H, H.conj().T)}")
     assert H.shape == (n, n)
     assert np.allclose(np.diag(H), energies)
     assert np.allclose(H, H.conj().T)

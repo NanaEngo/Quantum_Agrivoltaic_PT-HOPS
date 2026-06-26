@@ -48,32 +48,21 @@ except ImportError:
     HopsTrajectory = None
     HopsEOM = None
 
-# Import our custom PT-HOPS and SBD Extensions
-# Supports three import contexts:
-#   1. Relative (from ..extensions)  — core is subpackage of src
-#   2. Absolute with src (from src.extensions) — framework root in sys.path
-#   3. Absolute bare (from extensions) — src/ in sys.path
+# Import custom PT-HOPS and SBD Extensions.
+# Relative imports work when running as an installed package;
+# absolute imports with src. prefix work when running from the project root.
 try:
     from ..extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
 except ImportError:
-    try:
-        from src.extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
-    except ImportError:
-        from extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
+    from src.extensions.mesohops_adapters import PT_HopsNoise, SBD_HopsTrajectory
 try:
     from ..quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
 except ImportError:
-    try:
-        from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
-    except ImportError:
-        from quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
+    from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
 try:
     from ..quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
 except ImportError:
-    try:
-        from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
-    except ImportError:
-        from quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
+    from src.quantum.simple_quantum_dynamics_simulator import SimpleQuantumDynamicsSimulator
 from .constants import (
     BASE_TRAJ_MEMORY_GB,
     DEFAULT_DRUDE_CUTOFF,
@@ -108,13 +97,11 @@ try:
 except ImportError:
     HAS_PSUTIL = False
 
+# Relative import preferred; fall back to absolute with src. prefix.
 try:
-    from src.utils.logging_config import get_logger
+    from ..utils.logging_config import get_logger
 except ImportError:
-    try:
-        from ..utils.logging_config import get_logger
-    except ImportError:
-        from utils.logging_config import get_logger
+    from src.utils.logging_config import get_logger
 
 
 def get_mesohops_version() -> Optional[str]:
@@ -194,10 +181,8 @@ def _run_single_traj_worker(
             import resource
 
             # Add base Python overhead (numpy+scipy+OpenBLAS ~1.25 GB VmSize)
-            try:
-                from .constants import BASE_PYTHON_OVERHEAD_GB
-            except ImportError:
-                from src.core.constants import BASE_PYTHON_OVERHEAD_GB
+            from .constants import BASE_PYTHON_OVERHEAD_GB
+
             limit_bytes = int((mem_limit_gb + BASE_PYTHON_OVERHEAD_GB) * (1024**3))
             resource.setrlimit(resource.RLIMIT_AS, (limit_bytes, limit_bytes))
         except (ImportError, ValueError, resource.error):

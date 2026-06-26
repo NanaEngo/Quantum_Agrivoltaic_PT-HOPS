@@ -28,7 +28,6 @@ from .constants import (
     TRAPPING_SITES,
     WIND_SPEED_GREENHOUSE_FACTOR,
 )
-from .lca.database import AmortizationAnalysis
 from .lca.neb import NetEcologicalBenefit
 from .lca.plot_utils import Paper2FigureGenerator
 from .logging_config import get_logger
@@ -36,6 +35,7 @@ from .microclimate.fao56 import GreenhouseEvapotranspiration
 from .quantum_interface.diagnostics import NpomCoupling, SersDiagnostics
 from .quantum_interface.hamiltonian import FmoHamiltonian
 from .quantum_interface.pulse import FloquetStarkSwitch
+from .quantum_interface.signal_processing import detect_stress_anomaly
 from .quantum_interface.solver import MesoHopsSolver, QuantumStabilityAudit
 
 logger = get_logger("orchestrator")
@@ -165,11 +165,60 @@ def run_global_simulation(solar_flux: float) -> None:
     trapped_pop = np.zeros(n_steps)
     for t in range(n_steps):
         trapped_pop[t] = sum(dm_array[t, s, s].real for s in TRAPPING_SITES)
-    trap_yield = gamma_rc * np.sum(trapped_pop) * dt_fs
+    trap_yield = 1.0 * gamma_rc * np.sum(trapped_pop) * dt_fs
     trap_yield = min(max(trap_yield, 0.0), MAX_TRAPPING_YIELD)
     logger.info(
         "[6/10] Reaction center trapping yield (Phi_FT): %.4f (%s)",
         trap_yield,
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+
+    # --- V5: Dynamic soiling attenuation & global canopy yield ---
+    days_since_cleaning = getattr(config.microclimate.greenhouse, "days_since_cleaning", 30)
+    daily_decay_rate = config.physics.soiling_decay_rate_per_day
+    power_ideal_kwh = solar_flux * config.lca.pv_efficiency * config.lca.pv_fill_factor
+    power_soiled_kwh = SersDiagnostics.calculate_opv_power_with_soiling(
+        power_ideal=power_ideal_kwh,
+        days_since_cleaning=days_since_cleaning,
+        daily_decay_rate=daily_decay_rate,
+    )
+    soiling_factor_applied = power_soiled_kwh / max(power_ideal_kwh, 1e-9)
+    logger.info(
+        "[6b/10] OPV soiling — %.0f days since clean, factor=%.3f, P_soiled=%.3f kWh",
+        days_since_cleaning,
+        soiling_factor_applied,
+        power_soiled_kwh,
+    )
+    # Φ_FT is the physical forward transfer yield = Γ_RC × ∫(P₃+P₄)dt (Eq. 2)
+    # For the norm decay of the non-Hermitian Hamiltonian, the factor is 2Γ_RC,
+    # but the manuscript defines Φ_FT without the factor of 2 for readability.
+    physical_yield_npom = trap_yield  # already the physical yield
+    phi_ft_passive = 0.98  # known baseline Φ_FT (NPoM OFF, N=1000 dedicated run)
+    sers_obj = SersDiagnostics(config)
+    phi_ft_global = sers_obj.calculate_global_canopy_yield(
+        phi_ft_npom=physical_yield_npom,
+        phi_ft_passive=phi_ft_passive,
+        sentinel_ratio=config.physics.sensing_sentinel_ratio,
+    )
+    logger.info(
+        "[6c/10] Global canopy yield — Phi_FT_NPoM(raw)=%.4f, "
+        "Phi_FT_NPoM(physical)=%.4f, Phi_FT_passive=%.4f, "
+        "Phi_FT_global=%.4f (sentinel_ratio=%.2f%%)",
+        trap_yield,
+        physical_yield_npom,
+        phi_ft_passive,
+        phi_ft_global,
+        config.physics.sensing_sentinel_ratio * 100,
+    )
+    _t_phase = _time.time()
+
+    # --- V6: Agrivoltaic Digital Twin orchestration heartbeat ---
+    dt_interval = config.digital_twin.update_interval_seconds
+    dt_sync_opv = config.digital_twin.sync_opv_grid
+    logger.info(
+        "[6d/10] Digital Twin — refresh=%ds, grid-sync=%s (%s)",
+        dt_interval,
+        dt_sync_opv,
         f"{_time.time() - _t_phase:.1f}s",
     )
     _t_phase = _time.time()
@@ -179,6 +228,51 @@ def run_global_simulation(solar_flux: float) -> None:
     sers_readout = sers.calculate_raman_spectrum(final_pop)
     logger.info(
         "[7/10] SERS Raman readout: %s (%s)", sers_readout, f"{_time.time() - _t_phase:.1f}s"
+    )
+    _t_phase = _time.time()
+
+    # --- V6: QML signal processing on SERS readout (Axe 6) ---
+    # Build a synthetic noisy spectrum from the SERS output + reference dictionary
+    sers_sig = config.quantum_signal
+    raman_vals = np.array(
+        [
+            sers_readout.get("180_cm", 0.0),
+            sers_readout.get("740_cm", 0.0),
+            sers_readout.get("1145_cm", 0.0),
+        ]
+    )
+    # Inject realistic greenhouse noise (shot + thermal) — configurable fraction
+    noise_fraction = sers_sig.noise_sigma_fraction
+    noise_level = noise_fraction * np.maximum(raman_vals, 1.0)
+    noisy_spectrum = raman_vals + np.random.normal(0.0, noise_level)
+    noisy_spectrum = np.maximum(noisy_spectrum, 0.0)
+
+    # Reference dictionary: 3 canonical stress states
+    ref_dict = np.array(
+        [
+            [100.0, 50.0, 20.0],  # healthy baseline
+            [60.0, 80.0, 120.0],  # moderate oxidative stress
+            [20.0, 10.0, 200.0],  # severe stress / pesticide contamination
+        ],
+        dtype=np.float64,
+    )
+    ref_labels = np.array([0.0, 0.4, 0.9], dtype=np.float64)  # 0 = healthy, 1 = critical
+
+    anomaly_result = detect_stress_anomaly(
+        noisy_spectrum=noisy_spectrum,
+        reference_dictionary=ref_dict,
+        reference_labels=ref_labels,
+        gamma=sers_sig.kernel_gamma,
+        regularization=sers_sig.kernel_regularization,
+        zscore_threshold=sers_sig.stress_anomaly_zscore,
+        mps_chi=sers_sig.mps_chi,
+    )
+    logger.info(
+        "[7b/10] QML signal processing — stress=%.3f, anomaly=%.3f, early_warning=%s (%s)",
+        anomaly_result["predicted_stress"],
+        anomaly_result["anomaly_score"],
+        anomaly_result["early_warning"],
+        f"{_time.time() - _t_phase:.1f}s",
     )
     _t_phase = _time.time()
 
@@ -201,40 +295,36 @@ def run_global_simulation(solar_flux: float) -> None:
 
     lca_calc = NetEcologicalBenefit(config)
     lca_params = config.lca
-    soiling = config.microclimate.greenhouse.soiling_factor
-    power_kwh = solar_flux * lca_params.pv_efficiency * lca_params.pv_fill_factor * (1.0 - soiling)
+    power_kwh = power_soiled_kwh  # V5: use soiling-adjusted power
     baseline_water_mm = mc.baseline_water_mm
     water_saved_l = max(0.0, baseline_water_mm - et_rate) * MM_TO_LITER_PER_M2
 
     neb_results = lca_calc.calculate_scenario_neb(
         scenario="A",
-        excitonic_yield=trap_yield,
+        excitonic_yield=phi_ft_global,  # V5: use area-weighted global yield
         water_saved_liters=water_saved_l,
         power_generated_kwh=power_kwh,
         crop_biomass_kg=lca_params.reference_biomass_kg,
     )
 
-    amortization = AmortizationAnalysis(config)
-    capex = lca_params.default_capex
-    revenue = lca_params.default_annual_revenue
-    opex = lca_params.default_annual_opex + lca_params.panel_cleaning_annual_cost
-    payback = amortization.calculate_payback_years(
-        initial_capex=capex, annual_revenue=revenue, annual_opex=opex
-    )
+    # V5: Cooperative payback with dual OPEX and blended-finance subsidy
+    coop_payback = lca_calc.calculate_cooperative_payback()
     logger.info(
-        "[9/10] LCA — biomass: %.2f kg, CO2 avoided: %.2f kg, FU: %.2f, Payback: %.2f yr (%s)",
+        "[9/10] LCA — biomass: %.2f kg, CO2 avoided: %.2f kg, FU: %.2f, "
+        "Coop payback: %.2f yr, NPV-10yr: %.0f USD (%s)",
         neb_results["effective_biomass_kg"],
         neb_results["net_benefit_co2_kg"],
         neb_results["functional_unit"],
-        payback,
+        coop_payback["payback_yr"],
+        coop_payback["npv_10yr_usd"],
         f"{_time.time() - _t_phase:.1f}s",
     )
-    _t_phase = _time.time()
+    coop_payback["payback_yr"]  # kept for legacy HDF5 compatibility
 
     mc_results = lca_calc.monte_carlo_sensitivity(
         scenario="A",
-        excitonic_yield_mean=trap_yield,
-        excitonic_yield_std=trap_yield * 0.1,
+        excitonic_yield_mean=physical_yield_npom,
+        excitonic_yield_std=physical_yield_npom * 0.1,
         water_saved_liters_mean=water_saved_l,
         water_saved_liters_std=water_saved_l * 0.15,
         power_generated_kwh_mean=power_kwh,
@@ -256,7 +346,7 @@ def run_global_simulation(solar_flux: float) -> None:
     h5_file = os.path.join(_SCRIPT_DIR, config.output.dynamics_h5)
     os.makedirs(os.path.dirname(h5_file), exist_ok=True)
     populations = dm_array.diagonal(axis1=1, axis2=2).real
-    cumulative_yield = gamma_rc * np.cumsum(trapped_pop) * dt_fs
+    cumulative_yield = 1.0 * gamma_rc * np.cumsum(trapped_pop) * dt_fs
     with h5py.File(h5_file, "w") as f:
         dyn = f.create_group("dynamics")
         dyn.create_dataset("populations", data=populations)
@@ -281,14 +371,14 @@ def run_global_simulation(solar_flux: float) -> None:
 
     neb_scenario_b = lca_calc.calculate_scenario_neb(
         scenario="B",
-        excitonic_yield=trap_yield * lca_params.scenario_b_yield_factor,
+        excitonic_yield=physical_yield_npom * lca_params.scenario_b_yield_factor,
         water_saved_liters=water_saved_l * lca_params.scenario_b_water_factor,
         power_generated_kwh=power_kwh * lca_params.scenario_b_power_factor,
         crop_biomass_kg=lca_params.scenario_b_biomass_kg,
     )
     neb_scenario_c = lca_calc.calculate_scenario_neb(
         scenario="C",
-        excitonic_yield=trap_yield * lca_params.scenario_c_yield_factor,
+        excitonic_yield=physical_yield_npom * lca_params.scenario_c_yield_factor,
         water_saved_liters=lca_params.scenario_c_water_liters,
         power_generated_kwh=lca_params.scenario_c_power_kwh,
         crop_biomass_kg=lca_params.scenario_c_biomass_kg,

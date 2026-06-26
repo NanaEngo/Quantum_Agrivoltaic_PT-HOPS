@@ -46,6 +46,78 @@ class NetEcologicalBenefit:
             "functional_unit": float(power_generated_kwh * effective_biomass),
         }
 
+    def calculate_cooperative_payback(
+        self,
+        capex: float | None = None,
+        annual_revenue: float | None = None,
+        annual_opex: float | None = None,
+        training_opex: float | None = None,
+        cleaning_opex: float | None = None,
+        subsidy_rate: float | None = None,
+        discount_rate: float | None = None,
+        area_m2: float | None = None,
+    ) -> dict:
+        """
+        V5: Compute cooperative financial metrics for the 500 m² micro-module
+        with dual OPEX (training + cleaning) and blended-finance subsidy.
+
+        Returns:
+            dict with 'payback_yr', 'npv_10yr_usd', 'lcoe_usd_kwh',
+            'net_revenue_usd_per_m2_yr', and effective CAPEX/OPEX values.
+        """
+        coop = self.config.lca.cooperative
+
+        # --- Defaults from config ---
+        capex = capex if capex is not None else self.config.lca.default_capex
+        annual_revenue = (
+            annual_revenue if annual_revenue is not None else self.config.lca.default_annual_revenue
+        )
+        annual_opex = (
+            annual_opex if annual_opex is not None else self.config.lca.default_annual_opex
+        )
+        training_opex = (
+            training_opex if training_opex is not None else coop.annual_training_opex_usd
+        )
+        cleaning_opex = (
+            cleaning_opex if cleaning_opex is not None else coop.annual_cleaning_opex_usd
+        )
+        subsidy_rate = subsidy_rate if subsidy_rate is not None else coop.capex_subsidy_rate
+        discount_rate = discount_rate if discount_rate is not None else coop.discount_rate
+        area_m2 = area_m2 if area_m2 is not None else coop.area_m2
+
+        # --- Core financial computation ---
+        effective_capex = capex * (1.0 - subsidy_rate)  # Net of blended-finance grant
+        total_annual_opex = annual_opex + training_opex + cleaning_opex  # Dual OPEX
+        net_annual_cashflow = annual_revenue - total_annual_opex
+
+        if net_annual_cashflow <= 0.0:
+            payback_yr = float("inf")
+        else:
+            payback_yr = effective_capex / net_annual_cashflow
+
+        # 10-year NPV using discounted cash flows
+        npv_10yr = -effective_capex + sum(
+            net_annual_cashflow / (1.0 + discount_rate) ** yr for yr in range(1, 11)
+        )
+
+        # LCOE proxy: effective_capex / (10-yr revenue) per m2
+        lcoe_proxy = effective_capex / max(annual_revenue * 10, 1.0)
+
+        net_revenue_per_m2 = net_annual_cashflow / max(area_m2, 1.0)
+
+        return {
+            "effective_capex_usd": float(effective_capex),
+            "total_annual_opex_usd": float(total_annual_opex),
+            "training_opex_usd": float(training_opex),
+            "cleaning_opex_usd": float(cleaning_opex),
+            "net_annual_cashflow_usd": float(net_annual_cashflow),
+            "payback_yr": float(payback_yr),
+            "npv_10yr_usd": float(npv_10yr),
+            "lcoe_proxy": float(lcoe_proxy),
+            "net_revenue_usd_per_m2_yr": float(net_revenue_per_m2),
+            "area_m2": float(area_m2),
+        }
+
     def monte_carlo_sensitivity(
         self,
         scenario: str,

@@ -7,17 +7,18 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from src.core.hamiltonian_factory import create_fmo_hamiltonian
+
 from src.agrivoltaic.coupling_model import AgrivoltaicCouplingModel
 from src.agrivoltaic.environmental_factors import EnvironmentalFactors
-from src.quantum.spectral_optimization import SpectralOptimizer
 from src.core.constants import (
     DEFAULT_N_OPV_SITES,
     DEFAULT_PCE,
-    SOLAR_LAMBDA_MIN,
-    SOLAR_LAMBDA_MAX,
     DEFAULT_TEMPERATURE,
+    SOLAR_LAMBDA_MAX,
+    SOLAR_LAMBDA_MIN,
 )
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.quantum.spectral_optimization import SpectralOptimizer
 
 logger = get_test_logger("test_models_agri")
 
@@ -39,17 +40,13 @@ def test_spectral_optimizer():
     lambdas = np.linspace(SOLAR_LAMBDA_MIN, SOLAR_LAMBDA_MAX, 100)
     sun = np.ones_like(lambdas)
     opv_res = np.exp(-((lambdas - 600) ** 2) / 10000)
-    psu_res = np.exp(-((lambdas - 450) ** 2) / 5000) + np.exp(
-        -((lambdas - 680) ** 2) / 5000
-    )
+    psu_res = np.exp(-((lambdas - 450) ** 2) / 5000) + np.exp(-((lambdas - 680) ** 2) / 5000)
 
     optimizer = SpectralOptimizer(
         solar_spectrum=(lambdas, sun), opv_response=opv_res, psu_response=psu_res
     )
     results = optimizer.optimize_spectral_splitting(n_filters=1, maxiter=5, popsize=4)
-    logger.info(
-        f"SpectralOptimizer: optimal_pce={results.get('optimal_pce', 'N/A'):.4f}"
-    )
+    logger.info(f"SpectralOptimizer: optimal_pce={results.get('optimal_pce', 'N/A'):.4f}")
     assert "optimal_pce" in results
     assert "optimal_etr" in results
     assert 0 <= results["optimal_pce"] <= 1.0

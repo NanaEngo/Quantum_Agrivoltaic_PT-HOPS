@@ -3,10 +3,17 @@ import numpy as np
 from ..config_loader import ConfigModel
 from ..constants import (
     QKD_MAX_SAMPLE_SIZE,
-    QKD_QBER_THRESHOLD,
     QKD_SAMPLE_DIVISOR,
     QKD_SIFTING_OVERHEAD,
 )
+
+
+class SecurityThresholdExceeded(RuntimeError):
+    """
+    V5: Raised when BB84 QBER exceeds the Shor-Preskill unconditional security
+    threshold (default 11%). Triggers automatic shutdown of QKD-protected
+    irrigation commands to prevent data injection under eavesdropping.
+    """
 
 
 class Bb84Protocol:
@@ -14,6 +21,9 @@ class Bb84Protocol:
         self.config = config
         self.noise_rate = config.security.qkd.channel_noise_rate
         self.key_length = config.security.qkd.key_length_bits
+        # V5: Shor-Preskill threshold from config (replaces hardcoded constant)
+        self.security_threshold = config.security.qkd.security_threshold
+        self.channel_type = config.security.qkd.channel_type
 
     def simulate_key_exchange(self, seed: int = 42) -> dict:
         np.random.seed(seed)
@@ -43,9 +53,19 @@ class Bb84Protocol:
         errors = np.sum(alice_sifted[sample_indices] != bob_sifted[sample_indices])
         qber = errors / sample_size
 
-        if qber > QKD_QBER_THRESHOLD:
-            return {"qber": float(qber), "key": None, "status": "FAILED_HI_NOISE_OR_EAVESDROP"}
+        if qber > self.security_threshold:
+            # V5: Raise hard fail-safe exception instead of returning a dict
+            raise SecurityThresholdExceeded(
+                f"BB84 QBER={qber:.4f} exceeds Shor-Preskill threshold "
+                f"{self.security_threshold:.4f} on {self.channel_type} channel. "
+                "Irrigation command relay halted."
+            )
 
         remaining_indices = list(set(range(len(alice_sifted))) - set(sample_indices))
         final_key = bob_sifted[remaining_indices][: self.key_length]
-        return {"qber": float(qber), "key": "".join(map(str, final_key)), "status": "SUCCESS"}
+        return {
+            "qber": float(qber),
+            "key": "".join(map(str, final_key)),
+            "status": "SUCCESS",
+            "channel_type": self.channel_type,  # V5: record channel for audit log
+        }

@@ -4,15 +4,17 @@ Mocks heavy simulations to test script flow and artifact generation.
 """
 
 import sys
-import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 import numpy as np
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
-from reproducibility.main import load_and_validate_config, check_environment
+
+from reproducibility.main import check_environment, load_and_validate_config
 from src.core.constants import (
     DEFAULT_MAX_HIERARCHY,
     DEFAULT_N_MATSUBARA,
@@ -43,18 +45,14 @@ def test_config_loading():
 def test_config_validation_failure():
     """Verify that L < DEFAULT_MAX_HIERARCHY raises ValueError."""
     bad_L = DEFAULT_MAX_HIERARCHY - 4
-    logger.info(
-        f"Testing config rejection for L={bad_L} (min required: 6)"
-    )
+    logger.info(f"Testing config rejection for L={bad_L} (min required: 6)")
     bad_config = {
         "dynamics": {"L_max": bad_L, "matsubara_truncation": DEFAULT_N_MATSUBARA},
         "bath": {"temperature": DEFAULT_TEMPERATURE},
     }
     with patch("builtins.open", MagicMock()):
         with patch("yaml.safe_load", return_value=bad_config):
-            with patch(
-                "os.path.basename", return_value="parameters.yaml"
-            ):  # Force production mode
+            with patch("os.path.basename", return_value="parameters.yaml"):  # Force production mode
                 with pytest.raises(ValueError, match=f"hierarchy_depth={bad_L} < 6"):
                     load_and_validate_config()
 
@@ -170,9 +168,7 @@ def test_pipeline_exits_on_no_mesohops():
     }
 
     with patch("reproducibility.main.check_environment", return_value=False):
-        with patch(
-            "reproducibility.main.load_and_validate_config", return_value=cfg_dict
-        ):
+        with patch("reproducibility.main.load_and_validate_config", return_value=cfg_dict):
             with patch("sys.exit") as mock_exit:
                 mock_exit.side_effect = SystemExit
                 from reproducibility.main import main

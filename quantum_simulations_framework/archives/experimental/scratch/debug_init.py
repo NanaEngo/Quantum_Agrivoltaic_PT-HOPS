@@ -7,8 +7,8 @@ sys.path.insert(
 )
 
 try:
-    from src.core.hops_simulator import HopsSimulator
     from src.core.hamiltonian_factory import create_fmo_hamiltonian
+    from src.core.hops_simulator import HopsSimulator
 
     H, _ = create_fmo_hamiltonian(include_reaction_center=False)
     print("Hamiltonian created.")

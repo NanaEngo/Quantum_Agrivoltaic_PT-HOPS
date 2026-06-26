@@ -113,10 +113,7 @@ def server_hardware():
     except ImportError:
         try:
             with open("/proc/meminfo") as fh:
-                lines = {
-                    k: int(v.split()[0])
-                    for k, v in (l.split(":", 1) for l in fh if ":" in l)
-                }
+                lines = {k: int(v.split()[0]) for k, v in (l.split(":", 1) for l in fh if ":" in l)}
             info["total_ram_gb"] = lines.get("MemTotal", 0) / 1024**2
             info["available_ram_gb"] = lines.get("MemAvailable", 0) / 1024**2
         except Exception:

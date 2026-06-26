@@ -1,5 +1,5 @@
 # Selective Vibronic Excitation for Coherent Energy Transport
-> **Last updated:** 2026-06-21 | **Manuscript ID:** `jz-2026-00994t` (JPCL)
+> **Last updated:** 2026-06-25 | **Manuscript ID:** `jz-2026-00994t` (JPCL)
 
 A high-performance computational framework for simulating non-Markovian quantum dynamics in photosynthetic complexes (FMO) and agrivoltaic systems. This repository implements Stochastic Bundled Dissipators (SBD) and PT-HOPS methods to investigate spectral bath engineering for enhanced energy transport.
 
@@ -10,8 +10,9 @@ A high-performance computational framework for simulating non-Markovian quantum 
 | Component | Status | Details |
 | :--- | :--- | :--- |
 | **Core Simulation** | ✅ **Verified Stable** | 100% Trace Preservation ($L=8, K=2$) |
-| **Test Coverage** | 🧪 **23 / 23 Passed** | Full suite verified on production hardware |
-| **Manuscript** | 🚀 **Submission Ready (Revised)** | Final package (June 20) in `Redac_Paper1/JPCL/JPCL_Submission_Package_2026-06-13/` |
+| **Test Coverage** | 🧪 **16 / 16 Passed (P2)** | P1 and P2 unit tests verified locally |
+| **JPCL Revision (Paper 1)** | 🚀 **Submitted (R2)** | Final package (June 20) in `Redac_Paper1/JPCL_Submission_Package_2026-06-20/` |
+| **Nature Energy (Paper 2)** | 🚀 **Submission Ready** | Manuscript V5 + SI synchronized & compiled in `Redac_Paper2/` |
 | **Data Integrity** | 🔒 LFS Tracked | Audited production ensemble ($n=100$) |
 
 ---

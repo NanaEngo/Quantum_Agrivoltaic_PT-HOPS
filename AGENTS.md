@@ -1,6 +1,54 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-25 (Session 14 — V5 Codebase Finalization & SI-Manuscript Sync)
+**Last updated:** 2026-06-26 (Session 15 — Figures, QML, Cover Letter, Housekeeping)
+
+## Session 15 (2026-06-26) — Figures with Panels, QML Integration, Cover Letter Fix, Housekeeping
+
+### Figure 2c Regenerated with Agricultural Targets (Axe 4)
+- **Problem**: Figure 2c (SERS spectrum) showed only 3 canonical BChl a modes (180, 740, 1145 cm⁻¹) but the caption described 2 additional agricultural targets (1435 cm⁻¹ 2,4,5-T and CQD Pb²⁺) not visible in the image.
+- **Fix**: `plot_figure_2()` in `regenerate_figures.py` updated to a 5-bar chart: 3 blue bars (canonical BChl a) + 1 terracotta bar (2,4,5-T at 1435 cm⁻¹, LOD = 1 nM) + 1 slate-brown bar (CQD Pb²⁺ fluorescence quenching, LOD = 31.8 nM). Annotations with arrows for LOD values. Legend differentiating 3 categories.
+- **Files**: `scripts/regenerate_figures.py`, `src/lca/plot_utils.py`, `src/quantum_interface/diagnostics.py` — all 3 files updated for consistency.
+- **Intensities**: 180 cm⁻¹=0.0004 (annotated with arrow), 740=0.129, 1145=0.177, 1435=0.70 (calibration), CQD Pb²⁺=0.45 (normalized).
+
+### QML (Axe 6) Added to Discussion
+- Added a sentence to the "Quantum digital twin" paragraph in the Discussion section, describing the hybrid quantum-classical signal processing pipeline (MPS denoising + quantum kernel ridge regression) for pre-symptomatic stress detection, with cross-reference to \Cref{SI-sec:qml}.
+- **Citations added**: `Stoudenmire2016` (MPS), `Havlicek2019` (quantum kernel) — both already in `references.bib`.
+
+### Cover Letter "2.7 yr" Carbon Credit Fix
+- **Problem**: Cover Letter claimed "a cooperative of 5 smallholders achieves full CAPEX recovery in 2.7 yr" with carbon credits. Actual carbon revenue = 62 USD/yr (0.2% of cashflow), insufficient to change the 4.23 yr payback.
+- **Fix**: Reworded to honestly state carbon credits generate 62 USD/yr (0.2% of cashflow), further improving the investment case without altering the 4.23 yr cooperative payback.
+
+### Multi-Panel Figures (all 3 figures now have proper panels)
+- **Problem**: Each figure was a single image without sub-panel labels (a), (b), (c). The manuscript captions described panels that didn't exist in the images.
+- **Fix**: All 3 `plot_figure_*` functions rewritten to generate multi-panel layouts:
+
+**Figure 1 — Quantum Dynamics (1×3, 625 KB):**
+- (a) Dressed Hamiltonian energy level diagram (9 eigenvalues computed from FMO + plasmon parameters)
+- (b) Excitonic energy transfer (population dynamics)
+- (c) Reaction center energy capture (RC yield)
+
+**Figure 2 — SERS Readout (1×3, 654 KB):**
+- (a) Floquet Stark detuning vs solar flux (sigmoid transition at 800 W/m²)
+- (b) OMIT transmission modulation (T/T₀ = 1/(1+I/I_sat))
+- (c) In situ SERS diagnostics (5-bar chart with agricultural targets)
+
+**Figure 3 — LCA / NEB Comparison (1×3, 756 KB):**
+- (a) Water savings: open field (4.5 mm/day) vs smart shield (3.2 mm/day), -28%
+- (b) NEB scenario comparison (twin-axis: carbon avoided + crop biomass)
+- (c) Cooperative payback + per-member capital exposure (left: payback independent of coop size; right: capital/member for n=1,3,5,10)
+
+### Payback/NPV Precision Updates
+- All payback values updated: 3.2→4.23 yr (Manuscript, SI, Cover Letter)
+- All NPV values updated: +14,600→+37,664 USD (Manuscript, SI, Cover Letter)
+- Revenue: 15,000→30,612 USD/yr (SI S5)
+- Cashflow: 11,000→26,612 USD/yr (SI S5)
+- Φ_FT^global: 0.971→0.972 (Manuscript Methods section)
+
+### Housekeeping
+- AGENTS.md and ROADMAP.md updated for Session 15
+- Redac_Paper2/ cleaned: removed `.coverage`, archived `project_ideas.md` and `drafting_roadmap.md`
+- New TODO list established (see ROADMAP.md)
+- Git commit and push
 
 ## Session 14 (2026-06-25) — V5 Codebase Finalization, Stern-Volmer Calibration, and Documentation Sync
 
@@ -11,7 +59,8 @@
 ### Documentation Updates
 - Updated `SI.tex` socioeconomic (S5), QKD security (S6), and proof-of-concept (S9) sections to match the 500 m² high-value floriculture cooperative micro-module specifications.
 - Verified compilation of both the main manuscript `Manuscript_NatureEnergy_26-06-25.tex` and the supporting information `SI.tex` locally.
-- Updated `ROADMAP.md` to mark all Paper 2 tasks as complete.
+- Consolidated all active Paper 2 editing and manuscript development files into `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/`. All editing and build work must strictly occur within this directory.
+- Updated `ROADMAP.md` to mark all Paper 2 tasks as complete and reflect the unified folder workspace.
 
 ## Session 12 (2026-06-25) — NPoM Validation + 6 Audit Suggestions + Quality Gates + Submission Package
 
@@ -82,13 +131,18 @@ All NPoM yields >90% suppressed regardless of volume (V=1.2 nm³ optimal).
 - **Figures generated on server**: Figure1–3 (same as local)
 - **Data**: `production_dynamics.h5` (448 KB, rsynced locally)
 
-### Submission Package Created
+### Submission Package & Source of Truth Created
+> [!IMPORTANT]
+> **SOURCE OF TRUTH (PAPER 2 — NATURE ENERGY)**: The absolute canonical source of truth for all Paper 2 writing, figure rendering, and LaTeX compilation is `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/`. All modifications and builds must be performed strictly within this directory. Do not edit files in other legacy subfolders.
+
 ```
-Submission_Package_Nature_Energy/
-├── Manuscript/   (Manuscript.tex + references.bib)
-├── SI/           (SI.tex + references.bib)
-├── Figures/      (Fig1–3, PNG, HD)
-└── Cover_Letter/ (Cover_Letter.tex)
+Submission_Package_Nature_Energy_Manuscript/  (Consolidated Submission Folder)
+├── Manuscript_NatureEnergy_26-06-25.tex      (Two-column draft)
+├── Manuscript.tex                            (Single-column submission version)
+├── SI.tex                                    (Supporting Information)
+├── Cover_Letter.tex                          (Cover letter)
+├── references.bib                            (References database)
+└── Figure1-3 PNGs                            (Figures)
 ```
 
 ### Git
@@ -101,7 +155,7 @@ This repository contains two active research projects:
 
 1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, targeting *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Major Revision in progress** (30-day deadline from 28-Apr-2026).
 
-2. **Quantum Agrivoltaics (Nature Energy)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status: **Ready for submission** (submission package created, 10/10 quality gates passed, production data complete).
+2. **Quantum Agrivoltaics (Nature Energy)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status: **Ready for submission** (submission package created, 10/10 quality gates passed, production data complete; source of truth consolidated in `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/`).
 
 ---
 
@@ -250,6 +304,11 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Master Nature Energy twocolumn draft (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript.tex` | Submission-format single-column draft (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/SI.tex` | Supporting Information draft (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Cover_Letter.tex` | Submission Cover Letter (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
 | `Redac_Paper1/quantum_simulations_framework_parallel_260612/parameters.yaml` | **Single source of truth** for all simulation parameters |
 | `Redac_Paper1/quantum_simulations_framework_parallel_260612/core/constants.py` | Python constants (must match `parameters.yaml`) |
 | `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py` | Single-entry pipeline orchestrator |

@@ -9,11 +9,12 @@ import logging
 import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from src.core.constants import DEFAULT_TEMPERATURE
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
+from src.core.constants import DEFAULT_TEMPERATURE
 
 # Import required classes
 # Import required classes
@@ -127,10 +128,7 @@ class TestingValidationProtocols:
             "bandwidth": {
                 "value": float(bandwidth),
                 "expected_range": expected_bandwidth,
-                "pass": (
-                    bandwidth >= expected_bandwidth[0]
-                    and bandwidth <= expected_bandwidth[1]
-                ),
+                "pass": (bandwidth >= expected_bandwidth[0] and bandwidth <= expected_bandwidth[1]),
             },
             "hermitian": {"pass": np.allclose(H, H.T.conj())},
         }
@@ -159,18 +157,11 @@ class TestingValidationProtocols:
 
             results = {
                 "population_conservation": {
-                    "initial_sum": float(np.sum(populations[0, :]))
-                    if populations.size > 0
-                    else 0,
-                    "final_sum": float(np.sum(populations[-1, :]))
-                    if populations.size > 0
-                    else 0,
+                    "initial_sum": float(np.sum(populations[0, :])) if populations.size > 0 else 0,
+                    "final_sum": float(np.sum(populations[-1, :])) if populations.size > 0 else 0,
                     "pass": (
                         populations.size > 0
-                        and np.abs(
-                            np.sum(populations[0, :]) - np.sum(populations[-1, :])
-                        )
-                        < 0.1
+                        and np.abs(np.sum(populations[0, :]) - np.sum(populations[-1, :])) < 0.1
                     ),
                 },
                 "coherence_decay": {
@@ -184,9 +175,7 @@ class TestingValidationProtocols:
                     "pass": True,  # Coherence should generally decay
                 },
                 "population_positivity": {
-                    "min_population": float(np.min(populations))
-                    if populations.size > 0
-                    else 0,
+                    "min_population": float(np.min(populations)) if populations.size > 0 else 0,
                     "pass": (
                         populations.size > 0
                         and np.min(populations) >= -0.1  # Allow small numerical errors
@@ -199,9 +188,7 @@ class TestingValidationProtocols:
         logger.debug("Quantum dynamics validation completed")
         return results
 
-    def convergence_analysis(
-        self, max_time_steps: Optional[List[int]] = None
-    ) -> Dict[str, Any]:
+    def convergence_analysis(self, max_time_steps: Optional[List[int]] = None) -> Dict[str, Any]:
         """
         Analyze convergence of simulation results with time step refinement.
 
@@ -225,9 +212,7 @@ class TestingValidationProtocols:
             time_points = np.linspace(0, 500, n_steps)
 
             if hasattr(self.quantum_simulator, "simulate_dynamics"):
-                result = self.quantum_simulator.simulate_dynamics(
-                    time_points=time_points
-                )
+                result = self.quantum_simulator.simulate_dynamics(time_points=time_points)
                 populations = result.get("populations", np.array([]))
                 coherences = result.get("coherences", np.array([]))
 
@@ -257,9 +242,7 @@ class TestingValidationProtocols:
             "final_coherences": final_coherences,
             "population_convergence": pop_convergence,
             "coherence_convergence": coh_convergence,
-            "converged": (
-                pop_convergence[-1] < 0.05 if len(pop_convergence) > 0 else False
-            ),
+            "converged": (pop_convergence[-1] < 0.05 if len(pop_convergence) > 0 else False),
         }
 
         logger.debug("Convergence analysis completed")
@@ -285,9 +268,7 @@ class TestingValidationProtocols:
 
         # Quantum simulation (non-Markovian)
         if hasattr(self.quantum_simulator, "simulate_dynamics"):
-            result_quantum = self.quantum_simulator.simulate_dynamics(
-                time_points=time_points
-            )
+            result_quantum = self.quantum_simulator.simulate_dynamics(time_points=time_points)
             pop_quantum = result_quantum.get("populations", np.array([]))
             coh_quantum = result_quantum.get("coherences", np.array([]))
         else:
@@ -330,12 +311,8 @@ class TestingValidationProtocols:
             "quantum_transfer": float(quantum_transfer),
             "classical_transfer": float(classical_transfer),
             "quantum_advantage_percent": float(quantum_advantage),
-            "quantum_coherence_final": float(coh_quantum[-1])
-            if coh_quantum.size > 0
-            else 0,
-            "classical_coherence_final": float(coh_classical[-1])
-            if coh_classical.size > 0
-            else 0,
+            "quantum_coherence_final": float(coh_quantum[-1]) if coh_quantum.size > 0 else 0,
+            "classical_coherence_final": float(coh_classical[-1]) if coh_classical.size > 0 else 0,
             "coherence_enhancement": (
                 coh_quantum[-1] / coh_classical[-1]
                 if coh_classical.size > 0 and coh_classical[-1] > 0
@@ -610,9 +587,7 @@ class TestingValidationProtocols:
             values = [quantum_transfer, classical_transfer]
             colors_comp = ["#1f77b4", "#ff7f0e"]
 
-            bars = ax4.bar(
-                categories, values, color=colors_comp, alpha=0.7, edgecolor="black"
-            )
+            bars = ax4.bar(categories, values, color=colors_comp, alpha=0.7, edgecolor="black")
             ax4.set_ylabel("Transfer Efficiency", fontsize=10)
             ax4.set_title(
                 f"Quantum vs Classical (Advantage: {quantum_advantage:.1f}%)",
@@ -664,9 +639,7 @@ if __name__ == "__main__":
     # Create dummy simulator for demonstration
     class DummySimulator:
         def __init__(self):
-            self.hamiltonian = np.diag(
-                [12200, 12070, 11980, 12050, 12140, 12130, 12260]
-            )
+            self.hamiltonian = np.diag([12200, 12070, 11980, 12050, 12140, 12130, 12260])
             self.temperature = DEFAULT_TEMPERATURE
 
         def simulate_dynamics(self, time_points):

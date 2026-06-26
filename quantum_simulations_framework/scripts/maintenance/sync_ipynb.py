@@ -30,14 +30,14 @@ def patch_notebook():
 
             # --- 2. CSV Data Storage Patch ---
             if "csv_storage.save_quantum_dynamics_results(results)" in source:
-                qdyn_old = (
-                    "csv_path = csv_storage.save_quantum_dynamics_results(results)"
-                )
+                qdyn_old = "csv_path = csv_storage.save_quantum_dynamics_results(results)"
                 qdyn_new = "time_fs = results['t_axis']\n    populations = results['populations']\n    coherences = results.get('coherences', [])\n    quantum_metrics = {k: v for k, v in results.items() if k not in ['t_axis', 'populations', 'coherences']}\n    csv_path = csv_storage.save_quantum_dynamics_results(time_fs, populations, coherences, quantum_metrics)"
                 source = source.replace(qdyn_old, qdyn_new)
 
                 agri_old = "csv_path = csv_storage.save_agrivoltaic_results({\n    'pce': pce,\n    'etr': etr,\n    'spectral_data': {},\n    **metadata\n})"
-                agri_new = "csv_path = csv_storage.save_agrivoltaic_results(pce, etr, {}, **metadata)"
+                agri_new = (
+                    "csv_path = csv_storage.save_agrivoltaic_results(pce, etr, {}, **metadata)"
+                )
                 source = source.replace(agri_old, agri_new)
 
                 eco_old = 'csv_path = csv_storage.save_eco_design_results(eco_data, filename_prefix="eco_design_results")'
@@ -55,9 +55,7 @@ csv_path = csv_storage.save_biodegradability_analysis(eco_data, filename_prefix=
                 "sensitivity_analyzer = SensitivityAnalyzer(" in source
                 and "simulator=simulator" in source
             ):
-                source = source.replace(
-                    "simulator=simulator,", "quantum_simulator=simulator,"
-                )
+                source = source.replace("simulator=simulator,", "quantum_simulator=simulator,")
 
                 sens_old = """    sensitivity_results = sensitivity_analyzer.analyze_sensitivity(
         parameters=['temperature', 'dephasing_rate', 'coupling_strength'],
@@ -116,13 +114,8 @@ csv_path = csv_storage.save_biodegradability_analysis(eco_data, filename_prefix=
     print(f"  - Revenue per hectare: ${te_results['total_revenue_yr_usd_per_ha']:,.2f}/yr")
 """
                 # Update keys in print statements if they were old, but avoid duplication
-                if (
-                    "total_revenue_yr_usd" in source
-                    and "total_revenue_yr_usd_per_ha" not in source
-                ):
-                    source = source.replace(
-                        "total_revenue_yr_usd", "total_revenue_yr_usd_per_ha"
-                    )
+                if "total_revenue_yr_usd" in source and "total_revenue_yr_usd_per_ha" not in source:
+                    source = source.replace("total_revenue_yr_usd", "total_revenue_yr_usd_per_ha")
 
                 source = source + te_block
 

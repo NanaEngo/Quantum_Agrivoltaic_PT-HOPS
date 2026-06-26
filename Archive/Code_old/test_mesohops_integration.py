@@ -3,7 +3,11 @@
 
 import numpy as np
 import sys
-sys.path.insert(0, '/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_HOPS/Redac_Paper1/quantum_simulations_framework')
+
+sys.path.insert(
+    0,
+    "/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_HOPS/Redac_Paper1/quantum_simulations_framework",
+)
 
 print("=== MesoHOPS Integration Test ===\n")
 
@@ -11,6 +15,7 @@ print("=== MesoHOPS Integration Test ===\n")
 print("1. Testing MesoHOPS import...")
 try:
     from mesohops import HopsSystem, HopsBasis, HopsEOM, HopsTrajectory
+
     print("   ✓ MesoHOPS classes imported")
 except ImportError as e:
     print(f"   ✗ Import failed: {e}")
@@ -27,9 +32,9 @@ H = np.diag(FMO_ENERGIES.astype(float))
 
 # Add couplings (simplified)
 couplings = 50.0  # cm^-1
-for i in range(n_sites-1):
-    H[i, i+1] = couplings
-    H[i+1, i] = couplings
+for i in range(n_sites - 1):
+    H[i, i + 1] = couplings
+    H[i + 1, i] = couplings
 
 print(f"   ✓ Hamiltonian created: {H.shape}")
 
@@ -37,20 +42,18 @@ print(f"   ✓ Hamiltonian created: {H.shape}")
 print("\n3. Initializing HopsSimulator...")
 try:
     from core.hops_simulator import HopsSimulator
-    
-    sim = HopsSimulator(
-        H, 
-        temperature=295
-    )
-    print(f"   ✓ HopsSimulator initialized")
+
+    sim = HopsSimulator(H, temperature=295)
+    print("   ✓ HopsSimulator initialized")
     print(f"   Using MesoHOPS: {sim.use_mesohops}")
-    
+
     if not MESOHOPS_AVAILABLE:
         print("   Note: MesoHOPS not available, using fallback simulator")
-    
+
 except Exception as e:
     print(f"   ✗ Initialization failed: {e}")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)
 
@@ -60,42 +63,47 @@ try:
     time_points = np.linspace(0, 100, 11)  # 0-100 fs, 11 points
     initial_state = np.zeros(n_sites, dtype=complex)
     initial_state[0] = 1.0
-    
+
     # Call the simulate_dynamics method
     results = sim.simulate_dynamics(time_points, initial_state)
-    
-    print(f"   ✓ Simulation completed")
+
+    print("   ✓ Simulation completed")
     print(f"   Simulator type: {sim.simulator_type}")
-    
+
     # Check if the results contain the expected keys
     if isinstance(results, dict):
         print(f"   Available keys: {list(results.keys())}")
-        
-        if 'populations' in results:
-            pops = results['populations']
+
+        if "populations" in results:
+            pops = results["populations"]
             print(f"   Population shape: {pops.shape}")
             print(f"   Initial population (site 1): {pops[0, 0]:.4f}")
             print(f"   Final population (site 1): {pops[-1, 0]:.4f}")
             print(f"   Energy transfer: {(1 - pops[-1, 0]) * 100:.2f}%")
-            
+
             # Validate population conservation
             total_pop = np.sum(pops[-1, :])
             print(f"   Final total population: {total_pop:.4f}")
-            print(f"   ✓ Populations sum to ~1.0" if abs(total_pop - 1.0) < 0.1 else f"   ⚠ Populations sum to {total_pop:.3f}")
-        
-        if 'coherences' in results:
-            coherences = results['coherences']
+            print(
+                "   ✓ Populations sum to ~1.0"
+                if abs(total_pop - 1.0) < 0.1
+                else f"   ⚠ Populations sum to {total_pop:.3f}"
+            )
+
+        if "coherences" in results:
+            coherences = results["coherences"]
             print(f"   Coherence decay: {coherences[0]:.4f} → {coherences[-1]:.4f}")
-    
+
     # Validation
-    if isinstance(results, dict) and 't_axis' in results:
-        t = results['t_axis']
+    if isinstance(results, dict) and "t_axis" in results:
+        t = results["t_axis"]
         assert len(t) == len(time_points), "Time points mismatch"
         print("   ✓ Time points validated")
-    
+
 except Exception as e:
     print(f"   ✗ Simulation failed: {e}")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)
 

@@ -1,9 +1,6 @@
 # Analysis execution and results documentation
 import subprocess
-import json
 import os
-import pandas as pd
-import matplotlib.pyplot as plt
 
 print("Executing quantum agrivoltaics analysis...")
 
@@ -1200,12 +1197,16 @@ print(f"Data exported to {DATA_DIR} directory")
 print(f"Key results: Eco-design score = {analysis['eco_design_score']:.3f}, PAR efficiency = {par_eff:.3f}")
 '''
 
-with open('/tmp/quantum_analysis_exec.py', 'w') as f:
+with open("/tmp/quantum_analysis_exec.py", "w") as f:
     f.write(analysis_script)
 
 # Execute the analysis script
-result = subprocess.run(['python', '/tmp/quantum_analysis_exec.py'], 
-                       capture_output=True, text=True, timeout=120)
+result = subprocess.run(
+    ["python", "/tmp/quantum_analysis_exec.py"],
+    capture_output=True,
+    text=True,
+    timeout=120,
+)
 
 print("Analysis execution completed!")
 print("STDOUT:")
@@ -1220,15 +1221,15 @@ analysis_report = f"""
 # Analysis Report - Quantum Agrivoltaics Framework
 
 ## Execution Summary
-- Status: {'SUCCESS' if result.returncode == 0 else 'FAILED'}
+- Status: {"SUCCESS" if result.returncode == 0 else "FAILED"}
 - Execution time: N/A (script executed directly)
 
 ## Key Results
 - FMO Hamiltonian: 7x7 matrix with site energies from 11980 to 12260 cm⁻¹
 - Quantum dynamics: Simulated 100 time points from 0 to 500 fs
-- Maximum coherence achieved: {max([float(x) for x in result.stdout.split() if x.replace('.', '').isdigit() and 0 < float(x) < 1], default='N/A')}
-- Eco-design score: {result.stdout.split('Eco-design score = ')[-1].split()[0] if 'Eco-design score = ' in result.stdout else 'N/A'}
-- PAR efficiency: {result.stdout.split('PAR efficiency: ')[-1].split()[0] if 'PAR efficiency: ' in result.stdout else 'N/A'}
+- Maximum coherence achieved: {max([float(x) for x in result.stdout.split() if x.replace(".", "").isdigit() and 0 < float(x) < 1], default="N/A")}
+- Eco-design score: {result.stdout.split("Eco-design score = ")[-1].split()[0] if "Eco-design score = " in result.stdout else "N/A"}
+- PAR efficiency: {result.stdout.split("PAR efficiency: ")[-1].split()[0] if "PAR efficiency: " in result.stdout else "N/A"}
 
 ## Data Export Summary
 - FMO Hamiltonian data saved to: simulation_data/fmo_hamiltonian_data.csv
@@ -1262,7 +1263,10 @@ analysis_report = f"""
 """
 
 # Write analysis report
-with open('/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_HOPS/Redac_Paper1/analysis_report.md', 'w') as f:
+with open(
+    "/media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_HOPS/Redac_Paper1/analysis_report.md",
+    "w",
+) as f:
     f.write(analysis_report)
 
 print("Analysis report saved to analysis_report.md")

@@ -8,6 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from conftest import get_test_logger
+
 from src.core.hamiltonian_factory import create_fmo_hamiltonian
 from src.quantum.quantum_dynamics_simulator import QuantumDynamicsSimulator
 from src.quantum.spectroscopy import Spectroscopy2DES
@@ -49,9 +50,7 @@ def test_quantum_dynamics_simulator():
     assert np.allclose(total_pop, 1.0, atol=0.2), "Unnormalized trace drift too large"
     # Normalization may have small numerical error; laptop/CI can differ.
     # Allow a wider tolerance because QFI/entropy computations can perturb floats.
-    assert np.allclose(total_pop_norm, 1.0, atol=5e-2), (
-        "Normalized trace should be conserved"
-    )
+    assert np.allclose(total_pop_norm, 1.0, atol=5e-2), "Normalized trace should be conserved"
 
 
 def test_spectroscopy_2des():

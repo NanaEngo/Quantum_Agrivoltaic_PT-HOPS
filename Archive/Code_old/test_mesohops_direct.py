@@ -10,6 +10,7 @@ print("=== Direct MesoHOPS Integration Test ===\n")
 print("1. Testing MesoHOPS import...")
 try:
     from mesohops import HopsSystem, HopsBasis, HopsEOM, HopsTrajectory
+
     print("   ✓ MesoHOPS classes imported")
 except ImportError as e:
     print(f"   ✗ Import failed: {e}")
@@ -17,9 +18,7 @@ except ImportError as e:
 
 # Test 2: Create FMO Hamiltonian
 print("\n2. Creating FMO Hamiltonian...")
-H = np.array([[12410, 50, 0], 
-              [50, 12530, 50],
-              [0, 50, 12210]], dtype=float)
+H = np.array([[12410, 50, 0], [50, 12530, 50], [0, 50, 12210]], dtype=float)
 n_sites = 3
 print(f"   ✓ Hamiltonian: {H.shape}")
 
@@ -32,15 +31,17 @@ temperature = 295.0  # K
 L_hier = [sp.csr_matrix(np.eye(n_sites)) for _ in range(n_sites)]
 gw_sysbath = [(lambda_reorg * gamma_cutoff / np.pi, gamma_cutoff)]
 
+
 def drude_correlation(t, lambda_reorg, gamma_cutoff, temperature):
     return (lambda_reorg / np.pi) * gamma_cutoff * np.exp(-gamma_cutoff * np.abs(t))
 
+
 system_param = {
-    'HAMILTONIAN': H,
-    'GW_SYSBATH': gw_sysbath,
-    'L_HIER': L_hier,
-    'ALPHA_NOISE1': drude_correlation,
-    'PARAM_NOISE1': [lambda_reorg, gamma_cutoff, temperature],
+    "HAMILTONIAN": H,
+    "GW_SYSBATH": gw_sysbath,
+    "L_HIER": L_hier,
+    "ALPHA_NOISE1": drude_correlation,
+    "PARAM_NOISE1": [lambda_reorg, gamma_cutoff, temperature],
 }
 print("   ✓ Parameters configured")
 
@@ -52,18 +53,20 @@ try:
 except Exception as e:
     print(f"   ✗ Failed: {e}")
     import traceback
+
     traceback.print_exc()
     exit(1)
 
 # Test 5: Create Basis
 print("\n5. Creating HopsBasis...")
 try:
-    hierarchy_param = {'MAXHIER': 2}
+    hierarchy_param = {"MAXHIER": 2}
     basis = HopsBasis(system, hierarchy_param)
-    print(f"   ✓ HopsBasis created")
+    print("   ✓ HopsBasis created")
 except Exception as e:
     print(f"   ✗ Failed: {e}")
     import traceback
+
     traceback.print_exc()
     exit(1)
 
@@ -71,14 +74,15 @@ except Exception as e:
 print("\n6. Creating HopsEOM...")
 try:
     eom_param = {
-        'TIME_DEPENDENCE': False,
-        'EQUATION_OF_MOTION': 'NORMALIZED NONLINEAR',
+        "TIME_DEPENDENCE": False,
+        "EQUATION_OF_MOTION": "NORMALIZED NONLINEAR",
     }
     eom = HopsEOM(basis, eom_param)
     print("   ✓ HopsEOM created")
 except Exception as e:
     print(f"   ✗ Failed: {e}")
     import traceback
+
     traceback.print_exc()
     exit(1)
 
@@ -86,30 +90,31 @@ except Exception as e:
 print("\n7. Running HopsTrajectory...")
 try:
     trajectory_param = {
-        'TMAX': 100.0,  # fs
-        'TAU': 10.0,    # fs
+        "TMAX": 100.0,  # fs
+        "TAU": 10.0,  # fs
     }
     trajectory = HopsTrajectory(eom, trajectory_param)
-    
+
     # Initial state (site 1 excited)
     initial_state = np.zeros(n_sites, dtype=complex)
     initial_state[0] = 1.0
-    
+
     trajectory.initialize(initial_state)
     trajectory.propagate(100.0, 10.0)
-    
+
     psi_traj = np.array(trajectory.psi_traj)
-    populations = np.abs(psi_traj)**2
-    
-    print(f"   ✓ Trajectory completed")
+    populations = np.abs(psi_traj) ** 2
+
+    print("   ✓ Trajectory completed")
     print(f"   Time steps: {len(populations)}")
     print(f"   Initial pop (site 1): {populations[0, 0]:.4f}")
     print(f"   Final pop (site 1): {populations[-1, 0]:.4f}")
     print(f"   Transfer: {(1 - populations[-1, 0]) * 100:.2f}%")
-    
+
 except Exception as e:
     print(f"   ✗ Failed: {e}")
     import traceback
+
     traceback.print_exc()
     exit(1)
 

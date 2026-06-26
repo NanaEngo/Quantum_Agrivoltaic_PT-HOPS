@@ -95,10 +95,10 @@ hops.propagate(t_max, dt_save)
 print(f"✓ Propagation completed to t_max = {t_max} fs")
 
 # Extract results
-t_axis = np.array(hops.storage.data['t_axis'])
-psi_traj = np.array(hops.storage.data['psi_traj'])
+t_axis = np.array(hops.storage.data["t_axis"])
+psi_traj = np.array(hops.storage.data["psi_traj"])
 
-print(f"✓ Results extracted:")
+print("✓ Results extracted:")
 print(f"  - Time points: {len(t_axis)}")
 print(f"  - Trajectory shape: {psi_traj.shape}")
 

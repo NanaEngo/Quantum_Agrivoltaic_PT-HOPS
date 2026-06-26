@@ -1348,7 +1348,12 @@ def main():
     sim_results, time_points = run_full_fmo_simulation(cfg)
 
     # Step 4: Generate and save all figures
-    generate_figures(cfg, sim_results, time_points, skip_temp_sweep=getattr(args, "skip_temp_sweep", False))
+    generate_figures(
+        cfg,
+        sim_results,
+        time_points,
+        skip_temp_sweep=getattr(args, "skip_temp_sweep", False),
+    )
 
     print("\n" + "=" * 60)
     print("  Pipeline complete.")

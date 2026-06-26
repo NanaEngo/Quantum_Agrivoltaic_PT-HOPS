@@ -1,16 +1,17 @@
 import sys
-import yaml
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import yaml
 
 # Add framework to path
 CURRENT_DIR = Path(__file__).parent
 FRAMEWORK_DIR = CURRENT_DIR.parent
 sys.path.insert(0, str(FRAMEWORK_DIR))
 
-from src.core.hops_simulator import HopsSimulator
-from src.core.hamiltonian_factory import create_fmo_hamiltonian
 from src.core.constants import DEFAULT_SBD_BUNDLES
+from src.core.hamiltonian_factory import create_fmo_hamiltonian
+from src.core.hops_simulator import HopsSimulator
 
 
 def test_3site_simulation_with_config():
@@ -102,9 +103,7 @@ def test_3site_simulation_with_config():
 
     # Check normalization
     traces = np.sum(pops, axis=1)
-    assert np.allclose(traces, 1.0, atol=1e-1), (
-        "Trace preservation failed (ensemble average)"
-    )
+    assert np.allclose(traces, 1.0, atol=1e-1), "Trace preservation failed (ensemble average)"
 
     # Check positivity
     assert np.all(pops >= -1e-6), "Positivity failed"

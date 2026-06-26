@@ -26,32 +26,18 @@ try:
 except ImportError:
     HAS_JOBLIB = False
 
-try:
-    from src.core.constants import (
-        BASE_TRAJ_MEMORY_GB,
-        DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_MAX_HIERARCHY,
-        DEFAULT_MAX_TIME,
-        DEFAULT_N_MATSUBARA,
-        DEFAULT_N_TRAJ,
-        DEFAULT_REORGANIZATION_ENERGY,
-        DEFAULT_TEMPERATURE,
-        MEMORY_FRACTION_LIMIT,
-        MIN_TRAJ_MEMORY_GB,
-    )
-except ImportError:
-    from ..src.core.constants import (
-        BASE_TRAJ_MEMORY_GB,
-        DEFAULT_DRUDE_CUTOFF,
-        DEFAULT_MAX_HIERARCHY,
-        DEFAULT_MAX_TIME,
-        DEFAULT_N_MATSUBARA,
-        DEFAULT_N_TRAJ,
-        DEFAULT_REORGANIZATION_ENERGY,
-        DEFAULT_TEMPERATURE,
-        MEMORY_FRACTION_LIMIT,
-        MIN_TRAJ_MEMORY_GB,
-    )
+from ..core.constants import (
+    BASE_TRAJ_MEMORY_GB,
+    DEFAULT_DRUDE_CUTOFF,
+    DEFAULT_MAX_HIERARCHY,
+    DEFAULT_MAX_TIME,
+    DEFAULT_N_MATSUBARA,
+    DEFAULT_N_TRAJ,
+    DEFAULT_REORGANIZATION_ENERGY,
+    DEFAULT_TEMPERATURE,
+    MEMORY_FRACTION_LIMIT,
+    MIN_TRAJ_MEMORY_GB,
+)
 
 try:
     import psutil
@@ -610,10 +596,7 @@ class QuantumDynamicsSimulator:
             mem_limit_gb = mem_avail_gb * MEMORY_FRACTION_LIMIT
             traj_mem_gb = self._get_memory_estimate()
             n_mem_jobs = max(1, int(mem_limit_gb / traj_mem_gb))
-            try:
-                from src.core.constants import MAX_N_JOBS
-            except ImportError:
-                from ..src.core.constants import MAX_N_JOBS
+            from ..core.constants import MAX_N_JOBS
 
             n_jobs = min(n_mem_jobs, cpu_count, MAX_N_JOBS)
             logger.info(

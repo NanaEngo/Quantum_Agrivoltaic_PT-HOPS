@@ -1,18 +1,16 @@
-
 import json
-import os
 
-nb_path = '/home/taamangtchu/Documents/Github/Comparative-study-of-the-Anderson-model-in-weak-and-strong-interaction-regimes/Redac_Paper1/quantum_coherence_agrivoltaics_analysis_refined.ipynb'
+nb_path = "/home/taamangtchu/Documents/Github/Comparative-study-of-the-Anderson-model-in-weak-and-strong-interaction-regimes/Redac_Paper1/quantum_coherence_agrivoltaics_analysis_refined.ipynb"
 
-with open(nb_path, 'r') as f:
+with open(nb_path, "r") as f:
     nb = json.load(f)
 
 new_cell_source = [
     "class SensitivityAnalyzer:\n",
-    "    \"\"\"\n",
+    '    """\n',
     "    Comprehensive sensitivity analysis and uncertainty quantification for\n",
     "    quantum agrivoltaics simulations.\n",
-    "    \"\"\"\n",
+    '    """\n',
     "    \n",
     "    def __init__(self, quantum_simulator, agrivoltaic_model):\n",
     "        self.quantum_simulator = quantum_simulator\n",
@@ -111,9 +109,9 @@ new_cell_source = [
     "\n",
     "agrivoltaic_model.update_environmental_conditions(dust_thickness=0.0)\n",
     "sensitivity_analyzer = SensitivityAnalyzer(quantum_sim, agrivoltaic_model)\n",
-    "print(f\"Sensitivity Analyzer initialized\")\n",
+    'print(f"Sensitivity Analyzer initialized")\n',
     "mc_results = sensitivity_analyzer.monte_carlo_uncertainty(n_samples=100)\n",
-    "print(f\"Monte Carlo Uncertainty Results calculated\")\n",
+    'print(f"Monte Carlo Uncertainty Results calculated")\n',
     "\n",
     "plt.figure(figsize=(12, 5))\n",
     "plt.subplot(1, 2, 1)\n",
@@ -128,18 +126,20 @@ new_cell_source = [
     "plt.savefig(os.path.join(FIGURES_DIR, \"ETR_Uncertainty_Distribution.pdf\"), bbox_inches='tight', dpi=300)\n",
     "plt.show()\n",
     "\n",
-    "print(f\"\\nPerforming comprehensive sensitivity analysis...\")\n",
+    'print(f"\\nPerforming comprehensive sensitivity analysis...")\n',
     "sensitivity_report = sensitivity_analyzer.comprehensive_sensitivity_report(n_points=8)\n",
     "for param_name, data in sensitivity_report.items():\n",
-    "    print(f\"  {param_name}: PCE sensitivity = {data['pce_sensitivity']:.3f}, ETR sensitivity = {data['etr_sensitivity']:.3f}\")\n"
+    "    print(f\"  {param_name}: PCE sensitivity = {data['pce_sensitivity']:.3f}, ETR sensitivity = {data['etr_sensitivity']:.3f}\")\n",
 ]
 
-for cell in nb['cells']:
-    if cell['cell_type'] == 'code' and any('class SensitivityAnalyzer' in line for line in cell['source']):
-        cell['source'] = new_cell_source
+for cell in nb["cells"]:
+    if cell["cell_type"] == "code" and any(
+        "class SensitivityAnalyzer" in line for line in cell["source"]
+    ):
+        cell["source"] = new_cell_source
         break
 
-with open(nb_path, 'w') as f:
+with open(nb_path, "w") as f:
     json.dump(nb, f, indent=1)
 
 print("Definitive cell rewrite applied.")

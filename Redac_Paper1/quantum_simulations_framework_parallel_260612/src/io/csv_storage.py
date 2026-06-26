@@ -179,7 +179,9 @@ class CSVDataStorage:
             else:
                 data_dict[metric_name] = [metric_values] * len(time_points)
 
-        print(f"DEBUG data_dict lengths: { {k: len(v) if hasattr(v, '__len__') else 'no_len' for k, v in data_dict.items()} }")
+        print(
+            f"DEBUG data_dict lengths: { {k: len(v) if hasattr(v, '__len__') else 'no_len' for k, v in data_dict.items()} }"
+        )
         df = pd.DataFrame(data_dict)
 
         # Validate schema before saving

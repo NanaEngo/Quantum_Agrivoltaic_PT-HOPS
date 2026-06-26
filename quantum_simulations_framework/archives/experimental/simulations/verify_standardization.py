@@ -17,9 +17,7 @@ def test_imports():
     try:
         import quantum_simulations_framework as qsf
 
-        logger.info(
-            f"Successfully imported qsf, version: {getattr(qsf, '__version__', 'unknown')}"
-        )
+        logger.info(f"Successfully imported qsf, version: {getattr(qsf, '__version__', 'unknown')}")
 
         # Test core components
         from quantum_simulations_framework.core import HopsSimulator

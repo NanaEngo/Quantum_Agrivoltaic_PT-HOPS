@@ -1,6 +1,7 @@
-import pytest
-import sys
 import os
+import sys
+
+import pytest
 
 # Add current dir to path
 sys.path.insert(0, os.getcwd())

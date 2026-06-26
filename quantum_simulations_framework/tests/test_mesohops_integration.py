@@ -15,9 +15,7 @@ def test_mesohops_api_and_version():
     if version is None:
         import warnings
 
-        warnings.warn(
-            "mesohops does not expose __version__ attribute", UserWarning, stacklevel=2
-        )
+        warnings.warn("mesohops does not expose __version__ attribute", UserWarning, stacklevel=2)
 
     # Check expected utility function exists
     util = pytest.importorskip("mesohops.util.bath_corr_functions")
@@ -25,6 +23,4 @@ def test_mesohops_api_and_version():
 
     # Check expected trajectory exp_noise exists
     traj = pytest.importorskip("mesohops.trajectory.exp_noise")
-    assert hasattr(traj, "bcf_exp"), (
-        "bcf_exp not found in mesohops.trajectory.exp_noise"
-    )
+    assert hasattr(traj, "bcf_exp"), "bcf_exp not found in mesohops.trajectory.exp_noise"

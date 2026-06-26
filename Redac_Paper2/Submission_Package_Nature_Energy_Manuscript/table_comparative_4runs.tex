@@ -1,0 +1,38 @@
+\begin{table*}[tbp]
+\centering
+\caption{\textbf{Comparative summary of simulated configurations.}
+All NPoM-on configurations use the 9-site dressed Hamiltonian
+(8 FMO~$+$~1 plasmon mode) with hierarchy depth $L=8$, $K=2$ Matsubara
+terms, $\Delta t = 0.2$~fs over a $1000$~fs window.
+The NPoM-off baseline uses the 8-site FMO Hamiltonian with identical
+solver parameters.
+Trapping yield $\Phi_{\rm FT}$ is defined in Eq.~(2);
+the SERS enhancement factor $\mathrm{EF}$ follows the Purcell scaling
+$\mathrm{EF} \propto (Q/V)^2$ normalized to $\mathrm{EF}=10^2$ at
+$V=0.8$~nm$^3$~\cite{Chikkaraddy2016}.}
+\label{tab:comparative_summary}
+\small
+\begin{tabular}{lcccc}
+\toprule
+\bfseries Metric & \bfseries NPoM-off & \bfseries NPoM-on & \bfseries NPoM-on & \bfseries NPoM-on \\
+\bfseries & \bfseries (baseline) & \bfseries $V=0.8$~nm$^3$ & \bfseries $V=1.2$~nm$^3$ & \bfseries $V=1.2$~nm$^3$ \\
+\bfseries & \bfseries $T=295$~K & \bfseries $T=295$~K & \bfseries $T=295$~K & \bfseries $T=77$~K \\
+\midrule
+Number of trajectories $n_{\rm traj}$ & 20 & 100 & 20 & 2\\
+System size & 8$\times$8 & 9$\times$9 & 9$\times$9 & 9$\times$9\\
+Site energy disorder $\sigma$ (cm$^{-1}$) & 50 & 50 & 50 & 50\\
+Trapping rate $\Gamma_{\rm RC}$ (ps$^{-1}$) & 0.15 & 0.15 & 0.15 & 0.15\\
+\midrule
+\bfseries Trapping yield $\Phi_{\rm FT}$ & \bfseries 0.9800 & \bfseries 0.0768 & \bfseries 0.0803 & \bfseries 0.1685 \\
+\midrule
+Trapping sites (3+4) max. population & 0.0189 & 0.0048 & 0.0038 & 0.0055\\
+Site~1 final population & 0.7318 & 0.1455 & 0.1221 & 0.1091\\
+Site~6 final population & 0.0030 & 0.0537 & 0.0422 & 0.0409\\
+Plasmon mode final population & --- & 0.7901 & 0.8256 & 0.8401\\
+Population trace $\mu\pm\sigma$ & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000\\
+\midrule
+SERS enhancement factor EF & --- & 100.0 & 44.0 & 44.0\\
+Figure of merit $\Phi_{\rm FT}\times\mathrm{EF}$ & --- & 7.68 & 3.53 & 7.41\\
+\bottomrule
+\end{tabular}
+\end{table*}
