@@ -19,7 +19,7 @@
 % - [ ] Quality Gate 10: Editorial board fit (pending)
 % =============================================================================
 
-\documentclass[twocolumn]{article}
+\documentclass[onecolumn,a4paper,12pt]{article}
 
 % ---- Nature Energy style packages ----
 \usepackage[utf8]{inputenc}
@@ -263,7 +263,7 @@ By contrast, $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ maximizes SERS sensitivit
 
 Second, reducing the temperature to \SI{77}{\kelvin} approximately doubles the trapping yield to $\Phi_{\mathrm{FT}} = 0.1685$, a \SI{2.1}{\times} enhancement over the equivalent room-temperature configuration ($\Phi_{\mathrm{FT}} = 0.0799$ at $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$). This cryogenic enhancement is attributable to the suppression of thermal phonon-induced decoherence: the frozen bath reduces the pure-dephasing rate of the excitonic coherence, permitting a larger fraction of the wavepacket to navigate to the reaction center before being captured by the plasmon sink. The maximum trapped population on sites~3+4 rises by \SI{46}{\percent} (from $\num{3.8e-3}$ to $\num{5.5e-3}$), consistent with a longer effective transport length at low temperature.
 
-Third, the trade-off between SERS diagnostic sensitivity and transport efficiency is captured by a composite figure of merit $\mathrm{FOM} = \Phi_{\mathrm{FT}} \times \mathrm{EF}_{\mathrm{SERS}}$. The $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$ configuration at \SI{295}{\kelvin} achieves the highest FOM (7.68), closely followed by the \SI{77}{\kelvin} configuration (7.41). Notably, the FOM at $V = \SI{0.8}{\nm\cubed}$ is dominated by the larger SERS enhancement factor ($10^2$), while the \SI{77}{\kelvin}$ case compensates for its lower enhancement with a superior transport yield. Both paths produce comparable FOM values, suggesting that the operational choice between cryogenic-sensitivity and room-temperature-sensitivity regimes can be guided by field-specific requirements without a fundamental performance penalty.
+\SI{77}{\kelvin} case
 
 All NPoM-on runs exhibit perfect trace conservation ($\Tr\rho = 1.0000 \pm 0.0000$), validating the numerical stability of the PT-HOPS/SBD propagator across $n=100$ disorder realizations at both temperatures. The baseline NPoM-off run is shown for completeness but represents a partial trajectory ($n=2$, \SI{20}{\fs} total simulation time) and should not be compared quantitatively with the converged NPoM-on data.
 
