@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-28 (Session 21 — Adversarial Audit Axes 11–16, LaTeX enumitem fix, 117 tests green)
+**Last updated:** 2026-06-28 (Session 22 — SI siunitx/physics fix, Outlook items 12–16, 118 tests 0 warnings)
 
 
 ---
@@ -398,6 +398,53 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 22 (2026-06-28) — SI Critical Fix (siunitx/physics Conflict), Outlook Extended to (16) Items, 0 Warnings
+
+#### Critical LaTeX Bug Fixed: `siunitx`/`physics` Package Conflict
+- **Root cause**: `physics` package redefines `\qty` (for bra-ket/absolute value) and siunitx v3+ detects this and **omits its own `\qty{val}{unit}` definition**, causing every `\qty{}{}` call in `SI.tex` to fail silently (cascaded into dozens of `Undefined control sequence` errors).
+- **Fix**: Added `\AtBeginDocument{\RenewCommandCopy\qty\SI}` to `SI.tex` preamble — the canonical fix documented in siunitx manual §3.1 "Interaction with the physics package". Also reordered packages to load `siunitx` before `physics`.
+- **Impact**: SI went from 0-error-reported-but-incorrect (siunitx values dropped) to **fully correct 25-page PDF** with all `\qty{}{}` values properly typeset.
+- **Before vs after**: `Output written on SI.pdf (19 pages)` → `Output written on SI.pdf (25 pages)` — 6 missing pages restored (all unit values in S1–S3 were silently discarded in error-recovery mode).
+
+#### `\externaldocument` Cross-Reference Fix
+- **Bug**: `SI.tex` had `\externaldocument{Manuscript}` but the actual file is `Manuscript_NatureEnergy_26-06-25.tex` → all `\cref{}` references from SI to the main manuscript resolved to `??`.
+- **Fix**: Changed to `\externaldocument{Manuscript_NatureEnergy_26-06-25}`.
+
+#### SI Section S9 Title Fix
+- **Bug**: `\section{...\qty{500}{\m\squared}...}` caused TOC re-read errors in subsequent LaTeX passes because raw siunitx macros in section titles get written verbatim to `.toc` and fail on next read.
+- **Fix**: Wrapped with `\texorpdfstring{\qty{500}{\m\squared}}{500 m²}` — standard LaTeX pattern for unit macros in section headings.
+
+#### SI S12 Section Title and Intro Updated
+- **Section title**: `"Four Breakthroughs"` → `"Nine Breakthroughs for Next-Generation Quantum Agrivoltaics"` (correctly reflects all 9 subsections: Axes 7–16).
+- **Intro paragraph**: Expanded from a vague "four breakthroughs" description to an accurate enumeration of all 9 domains (materials science, geophysics, quantum algorithms, hardware hardening, data governance).
+
+#### Manuscript Outlook Extended: Items (12)–(16)
+- Added 5 new Outlook items to `Manuscript_NatureEnergy_26-06-25.tex` covering adversarial audit axes 11–16 (implemented in Session 21):
+  - **(12)** Passive thermal micro-shielding (`\cref{SI-sec:thermal_shielding}`)
+  - **(13)** Quantum MOFs / UiO-66 contaminant remediation (`\cref{SI-sec:mof}`)
+  - **(14)** NV-diamond relaxometry for pathogen detection (`\cref{SI-sec:nv_diamond}`)
+  - **(15)** Quantum fertilizer biostimulation via CQD nanoparticles (`\cref{SI-sec:quantum_fertiliser}`)
+  - **(16)** GQAS six-pillar certification framework (`\cref{SI-sec:gqas}`)
+- Also added `\cref{}` links to previously un-referenced Outlook items (8)–(11) pointing to their SI sections.
+
+#### PennyLane DeprecationWarning Fixed
+- `qaoa_optimizer.py`: Moved `shots=1024` from `qml.device(...)` to `@qml.qnode(dev, shots=self._shots)` per PennyLane ≥0.45 API. Added `self._shots = None` for classical backend path.
+
+#### PytestReturnNotNoneWarning Fixed
+- `tests/integration/test_v6_pipeline_e2e.py`: Changed `-> dict` to `-> None`, replaced `return results` with `assert len(results) >= 9`.
+
+#### Test Results
+- **118 passed, 1 xfailed, 0 warnings** — all 3 previous warnings eliminated.
+
+#### Compilation Verification
+- **SI.pdf**: 25 pages, 0 LaTeX errors ✅ (was incorrectly showing 19-23 pp due to siunitx value drop)
+- **Manuscript_NatureEnergy_26-06-25.pdf**: 18 pages, 0 LaTeX errors ✅
+
+#### Git
+- Commit: `61c2e01` — `fix(SI): resolve siunitx/physics \qty conflict, update S12 title, extend Outlook items 12-16`
+
+---
 
 ### Session 21 (2026-06-28) — Adversarial Audit Axes 11–16: Full Code + LaTeX Implementation, Test Suite Expansion
 
