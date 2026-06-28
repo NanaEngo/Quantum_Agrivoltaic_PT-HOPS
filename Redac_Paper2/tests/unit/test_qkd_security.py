@@ -80,7 +80,7 @@ def test_bb84_qkd_protocol():
 
 def test_dynamic_calibrator():
     """V5: DynamicCalibrator corrects GQD sensor baseline drift via EMA."""
-    cal = DynamicCalibrator(ema_alpha=0.1, drift_alarm_threshold=0.20)
+    cal = DynamicCalibrator(ema_alpha=0.1, drift_alarm_threshold=0.20, shielding_factor=0.0)
 
     # Feed clean reference readings — no drift expected
     for _ in range(5):
@@ -118,12 +118,19 @@ def test_dynamic_calibrator_shielding_factor():
     cal_ideal = DynamicCalibrator(shielding_factor=1.0)
     cal_none = DynamicCalibrator(shielding_factor=0.0)
 
-    # With shielding=1.0, thermal drift is fully applied
+    # With shielding=1.0, NO thermal drift is applied (perfect shielding)
     k_sv_full = cal_ideal.get_calibrated_k_sv(temperature_k=308.15, salinity_ms_cm=5.0)
-    # With shielding=0.0, no thermal drift correction (bare reference)
+    # Expected with shielding=1.0: 1.5e5 * (1.0 - 0.012 * 5.0) = 1.5e5 * 0.94 = 141000.0
+    assert k_sv_full == pytest.approx(141000.0)
+
+    # With shielding=0.0, FULL thermal drift is applied (no shielding)
     k_sv_none = cal_none.get_calibrated_k_sv(temperature_k=308.15, salinity_ms_cm=5.0)
-    # Shielding factor reduces thermal component
-    assert abs(k_sv_full) >= abs(k_sv_none)
+    # Expected with shielding=0.0: 1.5e5 * (1.0 - 0.035 - 0.06) = 135750.0
+    assert k_sv_none == pytest.approx(135750.0)
+
+    # Partial shielding (0.85) should be in between
+    k_sv_partial = cal.get_calibrated_k_sv(temperature_k=308.15, salinity_ms_cm=5.0)
+    assert k_sv_none < k_sv_partial < k_sv_full
 
     with pytest.raises(ValueError, match="shielding_factor"):
         DynamicCalibrator(shielding_factor=1.5)

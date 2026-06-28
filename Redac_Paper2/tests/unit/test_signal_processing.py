@@ -75,6 +75,24 @@ class TestQuantumKernelDenoiser:
         with pytest.raises(ValueError, match="kernel_type"):
             model._kernel(X)
 
+    def test_pennylane_backend(self):
+        """QK-6: Pennylane backend functions and uses PCA appropriately."""
+        n_samples = 10
+        n_features = 8
+        n_qubits = 4
+        rng = np.random.default_rng(42)
+        X = rng.normal(size=(n_samples, n_features))
+        y = np.sum(X**2, axis=1)
+
+        model = QuantumKernelDenoiser(backend="pennylane", n_qubits=n_qubits)
+        model.fit(X, y)
+        y_pred = model.predict(X)
+
+        assert y_pred.shape == y.shape
+        assert np.all(np.isfinite(y_pred))
+        assert model._pca is not None
+        assert model._pca.n_components == n_qubits
+
 
 class TestMpsDenoiser:
     """Matrix Product State denoiser."""

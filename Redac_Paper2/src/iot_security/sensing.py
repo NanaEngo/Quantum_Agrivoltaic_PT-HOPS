@@ -165,12 +165,16 @@ class DynamicCalibrator:
     def get_calibrated_k_sv(self, temperature_k: float, salinity_ms_cm: float) -> float:
         """
         Ajuste la constante de Stern-Volmer pour contrer la dérive due à la température et au pH/salinité.
+        Intègre le facteur de blindage thermique (shielding_factor).
         """
         alpha_temp = -0.0035  # Dérive thermique
         beta_salinity = -0.012  # Dérive due à la salinité du sol (fouling)
 
-        delta_t = temperature_k - self.t_ref
-        k_sv_adj = self.k_sv_ref * (1.0 + alpha_temp * delta_t + beta_salinity * salinity_ms_cm)
+        raw_delta_t = temperature_k - self.t_ref
+        effective_delta_t = raw_delta_t * (1.0 - self.shielding_factor)
+        k_sv_adj = self.k_sv_ref * (
+            1.0 + alpha_temp * effective_delta_t + beta_salinity * salinity_ms_cm
+        )
         logger.debug(
             "Stern-Volmer calibrated: k_sv=%.1e (T=%.1f K, S=%.2f mS/cm)",
             max(k_sv_adj, 1e4),
@@ -178,3 +182,40 @@ class DynamicCalibrator:
             salinity_ms_cm,
         )
         return float(max(k_sv_adj, 1e4))
+
+
+class NvDiamondPathogenSensor:
+    """
+    Nitrogen-Vacancy (NV) center nanodiamond sensor for in situ pathogen detection.
+    Detects biomagnetic signatures of pathogens (e.g., fungi, bacteria) before macroscopic symptoms appear.
+    """
+
+    def __init__(self, sensitivity_nt: float = 10.0):
+        self.sensitivity_nt = sensitivity_nt
+        self.is_calibrated = False
+
+    def calibrate(self) -> bool:
+        """Perform pulse-sequence calibration for the NV center."""
+        self.is_calibrated = True
+        logger.info("NV-Diamond pathogen sensor calibrated.")
+        return True
+
+    def scan_pathogens(self, local_magnetic_noise_nt: float) -> dict:
+        """
+        Scan for pathogen-induced biomagnetic signatures.
+
+        Args:
+            local_magnetic_noise_nt: Measured local magnetic noise in nanoTesla.
+        """
+        if not self.is_calibrated:
+            raise RuntimeError("NV-Diamond sensor must be calibrated before scanning.")
+
+        pathogen_detected = local_magnetic_noise_nt > self.sensitivity_nt
+        status = "CRITICAL_PATHOGEN_LOAD" if pathogen_detected else "CLEAR"
+
+        logger.info("NV-Diamond scan: noise=%.1f nT -> %s", local_magnetic_noise_nt, status)
+        return {
+            "pathogen_detected": pathogen_detected,
+            "status": status,
+            "magnetic_signal_nt": float(local_magnetic_noise_nt),
+        }

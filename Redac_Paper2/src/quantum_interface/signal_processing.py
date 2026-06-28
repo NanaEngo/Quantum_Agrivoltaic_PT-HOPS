@@ -81,16 +81,65 @@ class QuantumKernelDenoiser:
         gamma: float = 0.5,
         regularization: float = 1e-3,
         kernel_type: str = "rbf",
+        backend: str = "classical",
+        n_qubits: int = 4,
     ):
         self.gamma = gamma
         self.regularization = regularization
         self.kernel_type = kernel_type
+        self.backend = backend
+        self.n_qubits = n_qubits
         self._alpha: NDArray[np.float64] | None = None
         self._X_fit: NDArray[np.float64] | None = None
+
+        # Variables for PennyLane PCA reduction and scaling
+        self._pca = None
+        self._X_min: NDArray[np.float64] | None = None
+        self._ptp: NDArray[np.float64] | None = None
+
+        self._qml = None
+        self._dev = None
+        self._kernel_circuit = None
+
+        if self.backend == "pennylane":
+            self._init_pennylane()
+
+    def _init_pennylane(self):
+        try:
+            import pennylane as qml
+
+            self._qml = qml
+            self._dev = qml.device("default.qubit", wires=self.n_qubits)
+
+            @qml.qnode(self._dev)
+            def kernel_circuit(x1, x2):
+                qml.AngleEmbedding(x1, wires=range(self.n_qubits))
+                qml.adjoint(qml.AngleEmbedding)(x2, wires=range(self.n_qubits))
+                return qml.probs(wires=range(self.n_qubits))
+
+            self._kernel_circuit = kernel_circuit
+        except ImportError as err:
+            raise ImportError(
+                "PennyLane is required for backend='pennylane'. Please install it."
+            ) from err
+
+    def _pennylane_kernel_matrix(
+        self, X: NDArray[np.float64], Y: NDArray[np.float64] | None = None
+    ) -> NDArray[np.float64]:
+        Y_use = X if Y is None else Y
+        K = np.zeros((X.shape[0], Y_use.shape[0]))
+        for i in range(X.shape[0]):
+            for j in range(Y_use.shape[0]):
+                # Probability of |0...0> is the fidelity between the two states
+                K[i, j] = self._kernel_circuit(X[i], Y_use[j])[0]
+        return K
 
     def _kernel(
         self, X: NDArray[np.float64], Y: NDArray[np.float64] | None = None
     ) -> NDArray[np.float64]:
+        if self.backend == "pennylane":
+            return self._pennylane_kernel_matrix(X, Y)
+
         if self.kernel_type == "rbf":
             return _quantum_rbf_kernel(X, Y, self.gamma)
         elif self.kernel_type == "angle":
@@ -111,11 +160,27 @@ class QuantumKernelDenoiser:
         y : (n_samples,) or (n_samples, n_outputs)
             Target values (e.g., known stress levels or clean spectra).
         """
-        K = self._kernel(X)
+        # Dimensionality reduction for PennyLane
+        X_proc = X
+        if self.backend == "pennylane":
+            from sklearn.decomposition import PCA
+
+            self._pca = PCA(n_components=self.n_qubits)
+            X_proc = self._pca.fit_transform(X)
+            # Normalize to [0, pi] for angle embedding
+            X_min = X_proc.min(axis=0)
+            X_max = X_proc.max(axis=0)
+            ptp = X_max - X_min
+            ptp[ptp == 0] = 1.0
+            X_proc = np.pi * (X_proc - X_min) / ptp
+            self._X_min = X_min
+            self._ptp = ptp
+
+        K = self._kernel(X_proc)
         n = K.shape[0]
         K_reg = K + self.regularization * np.eye(n)
         self._alpha = np.linalg.solve(K_reg, np.asarray(y))
-        self._X_fit = X.copy()
+        self._X_fit = X_proc.copy()
         return self
 
     def predict(self, X: NDArray[np.float64]) -> NDArray[np.float64]:
@@ -134,7 +199,15 @@ class QuantumKernelDenoiser:
         """
         if self._alpha is None or self._X_fit is None:
             raise RuntimeError("Model must be fitted before predict.")
-        K_test = self._kernel(X, self._X_fit)
+
+        X_proc = X
+        if self.backend == "pennylane":
+            if self._pca is None or self._X_min is None or self._ptp is None:
+                raise RuntimeError("PCA not fitted.")
+            X_proc = self._pca.transform(X)
+            X_proc = np.pi * (X_proc - self._X_min) / self._ptp
+
+        K_test = self._kernel(X_proc, self._X_fit)
         return K_test @ self._alpha
 
     def anomaly_score(self, X: NDArray[np.float64], y_observed: NDArray[np.float64]) -> float:
@@ -241,6 +314,8 @@ def detect_stress_anomaly(
     regularization: float = 1e-3,
     zscore_threshold: float = 2.0,
     mps_chi: int = 16,
+    backend: str = "classical",
+    n_qubits: int = 4,
 ) -> dict:
     """
     Run the full QML signal-processing pipeline on a noisy spectrum.
@@ -282,7 +357,9 @@ def detect_stress_anomaly(
     denoised = mps.fit_transform(noisy_spectrum)
 
     # Step 2: Quantum kernel regression
-    qk = QuantumKernelDenoiser(gamma=gamma, regularization=regularization)
+    qk = QuantumKernelDenoiser(
+        gamma=gamma, regularization=regularization, backend=backend, n_qubits=n_qubits
+    )
     qk.fit(reference_dictionary, reference_labels)
     predicted_stress = float(qk.predict(denoised.reshape(1, -1)).flat[0])
 
