@@ -38,8 +38,8 @@ from src.quantum_interface.signal_processing import (
 )
 
 
-def test_end_to_end_v6_pipeline() -> dict:
-    """Run every non-quantum V6 pipeline step and return a results dict."""
+def test_end_to_end_v6_pipeline() -> None:
+    """Run every non-quantum V6 pipeline step and validate all assertions."""
     results = {}
     _t0 = _time.time()
 
@@ -288,19 +288,11 @@ def test_end_to_end_v6_pipeline() -> dict:
     print(f"✅ V6 pipeline complete — {elapsed:.1f}s — all {len(results)} assertions passed")
     print(f"{'=' * 55}")
 
-    return results
+    assert len(results) >= 9, f"Expected ≥9 result keys, got {len(results)}"
 
 
 if __name__ == "__main__":
-    r = test_end_to_end_v6_pipeline()
-    # Pretty-print key metrics
-    print("\n📊 Summary of key V6 metrics:")
-    print(f"   Phi_FT_global         = {r['global_yield']['phi_ft_global']:.4f}")
-    print(f"   Soiling factor        = {r['soiling']['soiling_factor']:.4f}")
-    print(f"   QML anomaly score     = {r['qml_anomaly']['anomaly_score']:.4f}")
-    print(f"   Payback period        = {r['lca']['payback_yr']:.2f} yr")
-    print(f"   NPV-10yr              = {r['lca']['npv_10yr_usd']:.0f} USD")
-    print(f"   Digital Twin refresh  = {r['digital_twin']['update_interval_seconds']}s")
-    print(f"   DT fusion urgency     = {r['digital_twin_fusion']['urgency']}")
-    print(f"   DT security gate      = {r['digital_twin_fusion']['security_gate']}")
-    print(f"   QML kernel gamma      = {r['quantum_signal']['kernel_gamma']}")
+    test_end_to_end_v6_pipeline()
+    print(
+        "\n📊 End-to-end V6 pipeline completed successfully — run with pytest for assertion details."
+    )

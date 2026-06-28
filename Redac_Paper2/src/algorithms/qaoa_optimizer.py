@@ -32,9 +32,13 @@ class QAOAOptimizer:
                 import pennylane as qml
 
                 self._qml = qml
-                self._dev = qml.device("default.qubit", wires=self.n_vars, shots=1024)
+                # shots set on QNode (not device) per PennyLane ≥0.45 API
+                self._dev = qml.device("default.qubit", wires=self.n_vars)
+                self._shots = 1024
                 logger.info(
-                    "PennyLane QAOA backend initialised (wires=%d, shots=1024)", self.n_vars
+                    "PennyLane QAOA backend initialised (wires=%d, shots=%d)",
+                    self.n_vars,
+                    self._shots,
                 )
             except ImportError:
                 logger.warning("PennyLane not installed — falling back to classical backend")
@@ -42,6 +46,7 @@ class QAOAOptimizer:
         else:
             self._qml = None
             self._dev = None
+            self._shots = None
 
     def _build_cost_hamiltonian(self, solar_power_kw: float, period_h: int) -> tuple:
         J = np.zeros((self.n_vars, self.n_vars))
@@ -130,7 +135,7 @@ class QAOAOptimizer:
         beta = np.pi / 6.0
         n_layers = self.p
 
-        @qml.qnode(dev)
+        @qml.qnode(dev, shots=self._shots)
         def _circuit():
             for w in range(self.n_vars):
                 qml.Hadamard(wires=w)

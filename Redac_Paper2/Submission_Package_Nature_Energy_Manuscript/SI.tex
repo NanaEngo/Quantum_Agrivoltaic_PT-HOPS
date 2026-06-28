@@ -13,9 +13,11 @@
 % ---- Required packages ----
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs,physics,bm,multirow}
+% siunitx MUST be loaded before physics to prevent \qty conflict
+% (physics defines \qty as absolute-value/bra-ket; siunitx defines \qty{val}{unit})
 \usepackage{siunitx}
-\AtBeginDocument{\RenewCommandCopy\qty\SI}
+\usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs,physics,bm,multirow}
+\usepackage[version=4]{mhchem}
 \DeclareSIUnit{\yr}{yr}
 \DeclareSIUnit{\kB}{kB}
 \DeclareSIUnit{\USD}{USD}
@@ -38,7 +40,7 @@
 \usepackage{enumitem}
 
 % ---- Cross-reference to main manuscript ----
-\externaldocument{Manuscript}
+\externaldocument{Manuscript_NatureEnergy_26-06-25}
 
 % ---- siunitx v3/v4 configuration ----
 \sisetup{
@@ -51,6 +53,11 @@
     range-units = single,
     quantity-product = \,,
 }
+
+% Restore siunitx \qty{value}{unit} after physics package overwrites it.
+% (siunitx v3+ omits \qty when physics is detected; this re-instates it.)
+% See siunitx manual §3.1: "Interaction with the physics package".
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
 
 \emergencystretch 2em
 
@@ -421,7 +428,7 @@ where $C_{\mathrm{OPEX}}$ comprises extension services and technician training (
 \item \textbf{Electricity:} \qty{180}{\kWh\per\m\squared\per\yr} at \qty{0.12}{\per\kWh} = \qty{21.6}{\per\m\squared\per\yr}
 \item \textbf{Water savings:} \qty{1300}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{2.6}{\per\m\squared\per\yr}
 \item \textbf{Crop yield (high-value floriculture):} \qty{8.2}{\kg\per\m\squared\per\yr} at \qty{4.5}{\USD\per\kg} = \qty{36.9}{\per\m\squared\per\yr}. The \qty{15}{\percent} quantum improvement contributes \qty{5.5}{\per\m\squared\per\yr}.
-\item \textbf{Carbon credit (conservative):} \qty{19.6}{\kg\ CO2e\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.196}{\per\m\squared\per\yr}
+\item \textbf{Carbon credit (conservative):} \qty{19.6}{\kg\of{CO2}e\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.196}{\per\m\squared\per\yr}
 \end{itemize}
 For a \qty{500}{\m\squared} module, the total annual revenue is approximately \qty{30612}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26612}{\USD}.
 
@@ -434,9 +441,9 @@ For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance su
 We propose a tiered subsidy framework where the NEB serves as the verifiable metric for subsidy qualification:
 
 \begin{itemize}
-\item \textbf{Tier~1 (NEB $<$ \qty{5}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{0}{\percent} subsidy
-\item \textbf{Tier~2 (NEB \SIrange{5}{10}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{15}{\percent} subsidy
-\item \textbf{Tier~3 (NEB $>$ \qty{10}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{30}{\percent} subsidy
+\item \textbf{Tier~1 (NEB $<$ \qty{5}{\kg\of{CO2}e\per\m\squared\per\yr}):} \qty{0}{\percent} subsidy
+\item \textbf{Tier~2 (NEB \qtyrange{5}{10}{\kg\of{CO2}e\per\m\squared\per\yr}):} \qty{15}{\percent} subsidy
+\item \textbf{Tier~3 (NEB $>$ \qty{10}{\kg\of{CO2}e\per\m\squared\per\yr}):} \qty{30}{\percent} subsidy
 \end{itemize}
 
 This creates a direct incentive loop: higher quantum yield improvements lead to higher NEB, which unlocks greater subsidy access, enabling broader deployment.
@@ -545,7 +552,7 @@ Relevant platforms include:
 
 \begin{itemize}
 \item \textbf{Synthetic J-aggregates:} Organic dyes that form excitonically coupled chains with tunable $J_{nm}$~\cite{Jang2008}.
-\item \textbf{Plant light-harvesting complexes:} LHCII, CP29, and PSI core complexes that have underdamped vibrational modes in the \SIrange{100}{1600}{\per\cm} range.
+\item \textbf{Plant light-harvesting complexes:} LHCII, CP29, and PSI core complexes that have underdamped vibrational modes in the \qtyrange{100}{1600}{\per\cm} range.
 \item \textbf{Conjugated polymer domains:} P3HT, PTB7, and other OPV donor polymers where vibronic coupling influences charge separation yields.
 \end{itemize}
 
@@ -611,7 +618,7 @@ This demonstrates that the spectral filtering effect is a general vibronic pheno
 % SECTION S9: PROOF-OF-CONCEPT SCENARIO — 500 M2 FLORICULTURE MICRO-MODULE
 %==============================================================================
 
-\section{Proof-of-Concept Scenario: \qty{500}{\m\squared} Floriculture Micro-Module}
+\section{Proof-of-Concept Scenario: \texorpdfstring{\qty{500}{\m\squared}}{500 m\texttwosuperior} Floriculture Micro-Module}
 \label{SI-sec:poc}
 
 \subsection{Site Description}
@@ -629,7 +636,7 @@ The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{glo
 
 \subsection{Energy and Carbon Balance}
 
-The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr}. Displacing grid electricity at \qty{450}{\g\ CO2e\per\kWh} offsets \qty{40.5}{\tonne\ CO2e\per\yr}. Combined with the NEB (\qty{19.6}{\kg\ CO2e\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \qty{10}{\USD\per\tonne\ CO2e}~\cite{ICVCM2024}, the system generates \qty{98}{\USD\per\yr} in verified carbon revenue.
+The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr}. Displacing grid electricity at \qty{450}{\g\of{CO2}e\per\kWh} offsets \qty{40.5}{\tonne\of{CO2}e\per\yr}. Combined with the NEB (\qty{19.6}{\kg\of{CO2}e\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \qty{10}{\USD\per\tonne\ CO2e}~\cite{ICVCM2024}, the system generates \qty{98}{\USD\per\yr} in verified carbon revenue.
 
 \subsection{Smallholder Applicability}
 
@@ -644,7 +651,7 @@ The \qty{500}{\m\squared} scale aligns perfectly with cooperative ownership mode
 
 \subsection{Motivation}
 
-The hostile greenhouse environment introduces significant noise into SERS and CQD fluorescence telemetry: thermal fluctuations, microbial fouling, dust scattering, and humidity gradients all corrupt the optical readout. Standard digital filters (Savitzky--Golay, moving-average) struggle to preserve the weak spectral signatures of pre-symptomatic stress --- particularly the \qty{180}{\per\cm} Franck--Condon mode and the \qty{1145}{\per\cm} chlorophyll $a$ $C=C$ stretch --- that differentiate pathological states from baseline drift.
+The hostile greenhouse environment introduces significant noise into SERS and CQD fluorescence telemetry: thermal fluctuations, microbial fouling, dust scattering, and humidity gradients all corrupt the optical readout. Standard digital filters (Savitzky--Golay, moving-average) struggle to preserve the weak spectral signatures of pre-symptomatic stress --- particularly the \qty{180}{\per\cm} Franck--Condon mode and the \qty{1145}{\per\cm} chlorophyll $a$ \ce{C=C} stretch --- that differentiate pathological states from baseline drift.
 
 To address this, the Digital Twin incorporates a hybrid quantum-classical signal processing pipeline that combines (i)~Matrix Product State (MPS) compression as a nonlinear low-pass filter and (ii)~quantum kernel ridge regression (QKRR) for spectral reconstruction and anomaly scoring.
 
@@ -799,7 +806,7 @@ confirming that the suppression is physical and not numerical.
 \paragraph{Population redistribution (S2~e).}
 At steady state, the NPoM-off population is distributed broadly across the
 FMO sites (Site~1: \qty{73}{\percent}; Site~2: \qty{20}{\percent}; others:
-\SIrange{0.3}{4.1}{\percent}). Under NPoM-on, the plasmon mode (Site~9)
+\qtyrange{0.3}{4.1}{\percent}). Under NPoM-on, the plasmon mode (Site~9)
 captures \qty{82.3}{\percent} of the total population, starving the reaction
 center. The maximum population on the trapping sites (3~+~4) drops by a factor
 of~5 (from \num{0.0189} to \num{0.0038}).
@@ -864,14 +871,17 @@ diagnostic readout and transport performance.
 % QUANTUM AGRIVOLTAICS
 %==============================================================================
 
-\section{Roadmap: Four Breakthroughs for Next-Generation Quantum Agrivoltaics}
+\section{Roadmap: Nine Breakthroughs for Next-Generation Quantum Agrivoltaics}
 \label{SI-sec:roadmap}
 
 The ``quantum-to-organism'' framework established in this work opens several
 transformative directions that, collectively, could redefine the
-water-energy-food nexus. We outline four breakthroughs---spanning materials
-science, geophysics, quantum algorithms, and data ethics---that we consider the
-highest-priority frontiers.
+water-energy-food nexus. We outline nine breakthroughs---spanning materials
+science (zwitterionic antifouling coatings, quantum MOFs, NV-diamond relaxometry,
+quantum fertilizer biostimulation), geophysics (atom-interferometric gravimetry),
+quantum algorithms (QAOA nexus scheduling), hardware hardening (thermal
+micro-shielding), and data governance (data sovereignty, GQAS certification)---that
+we consider the highest-priority frontiers for next-generation quantum agrivoltaics.
 
 \subsection{Zwitterionic Antifouling Polymer Coatings}
 \label{SI-sec:zwitterionic}
@@ -897,7 +907,7 @@ Applied to the present architecture, a \qty{5}{\nm} to \qty{20}{\nm}
 zwitterionic coating deposited on the NPoM gold picocavity (by drop-casting or
 electropolymerisation) and grafted onto the CQD surface during hydrothermal
 synthesis would reduce the Stern-Volmer drift rate from
-$\beta_{\mathrm{salinity}} = \SI{-0.012}{\milli\siemens\per\cm}$ (empirical,
+$\beta_{\mathrm{salinity}} = \qty{-0.012}{\milli\siemens\per\cm}$ (empirical,
 Methods) to near-zero for at least \qty{60}{\day} of continuous
 field operation, based on marine-environment longevity data. This hardware
 approach eliminates the recurring OPEX of panel cleaning ($\qty{800}{\USD\per\yr}$)
@@ -1034,7 +1044,7 @@ into a single module integrated with the digital twin orchestrator.
 The \textit{DynamicCalibrator} (\Cref{SI-sec:qkd}) compensates for thermal
 and salinity drift algorithmically, but a complementary hardware solution
 reduces the magnitude of the drift itself. A thin-film micro-shielding layer
-(\qty{1}{\micro\meter} to \qty{5}{\micro\meter} of SiO$_2$ or Al$_2$O$_3$ deposited via ALD)
+(\qty{1}{\micro\meter} to \qty{5}{\micro\meter} of \ce{SiO2} or \ce{Al2O3} deposited via ALD)
 around the NPoM gold picocavity and the CQD sensor tip attenuates the diurnal
 temperature excursion experienced by the quantum probe. The shielding efficacy
 $\eta_{\mathrm{shield}} \in [0,1]$ multiplies the effective thermal coupling:
@@ -1048,7 +1058,7 @@ k_{\mathrm{SV}}^{\mathrm{(cal)}} = k_{\mathrm{SV}}^{\mathrm{(ref)}} \,
 \bigl(1 + \alpha_T \,\eta_{\mathrm{shield}}\,\Delta T +
 \beta_S \,\sigma\bigr),
 \]
-where $\alpha_T = \SI{-0.0035}{\per\K}$, $\beta_S = \SI{-0.012}{\per\milli\S\per\cm}$,
+where $\alpha_T = \qty{-0.0035}{\per\K}$, $\beta_S = \qty{-0.012}{\per\milli\S\per\cm}$,
 $\Delta T = T - T_{\mathrm{ref}}$, and $\sigma$ is the soil salinity. For a
 greenhouse with $\pm\qty{15}{\K}$ diurnal swing and
 $\sigma = \qty{2}{\milli\S\per\cm}$, shielding reduces the thermal contribution
@@ -1060,9 +1070,9 @@ to k-SV drift from 5.25\% to 0.79\%.
 Metal---organic frameworks (MOFs) with porphyrin-based linkers can selectively
 adsorb heavy metals and release CQD payloads in a controlled manner. The
 porphyrinic MOF PCN-222 exhibits a Langmuir adsorption capacity of
-$\qty{300}{\mg\per\g}$ for Pb\textsuperscript{2+} at equilibrium
+$\qty{300}{\mg\per\g}$ for \ce{Pb^{2+}} at equilibrium
 (\qty{298}{\K}, \qty{50}{\ppb} influent), driven by coordination between the
-porphyrin nitrogen centres and the Pb\textsuperscript{2+} ion.
+porphyrin nitrogen centres and the \ce{Pb^{2+}} ion.
 Simultaneously, CQDs loaded into the MOF pores during synthesis
 (\qty{50}{\mg\per\g}) are released via first-order kinetics with a
 decay constant of \qty{0.02}{\per\day}, providing sustained
@@ -1071,7 +1081,7 @@ fluorescence-based tracking of the MOF degradation.
 The framework component~\texttt{src/materials/quantum\_mof.py} implements
 Langmuir adsorption, CQD release kinetics, and breakthrough-curve estimation
 for a MOF column treating greenhouse runoff. For a \qty{500}{\g} MOF bed and
-\qty{0.5}{\m\cubed\per\day} flow rate, the predicted Pb\textsuperscript{2+}
+\qty{0.5}{\m\cubed\per\day} flow rate, the predicted \ce{Pb^{2+}}
 breakthrough time exceeds \qty{600}{\day}, sufficient for a full growing
 season without bed replacement. This dual-function
 adsorption---contaminant scrubbing plus CQD delivery---positions MOFs as the
