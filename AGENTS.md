@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-28 (Restructured Session Logs and Metadata Reference)
+**Last updated:** 2026-06-28 (Session 17 continued — NEB Correction, Figure Legend Fix)
 
 
 ---
@@ -463,7 +463,13 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 - **Adversarial review** (15 findings): Φ_FT factor-of-2 inconsistency, 8% vs 15% QY, digital twin asserted but not implemented, QML "quantum" is classical, 1% sentinel fraction unjustified, NEB underivable, Floquet parameters ad hoc, OMIT misapplied, four-vs-five config contradiction, n=100 misleading, payback ignores governance, quantum-organism bridge is juxtaposition, soiling uncalibrated, BB84 QBER programmer-selected, OPV yield inconsistent
 - **Edge case hunter** (20 findings): factor-of-2 in cumulative_yield, DynamicCalibrator persistence, Pb²⁺ detection blind spot, audit() stub, QKD thread-safety, negative yield/subsidy/discount bounds, soiling >1.0, EMA alpha instability, zero baseline, ragged density matrices
 
-#### 8 Fixes Applied
+#### NEB 12.4→19.6 Value Correction (cont.)
+- **Root cause**: The manuscript, SI, and Cover Letter claimed NEB = 12.4~kg~CO₂e/m²/yr and a 2.4× improvement over Scenario B, but the figure code computed A=19.6, B=25.8 after accounting for OPV soiling decay (eta_soil=0.85 at 30 days). B's higher NEB reflected greater PV power output (no spectral filter, power_factor=1.1) at a lower lifecycle footprint (5.0 vs 8.5 kg CO₂e/m²/yr).
+- **Fixes across 6 LaTeX locations**: Abstract (L105), PoC section (L403), Figure 3 caption (L479), SI (L418, L626), Cover Letter (L54). All 12.4→19.6; 62→98 USD/yr carbon revenue; "2.4× improvement" narrative replaced with honest yield–carbon trade-off.
+- **Figure legend fix**: `plot_utils.py:390` label "Carbon Avoided" → "Net Ecological Benefit" (matched the y‑axis but contradicted the bar legend).
+- **Figure 3 regenerated**: A=19.6, B=25.8, C=0.0 (kg CO₂e/m²/yr); Biomass: A=12.0, B=0.68, C=0.71 (kg/m²/yr).
+
+#### 9 Fixes Applied
 - **`orchestrator.py:363`**: `cumulative_yield` 1×Γ_RC → 2×Γ_RC (matches scalar trap_yield and SI Eq.S3)
 - **`digital_twin.py:265`**: DynamicCalibrator now persisted via `self._calibrator` (EMA state retained across ticks)
 - **`diagnostics.py:113`**: Pb²⁺ detection fixed — was looking for `primary_peak_cm1` which Pb²⁺ lacks; now handles `cqd_pb2` separately

@@ -387,7 +387,7 @@ class Paper2FigureGenerator:
             x - width / 2,
             carbon_avoided,
             width,
-            label="Carbon Avoided (kg CO$_2$e)",
+            label="Net Ecological Benefit (kg CO$_2$e)",
             color=COLORS[0],
             alpha=0.85,
         )
