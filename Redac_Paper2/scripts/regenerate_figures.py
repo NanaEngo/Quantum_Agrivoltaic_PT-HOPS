@@ -428,9 +428,13 @@ def _compute_cooperative_payback(cfg: dict) -> tuple[np.ndarray, np.ndarray, np.
     Returns (subsidy_rates, coop_sizes_array, payback_matrix).
     """
     lca = cfg["lca"]
+    coop = cfg.get("cooperative", {})
     capex = lca["default_capex"]
     annual_revenue = lca["default_annual_revenue"]
     annual_opex = lca["default_annual_opex"]
+    training_opex = coop.get("annual_training_opex_usd", 1200.0)
+    cleaning_opex = coop.get("annual_cleaning_opex_usd", 800.0)
+    total_opex = annual_opex + training_opex + cleaning_opex  # = 4000 USD/yr
 
     subsidy_rates = np.linspace(0, 0.5, 51)
     coop_sizes = [1, 3, 5, 10]
@@ -439,7 +443,7 @@ def _compute_cooperative_payback(cfg: dict) -> tuple[np.ndarray, np.ndarray, np.
     for i, n_coop in enumerate(coop_sizes):
         for j, s in enumerate(subsidy_rates):
             net_capex = capex * (1.0 - s) / n_coop
-            net_cashflow = (annual_revenue - annual_opex) / n_coop
+            net_cashflow = (annual_revenue - total_opex) / n_coop
             payback_matrix[i, j] = net_capex / net_cashflow if net_cashflow > 0 else np.inf
 
     return subsidy_rates, np.array(coop_sizes), payback_matrix
@@ -535,7 +539,9 @@ def plot_figure_3(scenario_a: dict, scenario_b: dict, scenario_c: dict, output_d
             fontsize=8,
             color=COLORS[1],
         )
-    ax2.set_ylabel("Avoided Emissions (kg CO$_2$e / m$^2$ yr)", color=COLORS[0], fontweight="bold")
+    ax2.set_ylabel(
+        "Net Ecological Benefit (kg CO$_2$e / m$^2$ yr)", color=COLORS[0], fontweight="bold"
+    )
     ax2.tick_params(axis="y", labelcolor=COLORS[0])
     ax2b.set_ylabel("Crop Biomass (kg / m$^2$ yr)", color=COLORS[1], fontweight="bold")
     ax2b.tick_params(axis="y", labelcolor=COLORS[1])
