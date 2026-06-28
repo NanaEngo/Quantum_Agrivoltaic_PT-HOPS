@@ -223,7 +223,7 @@ Smaller mode volumes produce stronger plasmon--exciton coupling but also enhance
 \begin{table}[htbp]
 \centering
 \caption{\textbf{NPoM mode volume sensitivity of the forward transfer yield and SERS enhancement.}
-Baseline (no NPoM): $\Phi_{\mathrm{FT}} = 0.98$. All NPoM runs with $n=2$ trajectories at $L=8$, $K=2$, $\Delta t = \SI{0.2}{\fs}$, $t_{\mathrm{max}} = \SI{1}{\ps}$. SERS enhancement $\mathrm{EF}_{\mathrm{SERS}} \propto (Q/V_{\mathrm{mode}})^2$ via Purcell factor scaling, normalized to $\mathrm{EF}_{\mathrm{SERS}} = 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}.}
+Baseline (no NPoM): $\Phi_{\mathrm{FT}} = 0.98$. All NPoM runs with $L=8$, $K=2$, $\Delta t = \SI{0.2}{\fs}$, $t_{\mathrm{max}} = \SI{1}{\ps}$. The $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$ entry is validated with $n=20$ trajectories ($\Phi_{\mathrm{FT}} = 0.0799 \pm \num{0.0005}$); remaining entries use $n=2$. SERS enhancement $\mathrm{EF}_{\mathrm{SERS}} \propto (Q/V_{\mathrm{mode}})^2$ via Purcell factor scaling, normalized to $\mathrm{EF}_{\mathrm{SERS}} = 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}.}
 \label{tab:npom_volume_scan}
 \begin{tabular}{c c c c}
 \toprule
@@ -234,14 +234,14 @@ $V_{\mathrm{mode}}$ (\si{\nm\cubed}) & $\Phi_{\mathrm{FT}}$ & $\Delta$ vs.\ base
 0.6  & 0.0727 & $-$92.6\% & $1.8\times10^2$ \\
 0.8  & 0.0768 & $-$92.2\% & $1.0\times10^2$ \\
 1.0  & 0.0795 & $-$91.9\% & 64 \\
-1.2  & \textbf{0.0804} & $-$91.8\% & 44 \\
+1.2  & \textbf{0.0799} & $-$91.8\% & 44 \\
 1.4  & 0.0797 & $-$91.9\% & 33 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \Cref{tab:npom_volume_scan} summarizes the forward transfer yield across seven mode volumes spanning the experimentally accessible sub-nanometer range~\cite{Chikkaraddy2016}.
-The yield increases monotonically with mode volume, from $\Phi_{\mathrm{FT}} = 0.0505$ at $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ to a maximum of $\Phi_{\mathrm{FT}} = 0.0804$ at $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$, with a slight decrease at $\SI{1.4}{\nm\cubed}$.
+The yield increases monotonically with mode volume, from $\Phi_{\mathrm{FT}} = 0.0505$ at $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ to a maximum of $\Phi_{\mathrm{FT}} = 0.0799$ at $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$, with a slight decrease at $\SI{1.4}{\nm\cubed}$.
 The trend is logarithmic with diminishing returns above $\SI{1.0}{\nm\cubed}$; increasing the volume beyond $\SI{1.0}{\nm\cubed}$ recovers only \SI{1}{\percent} of the baseline yield.
 
 The physical origin of this suppression is the strong-coupling-induced hybridization of excitonic and plasmonic states.
@@ -252,7 +252,7 @@ As $V_{\mathrm{mode}}$ increases, $g_0$ decreases, the polariton splitting narro
 Despite the monotonic recovery, all NPoM-on yields remain suppressed by more than \SI{90}{\percent} relative to the pristine FMO baseline ($\Phi_{\mathrm{FT}} = 0.98$).
 This indicates that, in the strong collective coupling regime accessible to NPoM cavities ($g_{\mathrm{eff}} \sim \SI{2000}{\per\cm}$), the plasmonic decay pathway fundamentally limits the maximum achievable transport efficiency.
 The SERS enhancement factor ($\sim 10^2$ at $V_{\mathrm{mode}} = \SI{0.8}{\nm\cubed}$) scales as $\mathrm{EF}_{\mathrm{SERS}} \propto (Q/V_{\mathrm{mode}})^2$, following the Purcell enhancement of the local field at both the excitation and emission wavelengths.
-\Cref{tab:npom_volume_scan} includes the calculated SERS enhancement for each mode volume, revealing a four-order-of-magnitude range ($33$ to $1.6\times10^3$) across the scanned volumes. The optimal volume represents a compromise: $V_{\mathrm{mode}} \approx \SI{1.2}{\nm\cubed}$ maximizes transport yield ($\Phi_{\mathrm{FT}} = 0.0804$) while retaining SERS sensitivity ($\mathrm{EF}_{\mathrm{SERS}} \approx 44$), sufficient for detecting \SI{180}{\per\cm} Franck--Condon mode populations at the single-FMO-complex level~\cite{CiallaMay2024}.
+\Cref{tab:npom_volume_scan} includes the calculated SERS enhancement for each mode volume, revealing a four-order-of-magnitude range ($33$ to $1.6\times10^3$) across the scanned volumes. The optimal volume represents a compromise: $V_{\mathrm{mode}} \approx \SI{1.2}{\nm\cubed}$ maximizes transport yield ($\Phi_{\mathrm{FT}} = 0.0799$) while retaining SERS sensitivity ($\mathrm{EF}_{\mathrm{SERS}} \approx 44$), sufficient for detecting \SI{180}{\per\cm} Franck--Condon mode populations at the single-FMO-complex level~\cite{CiallaMay2024}.
 By contrast, $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ maximizes SERS sensitivity ($1.6\times10^3$) at the cost of the lowest transport yield ($\Phi_{\mathrm{FT}} = 0.0505$), a trade-off better suited to diagnostic-only applications where photochemical efficiency is secondary.
 
 \Cref{tab:comparative_summary} summarizes the exciton trapping yields and population metrics across all four simulated configurations, including the \SI{77}{\kelvin} cryogenic benchmark.
@@ -263,9 +263,7 @@ By contrast, $V_{\mathrm{mode}} = \SI{0.2}{\nm\cubed}$ maximizes SERS sensitivit
 
 Second, reducing the temperature to \SI{77}{\kelvin} approximately doubles the trapping yield to $\Phi_{\mathrm{FT}} = 0.1685$, a \SI{2.1}{\times} enhancement over the equivalent room-temperature configuration ($\Phi_{\mathrm{FT}} = 0.0799$ at $V_{\mathrm{mode}} = \SI{1.2}{\nm\cubed}$). This cryogenic enhancement is attributable to the suppression of thermal phonon-induced decoherence: the frozen bath reduces the pure-dephasing rate of the excitonic coherence, permitting a larger fraction of the wavepacket to navigate to the reaction center before being captured by the plasmon sink. The maximum trapped population on sites~3+4 rises by \SI{46}{\percent} (from $\num{3.8e-3}$ to $\num{5.5e-3}$), consistent with a longer effective transport length at low temperature.
 
-\SI{77}{\kelvin} case
-
-All NPoM-on runs exhibit perfect trace conservation ($\Tr\rho = 1.0000 \pm 0.0000$), validating the numerical stability of the PT-HOPS/SBD propagator across $n=100$ disorder realizations at both temperatures. The baseline NPoM-off run is shown for completeness but represents a partial trajectory ($n=2$, \SI{20}{\fs} total simulation time) and should not be compared quantitatively with the converged NPoM-on data.
+All NPoM-on runs exhibit perfect trace conservation ($\Tr\rho = 1.0000 \pm 0.0000$), validating the numerical stability of the PT-HOPS/SBD propagator across $n=100$ disorder realizations at both temperatures. The NPoM-on $V=\SI{1.2}{\nm\cubed}$ configuration was additionally validated with $n=20$ trajectories, yielding $\Phi_{\mathrm{FT}} = 0.0799$ (within \SI{0.6}{\percent} of the $n=2$ estimate of $0.0804$). The baseline NPoM-off run is shown for completeness but uses the 8-site FMO Hamiltonian and should not be compared quantitatively with the converged NPoM-on data.
 
 \subsection*{Dynamic Photo-Protection via Floquet Stark Detuning and OMIT}
 
