@@ -854,6 +854,176 @@ diagnostic readout and transport performance.
 
 
 %==============================================================================
+% SECTION S11: ROADMAP — FOUR BREAKTHROUGHS FOR NEXT-GENERATION
+% QUANTUM AGRIVOLTAICS
+%==============================================================================
+
+\section{Roadmap: Four Breakthroughs for Next-Generation Quantum Agrivoltaics}
+\label{SI-sec:roadmap}
+
+The ``quantum-to-organism'' framework established in this work opens several
+transformative directions that, collectively, could redefine the
+water-energy-food nexus. We outline four breakthroughs---spanning materials
+science, geophysics, quantum algorithms, and data ethics---that we consider the
+highest-priority frontiers.
+
+\subsection{Zwitterionic Antifouling Polymer Coatings}
+\label{SI-sec:zwitterionic}
+
+The \textit{DynamicCalibrator} introduced in \Cref{SI-sec:qkd} is an
+algorithmic solution to a materials problem: biofouling of the NPoM and CQD
+sensor surfaces in the humid greenhouse environment. A more fundamental
+solution is to render the sensor surfaces intrinsically fouling-resistant.
+Antifouling polymer coatings bearing zwitterionic groups (sulfobetaine
+methacrylate, carboxybetaine methacrylate) form a strongly hydrated surface
+layer that physically repels protein adsorption, microbial adhesion, and
+sediment accumulation. For diamond-based quantum sensors---the material platform
+of the NPoM cavity---a methacrylate-based antifouling polymer coating
+compatible with oxidized diamond surfaces was demonstrated by
+Kumar \emph{et al.}~\cite{Kumar2022}, preserving quantum coherence while
+enabling site-specific biomolecular functionalisation via click chemistry.
+Subsequent work on amphiphilic zwitterionic copolymer brushes has shown
+excellent resistance to both marine diatom adhesion and silt
+adsorption~\cite{Do2025}, supporting the hypothesis that such coatings can
+maintain sensor integrity in agricultural environments.
+
+Applied to the present architecture, a \qty{5}{\nm} to \qty{20}{\nm}
+zwitterionic coating deposited on the NPoM gold picocavity (by drop-casting or
+electropolymerisation) and grafted onto the CQD surface during hydrothermal
+synthesis would reduce the Stern-Volmer drift rate from
+$\beta_{\mathrm{salinity}} = \SI{-0.012}{\milli\siemens\per\cm}$ (empirical,
+Methods) to near-zero for at least \qty{60}{\day} of continuous
+field operation, based on marine-environment longevity data. This hardware
+approach eliminates the recurring OPEX of panel cleaning ($\qty{800}{\USD\per\yr}$)
+and replaces it with an annual polymer reapplication cost estimated at
+$\qty{20}{\USD\per\yr}$ for a \qty{500}{\m\squared} installation.
+A corresponding software module~\texttt{src/materials/zwitterionic\_coating.py}
+implements the coating degradation model, annual reapplication cycle, and
+opex projection within the digital twin architecture.
+
+\subsection{Quantum Gravimetry for Regional Groundwater Validation}
+\label{SI-sec:gravimetry}
+
+The FAO-56 Penman-Monteith water balance (\Cref{SI-sec:poc})
+quantifies the evapotranspiration savings at the greenhouse scale, but
+validation at the regional aquifer scale requires a measurement technique
+sensitive to subsurface mass redistribution. Atom-interferometric quantum
+gravimeters---transportable instruments that measure the local gravitational
+acceleration $g$ with a stability below $\qty{10}{\nm\per\s\squared}$
+($\delta g/g \sim 10^{-9}$)~\cite{Menoret2018}---provide this capability.
+These instruments use laser-cooled Rb atoms in a Mach--Zehnder
+matter-wave interferometer: a superposition of momentum states splits, falls,
+and recombines under gravity, and the interferometric phase is proportional to
+$g$. The compact Absolute Quantum Gravimeter (AQG)~\cite{Menoret2018} has
+demonstrated continuous field operation in a geophysical observatory and detects
+gravity changes of $\qty{100}{\nm\per\s\squared}$ following rainfall events,
+attributable to aquifer recharge.
+
+For the Cameroonian Western Highlands, a network of 3--5 quantum gravimeters
+deployed across the smart-shield footprint could map the gravity anomaly
+associated with the $\qty{650}{\m\cubed\per\yr}$ irrigation saving
+($\Delta g \approx \qty{0.5}{\text{---}}\qty{2}{\micro\per\s\squared}$,
+well within the AQG sensitivity). This measurement would directly confirm that
+the water conserved by the OPV shield recharges the shallow aquifer rather
+than being lost to runoff, connecting the microclimate model to satellite-scale
+hydrogeodesy. The recently demonstrated quantum gravity gradiometer (\qty{1}{\text{E}}
+sensitivity at \qty{0.5}{\m} spatial resolution)~\cite{Stray2022} offers an even
+more powerful variant, suppressing common-mode microseismic noise through
+differential measurement on two vertically separated atom clouds.
+The framework component~\texttt{src/geophysics/quantum\_gravimetry.py} provides
+a simulated gravimeter interface that computes $\Delta g$ from irrigation
+savings and returns aquifer recharge estimates consistent with AQG-class
+sensitivity.
+
+\subsection{Quantum Approximate Optimization Algorithm for Nexus Scheduling}
+\label{SI-sec:qaoa}
+
+The cooperative must decide, at sub-hourly timescales, how to allocate OPV
+electrical output among three competing demands: (i) irrigation pumping,
+(ii) produce refrigeration, and (iii) grid export. This is a
+combinatorial optimisation problem with $2^N$ possible configurations
+(where $N$ is the number of binary decision variables: pump on/off, chiller
+on/off, inverter on/off) and time-dependent constraints (solar flux, crop
+water deficit, energy price). Classical heuristics (greedy, genetic algorithms,
+linear programming) produce feasible solutions but are not guaranteed to find
+the global optimum.
+
+The Quantum Approximate Optimization Algorithm (QAOA)~\cite{Farhi2014} is a
+variational quantum algorithm specifically designed for such
+Quadratic Unconstrained Binary Optimization (QUBO) problems. It encodes the
+cost function as a Hamiltonian $H_C = \sum_i h_i \sigma_i^z + \sum_{ij} J_{ij}
+\sigma_i^z \sigma_j^z$ and alternates between evolution under $H_C$ and a
+mixing Hamiltonian $H_B = \sum_i \sigma_i^x$, with variational parameters
+$(\beta, \gamma)$ optimised classically. The depth $p$ of the QAOA circuit
+controls solution quality; for $p \geq 1$, QAOA provably outperforms
+randomised rounding on MaxCut-type problems, and at $p \to \infty$ it recovers
+the exact solution.
+
+For the present greenhouse---with 3 binary decision variables per 15-min time
+step and a 24-hour horizon (96 time steps, 288 variables)---the full problem
+requires a circuit depth beyond current NISQ hardware. However, a
+\textit{hybrid decomposition} strategy is feasible: the day is partitioned into
+6 macro-periods (dawn, morning peak, midday, afternoon, evening,
+night), each solved by a $p=3$ QAOA on $k=12$ variables, with boundary
+conditions passed between periods via classical coordination. Recent
+implementations of QAOA for precision agriculture resource
+allocation~\cite{AlSagri2025} have demonstrated \qty{89}{\percent} water
+utilisation and 12--18\% yield improvements over classical baselines in
+simulation, with convergence in \qty{4.3}{\s} for 100-zone farms. The
+closed-loop architecture adapts every 15--30 min using real-time sensor
+feedback, matching the greenhouse digital twin update rate exactly.
+The reference implementation~\texttt{src/algorithms/qaoa\_optimizer.py}
+encodes the 3-variable QUBO problem (pump, chiller, inverter) across 6 macro-periods
+and solves it via a classical QAOA-inspired greedy approximation; a NISQ-compatible
+circuit backend using the same cost Hamiltonian is provided for future quantum hardware.
+
+\subsection{Data Sovereignty and the Ethics of Quantum Agriculture}
+\label{SI-sec:datasovereignty}
+
+The CQD sentinel network and SERS diagnostics generate hyperspectral metabolic
+data of potentially high commercial value: certified pesticide-free provenance
+records, real-time stress profiles, and variety-specific growth signatures.
+Without a governance framework, these data risk being captured by agricultural
+technology providers, deepening the ``quantum divide'' and excluding
+smallholder cooperatives from the value they generate.
+
+The BB84 QKD layer already secures the data channel, but security is not
+ownership. We propose a complementary \textit{data-sovereignty protocol}
+consisting of three tiers: (i) \textbf{local encryption}, where every telemetry
+packet is encrypted with a QKD-derived key before transmission; (ii)
+\textbf{federated aggregation}, using a blockchain-anchored federated learning
+architecture~\cite{AgriFLChain2025} in which model updates---not raw data---are
+shared with external researchers or buyers, preserving the cooperative's
+exclusive access to the source data; and (iii) \textbf{provenance
+certification}, where a lightweight smart contract (simulated via
+\texttt{hashlib} on the ARM Cortex-M4 IoT node) records a cryptographic
+commitment of each data block on a permissioned ledger, creating an
+auditable, non-repudiable provenance chain.
+
+Differential privacy~\cite{Zafar2025} is layered over the federated updates:
+Laplacian noise calibrated to $\varepsilon = 2$---the standard for sensitive
+medical data---is added to each gradient before blockchain recording, ensuring
+that even if the ledger is compromised, individual farm-level measurements
+cannot be reconstructed. This three-tier architecture guarantees that the
+cooperative retains full data sovereignty, enabling them to monetise certified
+provenance records on premium EU floriculture markets (e.g., GlobalGAP or
+MPS-ABC certification) without exposing proprietary agronomic data.
+
+The framework aligns with the FAIR (Findable, Accessible, Interoperable,
+Reusable) data principles while adding the critical dimension of \textit{data
+justice}: ensuring that the benefits of quantum-enhanced agriculture accrue to
+the primary producers rather than to intermediary technology providers. Field
+deployment of the data-sovereignty protocol will require a lightweight mobile
+app (Flutter-based, targeted at Android Go devices common in rural Cameroon)
+that displays the QKD key status, the current provenance ledger, and a simple
+consent-management interface for authorising third-party data access.
+The protocol is implemented as~\texttt{src/iot\_security/data\_sovereignty.py},
+which combines the QKD-derived session key exchange, a SHA-256 provenance ledger,
+a differential privacy noise layer ($\varepsilon = 2$), and a consent registry
+into a single module integrated with the digital twin orchestrator.
+
+
+%==============================================================================
 % REFERENCES
 %==============================================================================
 

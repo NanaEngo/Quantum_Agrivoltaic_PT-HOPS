@@ -211,8 +211,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Master Nature Energy twocolumn draft (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Submission-format single-column draft (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Master manuscript (Nature Energy single-column submission format; **Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/SI.tex` | Supporting Information draft (**Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Cover_Letter.tex` | Submission Cover Letter (**Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
@@ -399,6 +398,34 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 20 (2026-06-28) — 4 Breakthrough Axes: Code Implementation, Adversarial Audit, LaTeX Integration
+
+#### Axes 7-10: Code Modules + Orchestrator Integration
+- **Axe 7 (Zwitterionic coatings)**: `src/materials/zwitterionic_coating.py` — coating degradation model, coherence retention, annual OPEX simulation. Replaces DynamicCalibrator algorithmic crutch with hardware-level antifouling model (Kumar2022, Do2025).
+- **Axe 8 (Quantum gravimetry)**: `src/geophysics/quantum_gravimetry.py` — atom-interferometric gravimeter model. Computes Δg from irrigation savings, gradient survey, aquifer recharge estimates. Cross-referenced to Stray2022/Menoret2018.
+- **Axe 9 (QAOA nexus optimization)**: `src/algorithms/qaoa_optimizer.py` — 3-variable QUBO optimizer (pump/cooler/inverter) over 6 macro-periods. Classical QAOA-inspired greedy backend.
+- **Axe 10 (Data sovereignty)**: `src/iot_security/data_sovereignty.py` — provenance ledger (SHA-256 blockchain), QKD-derived session encryption, differential privacy (ε=2), consent registry. Integrated with BB84 QKD layer.
+
+#### Orchestrator Integration (src/orchestrator.py)
+- Steps 9c-9f: Zwitterionic annual cycle → Gravimeter recharge estimate → QAOA schedule → Data sovereignty provenance record. All 4 modules called in sequence after Monte Carlo LCA, before HDF5 save.
+
+#### Tests
+- **28 new unit tests** across 4 modules (zwitterionic: 10, gravimetry: 6, qaoa: 5, sovereignty: 7)
+- **Total: 73 passed, 1 xfailed** (pre-existing solver skip)
+
+#### Manuscript & SI Updates
+- **Manuscript Outlook**: Points (8)-(11) added, Limitations enriched (zwitterionic hardware path)
+- **SI S11**: Full "Roadmap" section (155 lines) with 4 subsections covering zwitterionic coatings, quantum gravimetry, QAOA, and data sovereignty. Each subsection ends with code module reference.
+- **8 new references** added to references.bib (Kumar2022, Do2025, Stray2022, Menoret2018, Farhi2014, AlSagri2025, Zafar2025, AgriFLChain2025)
+- **Compilation**: MS (18 pp), SI (22 pp), 0 errors
+
+#### Document Updates
+- **Pistes_Improvements260625.md**: Sections III (Axes 7-10) + IV (Adversarial Audit — 6 new vulnerabilities)
+- **AGENTS.md**: Session 20 entry added, duplicate filename bug fixed ($\times$2)
+
+#### Git
+- Commit: `318bf6b` (4 breakthrough axes), pending second commit
 
 ### Session 19 (2026-06-28) — Codebase Restructuring, Paper 2 Figures Wrapping, and Path Reference Cleanup
 
@@ -732,8 +759,7 @@ All NPoM yields >90% suppressed regardless of volume (V=1.2 nm³ optimal).
 
 ```
 Submission_Package_Nature_Energy_Manuscript/  (Consolidated Submission Folder)
-├── Manuscript_NatureEnergy_26-06-25.tex      (Two-column draft)
-├── Manuscript_NatureEnergy_26-06-25.tex                            (Single-column submission version)
+├── Manuscript_NatureEnergy_26-06-25.tex      (Master manuscript — single-column submission format)
 ├── SI.tex                                    (Supporting Information)
 ├── Cover_Letter.tex                          (Cover letter)
 ├── references.bib                            (References database)

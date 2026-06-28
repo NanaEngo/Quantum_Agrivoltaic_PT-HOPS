@@ -14,8 +14,12 @@ from datetime import datetime, timezone
 import h5py
 import numpy as np
 
+from .algorithms.qaoa_optimizer import QAOAOptimizer
 from .config_loader import load_config
 from .digital_twin import DigitalTwin
+from .geophysics.quantum_gravimetry import QuantumGravimeter
+from .iot_security.data_sovereignty import DataSovereigntyProtocol
+from .materials.zwitterionic_coating import ZwitterionicCoating
 
 _SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from .constants import (
@@ -351,6 +355,59 @@ def run_global_simulation(solar_flux: float) -> None:
         mc_results["net_benefit_co2_kg"]["std"],
         mc_results["net_benefit_co2_kg"]["p5"],
         mc_results["net_benefit_co2_kg"]["p95"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    coating = ZwitterionicCoating(config)
+    annual_coating = coating.simulate_annual_cycle()
+    logger.info(
+        "[9c/10] Zwitterionic coating — %d reapp/yr, OPEX=%.0f USD/yr, avg coherence=%.2f (%s)",
+        annual_coating["annual_reapplications"],
+        annual_coating["annual_opex_usd"],
+        annual_coating["avg_coherence_retention"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    gravimeter = QuantumGravimeter(config)
+    irrigation_saving_m3 = water_saved_l * config.lca.footprint_m2 / 1000.0
+    aquifer_result = gravimeter.estimate_aquifer_recharge(
+        irrigation_saving_m3=irrigation_saving_m3, n_gravimeters=3
+    )
+    logger.info(
+        "[9d/10] Quantum gravimetry — Δg=%.2e m/s², detectable=%s, SNR=%.1f (%s)",
+        aquifer_result["mean_delta_g_ms2"],
+        aquifer_result["detectable"],
+        aquifer_result["signal_to_noise"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    qaoa = QAOAOptimizer(config)
+    solar_profile = np.full(96, power_kwh / 24.0)
+    qaoa_result = qaoa.solve(solar_profile)
+    logger.info(
+        "[9e/10] QAOA nexus — revenue=%.0f USD, utilization=%.1f%%, solar=%.1f kWh (%s)",
+        qaoa_result["total_revenue_usd"],
+        qaoa_result["utilization_fraction"] * 100,
+        qaoa_result["total_solar_kwh"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    dsp = DataSovereigntyProtocol(config)
+    dsp.record_provenance(
+        data_hash=run_id,
+        metadata={"trap_yield": float(trap_yield), "co2_kg": neb_results["net_benefit_co2_kg"]},
+    )
+    dsp.grant_consent("EU_floriculture_buyer")
+    sovereignty_status = dsp.get_status()
+    logger.info(
+        "[9f/10] Data sovereignty — ledger=%d blocks, intact=%s, consent=%s (%s)",
+        sovereignty_status["ledger_size"],
+        sovereignty_status["ledger_intact"],
+        sovereignty_status["consent_granted_parties"],
         f"{_time.time() - _t_phase:.1f}s",
     )
     _t_phase = _time.time()

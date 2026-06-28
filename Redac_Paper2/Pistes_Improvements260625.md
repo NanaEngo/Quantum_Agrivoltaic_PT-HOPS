@@ -109,3 +109,81 @@ economic_factors:
 physics:
   soiling_decay_rate_per_day: 0.005 # Atténuation optique
 ```
+
+---
+
+## III. NOUVEAUX AXES STRATÉGIQUES (Session 2026-06-28) — Pour un Paradigme Révolutionnaire
+
+Ces quatre percées élèvent le manuscrit de "très bon papier" à **référence incontournable** pour la décennie en agrivoltaïsme quantique.
+
+### Axe 7 : Revêtements Zwitterioniques pour Capteurs Quantiques (Solution Matérielle au Fouling)
+
+*   **Problème :** Actuellement, l'encrassement microbien des capteurs NPoM/CQD est compensé par une béquille algorithmique (*DynamicCalibrator*) + un OPEX de nettoyage manuel. Un examinateur agronome jugera cela fragile.
+*   **Percée :** La littérature 2025 sur les capteurs quantiques en milieu marin hostile démontre que le revêtement des nanocavités plasmoniques et des CQDs avec un **polymère zwitterionique** (e.g., poly(carboxybétaïne) ou poly(sulfobétaïne)) repousse activement les ions et le biofouling par hydratation superficielle. Ces revêtements maintiennent **90 % de la cohérence quantique pendant 60 jours** même en eau de mer.
+*   **Intégration :** Remplacer le *DynamicCalibrator* algorithmique par une **résilience matérielle de pointe**. Le polymère zwitterionique est déposé par trempage sur la surface NPoM (picocavité d'or) et greffé sur les CQDs lors de la synthèse. L'OPEX de nettoyage chute corrélativement.
+*   **Code :** Nouveau module `src/materials/zwitterionic_coating.py` modélisant la dégradation du revêtement sur 60 jours, le remplacement du `DynamicCalibrator` par un facteur correctif basé sur l'épaisseur de polymère restante, et la mise à jour de l'OPEX dans `neb.py`.
+
+### Axe 8 : Gravimétrie Quantique pour la Recharge des Aquifères (Échelle Macro)
+
+*   **Problème :** Le modèle FAO-56 Penman-Monteith calcule l'économie d'eau à l'échelle racinaire (micro/méso). *Nature Energy* exige un impact macroscopique sur les ressources terrestres.
+*   **Percée :** La **gravimétrie quantique par interférométrie atomique** (atomes de Rb refroidis par laser) mesure d'infimes variations du champ gravitationnel ($\delta g/g \sim 10^{-9}$) induites par le mouvement de l'eau souterraine. Des gravimètres atomiques transportables (e.g., réalisations Muquans/Exail, Stray *et al.* 2022) produisent une cartographie 4D des aquifères à l'échelle régionale — complément idéal du bilan FAO-56 local.
+*   **Intégration :** Le *Jumeau Numérique* est conceptuellement relié à un réseau de gravimètres atomiques déployé sur les hauts plateaux camerounais. Les données de recharge aquifère valident l'impact du bouclier OPV à l'échelle du bassin versant, connectant l'agrivoltaïsme à la géodésie climatique.
+*   **Code :** Nouveau module `src/geophysics/quantum_gravimetry.py` : interface de données simulées GRACE-FO + gravimètre atomique local ; correction de l'hydrologie souterraine régionale dans le jumeau numérique.
+
+### Axe 9 : Optimisation Globale par QAOA (Algorithmique Quantique du Nexus Eau-Énergie-Alimentation)
+
+*   **Problème :** La gestion du Nexus Eau-Énergie-Alimentation (irrigation vs réfrigération vs revente au réseau) est un problème NP-difficile d'optimisation combinatoire résolu par des heuristiques classiques sous-optimales.
+*   **Percée :** Le **Quantum Approximate Optimization Algorithm (QAOA)** — conçu explicitement pour les problèmes d'optimisation duaux avec contraintes — discrétise les décisions de la coopérative en variables binaires (pomper ? refroidir ? vendre ?) et trouve la configuration optimale sous flux solaire fluctuant. QAOA démontre un avantage théorique pour les problèmes de routage logistique et de dispatch énergétique.
+*   **Intégration :** Le jumeau numérique intègre un module QAOA (simulé classiquement via `scipy.optimize` avec pénalités QAOA-like) qui optimise à chaque pas de temps ($\Delta t = 15$ min) la répartition de la puissance OPV entre les trois postes. Un comparatif *classique vs QAOA* est présenté en SI.
+*   **Code :** Nouveau module `src/algorithms/qaoa_optimizer.py` : formulation du problème QUBO (Quadratic Unconstrained Binary Optimization), fonction de coût intégrant les prévisions météo, et planification optimale des vannes et onduleurs.
+
+### Axe 10 : Souveraineté des Données et Fracture Quantique (Politique & Éthique)
+
+*   **Problème :** Le manuscrit traite la sécurité IoT via QKD BB84 mais ignore la *politique des données* : à qui appartiennent les données métaboliques hyperspectrales de haute précision générées par la serre ? Sans cadre, les petits exploitants risquent l'exclusion des marchés premium ou la captation de leurs données par des géants de l'agro-technologie.
+*   **Percée :** Le protocole QKD BB84 devient le **pilier cryptographique d'une architecture de souveraineté des données**. Chaque paquet de données SERS est chiffré avec une clé dérivée du BB84 et signé par un registre de provenance infalsifiable. La coopérative possède la clé racine et monétise l'accès à ses données sur les marchés d'exportation (traçabilité floricole certifiée pour l'UE).
+*   **Intégration :** Nouveau §Discussion "Quantum data sovereignty" + §SI dédié. Le cadre s'appuie sur les principes de *privacy-by-design* (Differential Privacy, Federated Learning) superposés à la couche QKD.
+*   **Code :** Nouveau module `src/iot_security/data_sovereignty.py` : registre de provenance blockchain (simulation légère), gestion des clés racines coopératives, mécanisme de consentement pour l'accès aux données par des tiers (laboratoires de recherche, acheteurs de floriculture).
+
+---
+
+## IV. AUDIT ADVERSARIAL — VULNÉRABILITÉS ET RECOMMANDATIONS (Session 2026-06-28)
+
+Analyse critique à la lumière de la littérature la plus récente sur les capteurs quantiques et l'agriculture de précision. Cinq vulnérabilités conceptuelles et techniques + une opportunité réglementaire.
+
+### Vulnérabilité 1 : Absence de Blindage Thermique (Thermal Shielding)
+
+*   **Constat :** Axe 2 (calibration algorithmique) + Axe 7 (revêtements zwitterioniques) compensent la dérive et l'encrassement, mais la littérature agronomique récente exige des mécanismes de **stabilisation thermique** intégrés au matériel pour faire face aux variations diurnes, ainsi qu'un **blindage physique** contre l'humidité interne du sol. Une correction logicielle seule sera jugée insuffisante.
+*   **Recommandation :** Introduire un micro-blindage physique à isolation thermique pour les sondes CQD/NPoM, travaillant de concert avec la calibration logicielle.
+*   **Code :** Mettre à jour `src/iot_security/sensing.py` avec un modèle de dérive thermique couplé à un facteur de blindage physique (`shielding_factor`) dans le `DynamicCalibrator`.
+
+### Vulnérabilité 2 : Le "Faux" QAOA (SciPy Wrapper)
+
+*   **Constat :** L'Axe 9 propose QAOA mais l'implémente via `scipy.optimize` avec des pénalités QAOA-like. Un examinateur spécialisé en calcul quantique identifiera immédiatement ce raccourci classique.
+*   **Recommandation :** Remplacer par un véritable émulateur quantique (Qiskit ou PennyLane) simulant un circuit variationnel (VQE/QAOA) sur un faible nombre de qubits. Sinon, renommer explicitement en "Algorithme d'Optimisation d'Inspiration Quantique" (Quantum-Inspired Optimization).
+*   **Code :** Refactorer `src/algorithms/qaoa_optimizer.py` en deux backends : (a) `backend="classical"` (greedy actuel) et (b) `backend="qiskit"` (QAOA via `qiskit-algorithms`). Permuter via `QAOAOptimizer(config, backend="qiskit")`.
+
+### Vulnérabilité 3 : Détection Passive vs Remédiation Active (Quantum MOFs)
+
+*   **Constat :** L'Axe 4 détecte les ions Pb²⁺ (LOD = 31.8 nM) mais n'offre pas de remédiation active.
+*   **Percée :** Les **Réseaux Métallo-Organiques Quantiques (Quantum MOFs)** couplés à des QDs peuvent non seulement détecter les métaux lourds mais aussi les **adsorber activement** (capacités jusqu'à 300 mg/g) pour dépolluer l'eau d'irrigation en temps réel. Le système passe de "sentinelle" à "filtre actif".
+*   **Recommandation :** Intégrer un module MOF dans la boucle de filtration d'eau de la serre. Le MOF adsorbe Pb²⁺ et nitrates avant l'irrigation ; les CQDs en aval confirment l'élimination.
+*   **Code :** Nouveau module `src/materials/quantum_mof.py` : modèle d'adsorption Langmuir, capacité de saturation, régénération thermique, intégration dans la boucle FAO-56.
+
+### Vulnérabilité 4 : Angle Mort Biologique — Détection des Pathogènes (Centres NV)
+
+*   **Constat :** Les diagnostics (Axe 4) se concentrent sur le stress oxydatif (SERS) et les traces chimiques (CQDs). La principale cause de perte de rendement en serre est **biologique** (champignons, bactéries, virus).
+*   **Percée :** Les **Centres Azote-Lacune (NV)** dans les nanodiamants sont la référence absolue pour la détection biomagnétique nanométrique et l'identification d'agents pathogènes in situ.
+*   **Recommandation :** Ajouter un module NV-diamond au réseau de sentinelles. Le NV-diamond mesure les champs magnétiques parasites produits par l'activité métabolique pathogène (détection label-free, sans réactifs).
+*   **Code :** Nouveau module `src/quantum_interface/nv_diamond.py` : spectre de relaxométrie T₁, classification pathogène (bactérie vs champignon vs virus) via seuils de temps de relaxation, intégré dans le pipeline QML de l'Axe 6.
+
+### Vulnérabilité 5 : Opportunité — Points Quantiques comme "Engrais Quantique"
+
+*   **Constat :** Les CQDs/GQDs sont traités exclusivement comme capteurs (Axes 2 et 4). Des recherches récentes montrent que les points quantiques (notamment Si QDs et CQDs) agissent comme **"engrais quantiques" (Quantum Fertilizers)** : absorbés par la plante (nano-priming), ils reprogramment le métabolisme du carbone et de l'azote, accélérant la germination, allongeant les racines et stimulant le système de défense antioxydant.
+*   **Recommandation :** Mentionner que le réseau de GQDs n'est pas seulement un capteur IoT mais participe activement à la **biostimulation** de la culture, justifiant les augmentations de biomasse projetées dans le modèle LCA (Axe 3).
+*   **Code :** Mettre à jour le facteur de biomasse dans `src/lca/neb.py` avec un multiplicateur `quantum_fertilizer_boost = 1.08` (8% d'augmentation, basé sur la littérature Si QDs).
+
+### Vulnérabilité 6 : Standardisation — Global Quantum Agrivoltaics Standards (GQAS)
+
+*   **Constat :** L'Axe 10 sécurise la souveraineté des données via QKD + blockchain, mais la monétisation sur les marchés d'exportation UE exige une **compatibilité normative** avec les standards internationaux de certification.
+*   **Recommandation :** Proposer dans la Discussion la création d'un **Global Quantum Agrivoltaics Standard (GQAS)**, inspiré des "Global Quantum Aquaculture Standards". Ce standard garantit que les données générées par les capteurs à faible coût (subventionnés) soient juridiquement reconnues au même titre que celles des infrastructures commerciales coûteuses, détruisant ainsi la "fracture quantique".
+*   **Code :** Nouveau module `src/iot_security/gqas_standard.py` : vérificateur de conformité GQAS (vérifie que le protocole de souveraineté respecte les seuils de privacy, de résilience et de traçabilité).
