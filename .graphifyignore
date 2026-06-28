@@ -34,6 +34,7 @@ _bmad/
 ROADMAP.md
 AGENTS.md
 SUBMISSION_STANDARD.md
+*.md
 
 # ─── Duplicate reproducibility dir (canonical is in quantum_simulations_framework_parallel_260612/) ──
 reproducibility/

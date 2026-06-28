@@ -3,36 +3,35 @@
 \caption{\textbf{Comparative summary of simulated configurations.}
 All NPoM-on configurations use the 9-site dressed Hamiltonian
 (8 FMO~$+$~1 plasmon mode) with hierarchy depth $L=8$, $K=2$ Matsubara
-terms, $\Delta t = 0.2$~fs over a $1000$~fs window.
+terms, $\Delta t = \qty{0.2}{\fs}$ over a \qty{1000}{\fs} window.
 The NPoM-off baseline uses the 8-site FMO Hamiltonian with identical
-solver parameters.
-Trapping yield $\Phi_{\rm FT}$ is defined in Eq.~(2);
+solver parameters. Trapping yield $\Phi_{\rm FT}$ is defined in \eqphift;
 the SERS enhancement factor $\mathrm{EF}$ follows the Purcell scaling
 $\mathrm{EF} \propto (Q/V)^2$ normalized to $\mathrm{EF}=10^2$ at
-$V=0.8$~nm$^3$~\cite{Chikkaraddy2016}.}
+$V=\qty{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}.}
 \label{tab:comparative_summary}
 \small
 \begin{tabular}{lcccc}
 \toprule
 \bfseries Metric & \bfseries NPoM-off & \bfseries NPoM-on & \bfseries NPoM-on & \bfseries NPoM-on \\
-\bfseries & \bfseries (baseline) & \bfseries $V=0.8$~nm$^3$ & \bfseries $V=1.2$~nm$^3$ & \bfseries $V=1.2$~nm$^3$ \\
-\bfseries & \bfseries $T=295$~K & \bfseries $T=295$~K & \bfseries $T=295$~K & \bfseries $T=77$~K \\
+\bfseries & \bfseries (baseline) & \bfseries $V=\qty{0.8}{\nm\cubed}$ & \bfseries $V=\qty{1.2}{\nm\cubed}$ & \bfseries $V=\qty{1.2}{\nm\cubed}$ \\
+\bfseries & \bfseries $T=\qty{295}{\K}$ & \bfseries $T=\qty{295}{\K}$ & \bfseries $T=\qty{295}{\K}$ & \bfseries $T=\qty{77}{\K}$ \\
 \midrule
-Number of trajectories $n_{\rm traj}$ & 20 & 100 & 20 & 2\\
-System size & 8$\times$8 & 9$\times$9 & 9$\times$9 & 9$\times$9\\
-Site energy disorder $\sigma$ (cm$^{-1}$) & 50 & 50 & 50 & 50\\
-Trapping rate $\Gamma_{\rm RC}$ (ps$^{-1}$) & 0.15 & 0.15 & 0.15 & 0.15\\
+Number of trajectories $n_{\rm traj}$ & \num{20} & \num{100} & \num{20} & \num{2}\\
+System size & \num{8}$\times$\num{8} & \num{9}$\times$\num{9} & \num{9}$\times$\num{9} & \num{9}$\times$\num{9}\\
+Site energy disorder $\sigma$ (\unit{\per\cm}) & \num{50} & \num{50} & \num{50} & \num{50}\\
+Trapping rate $\Gamma_{\rm RC}$ (\unit{\per\ps}) & \num{0.15} & \num{0.15} & \num{0.15} & \num{0.15}\\
 \midrule
-\bfseries Trapping yield $\Phi_{\rm FT}$ & \bfseries 0.9800 & \bfseries 0.0768 & \bfseries 0.0799 & \bfseries 0.1685 \\
+\bfseries Trapping yield $\Phi_{\rm FT}$ & \bfseries \num{0.9800} & \bfseries \num{0.0768} & \bfseries \num{0.0799} & \bfseries \num{0.1685} \\
 \midrule
-Trapping sites (3+4) max. population & 0.0189 & 0.0048 & 0.0038 & 0.0055\\
-Site~1 final population & 0.7318 & 0.1455 & 0.1221 & 0.1091\\
-Site~6 final population & 0.0030 & 0.0537 & 0.0422 & 0.0409\\
-Plasmon mode final population & --- & 0.7901 & 0.8256 & 0.8401\\
-Population trace $\mu\pm\sigma$ & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000 & 1.0000$\pm$0.000000\\
+Trapping sites (3+4) max. population & \num{0.0189} & \num{0.0048} & \num{0.0038} & \num{0.0055}\\
+Site~1 final population & \num{0.7318} & \num{0.1455} & \num{0.1221} & \num{0.1091}\\
+Site~6 final population & \num{0.0030} & \num{0.0537} & \num{0.0422} & \num{0.0409}\\
+Plasmon mode final population & --- & \num{0.7901} & \num{0.8256} & \num{0.8401}\\
+Population trace $\mu\pm\sigma$ & \num{1.0000 \pm 0.0000} & \num{1.0000 \pm 0.0000} & \num{1.0000 \pm 0.0000} & \num{1.0000 \pm 0.0000}\\
 \midrule
-SERS enhancement factor EF & --- & 100.0 & 44.0 & 44.0\\
-Figure of merit $\Phi_{\rm FT}\times\mathrm{EF}$ & --- & 7.68 & 3.53 & 7.41\\
+SERS enhancement factor EF & --- & \num{100.0} & \num{44.0} & \num{44.0}\\
+Figure of merit $\Phi_{\rm FT}\times\mathrm{EF}$ & --- & \num{7.68} & \num{3.53} & \num{7.41}\\
 \bottomrule
 \end{tabular}
 \end{table*}

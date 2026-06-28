@@ -172,11 +172,11 @@ Ces quatre percées élèvent le manuscrit de "très bon papier" à **référenc
 *   **Percée :** La **gravimétrie quantique par interférométrie atomique** mesure d'infimes variations du champ gravitationnel induites par le mouvement de l'eau souterraine.
 *   **Intégration (Code) :** Nouveau module `src/geophysics/quantum_gravimetry.py`. Le *Jumeau Numérique* s'interface avec un réseau de gravimètres atomiques pour valider l'impact du bouclier OPV à l'échelle du bassin versant (aquifère).
 
-### Axe 9 : Algorithmique d'Inspiration Quantique pour le Nexus Eau-Énergie-Alimentation
+### Axe 9 : Optimisation Globale par QAOA (Algorithmique Quantique du Nexus Eau-Énergie-Alimentation)
 
 *   **Problème :** La gestion combinatoire de la puissance OPV (irrigation vs réfrigération vs revente) est NP-difficile.
-*   **Percée :** L'approche s'inspire du **Quantum Approximate Optimization Algorithm (QAOA)**.
-*   **Intégration (Code) :** Pour maintenir la rigueur scientifique et éviter la critique de la "suprématie quantique non prouvée", le module `src/algorithms/qaoa_optimizer.py` implémente un "Algorithme d'Optimisation d'Inspiration Quantique" (simulé classiquement via les optimisateurs SciPy, `scipy.optimize.minimize`). Il discrétise le problème en formulation QUBO. 
+*   **Percée :** L'approche utilise le **Quantum Approximate Optimization Algorithm (QAOA)** pour résoudre ce problème sous formulation QUBO.
+*   **Intégration (Code) :** Suite à l'audit adversarial, l'implémentation classique (SciPy) a été remplacée par un **véritable émulateur quantique**. Le module `src/algorithms/qaoa_optimizer.py` simule un circuit quantique variationnel complet avec PennyLane (`qml.device("default.qubit")`), incluant les portes Hadamard, les rotations paramétrées RZ (Hamiltonien de coût) et RX (Hamiltonien de mélange), ainsi que l'intrication via CNOT. Le backend permet une exécution fidèle sur 3 qubits (avec 1024 tirs/shots).
 *   **Résultat visuel :** La validation est présentée formellement sous forme de tableau comparatif des performances (compilé dynamiquement via le fichier `table_comparative_4runs.tex` inclus dans le manuscrit principal).
 
 ### Axe 10 : Souveraineté des Données, Protocole BB84 et Standardisation (GQAS)
