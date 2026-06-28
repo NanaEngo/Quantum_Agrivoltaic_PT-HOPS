@@ -15,6 +15,7 @@ import h5py
 import numpy as np
 
 from .config_loader import load_config
+from .digital_twin import DigitalTwin
 
 _SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from .constants import (
@@ -147,7 +148,9 @@ def run_global_simulation(solar_flux: float) -> None:
     _t_phase = _time.time()
 
     if not density_matrices:
-        logger.error("[4/10] No density matrices returned — aborting downstream analysis.")
+        logger.error(
+            "[4/10] No density matrices returned — aborting downstream analysis.", exc_info=True
+        )
         return
 
     dm_array = np.array(density_matrices)
@@ -213,13 +216,23 @@ def run_global_simulation(solar_flux: float) -> None:
     )
     _t_phase = _time.time()
 
-    # --- V6: Agrivoltaic Digital Twin orchestration heartbeat ---
-    dt_interval = config.digital_twin.update_interval_seconds
-    dt_sync_opv = config.digital_twin.sync_opv_grid
+    # --- V6: Agrivoltaic Digital Twin fusion (Axe 1) ---
+    dt = DigitalTwin(config)
+    dt_state = dt.tick(
+        solar_flux=solar_flux,
+        dm_array=dm_array,
+    )
     logger.info(
-        "[6d/10] Digital Twin — refresh=%ds, grid-sync=%s (%s)",
-        dt_interval,
-        dt_sync_opv,
+        "[6d/10] Digital Twin tick #%d — urgency=%s, phi_ft_global=%.4f, "
+        "et_rate=%.4f mm/day, water_saved=%.1f L/m2, power_soiled=%.3f kWh, "
+        "CO2_avoided=%.2f kg (%s)",
+        dt_state["tick"],
+        dt_state["urgency"],
+        dt_state["phi_ft_global"],
+        dt_state["et_rate_mm_day"],
+        dt_state["water_saved_liters"],
+        dt_state["power_soiled_kwh"],
+        dt_state["neb_co2_kg"],
         f"{_time.time() - _t_phase:.1f}s",
     )
     _t_phase = _time.time()

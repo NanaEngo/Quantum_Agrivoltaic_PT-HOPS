@@ -1,0 +1,33 @@
+# .graphifyignore — Exclude files from graphify knowledge graph extraction
+# Uses gitignore spec (same syntax as .gitignore)
+# See: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# ─── Deprecated / legacy code ─────────────────────────────────────────────
+Archive/
+
+# ─── Generated figures (images are extracted separately by graphify) ──────
+Graphics/
+
+# ─── Unrelated tooling ────────────────────────────────────────────────────
+comfyui-mcp-server/
+
+# ─── Planning artifacts (not source code) ─────────────────────────────────
+_bmad/
+
+# ─── Duplicate reproducibility dir (canonical is in quantum_simulations_framework_parallel_260612/) ──
+reproducibility/
+
+# ─── Binary data files (large, no semantic value) ─────────────────────────
+*.h5
+*.csv
+*.INVALID_FALLBACK_DATA.csv
+
+# ─── Generated coverage HTML reports ──────────────────────────────────────
+Redac_Paper2/coverage_html/
+
+# ─── npm / conda metadata ────────────────────────────────────────────────
+package-lock.json
+environment.yml
+
+# ─── Coverage data ────────────────────────────────────────────────────────
+.coverage

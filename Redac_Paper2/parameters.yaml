@@ -78,6 +78,10 @@ security:
 digital_twin:
   update_interval_seconds: 60           # Data fusion refresh interval (Axe 1)
   sync_opv_grid: true                   # Synchronize OPV power output with grid telemetry
+  fusion_enabled: true                  # Enable cross-domain fusion (Axe 1)
+  urgency_high_threshold: 2.0           # Anomaly score > 2.0 → HIGH urgency
+  urgency_medium_threshold: 1.0         # Anomaly score > 1.0 → MEDIUM urgency
+  security_gate_qkd: true              # QKD security gate for irrigation commands
 
 quantum_signal:
   kernel_gamma: 0.5                     # Quantum kernel RBF width

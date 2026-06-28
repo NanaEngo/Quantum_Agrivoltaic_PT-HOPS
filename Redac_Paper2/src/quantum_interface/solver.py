@@ -37,7 +37,9 @@ def _load_hops_simulator():
 
     _mod_path = os.path.join(_QS_FW, "src", "core", "hops_simulator.py")
     if not os.path.isfile(_mod_path):
+        logger.debug("HopsSimulator not found at %s", _mod_path)
         return None
+    logger.debug("Loading HopsSimulator from %s", _mod_path)
 
     # Temporarily remove Paper 2's "src" from sys.modules so
     # importlib.import_module looks for it fresh via sys.path.
@@ -98,6 +100,7 @@ class MesoHopsSolver:
     ) -> list[np.ndarray]:
         """Run a quantum dynamics simulation using MesoHOPS."""
         if not HOPS_SIM_AVAILABLE or HopsSimulator is None:
+            logger.error("HopsSimulator not available — framework path: %s", _QS_FW)
             raise ImportError(
                 "HopsSimulator not available. Ensure quantum_simulations_framework/ "
                 "is present at the project root."
@@ -111,6 +114,14 @@ class MesoHopsSolver:
             dt = self.config.quantum.solver.time_step_fs
         max_hier = int(hierarchy_depth)
 
+        logger.info(
+            "MesoHOPS init: L=%d, K=%d, n_traj=%d, dt=%.2f fs, T=%.0f K",
+            max_hier,
+            K_MATSUBARA,
+            n_traj,
+            dt,
+            self.config.simulation.temperature_k,
+        )
         sim = HopsSimulator(
             hamiltonian=hamiltonian,
             temperature=self.config.simulation.temperature_k,
@@ -157,12 +168,19 @@ class MesoHopsSolver:
                 os.environ.pop("PYTHONPATH", None)
 
         if result is None:
+            logger.error("HopsSimulator.simulate_dynamics() returned None")
             raise RuntimeError("HopsSimulator.simulate_dynamics() returned None.")
 
         # ----- Map HopsSimulator output to Paper 2's return format -----
         dm_list = result.get("density_matrices", [])
         if not dm_list:
+            logger.error("HopsSimulator returned no density matrices")
             raise RuntimeError("HopsSimulator returned no density matrices.")
+        logger.info(
+            "MesoHOPS completed: %d density matrices, time span [0, %.0f] fs",
+            len(dm_list),
+            time_points[-1],
+        )
 
         dm_array = np.array(dm_list)  # shape (traj_times, n_sites, n_sites)
 

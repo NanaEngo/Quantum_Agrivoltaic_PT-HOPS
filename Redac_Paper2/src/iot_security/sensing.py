@@ -10,6 +10,9 @@ from ..constants import (
     STRESS_NONE_THRESHOLD,
     STRESS_SEVERE_THRESHOLD,
 )
+from ..logging_config import get_logger
+
+logger = get_logger("sensing")
 
 
 class GqdSensorNetwork:
@@ -29,12 +32,21 @@ class GqdSensorNetwork:
         )
         red_shift_nm = GQD_PESTICIDE_REDSHIFT_SENSITIVITY * pesticide_ppb
 
+        status = "dry" if soil_moisture_pct < SOIL_MOISTURE_DRY_THRESHOLD else "optimum"
+        logger.info(
+            "GQD telemetry: moisture=%.1f%%, Pb=%.2f ppm, pesticide=%.1f ppb → "
+            "intensity=%.2f, peak=%.1f nm, status=%s",
+            soil_moisture_pct,
+            heavy_metal_pb_ppm,
+            pesticide_ppb,
+            gqd_quenched_intensity,
+            GQD_CORE_SHELL_BASELINE_NM + red_shift_nm,
+            status,
+        )
         return {
             "gqd_fluorescence_intensity": float(max(gqd_quenched_intensity, 0.0)),
             "core_shell_peak_wavelength_nm": float(GQD_CORE_SHELL_BASELINE_NM + red_shift_nm),
-            "soil_moisture_status": "dry"
-            if soil_moisture_pct < SOIL_MOISTURE_DRY_THRESHOLD
-            else "optimum",
+            "soil_moisture_status": status,
         }
 
 
@@ -110,6 +122,18 @@ class DynamicCalibrator:
         drift_fraction = abs(self._baseline_ema - ref) / max(abs(ref), 1e-12)
         correction_factor = ref / max(self._baseline_ema, 1e-12)
         alarm = drift_fraction > self.drift_alarm_threshold
+        if alarm:
+            logger.warning(
+                "DynamicCalibrator: drift=%.2f%% exceeds threshold %.2f%% — cleaning required",
+                drift_fraction * 100,
+                self.drift_alarm_threshold * 100,
+            )
+        logger.debug(
+            "DynamicCalibrator: correction=%.4f, drift=%.4f, ema=%.4f",
+            correction_factor,
+            drift_fraction,
+            self._baseline_ema,
+        )
 
         return {
             "correction_factor": float(correction_factor),
@@ -135,4 +159,10 @@ class DynamicCalibrator:
 
         delta_t = temperature_k - self.t_ref
         k_sv_adj = self.k_sv_ref * (1.0 + alpha_temp * delta_t + beta_salinity * salinity_ms_cm)
+        logger.debug(
+            "Stern-Volmer calibrated: k_sv=%.1e (T=%.1f K, S=%.2f mS/cm)",
+            max(k_sv_adj, 1e4),
+            temperature_k,
+            salinity_ms_cm,
+        )
         return float(max(k_sv_adj, 1e4))

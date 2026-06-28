@@ -6,6 +6,9 @@ from ..constants import (
     QKD_SAMPLE_DIVISOR,
     QKD_SIFTING_OVERHEAD,
 )
+from ..logging_config import get_logger
+
+logger = get_logger("qkd")
 
 
 class SecurityThresholdExceeded(RuntimeError):
@@ -54,7 +57,12 @@ class Bb84Protocol:
         qber = errors / sample_size
 
         if qber > self.security_threshold:
-            # V5: Raise hard fail-safe exception instead of returning a dict
+            logger.critical(
+                "BB84 QBER=%.4f exceeds Shor-Preskill threshold %.4f on %s channel — irrigation HALTED",
+                qber,
+                self.security_threshold,
+                self.channel_type,
+            )
             raise SecurityThresholdExceeded(
                 f"BB84 QBER={qber:.4f} exceeds Shor-Preskill threshold "
                 f"{self.security_threshold:.4f} on {self.channel_type} channel. "
@@ -63,9 +71,15 @@ class Bb84Protocol:
 
         remaining_indices = list(set(range(len(alice_sifted))) - set(sample_indices))
         final_key = bob_sifted[remaining_indices][: self.key_length]
+        logger.info(
+            "BB84 QKD: QBER=%.4f, key_length=%d, channel=%s, status=SUCCESS",
+            qber,
+            len(final_key),
+            self.channel_type,
+        )
         return {
             "qber": float(qber),
             "key": "".join(map(str, final_key)),
             "status": "SUCCESS",
-            "channel_type": self.channel_type,  # V5: record channel for audit log
+            "channel_type": self.channel_type,
         }

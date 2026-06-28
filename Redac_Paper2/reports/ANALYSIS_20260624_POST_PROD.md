@@ -186,7 +186,50 @@ Method: 100,000 vectorized samples with normal distributions on all input parame
 - **Manuscript compilation**: Clean (0 errors, 14 SI cross-refs unresolved — expected)
 - **Git**: Commit `ad5b760`, pushed to `origin/main`
 
-### 7.7 Data Files (Local + Server)
+### 7.7 Mode Volume → Hamiltonian Coupling Trace (Graphify Discovery)
+
+The NPoM volume scan is governed by a single physical chain from config to Hamiltonian:
+
+**Step 1 — Config parameter**: `mode_volume_nm3` in `parameters.yaml` (default 0.8, scanned 0.2–1.4)
+
+**Step 2 — Plasmon coupling strength** (`diagnostics.py:53-59`):
+```python
+g_0 = NPoM_REFERENCE_COUPLING_CM × √(NPoM_REFERENCE_MODE_VOLUME_NM3 / mode_volume_nm3)
+    = 120.0 × √(1.0 / V)  cm⁻¹
+```
+
+**Step 3 — Hamiltonian dressing** (`diagnostics.py:61-69`):
+```python
+H_dressed[site, PLASMON_INDEX] = g_0   # for sites in PLASMON_COUPLING_SITES = [0, 5]
+H_dressed[PLASMON_INDEX, site] = g_0   # Hermitian conjugate
+H_dressed[PLASMON_INDEX, PLASMON_INDEX] = 0.0  # plasmon site energy = 0
+```
+This produces a 9×9 dressed Hamiltonian (8 FMO BChl a sites + 1 plasmon mode).
+
+**Step 4 — MesoHOPS HEOM solver** propagates dynamics on the dressed Hamiltonian → Φ_FT.
+
+**Complete scan with coupling strengths:**
+
+| V (nm³) | g₀ (cm⁻¹) | Φ_FT | Δ vs baseline | EF_SERS |
+|:-------:|:----------:|:----:|:-------------:|:-------:|
+| 0.2 | 268.3 | 0.0505 | −94.8% | 1600 |
+| 0.4 | 189.7 | 0.0605 | −93.8% | 400 |
+| 0.6 | 155.0 | 0.0727 | −92.6% | 180 |
+| 0.8 | 134.2 | 0.0760 | −92.2% | 100 |
+| 1.0 | 120.0 | 0.0795 | −91.9% | 64 |
+| **1.2** | **109.5** | **0.0799** | **−91.8%** | **44** |
+| 1.4 | 101.4 | 0.0797 | −91.9% | 33 |
+| 77K @ 1.2 | 109.5 | **0.1685** | −82.8% | 44 |
+
+**Key physics**: g₀ ∝ 1/√V → smaller mode volume = stronger plasmon-exciton coupling = more population trapped on plasmon = lower Φ_FT but higher SERS EF. The relationship is monotonically inverse with diminishing returns above V=1.0 nm³. V=1.2 nm³ is the Pareto optimum: best transport yield (0.0799) with adequate SERS sensitivity (EF=44).
+
+**Constants** (`constants.py:40-43`):
+- `NPoM_REFERENCE_MODE_VOLUME_NM3 = 1.0`
+- `NPoM_REFERENCE_COUPLING_CM = 120.0`
+- `NPoM_MAX_PLASMON_COUPLING_CM = 1000.0` (guardrail for V→0)
+- `PLASMON_COUPLING_SITES = [0, 5]` (coupled to BChl a sites 1 and 6)
+
+### 7.8 Data Files (Local + Server)
 | File | Source | Size | Description |
 |------|--------|:----:|-------------|
 | `production_dynamics.h5` | R-3 (latest) | 448 KB | 295K, NPoM ON, V=1.2, n_traj=20 |

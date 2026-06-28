@@ -1,6 +1,50 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-26 (Session 15 — Figures, QML, Cover Letter, Housekeeping)
+**Last updated:** 2026-06-28 (Session 16 — Graphify, FMO Network, Logging, Figure Alignment)
+
+## Session 16 (2026-06-28) — Graphify Knowledge Graph, FMO Network, Logging Lifting, Figure Alignment
+
+### Graphify Knowledge Graph (Complete)
+- **Full pipeline**: 4,359 nodes · 6,038 edges · 318 communities across 673 files (~2.1M words)
+- **Deep mode re-run**: Improved from 4,332/6,034/439 to 4,359/6,038/318 (community detection refinement)
+- **Graphify ignore**: Created `.graphifyignore` with 12 patterns (Archive/, Graphics/, *.h5, *.csv, etc.)
+- **`.gitignore` refined**: Removed duplicates, fixed broken `*.run.xml# achemso...` pattern, added `graphify-out/`, `*.h5`, `*.csv`, `.opencode/`, reorganized into 15 sections
+- **Mode volume → Hamiltonian chain traced**: `FmoConfig (mode_volume_nm3) → reads_config → NpomCoupling → implements → NPoM Plasmon Coupling Chain (g₀ = 120√(1/V) → H_dressed → 9×9 Hamiltonian)` via `graphify explain npom_plasmon_coupling_chain`
+- **Known limitation**: Graph is fragmented (280 connected components); `graphify path` fails across components; `graphify explain` works for local neighborhoods
+
+### FMO Network Visualization
+- **Created** `src/quantum_interface/fmo_network.py` (270 lines): networkx-based FMO complex graph with:
+  - `build_fmo_graph()`: 8 BChl a sites with couplings from `FMO_COUPLINGS_CM`
+  - `add_plasmon_coupling()`: NPoM plasmon node with mode-volume-dependent coupling
+  - `plot_fmo_network()`: publication-quality network diagram (edge width ∝ |coupling|, color ∝ sign)
+  - `get_coupling_matrix()`, `get_degree_summary()`, `print_coupling_table()` for analysis
+
+### Logging Lifting (6 files)
+- **`digital_twin.py`**: Added `get_logger("digital_twin")` + 6 logger calls (init, tick, urgency HIGH/MEDIUM)
+- **`solver.py`**: Activated unused `logger = get_logger("solver")` + 5 logger calls (init, dynamics, error paths)
+- **`diagnostics.py`**: Added `get_logger("diagnostics")` + 4 logger calls (NPoM coupling, dressed Hamiltonian, global yield)
+- **`qkd.py`**: Added `get_logger("qkd")` + 2 logger calls (QBER critical, QKD success)
+- **`sensing.py`**: Added `get_logger("sensing")` + 3 logger calls (GQD telemetry, calibrator drift, Stern-Volmer)
+- **`orchestrator.py`**: Added `exc_info=True` to error path (line 151)
+
+### Figure Panel Count Alignment
+- **Problem**: `plot_utils.py` (called by orchestrator) produced 2/1/1 panels, while `regenerate_figures.py` (standalone script) produced 3/3/3 panels matching the manuscript caption
+- **Fix**: Rewrote `plot_utils.py` to produce 3-panel figures:
+  - Figure 1: (a) Energy level diagram, (b) Population dynamics, (c) RC yield
+  - Figure 2: (a) Floquet Stark, (b) OMIT, (c) SERS spectrum
+  - Figure 3: (a) Water savings, (b) NEB comparison, (c) Cooperative payback
+- **Extracted constants**: `plot_utils.py` now imports from `src/constants.py` instead of duplicating FMO values
+- **`matplotlib.use("Agg")`**: Added for server-safe non-interactive rendering
+
+### Test Results
+- **46 passed, 1 xfailed** (pre-existing MesoHOPS solver), 1 warning (non-critical)
+- All 17 digital twin unit tests pass
+- All 10 signal processing tests pass
+- Integration test 9-step pipeline passes
+
+### Gitignore & Documentation
+- `.gitignore` rewritten: 15 sections, deduped, added `graphify-out/`, `*.h5`, `*.csv`, `.opencode/`, `comfyui-mcp-server/`
+- `AGENTS.md` and `ROADMAP.md` updated for Session 16
 
 ## Session 15 (2026-06-26) — Figures with Panels, QML Integration, Cover Letter Fix, Housekeeping
 

@@ -28,6 +28,7 @@ from src.constants import (
     MM_TO_LITER_PER_M2,
     WIND_SPEED_GREENHOUSE_FACTOR,
 )
+from src.digital_twin import DigitalTwin
 from src.lca.neb import NetEcologicalBenefit
 from src.microclimate.fao56 import GreenhouseEvapotranspiration
 from src.quantum_interface.diagnostics import SersDiagnostics
@@ -58,7 +59,7 @@ def test_end_to_end_v6_pipeline() -> dict:
         "noise_sigma_fraction": config.quantum_signal.noise_sigma_fraction,
     }
     print(
-        f"[1/8] Config loaded with Digital Twin ✓ — "
+        f"[1/9] Config loaded with Digital Twin ✓ — "
         f"refresh={config.digital_twin.update_interval_seconds}s, "
         f"grid-sync={config.digital_twin.sync_opv_grid}"
     )
@@ -81,7 +82,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     }
     assert 0.0 < soiling_factor < 1.0, f"Soiling factor {soiling_factor} out of range"
     print(
-        f"[2/8] Soiling attenuation ✓ — factor={soiling_factor:.4f}, "
+        f"[2/9] Soiling attenuation ✓ — factor={soiling_factor:.4f}, "
         f"P_ideal={power_ideal_kwh:.1f}, P_soiled={power_soiled_kwh:.1f}"
     )
 
@@ -104,7 +105,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     }
     assert 0.0 < phi_ft_global <= 1.0, f"Global yield {phi_ft_global} out of range"
     print(
-        f"[3/8] Global canopy yield ✓ — Phi_FT_NPoM(physical)={physical_yield_npom:.4f}, "
+        f"[3/9] Global canopy yield ✓ — Phi_FT_NPoM(physical)={physical_yield_npom:.4f}, "
         f"Phi_FT_passive={phi_ft_passive:.4f}, "
         f"Phi_FT_global={phi_ft_global:.4f} (sentinel={sentinel_ratio * 100:.1f}%)"
     )
@@ -115,7 +116,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     results["sers_readout"] = {k: v for k, v in sers_readout.items() if k != "stress_markers"}
     results["sers_stress_markers"] = sers_readout.get("stress_markers", {})
     print(
-        f"[4/8] SERS Raman readout ✓ — 180_cm={sers_readout.get('180_cm', 0):.2f}, "
+        f"[4/9] SERS Raman readout ✓ — 180_cm={sers_readout.get('180_cm', 0):.2f}, "
         f"740_cm={sers_readout.get('740_cm', 0):.2f}, "
         f"1145_cm={sers_readout.get('1145_cm', 0):.2f}"
     )
@@ -162,7 +163,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     }
     assert "denoised_spectrum" in anomaly_result
     print(
-        f"[5/8] QML signal processing ✓ — stress={anomaly_result['predicted_stress']:.3f}, "
+        f"[5/9] QML signal processing ✓ — stress={anomaly_result['predicted_stress']:.3f}, "
         f"anomaly={anomaly_result['anomaly_score']:.3f}, "
         f"early_warning={anomaly_result['early_warning']}"
     )
@@ -190,7 +191,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     }
     assert et_rate >= 0.0
     print(
-        f"[6/8] FAO-56 ET_c ✓ — et_rate={et_rate:.4f} mm/day, water_saved={water_saved_l:.1f} L/m2"
+        f"[6/9] FAO-56 ET_c ✓ — et_rate={et_rate:.4f} mm/day, water_saved={water_saved_l:.1f} L/m2"
     )
 
     # ── 7. LCA cooperative payback (Axe 3) ──────────────────────────────
@@ -219,7 +220,7 @@ def test_end_to_end_v6_pipeline() -> dict:
     assert coop_payback["training_opex_usd"] == 1200.0
     assert coop_payback["cleaning_opex_usd"] == 800.0
     print(
-        f"[7/8] LCA cooperative ✓ — payback={coop_payback['payback_yr']:.2f} yr, "
+        f"[7/9] LCA cooperative ✓ — payback={coop_payback['payback_yr']:.2f} yr, "
         f"NPV-10yr={coop_payback['npv_10yr_usd']:.0f} USD, "
         f"CO2_avoided={neb_results['net_benefit_co2_kg']:.2f} kg"
     )
@@ -244,11 +245,41 @@ def test_end_to_end_v6_pipeline() -> dict:
         "co2_p95": mc_results["net_benefit_co2_kg"]["p95"],
     }
     print(
-        f"[8/8] Monte Carlo NEB ✓ — CO2: "
+        f"[8/9] Monte Carlo NEB ✓ — CO2: "
         f"{mc_results['net_benefit_co2_kg']['mean']:.2f} ± "
         f"{mc_results['net_benefit_co2_kg']['std']:.2f} kg "
         f"[5%:{mc_results['net_benefit_co2_kg']['p5']:.2f}, "
         f"95%:{mc_results['net_benefit_co2_kg']['p95']:.2f}]"
+    )
+
+    # ── 9. Digital Twin fusion (Axe 1) ──────────────────────────────────
+    dt = DigitalTwin(config)
+    dt_state = dt.tick(
+        solar_flux=solar_flux,
+        anomaly_result=anomaly_result,
+        sensor_telemetry={"soil_moisture_status": "optimum", "baseline_reading": 1.0},
+        qkd_status={"status": "SECURE", "qber": 0.03},
+    )
+    results["digital_twin_fusion"] = {
+        "tick": dt_state["tick"],
+        "urgency": dt_state["urgency"],
+        "phi_ft_global": dt_state["phi_ft_global"],
+        "et_rate_mm_day": dt_state["et_rate_mm_day"],
+        "water_saved_liters": dt_state["water_saved_liters"],
+        "power_soiled_kwh": dt_state["power_soiled_kwh"],
+        "neb_co2_kg": dt_state["neb_co2_kg"],
+        "anomaly_score": dt_state["anomaly_score"],
+        "security_gate": dt_state["security_gate"],
+        "calibration_correction": dt_state["calibration_correction"],
+    }
+    assert dt_state["urgency"] in ("NORMAL", "MEDIUM", "HIGH")
+    assert dt_state["security_gate"] is True
+    assert dt_state["phi_ft_global"] > 0.0
+    print(
+        f"[9/9] Digital Twin fusion ✓ — urgency={dt_state['urgency']}, "
+        f"phi_ft_global={dt_state['phi_ft_global']:.4f}, "
+        f"security_gate={dt_state['security_gate']}, "
+        f"calibration={dt_state['calibration_correction']:.4f}"
     )
 
     elapsed = _time.time() - _t0
@@ -270,4 +301,6 @@ if __name__ == "__main__":
     print(f"   Payback period        = {r['lca']['payback_yr']:.2f} yr")
     print(f"   NPV-10yr              = {r['lca']['npv_10yr_usd']:.0f} USD")
     print(f"   Digital Twin refresh  = {r['digital_twin']['update_interval_seconds']}s")
+    print(f"   DT fusion urgency     = {r['digital_twin_fusion']['urgency']}")
+    print(f"   DT security gate      = {r['digital_twin_fusion']['security_gate']}")
     print(f"   QML kernel gamma      = {r['quantum_signal']['kernel_gamma']}")

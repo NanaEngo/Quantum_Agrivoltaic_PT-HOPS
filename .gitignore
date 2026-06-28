@@ -1,11 +1,13 @@
-# Python
+# =============================================================================
+# .gitignore — Quantum Agrivoltaic PT-HOPS
+# =============================================================================
+
+# ─── Python ────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-.mypy_cache/
-.pytest_cache/
 build/
 develop-eggs/
 dist/
@@ -22,9 +24,10 @@ wheels/
 .installed.cfg
 *.egg
 
-# Testing
+# ─── Testing ───────────────────────────────────────────────────────────────
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 .coverage
 htmlcov/
 .tox/
@@ -32,55 +35,27 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# Jupyter
+# ─── Jupyter ───────────────────────────────────────────────────────────────
 .ipynb_checkpoints
+notebooks/*.ipynb_checkpoints/
 
-# IDEs
+# ─── IDEs ──────────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
+# ─── OS ────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# Project specific
-.qodo/
-.kiro/
-.agent/
-.agents/
-_bmad/
-.QWEN*/
-managed_context/
-test_suite_analysis/
-AGENTS.md
-QWEN.md
-
-# Simulation data — invalid/fallback results must not be committed
-*.INVALID_FALLBACK_DATA.csv
-
-# Simulation data — invalid/fallback results must not be committed
-*.INVALID_FALLBACK_DATA.csv
-
-# Laptop-specific configurations (do not commit local test overrides)
-Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml
-
-# Temporary files
-*.tmp
-*.bak
-envs.txt
-
-# Jupyter notebook checkpoints
-notebooks/*.ipynb_checkpoints/
-
-# Sensitive development files
-Next/
-
-# FUSE filesystem artifacts
+# ─── FUSE filesystem ──────────────────────────────────────────────────────
 .fuse*
 
-# LaTeX
+# ─── Graphify (knowledge graph output) ────────────────────────────────────
+graphify-out/
+
+# ─── LaTeX auxiliary ──────────────────────────────────────────────────────
 *.acn
 *.acr
 *.alg
@@ -115,10 +90,53 @@ Next/
 *.toc
 *.vrb
 *.xdy
-*.run.xml# achemso auxiliary files
+*.run.xml
 Redac_Paper1/Theory_Journals/JPCL/acs-*.bib
 
-# Large compiled/generated files (never commit)
+# ─── Simulation data (binary) ─────────────────────────────────────────────
+*.h5
+*.hdf5
+
+# ─── Simulation data (tabular) ────────────────────────────────────────────
+*.csv
+*.INVALID_FALLBACK_DATA.csv
+
+# ─── Generated reports ────────────────────────────────────────────────────
+Redac_Paper2/coverage_html/
+
+# ─── Large compiled/generated files ───────────────────────────────────────
 *.tar.gz
 *.pdf
 
+# ─── Package managers ─────────────────────────────────────────────────────
+package-lock.json
+environment.yml
+
+# ─── Project-specific ─────────────────────────────────────────────────────
+# Agent tooling configs (not source)
+.qodo/
+.kiro/
+.agent/
+.agents/
+.QWEN*/
+managed_context/
+test_suite_analysis/
+.opencode/
+
+# Unrelated submodule / tooling
+comfyui-mcp-server/
+
+# Planning artifacts
+_bmad/
+
+# Sensitive / local-only
+Next/
+QWEN.md
+
+# Laptop-specific (do not commit local test overrides)
+Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml
+
+# ─── Temporary files ──────────────────────────────────────────────────────
+*.tmp
+*.bak
+envs.txt

@@ -104,13 +104,18 @@ class DigitalTwinConfig(BaseModel):
     """
     V6: Agrivoltaic Digital Twin orchestration parameters (Axe 1).
 
-    Defines the data-fusion refresh cadence and grid synchronisation flags
-    that unify quantum metabolic sensing, FAO-56 microclimate, and OPV
-    energy flux under a single Digital Twin control loop.
+    Defines the data-fusion refresh cadence, grid synchronisation flags,
+    and cross-domain feedback thresholds that unify quantum metabolic
+    sensing, FAO-56 microclimate, IoT sensor telemetry, and OPV energy
+    flux under a single Digital Twin control loop.
     """
 
     update_interval_seconds: int = Field(default=60, ge=1)
     sync_opv_grid: bool = Field(default=True)
+    fusion_enabled: bool = Field(default=True)
+    urgency_high_threshold: float = Field(default=2.0, gt=0.0)
+    urgency_medium_threshold: float = Field(default=1.0, gt=0.0)
+    security_gate_qkd: bool = Field(default=True)
 
 
 class PhysicsConfig(BaseModel):

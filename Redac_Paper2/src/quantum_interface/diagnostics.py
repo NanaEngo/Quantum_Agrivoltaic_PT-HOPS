@@ -13,6 +13,9 @@ from ..constants import (
     NPoM_REFERENCE_MODE_VOLUME_NM3,
     NPoM_VOLUME_GUARDRAIL_THRESHOLD,
 )
+from ..logging_config import get_logger
+
+logger = get_logger("diagnostics")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # V5: Specific SERS/CQD molecular-marker signatures (reference literature)
@@ -52,10 +55,16 @@ class NpomCoupling:
 
     def get_plasmon_coupling(self) -> float:
         if self.mode_volume_nm3 <= NPoM_VOLUME_GUARDRAIL_THRESHOLD:
+            logger.warning(
+                "Mode volume %.2e nm3 below guardrail → g0=%.1f cm-1",
+                self.mode_volume_nm3,
+                NPoM_MAX_PLASMON_COUPLING_CM,
+            )
             return NPoM_MAX_PLASMON_COUPLING_CM
         g_0 = NPoM_REFERENCE_COUPLING_CM * np.sqrt(
             NPoM_REFERENCE_MODE_VOLUME_NM3 / self.mode_volume_nm3
         )
+        logger.info("NPoM coupling: V=%.2f nm3, g0=%.1f cm-1", self.mode_volume_nm3, g_0)
         return float(g_0)
 
     def dress_hamiltonian(self, H_fmo: np.ndarray) -> np.ndarray:
@@ -66,6 +75,13 @@ class NpomCoupling:
         for site in PLASMON_COUPLING_SITES:
             H_dressed[site, FMO_NSITES] = g_0
             H_dressed[FMO_NSITES, site] = g_0
+        logger.info(
+            "Dressed Hamiltonian: %dx%d, plasmon coupled to sites %s with g0=%.1f cm-1",
+            N_DIM_DRESSED,
+            N_DIM_DRESSED,
+            PLASMON_COUPLING_SITES,
+            g_0,
+        )
         return H_dressed
 
 
@@ -128,6 +144,13 @@ class SersDiagnostics:
             sentinel_ratio = self.config.physics.sensing_sentinel_ratio
         alpha = float(np.clip(sentinel_ratio, 0.0, 1.0))
         phi_global = alpha * phi_ft_npom + (1.0 - alpha) * phi_ft_passive
+        logger.info(
+            "Global canopy yield: alpha=%.3f, phi_npom=%.4f, phi_passive=%.4f → phi_global=%.4f",
+            alpha,
+            phi_ft_npom,
+            phi_ft_passive,
+            phi_global,
+        )
         return float(np.clip(phi_global, 0.0, 1.0))
 
     @staticmethod

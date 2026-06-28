@@ -32,7 +32,27 @@ This project integrates quantum dynamics with agricultural modeling, IoT securit
 - [x] IoT Security (BB84 QKD) Integration (buried single-mode fiber, 4.8% noise, fail-safe exception).
 - [x] Full-scale SERS Diagnostic molecular signature targets defined.
 
-## 3. Next Steps
+## 3. Graphify Knowledge Graph (2026-06-28)
+
+Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 136,691 input / 61,930 output tokens**.
+
+### Key Discoveries
+- **God Nodes**: HopsSimulator (59 edges), PublishManager (40), FigureGenerator (35) — core abstractions
+- **NPoM-SERS Trade-off Chain**: `mode_volume_nm3 → g₀ = 120×√(1/V) cm⁻¹ → H_dressed[site,plasmon] = g₀ → 9×9 Hamiltonian → MesoHOPS → Φ_FT` traced across communities 96, 220, 237
+- **Bridge Node**: `ANALYSIS_20260624_POST_PROD` connects quantum dynamics simulations (community 96) to NPoM figures (community 220/237)
+- **Hyperedges** (selected):
+  - NPoM Plasmonic Cavity Study: plasmon traps >82% population, 25× suppression
+  - Cryogenic 77K: 2.1× Φ_FT recovery via reduced thermal decoherence
+  - Paper 2 integrates 5 domains: quantum, microclimate, LCA, IoT, SERS
+  - BMAD chain: PRD → Architecture → Epics → Readiness
+  - Paper 2 coverage gaps: orchestrator 0%, plot_utils 0%, solver 51%
+
+### Outputs
+- `graphify-out/graph.html` — interactive visualization
+- `graphify-out/GRAPH_REPORT.md` — full audit report
+- `graphify-out/graph.json` — GraphRAG-ready data
+
+## 4. Next Steps
 
 ### A. Pre-Submission Quality Checks
 - [ ] Compile manuscripts (Manuscript + SI + Cover Letter) with LaTeX to verify cross-refs.
