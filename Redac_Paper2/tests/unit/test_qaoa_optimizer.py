@@ -3,6 +3,7 @@
 from unittest.mock import MagicMock
 
 import numpy as np
+import pytest
 
 from src.algorithms.qaoa_optimizer import (
     N_DECISION_VARIABLES,
@@ -50,3 +51,21 @@ class TestQAOAOptimizer:
         assert len(h) == N_DECISION_VARIABLES
         assert J.shape == (N_DECISION_VARIABLES, N_DECISION_VARIABLES)
         assert J[0, 1] > 0.0
+
+    def test_raises_on_invalid_backend(self):
+        with pytest.raises(ValueError, match="Unsupported QAOA backend"):
+            QAOAOptimizer(_mock_config(), backend="qiskit")
+
+    def test_pennylane_backend(self):
+        q = QAOAOptimizer(_mock_config(), backend="pennylane")
+        assert q.backend == "pennylane"
+        profile = np.full(96, 50.0)
+        result = q.solve(profile)
+        assert len(result["schedule"]) == 6
+        assert result["total_revenue_usd"] > 0.0
+
+    def test_pennylane_low_solar(self):
+        q = QAOAOptimizer(_mock_config(), backend="pennylane")
+        profile = np.full(96, 0.1)
+        result = q.solve(profile)
+        assert 0.0 <= result["utilization_fraction"] <= 1.0

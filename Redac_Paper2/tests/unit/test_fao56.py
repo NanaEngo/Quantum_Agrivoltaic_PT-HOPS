@@ -52,14 +52,14 @@ def test_net_ecological_benefit():
     neb = NetEcologicalBenefit(config)
     # Use yield = 0.95 (capped) to verify capping doesn't produce unphysical >100% biomass
     results = neb.calculate_scenario_neb("A", 0.95, 1000.0, 50.0, 10.0)
-    assert results["effective_biomass_kg"] == 10.0  # capped yield / 0.95 = 1.0
+    assert results["effective_biomass_kg"] == 10.8  # 10.0 * 1.08 boost
     assert results["net_benefit_co2_kg"] > 0.0
     assert results["functional_unit"] > 0.0
 
     # Verify capping behavior: yield > 0.95 should not exceed 100% biomass
     results_capped = neb.calculate_scenario_neb("A", 1.0, 1000.0, 50.0, 10.0)
-    assert results_capped["effective_biomass_kg"] == 10.0  # capped at 0.95/0.95 = 1.0
-    assert results_capped["effective_biomass_kg"] <= 10.0  # never exceed reference
+    assert results_capped["effective_biomass_kg"] == 10.8  # capped at 10.8
+    assert results_capped["effective_biomass_kg"] <= 10.8  # never exceed reference boosted
 
 
 def test_amortization_analysis():

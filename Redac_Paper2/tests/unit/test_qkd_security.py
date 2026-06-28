@@ -108,3 +108,22 @@ def test_dynamic_calibrator():
     # Floor limit test
     k_sv_floor = cal.get_calibrated_k_sv(temperature_k=400.0, salinity_ms_cm=100.0)
     assert k_sv_floor == 1e4
+
+
+def test_dynamic_calibrator_shielding_factor():
+    """V6f: DynamicCalibrator with thermal shielding factor."""
+    cal = DynamicCalibrator(shielding_factor=0.85)
+    assert cal.shielding_factor == 0.85
+
+    cal_ideal = DynamicCalibrator(shielding_factor=1.0)
+    cal_none = DynamicCalibrator(shielding_factor=0.0)
+
+    # With shielding=1.0, thermal drift is fully applied
+    k_sv_full = cal_ideal.get_calibrated_k_sv(temperature_k=308.15, salinity_ms_cm=5.0)
+    # With shielding=0.0, no thermal drift correction (bare reference)
+    k_sv_none = cal_none.get_calibrated_k_sv(temperature_k=308.15, salinity_ms_cm=5.0)
+    # Shielding factor reduces thermal component
+    assert abs(k_sv_full) >= abs(k_sv_none)
+
+    with pytest.raises(ValueError, match="shielding_factor"):
+        DynamicCalibrator(shielding_factor=1.5)
