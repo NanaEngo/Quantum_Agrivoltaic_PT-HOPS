@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-28 (Session 17 continued — NEB Correction, Figure Legend Fix)
+**Last updated:** 2026-06-28 (Session 21 — Adversarial Audit Axes 11–16, LaTeX enumitem fix, 117 tests green)
 
 
 ---
@@ -398,6 +398,33 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 21 (2026-06-28) — Adversarial Audit Axes 11–16: Full Code + LaTeX Implementation, Test Suite Expansion
+
+#### Adversarial Audit Implementation (6 Vulnerabilities → Code Modules)
+- **Axe 11 (Thermal shielding)**: `DynamicCalibrator` in `src/iot_security/sensing.py` — added `shielding_factor=0.85` parameter modelling physical micro-shielding of CQD/NPoM probe against diurnal thermal excursions.
+- **Axe 12 (QAOA → PennyLane backend)**: `src/algorithms/qaoa_optimizer.py` — added `backend="pennylane"` option with real `qml.qnode` circuit (3 wires, p=3 layers, `qml.counts()` sampling). PennyLane v0.45.1 installed in `MesoHOP-sim` env. Falls back to classical if import fails. 2 new tests added.
+- **Axe 13 (Quantum MOFs)**: `src/materials/quantum_mof.py` — Langmuir adsorption model for phosphate/nitrate contaminants on UiO-66 MOF scaffold, with quantum coherence doping effect on K_L. Tests: `tests/unit/test_quantum_mof.py`.
+- **Axe 14 (NV diamond relaxometry)**: `src/quantum_interface/nv_diamond.py` — T1 relaxometry model for pre-symptomatic pathogen detection. Maps T1 shortening to pathogen concentration via sensitivity factor. Tests: `tests/unit/test_nv_diamond.py`.
+- **Axe 15 (Quantum fertilizer boost)**: `QUANTUM_FERTILIZER_BOOST = 1.08` constant in `src/constants.py`, applied to `effective_biomass` in `src/lca/neb.py`. Reflects CQD biostimulation effect on photosynthesis.
+- **Axe 16 (GQAS compliance checker)**: `src/iot_security/gqas_standard.py` — six-pillar audit framework (QKD QBER, data sovereignty, sensor LOD, quantum fidelity, latency, sustainability), composite score, SHA-256 audit ID for blockchain-anchoring. Tests: `tests/unit/test_gqas_standard.py`.
+
+#### SI S12 Roadmap Extension (Adversarial Axes)
+- **6 new subsections** added to SI.tex (S12.1–S12.6): Thermal Shielding, Quantum MOFs, NV Diamond Relaxometry, Quantum Fertiliser Biostimulation, GQAS. Each ends with `src/` module reference.
+- **`\\usepackage{enumitem}` added** to SI.tex preamble — fixes `! LaTeX Error: missing \\item` in the GQAS `enumerate[label=(\\roman*)]` environment (stale `.aux` was also cleaned).
+
+#### Test Results
+- **117 passed, 1 xfailed** (pre-existing MesoHOPS solver skip) — all adversarial-audit modules covered, 0 regressions.
+- PennyLane QAOA tests issue `PennyLaneDeprecationWarning` (shots on device) — harmless, tracked for v0.46 upgrade.
+
+#### Compilation Verification
+- **SI.pdf**: 25 pages, 0 LaTeX errors ✅
+- **Manuscript_NatureEnergy_26-06-25.pdf**: 18 pages, 0 LaTeX errors ✅
+
+#### Git
+- Commit: `f7200b8` — `fix(SI): add enumitem package to resolve GQAS enumerate compilation error`
+
+---
 
 ### Session 20 (2026-06-28) — 4 Breakthrough Axes: Code Implementation, Adversarial Audit, LaTeX Integration
 
