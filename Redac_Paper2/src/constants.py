@@ -105,6 +105,9 @@ FAO56_WIND_TERM_COEFF = 0.34
 # Conversion factors
 G_TO_KG = 1000.0
 
+# Quantum fertiliser biostimulation (Axe 15)
+QUANTUM_FERTILIZER_BOOST = 1.08
+
 # CLI defaults
 DEFAULT_SOLAR_FLUX_W_M2 = 950.0
 

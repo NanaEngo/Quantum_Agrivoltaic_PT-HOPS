@@ -77,6 +77,11 @@ class DynamicCalibrator:
     Uses an exponential moving average (EMA) of recent baseline readings to
     compute a multiplicative correction factor. This maintains measurement
     accuracy between scheduled cleaning cycles.
+
+    V6f: Thermal shielding factor models the effect of physical micro-shielding
+    that insulates the CQD/NPoM probe from diurnal thermal excursions and
+    soil humidity. A shielding_factor of 1.0 means ideal insulation; 0.0 means
+    no shielding. The calibrated k_sv is further corrected by shielding.
     """
 
     def __init__(
@@ -85,21 +90,26 @@ class DynamicCalibrator:
         drift_alarm_threshold: float = 0.20,
         k_sv_ref: float = 1.5e5,
         t_ref: float = 298.15,
+        shielding_factor: float = 0.85,
     ):
         """
         Args:
             ema_alpha: EMA smoothing factor in [0, 1]. Smaller = slower adaptation.
             drift_alarm_threshold: Fractional drift (vs. initial baseline) that
                 triggers a maintenance alert (default 20%).
+            shielding_factor: Thermal shielding efficacy in [0, 1] (default 0.85).
         """
         if not 0.0 <= ema_alpha <= 1.0:
             raise ValueError(f"ema_alpha must be in [0, 1], got {ema_alpha}")
+        if not 0.0 <= shielding_factor <= 1.0:
+            raise ValueError(f"shielding_factor must be in [0, 1], got {shielding_factor}")
         self.ema_alpha = ema_alpha
         self.drift_alarm_threshold = drift_alarm_threshold
         self._baseline_ema: float | None = None
         self._reference_baseline: float | None = None
         self.k_sv_ref = k_sv_ref
         self.t_ref = t_ref
+        self.shielding_factor = shielding_factor
 
     def update(self, raw_baseline_reading: float) -> dict:
         """

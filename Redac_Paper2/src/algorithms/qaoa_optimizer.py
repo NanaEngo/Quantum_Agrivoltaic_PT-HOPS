@@ -16,11 +16,32 @@ REFRIGERATION_VALUE_USD_PER_KWH = 0.20
 
 
 class QAOAOptimizer:
-    def __init__(self, config: ConfigModel):
+    def __init__(self, config: ConfigModel, backend: str = "classical"):
         self.config = config
         self.p = QAOA_DEPTH_P
         self.n_vars = N_DECISION_VARIABLES
         self.n_periods = N_MACRO_PERIODS
+        self.backend = backend
+        if backend not in ("classical", "pennylane"):
+            raise ValueError(f"Unsupported QAOA backend: {backend}")
+        self._init_pennylane()
+
+    def _init_pennylane(self):
+        if self.backend == "pennylane":
+            try:
+                import pennylane as qml
+
+                self._qml = qml
+                self._dev = qml.device("default.qubit", wires=self.n_vars, shots=1024)
+                logger.info(
+                    "PennyLane QAOA backend initialised (wires=%d, shots=1024)", self.n_vars
+                )
+            except ImportError:
+                logger.warning("PennyLane not installed — falling back to classical backend")
+                self.backend = "classical"
+        else:
+            self._qml = None
+            self._dev = None
 
     def _build_cost_hamiltonian(self, solar_power_kw: float, period_h: int) -> tuple:
         J = np.zeros((self.n_vars, self.n_vars))
@@ -42,7 +63,10 @@ class QAOAOptimizer:
             p_end = int((p + 1) * len(power_available) / self.n_periods)
             period_solar = float(np.mean(power_available[p_start:p_end]))
             h, J = self._build_cost_hamiltonian(period_solar, period_duration_h)
-            x = self._classical_qaoa_approximation(h, J, period_solar)
+            if self.backend == "pennylane":
+                x = self._pennylane_qaoa(h, J, period_solar)
+            else:
+                x = self._classical_qaoa_approximation(h, J, period_solar)
             irrigation_on, cooling_on, export_on = x
             irrigation_kwh = irrigation_on * IRRIGATION_PUMP_POWER_KW * period_duration_h
             cooling_kwh = cooling_on * REFRIGERATION_POWER_KW * period_duration_h
@@ -90,6 +114,42 @@ class QAOAOptimizer:
             x[i] = 1.0 if local_field < 0 else 0.0
         if solar_kw < 0.5:
             x[1] = 0.0
+        total_load = x[0] * IRRIGATION_PUMP_POWER_KW + x[1] * REFRIGERATION_POWER_KW
+        if total_load > solar_kw:
+            if x[0] > 0 and IRRIGATION_PUMP_POWER_KW > solar_kw:
+                x[0] = 0.0
+            elif x[1] > 0:
+                x[1] = 0.0
+        return x
+
+    def _pennylane_qaoa(self, h: np.ndarray, J: np.ndarray, solar_kw: float) -> np.ndarray:
+        qml = self._qml
+        dev = self._dev
+
+        gamma = np.pi / 4.0
+        beta = np.pi / 6.0
+        n_layers = self.p
+
+        @qml.qnode(dev)
+        def _circuit():
+            for w in range(self.n_vars):
+                qml.Hadamard(wires=w)
+            for _ in range(n_layers):
+                for i in range(self.n_vars):
+                    qml.RZ(-2.0 * gamma * h[i], wires=i)
+                for i in range(self.n_vars):
+                    for j in range(i + 1, self.n_vars):
+                        if abs(J[i, j]) > 1e-9:
+                            qml.CNOT(wires=[i, j])
+                            qml.RZ(-2.0 * gamma * J[i, j], wires=j)
+                            qml.CNOT(wires=[i, j])
+                for w in range(self.n_vars):
+                    qml.RX(2.0 * beta, wires=w)
+            return qml.counts()
+
+        counts = _circuit()
+        best_bitstring = max(counts, key=counts.get) if counts else "000"
+        x = np.array([int(b) for b in best_bitstring[: self.n_vars]])
         total_load = x[0] * IRRIGATION_PUMP_POWER_KW + x[1] * REFRIGERATION_POWER_KW
         if total_load > solar_kw:
             if x[0] > 0 and IRRIGATION_PUMP_POWER_KW > solar_kw:

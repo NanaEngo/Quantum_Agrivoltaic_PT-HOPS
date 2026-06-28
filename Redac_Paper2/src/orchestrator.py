@@ -19,7 +19,10 @@ from .config_loader import load_config
 from .digital_twin import DigitalTwin
 from .geophysics.quantum_gravimetry import QuantumGravimeter
 from .iot_security.data_sovereignty import DataSovereigntyProtocol
+from .iot_security.gqas_standard import GqasComplianceChecker
+from .materials.quantum_mof import QuantumMofAdsorber
 from .materials.zwitterionic_coating import ZwitterionicCoating
+from .quantum_interface.nv_diamond import NvDiamondSensor
 
 _SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from .constants import (
@@ -408,6 +411,57 @@ def run_global_simulation(solar_flux: float) -> None:
         sovereignty_status["ledger_size"],
         sovereignty_status["ledger_intact"],
         sovereignty_status["consent_granted_parties"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    mof = QuantumMofAdsorber(config)
+    pb_uptake = mof.langmuir_uptake(pb_concentration_ppm=0.05, mass_g=500.0)
+    cqd_release = mof.release_cqd(days=30)
+    bt_days = mof.breakthrough_time(flow_rate_m3_day=0.5, mass_g=500.0)
+    logger.info(
+        "[9g/10] MOF adsorber — Pb uptake=%.2f mg, CQD release=%.2f mg, "
+        "breakthrough=%.0f days (%s)",
+        pb_uptake,
+        cqd_release,
+        bt_days,
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    nv = NvDiamondSensor(config)
+    nv_relax = nv.simulate_relaxometry(pathogen_metabolite_um=20.0)
+    nv_class = nv.classify_pathogen(t1_us=nv_relax["t1_us"], t2_star_us=nv_relax["t2_star_us"])
+    logger.info(
+        "[9h/10] NV diamond — T₁=%.1f µs, T₂*=%.1f µs, pathogen=%s, conf=%.2f (%s)",
+        nv_relax["t1_us"],
+        nv_relax["t2_star_us"],
+        nv_class["pathogen"],
+        nv_class["confidence"],
+        f"{_time.time() - _t_phase:.1f}s",
+    )
+    _t_phase = _time.time()
+
+    gqas = GqasComplianceChecker(config)
+    gqas_result = gqas.full_audit(
+        qber=config.quantum.qkd.get("qber", 0.05),
+        key_rate_hz=config.quantum.qkd.get("key_rate_hz", 500.0),
+        epsilon=2.0,
+        ledger_intact=sovereignty_status["ledger_intact"],
+        sers_lod_nm=50.0,
+        nv_calibrated=True,
+        trace_ok=audit_result.get("trace_ok", True),
+        positivity_ok=audit_result.get("positivity_ok", True),
+        end_to_end_latency_s=2.5,
+        neb_co2_kg=neb_results["net_benefit_co2_kg"],
+        payback_yr=coop_payback["payback_yr"],
+    )
+    logger.info(
+        "[9i/10] GQAS audit — %d/%d pillars passed, score=%.2f, id=%s (%s)",
+        gqas_result["pillars_passed"],
+        gqas_result["total_pillars"],
+        gqas_result["composite_score"],
+        gqas_result["audit_id"],
         f"{_time.time() - _t_phase:.1f}s",
     )
     _t_phase = _time.time()

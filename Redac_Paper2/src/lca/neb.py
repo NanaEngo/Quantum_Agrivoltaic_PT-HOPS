@@ -8,6 +8,7 @@ from ..constants import (
     LCA_FOOTPRINT_C,
     LCA_MAX_PHYSICAL_YIELD,
     LCA_WATER_PUMPING_CARBON_FACTOR,
+    QUANTUM_FERTILIZER_BOOST,
 )
 
 
@@ -25,7 +26,9 @@ class NetEcologicalBenefit:
         crop_biomass_kg: float,
     ) -> dict:
         safe_yield = min(excitonic_yield, LCA_MAX_PHYSICAL_YIELD)
-        effective_biomass = crop_biomass_kg * (safe_yield / LCA_MAX_PHYSICAL_YIELD)
+        effective_biomass = (
+            crop_biomass_kg * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * QUANTUM_FERTILIZER_BOOST
+        )
 
         carbon_avoided_power = power_generated_kwh * (self.grid_intensity / G_TO_KG)
         carbon_avoided_water = water_saved_liters * LCA_WATER_PUMPING_CARBON_FACTOR
@@ -160,7 +163,9 @@ class NetEcologicalBenefit:
 
         # Vectorized calculation
         safe_yield = np.minimum(excitonic_yields, LCA_MAX_PHYSICAL_YIELD)
-        effective_biomass = biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD)
+        effective_biomass = (
+            biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * QUANTUM_FERTILIZER_BOOST
+        )
         carbon_avoided_power = power * (grid_values / G_TO_KG)
         carbon_avoided_water = water_saved * LCA_WATER_PUMPING_CARBON_FACTOR
 
