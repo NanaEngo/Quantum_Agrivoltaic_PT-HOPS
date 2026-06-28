@@ -314,6 +314,10 @@ def _run_single_traj_worker(
                 f"in {_time.time() - _t5:.1f}s"
             )
 
+            if not valid_data:
+                logger.error(f"Traj {seed}: no valid frames extracted from psi_data")
+                return None
+
             return {
                 "psi_traj": np.stack(valid_data),
                 "t_axis": np.array(valid_t),

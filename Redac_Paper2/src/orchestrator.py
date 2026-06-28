@@ -165,9 +165,7 @@ def run_global_simulation(solar_flux: float) -> None:
     _t_phase = _time.time()
 
     gamma_rc = config.quantum.fmo.coupling_reaction_center
-    trapped_pop = np.zeros(n_steps)
-    for t in range(n_steps):
-        trapped_pop[t] = sum(dm_array[t, s, s].real for s in TRAPPING_SITES)
+    trapped_pop = np.sum(dm_array[:, TRAPPING_SITES, TRAPPING_SITES].real, axis=1)
     # Consistent with SI Eq. \ref{eq:SI_phi_ft}: \Phi_FT = 2 \Gamma_RC \int (P3+P4) dt
     trap_yield = 2.0 * gamma_rc * np.sum(trapped_pop) * dt_fs
     trap_yield = min(max(trap_yield, 0.0), MAX_TRAPPING_YIELD)

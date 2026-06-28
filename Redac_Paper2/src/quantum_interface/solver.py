@@ -203,4 +203,23 @@ class QuantumStabilityAudit:
 
     def audit(self, density_matrices: list[np.ndarray]) -> dict:
         """Audit a list of (n_sites, n_sites) density matrices."""
-        return {"trace_ok": True, "positivity_ok": True, "issues": []}
+        issues = []
+        trace_ok = True
+        positivity_ok = True
+
+        for idx, dm in enumerate(density_matrices):
+            tr = np.trace(dm).real
+            if tr > self.trace_upper:
+                trace_ok = False
+                issues.append(f"Frame {idx}: trace {tr:.4f} exceeds upper limit {self.trace_upper}")
+
+            # Verify positive semi-definiteness: all eigenvalues of Hermitian matrix should be >= tol
+            evals = np.linalg.eigvalsh(dm)
+            min_ev = np.min(evals)
+            if min_ev < self.pos_tol:
+                positivity_ok = False
+                issues.append(
+                    f"Frame {idx}: minimum eigenvalue {min_ev:.2e} below tolerance {self.pos_tol:.2e}"
+                )
+
+        return {"trace_ok": trace_ok, "positivity_ok": positivity_ok, "issues": issues}
