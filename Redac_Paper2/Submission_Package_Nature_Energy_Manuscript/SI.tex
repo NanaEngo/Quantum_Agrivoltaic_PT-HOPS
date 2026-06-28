@@ -24,12 +24,18 @@
 \DeclareSIUnit{\hectare}{ha}
 \DeclareSIUnit{\MWh}{MWh}
 \DeclareSIUnit{\cubed}{^{3}}
+\DeclareSIUnit{\nM}{nM}
+\DeclareSIUnit{\molar}{M}
+\DeclareSIUnit{\minute}{min}
+\DeclareSIUnit{\ppb}{ppb}
+\DeclareSIUnit{\day}{d}
 \usepackage{xcolor}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage[capitalise,nameinlink]{cleveref}
 \usepackage{authblk}
 \usepackage{xr}
+\usepackage{enumitem}
 
 % ---- Cross-reference to main manuscript ----
 \externaldocument{Manuscript}
@@ -1028,7 +1034,7 @@ into a single module integrated with the digital twin orchestrator.
 The \textit{DynamicCalibrator} (\Cref{SI-sec:qkd}) compensates for thermal
 and salinity drift algorithmically, but a complementary hardware solution
 reduces the magnitude of the drift itself. A thin-film micro-shielding layer
-(\qty{1}{\um} to \qty{5}{\um} of SiO$_2$ or Al$_2$O$_3$ deposited via ALD)
+(\qty{1}{\micro\meter} to \qty{5}{\micro\meter} of SiO$_2$ or Al$_2$O$_3$ deposited via ALD)
 around the NPoM gold picocavity and the CQD sensor tip attenuates the diurnal
 temperature excursion experienced by the quantum probe. The shielding efficacy
 $\eta_{\mathrm{shield}} \in [0,1]$ multiplies the effective thermal coupling:
@@ -1081,7 +1087,7 @@ detection of paramagnetic species, including melanin (fungal), siderophores
 paramagnetic metabolites via dipolar coupling, providing a label-free
 pathogen signature. For the greenhouse environment, an NV-diamond chip
 integrated into the hydroponic recirculation line samples the nutrient
-solution every \qty{30}{\min}, correlating T$_1$ and T$_2^*$ measurements
+solution every \qty{30}{\minute}, correlating T$_1$ and T$_2^*$ measurements
 against a classifier bank (healthy, fungal, bacterial, viral).
 
 The module~\texttt{src/quantum\_interface/nv\_diamond.py} implements:
@@ -1091,7 +1097,7 @@ against reference signatures (healthy: T$_1$ ratio~0.98, T$_2^*$ ratio~0.97;
 fungal: 0.55/0.70; bacterial: 0.30/0.45; viral: 0.10/0.20); and (iii) DC
 magnetometry for stray-field diagnostics. The classifier achieves a
 minimum confidence of 0.85 for metabolite concentrations above
-\qty{10}{\micro\M}, enabling detection 24--48~h before visible symptoms
+\qty{10}{\micro\molar}, enabling detection 24--48~h before visible symptoms
 appear---sufficient for targeted fungicide application rather than blanket
 spraying, reducing agrochemical input by an estimated 40--60\%.
 
