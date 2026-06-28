@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Patch
 
+from ..config_loader import ConfigModel, load_config
 from ..logging_config import get_logger
 
 logger = get_logger("plot_utils")
@@ -58,9 +59,55 @@ def _compute_dressed_eigenvalues() -> np.ndarray:
 class Paper2FigureGenerator:
     """Generates publication-quality 3-panel figures for Paper 2."""
 
-    def __init__(self, output_dir: str = "./Graphics") -> None:
+    def __init__(
+        self, output_dir: str = "./Graphics", config: ConfigModel | str | None = None
+    ) -> None:
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
+
+        if config is None:
+            # Try to auto-locate parameters.yaml relative to this source file
+            src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            project_root = os.path.dirname(src_dir)
+            config_path = os.path.join(project_root, "parameters.yaml")
+            try:
+                self.config = load_config(config_path)
+            except Exception as e:
+                logger.warning("Could not auto-load parameters.yaml: %s", e)
+                self.config = None
+        elif isinstance(config, str):
+            try:
+                self.config = load_config(config)
+            except Exception as e:
+                logger.warning("Could not load config from %s: %s", config, e)
+                self.config = None
+        else:
+            self.config = config
+
+    def _compute_cooperative_payback(self) -> tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+        """Compute cooperative payback curves using the internal configuration."""
+        if not self.config:
+            return None
+
+        cfg = self.config
+        capex = cfg.lca.default_capex
+        annual_revenue = cfg.lca.default_annual_revenue
+        annual_opex = cfg.lca.default_annual_opex
+        training_opex = cfg.lca.cooperative.annual_training_opex_usd
+        cleaning_opex = cfg.lca.cooperative.annual_cleaning_opex_usd
+        total_opex = annual_opex + training_opex + cleaning_opex
+
+        subsidy_rates = np.linspace(0, 0.5, 51)
+        coop_sizes = [1, 3, 5, 10]
+
+        payback_matrix = np.zeros((len(coop_sizes), len(subsidy_rates)))
+        for i, n_coop in enumerate(coop_sizes):
+            for j, s in enumerate(subsidy_rates):
+                net_capex = capex * (1.0 - s) / n_coop
+                net_cashflow = (annual_revenue - total_opex) / n_coop
+                payback_matrix[i, j] = net_capex / net_cashflow if net_cashflow > 0 else np.inf
+
+        return subsidy_rates, np.array(coop_sizes), payback_matrix
 
     # ── Figure 1: Quantum Dynamics (3 panels) ──────────────────────────────
 
@@ -381,6 +428,11 @@ class Paper2FigureGenerator:
         ax2.legend(lines1 + lines2, labels1 + labels2, loc="upper right", frameon=False, fontsize=8)
 
         # Panel (c): Cooperative payback
+        if subsidy_rates is None or payback_matrix is None or coop_sizes is None:
+            curves = self._compute_cooperative_payback()
+            if curves is not None:
+                subsidy_rates, coop_sizes, payback_matrix = curves
+
         if subsidy_rates is not None and payback_matrix is not None and coop_sizes is not None:
             coop_colors = ["#d62728", "#ff7f0e", "#2ca02c", "#4C72B0"]
             for i, n_coop in enumerate(coop_sizes):

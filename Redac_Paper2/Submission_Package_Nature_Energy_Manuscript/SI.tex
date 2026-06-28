@@ -15,6 +15,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs,physics,bm,multirow}
 \usepackage{siunitx}
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
 \DeclareSIUnit{\yr}{yr}
 \DeclareSIUnit{\kB}{kB}
 \DeclareSIUnit{\USD}{USD}
@@ -106,17 +107,17 @@ The full electronic Hamiltonian in the site basis is:
 \label{eq:SI_fmo_hamiltonian}
 \end{equation}
 
-where $\varepsilon_n$ are the site energies (referenced to the lowest-energy site), $J_{nm}$ are the inter-site electronic couplings, and $\Gamma_{\mathrm{RC}} = \SI{0.15}{\per\ps}$ is the irreversible reaction center trapping rate applied to Sites~3 and~4.
+where $\varepsilon_n$ are the site energies (referenced to the lowest-energy site), $J_{nm}$ are the inter-site electronic couplings, and $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\ps}$ is the irreversible reaction center trapping rate applied to Sites~3 and~4.
 The anti-Hermitian term $-i\Gamma_{\mathrm{RC}}$ models irreversible charge separation at the reaction center; the Hamiltonian is non-Hermitian only on these diagonal trapping terms.
 
 \subsection{Site Energies}
 
-Table~\ref{tab:SI_site_energies} lists the site energies used in all production simulations.
-Energies are given relative to the lowest-energy site (Site~3 at \SI{12210}{\per\cm}) and are expressed in \si{\per\cm}.
+\Cref{tab:SI_site_energies} lists the site energies used in all production simulations.
+Energies are given relative to the lowest-energy site (Site~3 at \qty{12210}{\per\cm}) and are expressed in \unit{\per\cm}.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{8-site FMO site energies} (in \si{\per\cm}, referenced to Site~3).}
+\caption{\textbf{8-site FMO site energies} (in \unit{\per\cm}, referenced to Site~3).}
 \label{tab:SI_site_energies}
 \begin{tabular}{lcccccccc}
 \toprule
@@ -129,17 +130,17 @@ Relative $\varepsilon_n$ & 280   & 420   & 0     & 110   & 270   & 500   & 310  
 \end{table}
 
 The absolute site energies are taken from the Adolphs--Renger parameterization~\cite{Adolphs2006} for Sites~1--7.
-Site~8, which bridges the baseplate to the reaction center, is assigned an energy of \SI{12410}{\per\cm} based on the eighth-bacteriochlorophyll characterization by Moix~\textit{et al.}~\cite{Moix2011}.
+Site~8, which bridges the baseplate to the reaction center, is assigned an energy of \qty{12410}{\per\cm} based on the eighth-bacteriochlorophyll characterization by Moix~\textit{et al.}~\cite{Moix2011}.
 
 \subsection{Electronic Coupling Matrix}
 
-Table~\ref{tab:SI_coupling_matrix} presents the full $8\times8$ electronic coupling matrix $J_{nm}$ (in \si{\per\cm}).
+\Cref{tab:SI_coupling_matrix} presents the full $8\times8$ electronic coupling matrix $J_{nm}$ (in \unit{\per\cm}).
 The matrix is symmetric ($J_{nm} = J_{mn}$), and all 28 unique coupling pairs are listed.
 Values for Sites~1--7 follow the Adolphs--Renger parameterization~\cite{Adolphs2006}; couplings involving Site~8 are taken from~Ref.~\cite{Moix2011}.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Full 8-site electronic coupling matrix $J_{nm}$} (in \si{\per\cm}).}
+\caption{\textbf{Full 8-site electronic coupling matrix $J_{nm}$} (in \unit{\per\cm}).}
 \label{tab:SI_coupling_matrix}
 \begin{tabular}{lcccccccc}
 \toprule
@@ -160,7 +161,7 @@ Values for Sites~1--7 follow the Adolphs--Renger parameterization~\cite{Adolphs2
 \subsection{Reaction Center Trapping}
 
 The irreversible trapping is implemented through a non-Hermitian term on Sites~3 and~4, which together form the primary funnel to the reaction center in the 8-site FMO model~\cite{Renger2003,Moix2011}.
-The trapping rate $\Gamma_{\mathrm{RC}} = \SI{0.15}{\per\ps}$ corresponds to a trapping time of $\tau_{\mathrm{RC}} \approx \SI{6.7}{\ps}$, consistent with ultrafast charge separation rates measured in reaction center complexes~\cite{Renger2003}.
+The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\ps}$ corresponds to a trapping time of $\tau_{\mathrm{RC}} \approx \qty{6.7}{\ps}$, consistent with ultrafast charge separation rates measured in reaction center complexes~\cite{Renger2003}.
 The forward transfer yield is defined as:
 
 \begin{equation}
@@ -168,7 +169,7 @@ The forward transfer yield is defined as:
 \label{eq:SI_phi_ft}
 \end{equation}
 
-with $t_{\mathrm{max}} = \SI{1}{\ps}$ and $P_j(t) = \rho_{jj}(t)$.
+with $t_{\mathrm{max}} = \qty{1}{\ps}$ and $P_j(t) = \rho_{jj}(t)$.
 The factor of 2 accounts for the two trapping sites.
 
 \subsection{Hermiticity Validation}
@@ -187,7 +188,7 @@ The Hamiltonian's Hermiticity condition is verified for all 64 matrix elements a
 \subsection{Hierarchy Depth Convergence}
 We adopt $L=8$ as the production standard to ensure robust convergence across all disorder realizations. The numerical framework (PT-HOPS/SBD implementation, hierarchy equations) is directly inherited from the validation framework established in Paper~I~\cite{Kouam2026}, where convergence was validated via MAE analysis on the same excitonic parameters.
 
-Table~\ref{tab:SI_hierarchy_convergence} summarizes the mean absolute error (MAE) between successive $L$ values and the relative deviation from the $L=9$ reference (computed for a subset of 10 disorder realizations).
+\Cref{tab:SI_hierarchy_convergence} summarizes the mean absolute error (MAE) between successive $L$ values and the relative deviation from the $L=9$ reference (computed for a subset of 10 disorder realizations).
 
 \begin{table}[htbp]
 \centering
@@ -210,11 +211,11 @@ We adopt $L=8$ as the production standard to ensure robust convergence across al
 \subsection{Matsubara Truncation}
 
 We test Matsubara term counts $K = 1, 2, 3$ to assess the impact of high-temperature corrections.
-Table~\ref{tab:SI_matsubara_convergence} shows the effect on the coherence lifetime $\tau_c$ and the forward transfer yield $\Phi_{\mathrm{FT}}$.
+\Cref{tab:SI_matsubara_convergence} shows the effect on the coherence lifetime $\tau_c$ and the forward transfer yield $\Phi_{\mathrm{FT}}$.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \SI{295}{\kelvin}.}
+\caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \qty{295}{\kelvin}.}
 \label{tab:SI_matsubara_convergence}
 \begin{tabular}{lccc}
 \toprule
@@ -228,34 +229,34 @@ $K$ & $\tau_c$ (fs) & $\Phi_{\mathrm{FT}}$ & MAE from $K=3$ \\
 \end{table}
 
 The MAE between $K=2$ and $K=3$ is $\num{3.3e-5}$, confirming that $K=2$ is sufficient for converged dynamics at room temperature.
-This is consistent with the expectation that at \SI{295}{\kelvin}, the dynamics are dominated by the explicit vibronic modes rather than high-order Matsubara corrections to the Drude--Lorentz background.
+This is consistent with the expectation that at \qty{295}{\kelvin}, the dynamics are dominated by the explicit vibronic modes rather than high-order Matsubara corrections to the Drude--Lorentz background.
 
 \subsection{Time Step Convergence}
 
 We verify time step convergence by comparing $\Delta t = \qtylist{0.2;1.0;2.0}{\fs}$.
-Table~\ref{tab:SI_timestep_convergence} summarizes the results.
+\Cref{tab:SI_timestep_convergence} summarizes the results.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Time step convergence.} Maximum population deviation relative to the $\Delta t = \SI{0.2}{\fs}$ reference.}
+\caption{\textbf{Time step convergence.} Maximum population deviation relative to the $\Delta t = \qty{0.2}{\fs}$ reference.}
 \label{tab:SI_timestep_convergence}
 \begin{tabular}{lc}
 \toprule
 $\Delta t$ (fs) & Max.\ population deviation \\
 \midrule
-0.5 & --- (reference) \\
+0.2 & --- (reference) \\
 1.0 & \num{4.3e-3} \\
 2.0 & \num{8.1e-3} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-We adopt $\Delta t = \SI{0.2}{\fs}$ as the production standard, consistent with Paper~I~\cite{Kouam2026}.
+We adopt $\Delta t = \qty{0.2}{\fs}$ as the production standard, consistent with Paper~I~\cite{Kouam2026}.
 
 \subsection{Detailed Balance}
 
 The steady-state populations are compared with the analytical Boltzmann distribution to verify detailed balance.
-The maximum deviation across all 8 sites is \SI{2.3}{\percent}, confirming that thermal equilibrium is correctly reproduced.
+The maximum deviation across all 8 sites is \qty{2.3}{\percent}, confirming that thermal equilibrium is correctly reproduced.
 
 \subsection{Physical Consistency Checks}
 
@@ -310,15 +311,15 @@ where $\mathcal{S}$ denotes the set of underdamped modes that are vibronically d
 
 \subsection{Quantitative Effect}
 
-For the 12-mode Kleinekath\"{o}fer/Coker parameterization at \SI{295}{\kelvin}, the residual reorganization energy under the two excitation scenarios is:
+For the 12-mode Kleinekath\"{o}fer/Coker parameterization at \qty{295}{\kelvin}, the residual reorganization energy under the two excitation scenarios is:
 
 \begin{align}
-\lambda_{\mathrm{res}}^{\mathrm{broad}} &= \lambda_{\mathrm{DL}} + \sum_{k=1}^{12} S_k \omega_k \approx \SI{53}{\per\cm}, \label{eq:SI_lambda_broad} \\
-\lambda_{\mathrm{res}}^{\mathrm{filt}} &= \lambda_{\mathrm{DL}} + \sum_{k \notin \mathcal{S}} S_k \omega_k \approx \SI{40}{\per\cm}. \label{eq:SI_lambda_filt}
+\lambda_{\mathrm{res}}^{\mathrm{broad}} &= \lambda_{\mathrm{DL}} + \sum_{k=1}^{12} S_k \omega_k \approx \qty{53}{\per\cm}, \label{eq:SI_lambda_broad} \\
+\lambda_{\mathrm{res}}^{\mathrm{filt}} &= \lambda_{\mathrm{DL}} + \sum_{k \notin \mathcal{S}} S_k \omega_k \approx \qty{40}{\per\cm}. \label{eq:SI_lambda_filt}
 \end{align}
 
-The \SI{20}{\percent} reduction in $\lambda_{\mathrm{res}}$ translates to a \SI{50}{\percent} coherence lifetime extension (since $\tau_c \propto 1/\lambda_{\mathrm{res}}$ in the high-temperature limit).
-The dual-band filter at \SI{750}{\nm} and \SI{820}{\nm} selectively excites those vibronic resonances that are most strongly coupled to the energy-transfer pathway (primarily the \SI{180}{\per\cm} Franck--Condon mode at Sites~3/4 and the \SI{740}{\per\cm} ring deformation mode), maximizing the dressing effect.
+The \qty{20}{\percent} reduction in $\lambda_{\mathrm{res}}$ translates to a \qty{50}{\percent} coherence lifetime extension (since $\tau_c \propto 1/\lambda_{\mathrm{res}}$ in the high-temperature limit).
+The dual-band filter at \qty{750}{\nm} and \qty{820}{\nm} selectively excites those vibronic resonances that are most strongly coupled to the energy-transfer pathway (primarily the \qty{180}{\per\cm} Franck--Condon mode at Sites~3/4 and the \qty{740}{\per\cm} ring deformation mode), maximizing the dressing effect.
 
 \subsection{Connection to PT-HOPS/SBD}
 
@@ -334,7 +335,7 @@ The resulting trajectories exhibit the suppressed decoherence predicted by the v
 
 \subsection{Floquet Stark Detuning}
 
-Under high solar flux ($> \SI{800}{\W\per\m\squared}$), the OPV dielectric constant changes dynamically, inducing a time-dependent Stark shift.
+Under high solar flux ($> \qty{800}{\W\per\m\squared}$), the OPV dielectric constant changes dynamically, inducing a time-dependent Stark shift.
 The driving term in the Hamiltonian is:
 
 \begin{equation}
@@ -342,9 +343,9 @@ The driving term in the Hamiltonian is:
 \label{eq:SI_stark_detuning}
 \end{equation}
 
-with $V_0 = \SI{0.05}{\eV}$ and $\omega_{\mathrm{F}} = \SI{1.2}{\THz}$.
+with $V_0 = \qty{0.05}{\eV}$ and $\omega_{\mathrm{F}} = \qty{1.2}{\THz}$.
 At $t = 0$ (zero flux), the cosine term evaluates to $V_0$, ensuring continuity with the undriven Hamiltonian.
-When the flux drops below threshold, the amplitude $V_0$ decays to zero with a relaxation time $\tau_{\mathrm{relax}} = \SI{10}{\ps}$, preventing numerical singularities.
+When the flux drops below threshold, the amplitude $V_0$ decays to zero with a relaxation time $\tau_{\mathrm{relax}} = \qty{10}{\ps}$, preventing numerical singularities.
 
 \subsection{OMIT Transmission Modulation}
 
@@ -360,10 +361,10 @@ T_0 \left(1 + \frac{I}{I_{\mathrm{sat}}}\right)^{-1}, & I > 0,
 \label{eq:SI_omit}
 \end{equation}
 
-where $I_{\mathrm{sat}} = \SI{800}{\W\per\m\squared}$.
+where $I_{\mathrm{sat}} = \qty{800}{\W\per\m\squared}$.
 The piecewise definition at $I=0$ ensures continuity: $T_{\mathrm{OMIT}}(0) = T_0$, corresponding to the undriven cavity transmission.
-At high flux (\SI{1000}{\W\per\m\squared}), $T = T_0 \times (1 + 1000/800)^{-1} = 0.44\,T_0$, i.e., transmission drops to \SI{44}{\percent} of baseline.
-The time-dependent flux follows $\SI{24}{\hour}$ solar cycles, and the OMIT response is instantaneous on agricultural timescales.
+At high flux (\qty{1000}{\W\per\m\squared}), $T = T_0 \times (1 + 1000/800)^{-1} = 0.44\,T_0$, i.e., transmission drops to \qty{44}{\percent} of baseline.
+The time-dependent flux follows $\qty{24}{\hour}$ solar cycles, and the OMIT response is instantaneous on agricultural timescales.
 
 \subsection{Night Mode (Zero Flux)}
 
@@ -385,18 +386,18 @@ No singularities or discontinuities arise because both models are explicitly def
 
 The capital expenditure (CAPEX) for the quantum agrivoltaic system (Scenario~A) comprises:
 \begin{itemize}
-\item \textbf{NPoM-coated graphene barrier:} \SI{120}{\per\m\squared} (including gold nanoparticle synthesis and deposition)
-\item \textbf{OPV module:} \SI{80}{\per\m\squared} (blade-coated semi-transparent polymer cells)
-\item \textbf{Installation and mounting:} \SI{50}{\per\m\squared}
-\item \textbf{Electronics and IoT:} \SI{30}{\per\m\squared} (sensors, microcontroller, QKD module)
-\item \textbf{Contingency (\SI{15}{\percent}):} \SI{42}{\per\m\squared}
+\item \textbf{NPoM-coated graphene barrier:} \qty{120}{\per\m\squared} (including gold nanoparticle synthesis and deposition)
+\item \textbf{OPV module:} \qty{80}{\per\m\squared} (blade-coated semi-transparent polymer cells)
+\item \textbf{Installation and mounting:} \qty{50}{\per\m\squared}
+\item \textbf{Electronics and IoT:} \qty{30}{\per\m\squared} (sensors, microcontroller, QKD module)
+\item \textbf{Contingency (\qty{15}{\percent}):} \qty{42}{\per\m\squared}
 \end{itemize}
-Total CAPEX: \SI{322}{\per\m\squared}.
+Total CAPEX: \qty{322}{\per\m\squared}.
 
 \subsection{Cooperative Ownership Model}
 
 We model a cooperative of $N$ smallholder farmers who collectively own and operate the quantum agrivoltaic system.
-The system is scaled to a \SI{500}{\m\squared} high-value floriculture micro-module (strawberries and cut flowers), yielding a total CAPEX of \SI{161000}{\USD}.
+The system is scaled to a \qty{500}{\m\squared} high-value floriculture micro-module (strawberries and cut flowers), yielding a total CAPEX of \qty{161000}{\USD}.
 With a blended-finance subsidy $s$, the net CAPEX is $C_{\mathrm{net}} = C_{\mathrm{total}}(1 - s)$.
 
 The payback period is computed as:
@@ -406,30 +407,30 @@ P = \frac{C_{\mathrm{total}} (1 - s)}{R_{\mathrm{total}} - C_{\mathrm{OPEX}}},
 \label{eq:SI_payback}
 \end{equation}
 
-where $C_{\mathrm{OPEX}}$ comprises extension services and technician training (\SI{1200}{\USD\per\yr}), OPV panel cleaning to mitigate soiling (\SI{800}{\USD\per\yr}), and general maintenance (\SI{2000}{\USD\per\yr}), totaling \SI{4000}{\USD\per\yr}.
+where $C_{\mathrm{OPEX}}$ comprises extension services and technician training (\qty{1200}{\USD\per\yr}), OPV panel cleaning to mitigate soiling (\qty{800}{\USD\per\yr}), and general maintenance (\qty{2000}{\USD\per\yr}), totaling \qty{4000}{\USD\per\yr}.
 
 \subsection{Revenue Streams}
 
 \begin{itemize}
-\item \textbf{Electricity:} \SI{180}{\kWh\per\m\squared\per\yr} at \SI{0.12}{\per\kWh} = \SI{21.6}{\per\m\squared\per\yr}
-\item \textbf{Water savings:} \SI{1300}{\L\per\m\squared\per\yr} at \SI{0.002}{\per\L} = \SI{2.6}{\per\m\squared\per\yr}
-\item \textbf{Crop yield (high-value floriculture):} \SI{8.2}{\kg\per\m\squared\per\yr} at \SI{4.5}{\USD\per\kg} = \SI{36.9}{\per\m\squared\per\yr}. The \SI{15}{\percent} quantum improvement contributes \SI{5.5}{\per\m\squared\per\yr}.
-\item \textbf{Carbon credit (conservative):} \SI{12.4}{\kg\ CO2e\per\m\squared\per\yr} at \SI{10}{\USD\per\tonne} = \SI{0.124}{\per\m\squared\per\yr}
+\item \textbf{Electricity:} \qty{180}{\kWh\per\m\squared\per\yr} at \qty{0.12}{\per\kWh} = \qty{21.6}{\per\m\squared\per\yr}
+\item \textbf{Water savings:} \qty{1300}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{2.6}{\per\m\squared\per\yr}
+\item \textbf{Crop yield (high-value floriculture):} \qty{8.2}{\kg\per\m\squared\per\yr} at \qty{4.5}{\USD\per\kg} = \qty{36.9}{\per\m\squared\per\yr}. The \qty{15}{\percent} quantum improvement contributes \qty{5.5}{\per\m\squared\per\yr}.
+\item \textbf{Carbon credit (conservative):} \qty{12.4}{\kg\ CO2e\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.124}{\per\m\squared\per\yr}
 \end{itemize}
-For a \SI{500}{\m\squared} module, the total annual revenue is approximately \SI{30612}{\USD}. Subtracting the \SI{4000}{\USD} OPEX yields a net annual cash flow of \SI{26612}{\USD}.
+For a \qty{500}{\m\squared} module, the total annual revenue is approximately \qty{30612}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26612}{\USD}.
 
 \subsection{Payback Periods and NPV}
 
-For a \SI{500}{\m\squared} module under a \SI{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \SI{112700}{\USD}$), the simple payback period is $\SI{112700}{\USD} / \SI{26612}{\USD\per\yr} \approx \SI{4.23}{\yr}$ for the single-owner baseline. Under the cooperative risk-sharing model where the \num{5} members pool resources and leverage the same subsidy, each member's individual capital exposure drops to $\SI{22540}{\USD}$, with an identical \SI{4.23}{\yr} payback period — the cooperative's primary benefit is risk diversification and lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \SI{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} is \SI{+37664}{\USD} when carbon credits are included.
+For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \qty{112700}{\USD}$), the simple payback period is $\qty{112700}{\USD} / \qty{26612}{\USD\per\yr} \approx \qty{4.23}{\yr}$ for the single-owner baseline. Under the cooperative risk-sharing model where the \num{5} members pool resources and leverage the same subsidy, each member's individual capital exposure drops to $\qty{22540}{\USD}$, with an identical \qty{4.23}{\yr} payback period — the cooperative's primary benefit is risk diversification and lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \qty{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} is \qty{+37664}{\USD} when carbon credits are included.
 
 \subsection{Tiered Subsidy Framework}
 
 We propose a tiered subsidy framework where the NEB serves as the verifiable metric for subsidy qualification:
 
 \begin{itemize}
-\item \textbf{Tier~1 (NEB $<$ \SI{5}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{0}{\percent} subsidy
-\item \textbf{Tier~2 (NEB \SIrange{5}{10}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{15}{\percent} subsidy
-\item \textbf{Tier~3 (NEB $>$ \SI{10}{\kg\ CO2e\per\m\squared\per\yr}):} \SI{30}{\percent} subsidy
+\item \textbf{Tier~1 (NEB $<$ \qty{5}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{0}{\percent} subsidy
+\item \textbf{Tier~2 (NEB \SIrange{5}{10}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{15}{\percent} subsidy
+\item \textbf{Tier~3 (NEB $>$ \qty{10}{\kg\ CO2e\per\m\squared\per\yr}):} \qty{30}{\percent} subsidy
 \end{itemize}
 
 This creates a direct incentive loop: higher quantum yield improvements lead to higher NEB, which unlocks greater subsidy access, enabling broader deployment.
@@ -447,20 +448,20 @@ The BB84 protocol~\cite{Bennett1984} is implemented as follows:
 
 \begin{enumerate}
 \item \textbf{Preparation:} Alice (sensor node) generates $4N = 1024$ random bits (for $N = 256$ final key length) and encodes each bit in one of four polarization states: $|H\rangle$, $|V\rangle$ (rectilinear basis, $+$) or $|D\rangle$, $|A\rangle$ (diagonal basis, $\times$).
-\item \textbf{Transmission:} The quantum states are transmitted over a buried single-mode fibre channel with a simulated depolarizing noise rate of $p = \SI{4.8}{\percent}$, modeling the baseline error rate in field-deployed fiber links~\cite{Zahidy2024}.
+\item \textbf{Transmission:} The quantum states are transmitted over a buried single-mode fibre channel with a simulated depolarizing noise rate of $p = \qty{4.8}{\percent}$, modeling the baseline error rate in field-deployed fiber links~\cite{Zahidy2024}.
 \item \textbf{Measurement:} Bob (cloud server) measures each received qubit in a randomly chosen basis ($+$ or $\times$), independent of Alice's preparation basis.
 \item \textbf{Sifting:} Alice and Bob publicly announce their basis choices and retain only events where bases match (approximately $2N = 512$ bits remain).
 \item \textbf{Parameter estimation:} A random sample (minimum 1 bit, maximum 50 bits) of the sifted key is disclosed to estimate the quantum bit error rate (QBER). The sample fraction follows $f_{\mathrm{sample}} = \min(50/N, 0.2)$.
-\item \textbf{Key generation:} If QBER $< \SI{11}{\percent}$ (the Shor--Preskill security threshold), the remaining sifted bits form the raw key. Error correction and privacy amplification reduce the key to $N = 256$ bits.
+\item \textbf{Key generation:} If QBER $< \qty{11}{\percent}$ (the Shor--Preskill security threshold), the remaining sifted bits form the raw key. Error correction and privacy amplification reduce the key to $N = 256$ bits.
 \end{enumerate}
 
 \subsection{Error Threshold and Security}
 
-The \SI{11}{\percent} QBER threshold is derived from the intercept-resend attack bound: an eavesdropper (Eve) performing intercept-resend on all qubits introduces a minimum QBER of \SI{25}{\percent}. The \SI{11}{\percent} threshold provides unconditional security via the Shor--Preskill proof~\cite{Shor2000}.
+The \qty{11}{\percent} QBER threshold is derived from the intercept-resend attack bound: an eavesdropper (Eve) performing intercept-resend on all qubits introduces a minimum QBER of \qty{25}{\percent}. The \qty{11}{\percent} threshold provides unconditional security via the Shor--Preskill proof~\cite{Shor2000}.
 
 \subsection{Fail-Safe Mechanism}
 
-If the QBER exceeds \SI{11}{\percent} (e.g., due to equipment malfunction or attempted eavesdropping on the fibre link), the key generation aborts via a \texttt{SecurityThresholdExceeded} exception, and a fail-safe local irrigation routine activates:
+If the QBER exceeds \qty{11}{\percent} (e.g., due to equipment malfunction or attempted eavesdropping on the fibre link), the key generation aborts via a \texttt{SecurityThresholdExceeded} exception, and a fail-safe local irrigation routine activates:
 
 \begin{itemize}
 \item QKD-protected cloud irrigation commands are blocked to prevent data-injection attacks.
@@ -470,7 +471,7 @@ If the QBER exceeds \SI{11}{\percent} (e.g., due to equipment malfunction or att
 
 \subsection{Computational Overhead}
 
-Table~\ref{tab:SI_qkd_overhead} shows the runtime overhead of the BB84 simulation for a resource-limited IoT microcontroller (simulated on a single ARM Cortex-M4 core at \SI{120}{\MHz}).
+\Cref{tab:SI_qkd_overhead} shows the runtime overhead of the BB84 simulation for a resource-limited IoT microcontroller (simulated on a single ARM Cortex-M4 core at \qty{120}{\MHz}).
 
 \begin{table}[htbp]
 \centering
@@ -478,7 +479,7 @@ Table~\ref{tab:SI_qkd_overhead} shows the runtime overhead of the BB84 simulatio
 \label{tab:SI_qkd_overhead}
 \begin{tabular}{lcc}
 \toprule
-\textbf{Operation} & \textbf{Time (\si{\milli\second})} & \textbf{Memory (\si{\kilo\byte})} \\
+\textbf{Operation} & \textbf{Time (\unit{\milli\second})} & \textbf{Memory (\unit{\kilo\byte})} \\
 \midrule
 State preparation (1024 bits) & 0.8 & 0.5 \\
 Noisy transmission & 1.2 & 0.1 \\
@@ -491,7 +492,7 @@ Total & 4.8 & 2.2 \\
 \end{tabular}
 \end{table}
 
-The total runtime of \SI{4.8}{\ms} and memory footprint of \SI{2.2}{\kB} are negligible for resource-limited IoT nodes, confirming the practical feasibility of BB84-secured agricultural telemetry.
+The total runtime of \qty{4.8}{\ms} and memory footprint of \qty{2.2}{\kB} are negligible for resource-limited IoT nodes, confirming the practical feasibility of BB84-secured agricultural telemetry.
 
 %==============================================================================
 % SECTION S7: RESONANCE CONDITION FOR GENERAL VIBRONIC COUPLING
@@ -527,8 +528,8 @@ In the vibronic basis (after the Lang--Firsov transformation), the effective pur
 \label{eq:SI_dephasing_rate}
 \end{equation}
 
-where $J_{\mathrm{res}}(\omega)$ is the residual spectral density defined in Eq.~\ref{eq:SI_residual_spectral}.
-Modes satisfying Eq.~\ref{eq:SI_resonance_condition} are removed from $J_{\mathrm{res}}(\omega)$, reducing $\Gamma_{\alpha\beta}^{\mathrm{pd}}$ proportionally.
+where $J_{\mathrm{res}}(\omega)$ is the residual spectral density defined in \cref{eq:SI_residual_spectral}.
+Modes satisfying \cref{eq:SI_resonance_condition} are removed from $J_{\mathrm{res}}(\omega)$, reducing $\Gamma_{\alpha\beta}^{\mathrm{pd}}$ proportionally.
 
 \subsection{Generality Across Material Platforms}
 
@@ -553,7 +554,7 @@ The general design criterion is:
 \end{equation}
 
 where $\omega_{\mathrm{ex}}$ is the primary exciton absorption frequency and $\omega_v$ is the underdamped mode frequency.
-For FMO at \SI{295}{\kelvin}, $\omega_{\mathrm{ex}} \approx \SI{12500}{\per\cm}$ (\SI{800}{\nm}) and $\omega_v = \SI{180}{\per\cm}$ gives $\lambda_{\mathrm{filter}} \approx \qtylist{790;810}{\nm}$, which defines the dual-band filter passband.
+For FMO at \qty{295}{\kelvin}, $\omega_{\mathrm{ex}} \approx \qty{12500}{\per\cm}$ (\qty{800}{\nm}) and $\omega_v = \qty{180}{\per\cm}$ gives $\lambda_{\mathrm{filter}} \approx \qtylist{790;810}{\nm}$, which defines the dual-band filter passband.
 
 %==============================================================================
 % SECTION S8: THREE-SITE EXCITONIC TRIMER VERIFICATION
@@ -575,13 +576,13 @@ The trimer Hamiltonian is:
 \label{eq:SI_trimer_hamiltonian}
 \end{equation}
 
-with $\varepsilon_n = \varepsilon_0 + \delta_n$ (uniform site energy $\varepsilon_0 = \SI{12410}{\per\cm}$ plus small Gaussian disorder $\delta_n \sim \mathcal{N}(0, \SI{10}{\per\cm})$), and $J = \SI{-50}{\per\cm}$.
+with $\varepsilon_n = \varepsilon_0 + \delta_n$ (uniform site energy $\varepsilon_0 = \qty{12410}{\per\cm}$ plus small Gaussian disorder $\delta_n \sim \mathcal{N}(0, \qty{10}{\per\cm})$), and $J = \qty{-50}{\per\cm}$.
 
-The spectral density is a single Drude--Lorentz mode ($\lambda = \SI{20}{\per\cm}$, $\gamma = \SI{30}{\per\cm}$) plus one underdamped mode at $\omega_v = \SI{200}{\per\cm}$ (Huang--Rhys factor $S = 0.08$).
+The spectral density is a single Drude--Lorentz mode ($\lambda = \qty{20}{\per\cm}$, $\gamma = \qty{30}{\per\cm}$) plus one underdamped mode at $\omega_v = \qty{200}{\per\cm}$ (Huang--Rhys factor $S = 0.08$).
 
 \subsection{Results}
 
-Table~\ref{tab:SI_trimer_results} compares the forward transfer yield enhancement under broadband and filtered excitation.
+\Cref{tab:SI_trimer_results} compares the forward transfer yield enhancement under broadband and filtered excitation.
 
 \begin{table}[htbp]
 \centering
@@ -604,29 +605,29 @@ This demonstrates that the spectral filtering effect is a general vibronic pheno
 % SECTION S9: PROOF-OF-CONCEPT SCENARIO — 500 M2 FLORICULTURE MICRO-MODULE
 %==============================================================================
 
-\section{Proof-of-Concept Scenario: \SI{500}{\m\squared} Floriculture Micro-Module}
+\section{Proof-of-Concept Scenario: \qty{500}{\m\squared} Floriculture Micro-Module}
 \label{SI-sec:poc}
 
 \subsection{Site Description}
 
-We consider a \SI{500}{\m\squared} high-tunnel greenhouse located in Cameroon's Western Highlands.
-This region supports high-value floriculture (strawberries, cut flowers) suitable for micro-module deployment by cooperatives. The environment features a mean annual solar irradiance of \SI{5.76}{\kWh\per\m\squared\per\day}~\cite{FAO2022} and significant biofouling potential that necessitates the NPoM \textit{DynamicCalibrator} and regular OPV cleaning (factored into the dual-OPEX model).
+We consider a \qty{500}{\m\squared} high-tunnel greenhouse located in Cameroon's Western Highlands.
+This region supports high-value floriculture (strawberries, cut flowers) suitable for micro-module deployment by cooperatives. The environment features a mean annual solar irradiance of \qty{5.76}{\kWh\per\m\squared\per\day}~\cite{FAO2022} and significant biofouling potential that necessitates the NPoM \textit{DynamicCalibrator} and regular OPV cleaning (factored into the dual-OPEX model).
 
 \subsection{Water Savings}
 
-Under the NPoM-shield spectral filter, the \SI{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline saves approximately \SI{650}{\m\cubed\per\yr} of irrigation water for a \SI{500}{\m\squared} greenhouse.
+Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline saves approximately \qty{650}{\m\cubed\per\yr} of irrigation water for a \qty{500}{\m\squared} greenhouse.
 
 \subsection{Biomass Yield Improvement}
 
-The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \SI{1}{\percent} NPoM sentinel fraction for SERS diagnostics. The \SI{8}{\percent} quantum yield enhancement observed in the passive OPV fraction translates to an additional \SI{1.23}{\kg\per\m\squared\per\yr} of high-value produce (strawberries at \SI{4.5}{\USD\per\kg}), generating substantial supplemental revenue.
+The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. The \qty{8}{\percent} quantum yield enhancement observed in the passive OPV fraction translates to an additional \qty{1.23}{\kg\per\m\squared\per\yr} of high-value produce (strawberries at \qty{4.5}{\USD\per\kg}), generating substantial supplemental revenue.
 
 \subsection{Energy and Carbon Balance}
 
-The OPV module generates \SI{90}{\MWh\per\yr} of electrical energy for a \SI{500}{\m\squared} installation at \SI{180}{\kWh\per\m\squared\per\yr}. Displacing grid electricity at \SI{450}{\g\ CO2e\per\kWh} offsets \SI{40.5}{\tonne\ CO2e\per\yr}. Combined with the NEB (\SI{12.4}{\kg\ CO2e\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \SI{10}{\USD\per\tonne\ CO2e}~\cite{ICVCM2024}, the system generates \SI{62}{\USD\per\yr} in verified carbon revenue.
+The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr}. Displacing grid electricity at \qty{450}{\g\ CO2e\per\kWh} offsets \qty{40.5}{\tonne\ CO2e\per\yr}. Combined with the NEB (\qty{12.4}{\kg\ CO2e\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \qty{10}{\USD\per\tonne\ CO2e}~\cite{ICVCM2024}, the system generates \qty{62}{\USD\per\yr} in verified carbon revenue.
 
 \subsection{Smallholder Applicability}
 
-The \SI{500}{\m\squared} scale aligns perfectly with cooperative ownership models. By adopting high-value floriculture instead of staple crops, the system shifts from an \SI{8.0}{\yr} individual payback to a \SI{4.23}{\yr} cooperative payback (with a \SI{30}{\percent} blended-finance subsidy). This validates that quantum-enhanced agrivoltaics can be economically transformative when coupled with strategic crop selection and robust field-sensor integration.
+The \qty{500}{\m\squared} scale aligns perfectly with cooperative ownership models. By adopting high-value floriculture instead of staple crops, the system shifts from an \qty{8.0}{\yr} individual payback to a \qty{4.23}{\yr} cooperative payback (with a \qty{30}{\percent} blended-finance subsidy). This validates that quantum-enhanced agrivoltaics can be economically transformative when coupled with strategic crop selection and robust field-sensor integration.
 
 %==============================================================================
 % SECTION S10: QUANTUM MACHINE LEARNING SIGNAL PROCESSING
@@ -637,7 +638,7 @@ The \SI{500}{\m\squared} scale aligns perfectly with cooperative ownership model
 
 \subsection{Motivation}
 
-The hostile greenhouse environment introduces significant noise into SERS and CQD fluorescence telemetry: thermal fluctuations, microbial fouling, dust scattering, and humidity gradients all corrupt the optical readout. Standard digital filters (Savitzky--Golay, moving-average) struggle to preserve the weak spectral signatures of pre-symptomatic stress --- particularly the \SI{180}{\per\cm} Franck--Condon mode and the \SI{1145}{\per\cm} chlorophyll $a$ $C=C$ stretch --- that differentiate pathological states from baseline drift.
+The hostile greenhouse environment introduces significant noise into SERS and CQD fluorescence telemetry: thermal fluctuations, microbial fouling, dust scattering, and humidity gradients all corrupt the optical readout. Standard digital filters (Savitzky--Golay, moving-average) struggle to preserve the weak spectral signatures of pre-symptomatic stress --- particularly the \qty{180}{\per\cm} Franck--Condon mode and the \qty{1145}{\per\cm} chlorophyll $a$ $C=C$ stretch --- that differentiate pathological states from baseline drift.
 
 To address this, the Digital Twin incorporates a hybrid quantum-classical signal processing pipeline that combines (i)~Matrix Product State (MPS) compression as a nonlinear low-pass filter and (ii)~quantum kernel ridge regression (QKRR) for spectral reconstruction and anomaly scoring.
 
@@ -688,7 +689,7 @@ serves as the anomaly score. A spectrum is flagged as anomalous when $\mathcal{A
 
 \subsection{Integration into the Digital Twin}
 
-The QML pipeline executes at each Digital Twin refresh cycle (every~\SI{60}{\s}):
+The QML pipeline executes at each Digital Twin refresh cycle (every~\qty{60}{\s}):
 \begin{enumerate}
 \item Raw SERS and CQD fluorescence intensities are read from the NPoM sentinel sensors.
 \item The MPS denoiser compresses the $n$-dimensional spectral vector with bond dimension $\chi = 16$.
@@ -699,7 +700,7 @@ The QML pipeline executes at each Digital Twin refresh cycle (every~\SI{60}{\s})
 
 \subsection{Computational Overhead}
 
-Table~\ref{tab:SI_qml_overhead} summarizes the runtime and memory requirements of the QML pipeline on the ARM Cortex-M4 IoT node (\SI{120}{\MHz}, \SI{256}{\kB} SRAM).
+\Cref{tab:SI_qml_overhead} summarizes the runtime and memory requirements of the QML pipeline on the ARM Cortex-M4 IoT node (\qty{120}{\MHz}, \qty{256}{\kB} SRAM).
 
 \begin{table}[htbp]
 \centering
@@ -707,7 +708,7 @@ Table~\ref{tab:SI_qml_overhead} summarizes the runtime and memory requirements o
 \label{tab:SI_qml_overhead}
 \begin{tabular}{lcc}
 \toprule
-\textbf{Operation} & \textbf{Time (\si{\milli\second})} & \textbf{Memory (\si{\kilo\byte})} \\
+\textbf{Operation} & \textbf{Time (\unit{\milli\second})} & \textbf{Memory (\unit{\kilo\byte})} \\
 \midrule
 MPS decomposition ($n=64$, $\chi=16$) & 3.2 & 4.8 \\
 Quantum KRR prediction ($M=3$ templates) & 0.4 & 0.6 \\
@@ -718,7 +719,7 @@ Total & 3.7 & 5.5 \\
 \end{tabular}
 \end{table}
 
-The total runtime of \SI{3.7}{\ms} is well within the \SI{60}{\s} refresh window, leaving ample headroom for additional sensor fusion and telemetry tasks.
+The total runtime of \qty{3.7}{\ms} is well within the \qty{60}{\s} refresh window, leaving ample headroom for additional sensor fusion and telemetry tasks.
 
 %==============================================================================
 % SECTION S11: COMPARATIVE SIMULATION RESULTS — HDF5 DATA ANALYSIS
@@ -730,12 +731,12 @@ The total runtime of \SI{3.7}{\ms} is well within the \SI{60}{\s} refresh window
 This section presents a comparative analysis of the four production simulation runs
 performed to characterize the NPoM--FMO coupled system under different operating
 conditions. All simulations were executed with the PT-HOPS/SBD formalism at
-hierarchy depth $L=8$, $K=2$ Matsubara terms, $\Delta t = \SI{0.2}{\fs}$, and
-$t_{\max} = \SI{1}{\ps}$.
+hierarchy depth $L=8$, $K=2$ Matsubara terms, $\Delta t = \qty{0.2}{\fs}$, and
+$t_{\max} = \qty{1}{\ps}$.
 
 \subsection{Simulation Configurations}
 
-Table~\ref{tab:comparative_summary} lists the four configurations.
+\Cref{tab:comparative_summary} lists the four configurations.
 The baseline (no NPoM) uses the 8-site FMO Hamiltonian; the three NPoM-on
 configurations use the 9-site dressed Hamiltonian (8~FMO~$+$~1~plasmon mode).
 
@@ -744,9 +745,9 @@ configurations use the 9-site dressed Hamiltonian (8~FMO~$+$~1~plasmon mode).
 \subsection{Population Dynamics}
 
 % ---- Figure S1: 5-run comparative dynamics ----
-Figure~\ref{fig:SI_comparative_dynamics} shows the time evolution of key
+\Cref{fig:SI_comparative_dynamics} shows the time evolution of key
 observables across all five production configurations, extracted from the
-production HDF5 files at \SI{1000}{\fs} of simulated dynamics.
+production HDF5 files at \qty{1000}{\fs} of simulated dynamics.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_SI_Comparative_4Runs.png}
@@ -762,21 +763,21 @@ Panel~(a): forward transfer yield $\Phi_{\rm FT}$; (b): Site~1 antenna populatio
 % ---- Figure S2: NPoM OFF vs ON dedicated comparison ----
 To isolate the plasmonic suppression mechanism, we compare the baseline
 NPoM-off configuration ($n=20$, 8-site FMO Hamiltonian) directly against the
-NPoM-on production runs in Figure~\ref{fig:SI_npom_off_vs_on}.
+NPoM-on production runs in \cref{fig:SI_npom_off_vs_on}.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{figures/Figure_SI_NPoM_ON_vs_OFF.png}
 \caption{\textbf{NPoM plasmonic suppression: baseline OFF vs ON comparison.}
-Panel~(a): forward transfer yield $\Phi_{\rm FT}$ showing the \SI{91.8}{\percent}
+Panel~(a): forward transfer yield $\Phi_{\rm FT}$ showing the \qty{91.8}{\percent}
 suppression induced by the NPoM cavity;
-(b): Site~1 antenna population (\SI{73}{\percent} OFF vs.~\SI{12}{\percent} ON);
+(b): Site~1 antenna population (\qty{73}{\percent} OFF vs.~\qty{12}{\percent} ON);
 (c): trapping sites~3+4 (fivefold reduction);
 (d): Site~6 secondary antenna;
-(e): final site distribution bar chart at $t = \SI{1000}{\fs}$;
-(f): plasmon mode population (NPoM ON captures \SI{82}{\percent} of total
+(e): final site distribution bar chart at $t = \qty{1000}{\fs}$;
+(f): plasmon mode population (NPoM ON captures \qty{82}{\percent} of total
 excitation);
 (g): trace conservation ($\mu = 1.000000$ for both runs);
-(h): early dynamics zoom (0--\SI{50}{\fs}) showing competitive population loading;
+(h): early dynamics zoom (0--\qty{50}{\fs}) showing competitive population loading;
 (i): yield comparison across four representative configurations;
 (j): physical interpretation of the strong-coupling hybridization mechanism.}
 \label{fig:SI_npom_off_vs_on}
@@ -784,23 +785,23 @@ excitation);
 
 The following features are noteworthy:
 
-\paragraph{Plasmonic suppression (S2~a).}The forward transfer yield drops from $\Phi_{\rm FT} = 0.98$ (NPoM-off baseline) to $\Phi_{\rm FT} = 0.0799$ (NPoM-on, $V = \SI{1.2}{\nm\cubed}$, $n=20$), a relative suppression of \SI{91.8}{\percent}. This is not an artifact of
+\paragraph{Plasmonic suppression (S2~a).}The forward transfer yield drops from $\Phi_{\rm FT} = 0.98$ (NPoM-off baseline) to $\Phi_{\rm FT} = 0.0799$ (NPoM-on, $V = \qty{1.2}{\nm\cubed}$, $n=20$), a relative suppression of \qty{91.8}{\percent}. This is not an artifact of
 the dressed Hamiltonian: the baseline HDF5 file records $n=20$ trajectories
 with perfect trace conservation ($\mu = 1.000000$, $\sigma = 0.000000$),
 confirming that the suppression is physical and not numerical.
 
 \paragraph{Population redistribution (S2~e).}
 At steady state, the NPoM-off population is distributed broadly across the
-FMO sites (Site~1: \SI{73}{\percent}; Site~2: \SI{20}{\percent}; others:
+FMO sites (Site~1: \qty{73}{\percent}; Site~2: \qty{20}{\percent}; others:
 \SIrange{0.3}{4.1}{\percent}). Under NPoM-on, the plasmon mode (Site~9)
-captures \SI{82.3}{\percent} of the total population, starving the reaction
+captures \qty{82.3}{\percent} of the total population, starving the reaction
 center. The maximum population on the trapping sites (3~+~4) drops by a factor
 of~5 (from \num{0.0189} to \num{0.0038}).
 
 \paragraph{Competitive dynamics (S2~h).}
-The early-time zoom (0--\SI{50}{\fs}) reveals the competition between the two
+The early-time zoom (0--\qty{50}{\fs}) reveals the competition between the two
 decay channels. In the NPoM-on case, the plasmon mode loads within
-the first \SI{10}{\fs}, establishing a population reservoir that
+the first \qty{10}{\fs}, establishing a population reservoir that
 persists throughout the simulation. The trapping sites receive only the
 fraction of excitation that escapes the plasmonic channel. In the NPoM-off
 case, the initial excitation flows directly into the antenna states without
@@ -808,26 +809,26 @@ competition, allowing efficient funneling to the reaction center.
 
 \paragraph{Plasmon population loading.}
 In all three NPoM-on configurations, the plasmon mode (Site~9) rapidly acquires
-\SI{60}{\percent}--\SI{80}{\percent} of the total population within the first
-\SI{100}{\fs} and retains a dominant fraction throughout the simulation window.
+\qty{60}{\percent}--\qty{80}{\percent} of the total population within the first
+\qty{100}{\fs} and retains a dominant fraction throughout the simulation window.
 The residual population on the trapping sites (3~and~4) remains below
 \num{0.01} in all cases, consistent with the strong-coupling scenario where
 the plasmonic decay channel competes with the reaction center trapping.
 
 \paragraph{Temperature dependence.}
-At \SI{77}{\kelvin}, the trapping yield$\Phi_{\rm FT}$ increases by a factor of~2.1 relative to the \SI{295}{\kelvin} run at the same mode volume
-($V = \SI{1.2}{\nm\cubed}$). This is attributed to the suppression of thermal
+At \qty{77}{\kelvin}, the trapping yield$\Phi_{\rm FT}$ increases by a factor of~2.1 relative to the \qty{295}{\kelvin} run at the same mode volume
+($V = \qty{1.2}{\nm\cubed}$). This is attributed to the suppression of thermal
 decoherence at cryogenic temperatures: the reduced phonon population extends
 the exciton coherence lifetime, allowing a larger fraction of excitons to reach
-the reaction centre before being captured by the plasmon trap.
+the reaction center before being captured by the plasmon trap.
 The peak population on the trapping sites (3~+~4) increases from \num{0.0038}
-at \SI{295}{\kelvin} to \num{0.0055} at \SI{77}{\kelvin}, a relative enhancement
-of \SI{46}{\percent}.
+at \qty{295}{\kelvin} to \num{0.0055} at \qty{77}{\kelvin}, a relative enhancement
+of approximately \qty{45}{\percent} (precisely \qty{44.7}{\percent}).
 
 \paragraph{Volume dependence.}
-Increasing the mode volume from $V = \SI{0.8}{\nm\cubed}$ to
-$V = \SI{1.2}{\nm\cubed}$ at \SI{295}{\kelvin} produces a modest
-\SI{4.1}{\percent} improvement in $\Phi_{\rm FT}$ (from \num{0.0768} to
+Increasing the mode volume from $V = \qty{0.8}{\nm\cubed}$ to
+$V = \qty{1.2}{\nm\cubed}$ at \qty{295}{\kelvin} produces a modest
+\qty{4.1}{\percent} improvement in $\Phi_{\rm FT}$ (from \num{0.0768} to
 \num{0.0799}). The weaker plasmon--exciton coupling at larger volumes reduces
 the polariton splitting, partially restoring the excitonic character of the
 bright states and marginally improving reaction center access.
@@ -846,8 +847,8 @@ run is reported in the main text.
 The trade-off between exciton transport efficiency and SERS sensitivity is
 quantified by the combined figure of merit $\Phi_{\rm FT} \times \mathrm{EF}$,
 where $\mathrm{EF}$ is the Purcell-scaled SERS enhancement factor.
-The \SI{77}{\kelvin} configuration achieves the highest figure of merit
-($7.41$ vs.~$3.53$ at \SI{295}{\kelvin}, $V = \SI{1.2}{\nm\cubed}$),
+The \qty{77}{\kelvin} configuration achieves the highest figure of merit
+($7.41$ vs.~$3.53$ at \qty{295}{\kelvin}, $V = \qty{1.2}{\nm\cubed}$),
 making cryogenic operation the most favourable regime for simultaneous
 diagnostic readout and transport performance.
 

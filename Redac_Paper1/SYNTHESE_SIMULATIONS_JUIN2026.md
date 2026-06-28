@@ -13,7 +13,7 @@ Campagne de simulations PT-HOPS/SBD pour l'étude de l'excitation vibronique sé
 
 ## 2. Codebase & Environnement
 
-- **Framework :** `Redac_Paper1/quantum_simulations_framework_parallel_260612/`
+- **Framework :** `quantum_simulations_framework/`
 - **Solveur :** MesoHOPS v1.7.0 (SBD — Stochastically Bundled Dissipators, 3 bundles/site)
 - **Langage :** Python 3.12+, conda env `MesoHOP-sim`
 - **Parallélisation :** `joblib` avec `MemoryAwareJobScheduler` (OOM prevention)
@@ -116,7 +116,7 @@ Campagne de simulations PT-HOPS/SBD pour l'étude de l'excitation vibronique sé
 ## 5. Fichiers de Résultats (72 CSVs, Juin 2026)
 
 Tous les CSVs crédibles se trouvent dans :
-`Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/`
+`quantum_simulations_framework/reproducibility/results/`
 
 ### Convergence (9 CSVs)
 - `convergence_audit_L1_85ed4115d72b_20260613_*.csv` — L=1

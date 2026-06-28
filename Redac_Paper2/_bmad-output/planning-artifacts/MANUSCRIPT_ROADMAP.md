@@ -210,13 +210,13 @@ If *Nature Energy* scope mismatch: PRL (quantum dynamics) / ACS Photonics (NPoM+
 - V_ref=0.8 nm³ → EF=100 (réf. littérature)
 - V=0.2 → EF=1600, V=0.4 → 400, V=0.6 → 178, V=1.0 → 64, V=1.2 → 44, V=1.4 → 33
 - Impact: Quantifie le trade-off SERS↔Φ_FT avec données de notre système
-- **Fichier:** `Manuscript.tex` — Section NPoM ✅
+- **Fichier:** `Manuscript_NatureEnergy_26-06-25.tex` — Section NPoM ✅
 
 ### R-2: Architecture alternative (nanoantennes diélectriques) (✅ Terminé)
 **Problème:** NPoM supprime le transport, aucune solution proposée.
 **Solution:** Ajouter aux Limitations/Outlook une discussion sur les nanoantennes diélectriques (Si, TiO₂) qui donnent du SERS sans pertes plasmoniques.
 - Réf: Caldarola2015 *Nat. Commun.*, Regmi2016 *Nano Lett.*
-- **Fichier:** `Manuscript.tex` — Limitations/Outlook ✅
+- **Fichier:** `Manuscript_NatureEnergy_26-06-25.tex` — Limitations/Outlook ✅
 
 ### R-3: NPoM n_traj=20 à V=1.2 nm³ (🔄 En cours — serveur PID 125259)
 **Problème:** Scan fait avec n_traj=2 → pas de barres d'erreur.
@@ -239,7 +239,7 @@ If *Nature Energy* scope mismatch: PRL (quantum dynamics) / ACS Photonics (NPoM+
 ### R-6: OPV spectral sweep (autres bandes passantes) (✅ Terminé)
 **Problème:** On montre 750/820 nm. Et si on testait d'autres bandes?
 **Solution:** Ajouté au Outlook (point 7): "optimization of the OPV absorption band relative to the FMO Q_y manifold, including near-infrared perovskite and organic tandem cell configurations".
-- **Fichier:** `Manuscript.tex` — Outlook ✅
+- **Fichier:** `Manuscript_NatureEnergy_26-06-25.tex` — Outlook ✅
 
 ### R-7: Simulation 2DES (✅ Couvert)
 **Solution:** Déjà couvert par la mention existante dans l'Introduction (line 127: "two-dimensional electronic spectroscopy, revealing oscillatory coherence signatures") et l'Outlook (point 2: "experimental verification via 2DES with spatial light modulator pulse shaping").

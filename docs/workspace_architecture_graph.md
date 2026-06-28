@@ -43,7 +43,7 @@ graph TD
         P1_Package --> P1_Resp["Response_to_Reviewers_26-06-20.tex"]:::paper1
         P1_Package --> P1_Cover["Cover_Letter_JPCL_26-06-20.tex"]:::paper1
         
-        Paper1 --> P1_Framework["quantum_simulations_framework_parallel_260612/"]:::paper1
+        Paper1 --> P1_Framework["quantum_simulations_framework/"]:::paper1
         P1_Framework --> P1_Params["parameters.yaml (Physics Config)"]:::paper1
         P1_Framework --> P1_Core["core/ (HopsSimulator, constants.py)"]:::paper1
         P1_Framework --> P1_Models["models/ (QuantumDynamicsSimulator)"]:::paper1
@@ -105,6 +105,6 @@ sequenceDiagram
 ## 3. Component Details & Descriptions
 
 *   **`Redac_Paper1/`**: Contains the revised manuscript and supporting materials for *The Journal of Physical Chemistry Letters* (JPCL) revision, including point-by-point reviewer response files.
-*   **`Redac_Paper1/quantum_simulations_framework_parallel_260612/`**: The canonical simulation code utilizing MesoHOPS (v1.7.0) to model non-Markovian open quantum systems with stochastically bundled dissipators (SBD).
+*   **`quantum_simulations_framework/`**: The canonical simulation code utilizing MesoHOPS (v1.7.0) to model non-Markovian open quantum systems with stochastically bundled dissipators (SBD).
 *   **`Redac_Paper2/`**: Focuses on the Nature Energy project, which couples quantum dynamics with FAO-56 microclimate modeling, life-cycle assessment, and IoT BB84 QKD security.
 *   **`_bmad/` & `_bmad-output/`**: The workspace planning infrastructure defining product requirements, epics, stories, and solution architectures under BMad methodology.

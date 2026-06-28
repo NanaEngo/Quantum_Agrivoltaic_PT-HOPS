@@ -55,15 +55,15 @@ Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 13
 ## 4. Next Steps
 
 ### A. Pre-Submission Quality Checks
-- [ ] Compile manuscripts (Manuscript + SI + Cover Letter) with LaTeX to verify cross-refs.
-- [ ] Update figure captions in Manuscript.tex to match the new 3-panel layouts.
-- [ ] Update `plot_utils.py` (Paper2FigureGenerator) to match the new multi-panel code.
-- [ ] Audit all in-text panel references (e.g. `\Cref{fig:npq_switch}a`) for correctness.
-- [ ] Run full test suite (unit + integration).
-- [ ] Final quality gates (10/10) check.
+- [x] Compile manuscripts (Manuscript + SI + Cover Letter) with LaTeX to verify cross-refs.
+- [x] Update figure captions in Manuscript_NatureEnergy_26-06-25.tex to match the new 3-panel layouts.
+- [x] Update `plot_utils.py` (Paper2FigureGenerator) to match the new multi-panel code.
+- [x] Audit all in-text panel references (e.g. `\Cref{fig:npq_switch}a`) for correctness.
+- [x] Run full test suite (unit + integration).
+- [x] Final quality gates (10/10) check.
 
 ### B. Paper 2 Submission
-- [ ] Generate single-column submission version (Manuscript.tex) from twocolumn draft.
+- [ ] Generate single-column submission version (Manuscript_NatureEnergy_26-06-25.tex) from twocolumn draft.
 - [ ] Verify journal compliance (Nature Energy author guidelines).
 - [ ] Prepare cover letter and point-by-point response (if applicable).
 - [ ] Submit via Nature Energy online portal.

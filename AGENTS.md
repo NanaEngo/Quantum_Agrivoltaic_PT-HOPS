@@ -1,6 +1,68 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-28 (Session 16 — Graphify, FMO Network, Logging, Figure Alignment)
+**Last updated:** 2026-06-28 (Session 18 — LaTeX Cross-Reference Audit and Citation Verification)
+
+## Session 18 (2026-06-28) — LaTeX Cross-Reference Audit and Citation Verification
+
+### Cleveref Normalization (16 bare references fixed)
+- **Manuscript (3 refs)**: Replaced bare `\ref` tags with cleveref commands (e.g., `Figure~\ref` → `\Cref`, `Eq.~\ref` → `\cref`).
+- **Supporting Information (13 refs)**: Standardized all internal section, table, equation, and figure references to use `\cref` and `\Cref`, satisfying Technical Gate 10.4.
+
+### Value Consistency and American English
+- **Cryogenic Enhancement Precision**: Aligned the relative trapping yield enhancement at \SI{77}{\kelvin} in the SI text with the manuscript (precisely \SI{44.7}{\percent}, approximately \SI{45}{\percent}, from \num{0.0038} to \num{0.0055}).
+- **Oxford/American English**: Replaced a British English spelling ("centre" → "center") in `SI.tex` (line 822) to enforce the US English style standard across all documents.
+- **Figure 3 Panel Citations**: Added explicit citations to `\Cref{fig:lca_comparison}b` (Net Ecological Benefit) and `\Cref{fig:lca_comparison}c` (Cooperative Payback) in the body text of the manuscript.
+
+### LaTeX Compilation Check
+- Regenerated and compiled the manuscript (`Manuscript_NatureEnergy_26-06-25.pdf`) and SI (`SI.pdf`) successfully with no unresolved cross-references or compilation failures.
+
+## Session 17 (2026-06-28) — Adversarial Audit, Numerical Cross-Check, Figure Fixes
+
+### Numerical Cross-Check (85+ values verified)
+- **3 critical mismatches fixed**:
+  - OMIT 64% → 44% at 1000 W/m² (T₀(1+I/I_sat)⁻¹ = 0.44)
+  - Payback ratio 2.5× → 1.9× (8.0/4.23 = 1.89)
+  - g₀ > 200 cm⁻¹ threshold: V < 1 nm³ → V < 0.36 nm³
+- **3 minor inconsistencies fixed**:
+  - Global yield 0.972 → 0.971 (0.01×0.077 + 0.99×0.980)
+  - Cryo trapping +46% → +45% (actual +44.7%)
+  - SI QY enhancement 15% → 8% (consistent with MS)
+- **Strong coupling clarified**: g₀ (120-300 cm⁻¹) < κ (800 cm⁻¹); strong coupling via g_eff ~ 2000 cm⁻¹ (collective)
+- **Tab label fixed**: `tab:comparative_summary_ms` → `tab:comparative_summary`
+
+### Pistes_Improvements260625.md Audit (6 Axes)
+- **All 6 Axes present and numerically consistent** with code
+- **Code values verified**: ANNUAL_TRAINING_OPEX=1200, ANNUAL_CLEANING_OPEX=800, daily_decay_rate=0.005, soiling_floor=0.75, k_sv_ref=1.5e5, alpha_temp=-0.0035, beta_salinity=-0.012
+- **Axe 6 (QML) expanded**: Main text paragraph grew from 1 sentence to 3 sentences (MPS denoising, Savitzky-Golay comparison, 3.7 ms ARM Cortex-M4 budget)
+
+### Figure Audit & Fixes (5 issues)
+- **Figure 1 caption**: Removed phantom panel (d) coherence (code generates a-c only); removed "Solid: filtered; dashed: broadband" (single trace)
+- **Figure 3 payback**: `_compute_cooperative_payback()` now includes training_opex (1200) + cleaning_opex (800) → total OPEX 4000 USD → payback 4.23 yr
+- **Figure 3 NEB label**: "Avoided Emissions" → "Net Ecological Benefit"
+- **SI Figure S2**: Suppression 83.6% → 91.8% (matches n=20 V=1.2 body text)
+- **Figures regenerated** with corrected code
+
+### Adversarial Audit (BMAD-METHOD, 35 findings)
+- **Adversarial review** (15 findings): Φ_FT factor-of-2 inconsistency, 8% vs 15% QY, digital twin asserted but not implemented, QML "quantum" is classical, 1% sentinel fraction unjustified, NEB underivable, Floquet parameters ad hoc, OMIT misapplied, four-vs-five config contradiction, n=100 misleading, payback ignores governance, quantum-organism bridge is juxtaposition, soiling uncalibrated, BB84 QBER programmer-selected, OPV yield inconsistent
+- **Edge case hunter** (20 findings): factor-of-2 in cumulative_yield, DynamicCalibrator persistence, Pb²⁺ detection blind spot, audit() stub, QKD thread-safety, negative yield/subsidy/discount bounds, soiling >1.0, EMA alpha instability, zero baseline, ragged density matrices
+
+### 8 Fixes Applied
+- **`orchestrator.py:363`**: `cumulative_yield` 1×Γ_RC → 2×Γ_RC (matches scalar trap_yield and SI Eq.S3)
+- **`digital_twin.py:265`**: DynamicCalibrator now persisted via `self._calibrator` (EMA state retained across ticks)
+- **`diagnostics.py:113`**: Pb²⁺ detection fixed — was looking for `primary_peak_cm1` which Pb²⁺ lacks; now handles `cqd_pb2` separately
+- **`diagnostics.py:180`**: Boundary guards for `days_since_cleaning < 0` and `daily_decay_rate < 0`
+- **`neb.py:87`**: Boundary guards for `subsidy_rate ∈ [0,1]` and `discount_rate ≥ -0.999`
+- **`sensing.py:95`**: `ema_alpha ∈ [0,1]` validation
+- **Manuscript L266**: n=100 claim now per-configuration (V=0.8: n=100, V=1.2: n=20, 77K: n=2)
+- **Graphify confidence**: Fixed 150 links with invalid confidence values (lowercase `inferred`, `direct`, sentence strings → `INFERRED`)
+
+### Test Results
+- **46 passed, 1 xfailed** (pre-existing), 1 warning
+- All fixes verified — no regressions
+
+### Git
+- Commits: `9b60931` (cross-check), `12fe208` (QML expansion), `67e6c8d` (figure fixes), `9625976` (adversarial audit)
+- All pushed to origin/main, rsynced to server
 
 ## Session 16 (2026-06-28) — Graphify Knowledge Graph, FMO Network, Logging Lifting, Figure Alignment
 
@@ -182,7 +244,7 @@ All NPoM yields >90% suppressed regardless of volume (V=1.2 nm³ optimal).
 ```
 Submission_Package_Nature_Energy_Manuscript/  (Consolidated Submission Folder)
 ├── Manuscript_NatureEnergy_26-06-25.tex      (Two-column draft)
-├── Manuscript.tex                            (Single-column submission version)
+├── Manuscript_NatureEnergy_26-06-25.tex                            (Single-column submission version)
 ├── SI.tex                                    (Supporting Information)
 ├── Cover_Letter.tex                          (Cover letter)
 ├── references.bib                            (References database)
@@ -207,34 +269,34 @@ This repository contains two active research projects:
 
 ### Local Execution (Laptop Mode - Fast Verification)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --config Redac_Paper1/quantum_simulations_framework_parallel_260612/laptop_parameters.yaml
+mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --config quantum_simulations_framework/laptop_parameters.yaml
 ```
 
 ### Local/Cluster Execution (Production Mode - Publication Data)
 ```bash
-mamba run -n MesoHOP-sim python Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py --parallel --skip-audit
+mamba run -n MesoHOP-sim python quantum_simulations_framework/reproducibility/main.py --parallel --skip-audit
 ```
 
 **Figure 2 Sweep (Server-Side):**
 ```bash
-chmod +x Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
-./Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh
+chmod +x quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
+./quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh
 ```
 Monitoring: `tail -f reproducibility_cluster.log`
 
 ### Repository Hygiene (STRICT)
 **The canonical simulation framework is:**
-`Redac_Paper1/quantum_simulations_framework_parallel_260612/` (Paper 1 — JPCL revision)
+`quantum_simulations_framework/` (Paper 1 — JPCL revision)
 
 **ALWAYS SYNC AFTER CHANGES**: After every local modification to the codebase, you MUST synchronize the files to the server using `rsync` to ensure the production environment is up-to-date:
 ```bash
-rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper1/quantum_simulations_framework_parallel_260612/ nanaengo@100.73.21.40:~/quantum_simulations_framework_parallel_260612/
+rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/ nanaengo@100.73.21.40:~/quantum_simulations_framework/
 ```
 
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
 - `Redac_Paper1/quantum_simulations_framework_parallel/` (DELETED)
-- `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework_parallel_260612/` (DELETED — moved to `_deleted_root_duplicate_260612/`)
+- `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/` (DELETED — moved to `_deleted_root_duplicate_260612/`)
 
 If these directories appear, delete them immediately and check for stale path references in `AGENTS.md`, `ROADMAP.md`, or `README.md`.
 
@@ -272,7 +334,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 - `main.py`: complete orchestrator (hardened with `--skip-audit` and `--parallel` flags)
 - `figure_generator.py`: Overhauled to support JPCL legibility standards (600 DPI, Time [fs] units, Panel labels (a)-(f), comparison traces)
 - `environmental_factors.py`: Replaced seasonal "Time (days)" cycle with physically motivated static temperature sweeps (FR11)
-- **Code Merge & Data Reconciliation (2026-05-10)**: Merged server-side best practices (Python 3.10+ type hints, NumPy-style docstrings, `np.diag` initialization) into `core/hamiltonian_factory.py`. Local `quantum_simulations_framework_parallel_260612/` confirmed as the canonical reference with all improvements incorporated. Production CSV format verified identical (local=server). SI `η` value aligned: Test 10 corrected from 0.22(4) to 0.20(4) to match production ensemble average.
+- **Code Merge & Data Reconciliation (2026-05-10)**: Merged server-side best practices (Python 3.10+ type hints, NumPy-style docstrings, `np.diag` initialization) into `core/hamiltonian_factory.py`. Local `quantum_simulations_framework/` confirmed as the canonical reference with all improvements incorporated. Production CSV format verified identical (local=server). SI `η` value aligned: Test 10 corrected from 0.22(4) to 0.20(4) to match production ensemble average.
 - **CSV Format Verified**: Both local and server CSVs use the same column schema (`time_fs` + 7 site populations + `coherences` + broadband columns). No compatibility patch needed for figure generator.
 ### ✅ Production Run (2026-06-13→15)
 - **200/200 trajectories completed** with η=0.39±0.04 (2.2× higher than old η=0.18 after vibronic bath bug fix).
@@ -349,21 +411,21 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Master Nature Energy twocolumn draft (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript.tex` | Submission-format single-column draft (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Submission-format single-column draft (**Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/SI.tex` | Supporting Information draft (**Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Cover_Letter.tex` | Submission Cover Letter (**Source of truth**) |
 | `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/parameters.yaml` | **Single source of truth** for all simulation parameters |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/core/constants.py` | Python constants (must match `parameters.yaml`) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/main.py` | Single-entry pipeline orchestrator |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_temp_sweep_cluster.sh` | Temperature sweep Fig 2 |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/run_phase2_parallel.sh` | Phase 2 parallèle (4× simultané, ≥60 GiB RAM) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260620.md` | Final data analysis report (Phase 3, convergence) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260619.md` | Phase 2 robustness sweeps (temperature, bath, filter) |
-| `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/ANALYSIS_20260617.md` | Production run (L=8, K=2, SBD=3, N=100) |
+| `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
+| `quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
+| `quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |
+| `quantum_simulations_framework/reproducibility/audit_convergence.py` | L=7,8,9 convergence audit |
+| `quantum_simulations_framework/reproducibility/run_temp_sweep_cluster.sh` | Temperature sweep Fig 2 |
+| `quantum_simulations_framework/reproducibility/run_phase1_continue.sh` | Continuation Phase 1 (K-sweep + dt-sweep) |
+| `quantum_simulations_framework/reproducibility/run_phase1_parallel.sh` | Parallélisation Phase 1 (K=3 || dt=2.0) |
+| `quantum_simulations_framework/reproducibility/run_phase2_parallel.sh` | Phase 2 parallèle (4× simultané, ≥60 GiB RAM) |
+| `quantum_simulations_framework/reproducibility/results/ANALYSIS_20260620.md` | Final data analysis report (Phase 3, convergence) |
+| `quantum_simulations_framework/reproducibility/results/ANALYSIS_20260619.md` | Phase 2 robustness sweeps (temperature, bath, filter) |
+| `quantum_simulations_framework/reproducibility/results/ANALYSIS_20260617.md` | Production run (L=8, K=2, SBD=3, N=100) |
 | `_bmad-output/planning-artifacts/prd.md` | Product Requirements Document |
 | `_bmad-output/planning-artifacts/architecture.md` | Architecture decisions |
 | `_bmad-output/planning-artifacts/epics.md` | Epic breakdown (stories not yet written) |
@@ -416,7 +478,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 │   │   ├── references.bib
 │   │   ├── Reviewers_Comments.md
 │   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework_parallel_260612/ # Simulation framework (Paper 1)
+│   └── quantum_simulations_framework/ # Simulation framework (Paper 1)
 │       ├── parameters.yaml            # Source of truth
 │       ├── core/                      # HopsSimulator, constants, hamiltonian
 │       ├── models/                    # QuantumDynamicsSimulator, etc.
@@ -454,7 +516,7 @@ Quantum_Agrivoltaic_PT-HOPS/
 **Access:** `ssh penavora@100.73.21.40` (via Tailscale)
 **OS:** Ubuntu 24.04
 **Hardware:** 48 CPU cores, 125 GB RAM, 1× NVIDIA RTX A4000 (driver 580.159.03, NVML réconcilié)
-**Codebase:** `~/quantum_simulations_framework_parallel_260612/` (Paper 1 — JPCL revision), `~/quantum_simulations_framework/` (canonical)
+**Codebase:** `~/quantum_simulations_framework/` (Paper 1 — JPCL revision), `~/quantum_simulations_framework/` (canonical)
 **Conda env:** `MesoHOP-sim` (créé le 2026-06-13, Python 3.12, mesohops v1.7.0)
 **Dependencies:** numpy, scipy, pandas, matplotlib, joblib, tqdm, psutil, pyyaml
 
@@ -505,7 +567,7 @@ Key difference laptop vs server: laptop uses `laptop_parameters.yaml` (L=3, N=4,
 ## 2026-06-13 Session 3 — Audit & comprehensive OOM fixes
 
 ### Root-level duplicate DELETED
-The stale copy of the codebase at `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework_parallel_260612/` (118 Python files, MAX_N_JOBS=1, missing FMO_TARGET_SITE) was moved to `_deleted_root_duplicate_260612/`. The canonical path remains `Redac_Paper1/quantum_simulations_framework_parallel_260612/`.
+The stale copy of the codebase at `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/` (118 Python files, MAX_N_JOBS=1, missing FMO_TARGET_SITE) was moved to `_deleted_root_duplicate_260612/`. The canonical path remains `quantum_simulations_framework/`.
 
 ### Critical fixes
 - **`src.core.memory_manager` re-export created**: `src/core/memory_manager.py` re-exports `MemoryAwareJobScheduler`, `validate_memory_configuration`, `cleanup_memory` from `core.memory_manager`. This fixes a silent no-op: `memory_aware_patch.py` would always fail its import and silently skip patching, meaning no batch execution was ever active.
@@ -518,8 +580,8 @@ The stale copy of the codebase at `Quantum_Agrivoltaic_PT-HOPS/quantum_simulatio
 
 ### Files created
 - `src/core/memory_manager.py` (re-export)
-- `Redac_Paper1/quantum_simulations_framework_parallel_260612/scripts/cluster/run_production.sh` (server runner)
-- `Redac_Paper1/quantum_simulations_framework_parallel_260612/SERVER_PROTOCOL.md` (server usage guide)
+- `quantum_simulations_framework/scripts/cluster/run_production.sh` (server runner)
+- `quantum_simulations_framework/SERVER_PROTOCOL.md` (server usage guide)
 
 ### Files modified
 - `core/hops_simulator.py` — mem_limit_gb, MemoryError catch in batch loop
@@ -563,7 +625,7 @@ Agents are strictly instructed to use these specialized skills for high-fidelity
 - **filt750_800 killed** (Batch 2/2 stuck ~70 min on 1 traj) to unblock second batch
 - **3 SI figures generated locally**: `SI_bath_sensitivity.pdf`, `SI_filter_sweep.pdf`, `SI_temperature_dynamics.pdf`
 - **Manuscript + SI siunitx audit**: All bare numbers wrapped in `\num{}`/`\SI{}`/`\SIrange{}`
-- **Backup directory**: `Redac_Paper1/quantum_simulations_framework_parallel_260612/reproducibility/results/`
+- **Backup directory**: `quantum_simulations_framework/reproducibility/results/`
 
 #### ✅ Completed subsequently
 - **Second filter batch (bw200, single700, single850)**: all completed (bw200 η=0.648, single700 η=-0.958, single850 η=-0.958)

@@ -11,7 +11,7 @@
 | Domaine | Statut | Détails |
 |---------|--------|---------|
 | Code source | **16/16 tests OK** ✅ | 21 fichiers, ~1 666 lignes Python |
-| Manuscrit principal | **Compile (12pp)** ✅ | `Nature_Energy/Manuscript.tex` |
+| Manuscrit principal | **Compile (12pp)** ✅ | `Nature_Energy/Manuscript_NatureEnergy_26-06-25.tex` |
 | Supporting Information | **Compile** ✅ | `Nature_Energy/SI.tex` |
 | Simulation framework | **Intégré** ✅ | Dépend de `quantum_simulations_framework/` |
 | Pre-commit hooks | **Installé** ✅ | Ruff check + format |
@@ -45,7 +45,7 @@ Redac_Paper2/
 │       └── sensing.py               # Capteurs GQD + stress hydrique
 ├── tests/unit/                      # 16 tests unitaires
 ├── Nature_Energy/                   # Version soumission manuscrit
-│   ├── Manuscript.tex
+│   ├── Manuscript_NatureEnergy_26-06-25.tex
 │   ├── SI.tex
 │   └── Cover_Letter.tex
 └── _bmad-output/                    # Artéfacts de planification
@@ -117,7 +117,7 @@ test_quantum_solver.py   ✅  7/7  (Hamiltonien, couplage, NPoM, Floquet, SERS, 
 | Fichier | Pages | Statut |
 |---------|-------|--------|
 | `Manuscript_NatureEnergy_26-06-18.tex` | 8 | Draft (quality gates 1 ✅, 2-10 ❌) |
-| `Nature_Energy/Manuscript.tex` | 12 | Version propre soumission |
+| `Nature_Energy/Manuscript_NatureEnergy_26-06-25.tex` | 12 | Version propre soumission |
 | `Nature_Energy/SI.tex` | ~15 | Supporting Information (8 sections) |
 | `Nature_Energy/Cover_Letter.tex` | 2 | Lettre de soumission |
 
