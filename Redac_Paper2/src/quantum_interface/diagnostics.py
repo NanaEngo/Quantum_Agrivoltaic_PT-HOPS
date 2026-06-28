@@ -110,12 +110,17 @@ class SersDiagnostics:
             "cqd_pb2": 0.45,
         }
         # V5: Annotate which signatures are above detection threshold
-        spectrum["stress_markers"] = {
-            key: sig["description"]
-            for key, sig in SERS_TARGET_SIGNATURES.items()
-            if spectrum.get(f"{sig.get('primary_peak_cm1', 0)}_cm", 0.0)
-            > sig.get("detection_limit_mol_L", 0.0) * 1e6
-        }
+        spectrum["stress_markers"] = {}
+        for key, sig in SERS_TARGET_SIGNATURES.items():
+            peak = sig.get("primary_peak_cm1")
+            if peak is not None:
+                # Raman-based detection (oxidative stress, pesticide)
+                if spectrum.get(f"{peak}_cm", 0.0) > sig.get("detection_limit_mol_L", 0.0) * 1e6:
+                    spectrum["stress_markers"][key] = sig["description"]
+            elif key == "heavy_metal_pb2_cqd":
+                # Fluorescence quenching detection (Pb²⁺ via CQD)
+                if spectrum.get("cqd_pb2", 0.0) > sig.get("detection_limit_mol_L", 0.0) * 1e6:
+                    spectrum["stress_markers"][key] = sig["description"]
         return spectrum
 
     def calculate_correlation_metric(self, raman_spectrum: dict, trap_yield: float) -> float:
@@ -172,6 +177,8 @@ class SersDiagnostics:
             daily_decay_rate: Fractional efficiency loss per day (default 0.5%).
             min_soiling_factor: Floor on soiling factor (25% max loss by default).
         """
+        days_since_cleaning = max(days_since_cleaning, 0)
+        daily_decay_rate = max(daily_decay_rate, 0.0)
         soiling_factor = max(
             1.0 - daily_decay_rate * days_since_cleaning,
             min_soiling_factor,

@@ -92,6 +92,8 @@ class DynamicCalibrator:
             drift_alarm_threshold: Fractional drift (vs. initial baseline) that
                 triggers a maintenance alert (default 20%).
         """
+        if not 0.0 <= ema_alpha <= 1.0:
+            raise ValueError(f"ema_alpha must be in [0, 1], got {ema_alpha}")
         self.ema_alpha = ema_alpha
         self.drift_alarm_threshold = drift_alarm_threshold
         self._baseline_ema: float | None = None

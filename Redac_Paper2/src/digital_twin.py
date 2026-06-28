@@ -262,6 +262,7 @@ class DigitalTwin:
             return 1.0, 0.0
         from .iot_security.sensing import DynamicCalibrator
 
-        cal = DynamicCalibrator()
-        result = cal.update(float(baseline))
+        if not hasattr(self, "_calibrator"):
+            self._calibrator = DynamicCalibrator()
+        result = self._calibrator.update(float(baseline))
         return result["correction_factor"], result["drift_fraction"]

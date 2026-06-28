@@ -360,7 +360,7 @@ def run_global_simulation(solar_flux: float) -> None:
     h5_file = os.path.join(_SCRIPT_DIR, config.output.dynamics_h5)
     os.makedirs(os.path.dirname(h5_file), exist_ok=True)
     populations = dm_array.diagonal(axis1=1, axis2=2).real
-    cumulative_yield = 1.0 * gamma_rc * np.cumsum(trapped_pop) * dt_fs
+    cumulative_yield = 2.0 * gamma_rc * np.cumsum(trapped_pop) * dt_fs
     with h5py.File(h5_file, "w") as f:
         dyn = f.create_group("dynamics")
         dyn.create_dataset("populations", data=populations)

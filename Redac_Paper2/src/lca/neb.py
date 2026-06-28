@@ -85,6 +85,10 @@ class NetEcologicalBenefit:
         discount_rate = discount_rate if discount_rate is not None else coop.discount_rate
         area_m2 = area_m2 if area_m2 is not None else coop.area_m2
 
+        # --- Boundary guards ---
+        subsidy_rate = max(0.0, min(subsidy_rate, 1.0))
+        discount_rate = max(discount_rate, -0.999)  # Prevent zero denominator in NPV
+
         # --- Core financial computation ---
         effective_capex = capex * (1.0 - subsidy_rate)  # Net of blended-finance grant
         total_annual_opex = annual_opex + training_opex + cleaning_opex  # Dual OPEX
