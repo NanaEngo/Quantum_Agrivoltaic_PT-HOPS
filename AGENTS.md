@@ -1,6 +1,18 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-28 (Session 18 — LaTeX Cross-Reference Audit and Citation Verification)
+**Last updated:** 2026-06-28 (Session 19 — Codebase Restructuring, Paper 2 Figures Wrapping, and Path Reference Cleanup)
+
+## Session 19 (2026-06-28) — Codebase Restructuring, Paper 2 Figures Wrapping, and Path Reference Cleanup
+
+### Paper 2 Figure Code Consolidation
+- **Plotting Single Source of Truth**: Integrated the cooperative payback matrix curves computation and the `ConfigModel` loader directly into [plot_utils.py](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/src/lca/plot_utils.py).
+- **CLI Wrapper Simplify**: Refactored [regenerate_figures.py](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/scripts/regenerate_figures.py) into a clean CLI wrapper that invokes `Paper2FigureGenerator`, eliminating extensive code duplication between the source codebase and utility scripts.
+- **Verification**: Regenerated and confirmed all three multi-panel figures compile perfectly and are copied to the submission package matching the manuscript and SI.
+
+### Stale Path & Reference Cleanup
+- **Directory Path Updates**: Replaced all stale path allusions to the archived/deleted folder `Redac_Paper1/quantum_simulations_framework_parallel_260612` with the active root-level `quantum_simulations_framework/` directory across all project markdown files (including `AGENTS.md` and repository roadmaps).
+- **Ruff Hook Exclusions**: Modified the pre-commit configuration [Redac_Paper2/.pre-commit-config.yaml](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/.pre-commit-config.yaml) to exclude legacy and Paper 1 folders, preventing linter failures on non-active code.
+- **Graphify Update**: Updated the Graphify knowledge graph to prune 2,845 nodes from 550 deleted source files and AST-extract code changes.
 
 ## Session 18 (2026-06-28) — LaTeX Cross-Reference Audit and Citation Verification
 

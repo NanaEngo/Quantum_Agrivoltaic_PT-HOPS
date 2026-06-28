@@ -1,18 +1,39 @@
 # .graphifyignore — Exclude files from graphify knowledge graph extraction
 # Uses gitignore spec (same syntax as .gitignore)
 # See: https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
 # ─── Deprecated / legacy code ─────────────────────────────────────────────
 Archive/
 
-# ─── Generated figures (images are extracted separately by graphify) ──────
-Graphics/
+# ─── Generated figures (images are ignored recursively) ────────────────────
+**/Graphics/
+**/graphics/
+**/Figures/
+**/figures/
+**/Submission_Package_Nature_Energy_Manuscript/
 
-# ─── Unrelated tooling ────────────────────────────────────────────────────
+# ─── Unrelated tooling & Caches ───────────────────────────────────────────
 comfyui-mcp-server/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+**/.pytest_cache/
 
-# ─── Planning artifacts (not source code) ─────────────────────────────────
+# ─── Format Exclusions ────────────────────────────────────────────────────
+*.tex
+*.yaml
+*.yml
+*.json
+*.toml
+*.h5
+*.csv
+*.INVALID_FALLBACK_DATA.csv
+
+# ─── Planning & BMAD output artifacts ──────────────────────────────────────
 _bmad/
+**/_bmad-output/
+ROADMAP.md
+AGENTS.md
+SUBMISSION_STANDARD.md
 
 # ─── Duplicate reproducibility dir (canonical is in quantum_simulations_framework_parallel_260612/) ──
 reproducibility/
