@@ -35,7 +35,7 @@
 | | **3.3 Dynamic NPQ Switch** | Floquet Stark detuning + OMIT modulation; 40% reduction in exciton overload at >800 W/m² | Fig. 2a–b | 500 |
 | | **3.4 SERS Optomechanical Diagnostics** | Non-destructive readout: 180, 740, 1145 cm⁻¹ peaks; enhancement factor ~10² | Fig. 2c | 400 |
 | | **3.5 Smart Shield Microclimate** | FAO-56 Penman-Monteith ET_c reduction; 35% shading → 28% water savings | Fig. 3a | 500 |
-| | **3.6 Net Ecological Benefit** | Scenarios A vs B vs C; NEB = 12.4 kg CO2e/m²/yr (A); payback < 5 yrs (cooperative) | Fig. 3b–c | 600 |
+| | **3.6 Net Ecological Benefit** | Scenarios A vs B vs C; NEB = 19.6 kg CO2e/m²/yr (A), 25.8 (B); payback < 5 yrs (cooperative) | Fig. 3b–c | 600 |
 | | **3.7 Secure IoT & QKD** | BB84 with QBER < 11%; fail-safe irrigation backup | Fig. S1 | 300 |
 | **Discussion** | Quantum Divide mitigation | Tiered subsidies, cooperative models, policy recommendations | — | 600 |
 | **Methods** | PT-HOPS/SBD, FAO-56, LCA, BB84 | Full parameterization and convergence criteria | — | 800 |
@@ -114,7 +114,7 @@
 | Shading factor | 35% | `parameters.yaml` |
 | Crop coefficient K_c | 0.85 | `parameters.yaml` |
 | ET_c reduction | ~3.2 mm/day (28% vs open field) | `fao56.py` |
-| NEB Scenario A | ~12.4 kg CO2e/m²/yr | `neb.py` |
+| NEB Scenario A | ~19.6 kg CO2e/m²/yr | `neb.py` |
 | Cooperative payback | 3.5 years (5 members, 30% subsidy) | `database.py` |
 
 ### Security
@@ -176,8 +176,8 @@ Added 1 ha Cameroon greenhouse POC:
 - ~13000 m³/yr water savings, +2.8 t/ha/yr produce, 42 MWh/yr PV, net-zero carbon in 3.2 yr
 - References: Mohammed2023, FAO2022
 
-### S-3: Carbon Credit Angle (✅ Done 2026-06-25)
-- NEB = 12.4 kg CO2e/m²/yr → voluntary carbon markets (ICVCM2024)
+### S-3: Carbon Credit Angle (✅ Done 2026-06-25, corrected 2026-06-28)
+- NEB = 19.6 kg CO2e/m²/yr → voluntary carbon markets (ICVCM2024)
 - At 10 USD/tCO2e: ~124 USD/yr/ha → payback = 2.7 yr
 - Agriculture = 11% GHG emissions (Tubiello2015)
 - Abstract + Editorial Summary updated with carbon credit payback
