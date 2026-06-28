@@ -1,7 +1,7 @@
 % =============================================================================
 % Supporting Information
-% Coordinated Vibronic Light-Harvesting & Polaritonic Interface
-% for Symbiotic Quantum Agrivoltaics
+% Quantum Agrivoltaic Digital Twin: Coordinated Vibronic Light-Harvesting,
+% Environmental Calibration, and Agro-Rural Cybersecurity
 % Target: Nature Energy
 % Date:    June 18, 2026 (First Draft)
 % Authors: Teguia Kouam S.C., Goumai Vedekoi T., Tchapet Njafa J.-P.,
@@ -74,7 +74,7 @@
 \begin{document}
 
 \title{\textbf{Supporting Information}\\[0.5em]
-\large Coordinated Vibronic Light-Harvesting and Polaritonic Interface for Symbiotic Quantum Agrivoltaics}
+\large Quantum Agrivoltaic Digital Twin: Coordinated Vibronic Light-Harvesting, Environmental Calibration, and Agro-Rural Cybersecurity}
 
 \author{Steve Cabrel Teguia Kouam}
 \affil{Department of Physics, Faculty of Science, University of Douala, Cameroon}
@@ -461,7 +461,7 @@ The BB84 protocol~\cite{Bennett1984} is implemented as follows:
 
 \begin{enumerate}
 \item \textbf{Preparation:} Alice (sensor node) generates $4N = 1024$ random bits (for $N = 256$ final key length) and encodes each bit in one of four polarization states: $|H\rangle$, $|V\rangle$ (rectilinear basis, $+$) or $|D\rangle$, $|A\rangle$ (diagonal basis, $\times$).
-\item \textbf{Transmission:} The quantum states are transmitted over a buried single-mode fibre channel with a simulated depolarizing noise rate of $p = \qty{4.8}{\percent}$, modeling the baseline error rate in field-deployed fiber links~\cite{Zahidy2024}.
+\item \textbf{Transmission:} The quantum states are transmitted over a buried single-mode fiber channel with a simulated depolarizing noise rate of $p = \qty{4.8}{\percent}$, modeling the baseline error rate in field-deployed fiber links~\cite{Zahidy2024}.
 \item \textbf{Measurement:} Bob (cloud server) measures each received qubit in a randomly chosen basis ($+$ or $\times$), independent of Alice's preparation basis.
 \item \textbf{Sifting:} Alice and Bob publicly announce their basis choices and retain only events where bases match (approximately $2N = 512$ bits remain).
 \item \textbf{Parameter estimation:} A random sample (minimum 1 bit, maximum 50 bits) of the sifted key is disclosed to estimate the quantum bit error rate (QBER). The sample fraction follows $f_{\mathrm{sample}} = \min(50/N, 0.2)$.
@@ -474,7 +474,7 @@ The \qty{11}{\percent} QBER threshold is derived from the intercept-resend attac
 
 \subsection{Fail-Safe Mechanism}
 
-If the QBER exceeds \qty{11}{\percent} (e.g., due to equipment malfunction or attempted eavesdropping on the fibre link), the key generation aborts via a \texttt{SecurityThresholdExceeded} exception, and a fail-safe local irrigation routine activates:
+If the QBER exceeds \qty{11}{\percent} (e.g., due to equipment malfunction or attempted eavesdropping on the fiber link), the key generation aborts via a \texttt{SecurityThresholdExceeded} exception, and a fail-safe local irrigation routine activates:
 
 \begin{itemize}
 \item QKD-protected cloud irrigation commands are blocked to prevent data-injection attacks.
@@ -862,7 +862,7 @@ quantified by the combined figure of merit $\Phi_{\rm FT} \times \mathrm{EF}$,
 where $\mathrm{EF}$ is the Purcell-scaled SERS enhancement factor.
 The \qty{77}{\kelvin} configuration achieves the highest figure of merit
 ($7.41$ vs.~$3.53$ at \qty{295}{\kelvin}, $V = \qty{1.2}{\nm\cubed}$),
-making cryogenic operation the most favourable regime for simultaneous
+making cryogenic operation the most favorable regime for simultaneous
 diagnostic readout and transport performance.
 
 
@@ -957,7 +957,7 @@ sensitivity.
 The cooperative must decide, at sub-hourly timescales, how to allocate OPV
 electrical output among three competing demands: (i) irrigation pumping,
 (ii) produce refrigeration, and (iii) grid export. This is a
-combinatorial optimisation problem with $2^N$ possible configurations
+combinatorial optimization problem with $2^N$ possible configurations
 (where $N$ is the number of binary decision variables: pump on/off, chiller
 on/off, inverter on/off) and time-dependent constraints (solar flux, crop
 water deficit, energy price). Classical heuristics (greedy, genetic algorithms,
@@ -970,7 +970,7 @@ Quadratic Unconstrained Binary Optimization (QUBO) problems. It encodes the
 cost function as a Hamiltonian $H_C = \sum_i h_i \sigma_i^z + \sum_{ij} J_{ij}
 \sigma_i^z \sigma_j^z$ and alternates between evolution under $H_C$ and a
 mixing Hamiltonian $H_B = \sum_i \sigma_i^x$, with variational parameters
-$(\beta, \gamma)$ optimised classically. The depth $p$ of the QAOA circuit
+$(\beta, \gamma)$ optimized classically. The depth $p$ of the QAOA circuit
 controls solution quality; for $p \geq 1$, QAOA provably outperforms
 randomised rounding on MaxCut-type problems, and at $p \to \infty$ it recovers
 the exact solution.
@@ -1021,7 +1021,7 @@ Laplacian noise calibrated to $\varepsilon = 2$---the standard for sensitive
 medical data---is added to each gradient before blockchain recording, ensuring
 that even if the ledger is compromised, individual farm-level measurements
 cannot be reconstructed. This three-tier architecture guarantees that the
-cooperative retains full data sovereignty, enabling them to monetise certified
+cooperative retains full data sovereignty, enabling them to monetize certified
 provenance records on premium EU floriculture markets (e.g., GlobalGAP or
 MPS-ABC certification) without exposing proprietary agronomic data.
 
@@ -1051,7 +1051,7 @@ $\eta_{\mathrm{shield}} \in [0,1]$ multiplies the effective thermal coupling:
 a value of $\eta_{\mathrm{shield}} = 0.85$ means the probe experiences only
 85\% of the ambient greenhouse temperature swing.
 
-This micro-shielding is modelled as a multiplicative correction to the
+This micro-shielding is modeled as a multiplicative correction to the
 Stern-Volmer thermal drift term in~\texttt{src/iot\_security/sensing.py}:
 \[
 k_{\mathrm{SV}}^{\mathrm{(cal)}} = k_{\mathrm{SV}}^{\mathrm{(ref)}} \,
@@ -1072,7 +1072,7 @@ adsorb heavy metals and release CQD payloads in a controlled manner. The
 porphyrinic MOF PCN-222 exhibits a Langmuir adsorption capacity of
 $\qty{300}{\mg\per\g}$ for \ce{Pb^{2+}} at equilibrium
 (\qty{298}{\K}, \qty{50}{\ppb} influent), driven by coordination between the
-porphyrin nitrogen centres and the \ce{Pb^{2+}} ion.
+porphyrin nitrogen centers and the \ce{Pb^{2+}} ion.
 Simultaneously, CQDs loaded into the MOF pores during synthesis
 (\qty{50}{\mg\per\g}) are released via first-order kinetics with a
 decay constant of \qty{0.02}{\per\day}, providing sustained
@@ -1090,7 +1090,7 @@ physical complement to the electronic CQD sentinel network.
 \subsection{NV Diamond Relaxometry for Pre-Symptomatic Pathogen Detection}
 \label{SI-sec:nv_diamond}
 
-Nitrogen-vacancy (NV) centres in diamond offer T$_1$-relaxometry-based
+Nitrogen-vacancy (NV) centers in diamond offer T$_1$-relaxometry-based
 detection of paramagnetic species, including melanin (fungal), siderophores
 (bacterial), and reactive oxygen species (viral). The NV T$_1$ relaxation time
 (\qtyrange{10}{300}{\us}) is shortened by magnetic noise from nearby
@@ -1111,7 +1111,7 @@ minimum confidence of 0.85 for metabolite concentrations above
 appear---sufficient for targeted fungicide application rather than blanket
 spraying, reducing agrochemical input by an estimated 40--60\%.
 
-\subsection{Quantum Fertiliser Biostimulation}
+\subsection{Quantum Fertilizer Biostimulation}
 \label{SI-sec:quantum_fertiliser}
 
 Carbon quantum dots (CQD) exhibit
@@ -1127,7 +1127,7 @@ conditions. When CQDs are released from the MOF carrier
 through root hair endocytosis and translocated to leaf mesophyll cells
 within 2--4~h.
 
-The agronomic effect is modelled as a multiplicative boost factor
+The agronomic effect is modeled as a multiplicative boost factor
 $\beta_{\mathrm{QF}} = 1.08$ (8\% biomass enhancement) applied to the
 effective crop biomass in~\texttt{src/lca/neb.py}. This factor is
 conservative relative to published CQD biostimulation results (12--18\%
