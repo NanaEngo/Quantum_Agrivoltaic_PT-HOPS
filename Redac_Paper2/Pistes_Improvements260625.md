@@ -1,7 +1,7 @@
 # ROADMAP DÉTAILLÉE DE RÉVISION (Nature Energy) & AUDIT ÉDITORIAL CRITIQUE
 *Jumeau Numérique Quantique, Étalonnage Environnemental et Cybersécurité Agro-Rurale*
 
-Ce document fusionne la feuille de route de révision et les conclusions de l'audit critique (Editorial Board & Peer Reviewer de *Nature Energy*). Il consigne les axes méthodologiques, les modifications logicielles, ainsi que les justifications physiques nécessaires pour lever les verrous théoriques et aligner le document avec les exigences de publication.
+Ce document fusionne la feuille de route de révision, les conclusions de l'audit critique initial (Editorial Board & Peer Reviewer de *Nature Energy*) et les verrous identifiés lors de l'audit adversaire V2. Il consigne les axes méthodologiques, les modifications logicielles, ainsi que les justifications physiques nécessaires pour lever les verrous théoriques et aligner le document avec les exigences de publication de *Nature Energy*.
 
 ---
 
@@ -34,7 +34,7 @@ Ce document fusionne la feuille de route de révision et les conclusions de l'au
 *   **L'OPEX d'Entretien du "Smart Shield" (Panneaux OPV) :** 
     Pour faire face à la poussière et aux fientes qui s'accumulent inévitablement sur la serre, le modèle économique intègre un poste d'OPEX annuel dédié au nettoyage régulier des panneaux solaires (consommation d'eau filtrée, matériel et main-d'œuvre). Cet OPEX est calculé en fonction de la fréquence optimale de nettoyage requise pour minimiser la pénalité de rendement électrique.
 *   **Modélisation de l'OPEX de Vulgarisation Agricole :** 
-    Le modèle d'amortissement socio-économique intègre également une charge opérationnelle annuelle dédiée à la formation technique locale et aux services de vulgarisation agricole (`ANNUAL_TRAINING_OPEX`), afin de doter la coopérative des compétences nécessaires pour opérer l'interface simplifiée du jumeau numérique.
+    Le modèle d'amortissement socio-economic intègre également une charge opérationnelle annuelle dédiée à la formation technique locale et aux services de vulgarisation agricole (`ANNUAL_TRAINING_OPEX`), afin de doter la coopérative des compétences nécessaires pour opérer l'interface simplifiée du jumeau numérique.
 
 ### Axe 4 : Ciblage Moléculaire Spécifique et Dépollution Active
 Le manuscrit cible des signatures physiologiques et chimiques spécifiques, passant d'un diagnostic passif à une remédiation active :
@@ -93,7 +93,7 @@ class DynamicCalibrator:
 
 ---
 
-## III. NOUVEAUX AXES STRATÉGIQUES ET RÉPONSES AUX AUDITS ÉDITORIAUX (REVUES CRITIQUES)
+## III. NOUVEAUX AXES STRATÉGIQUES ET RÉPONSES AUX AUDITS ÉDITORIAUX (REVUES CRITIQUES DE PREMIER TOUR)
 
 ### Axe 7 : Revêtements Zwitterioniques (Solution Matérielle au Fouling)
 *   **Le Concept :** L'intégration de polymères zwitterioniques sur les espaceurs NPoM offre une barrière physique contre le bioencrassement, permettant de limiter le recours aux algorithmes correctifs de dérive thermique et d'humidité.
@@ -123,24 +123,43 @@ class DynamicCalibrator:
 
 ---
 
-## IV. RÉSOLUTION DES 5 FAILLES DE L'AUDIT ADVERSARIEL DE FIN DE CYCLE (# ADVERSARIAL REVIEW260629.md)
+## IV. RESOLUTIONS DES FAILLES PHYSIQUES ET SYSTÉMIQUES DE L'AUDIT ADVERSARIEL V2
 
-### Axe 13 : Répartition du Budget de Calcul QML/QAOA (Faille 1)
-*   **La Faille :** Le budget de calcul de 3,7 ms sur un microcontrôleur ARM Cortex-M4 est physiquement insuffisant pour exécuter des contractions de réseaux de tenseurs (MPS) et de l'optimisation QAOA à 3 qubits.
-*   **Ajustement Manuscrit & SI :** Précision apportée dans le texte principal (Section Discussion) et le SI (Section S10). Le microcontrôleur d'extrémité (IoT node) n'exécute localement que l'inférence à faible latence (3,7 ms) d'un modèle Quantum Kernel Ridge Regression (QKRR) à poids gelés (*frozen weights*). Le traitement lourd de réduction de bruit par MPS et la planification dynamique QAOA s'exécutent de façon centralisée sur le serveur (ou cloud) de la coopérative, puis les paramètres optimisés sont poussés périodiquement vers les nœuds IoT.
+### Axe 13 : Le Mythe du $|E|^4$ en Picocavités (Faille V2-1)
+*   **La Faille :** L'approximation classique de SERS $EF = (E/E_0)^4 \approx 44$ s'effondre dans les sub-nanopocavités ($V_{\mathrm{mode}} = \qty{1.2}{\nm\cubed}$). Les effets non-locaux (tunneling quantique, dielectric screening) et le pompage optomécanique hors-équilibre des phonons de vibration modifient radicalement le comportement.
+*   **Modifications Apportées :** Une sous-section spécifique `SERS enhancement scaling limits` a été insérée dans les *Methods* du manuscrit pour recadrer l'exaltation comme une estimation semi-classique basse. L'Outlook explicite le besoin d'une modélisation par tenseur de Green non-local pour rendre justice à ce régime sub-nanométrique.
 
-### Axe 14 : Coût de Déploiement du Réseau Fibre Optique (Faille 2)
-*   **La Faille :** L'omission du coût d'enfouissement de la fibre optique monomode sous la terre volcanique du Cameroun fausse l'analyse socio-économique du CAPEX (322 $/m²).
-*   **Ajustement Manuscrit & SI :** Le CAPEX de la section S5.1 du SI a été restructuré pour inclure explicitement une ligne de \qty{30}{\per\m\squared} dédiée à la tranchée, au déploiement et à la terminaison de la fibre optique monomode. Pour conserver le total de \qty{322}{\per\m\squared} (cohérent avec les analyses de payback et de rentabilité), les budgets d'installation/structure (\qty{35}{\per\m\squared}) et d'électronique/IoT (\qty{25}{\per\m\squared}) ont été affinés et révisés.
+### Axe 14 : Abrasion Mécanique des Polymères Zwitterioniques (Faille V2-2)
+*   **La Faille :** La résilience de 60 jours en immersion fluide (aquaculture) des revêtements zwitterioniques anti-fouling est inapplicable au sol agricole abrasif ( quartz, bioturbation, tillage). Les polymères y subiraient un décollement mécanique instantané.
+*   **Modifications Apportées :** La section *Limitations* du manuscrit et la section S11.1 du SI ont été enrichies pour limiter la longévité de 60 jours aux capteurs abrités dans des chambres de micro-échantillonnage fermées ou des gaines de protection en céramique poreuse rigide, écartant tout contact direct non protégé avec la boue soumise au labour.
 
-### Axe 15 : Risque Écotoxique et Confinement des Points Quantiques (Faille 3)
-*   **La Faille :** L'injection directe de points quantiques à base de métaux lourds toxiques (CdTe/ZnSe) comme engrais quantique en plein champ (fraisiculture) pose un risque majeur de nanotoxicity et bioaccumulation, ruinant le bénéfice environnemental net (NEB).
-*   **Ajustement Manuscrit & SI :** Ajout d'une clause restrictive stricte dans la section des limitations du SI (Section S11.1). Pour toute culture à usage alimentaire, l'utilisation de points quantiques contenant du cadmium ou du tellure est proscrite dans le sol ou l'eau libre. Ces nanomatériaux sont confinés de manière étanche dans les enveloppes polymères des biocapteurs NPoM. Seuls les points quantiques de carbone (CQDs) ou de graphène (GQDs) non métalliques, biocompatibles et biodégradables, sont autorisés pour des applications de nano-priming en solution.
+### Axe 15 : Pertinence Temporelle du Traitement Edge QML (Faille V2-3)
+*   **La Faille :** La latence de 3,7 ms du modèle QKRR sur Cortex-M4 est disproportionnée face aux échelles de temps de la biologie végétale et de l'irrigation (heures/jours).
+*   **Modifications Apportées :** La discussion du manuscrit a été ajustée pour montrer que cette très faible latence n'a pas pour but de réagir à la seconde près sur la plante, mais permet le **multiplexage spatial massif**. Un seul processeur Cortex-M4 bon marché peut interroger séquentiellement et analyser les spectres de dizaines de capteurs sentinelles répartis sur la serre en moins d'une seconde, limitant le CAPEX matériel global.
 
-### Axe 16 : Configuration Hors-Sol du Diagnostic par Centres NV (Faille 4)
-*   **La Faille :** Proposer d'enfouir des capteurs à centres NV (qui requièrent une excitation laser vert à 532 nm, une radiofréquence micro-onde et une collecte de fluorescence rouge) dans du sol ou de la boue opaque est un non-sens optique.
-*   **Ajustement Manuscrit & SI :** Section S11.3 révisée. Le biocapteur NV-diamond n'est plus présenté comme un dispositif enterré. Il est redéfini comme une station microfluidique de diagnostic de bureau "Point-of-Care" (Lab-on-a-Chip) située dans le hub central ventilé de la serre. Les techniciens effectuent des prélèvements manuels périodiques de sève ou d'eau d'irrigation et les chargent dans la puce microfluidique pour une lecture optique et micro-onde stable.
+### Axe 16 : Résolution du Bruit Gravitationnel Régional (Faille V2-4)
+*   **La Faille :** Extraire une anomalie de gravité locale due à $650 \text{ m}^3$ d'eau économisée au milieu des fluctuations géophysiques massives (mousson, biomasse saisonnière) est un problème inverse mal posé.
+*   **Modifications Apportées :** Clarification insérée dans le manuscrit principal et le SI Section S5.5. Le réseau de mesure doit employer la **Gradiométrie Gravimétrique Quantique** (Quantum Gravity Gradiometer à deux nuages d'atomes, Stray et al., 2022) pour éliminer par réjection en mode commun les bruits géophysiques et sismiques régionaux de grande échelle et isoler le signal hydrogéologique de la serre.
 
-### Axe 17 : Approximation FAO-56 sous Serre Confinée (Faille 5)
-*   **La Faille :** Le modèle FAO-56 Penman-Monteith est conçu pour des conditions de champ libre et de turbulence atmosphérique standard. Son application brute sous serre confinée avec un simple facteur d'ombrage est une simplification agronomique abusive.
-*   **Ajustement Manuscrit & SI :** La section *Methods* du texte principal a été modifiée pour désigner explicitement le modèle FAO-56 modifié comme une approximation de premier ordre. Il est mentionné que sous une couverture agrivoltaïque fermée, la résistance aérodynamique de la couche limite et les transferts de chaleur latente sont significativement altérés. Le manuscrit préconise formellement, dans l'Outlook, l'intégration future de modèles de mécanique des fluides numérique (CFD - Computational Fluid Dynamics) 3D pour modéliser précisément le microclimat de la canopée.
+### Axe 17 : Conditionnalité Financière par Performance Bonds (Faille V2-5)
+*   **La Faille :** Les économistes du journal rejetteraient l'idée d'une subvention Tier 3 inconditionnelle de \qty{30}{\percent} comme un chèque en blanc irréaliste pour de petits exploitants.
+*   **Modifications Apportées :** Le SI Section S5.5 a été réécrit pour spécifier que ces subventions sont adossées à des **Performance Bonds** (obligations de performance) et des clauses crépusculaires. Le financement n'est définitivement converti en subvention que si le jumeau numérique blockchain prouve le maintien des seuils d'économie d'eau sur une période continue de 24 mois.
+
+---
+
+## V. ANCIENS VERROUS INTÉGRÉS DANS L'AUDIT DE FIN DE CYCLE V1
+
+### Axe 18 : Répartition du Budget de Calcul QML/QAOA (Budget CPU/SRAM)
+Le traitement lourd de réduction de bruit par MPS et la planification dynamique QAOA s'exécutent sur le serveur cloud, tandis que le Cortex-M4 d'extrémité n'exécute localement que l'inférence du modèle QKRR à poids gelés.
+
+### Axe 19 : Coût de Déploiement du Réseau Fibre Optique
+Le CAPEX inclut explicitement une ligne de \qty{30}{\per\m\squared} dédiée à l'enfouissement de la fibre monomode.
+
+### Axe 20 : Risque Écotoxique et Confinement des Points Quantiques
+Le cadmium toxique (CdTe) est confiné hermétiquement dans les biocapteurs NPoM. Seuls les points quantiques de carbone (CQDs) biocompatibles sont autorisés en plein sol.
+
+### Axe 21 : Configuration Hors-Sol du Diagnostic par Centres NV
+Le diagnostic NV-diamond est déporté dans une station microfluidique "Point-of-Care" (Lab-on-a-Chip) de bureau au centre de la serre, supprimant l'impossible lecture optique/micro-onde en sol opaque.
+
+### Axe 22 : Approximation FAO-56 sous Serre Confinée
+La formulation FAO-56 modifiée est désignée comme une approximation de premier ordre. L'intégration de modèles CFD 3D est prescrite dans l'Outlook pour capturer les microclimats confinés de la serre.
