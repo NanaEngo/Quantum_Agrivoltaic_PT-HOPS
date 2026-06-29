@@ -120,3 +120,27 @@ class DynamicCalibrator:
 ### Axe 12 : Relégation du 77 K de la Discussion vers le SI
 *   **Justification du Reviewer (C1) :** Les résultats cryogéniques à 77 K polluent le texte principal d'un article d'agrivoltaïsme appliqué.
 *   **Ajustement Manuscrit :** Les sections Results et Discussion ont été purgées des paragraphes de surinterprétation du rendement à 77 K. Ces derniers ont été transférés intégralement dans la section correspondante du SI (`\Cref{SI-sec:cryo}`) à titre de vérification limite de la suppression du bruit de phonons.
+
+---
+
+## IV. RÉSOLUTION DES 5 FAILLES DE L'AUDIT ADVERSARIEL DE FIN DE CYCLE (# ADVERSARIAL REVIEW260629.md)
+
+### Axe 13 : Répartition du Budget de Calcul QML/QAOA (Faille 1)
+*   **La Faille :** Le budget de calcul de 3,7 ms sur un microcontrôleur ARM Cortex-M4 est physiquement insuffisant pour exécuter des contractions de réseaux de tenseurs (MPS) et de l'optimisation QAOA à 3 qubits.
+*   **Ajustement Manuscrit & SI :** Précision apportée dans le texte principal (Section Discussion) et le SI (Section S10). Le microcontrôleur d'extrémité (IoT node) n'exécute localement que l'inférence à faible latence (3,7 ms) d'un modèle Quantum Kernel Ridge Regression (QKRR) à poids gelés (*frozen weights*). Le traitement lourd de réduction de bruit par MPS et la planification dynamique QAOA s'exécutent de façon centralisée sur le serveur (ou cloud) de la coopérative, puis les paramètres optimisés sont poussés périodiquement vers les nœuds IoT.
+
+### Axe 14 : Coût de Déploiement du Réseau Fibre Optique (Faille 2)
+*   **La Faille :** L'omission du coût d'enfouissement de la fibre optique monomode sous la terre volcanique du Cameroun fausse l'analyse socio-économique du CAPEX (322 $/m²).
+*   **Ajustement Manuscrit & SI :** Le CAPEX de la section S5.1 du SI a été restructuré pour inclure explicitement une ligne de \qty{30}{\per\m\squared} dédiée à la tranchée, au déploiement et à la terminaison de la fibre optique monomode. Pour conserver le total de \qty{322}{\per\m\squared} (cohérent avec les analyses de payback et de rentabilité), les budgets d'installation/structure (\qty{35}{\per\m\squared}) et d'électronique/IoT (\qty{25}{\per\m\squared}) ont été affinés et révisés.
+
+### Axe 15 : Risque Écotoxique et Confinement des Points Quantiques (Faille 3)
+*   **La Faille :** L'injection directe de points quantiques à base de métaux lourds toxiques (CdTe/ZnSe) comme engrais quantique en plein champ (fraisiculture) pose un risque majeur de nanotoxicity et bioaccumulation, ruinant le bénéfice environnemental net (NEB).
+*   **Ajustement Manuscrit & SI :** Ajout d'une clause restrictive stricte dans la section des limitations du SI (Section S11.1). Pour toute culture à usage alimentaire, l'utilisation de points quantiques contenant du cadmium ou du tellure est proscrite dans le sol ou l'eau libre. Ces nanomatériaux sont confinés de manière étanche dans les enveloppes polymères des biocapteurs NPoM. Seuls les points quantiques de carbone (CQDs) ou de graphène (GQDs) non métalliques, biocompatibles et biodégradables, sont autorisés pour des applications de nano-priming en solution.
+
+### Axe 16 : Configuration Hors-Sol du Diagnostic par Centres NV (Faille 4)
+*   **La Faille :** Proposer d'enfouir des capteurs à centres NV (qui requièrent une excitation laser vert à 532 nm, une radiofréquence micro-onde et une collecte de fluorescence rouge) dans du sol ou de la boue opaque est un non-sens optique.
+*   **Ajustement Manuscrit & SI :** Section S11.3 révisée. Le biocapteur NV-diamond n'est plus présenté comme un dispositif enterré. Il est redéfini comme une station microfluidique de diagnostic de bureau "Point-of-Care" (Lab-on-a-Chip) située dans le hub central ventilé de la serre. Les techniciens effectuent des prélèvements manuels périodiques de sève ou d'eau d'irrigation et les chargent dans la puce microfluidique pour une lecture optique et micro-onde stable.
+
+### Axe 17 : Approximation FAO-56 sous Serre Confinée (Faille 5)
+*   **La Faille :** Le modèle FAO-56 Penman-Monteith est conçu pour des conditions de champ libre et de turbulence atmosphérique standard. Son application brute sous serre confinée avec un simple facteur d'ombrage est une simplification agronomique abusive.
+*   **Ajustement Manuscrit & SI :** La section *Methods* du texte principal a été modifiée pour désigner explicitement le modèle FAO-56 modifié comme une approximation de premier ordre. Il est mentionné que sous une couverture agrivoltaïque fermée, la résistance aérodynamique de la couche limite et les transferts de chaleur latente sont significativement altérés. Le manuscrit préconise formellement, dans l'Outlook, l'intégration future de modèles de mécanique des fluides numérique (CFD - Computational Fluid Dynamics) 3D pour modéliser précisément le microclimat de la canopée.
