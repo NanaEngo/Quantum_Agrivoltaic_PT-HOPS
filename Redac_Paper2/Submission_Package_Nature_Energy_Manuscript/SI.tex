@@ -136,12 +136,12 @@ Energies are given relative to the lowest-energy site (Site~3 at \qty{12210}{\pe
 \centering
 \caption{\textbf{8-site FMO site energies} (in \unit{\per\cm}, referenced to Site~3).}
 \label{tab:SI_site_energies}
-\begin{tabular}{lcccccccc}
+\begin{tabular}{l *{8}{S[table-format=5.0]} }
 \toprule
-\textbf{Parameter} & \textbf{Site 1} & \textbf{Site 2} & \textbf{Site 3} & \textbf{Site 4} & \textbf{Site 5} & \textbf{Site 6} & \textbf{Site 7} & \textbf{Site 8} \\
+\textbf{Parameter} & {\textbf{Site 1}} & {\textbf{Site 2}} & {\textbf{Site 3}} & {\textbf{Site 4}} & {\textbf{Site 5}} & {\textbf{Site 6}} & {\textbf{Site 7}} & {\textbf{Site 8}} \\
 \midrule
-Absolute $\varepsilon_n$ & \num{12410} & \num{12530} & \num{12210} & \num{12320} & \num{12480} & \num{12630} & \num{12440} & \num{12410} \\
-Relative $\varepsilon_n$ & \num{280}   & \num{420}   & \num{0}     & \num{110}   & \num{270}   & \num{500}   & \num{310}   & \num{200}   \\
+Absolute $\varepsilon_n$ & 12410 & 12530 & 12210 & 12320 & 12480 & 12630 & 12440 & 12410 \\
+Relative $\varepsilon_n$ & 280   & 420   & 0     & 110   & 270   & 500   & 310   & 200   \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -153,27 +153,25 @@ Site~8, which bridges the baseplate to the reaction center, is assigned an energ
 
 \Cref{tab:SI_coupling_matrix} presents the full $8\times8$ electronic coupling matrix $J_{nm}$ (in \unit{\per\cm}).
 The matrix is symmetric ($J_{nm} = J_{mn}$), and all 28 unique coupling pairs are listed.
-Values for Sites~1--7 follow the Adolphs--Renger parameterization~\cite{Adolphs2006}; couplings involving Site~8 are taken from~Ref.~\cite{Moix2011}.
-
-\begin{table}[htbp]
+Values for Sites~1--7 follow the Adolphs--Renger parameterization~\cite{Adolphs2006}; couplings involving Site~8 are taken from~Ref.~\cite{Moix2011}.\begin{table}[htbp]
 \centering
 \caption{\textbf{Full 8-site electronic coupling matrix $J_{nm}$} (in \unit{\per\cm}).}
 \label{tab:SI_coupling_matrix}
-\begin{tabular}{lcccccccc}
+\begin{tabular}{l *{8}{S[table-format=-2.1]} }
 \toprule
- & \textbf{Site 1} & \textbf{Site 2} & \textbf{Site 3} & \textbf{Site 4} & \textbf{Site 5} & \textbf{Site 6} & \textbf{Site 7} & \textbf{Site 8} \\
+ & {\textbf{Site 1}} & {\textbf{Site 2}} & {\textbf{Site 3}} & {\textbf{Site 4}} & {\textbf{Site 5}} & {\textbf{Site 6}} & {\textbf{Site 7}} & {\textbf{Site 8}} \\
 \midrule
-\textbf{Site 1} & \num{0} & \num{-87.7} & \num{5.5}  & \num{-5.9} & \num{6.7}  & \num{-13.7} & \num{-9.9} & \num{4.0} \\
-\textbf{Site 2} &   & \num{0}     & \num{30.8} & \num{8.2}  & \num{0.7}  & \num{11.8}  & \num{4.3}  & \num{-2.1} \\
-\textbf{Site 3} &   &       & \num{0}    & \num{-53.5} & \num{-2.2} & \num{-9.6}  & \num{6.0}  & \num{12.0} \\
-\textbf{Site 4} &   &       &      & \num{0}    & \num{-70.7} & \num{-17.0} & \num{-63.3} & \num{5.5} \\
-\textbf{Site 5} &   &       &      &      & \num{0}    & \num{81.1}  & \num{-1.3} & \num{3.2} \\
-\textbf{Site 6} &   &       &      &      &      & \num{0}     & \num{39.7} & \num{-8.7} \\
-\textbf{Site 7} &   &       &      &      &      &       & \num{0}    & \num{-15.0} \\
-\textbf{Site 8} &   &       &      &      &      &       &      & \num{0} \\
+\textbf{Site 1} & 0 & -87.7 & 5.5  & -5.9 & 6.7  & -13.7 & -9.9 & 4.0 \\
+\textbf{Site 2} & {}  & 0     & 30.8 & 8.2  & 0.7  & 11.8  & 4.3  & -2.1 \\
+\textbf{Site 3} & {}  & {}      & 0    & -53.5 & -2.2 & -9.6  & 6.0  & 12.0 \\
+\textbf{Site 4} & {}  & {}      & {}     & 0    & -70.7 & -17.0 & -63.3 & 5.5 \\
+\textbf{Site 5} & {}  & {}      & {}     & {}     & 0    & 81.1  & -1.3 & 3.2 \\
+\textbf{Site 6} & {}  & {}      & {}     & {}     & {}     & 0     & 39.7 & -8.7 \\
+\textbf{Site 7} & {}  & {}      & {}     & {}     & {}     & {}      & 0    & -15.0 \\
+\textbf{Site 8} & {}  & {}      & {}     & {}     & {}     & {}      & {}     & 0 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table}e}
 
 \subsection{Reaction center trapping}
 
@@ -211,13 +209,13 @@ We adopt $L=8$ as the production standard to ensure robust convergence across al
 \centering
 \caption{\textbf{Hierarchy depth convergence.} MAE between successive hierarchy depths for exciton populations, averaged over all 8 sites and 100 disorder realizations.}
 \label{tab:SI_hierarchy_convergence}
-\begin{tabular}{lccc}
+\begin{tabular}{S[table-format=1.0] S[table-format=1.1e-2] S[table-format=1.1e-2] S[table-format=1.1]}
 \toprule
-$L$ & MAE ($L \to L+1$) & Rel.\ dev.\ from $L=9$ & CPU time (min) \\
+{$L$} & {MAE ($L \to L+1$)} & {Rel.\ dev.\ from $L=9$} & {CPU time (min)} \\
 \midrule
-\num{6} & \num{9.8e-10} & \num{1.2e-8} & \num{2.1} \\
-\num{7} & \num{9.6e-10} & \num{1.1e-8} & \num{4.3} \\
-\num{8} & \num{3.1e-11} & \num{4.2e-10} & \num{7.5} \\
+6 & 9.8e-10 & 1.2e-8 & 2.1 \\
+7 & 9.6e-10 & 1.1e-8 & 4.3 \\
+8 & 3.1e-11 & 4.2e-10 & 7.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -234,13 +232,13 @@ We test Matsubara term counts $K = 1, 2, 3$ to assess the impact of high-tempera
 \centering
 \caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \qty{295}{\kelvin}.}
 \label{tab:SI_matsubara_convergence}
-\begin{tabular}{lccc}
+\begin{tabular}{S[table-format=1.0] S[table-format=3.2(2)] S[table-format=1.2(1)] S[table-format=1.1e-1]}
 \toprule
-$K$ & $\tau_c$ (fs) & $\Phi_{\mathrm{FT}}$ & MAE from $K=3$ \\
+{$K$} & {$\tau_c$ (fs)} & {$\Phi_{\mathrm{FT}}$} & {MAE from $K=3$} \\
 \midrule
-\num{1} & \num{406(30)} & \num{0.86(3)} & \num{3.4e-4} \\
-\num{2} & \num{420(35)} & \num{0.89(3)} & \num{3.3e-5} \\
-\num{3} & \num{422(36)} & \num{0.89(3)} & --- \\
+1 & 406(30) & 0.86(3) & 3.4e-4 \\
+2 & 420(35) & 0.89(3) & 3.3e-5 \\
+3 & 422(36) & 0.89(3) & {---} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -257,13 +255,13 @@ We verify time step convergence by comparing $\Delta t = \qtylist{0.2;1.0;2.0}{\
 \centering
 \caption{\textbf{Time step convergence.} Maximum population deviation relative to the $\Delta t = \qty{0.2}{\fs}$ reference.}
 \label{tab:SI_timestep_convergence}
-\begin{tabular}{lc}
+\begin{tabular}{S[table-format=1.1] S[table-format=1.1e-1]}
 \toprule
-$\Delta t$ (fs) & Max.\ population deviation \\
+{$\Delta t$ (fs)} & {Max.\ population deviation} \\
 \midrule
-\num{0.2} & --- (reference) \\
-\num{1.0} & \num{4.3e-3} \\
-\num{2.0} & \num{8.1e-3} \\
+0.2 & {--- (reference)} \\
+1.0 & 4.3e-3 \\
+2.0 & 8.1e-3 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -493,17 +491,17 @@ If the QBER exceeds \qty{11}{\percent} (e.g., due to equipment malfunction or at
 \centering
 \caption{\textbf{BB84 QKD simulation runtime overhead.}}
 \label{tab:SI_qkd_overhead}
-\begin{tabular}{lcc}
+\begin{tabular}{l S[table-format=1.1] S[table-format=1.1]}
 \toprule
-\textbf{Operation} & \textbf{Time (\unit{\milli\second})} & \textbf{Memory (\unit{\kilo\byte})} \\
+\textbf{Operation} & {Time (\unit{\milli\second})} & {Memory (\unit{\kilo\byte})} \\
 \midrule
-State preparation (1024 bits) & \num{0.8} & \num{0.5} \\
-Noisy transmission & \num{1.2} & \num{0.1} \\
-Measurement and sifting & \num{0.6} & \num{0.3} \\
-QBER estimation & \num{0.1} & \num{0.1} \\
-Key distillation & \num{2.1} & \num{1.2} \\
+State preparation (1024 bits) & 0.8 & 0.5 \\
+Noisy transmission & 1.2 & 0.1 \\
+Measurement and sifting & 0.6 & 0.3 \\
+QBER estimation & 0.1 & 0.1 \\
+Key distillation & 2.1 & 1.2 \\
 \midrule
-Total & \num{4.8} & \num{2.2} \\
+Total & 4.8 & 2.2 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -604,12 +602,12 @@ The spectral density is a single Drude--Lorentz mode ($\lambda = \qty{20}{\per\c
 \centering
 \caption{\textbf{Three-site trimer: forward transfer yield under broadband and filtered excitation.}}
 \label{tab:SI_trimer_results}
-\begin{tabular}{lccc}
+\begin{tabular}{l S[table-format=1.2(1)] S[table-format=3.0(2)] S[table-format=1.2(1)]}
 \toprule
-Excitation & $\Phi_{\mathrm{FT}}$ & $\tau_c$ (fs) & $\eta_{\mathrm{FT}}$ \\
+Excitation & {$\Phi_{\mathrm{FT}}$} & {$\tau_c$ (fs)} & {$\eta_{\mathrm{FT}}$} \\
 \midrule
-Broadband & \num{0.62(4)} & \num{180(20)} & --- \\
-Filtered (dual-band) & \num{0.73(3)} & \num{240(25)} & \num{0.18(3)} \\
+Broadband & 0.62(4) & 180(20) & {---} \\
+Filtered (dual-band) & 0.73(3) & 240(25) & 0.18(3) \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -722,15 +720,15 @@ The QML pipeline executes at each Digital Twin refresh cycle (every~\qty{60}{\s}
 \centering
 \caption{\textbf{QML signal processing runtime overhead per refresh cycle.}}
 \label{tab:SI_qml_overhead}
-\begin{tabular}{lcc}
+\begin{tabular}{l S[table-format=1.1] S[table-format=1.1]}
 \toprule
-\textbf{Operation} & \textbf{Time (\unit{\milli\second})} & \textbf{Memory (\unit{\kilo\byte})} \\
+\textbf{Operation} & {Time (\unit{\milli\second})} & {Memory (\unit{\kilo\byte})} \\
 \midrule
-MPS decomposition ($n=64$, $\chi=16$) & \num{3.2} & \num{4.8} \\
-Quantum KRR prediction ($M=3$ templates) & \num{0.4} & \num{0.6} \\
-Anomaly scoring & \num{0.1} & \num{0.1} \\
+MPS decomposition ($n=64$, $\chi=16$) & 3.2 & 4.8 \\
+Quantum KRR prediction ($M=3$ templates) & 0.4 & 0.6 \\
+Anomaly scoring & 0.1 & 0.1 \\
 \midrule
-Total & \num{3.7} & \num{5.5} \\
+Total & 3.7 & 5.5 \\
 \bottomrule
 \end{tabular}
 \end{table}
