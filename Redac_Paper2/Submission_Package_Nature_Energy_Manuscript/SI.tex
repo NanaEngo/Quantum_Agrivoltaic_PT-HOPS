@@ -405,9 +405,10 @@ The capital expenditure (CAPEX) for the quantum agrivoltaic system (Scenario~A) 
 \begin{itemize}
 \item \textbf{NPoM-coated graphene barrier:} \qty{120}{\per\m\squared} (including gold nanoparticle synthesis and deposition)
 \item \textbf{OPV module:} \qty{80}{\per\m\squared} (blade-coated semi-transparent polymer cells)
-\item \textbf{Installation and mounting:} \qty{50}{\per\m\squared}
-\item \textbf{Electronics and IoT:} \qty{30}{\per\m\squared} (sensors, microcontroller, QKD module)
-\item \textbf{Contingency (\qty{15}{\percent}):} \qty{42}{\per\m\squared}
+\item \textbf{Buried single-mode fiber-optic link:} \qty{30}{\per\m\squared} (trenching, fiber deployment, and termination)
+\item \textbf{Installation and mounting:} \qty{35}{\per\m\squared} (optimized structures)
+\item \textbf{Electronics and IoT:} \qty{25}{\per\m\squared} (sensors, microcontroller, QKD transceiver module)
+\item \textbf{Contingency (\qty{10}{\percent}):} \qty{32}{\per\m\squared}
 \end{itemize}
 Total CAPEX: \qty{322}{\per\m\squared}.
 
@@ -921,6 +922,8 @@ A corresponding software module~\texttt{src/materials/zwitterionic\_coating.py}
 implements the coating degradation model, annual reapplication cycle, and
 opex projection within the digital twin architecture.
 
+To mitigate nanotoxicity and heavy metal bioaccumulation in food crops (such as strawberries), CdTe-based quantum dots are strictly confined to sealed, closed-loop polymer matrices in the NPoM sensor probes and do not contact soil or irrigation fluid directly. For agricultural biostimulation (nano-priming), only highly biocompatible, metal-free carbon quantum dots (CQDs) and graphene quantum dots (GQDs) are utilized.
+
 \subsection{Quantum gravimetry for regional groundwater validation}
 \label{SI-sec:gravimetry}
 
@@ -1098,9 +1101,8 @@ detection of paramagnetic species, including melanin (fungal), siderophores
 (bacterial), and reactive oxygen species (viral). The NV T$_1$ relaxation time
 (\qtyrange{10}{300}{\us}) is shortened by magnetic noise from nearby
 paramagnetic metabolites via dipolar coupling, providing a label-free
-pathogen signature. For the greenhouse environment, an NV-diamond chip
-integrated into the hydroponic recirculation line samples the nutrient
-solution every \qty{30}{\minute}, correlating T$_1$ and T$_2^*$ measurements
+pathogen signature. Rather than burying sensitive optoelectronic components in opaque, humid agricultural soil, the NV-diamond sensor is integrated into a microfluidic "Point-of-Care" (Lab-on-a-Chip) desktop reader located at the greenhouse hub. Cooperative technicians collect saps or irrigation water samples and load them into the microfluidic channel for optical and microwave readout. The NV-diamond chip
+samples the fluid every \qty{30}{\minute}, correlating T$_1$ and T$_2^*$ measurements
 against a classifier bank (healthy, fungal, bacterial, viral).
 
 The module~\texttt{src/quantum\_interface/nv\_diamond.py} implements:
