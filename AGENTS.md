@@ -412,10 +412,17 @@ User adversarial review identified that four implemented innovations (zwitterion
 - **Outlook §restructured**: QAOA/gravimetry removed from Outlook (claimed in Discussion); only true future experiments remain (2DES, field trials, multi-cooperative scale-up).
 - **Methods §DynamicCalibrator**: Zwitterionic coating added as primary layer, DynamicCalibrator as secondary.
 
-#### Verification
-- Zero occurrences of "we advocate" in manuscript ✅
-- PDF: `Manuscript_NatureEnergy_26-06-25.pdf` — **18 pages, 0 LaTeX errors** ✅
-- Git commit `a564689` pushed ✅
+#### Peer Review & Editorial Board Audits (C1--C6)
+- **Cryo (77 K) Relocation**: Removed cryogenic dynamics discussion and Table 2 references from the main text, placing them in `SI.tex` (\Cref{SI-sec:cryo}) as limit-case theoretical studies. Focuses text on room temperature (295 K).
+- **Multi-exciton Limitations**: Expanded the limitations section to address multi-exciton dynamics, singlet fission, and exciton-exciton annihilation regimes.
+- **Dynamic VPD & Transpiration**: Acknowledged microclimatic vapor pressure deficit feedback variations in Methods.
+- **QKD Link Security**: Added comparisons between buried fiber-optic links (susceptible to damage) and free-space optical links (subject to dust scattering).
+- **GQAS & Blended Finance Policy**: Replaced "validation" with "proof-of-concept application", noting institutional pathway requirements. Specified that the 30% CAPEX subsidy must originate from development banks or public funds, as carbon credits are insufficient.
+
+#### Verification & File Consolidation
+- PDF compiled successfully: `Manuscript_NatureEnergy_26-06-25.pdf` — **19 pages (including unique Fig 4 schematic), 0 LaTeX errors** ✅
+- Consolidated roadmaps: merged `editorial_board_reviewer_report.md` into `Pistes_Improvements260625.md` and deleted the redundant artifact.
+- Git commits `3e650b5` created locally.
 
 ---
 

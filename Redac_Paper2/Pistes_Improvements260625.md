@@ -1,11 +1,11 @@
-# ROADMAP DÉTAILLÉE DE RÉVISION (Nature Energy)
+# ROADMAP DÉTAILLÉE DE RÉVISION (Nature Energy) & AUDIT ÉDITORIAL CRITIQUE
 *Jumeau Numérique Quantique, Étalonnage Environnemental et Cybersécurité Agro-Rurale*
 
-Ce document constitue la feuille de route définitive pour la révision du manuscrit Paper 2 destiné à *Nature Energy*. Il intègre de manière exhaustive l'impact hostile du milieu agricole (poussière, fientes de volatiles, boue et encrassement microbien) sur l'architecture physique, optique et économique de la serre agrivoltaïque.
+Ce document fusionne la feuille de route de révision et les conclusions de l'audit critique (Editorial Board & Peer Reviewer de *Nature Energy*). Il consigne les axes méthodologiques, les modifications logicielles, ainsi que les justifications physiques nécessaires pour lever les verrous théoriques et aligner le document avec les exigences de publication.
 
 ---
 
-## I. AXES DE RÉVISION SCIENTIFIQUE ET TECHNIQUE
+## I. AXES DE RÉVISION SCIENTIFIQUE ET TECHNIQUE (INITIAUX)
 
 ### Axe 1 : Le "Jumeau Numérique Agrivoltaïque" (Agrivoltaic Digital Twin)
 *   **Intégration Systémique :** 
@@ -59,30 +59,7 @@ Le manuscrit cible des signatures physiologiques et chimiques spécifiques, pass
 
 ### Axe 6 : Traitement des Signaux via le Machine Learning Quantique / Hybride
 *   **Extraction de Signaux dans le Bruit :** 
-Les données SERS et de fluorescence CQD bruitées par l'environnement hostile de la serre sont traitées par des méthodes à noyaux quantiques (Quantum Kernel Methods) ou des représentations en réseaux de tenseurs (Tensor Networks, e.g., Matrix Product States). Ces méthodes QML permettent de détecter les signaux faibles caractéristiques d'un stress pathologique bien avant l'apparition de symptômes macroscopiques visibles.
-
-**Code réel déployé :** Implémentation hybride PennyLane + PCA (`src/quantum_interface/signal_processing.py`)
-```python
-import pennylane as qml
-from sklearn.decomposition import PCA
-
-class QuantumKernelDenoiser:
-    """Modèle hybride: PCA (filtrage passe-bas) + Quantum Kernel Ridge Regression (PennyLane)."""
-    def __init__(self, gamma: float = 0.5, regularization: float = 1e-3, backend: str = "pennylane", n_qubits: int = 4):
-        self.backend = backend
-        self.n_qubits = n_qubits
-        
-        # Le simulateur qml permet d'encoder le signal classique
-        self.dev = qml.device("default.qubit", wires=n_qubits)
-        
-        @qml.qnode(self.dev)
-        def _circuit(x, y):
-            qml.AngleEmbedding(features=x, wires=range(self.n_qubits))
-            qml.adjoint(qml.AngleEmbedding)(features=y, wires=range(self.n_qubits))
-            return qml.probs(wires=range(self.n_qubits))
-        
-        self._circuit = _circuit
-```
+    Les données SERS et de fluorescence CQD bruitées par l'environnement hostile de la serre sont traitées par des méthodes à noyaux quantiques (Quantum Kernel Methods) ou des représentations en réseaux de tenseurs (Tensor Networks, e.g., Matrix Product States). Ces méthodes QML permettent de détecter les signaux faibles caractéristiques d'un stress pathologique bien avant l'apparition de symptômes macroscopiques visibles.
 
 ---
 
@@ -91,19 +68,14 @@ class QuantumKernelDenoiser:
 ### 1. Modélisation de l'OPEX et de l'Amortissement (`src/lca/neb.py`)
 Intégrer le coût d'éducation agronomique et de support technique dans le calcul du payback de la coopérative.
 ```python
-# Dans calculate_cooperative_payback():
 ANNUAL_TRAINING_OPEX = 1200.0   # USD/an pour services de vulgarisation (Axe 3)
 ANNUAL_CLEANING_OPEX = 800.0     # USD/an pour le lavage des panneaux OPV (eau + main d'oeuvre)
-
-# Calcul du cashflow net annuel révisé (CF_t):
-# CF_t = revenus_horticulture + gains_eau + gains_opv - opex_standard - ANNUAL_TRAINING_OPEX - ANNUAL_CLEANING_OPEX
 ```
 
 ### 2. Modèle de Soiling et Pénétration Optique (`src/quantum_interface/diagnostics.py`)
 Calculer la puissance OPV corrigée du facteur d'encrassement dynamique :
 ```python
 def calculate_opv_power(power_ideal: float, days_since_cleaning: int) -> float:
-    # Perte d'efficacité de 0.5% par jour d'accumulation de poussière (Axe 5)
     daily_decay_rate = 0.005
     soiling_factor = max(1.0 - (daily_decay_rate * days_since_cleaning), 0.75)  # Perte max de 25%
     return power_ideal * soiling_factor
@@ -113,77 +85,38 @@ def calculate_opv_power(power_ideal: float, days_since_cleaning: int) -> float:
 Implémenter la correction de Stern-Volmer face à la dérive environnementale de la salinité et de la température du sol.
 ```python
 class DynamicCalibrator:
-    """
-    Intègre le facteur de blindage thermique (shielding_factor) qui isole 
-    les sondes CQD/NPoM de l'humidité et de l'excursion thermique.
-    """
-    def __init__(
-        self,
-        ema_alpha: float = 0.1,
-        drift_alarm_threshold: float = 0.20,
-        k_sv_ref: float = 1.5e5,
-        t_ref: float = 298.15,
-        shielding_factor: float = 0.85, # Isolation thermique de 85%
-    ):
+    def __init__(self, ema_alpha: float = 0.1, drift_alarm_threshold: float = 0.20, k_sv_ref: float = 1.5e5, t_ref: float = 298.15, shielding_factor: float = 0.85):
         self.k_sv_ref = k_sv_ref
         self.t_ref = t_ref
         self.shielding_factor = shielding_factor
-        
-    def get_calibrated_k_sv(self, temperature_k: float, salinity_ms_cm: float) -> float:
-        alpha_temp = -0.0035    # Dérive thermique
-        beta_salinity = -0.012  # Dérive due à la salinité du sol (fouling)
-        
-        raw_delta_t = temperature_k - self.t_ref
-        effective_delta_t = raw_delta_t * (1.0 - self.shielding_factor)
-        
-        k_sv_adj = self.k_sv_ref * (
-            1.0 + alpha_temp * effective_delta_t + beta_salinity * salinity_ms_cm
-        )
-        return float(max(k_sv_adj, 1e4))
-```
-
-### 4. Configuration Globale (`parameters.yaml`)
-```yaml
-digital_twin:
-  update_interval_seconds: 60
-  sync_opv_grid: true
-economic_factors:
-  annual_training_opex_usd: 1200.0
-  annual_cleaning_opex_usd: 800.0  # Coûts de maintenance face à la saleté/boue
-physics:
-  soiling_decay_rate_per_day: 0.005 # Atténuation optique
 ```
 
 ---
 
-## III. NOUVEAUX AXES STRATÉGIQUES (Session 2026-06-28) — Pour un Paradigme Révolutionnaire
+## III. NOUVEAUX AXES STRATÉGIQUES ET RÉPONSES AUX AUDITS ÉDITORIAUX (REVUES CRITIQUES)
 
-Ces quatre percées élèvent le manuscrit de "très bon papier" à **référence incontournable** pour la décennie en agrivoltaïsme quantique.
+### Axe 7 : Revêtements Zwitterioniques (Solution Matérielle au Fouling)
+*   **Le Concept :** L'intégration de polymères zwitterioniques sur les espaceurs NPoM offre une barrière physique contre le bioencrassement, permettant de limiter le recours aux algorithmes correctifs de dérive thermique et d'humidité.
+*   **Ajustement Manuscrit :** La couche zwitterionique est décrite dans la section *Robustesse Environnementale* comme la première ligne de défense, le *DynamicCalibrator* agissant comme une alarme secondaire lorsque les limites physiques du revêtement sont dépassées.
 
-### Axe 7 : Revêtements Zwitterioniques pour Capteurs Quantiques (Solution Matérielle au Fouling)
+### Axe 8 : Gravimétrie Quantique pour la Recharge de l'Aquifère
+*   **Justification du Reviewer (C4) :** Un signal gravimétrique individuel $\Delta g = 3.5\text{ nm/s}^2$ calculé pour une seule serre de $500\text{ m}^2$ est situé sous le seuil de bruit d'un gravimètre AQG ($10\text{ nm/s}^2$).
+*   **Ajustement Manuscrit :** Le texte de la section Discussion a été corrigé pour préciser que si la signature individuelle de la serre est sous le seuil de bruit d'un unique instrument, un réseau régionalisé de 3 à 5 gravimètres quantiques permet de mapper un signal régional de $0.5$ à $2.0\text{ }\mu\text{m/s}^2$, reliant effectivement l'économie locale d'eau à l'hydrogéodésie satellitaire.
 
-*   **Problème :** L'encrassement microbien des capteurs NPoM/CQD était initialement compensé uniquement par une béquille algorithmique (*DynamicCalibrator*).
-*   **Percée :** L'intégration d'un revêtement en **polymère zwitterionique** repousse activement les ions et le biofouling. Ces revêtements maintiennent 90 % de la cohérence quantique pendant 60 jours.
-*   **Intégration (Code) :** Plutôt que de supprimer le `DynamicCalibrator`, le système hybride utilise la classe `ZwitterionicCoating` (dans `src/materials/zwitterionic_coating.py`) qui modélise la dégradation du revêtement. Ce revêtement matériel ralentit massivement la dérive traitée par l'algorithme `DynamicCalibrator`, qui agit dorénavant comme un système de sécurité complémentaire (alarme de maintenance lorsque le polymère est épuisé).
+### Axe 9 : Optimisation Globale par QAOA (Nexus Eau-Énergie-Alimentation)
+*   **Justification du Reviewer (C3) :** Le gain de $12\text{--}18\%$ rapporté ne provenait pas d'une simulation endogène mais d'une référence externe.
+*   **Ajustement Manuscrit :** Les verbes actifs impliquant une simulation autonome de benchmark ont été modifiés dans la section Discussion pour préciser que l'émulateur quantique PennyLane à 3 qubits ($p=3$) produit une planification des ressources conforme aux gains de $12\text{--}18\%$ documentés dans la littérature agronomique connexe (e.g. AlSagri *et al.*).
 
-### Axe 8 : Gravimétrie Quantique pour la Recharge des Aquifères (Échelle Macro)
+### Axe 10 : Sécurité BB84 et Souveraineté des Données (GQAS)
+*   **Justification du Reviewer (C5) :** L'affirmation selon laquelle notre modèle "valide" la norme GQAS que nous introduisons est tautologique.
+*   **Ajustement Manuscrit :** Le terme de "validation de la norme" a été remplacé par une "première application de preuve de concept". Le texte indique explicitement qu'une validation réglementaire externe par des tiers (comme ISO ou GlobalGAP) est indispensable avant toute normalisation industrielle.
+*   **Justification du Reviewer (C6) sur les Subsides :** Le payback de 4.23 ans repose sur un subside de 30% inexplicable par le seul marché volontaire du carbone (qui ne génère que 98 USD/an).
+*   **Ajustement Manuscrit :** Ajout dans la section *Limitations* d'un avertissement stipulant que les crédits carbone ne peuvent pas financer à eux seuls le CAPEX initial. Les subsides de 30% doivent être adossés à des banques de développement multilatérales ou à des financements climatiques publics dédiés à l'adaptation rurale.
 
-*   **Problème :** Le modèle FAO-56 calcule l'économie d'eau à l'échelle racinaire, mais il manque l'impact macroscopique sur les ressources terrestres.
-*   **Percée :** La **gravimétrie quantique par interférométrie atomique** mesure d'infimes variations du champ gravitationnel induites par le mouvement de l'eau souterraine.
-*   **Intégration (Code) :** Nouveau module `src/geophysics/quantum_gravimetry.py`. Le *Jumeau Numérique* s'interface avec un réseau de gravimètres atomiques pour valider l'impact du bouclier OPV à l'échelle du bassin versant (aquifère).
+### Axe 11 : Physique des Systèmes & Limites Multiexcitoniques
+*   **Justification du Reviewer (C2) :** L'approximation mono-excitonique du simulateur de dynamique quantique (PT-HOPS) est limitée.
+*   **Ajustement Manuscrit :** Ajout d'une clause de limitation technique stipulant que sous un éclairement solaire intense, l'excitation multi-excitonique, la fission de singlets et l'annihilation exciton-exciton non modélisées pourraient altérer le régime de couplage fort et le rendement de piégeage $\Phi_{\mathrm{FT}}$.
 
-### Axe 9 : Optimisation Globale par QAOA (Algorithmique Quantique du Nexus Eau-Énergie-Alimentation)
-
-*   **Problème :** La gestion combinatoire de la puissance OPV (irrigation vs réfrigération vs revente) est NP-difficile.
-*   **Percée :** L'approche utilise le **Quantum Approximate Optimization Algorithm (QAOA)** pour résoudre ce problème sous formulation QUBO.
-*   **Intégration (Code) :** Suite à l'audit adversarial, l'implémentation classique (SciPy) a été remplacée par un **véritable émulateur quantique**. Le module `src/algorithms/qaoa_optimizer.py` simule un circuit quantique variationnel complet avec PennyLane (`qml.device("default.qubit")`), incluant les portes Hadamard, les rotations paramétrées RZ (Hamiltonien de coût) et RX (Hamiltonien de mélange), ainsi que l'intrication via CNOT. Le backend permet une exécution fidèle sur 3 qubits (avec 1024 tirs/shots).
-*   **Résultat visuel :** La validation est présentée formellement sous forme de tableau comparatif des performances (compilé dynamiquement via le fichier `table_comparative_4runs.tex` inclus dans le manuscrit principal).
-
-### Axe 10 : Souveraineté des Données, Protocole BB84 et Standardisation (GQAS)
-
-*   **Problème :** À qui appartiennent les données métaboliques de la serre ? La politique des données est critique pour éviter que les géants technologiques ne captent les flux.
-*   **Percée :** Le protocole QKD BB84 devient le pilier d'une **architecture de souveraineté des données**. Chaque paquet SERS est chiffré.
-*   **Intégration (Code) :** Le protocole BB84 n'est pas simulé par des circuits PennyLane, mais via une simulation Monte Carlo classique du Taux d'Erreur Quantique (QBER) dans le fichier `src/iot_security/qkd.py`. Il simule l'échange de clés, l'impact du bruit ambiant et impose une coupure dure de sécurité si le QBER dépasse la limite théorique de Shor-Preskill (11%).
-*   **Cadre normatif :** Pour monétiser ces données protégées par QKD, le manuscrit propose le **Global Quantum Agrivoltaics Standards (GQAS)** (`src/iot_security/gqas_standard.py`), un standard de certification de la chaîne de blocs pour garantir la traçabilité des cultures (fleurs, légumes) sur le marché européen.
-
----
+### Axe 12 : Relégation du 77 K de la Discussion vers le SI
+*   **Justification du Reviewer (C1) :** Les résultats cryogéniques à 77 K polluent le texte principal d'un article d'agrivoltaïsme appliqué.
+*   **Ajustement Manuscrit :** Les sections Results et Discussion ont été purgées des paragraphes de surinterprétation du rendement à 77 K. Ces derniers ont été transférés intégralement dans la section correspondante du SI (`\Cref{SI-sec:cryo}`) à titre de vérification limite de la suppression du bruit de phonons.
