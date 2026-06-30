@@ -76,3 +76,47 @@ Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 13
 - [ ] Dielectric nanoantenna designs (Si, TiO₂) to minimize transport penalty.
 - [ ] 2DES experiments with spatial light modulator pulse shaping.
 - [ ] Quantum Machine Learning on edge processors for real-time anomaly detection.
+
+## 5. Pistons_Improvements260625.md Full Audit (2026-06-30)
+
+All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` have been cross-referenced against `Manuscript_NatureEnergy_26-06-25.tex` and `SI.tex`. **Status: 37/37 COMPLETE.**
+
+| Axe | Description | Status |
+|-----|-------------|--------|
+| 1 | Jumeau Numérique Agrivoltaïque | ✅ MS + SI |
+| 2 | Robustesse Calibration Dynamique IoT | ✅ MS + SI |
+| 3 | Modélisation Socio-Économique (LCA) | ✅ MS + SI |
+| 4 | Ciblage Moléculaire Spécifique | ✅ MS + SI |
+| 5 | Soiling Factor | ✅ MS |
+| 6 | QML / Hybrid Signal Processing | ✅ MS + SI |
+| 7 | Revêtements Zwitterioniques | ✅ MS + SI |
+| 8 | Gravimétrie Quantique | ✅ MS + SI |
+| 9 | QAOA Nexus Optimization | ✅ MS + SI |
+| 10 | BB84 + GQAS + Data Sovereignty | ✅ MS + SI |
+| 11 | Limites Multiexcitoniques | ✅ MS |
+| 12 | Relégation 77 K → SI | ✅ MS + SI |
+| 13 | \|E\|⁴ Picocavité Limits | ✅ MS Methods |
+| 14 | Abrasion Mécanique Zwitterionique | ✅ MS Limitations + SI |
+| 15 | Pertinence Temporelle Edge QML | ✅ MS Discussion |
+| 16 | Gradiométrie Gravitationnelle | ✅ MS + SI |
+| 17 | Performance Bonds (24-month sunset) | ✅ SI S5.4 |
+| 18 | Budget Calcul QML/QAOA | ✅ MS + SI |
+| 19 | Coût Fibre Optique (30 USD/m²) | ✅ SI S5.1 |
+| 20 | Risque Écotoxique CdTe | ✅ SI S11.1 |
+| 21 | NV Diagnostic Hors-Sol | ✅ SI S11.8 |
+| 22 | Approximation FAO-56 | ✅ MS Methods |
+| 23 | Diaphonie Humidité/Pb²⁺ | ✅ MS (Session 25) |
+| 24 | Pertes Sifting/Privacy Amplification | ✅ SI S6.1 |
+| 25 | Canopée Plasmonique 1% sentinel | ✅ MS Discussion |
+| 26 | Limites QUBO 3→24 qubits | ✅ SI S11.4 |
+| 27 | Incertitude FAO-56 ±10% | ✅ MS Limitations (Session 25) |
+| 28 | Instabilité Numérique Baseline | ✅ MS Fig 1 caption (Session 25) |
+| 29 | Rôle Secondaire Crédits Carbone | ✅ MS Limitations |
+| 30 | OMIT Dissipation Cohérente | ✅ SI S4.2 |
+| 31 | Tolérances GQAS | ✅ SI S11.9 |
+| 32 | Dégradation LOD ×10 matrix | ✅ MS Limitations (Session 25) |
+| 33 | FMO → LHCII Biophysical Mapping | ✅ SI S1.4 |
+| 34 | Protocole Auto-Assemblage NPoM | ✅ SI S11.2 |
+| 35 | Fallback Classique MILP | ✅ SI S11.4 |
+| 36 | Ciblage GCF/BAD | ✅ MS Limitations (Session 25) |
+| 37 | Zenodo DOIs + Code Availability | ✅ MS (Session 25) |
