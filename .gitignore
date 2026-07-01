@@ -106,7 +106,7 @@ Redac_Paper2/coverage_html/
 
 # ─── Large compiled/generated files ───────────────────────────────────────
 *.tar.gz
-*.pdf
+# *.pdf
 
 # ─── Package managers ─────────────────────────────────────────────────────
 package-lock.json
