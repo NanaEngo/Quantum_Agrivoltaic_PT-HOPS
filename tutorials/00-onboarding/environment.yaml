@@ -1,0 +1,16 @@
+name: qa_pt_hops_tutorial
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy=1.26
+  - scipy=1.11
+  - matplotlib=3.8
+  - jupyterlab=4.5
+  - pandas=2.2
+  - joblib=1.3
+  - pip
+  - pip:
+    - numba
+    - tqdm
