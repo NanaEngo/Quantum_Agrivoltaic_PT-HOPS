@@ -448,7 +448,13 @@ Exhaustive cross-referencing of all 37 axes defined in `Redac_Paper2/Pistes_Impr
 - **All 37 axes**: COMPLETE ✅
 
 #### Git
-- Commit pending: `fix(MS): close 6 remaining Pistons_Improvements gaps (axes 23,27,28,32,36,37)`
+- Commit: `fix(MS): close 6 remaining Pistons_Improvements gaps (axes 23,27,28,32,36,37)`
+
+### Session 27 (2026-07-31) — Journal Refinement Audit Updated
+- `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md` completed and consolidated in `Redac_Paper2/`. All 6 critical gaps (F1–F6) and all 5 major gaps (F7–F11) documented with remediation plan and submission timeline.
+
+### Session 26 (2026-07-01) — NPoM Volume Scan Finalized
+- Data from all six NPoM mode volumes ($V=0.2\text{–}1.2\text{ nm}^3$) merged into `Redac_Paper2/DATA_ANALYSIS_REPORT.md`; coherence yields, Φ_FT, and transition regimes fully documented; Table 2 in manuscript synchronized to 100% with the 6 data points.
 
 ---
 
