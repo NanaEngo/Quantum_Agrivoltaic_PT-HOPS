@@ -1,0 +1,72 @@
+python3 -c "
+import json
+found = False
+with open('/home/taamangtchu/.gemini/antigravity/brain/759f2208-f4e8-45d5-8be0-f9652c73afc0/.system_generated/logs/transcript_full.jsonl') as f:
+    for line in f:
+        if found: break
+        try:
+            obj = json.loads(line)
+            if 'tool_calls' in obj:
+                for tc in obj['tool_calls']:
+                    if tc['name'] == 'run_command':
+                        args = tc.get('args', {})
+                        cmd = args.get('CommandLine', '')
+                        if 'Figure_SI_NPoM_VolumeScan_n20' in cmd and 'PYEOF' in cmd and 'cat >' in cmd:
+                            code = cmd.split('PYEOF')[0].split('cat > /home/nanaengo/generate_light_figures.py <<\\'PYEOF\\'')[1].strip()
+                            with open('generate_light_figures.py', 'w') as out:
+                                out.write(code)
+                            print('Script saved to generate_light_figures.py')
+                            found = True
+                            break
+        except Exception as e:
+            pass
+"
+===
+python3 -c "
+import json
+found = False
+with open('/home/taamangtchu/.gemini/antigravity/brain/759f2208-f4e8-45d5-8be0-f9652c73afc0/.system_generated/logs/transcript_full.jsonl') as f:
+    for line in f:
+        if found: break
+        try:
+            obj = json.loads(line)
+            if 'tool_calls' in obj:
+                for tc in obj['tool_calls']:
+                    if tc['name'] == 'run_command':
+                        args = tc.get('args', {})
+                        cmd = args.get('CommandLine', '')
+                        if 'Figure_SI_NPoM_VolumeScan_n20' in cmd and 'PYEOF' in cmd and 'ssh -i' in cmd:
+                            parts = cmd.split('PYEOF\\''\\'\\'')
+                            if len(parts) >= 3:
+                                code = parts[1].strip()
+                            else:
+                                code = cmd.split('PYEOF\\'\\"\\'')[1].strip() # just try something
+                            
+                            with open('generate_light_figures.py', 'w') as out:
+                                out.write(cmd)
+                            print('Script saved to generate_light_figures.py')
+                            found = True
+                            break
+        except Exception as e:
+            pass
+"
+===
+python3 -c "
+import json
+with open('/home/taamangtchu/.gemini/antigravity/brain/759f2208-f4e8-45d5-8be0-f9652c73afc0/.system_generated/logs/transcript_full.jsonl') as f:
+    for line in f:
+        try:
+            obj = json.loads(line)
+            if 'tool_calls' in obj:
+                for tc in obj['tool_calls']:
+                    if tc['name'] == 'run_command':
+                        args = tc.get('args', {})
+                        cmd = args.get('CommandLine', '')
+                        if 'generate_light_figures.py' in cmd and 'PYEOF' in cmd:
+                            with open('generate_light_figures_script.txt', 'a') as out:
+                                out.write(cmd)
+                                out.write('\n===\n')
+        except Exception as e:
+            pass
+"
+===

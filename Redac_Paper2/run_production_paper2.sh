@@ -143,7 +143,6 @@ stage_1_simulation() {
     local sim_log="${LOG_DIR}/simulation_${TIMESTAMP}.log"
     OPENBLAS_NUM_THREADS=1 PYTHONPATH="$PROJECT_DIR:$FRAMEWORK_DIR" nohup $PYTHON "$PROJECT_DIR/main.py" \
         --solar-flux "$SOLAR_FLUX" \
-        --time-step-fs "$DT_FS" \
         --log-file "$sim_log" \
         > "${LOG_DIR}/simulation_stdout_${TIMESTAMP}.log" 2>&1 &
     local SIM_PID=$!

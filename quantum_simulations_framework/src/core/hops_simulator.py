@@ -130,6 +130,7 @@ def _run_single_traj_worker(
     time_points: NDArray[np.float64],
     mem_limit_gb: float = 0.0,
     update_step: int = 50,
+    output_dir: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
     """
     Standalone worker function for parallel trajectory execution.
@@ -174,6 +175,29 @@ def _run_single_traj_worker(
     # setting it restricts the entire Python runtime, breaking subprocess calls
     # (git, etc.) and pandas I/O. Skip entirely for n_jobs=1.
     import os as _os
+    import pickle as _pkl
+    from pathlib import Path as _Path
+
+    # Force single-threaded execution inside subprocess to prevent LLVM section memory allocation errors
+    _os.environ["NUMBA_NUM_THREADS"] = "1"
+    _os.environ["OMP_NUM_THREADS"] = "1"
+    _os.environ["OPENBLAS_NUM_THREADS"] = "1"
+    _os.environ["MKL_NUM_THREADS"] = "1"
+
+    # Checkpoint support: check for pre-existing checkpoint
+    checkpoint_file = None
+    if output_dir:
+        ckpt_dir = _Path(output_dir) / "checkpoints"
+        ckpt_dir.mkdir(parents=True, exist_ok=True)
+        checkpoint_file = ckpt_dir / f"checkpoint_seed_{seed}.pkl"
+        if checkpoint_file.exists():
+            try:
+                with open(checkpoint_file, "rb") as f:
+                    cached_res = _pkl.load(f)
+                logger.info(f"Traj {seed}: Loaded from checkpoint {checkpoint_file.name}")
+                return cached_res
+            except Exception as _e_ckpt:
+                logger.warning(f"Traj {seed}: Failed to load corrupt checkpoint: {_e_ckpt}")
 
     _is_subprocess = multiprocessing.parent_process() is not None
     if mem_limit_gb > 0 and _is_subprocess:
@@ -318,11 +342,22 @@ def _run_single_traj_worker(
                 logger.error(f"Traj {seed}: no valid frames extracted from psi_data")
                 return None
 
-            return {
+            result_dict = {
                 "psi_traj": np.stack(valid_data),
                 "t_axis": np.array(valid_t),
                 "pop_site": np.array(trajectory.storage.data.get("pop_site", [])),
             }
+
+            # Save checkpoint for this trajectory
+            if checkpoint_file:
+                try:
+                    with open(checkpoint_file, "wb") as f:
+                        _pkl.dump(result_dict, f)
+                    logger.info(f"Traj {seed}: Saved checkpoint to {checkpoint_file.name}")
+                except Exception as _e_save:
+                    logger.warning(f"Traj {seed}: Failed to write checkpoint: {_e_save}")
+
+            return result_dict
         except Exception as e:
             import sys
             import traceback
@@ -1080,6 +1115,7 @@ class HopsSimulator:
                 "time_points": time_points,
                 "mem_limit_gb": traj_mem_gb,
                 "update_step": kwargs.get("update_step", 50),
+                "output_dir": kwargs.get("output_dir", None),
             }
 
             batch_size = max(1, n_jobs)

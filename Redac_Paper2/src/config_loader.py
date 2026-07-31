@@ -94,6 +94,7 @@ class QkdConfig(BaseModel):
     channel_noise_rate: float = Field(..., ge=0.0, le=1.0)
     security_threshold: float = Field(default=0.11, gt=0.0)  # Shor-Preskill limit
     key_length_bits: int = Field(..., ge=1)
+    key_rate_hz: float = Field(default=500.0, gt=0.0)  # BB84 sifted key generation rate
 
 
 class SecuritySection(BaseModel):

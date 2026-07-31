@@ -1,0 +1,37 @@
+\begin{table*}[tbp]
+\centering
+\caption{\textbf{Comparative summary of simulated configurations.}
+All NPoM-on configurations use the 9-site dressed Hamiltonian
+(8 FMO~$+$~1 plasmon mode) with hierarchy depth $L=8$, $K=2$ Matsubara
+terms, $\Delta t = \qty{0.2}{\fs}$ over a \qty{1000}{\fs} window.
+The NPoM-off baseline uses the 8-site FMO Hamiltonian with identical
+solver parameters. Trapping yield $\Phi_{\rm FT}$ is defined in \eqphift;
+the SERS enhancement factor $\mathrm{EF}$ follows the Purcell scaling
+$\mathrm{EF} \propto (Q/V)^2$ normalized to $\mathrm{EF}=10^2$ at
+$V=\qty{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}. $^a$The $T=\qty{77}{\K}$ configuration ($n_{\rm traj}=2$) serves as a deterministic mean-field reference benchmark for low-temperature baseline dynamics.}
+\label{tab:comparative_summary}
+\small
+\begin{tabular}{l *{4}{S[table-format=3.4]} }
+\toprule
+\textbf{Metric} & {\bfseries NPoM-off} & {\bfseries NPoM-on} & {\bfseries NPoM-on} & {\bfseries NPoM-on} \\
+ & {\bfseries (baseline)} & {\bfseries $V=\qty{0.8}{\nm\cubed}$} & {\bfseries $V=\qty{1.2}{\nm\cubed}$} & {\bfseries $V=\qty{1.2}{\nm\cubed}$} \\
+ & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{77}{\K}$} \\
+\midrule
+Number of trajectories $n_{\rm traj}$ & 20 & 100 & 20 & 2$^a$\\
+System size & {8$\times$8} & {9$\times$9} & {9$\times$9} & {9$\times$9}\\
+Site energy disorder $\sigma$ (\unit{\per\cm}) & 50 & 50 & 50 & 50\\
+Trapping rate $\Gamma_{\rm RC}$ (\unit{\per\ps}) & 0.15 & 0.15 & 0.15 & 0.15\\
+\midrule
+\bfseries Trapping yield $\Phi_{\rm FT}$ & 0.9800 & 0.0768 & 0.0799 & 0.1685 \\
+\midrule
+Trapping sites (3+4) max. population & 0.0189 & 0.0048 & 0.0038 & 0.0055\\
+Site~1 final population & 0.7318 & 0.1455 & 0.1221 & 0.1091\\
+Site~6 final population & 0.0030 & 0.0537 & 0.0422 & 0.0409\\
+Plasmon mode final population & {---} & 0.7901 & 0.8256 & 0.8401\\
+Population trace $\mu\pm\sigma$ & {1.0000(0)} & {1.0000(0)} & {1.0000(0)} & {1.0000(0)}\\
+\midrule
+SERS enhancement factor EF & {---} & 100.0 & 44.0 & 44.0\\
+Figure of merit $\Phi_{\rm FT}\times\mathrm{EF}$ & {---} & 7.68 & 3.53 & 7.41\\
+\bottomrule
+\end{tabular}
+\end{table*}

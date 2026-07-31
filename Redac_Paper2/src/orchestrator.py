@@ -374,7 +374,7 @@ def run_global_simulation(solar_flux: float) -> None:
     _t_phase = _time.time()
 
     gravimeter = QuantumGravimeter(config)
-    irrigation_saving_m3 = water_saved_l * config.lca.footprint_m2 / 1000.0
+    irrigation_saving_m3 = water_saved_l * config.lca.cooperative.area_m2 / 1000.0
     aquifer_result = gravimeter.estimate_aquifer_recharge(
         irrigation_saving_m3=irrigation_saving_m3, n_gravimeters=3
     )
@@ -444,8 +444,8 @@ def run_global_simulation(solar_flux: float) -> None:
 
     gqas = GqasComplianceChecker(config)
     gqas_result = gqas.full_audit(
-        qber=config.quantum.qkd.get("qber", 0.05),
-        key_rate_hz=config.quantum.qkd.get("key_rate_hz", 500.0),
+        qber=config.security.qkd.channel_noise_rate,
+        key_rate_hz=config.security.qkd.key_rate_hz,
         epsilon=2.0,
         ledger_intact=sovereignty_status["ledger_intact"],
         sers_lod_nm=50.0,
