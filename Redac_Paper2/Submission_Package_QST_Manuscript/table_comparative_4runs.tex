@@ -8,16 +8,18 @@ The NPoM-off baseline uses the 8-site FMO Hamiltonian with identical
 solver parameters. Trapping yield $\Phi_{\rm FT}$ is defined in \eqphift;
 the SERS enhancement factor $\mathrm{EF}$ follows the Purcell scaling
 $\mathrm{EF} \propto (Q/V)^2$ normalized to $\mathrm{EF}=10^2$ at
-$V=\qty{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}. $^a$The $T=\qty{77}{\K}$ configuration ($n_{\rm traj}=2$) serves as a deterministic mean-field reference benchmark for low-temperature baseline dynamics.}
+$V=\qty{0.8}{\nm\cubed}$~\cite{Chikkaraddy2016}. The NPoM-off column is a
+limiting-case reference carried over from an exploratory snapshot; see the
+trace-conservation paragraph in the text.}
 \label{tab:comparative_summary}
-\small
+\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{l *{4}{S[table-format=3.4]} }
 \toprule
 \textbf{Metric} & {\bfseries NPoM-off} & {\bfseries NPoM-on} & {\bfseries NPoM-on} & {\bfseries NPoM-on} \\
  & {\bfseries (baseline)} & {\bfseries $V=\qty{0.8}{\nm\cubed}$} & {\bfseries $V=\qty{1.2}{\nm\cubed}$} & {\bfseries $V=\qty{1.2}{\nm\cubed}$} \\
  & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{295}{\K}$} & {\bfseries $T=\qty{77}{\K}$} \\
 \midrule
-Number of trajectories $n_{\rm traj}$ & 20 & 100 & 20 & 2$^a$\\
+Number of trajectories $n_{\rm traj}$ & 20 & 100 & 20 & 2\\
 System size & {8$\times$8} & {9$\times$9} & {9$\times$9} & {9$\times$9}\\
 Site energy disorder $\sigma$ (\unit{\per\cm}) & 50 & 50 & 50 & 50\\
 Trapping rate $\Gamma_{\rm RC}$ (\unit{\per\ps}) & 0.15 & 0.15 & 0.15 & 0.15\\

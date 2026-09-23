@@ -180,12 +180,12 @@ The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\ps}$ corresponds to a 
 The forward transfer yield is defined as:
 
 \begin{equation}
-\Phi_{\mathrm{FT}} = 2\Gamma_{\mathrm{RC}} \int_0^{t_{\mathrm{max}}} \left[ P_3(t) + P_4(t) \right] dt,
+\Phi_{\mathrm{FT}} = \Gamma_{\mathrm{RC}} \int_0^{t_{\mathrm{max}}} \left[ P_3(t) + P_4(t) \right] dt,
 \label{eq:SI_phi_ft}
 \end{equation}
 
 with $t_{\mathrm{max}} = \qty{1}{\ps}$ and $P_j(t) = \rho_{jj}(t)$.
-The factor of 2 accounts for the two trapping sites.
+Sites 3 and 4 are the two trapping sites of the network, and both are summed in the integrand.
 
 \subsection{Mapping FMO model dynamics to higher plant LHCII complexes}
 \label{SI-sec:lhcii}
@@ -657,7 +657,7 @@ This region supports high-value floriculture (strawberries, cut flowers) suitabl
 
 \subsection{Water savings}
 
-Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline saves approximately \qty{650}{\m\cubed\per\yr} of irrigation water for a \qty{500}{\m\squared} greenhouse.
+Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline yields the modelled water-savings credit of \qty{1300}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{650}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
 
 \subsection{FAO-56 wind speed sensitivity analysis}
 \label{SI-sec:fao56_sensitivity}
@@ -668,9 +668,10 @@ To quantify the impact of internal greenhouse air velocity on crop evapotranspir
 \centering
 \caption{\textbf{Sensitivity of FAO-56 crop evapotranspiration $\mathrm{ET}_c$ to greenhouse wind speed $u$ (Table S-FAO56).} Baseline configuration uses $u = \qty{0.5}{\m\per\s}$ ($\mathrm{ET}_c = \qty{3.20}{\mm\per\day}$, \qty{28.9}{\percent} reduction relative to open field). Variations across the range $u = \qtyrange{0.2}{0.8}{\m\per\s}$ introduce a $\pm\qty{10}{\percent}$ uncertainty band on predicted water savings.}
 \label{tab:s_fao56}
+\small\setlength{\tabcolsep}{4pt}
 \begin{tabular}{S[table-format=1.1] S[table-format=1.2] S[table-format=1.2] S[table-format=-2.1] S[table-format=-2.1]}
 \toprule
-{$u$ (\unit{\m\per\s})} & {Open Field $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {OPV Shield $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Water Saving (\unit{\percent})} & {$\Delta\mathrm{ET}_c$ vs.\ Base (\unit{\percent})} \\
+{$u$ (\unit{\m\per\s})} & {Open-field $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Shield $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Saving (\unit{\percent})} & {$\Delta\mathrm{ET}_c$ vs.\ base (\unit{\percent})} \\
 \midrule
 0.2 & 4.10 & 2.92 & -28.8 & -8.8 \\
 0.4 & 4.35 & 3.10 & -28.7 & -3.1 \\
@@ -683,7 +684,7 @@ To quantify the impact of internal greenhouse air velocity on crop evapotranspir
 
 \subsection{Biomass yield improvement}
 
-The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. The \qty{8}{\percent} quantum yield enhancement observed in the passive OPV fraction translates to an additional \qty{1.23}{\kg\per\m\squared\per\yr} of high-value produce (strawberries at \qty{4.5}{\USD\per\kg}), generating substantial supplemental revenue.
+The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. The \qty{15}{\percent} quantum yield enhancement observed in the passive OPV fraction translates to an additional \qty{1.23}{\kg\per\m\squared\per\yr} of high-value produce (strawberries at \qty{4.5}{\USD\per\kg}), generating substantial supplemental revenue.
 
 \subsection{Energy and carbon balance}
 
@@ -849,7 +850,7 @@ excitation);
 
 The following features are noteworthy:
 
-\paragraph{Plasmonic suppression.}The forward transfer yield drops from $\Phi_{\rm FT} = 0.98$ (NPoM-off baseline) to $\Phi_{\rm FT} = 0.1599$ (NPoM-on, $V = \qty{1.2}{\nm\cubed}$, $n=20$), a relative suppression of \qty{83.7}{\percent}. This is not an artifact of
+\paragraph{Plasmonic suppression.}The forward transfer yield drops from $\Phi_{\rm FT} = 0.98$ (NPoM-off baseline) to $\Phi_{\rm FT} = 0.0799$ (NPoM-on, $V = \qty{1.2}{\nm\cubed}$, $n=20$), a relative suppression of \qty{91.8}{\percent}. This is not an artifact of
 the dressed Hamiltonian: the baseline HDF5 file records $n=20$ trajectories
 with perfect trace conservation ($\mu = 1.000000$, $\sigma = 0.000000$),
 confirming that the suppression is physical and not numerical.
@@ -892,10 +893,10 @@ of approximately \qty{45}{\percent} (precisely \qty{44.7}{\percent}).
 \paragraph{Volume dependence and local dynamics.} \label{SI-sec:volume_dependence}
 Increasing the NPoM mode volume from $V_{\mathrm{mode}} = \qty{0.2}{\nm\cubed}$ to $V_{\mathrm{mode}} = \qty{1.2}{\nm\cubed}$ at \qty{295}{\kelvin} tunes the single-emitter vacuum coupling $g_0$ from \qty{268.3}{\per\cm} down to \qty{109.5}{\per\cm}, progressively shifting the system from an over-coupled plasmonic trap regime into an optimal excitonic transport domain. The complete temporal evolution of local state populations over $0$--$2000~\mathrm{fs}$ across all mode volumes is displayed in the 2-row panel layout of \Cref{fig:SI_population_dynamics_local}.
 
-In panel~(a) ($V = \qty{0.2}{\nm\cubed}$, $g_0 = \qty{268.3}{\per\cm}$), the extreme plasmonic field confinement induces strong exciton-plasmon hybridization. The plasmonic cavity mode (red dashed curve) rapidly extracts population from antenna Sites 1 and 6, but because of fast plasmonic dissipation ($\kappa \approx \qty{800}{\per\cm}$), population is lost to the continuum before it can transfer to the Reaction Center (black curve), suppressing the trapped yield to $\Phi_{\mathrm{FT}} = 0.097$.
-In panel~(b) ($V = \qty{0.4}{\nm\cubed}$, $g_0 = \qty{189.7}{\per\cm}$), a transient polaritonic resonance facilitates intermediate energy transfer, producing a localized peak in forward transfer yield ($\Phi_{\mathrm{FT}} = 0.183$).
-In panel~(c) ($V = \qty{0.6}{\nm\cubed}$, $g_0 = \qty{154.9}{\per\cm}$), dephasing-induced destructive interference briefly delays transport to the trapping sites ($\Phi_{\mathrm{FT}} = 0.146$).
-In panels~(d) and (e) ($V = \qty{0.8}{\nm\cubed}$ and $V = \qty{1.2}{\nm\cubed}$, $g_0 = \qty{134.1}{\per\cm}$ and $\qty{109.5}{\per\cm}$), the reduced plasmonic coupling minimizes cavity-induced dephasing, enabling smooth, coherent excitonic population accumulation at the Reaction Center (black curve) and reaching a maximum transport yield of $\Phi_{\mathrm{FT}} = 0.160$ at $V = \qty{1.2}{\nm\cubed}$.
+In panel~(a) ($V = \qty{0.2}{\nm\cubed}$, $g_0 = \qty{268.3}{\per\cm}$), the extreme plasmonic field confinement induces strong exciton-plasmon hybridization. The plasmonic cavity mode (red dashed curve) rapidly extracts population from antenna Sites 1 and 6, but because of fast plasmonic dissipation ($\kappa \approx \qty{800}{\per\cm}$), population is lost to the continuum before it can transfer to the Reaction Center (black curve), suppressing the trapped yield to $\Phi_{\mathrm{FT}} = 0.0505$.
+In panel~(b) ($V = \qty{0.4}{\nm\cubed}$, $g_0 = \qty{189.7}{\per\cm}$), the narrowing polaritonic splitting facilitates intermediate energy transfer, with the forward transfer yield increasing monotonically ($\Phi_{\mathrm{FT}} = 0.0605$).
+In panel~(c) ($V = \qty{0.6}{\nm\cubed}$, $g_0 = \qty{154.9}{\per\cm}$), the reduced plasmonic admixture further restores reaction-center access ($\Phi_{\mathrm{FT}} = 0.0727$).
+In panels~(d) and (e) ($V = \qty{0.8}{\nm\cubed}$ and $V = \qty{1.2}{\nm\cubed}$, $g_0 = \qty{134.1}{\per\cm}$ and $\qty{109.5}{\per\cm}$), the reduced plasmonic coupling minimizes cavity-induced dephasing, enabling smooth, coherent excitonic population accumulation at the Reaction Center (black curve) and reaching a maximum transport yield of $\Phi_{\mathrm{FT}} = 0.0799$ at $V = \qty{1.2}{\nm\cubed}$.
 Panel~(f) details the complete color-coded legend for Sites 1--7, the Reaction Center trap, and the plasmon mode.
 
 All volume scan simulations are fully converged over $n=20$ disorder realizations with PT-HOPS/SBD parameters $L=8$, $K=2$, and $\Delta t = \qty{0.2}{\fs}$ (\Cref{fig:SI_npom_volume_scan}).
@@ -1134,22 +1135,25 @@ reduces the magnitude of the drift itself. A thin-film micro-shielding layer
 (\qty{1}{\micro\meter} to \qty{5}{\micro\meter} of \ce{SiO2} or \ce{Al2O3} deposited via ALD)
 around the NPoM gold picocavity and the CQD sensor tip attenuates the diurnal
 temperature excursion experienced by the quantum probe. The shielding efficacy
-$\eta_{\mathrm{shield}} \in [0,1]$ multiplies the effective thermal coupling:
-a value of $\eta_{\mathrm{shield}} = 0.85$ means the probe experiences only
-\qty{85}{\percent} of the ambient greenhouse temperature swing.
+$\eta_{\mathrm{shield}} \in [0,1]$ attenuates the effective thermal coupling:
+the probe experiences only $(1 - \eta_{\mathrm{shield}})$ of the ambient
+greenhouse temperature swing, i.e., \qty{15}{\percent} for
+$\eta_{\mathrm{shield}} = 0.85$.
 
 This micro-shielding is modeled as a multiplicative correction to the
 Stern-Volmer thermal drift term in~\texttt{src/iot\_security/sensing.py}:
 \[
 k_{\mathrm{SV}}^{\mathrm{(cal)}} = k_{\mathrm{SV}}^{\mathrm{(ref)}} \,
-\bigl(1 + \alpha_T \,\eta_{\mathrm{shield}}\,\Delta T +
+\bigl(1 + \alpha_T \,(1 - \eta_{\mathrm{shield}})\,\Delta T +
 \beta_S \,\sigma\bigr),
 \]
 where $\alpha_T = \qty{-0.0035}{\per\K}$, $\beta_S = \qty{-0.012}{\per\milli\S\per\cm}$,
 $\Delta T = T - T_{\mathrm{ref}}$, and $\sigma$ is the soil salinity. For a
 greenhouse with \qty{\pm 15}{\K} diurnal swing and
 $\sigma = \qty{2}{\milli\S\per\cm}$, shielding reduces the thermal contribution
-to k-SV drift from \qty{5.25}{\percent} to \qty{0.79}{\percent}.
+to k-SV drift from \qty{5.25}{\percent} to \qty{0.79}{\percent}, i.e., a
+residual fraction of $(1 - \eta_{\mathrm{shield}}) = 0.15$ of the unshielded
+drift.
 
 \subsection{Quantum metal---organic frameworks for contaminant remediation}
 \label{SI-sec:mof}

@@ -7,18 +7,16 @@ from pathlib import Path
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
-OUT_DIR = Path(
-    "/home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/Submission_Package_QST_Manuscript/Figures"
-)
+OUT_DIR = Path(__file__).resolve().parent / "Figures"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Authentic 6-point NPoM Volume Scan Dataset (Table 2 & SI.tex) ───────────────
-vols = np.array([0.2, 0.4, 0.6, 0.8, 1.0, 1.2])  # V_mode (nm^3)
-g0s = np.array([268.3, 189.7, 154.9, 134.1, 120.0, 109.5])  # Vacuum coupling g0 (cm^-1)
+# ── Canonical 7-point NPoM Volume Scan Dataset (Table 2 & SI.tex, facteur-2 vintage) ──
+vols = np.array([0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4])  # V_mode (nm^3)
+g0s = np.array([268.3, 189.7, 154.9, 134.1, 120.0, 109.5, 101.4])  # Vacuum coupling g0 (cm^-1)
 phi_FT = np.array(
-    [0.097, 0.183, 0.146, 0.148, 0.159, 0.160]
+    [0.0505, 0.0605, 0.0727, 0.0768, 0.0795, 0.0799, 0.0797]
 )  # Local transfer yield \Phi_{FT}^{NPoM}
-sigma = np.array([0.0062, 0.0058, 0.0051, 0.0045, 0.0041, 0.0038])  # Standard error (n=20)
+sigma = np.array([0.0029, 0.0027, 0.0023, 0.0021, 0.0019, 0.0005, 0.0016])  # SE (n=2; n=20 at 1.2 nm^3)
 
 # Exact physical area-weighted canopy yield formula:
 # \Phi_{global} = 0.01 * \Phi_{FT}^{NPoM} + 0.99 * 0.980
@@ -73,27 +71,18 @@ ax1.axvline(x=1.2, color=C2, lw=1.3, ls=":", alpha=0.7)
 
 # Annotations
 ax1.annotate(
-    "max\n0.160",
-    xy=(1.2, 0.160),
-    xytext=(1.05, 0.130),
+    "max\n0.0799",
+    xy=(1.2, 0.0799),
+    xytext=(1.05, 0.066),
     fontsize=9,
     color=C2,
     ha="center",
     arrowprops={"arrowstyle": "->", "color": C2, "lw": 1.1},
 )
 ax1.annotate(
-    "transient\npeak 0.183",
-    xy=(0.4, 0.183),
-    xytext=(0.53, 0.198),
-    fontsize=8.5,
-    color=C1,
-    ha="center",
-    arrowprops={"arrowstyle": "->", "color": C1, "lw": 1.0},
-)
-ax1.annotate(
     "over-\ncoupled",
-    xy=(0.2, 0.097),
-    xytext=(0.18, 0.128),
+    xy=(0.2, 0.0505),
+    xytext=(0.18, 0.075),
     fontsize=8.5,
     color=C4,
     ha="center",
@@ -103,8 +92,8 @@ ax1.set_xlabel(r"$V_{\rm mode}$ (nm$^3$)", color=FG, fontsize=11)
 ax1.set_ylabel(r"$\Phi_{FT}$", color=FG, fontsize=12)
 ax1.set_title("(a) Transfer yield vs. mode volume", color=FG, fontsize=12, pad=6)
 ax1.legend(fontsize=9, facecolor=BG, edgecolor=FG, labelcolor=FG, loc="lower right")
-ax1.set_xlim(0.05, 1.38)
-ax1.set_ylim(0.07, 0.220)
+ax1.set_xlim(0.05, 1.52)
+ax1.set_ylim(0.030, 0.100)
 
 # (b) \Phi_FT vs g0
 ax2 = fig.add_subplot(gs[0, 1])
@@ -124,11 +113,11 @@ ax2.errorbar(
     elinewidth=1.2,
     capsize=4,
 )
-ax2.axvspan(105, 140, alpha=0.15, color=C2)
+ax2.axvspan(98, 138, alpha=0.15, color=C2)
 ax2.set_xlabel(r"$g_0$ (cm$^{-1}$)", color=FG, fontsize=11)
 ax2.set_ylabel(r"$\Phi_{FT}$", color=FG, fontsize=12)
 ax2.set_title(r"(b) Transfer yield vs. vacuum coupling $g_0$", color=FG, fontsize=12, pad=6)
-ax2.set_ylim(0.07, 0.220)
+ax2.set_ylim(0.030, 0.100)
 ax2.invert_xaxis()
 # label points
 for v, g, phi in zip(vols, g0s, phi_FT, strict=False):
@@ -181,7 +170,7 @@ bars2 = ax4.bar(
 ax4.set_xticks(x)
 ax4.set_xticklabels([f"V={v}" for v in vols], rotation=30, fontsize=9.5, color=FG)
 ax4.set_ylabel("Yield", color=FG, fontsize=11)
-ax4.set_title("(d) Yield summary — all 6 volumes", color=FG, fontsize=12, pad=6)
+ax4.set_title("(d) Yield summary — all 7 volumes", color=FG, fontsize=12, pad=6)
 ax4.legend(fontsize=9.5, facecolor=BG, edgecolor=FG, labelcolor=FG)
 ax4.set_ylim(0, 1.08)
 # Value labels on bars
@@ -210,7 +199,7 @@ for bar in bars2:
 fig.text(
     0.5,
     0.005,
-    r"MesoHOPS PT-HOPS/SBD | L=8, K=2, n=20, T=295 K, t$_{\rm max}$=1000 fs — Paper 2 QST",
+    r"MesoHOPS PT-HOPS/SBD | L=8, K=2, T=295 K, t$_{\rm max}$=1000 fs — Paper 2 QST",
     ha="center",
     fontsize=9,
     color="#555555",
