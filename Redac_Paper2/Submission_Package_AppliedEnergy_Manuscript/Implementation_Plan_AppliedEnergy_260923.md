@@ -231,3 +231,11 @@ Total: ~9–12 h. Order: 0 → 1 → 2 → 3 → 4. Do NOT start Phase 3 before 
 - `README_AppliedEnergy.md` : réécrit (état 2026-09-23 : manuscrit audité, SI retitré « Supplementary Material », cover 1 page) + bloc « Numerical canon » (définition sans facteur 2, 0.0799, 15 %, 650 m³, avertissement HDF5 scan_A* ×2).
 - `Submission_Package_QST_Manuscript/README.md` : créé (absent) — contenu, restauration des figures, historique de réconciliation, même bloc « Numerical canon », invocation de `verify_acceptance.py`.
 - README racine : 0 mention de rendement — non concerné.
+
+**Suite §16 — relance des scans juillet sur le HPC (2026-09-23, en cours) :**
+- Code corrigé déployé sur `nanaengo@100.73.21.40:~/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2` : les 4 `orchestrator.py` (main + scan_A1/A2/A3) et 4 `digital_twin.py` patchés (backups `*.pre_corr_20260923.bak`), zéro résidu `2.0 * gamma_rc`.
+- Sauvegarde préalable : `backups/hdf5_csv_backup_pre_relaunch_20260923.tar.gz` (10 fichiers : HDF5 ères juin+juillet, CSV de scans).
+- Découverte : les `quantum_simulations_framework/` locaux (main + scan_A*) sont des **squelettes sans aucun .py** (vidés) ; le vrai framework est à la racine projet (`~/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework`). Le solver (`src/quantum_interface/solver.py`) résout `_QS_FW` 3 niveaux au-dessus → symlink à la racine du dossier de lancement.
+- **7 volumes (0.2→1.4 nm³) relancés EN PARALLÈLE** via `run_npom_scan_relaunch.sh` dans `relaunch_20260923/V*/` (63 processus actifs, trajectoires initialisées ~20:41). Durée estimée : plusieurs heures (n_traj × 5000 pas). Résultats attendus : `relaunch_20260923/V*/data/converged/production_dynamics.h5` + CSV agrégé.
+- `scan_A1` (V=0.2, bloqué à 16/20 traj le 31 juil.) est remplacé par la relance V=0.2.
+- À la complétion : vérifier `rc_yield` finaux = canon (V=1.2 → ≈0.0799), sans facteur 2.
