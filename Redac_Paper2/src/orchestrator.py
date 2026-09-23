@@ -173,8 +173,8 @@ def run_global_simulation(solar_flux: float) -> None:
 
     gamma_rc = config.quantum.fmo.coupling_reaction_center
     trapped_pop = np.sum(dm_array[:, TRAPPING_SITES, TRAPPING_SITES].real, axis=1)
-    # Consistent with SI Eq. \ref{eq:SI_phi_ft}: \Phi_FT = 2 \Gamma_RC \int (P3+P4) dt
-    trap_yield = 2.0 * gamma_rc * np.sum(trapped_pop) * dt_fs
+    # Consistent with SI Eq. \ref{eq:SI_phi_ft}: \Phi_FT = \Gamma_RC \int (P3+P4) dt
+    trap_yield = gamma_rc * np.sum(trapped_pop) * dt_fs
     trap_yield = min(max(trap_yield, 0.0), MAX_TRAPPING_YIELD)
     logger.info(
         "[6/10] Reaction center trapping yield (Phi_FT): %.4f (%s)",
@@ -198,9 +198,10 @@ def run_global_simulation(solar_flux: float) -> None:
         soiling_factor_applied,
         power_soiled_kwh,
     )
-    # Φ_FT is the physical forward transfer yield = Γ_RC × ∫(P₃+P₄)dt (Eq. 2)
-    # For the norm decay of the non-Hermitian Hamiltonian, the factor is 2Γ_RC,
-    # but the manuscript defines Φ_FT without the factor of 2 for readability.
+    # Φ_FT is the physical forward transfer yield = Γ_RC × ∫(P₃+P₄)dt (Eq. 2).
+    # NOTE: runs from Jul 2026 (scan_A*) used a spurious prefactor 2 here and
+    # store rc_yield = 2 × Φ_FT; the June 2026 runs and all published tables
+    # use the definition above (no prefactor).
     physical_yield_npom = trap_yield  # already the physical yield
     phi_ft_passive = 0.98  # known baseline Φ_FT (NPoM OFF, N=1000 dedicated run)
     sers_obj = SersDiagnostics(config)
@@ -469,7 +470,7 @@ def run_global_simulation(solar_flux: float) -> None:
     h5_file = os.path.join(_SCRIPT_DIR, config.output.dynamics_h5)
     os.makedirs(os.path.dirname(h5_file), exist_ok=True)
     populations = dm_array.diagonal(axis1=1, axis2=2).real
-    cumulative_yield = 2.0 * gamma_rc * np.cumsum(trapped_pop) * dt_fs
+    cumulative_yield = gamma_rc * np.cumsum(trapped_pop) * dt_fs
     with h5py.File(h5_file, "w") as f:
         dyn = f.create_group("dynamics")
         dyn.create_dataset("populations", data=populations)

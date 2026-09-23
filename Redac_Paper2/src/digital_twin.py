@@ -106,7 +106,7 @@ class DigitalTwin:
             gamma_rc = self.config.quantum.fmo.coupling_reaction_center
             dt_fs = self.config.quantum.solver.time_step_fs
             trapped_pop = np.sum(dm_array[:, TRAPPING_SITES, TRAPPING_SITES].real, axis=1)
-            phi_ft_npom = min(2.0 * gamma_rc * np.sum(trapped_pop) * dt_fs, MAX_TRAPPING_YIELD)
+            phi_ft_npom = min(gamma_rc * np.sum(trapped_pop) * dt_fs, MAX_TRAPPING_YIELD)
 
         phi_ft_global = self.sers.calculate_global_canopy_yield(
             phi_ft_npom=phi_ft_npom,
