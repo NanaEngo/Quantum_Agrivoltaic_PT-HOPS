@@ -528,3 +528,23 @@ physique quantique :
   quatre axes du journal (photonique, biologie quantique, sensing, communication).
 - Titre inchangé (14 mots, « Quantum-Enhanced » ✓ audit) ; builds main 20 pp /
   cover 2 pp, 0 erreur, 0 undefined ; audit **22/22 PASS** (abstract 207 ≤ 210).
+
+## Lecture à voix haute des nouvelles ouvertures QST (2026-09-24)
+
+Sept accrochages corrigés (abstract 200/210 mots, audit 22/22, main 20 pp 0 erreur) :
+1. Phrase 2 de l'abstract trop longue (~55 mots), queue suspendue après la
+   parenthèse des paramètres — détachée en « The device operates as an
+   agrivoltaic digital twin. »
+2. « coherence extends … across the 99 % passive fraction » → « in the 99 %
+   passive fraction » (une durée ne s'étend pas spatialement) + « following
+   our companion study » → « in line with our companion study ».
+3. Pile lexicale « canopy sentinel diagnostic fraction … across 100 % of the
+   crop canopy » → « sentinel fraction … area-weighted global trapping yield ».
+4. « A FAO-56 » → « An FAO-56 » (oral : « an eff-ay-oh »).
+5. P2 de l'intro redémarrait comme l'ancienne intro (FMO + 2DES re-présentés
+   alors que la nouvelle amorce les donne déjà) → fusion en une phrase
+   fonctionnelle (« In green sulfur bacteria, the FMO complex shuttles
+   excitation … its seven BChl a sites show oscillatory coherence … »).
+6. « with numerically exact precision » (pléonasme) → « exactly » ;
+   « confined so that it enables » → « confined to enable » ; fusion des trois
+   « We » consécutifs en une participiale.
