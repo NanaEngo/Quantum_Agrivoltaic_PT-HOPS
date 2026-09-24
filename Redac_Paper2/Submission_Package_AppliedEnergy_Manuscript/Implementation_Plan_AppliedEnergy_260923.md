@@ -294,3 +294,13 @@ Scan lexique systématique (Crucially, leverage, transformative, paradigm, close
 - **QST cover (1)** : « is the premier venue… perfectly aligning with QST's mandate to publish transformative quantum technologies » → description factuelle du périmètre QST (fin de la flatterie éditoriale).
 - **Laissés volontairement** : « robust convergence » (qualifie la stabilité numérique, terme technique légitime, ×4), « robustness gaps » (reprise du vocabulaire de KaurJeet2026), « dependably/dependable » restants.
 - Builds : QST main 20 pp / SI 30 pp / cover 2 pp ; AE main 36 pp / SM 24 pp / cover 1 p — 0 erreur, 0 undefined partout ; audits QST 22/22 et AE 56/56 (marqueurs de canon F1/F2/F3 intacts). Rescan lexique final : 0 occurrence sur les 6 fichiers cibles.
+
+**Suite §16 — lecture à voix haute de l'ouverture AE (2026-09-24) :**
+Sept accrochages corrigés (abstract 159 mots, main 36 pp 0 erreur/0 overfull, audit 56/56) :
+1. Abstract : « a modelled, quantum-guided agrivoltaic system incorporating… » (trois modificateurs empilés) → « a quantum-guided agrivoltaic system in which a… layer couples to… » (structure directe).
+2. Abstract : « Secure IoT telemetry is maintained over a BB84 quantum link » (passive plate) → « A BB84 quantum link secures the IoT telemetry » (active, reprend le rythme des phrases voisines).
+3. Abstract : « cooperative economic modeling… modelled… cooperative case » (répétition modeling/modelled) → « techno-economic analysis of a Cameroonian micro-module ».
+4. Intro : « Land-use optimisation » → « optimization » (l'orthographe britannique isolée tranchait à l'oral contre « optimization » utilisé partout ailleurs).
+5. Intro gap (i) : phrase-monstre ~50 mots scindée en deux au point-virgule (« …window. Dynamic, physics-guided spectral management has not been transposed… ») — le second souffle était inaudible.
+6. Paragraphe-fuseau (~200 mots) coupé avant « The photosynthetic apparatus » (les 3 gaps d'un côté, la physique de l'autre).
+7. « serves as a model system for exploring this concept » (référence vague après saut de paragraphe) → « the model system for spectral light-sharing » ; « macroscopic multi-scale lifecycle assessment » (dédoublement) → « field-scale lifecycle assessment ».
