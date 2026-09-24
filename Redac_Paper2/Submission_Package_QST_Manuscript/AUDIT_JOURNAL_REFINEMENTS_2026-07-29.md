@@ -455,3 +455,51 @@ rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" \
 
 *Audit réalisé par Antigravity — 2026-07-29*
 *Skills appliqués : peer-review · scholar-evaluation · scientific-critical-thinking · venue-templates · scientific-writing (K-Dense / scientific-agent-skills) + bmad-editorial-review-structure + bmad-review-adversarial-general (BMAD-METHOD)*
+
+## Extension — passe siunitx méticuleuse (2026-09-24)
+
+Même méthode que le package AE (probes pdflatex isolés, tranchage empirique) :
+siunitx force le mode slash dès qu'un `\of{}` contient `\ce{}` — `\kg\of{\ce{CO2}}e`
+se rendait « kg (CO2)e/m2 **/yr** » (double slash, violation BIPM, espace parasite).
+
+- **Corrigé (8 constructions)** : `\of{\ce{CO2}}e` → `\of{\ce{CO2e}}` (1 main + 5 SI),
+  `\USD\per\tonne\ \ce{CO2}e` → `\USD\per\tonne\of{\ce{CO2e}}` (main L415, SI L691) —
+  rendu réciproque uniforme « kgCO2e m⁻² yr⁻¹ » avec indice chimique.
+- **Corrigé : `\DeclareSIUnit{\kWh}{kWh}` ajouté** (main + SI) — le kWh était utilisé
+  (irradiance 5.76, production 180) mais non déclaré → rendu « kW h » espacé.
+- Cover letter QST : 0 construction CO2e, non concernée.
+- Builds : main 20 pp / SI 30 pp — 0 erreur, 0 undefined (overfull cosmétiques
+  préexistants) ; extraction pdftotext : 0 « e/m2 /yr », 0 « kW h » ;
+  `verify_acceptance.py` **22/22 PASS** (non-régression canon).
+
+## Relecture croisée finale des deux packages (2026-09-24)
+
+- **SI QST : typos de casse de headings corrigées** (même signature qu'AE avant
+  audit adverse) : « 8-Site FMO hamiltonian » → Hamiltonian ; « Dynamic
+  photo-protection: floquet stark and omit behavior » → « Floquet--Stark and
+  OMIT behaviour » ; « Floquet stark detuning » → « Floquet--Stark detuning » ;
+  « wind speed » → « wind-speed » (cohérence britannique avec AE, 100 %
+  « behaviour »).
+- **Main QST : déficit canon −91.8 % désormais énoncé** (L223) : le texte
+  évoquait la suppression locale sans la chiffrer — ajout « the best NPoM
+  configuration retains only 8.2 % of the baseline yield, a −91.8 % deficit at
+  V = 1.2 nm³ », alignant QST sur AE (le chiffre n'était que dans le SI).
+- Builds : main 20 pp / SI 30 pp — 0 erreur, 0 undefined ; audits : QST 22/22,
+  AE 56/56. Résiduel : package QST non re-synchronisé vers le HPC.
+
+## Passe jargon AI + prose scientifique (2026-09-24)
+
+- 15 reformulations main+SI+cover QST (miroir de la passe AE, voir §16 AE) :
+  Crucially supprimé, « A key insight… is that » → causalité directe,
+  « apparent conflict/contradiction » → coexistence déclarée, « functional
+  synergy » → « shared spectral budget », « Additionally/Furthermore » → phrases
+  directes, « transforming…into an engineering advantage » → « absorbed at
+  negligible canopy-scale cost », « leverage » → « share », « aligns perfectly » →
+  « matches », « economically transformative » → « economically viable »,
+  « transformative directions…breakthroughs » → « directions for further
+  development…advances », « relies heavily on robust » → « requires integrated »,
+  cover : flatterie (« premier venue », « perfectly aligning », « transformative »)
+  → description factuelle du périmètre QST.
+- Laissés : « robust convergence » (technique) et « robustness gaps » (terme
+  cité de KaurJeet2026).
+- Builds 0 erreur/0 undefined ; audit 22/22 ; rescan lexique 0 occurrence.
