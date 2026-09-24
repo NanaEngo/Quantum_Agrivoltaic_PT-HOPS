@@ -503,3 +503,28 @@ se rendait « kg (CO2)e/m2 **/yr** » (double slash, violation BIPM, espace para
 - Laissés : « robust convergence » (technique) et « robustness gaps » (terme
   cité de KaurJeet2026).
 - Builds 0 erreur/0 undefined ; audit 22/22 ; rescan lexique 0 occurrence.
+
+## Repositionnement audience QST (2026-09-24, post-comparaison AE/QST)
+
+Inversion de la hiérarchie narrative — l'entrée n'est plus l'agriculture mais la
+physique quantique :
+- **Abstract** : ouverture sur « coherence as a design resource » (jamais
+  réalisé dans un dispositif opérationnel) plutôt que sur le conflit
+  food-energy ; chute finale réécrite : « establishes engineered photonic
+  environments and single-molecule plasmonic readout as operational
+  quantum-technology elements outside the laboratory » (207/210 mots).
+- **Introduction** : nouvelle amorce (2DES → cohérence établie → mais
+  l'environnement photonique toujours traité comme bruit subi, pas comme degré
+  de liberté de conception) ; l'agrivoltaique devient le terrain d'application
+  qui rend le gap pertinent ; **question centrale à l'angle QST** ajoutée :
+  le couplage fort exciton-plasmon, normalement canal de décohérence, peut-il
+  être confiné pour activer le sensing single-molécule sans compromettre le
+  transport, et la dynamique non-Markovienne exacte peut-elle fermer la boucle
+  de conception.
+- **Cover letter** : summary refondu « method-led » (PT-HOPS comme outil de
+  conception, couplage fort confiné à 1 % sentinelle) ; contributions
+  réordonnées (dynamique exacte d'abord, sensing single-molécule ensuite,
+  clôture système enfin) ; « Why QST » établit explicitement le croisement des
+  quatre axes du journal (photonique, biologie quantique, sensing, communication).
+- Titre inchangé (14 mots, « Quantum-Enhanced » ✓ audit) ; builds main 20 pp /
+  cover 2 pp, 0 erreur, 0 undefined ; audit **22/22 PASS** (abstract 207 ≤ 210).
