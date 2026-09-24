@@ -6,4 +6,4 @@ Title: Quantum Agrivoltaic Digital Twin: Coordinated Vibronic Light-Harvesting, 
 - NPoM cavity enables SERS crop diagnostics; transport trade-off quantified.
 - OPV shield cuts evapotranspiration 28% (FAO-56); NEB 19.6 kgCO2e/m2/yr.
 - 500 m2 cooperative module pays back in 4.23 yr in Cameroon highlands.
-- BB84 link secures IoT telemetry; AES-256 field-to-cloud data protection.
+- First quantum-coherence-guided agrivoltaic design with TEA and LCA.

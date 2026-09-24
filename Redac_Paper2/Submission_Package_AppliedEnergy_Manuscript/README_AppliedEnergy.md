@@ -6,7 +6,7 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
 
 ## Contents
 
-- `Manuscript_AppliedEnergy_260923.tex` : converted to `elsarticle`
+- `AppliedEnergy_main_2609.tex` : converted to `elsarticle`
   (preprint, 12pt), numbered bibliography (`elsarticle-num`), elsarticle
   frontmatter. Audited & refined 2026-09-23 (see
   `Implementation_Plan_AppliedEnergy_260923.md` §12–§16): numeric-consistency
@@ -14,9 +14,9 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
   "Experimental testability" subsection + benchmark table (from the QST
   package), PQC-vs-BB84 justification in Limitations. 35 pp, 0 error,
   0 overfull.
-- `SI.tex` : "Supplementary Material" (Elsevier terminology, retitled
+- `AppliedEnergy_SM_2609.tex` : "Supplementary Material" (Elsevier terminology, retitled
   2026-09-23; not "Supporting Information"). 24 pp, 0 error, 0 overfull.
-- `Cover_Letter_AppliedEnergy.tex` : 1 page, structured on the 5 questions
+- `AppliedEnergy_Cover_letter.tex` : 1 page, structured on the 5 questions
   required by the AE Guide for Authors (novelty, audience, importance,
   native-speaker check, reviewer availability).
 - `Highlights_AppliedEnergy.txt` : 5 bullets, ≤ 85 chars each.
