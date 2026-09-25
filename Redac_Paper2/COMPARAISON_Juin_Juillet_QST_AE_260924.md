@@ -80,6 +80,7 @@ vs `Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_main_2609.tex`.
 | Spécificités AE | — | **Highlights** (`Highlights_AppliedEnergy.txt`, 5 puces ≤85 car.), **graphical abstract** conforme (2048×1024), CRediT, déclarations (conflits d'intérêts, financement, IA générative), **Nomenclature** |
 | Audit d'acceptation | **`verify_acceptance.py`** (22/22 PASS, dont 5 contrôles de canon), `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md` | **`verify_acceptance.py`** (**60/60 PASS** — canon + framing F1–F3 + novelty : Q1–Q3, matrice 7×4, figure-tête, contre-factuels 0.9/2.9 pt) |
 | Passe novelty (2026-09-25) | — | Contre-factuels chiffrés dans les 3 gaps (facteur 1.6/48 ; 0.9 pt NPoM vs 2.9 pts d'écart à l'idéal) ; **matrice de capabilities 7 fonctions × 4 classes** (`tab:capability_matrix`) ; **question centrale en 1 phrase + Q1/Q2/Q3 mappées aux Results** ; **figure-tête `fig:flat_canopy`** (quenching local >90 % vs plateau global plat 0.971) ; phrase-plateau en miroir à la cover letter |
+| Passe orale finale (2026-09-25) | **Complète** (abstract, intro, Discussion, figures, SI, cover) : question centrale purgée du résidu d'idiome « close this design loop » → « quantify this design trade-off end to end » ; puce-cover ~70 mots à 3 parenthèses scindée ; **5/5 reviewers vérifiés** (Mukamel, Aspuru-Guzik, Scholes, Baumberg, Olaya-Castro — emails sur sources officielles) ; audit 22/22 | **Complète** (intro, figure-tête, matrice, Discussion, Conclusions, cover — 3 passes cumulées) : sémantique 0.9/2.9 pt corrigée au rythme, parenthétique répétitive du gap (ii) retirée, digital-twin scindé ; **4/4 reviewers vérifiés** (Olaya-Castro, Yuen-Zhou, Baumberg, Barron-Gafford) ; audit 60/60 |
 | Cover letter | `Cover_Letter_QST.tex` : 2 pp, EIC, route abonnement, 5 reviewers suggérés | `AppliedEnergy_Cover_letter.tex` : **1 page**, structurée sur les **5 questions** du Guide for Authors |
 | Scan volume (Table 2 QST / table AE) | Canon 7 points : 0.0505 → max 0.0799 à 1.2 nm³, repli 0.0791 à 1.4 (validé n=20, relance 20260924) | Mêmes valeurs (V1.0 = 0.0793, V1.4 = 0.0791) + table comparative 4 runs + légende de cross-validation n=20 |
 | Contenu spécifique | Sous-section « Experimental testability » complète | « Experimental testability » **condensée** + benchmark table **importée du package QST** ; justification **PQC-vs-BB84** dans Limitations |
@@ -134,4 +135,6 @@ Les deux manuscrits sont **strictement alignés sur le même canon 2026-09-23** 
 validée** (7/7 HDF5, verdict canon OK, preuves archivées et committées) ; le
 package AE est passé à 38 pp / 60 contrôles avec la passe novelty ; la
 checklist d'upload est dans `Submission_Package_AppliedEnergy_Manuscript/
-CHECKLIST_UPLOAD_AppliedEnergy.md`.*
+CHECKLIST_UPLOAD_AppliedEnergy.md` ; les **passes orales finales des deux
+packages sont closes** (audits 60/60 AE et 22/22 QST, revues orales locales
+et HPC) ; ORCID 4/5 collectés (Vedekoi à créer).*
