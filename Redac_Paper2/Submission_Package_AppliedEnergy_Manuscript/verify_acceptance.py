@@ -196,9 +196,10 @@ check("tab:capability_matrix" in ms_content and "Multifunctional accounting" in 
 check("fig:flat_canopy" in ms_content and "Figure_Plateau_Canopy.png" in ms_content,
       "Head figure fig:flat_canopy (local quenching vs flat canopy) present")
 check("factor of 1.6 and the SERS enhancement by a factor of 48" in ms_content
-      and "2.9-point overestimate" in ms_content
-      and "canopy-yield cost of 2.9\\%" in ms_content,
-      "Quantified counterfactual costs present in the three gaps")
+      and "costs only 0.9 points globally" in ms_content
+      and "canopy-yield cost of 0.9\\%" in ms_content
+      and "0.9-point canopy-scale cost" in ms_content,
+      "Quantified counterfactual costs present in the three gaps (0.9-pt NPoM cost vs 2.9-pt ideal shortfall)")
 check(all(f in ms_content for f in ["(F1) Microscopic", "(F2) Device", "(F3) System"]),
       "Three falsifiable claim families F1/F2/F3 present")
 check("the first (i)" in ms_content and "and (iii)" in ms_content,

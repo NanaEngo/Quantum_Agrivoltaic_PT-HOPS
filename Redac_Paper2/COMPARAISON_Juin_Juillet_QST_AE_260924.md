@@ -1,6 +1,6 @@
 # Comparaison — Ères de données Juin / Juillet & Manuscrits QST / AE
 
-**Date :** 2026-09-24 · **Projet :** Quantum Agrivoltaic PT-HOPS — Paper 2
+**Date :** 2026-09-24 (mise à jour 2026-09-25) · **Projet :** Quantum Agrivoltaic PT-HOPS — Paper 2
 **Référentiel numérique :** canon 2026-09-23 validé contre les données brutes HPC
 (voir `Submission_Package_AppliedEnergy_Manuscript/Implementation_Plan_AppliedEnergy_260923.md` §16).
 
@@ -52,12 +52,15 @@ lignes 2, 3, 4, 9 confirmées à 0.080325 / 0.079928 / 0.168473 / 2.005642.
 | Relance | Volumes | Φ_FT (logs [6/10]) | Verdict canon (±0.002) | HDF5 |
 |---------|---------|--------------------|------------------------|------|
 | `relaunch_20260923` | 0.2→1.4 nm³ ×7 | 0.0486 / 0.0610 / 0.0731 / 0.0761 / 0.0793 / **0.0799** / 0.0791 | **7/7 OK** (V=0.8 et V=1.2 **exact** ; V=0.2 à −0.0019, à surveiller) | **0/7 écrits** — crash tardif `footprint_m2` (étape [9d/10], après le calcul de Φ_FT) |
-| `relaunch_20260924` | 0.2→1.4 nm³ ×7 | en cours | — (collecteur + puller automatiques en place) | attendus ~14:00 HPC |
+| `relaunch_20260924` | 0.2→1.4 nm³ ×7 | = logs 0923 à ≤3e-5 | **7/7 OK** (V=0.8 = 0.076121 et V=1.2 = 0.079928 **exacts** à 5e-5 ; V0.2 −0.0019, V0.4 +0.0005, V0.6 +0.0004 ; monotonie stricte « violée » à V1.4 = repli déjà énoncé au main, pas un écart au canon) | **7/7 écrits et archivés** (`backups/relaunch_20260924/`, commit `c42b08e`) |
 
-Points nouveaux de la relance 20260923 : **V=1.0 → 0.0793** (saturation) et
+Points nouveaux des relances : **V=1.0 → 0.0793** (saturation) et
 **V=1.4 → 0.0791** (plateau) : la série est croissante jusqu'à ≥1.2 nm³ puis
 sature — jamais >1. `Phi_FT_NPoM(raw) == (physical)` partout (correction
-active). φ_global = 0.9707–0.9710 (canon 0.971).
+active). φ_global = 0.9707–0.9710 (canon 0.971). **Validé par HDF5 le
+2026-09-24** (verdict `canon_verdict_20260924.txt`, cohérence h5↔log ≤3e-5) —
+les vintages de table **0.0795 (V1.0) / 0.0797 (V1.4), sans provenance, ont
+été purgés** des deux packages au profit des moyennes n=20 mesurées.
 
 ---
 
@@ -71,13 +74,14 @@ vs `Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_main_2609.tex`.
 | Cible | Quantum Science and Technology (IOP, abonnement, 0 $ APC) | Applied Energy (Elsevier, route abonnement, 0 $ APC) |
 | Classe LaTeX | `iopart` 12pt (`iopart.cls` fourni) | `elsarticle` [preprint,12pt] |
 | Bibliographie | `unsrt` (numérotée, ordre d'apparition) | `elsarticle-num` (numérotée) |
-| Main — pagination | **20 pp**, 0 erreur, 0 undefined | **35 pp**, 0 erreur, 0 overfull, biblio 0 warning |
+| Main — pagination | **20 pp**, 0 erreur, 0 undefined | **38 pp** (35 + matrice de capabilities + figure-tête plateau + bloc Q1–Q3), 0 erreur, 0 undefined, 0 overfull |
 | SI — pagination | **30 pp**, 0 erreur | **24 pp**, 0 erreur, 0 overfull — retitré « **Supplementary Material** » (terminologie Elsevier) |
 | Sections du main | Numérotées : Introduction · Results (11 sous-sections) · Discussion (6) · Methods (8, dont Data/Code availability) | Étoilées (`\section*`) : Results (12 sous-sections) · Discussion · **Conclusions** · Methods (7) + frontmatter Elsevier |
 | Spécificités AE | — | **Highlights** (`Highlights_AppliedEnergy.txt`, 5 puces ≤85 car.), **graphical abstract** conforme (2048×1024), CRediT, déclarations (conflits d'intérêts, financement, IA générative), **Nomenclature** |
-| Spécificités QST | **`verify_acceptance.py`** (22/22 PASS, dont 5 contrôles de canon), `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md`, figures restaurées/régénérées (`plot_volume_scan_light.py` au canon 7 points, `plot_coupling_regime.py`) | — |
+| Audit d'acceptation | **`verify_acceptance.py`** (22/22 PASS, dont 5 contrôles de canon), `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md` | **`verify_acceptance.py`** (**60/60 PASS** — canon + framing F1–F3 + novelty : Q1–Q3, matrice 7×4, figure-tête, contre-factuels 0.9/2.9 pt) |
+| Passe novelty (2026-09-25) | — | Contre-factuels chiffrés dans les 3 gaps (facteur 1.6/48 ; 0.9 pt NPoM vs 2.9 pts d'écart à l'idéal) ; **matrice de capabilities 7 fonctions × 4 classes** (`tab:capability_matrix`) ; **question centrale en 1 phrase + Q1/Q2/Q3 mappées aux Results** ; **figure-tête `fig:flat_canopy`** (quenching local >90 % vs plateau global plat 0.971) ; phrase-plateau en miroir à la cover letter |
 | Cover letter | `Cover_Letter_QST.tex` : 2 pp, EIC, route abonnement, 5 reviewers suggérés | `AppliedEnergy_Cover_letter.tex` : **1 page**, structurée sur les **5 questions** du Guide for Authors |
-| Scan volume (Table 2 QST / table AE) | Canon 7 points 0.0505 → 0.0799 (monotone, croissante) | Mêmes valeurs canoniques + table comparative 4 runs |
+| Scan volume (Table 2 QST / table AE) | Canon 7 points : 0.0505 → max 0.0799 à 1.2 nm³, repli 0.0791 à 1.4 (validé n=20, relance 20260924) | Mêmes valeurs (V1.0 = 0.0793, V1.4 = 0.0791) + table comparative 4 runs + légende de cross-validation n=20 |
 | Contenu spécifique | Sous-section « Experimental testability » complète | « Experimental testability » **condensée** + benchmark table **importée du package QST** ; justification **PQC-vs-BB84** dans Limitations |
 | Scénario agronomique | **Horticulture seule** (benchmark tomate purgé) | idem |
 | Héritage Nature Energy | `Manuscript_NatureEnergy_26-06-25.tex/.pdf` conservé en référence — **ne pas soumettre** | base PDF retirée du package (récupérable dans l'historique git) — **ne pas soumettre** |
@@ -89,7 +93,13 @@ Les deux manuscrits sont **strictement alignés sur le même canon 2026-09-23** 
 - Équation Φ_FT **sans préfacteur 2** (Eq. (3) main + Eq. S1 SI des deux packages) ;
 - Φ_FT(V=1.2 nm³, 295 K) = **0.0799** (déficit −91.8 % vs passif) — présent
   6× dans le main AE et 5× dans le main QST ; valeurs du scan canoniques
-  (0.0505 / 0.0605 / 0.0727 / 0.0761) présentes dans les deux ;
+  (0.0505 / 0.0605 / 0.0727 / 0.0768 n=100) présentes dans les deux,
+  cross-validées n=20 (relance 20260924, HDF5 archivés) ;
+- **Sémantique du coût d'intégration (lue au rythme, 2026-09-25)** : le NPoM
+  coûte **0.9 point** de canopée (0.980 → 0.971) ; les **2.9 points** sont
+  l'écart à une canopée idéale de 1.0 (dont 2.0 pts de déficit passif). Les
+  premières formulations de la passe novelty attribuaient 2.9 pts au NPoM —
+  corrigé partout (gaps, headline, légende, cover, figure, audit).
 - Φ_global = **0.971** ; gain quantique **15 %** ; crédit eau **650 m³/yr**
   dérivé du crédit 1300 L/m²/yr (SI S5) ; sémantique η_shield = (1−η) ;
 - `table_comparative_4runs.tex` : **identique bit-à-bit** dans les deux packages ;
@@ -120,7 +130,8 @@ Les deux manuscrits sont **strictement alignés sur le même canon 2026-09-23** 
 | Canon des packages | blocs « Numerical canon » des deux README |
 | Structure des mains | `\section`/`\subsection` des deux `.tex` ; builds du 2026-09-23 (logs `build_main.log` / `build_si.log`) |
 
-*NB : la relance `relaunch_20260924` (HDF5 propres attendus ~14:00 HPC) viendra
-compléter la ligne « relance » du §1.3 — le puller automatique
-(`pull_relaunch_h5.sh`) produit le verdict canon (`canon_verdict_20260924.txt`)
-dès que les 7 fichiers sont rapatriés.*
+*Mise à jour 2026-09-25 : la relance `relaunch_20260924` est **complète et
+validée** (7/7 HDF5, verdict canon OK, preuves archivées et committées) ; le
+package AE est passé à 38 pp / 60 contrôles avec la passe novelty ; la
+checklist d'upload est dans `Submission_Package_AppliedEnergy_Manuscript/
+CHECKLIST_UPLOAD_AppliedEnergy.md`.*
