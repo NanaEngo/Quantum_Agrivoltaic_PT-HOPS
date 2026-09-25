@@ -18,10 +18,10 @@ import matplotlib.pyplot as plt
 OUT_DIR = Path(__file__).resolve().parent / "Figures"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Canonical 7-point NPoM volume scan (Table 2 & SI.tex) ────────────────────
+# ── Canonical 7-point NPoM volume scan (Table 2 & SI.tex; n=20 relaunch 20260924) ──
 vols = np.array([0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4])
 g0s = np.array([268.3, 189.7, 154.9, 134.1, 120.0, 109.5, 101.4])
-phi_FT = np.array([0.0505, 0.0605, 0.0727, 0.0768, 0.0795, 0.0799, 0.0797])
+phi_FT = np.array([0.0505, 0.0605, 0.0727, 0.0768, 0.0793, 0.0799, 0.0791])
 
 BG = "#ffffff"
 FG = "#000000"

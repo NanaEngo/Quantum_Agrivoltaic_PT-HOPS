@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 OUT_DIR = Path(__file__).resolve().parent / "Figures"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── Canonical 7-point NPoM Volume Scan Dataset (Table 2 & SI.tex, facteur-2 vintage) ──
+# ── Canonical 7-point NPoM Volume Scan Dataset (Table 2 & SI.tex; n=20 relaunch 20260924) ──
 vols = np.array([0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4])  # V_mode (nm^3)
 g0s = np.array([268.3, 189.7, 154.9, 134.1, 120.0, 109.5, 101.4])  # Vacuum coupling g0 (cm^-1)
 phi_FT = np.array(
-    [0.0505, 0.0605, 0.0727, 0.0768, 0.0795, 0.0799, 0.0797]
-)  # Local transfer yield \Phi_{FT}^{NPoM}
-sigma = np.array([0.0029, 0.0027, 0.0023, 0.0021, 0.0019, 0.0005, 0.0016])  # SE (n=2; n=20 at 1.2 nm^3)
+    [0.0505, 0.0605, 0.0727, 0.0768, 0.0793, 0.0799, 0.0791]
+)  # Local transfer yield \Phi_{FT}^{NPoM} — moyennes n=20 (relaunch_20260924, HDF5 validés)
+# NB : pas de barres d'erreur tracées — SE par point non archivé hors V=1.2 (SE 0.0005, Table 2).
 
 # Exact physical area-weighted canopy yield formula:
 # \Phi_{global} = 0.01 * \Phi_{FT}^{NPoM} + 0.99 * 0.980
@@ -49,20 +49,16 @@ gs = gridspec.GridSpec(2, 2, figure=fig, hspace=0.38, wspace=0.32)
 # (a) \Phi_FT vs V
 ax1 = fig.add_subplot(gs[0, 0])
 style_ax(ax1)
-ax1.errorbar(
+ax1.plot(
     vols,
     phi_FT,
-    yerr=sigma,
-    fmt="o-",
+    "o-",
     color=C1,
     lw=2.2,
     ms=8,
     mfc=C1,
     mec=FG,
     mew=1.0,
-    ecolor=C1,
-    elinewidth=1.2,
-    capsize=4,
     label=r"$\Phi_{FT}$ (n=20, L=8)",
     zorder=3,
 )
@@ -98,20 +94,16 @@ ax1.set_ylim(0.030, 0.100)
 # (b) \Phi_FT vs g0
 ax2 = fig.add_subplot(gs[0, 1])
 style_ax(ax2)
-ax2.errorbar(
+ax2.plot(
     g0s,
     phi_FT,
-    yerr=sigma,
-    fmt="o-",
+    "o-",
     color=C3,
     lw=2.2,
     ms=8,
     mfc=C3,
     mec=FG,
     mew=1.0,
-    ecolor=C3,
-    elinewidth=1.2,
-    capsize=4,
 )
 ax2.axvspan(98, 138, alpha=0.15, color=C2)
 ax2.set_xlabel(r"$g_0$ (cm$^{-1}$)", color=FG, fontsize=11)
@@ -149,7 +141,7 @@ ax3.set_xlim(0.05, 1.38)
 ax3.set_ylim(0.968, 0.982)
 ax3.set_yticks([0.970, 0.972, 0.974, 0.976, 0.978, 0.980, 0.982])
 
-# (d) Yield summary bar chart for all 6 sampled volumes
+# (d) Yield summary bar chart for all 7 sampled volumes
 ax4 = fig.add_subplot(gs[1, 1])
 style_ax(ax4)
 x = np.arange(len(vols))
