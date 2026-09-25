@@ -112,7 +112,7 @@ while :; do
     [ -f "$DEST/V${V}/production_dynamics.h5" ] || continue
     [ -f "$DEST/V${V}.vals" ] && continue
     VALS=$(timeout 40 ssh -n $SSH_OPTS "$HPC" \
-      "cd $HPC_DIR/V${V}/data/converged && \$HOME/miniforge3/envs/MesoHOP-sim/bin/python ../../../../check_h5_vals.py production_dynamics.h5" 2>/dev/null || true)
+      "cd $HPC_DIR/V${V}/data/converged && \$HOME/miniforge3/envs/MesoHOP-sim/bin/python ../../../../scripts/check_h5_vals.py production_dynamics.h5" 2>/dev/null || true)
     if printf '%s' "$VALS" | grep -q '^rc_yield='; then
       PHIL=$(cat "$DEST/V${V}.phi" 2>/dev/null || echo na)
       printf '%s|phi_ft_log=%s\n' "$VALS" "${PHIL:-na}" > "$DEST/V${V}.vals"
