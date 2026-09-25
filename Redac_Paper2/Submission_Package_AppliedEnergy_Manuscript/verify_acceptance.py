@@ -195,6 +195,10 @@ check("tab:capability_matrix" in ms_content and "Multifunctional accounting" in 
       "Capability matrix present (7 functions x 4 classes)")
 check("fig:flat_canopy" in ms_content and "Figure_Plateau_Canopy.png" in ms_content,
       "Head figure fig:flat_canopy (local quenching vs flat canopy) present")
+check("Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit" in ms_content,
+      "MS title carries the energy-systems signal (title review 2026-09-25)")
+check("Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit" in si_content,
+      "SM header mirrors the reviewed title")
 check("factor of 1.6 and the SERS enhancement by a factor of 48" in ms_content
       and "costs only 0.9 points globally" in ms_content
       and "canopy-yield cost of 0.9\\%" in ms_content

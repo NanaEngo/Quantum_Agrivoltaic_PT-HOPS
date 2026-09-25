@@ -1,5 +1,5 @@
 Highlights — Applied Energy submission
-Title: Quantum Agrivoltaic Digital Twin: Coordinated Vibronic Light-Harvesting, Environmental Calibration, and Agro-Rural Cybersecurity
+Title: Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit, and Quantum-Secured Telemetry
 (3–5 bullets, max 85 characters each)
 
 - Dual-band filtering at 750/820 nm extends FMO coherence by 50% at 295 K.
