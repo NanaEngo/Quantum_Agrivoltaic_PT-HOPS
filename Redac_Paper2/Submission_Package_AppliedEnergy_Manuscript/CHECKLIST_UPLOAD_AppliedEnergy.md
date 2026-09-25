@@ -60,13 +60,15 @@ l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés
   (profils institutionnels + publications 2024–2025) :
   | Reviewer | Institution (vérifiée) | Email | Domaine |
   |---|---|---|---|
-  | Alexandra **Olaya-Castro** | UCL, Dept. Physics & Astronomy (Prof.) | a.olaya-castro@ucl.ac.uk *(à confirmer au profil UCL)* | Biologie quantique, transport excitonique |
+  | Alexandra **Olaya-Castro** | UCL, Dept. Physics & Astronomy (Prof., Head of Biological Physics) | **a.olaya@ucl.ac.uk** ✓ | Biologie quantique, transport excitonique |
   | Joel **Yuen-Zhou** | UC San Diego, Chem & Biochem (Prof.) | **joelyuen@ucsd.edu** ✓ | Chimie polaritonique |
-  | Jeremy **Baumberg** | Cambridge, Cavendish Lab (Prof. NanoScience, FRS) | jjb12@cam.ac.uk *(à confirmer)* | NPoM/SERS, nanophotonique |
+  | Jeremy **Baumberg** | Cambridge, Cavendish Lab (Prof. Nanophotonics, FRS) | **JJB12@cam.ac.uk** ✓ | NPoM/SERS, nanophotonique |
   | Greg **Barron-Gafford** | U. Arizona, School of Geography (Prof.) + Biosphere 2 | **gregbg@arizona.edu** ✓ | Agrivoltaïsme, FEW nexus |
-  Emails marqués *(à confirmer)* : déduits du format standard institutionnel,
-  à vérifier sur la page profil avant saisie EM. Aucun n'a de conflit évident
-  (pas de co-tutelle, pas de collaboration récente avec les auteurs).
+  Emails ✓ confirmés sur des pages institutionnelles officielles (UCL MAPS
+  2022 + page quantum UCL pour Olaya-Castro — le format « a.olaya-castro@ »
+  deviné initialement était faux ; page profil Cavendish pour Baumberg).
+  Aucun n'a de conflit évident (pas de co-tutelle, pas de collaboration
+  récente avec les auteurs).
 - Vérifier la limite EM sur les fichiers source (LaTeX accepté ; figures
   embarquées OK — sinon préparer les PNG séparés de `figures/`).
 
