@@ -35,14 +35,26 @@ l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés
 | Graphical abstract | 2048×1024 px min, lisible en vignette | 2048×1024 ✓ | ✅ |
 | Cover letter | 1 page, 5 exigences GFA | 1 page ✓ | ✅ |
 
-## 3. ORCID — **bloquant l'upload** (TODO auteur F11)
+## 3. ORCID — état de la collecte (2026-09-25) : **4/5 trouvés**
 
-- Correspondant (Steve Cabrel Teguia Kouam) : **ORCID requis** au moment de la
-  soumission EM — en créer/relier sur le profil EM sinon blocage au step « Authors ».
+| Auteur | ORCID | Source de confirmation |
+|---|---|---|
+| Steve Cabrel **Teguia Kouam** (correspondant) | `0009-0000-7853-5476` | ✓ page ACS JPCL du Paper 1 (liée à steve.teguia@facsciences-uy1.cm) |
+| Theodore **Goumai Vedekoi** | **— à créer** (orcid.org, 5 min) | Aucun ORCID public trouvé ; seule action restante |
+| Jean-Pierre **Tchapet Njafa** | `0000-0002-1936-8353` | ✓ 3 sources (chemRxiv, page auteur arXiv, CRediT ResearchGate) |
+| Jean-Pierre **Nguenang** | `0000-0002-7140-7196` | ✓ attribution inline Springer 2018 — à confirmer par l'auteur à la saisie EM |
+| Serge Guy **Nana Engo** | `0000-0002-7484-3508` | ✓ **confirmé par l'auteur** + auto-dépôt arXiv 2026-08 |
+
+NB Nana Engo : le metadata AIP 2017 (JCP) associe `0000-0002-3013-3029` à son
+nom — ancien enregistrement ou homonyme ; en cas de double compte ORCID,
+les fusionner via le support ORCID avant la saisie EM.
+
+- Correspondant : **ORCID requis** au moment de la soumission EM — le relier
+  au profil EM au step « Authors » (sinon blocage).
 - Co-auteurs : ORCID individuels demandés (non bloquants chez Elsevier, mais
   requis pour l'affiliation crédible CRediT à la publication).
-- À préparer AVANT la session d'upload : collecter les 5 ORCID (ou créations
-  en 5 min sur orcid.org) et les emails institutionnels de chaque auteur.
+- Reste à faire avant la session : **Vedekoi crée son ORCID** et chacun lie
+  son ORCID à l'article JPCL via le wizard « Search & link » (5 min).
 
 ## 4. Affiliations, déclarations, divers
 
