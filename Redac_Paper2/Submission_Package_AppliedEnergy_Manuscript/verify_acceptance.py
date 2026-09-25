@@ -6,8 +6,13 @@ Numerical canon (2026-09-23): Phi_FT = Gamma_RC * integral(P3+P4) dt, WITHOUT
 a prefactor 2 (Eq. 3 / Eq. S1). Canonical NPoM yield at V_mode = 1.2 nm^3 is
 0.0799 (91.8% suppression); global canopy yield 0.971; payback 4.23 yr.
 Framing canon (2026-09-24): three literature gaps (static optics / TEA-LCA
-decoupled / sensing bolted on), three firsts, falsifiable claims F1-F3,
-deployment barriers split economic (tractable) vs physical.
+decoupled / sensing bolted on) with quantified counterfactual costs, three
+firsts, falsifiable claims F1-F3, deployment barriers split economic
+(tractable) vs physical.
+Novelty canon (2026-09-25): one-sentence central question with three
+subordinate questions Q1-Q3 mapped to Results; capability matrix
+(tab:capability_matrix); head figure fig:flat_canopy (local quenching vs
+flat canopy plateau).
 """
 import os
 import re
@@ -182,8 +187,18 @@ check("decoupled from the underlying device physics" in ms_content,
       "Gap (ii): TEA/LCA decoupled from device physics formulation present")
 check("treated purely as an energy harvester" in ms_content,
       "Gap (iii): PV as pure energy harvester (sensing bolted on) formulation present")
-check("The central question guiding this work is falsifiable" in ms_content,
-      "Central question explicitly stated as falsifiable")
+check("The central question of this work is falsifiable" in ms_content,
+      "Central question explicitly stated as falsifiable (one sentence)")
+check(all(f in ms_content for f in ["(Q1) Device", "(Q2) Physics", "(Q3) System"]),
+      "Three subordinate questions Q1-Q3 mapped to Results")
+check("tab:capability_matrix" in ms_content and "Multifunctional accounting" in ms_content,
+      "Capability matrix present (7 functions x 4 classes)")
+check("fig:flat_canopy" in ms_content and "Figure_Plateau_Canopy.png" in ms_content,
+      "Head figure fig:flat_canopy (local quenching vs flat canopy) present")
+check("factor of 1.6 and the SERS enhancement by a factor of 48" in ms_content
+      and "2.9-point overestimate" in ms_content
+      and "canopy-yield cost of 2.9\\%" in ms_content,
+      "Quantified counterfactual costs present in the three gaps")
 check(all(f in ms_content for f in ["(F1) Microscopic", "(F2) Device", "(F3) System"]),
       "Three falsifiable claim families F1/F2/F3 present")
 check("the first (i)" in ms_content and "and (iii)" in ms_content,
