@@ -548,3 +548,28 @@ Sept accrochages corrigés (abstract 200/210 mots, audit 22/22, main 20 pp 0 err
 6. « with numerically exact precision » (pléonasme) → « exactly » ;
    « confined so that it enables » → « confined to enable » ; fusion des trois
    « We » consécutifs en une participiale.
+
+## Fin de la passe orale QST + reviewers vérifiés (2026-09-25)
+
+Reprise après abstract et ouverture (lus le 24/09) ; couverture complète :
+- **Question centrale (fin d'intro)** : « …can close this design loop
+  quantitatively » était un **résidu de l'idiome « closes the loop »** que la
+  passe anti-jargon avait purgé côté AE mais échappé ici (le scan ciblait
+  « closes the loop » exact, pas la variante) → « …can quantify this design
+  trade-off end to end ». Rescan lexique sur main+SI+cover : les « loop »
+  restants (matrice closed-loop, architecture de contrôle, matrices
+  polymères closed-loop) sont des usages techniques légitimes — conservés.
+- **Cover letter** : la puce 1 empilait trois parenthèses sur ~70 mots
+  (même critère « second souffle » que la passe AE) → scindée en deux
+  phrases au « The results locate… ».
+- **Reviewers suggérés (5/5 emails confirmés sur sources officielles)** :
+  Mukamel `smukamel@uci.edu` ✓ (correspondant sur des pubs 2020–2026) ;
+  Aspuru-Guzik `aspuru@utoronto.ca` ✓ (correspondant 2024–2025) ; Scholes
+  `gscholes@princeton.edu` ✓ (arXiv sept. 2026 + handbook Princeton) ;
+  Baumberg `jjb12@cam.ac.uk` ✓ et Olaya-Castro `a.olaya@ucl.ac.uk` ✓
+  (confirmés le même jour côté AE). Aucun conflit d'intérêt évident avec
+  les auteurs (Scholes apparaît aux cites du main — acceptable pour un
+  reviewer, à signaler dans EM seulement si demandé).
+- Builds : main 20 pp / SI 30 pp / cover 2 pp — 0 erreur, 0 undefined
+  (cycles bibtex+SI refaits après purges ; les 22 undefined du main étaient
+  les renvois xr vers la SI). Audit **22/22 PASS**.
