@@ -11,9 +11,9 @@
 
 This repository contains two active research projects:
 
-1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, targeting *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Major Revision in progress** (30-day deadline from 28-Apr-2026).
+1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD.
 
-2. **Quantum Agrivoltaics (Nature Energy)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status: **Ready for submission** (submission package created, 10/10 quality gates passed, production data complete; source of truth consolidated in `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/`).
+2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-09-23 update): **editor-suggested transfer (with APC) DECLINED; retargeting a Q1 journal via subscription route (APC-free)**. Packages on hand: `Submission_Package_Nature_Energy_Manuscript/` (V5) + `Submission_Package_QST_Manuscript/` (iopart, formatting asset). Shortlist: Applied Energy, Solar Energy, QST, Prog. Photovoltaics.
 
 ---
 
@@ -65,7 +65,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 
 > [!IMPORTANT]
 > [!IMPORTANT]
-> **SOURCE OF TRUTH (REVISION R2 — SUBMITTED)**: The absolute canonical source of truth for the revised, submitted manuscript is `Redac_Paper1/JPCL_Submission_Package_2026-06-20/`. All modifications to the LaTeX files, Response letters, and SI must be done exclusively in this directory.
+> **PUBLISHED — ARCHIVAL RECORD**: The published Paper 1 record is `Redac_Paper1/JPCL_Submission_Package_2026-06-20/`. Do not modify (except a future erratum if the Xiang SI query requires one).
 
 #### ✅ Completed fixes
 - **Serialization/Pickling Hardening**: Refactored parallel trajectory workers in `hops_simulator.py` and `quantum_dynamics_simulator.py` to module-level functions, enabling 100% compatibility with `joblib`/`multiprocessing` backends.
@@ -868,18 +868,18 @@ Exhaustive cross-referencing of all 37 axes defined in `Redac_Paper2/Pistes_Impr
 
 **~13× drop** in Φ_FT confirms NPoM plasmon acts as population sink.
 
-#### NPoM Volume Scan (Complete)
+#### NPoM Volume Scan (Complete — validated n=20, relaunch 20260924)
 | Volume (nm³) | Φ_FT | Δ vs baseline |
 |:------------:|:----:|:-------------:|
 | 0.2 | 0.0505 | −94.8% |
 | 0.4 | 0.0605 | −93.8% |
 | 0.6 | 0.0727 | −92.6% |
 | 0.8 | 0.0768 | −92.2% |
-| 1.0 | 0.0795 | −91.9% |
-| 1.2 | **0.0804** | −91.8% |
-| 1.4 | 0.0797 | −91.9% |
+| 1.0 | 0.0793 | −91.9% |
+| 1.2 | **0.0799** | −91.8% |
+| 1.4 | 0.0791 | −91.9% |
 
-All NPoM yields >90% suppressed regardless of volume (V=1.2 nm³ optimal).
+All NPoM yields >90% suppressed regardless of volume (V=1.2 nm³ optimal). V0.8 is the n=100 reference; all seven points cross-validated by the n=20 relaunch_20260924 (HDF5 archived in `Redac_Paper2/backups/relaunch_20260924/`).
 
 #### 6 Post-Audit Suggestions Implemented
 

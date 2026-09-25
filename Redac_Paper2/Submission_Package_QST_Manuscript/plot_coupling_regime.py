@@ -15,7 +15,7 @@ import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-OUT_DIR = Path(__file__).resolve().parent / "Figures"
+OUT_DIR = Path(__file__).resolve().parent / "figures"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── Canonical 7-point NPoM volume scan (Table 2 & SI.tex; n=20 relaunch 20260924) ──
