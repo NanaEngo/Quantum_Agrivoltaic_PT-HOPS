@@ -34,10 +34,17 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
   `../src/orchestrator.py` and `../src/digital_twin.py`). See §16 of the
   implementation plan for the full evidence.
 - Canonical NPoM yield at V_mode = 1.2 nm³: **0.0799** (−91.8 % vs passive).
-- Quantum gain: **15 %** (economic chain 1.23 kg/m²/yr → 5.5 $/m²/yr →
-  payback 4.23 yr with 30 % subsidy).
-- Water credit 650 m³/yr derives from the 1300 L/m²/yr credit (SI S5), not
-  from raw ΔETc.
+- Γ_RC = 0.15 **fs⁻¹** effective (τ_trap ≈ 6.7 fs) — corrected 2026-09-25 from
+  the printed "0.15 ps⁻¹", which contradicted Eq. (3) (bound 0.15).
+- Economic chain re-derived 2026-09-25: water credit **474.5 L/m²/yr**
+  (1.3 mm/day × 365; corrects the ×365 error of the old 1300 L figure);
+  electricity **180 kWh/m²/yr** guaranteed-yield account (revenue = carbon);
+  **NEB_A = 72.6** / NEB_B = 84.2 kgCO₂e/m²/yr; Scenario B biomass **8.2**
+  (0.8 × 0.98/0.95); revenue **30 090 USD**, paybacks **4.32 / 6.17 / 2.68 yr**,
+  NPV **+34 714 USD**, carbon credits **363 USD/yr (1.4 %)**.
+- No coherence-derived crop gain is monetized: crop production is the
+  horticultural standard (8.2 kg/m²/yr) + quantum-fertiliser channel only
+  (0.96 kg/m²/yr, Scenario A).
 - **Do not use July-2026 `scan_A*` HDF5 `rc_yield` values raw** — divide by 2
   or re-run with the corrected code.
 

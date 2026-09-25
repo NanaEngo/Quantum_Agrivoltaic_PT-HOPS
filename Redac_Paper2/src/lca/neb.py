@@ -24,11 +24,16 @@ class NetEcologicalBenefit:
         water_saved_liters: float,
         power_generated_kwh: float,
         crop_biomass_kg: float,
+        apply_fertilizer_boost: bool | None = None,
     ) -> dict:
+        # Biostimulation boost (β_QF = 1.08) applies ONLY to Scenario A: the CQD
+        # sentinel network that delivers the quantum fertiliser exists solely in
+        # the quantum agrivoltaic configuration (see SI quantum-fertiliser).
+        if apply_fertilizer_boost is None:
+            apply_fertilizer_boost = scenario == "A"
+        boost = QUANTUM_FERTILIZER_BOOST if apply_fertilizer_boost else 1.0
         safe_yield = min(excitonic_yield, LCA_MAX_PHYSICAL_YIELD)
-        effective_biomass = (
-            crop_biomass_kg * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * QUANTUM_FERTILIZER_BOOST
-        )
+        effective_biomass = crop_biomass_kg * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * boost
 
         carbon_avoided_power = power_generated_kwh * (self.grid_intensity / G_TO_KG)
         carbon_avoided_water = water_saved_liters * LCA_WATER_PUMPING_CARBON_FACTOR
@@ -161,10 +166,13 @@ class NetEcologicalBenefit:
         power = np.clip(power, 0.0, None)
         biomass = np.clip(biomass, 0.0, None)
 
-        # Vectorized calculation
+        # Vectorized calculation. The biostimulation boost (β_QF = 1.08) applies
+        # only to Scenario A (CQD sentinel delivery); Monte Carlo is only invoked
+        # for the quantum scenario in the workflow.
+        boost = QUANTUM_FERTILIZER_BOOST if scenario == "A" else 1.0
         safe_yield = np.minimum(excitonic_yields, LCA_MAX_PHYSICAL_YIELD)
         effective_biomass = (
-            biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * QUANTUM_FERTILIZER_BOOST
+            biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * boost
         )
         carbon_avoided_power = power * (grid_values / G_TO_KG)
         carbon_avoided_water = water_saved * LCA_WATER_PUMPING_CARBON_FACTOR

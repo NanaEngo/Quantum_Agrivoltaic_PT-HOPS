@@ -52,7 +52,8 @@ FAO56_VAPOR_SLOPE_NUM = 4098.0
 FAO56_VAPOR_TEMP_OFFSET = 237.3
 
 LCA_MAX_PHYSICAL_YIELD = 0.95
-LCA_WATER_PUMPING_CARBON_FACTOR = 0.000298
+# Carbon intensity of water pumping: 0.298 kg CO2e per m³ (= per 1000 L)
+LCA_WATER_PUMPING_CARBON_FACTOR = 0.000298  # per LITER
 LCA_FOOTPRINT_A = 8.5
 LCA_FOOTPRINT_B = 5.0
 LCA_FOOTPRINT_C = 0.0
@@ -80,7 +81,8 @@ SOLVER_DETERMINISTIC_SEED = 0
 FLOQUET_EVAL_TIME_PS = 1.0
 FLOQUET_SITES = [0, 5]
 MAX_TRAPPING_YIELD = 0.98  # Physical maximum (FMO baseline Φ_FT = 0.98)
-# Phi_FT = 2 * Gamma_RC * int(P3+P4)dt (Eq. 2), but the physical yield Φ_FT ∈ [0, 0.98]
+# Φ_FT = Γ_RC × ∫(P3+P4)dt with NO prefactor (canon 2026-09-23; Γ_RC = 0.15 fs⁻¹
+# effective, i.e. τ_trap ≈ 6.7 fs in the dressed-model units).
 BASELINE_TRANSMISSION = 0.8
 PLASMON_COUPLING_SITES = [0, 5]
 

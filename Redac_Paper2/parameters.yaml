@@ -51,7 +51,7 @@ lca:
   reference_biomass_kg: 12.0
   default_capex: 161000.0            # V5: 322 USD/m2 × 500 m2
   capex_std: 16100.0
-  default_annual_revenue: 30612.0    # 30 USD/m2/yr × 500 m2 (electricity + water + floriculture + carbon credits, see SI Sec S5)
+  default_annual_revenue: 30090.0    # 60.18 USD/m2/yr × 500 m2 (electricity 21.6 + water 0.95 + floriculture 36.9 + carbon 0.73 — corrected annualized chain, Sept 2026)
   revenue_std: 3061.0
   default_annual_opex: 2000.0
   panel_cleaning_annual_cost: 800.0  # Aligned with cooperative.annual_cleaning_opex_usd

@@ -62,6 +62,13 @@
 
 \emergencystretch 2em
 
+% ---- TOC numwidths: S-prefixed two-digit section numbers (S10+) overflow
+% the article-class defaults (2.3em/3.2em) -> widen section/subsection boxes.
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{2.8em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{4.3em}{3.4em}}
+\makeatother
+
 % ---- SI numbering conventions ----
 \renewcommand{\theequation}{S\arabic{equation}}
 \renewcommand{\thefigure}{S\arabic{figure}}
@@ -119,13 +126,11 @@ References to the main manuscript are indicated by unadorned equation/figure num
 
 The 8-site Fenna--Matthews--Olson (FMO) Hamiltonian used throughout this work extends the standard 7-site model~\cite{Adolphs2006} by including the eighth bacteriochlorophyll $a$ molecule that bridges the chlorosome baseplate to the reaction center~\cite{Moix2011}.
 The full electronic Hamiltonian in the site basis is:
-
 \begin{equation}
 \hat{H}_{\mathrm{FMO}} = \sum_{n=1}^{8} \varepsilon_n \dyad{n} + \sum_{n \neq m} J_{nm} \dyad{n}{m} - i\Gamma_{\mathrm{RC}} \sum_{j \in \{3,4\}} \dyad{j}{j},
 \label{eq:SI_fmo_hamiltonian}
 \end{equation}
-
-where $\varepsilon_n$ are the site energies (referenced to the lowest-energy site), $J_{nm}$ are the inter-site electronic couplings, and $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\ps}$ is the irreversible reaction center trapping rate applied to Sites~3 and~4.
+where $\varepsilon_n$ are the site energies (referenced to the lowest-energy site), $J_{nm}$ are the inter-site electronic couplings, and $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\fs}$ is the effective irreversible reaction-center trapping rate applied to Sites~3 and~4.
 The anti-Hermitian term $-i\Gamma_{\mathrm{RC}}$ models irreversible charge separation at the reaction center; the Hamiltonian is non-Hermitian only on these diagonal trapping terms.
 
 \subsection{Site energies}
@@ -177,14 +182,12 @@ Values for Sites~1--7 follow the Adolphs--Renger parameterization~\cite{Adolphs2
 \subsection{Reaction center trapping}
 
 The irreversible trapping is implemented through a non-Hermitian term on Sites~3 and~4, which together form the primary funnel to the reaction center in the 8-site FMO model~\cite{Renger2003,Moix2011}.
-The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\ps}$ corresponds to a trapping time of $\tau_{\mathrm{RC}} \approx \qty{6.7}{\ps}$, consistent with ultrafast charge separation rates measured in reaction center complexes~\cite{Renger2003}.
+The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\fs}$ is the effective rate used in all production runs; it corresponds to a capture time $\tau_{\mathrm{trap}} \approx \qty{6.7}{\fs}$, short enough that near-complete capture (the $\Phi_{\mathrm{FT}} = 0.98$ passive baseline) is dynamically accessible within the 1-ps window of the yield definition.
 The forward transfer yield is defined as:
-
 \begin{equation}
 \Phi_{\mathrm{FT}} = \Gamma_{\mathrm{RC}} \int_0^{t_{\mathrm{max}}} \left[ P_3(t) + P_4(t) \right] dt,
 \label{eq:SI_phi_ft}
 \end{equation}
-
 with $t_{\mathrm{max}} = \qty{1}{\ps}$ and $P_j(t) = \rho_{jj}(t)$.
 Sites 3 and 4 are the two trapping sites of the network, and both are summed in the integrand.
 
@@ -261,7 +264,11 @@ We test Matsubara term counts $K = 1, 2, 3$ to assess the impact of high-tempera
 \centering
 \caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \qty{295}{\kelvin}.}
 \label{tab:SI_matsubara_convergence}
-\begin{tabular}{S[table-format=1.0] S[table-format=3.2(2)] S[table-format=1.2(1)] S[table-format=1.1e-1]}
+% NOTE: separate-uncertainty=false here (override of the global separate-uncertainty=true):
+% with siunitx v3.6.0 the uncertainty-split reserve emits three phantom empty
+% boxes overflowing by 5.44pt on every row of this table. Compact 406(30)
+% notation renders identically for the reader.
+\begin{tabular}{S[table-format=1.0, separate-uncertainty=false] S[table-format=3.2(2), separate-uncertainty=false] S[table-format=1.2(1), separate-uncertainty=false] S[table-format=1.1e2, separate-uncertainty=false]}
 \toprule
 {$K$} & {$\tau_c$ (fs)} & {$\Phi_{\mathrm{FT}}$} & {MAE from $K=3$} \\
 \midrule
@@ -323,45 +330,37 @@ All production simulations satisfy the following consistency checks:
 
 The polaron dressing mechanism that underlies the coherence protection reported in the main text can be rigorously understood through the canonical Lang--Firsov transformation~\cite{Chin2013,Huelga2013}.
 The full system-bath Hamiltonian is:
-
 \begin{equation}
 \hat{H} = \hat{H}_S + \sum_n \dyad{n} \sum_k g_{n,k}(\hat{b}_{n,k}^\dagger + \hat{b}_{n,k}) + \hat{H}_{\mathrm{bath}},
 \label{eq:SI_full_hamiltonian}
 \end{equation}
-
 where $g_{n,k}$ are the system-bath coupling constants for mode $k$ at site $n$, and $\hat{b}_{n,k}$ ($\hat{b}_{n,k}^\dagger$) are the bath annihilation (creation) operators.
 
 The unitary transformation $\hat{U} = \exp\!\left[\sum_n \dyad{n} \sum_k \frac{g_{n,k}}{\omega_k}(\hat{b}_{n,k}^\dagger - \hat{b}_{n,k})\right]$ partially diagonalizes the system-bath coupling.
 After applying $\hat{U}$, the transformed Hamiltonian becomes:
-
 \begin{equation}
 \hat{H}' = \hat{U}^\dagger \hat{H} \hat{U} = \hat{H}_S' + \hat{H}_{\mathrm{bath}} + \hat{H}_{\mathrm{res}},
 \label{eq:SI_lf_hamiltonian}
 \end{equation}
-
 where $\hat{H}_S'$ contains renormalized excitonic couplings (the polaron-shifted energies) and $\hat{H}_{\mathrm{res}}$ represents the residual system-bath coupling after the transformation.
 
 \subsection{Residual spectral density}
 
 The key physical insight is that underdamped vibronic modes satisfying the resonance condition $\Delta E_{nm} \approx \hbar\omega_v \pm J_{nm}$ become partially ``dressed'' by the canonical transformation: they are incorporated into $\hat{H}_S'$ and no longer contribute to dephasing in the transformed frame.
 The residual spectral density is:
-
 \begin{equation}
 J_{\mathrm{res}}(\omega) = J_{\mathrm{bath}}(\omega) - \sum_{k \in \mathcal{S}} \frac{\lambda_k \omega_k^2 \gamma_k}{(\omega - \omega_k)^2 + \gamma_k^2},
 \label{eq:SI_residual_spectral}
 \end{equation}
-
 where $\mathcal{S}$ denotes the set of underdamped modes that are vibronically dressed.
 
 \subsection{Quantitative effect}
 
 For the 12-mode Kleinekath\"{o}fer/Coker parameterization at \qty{295}{\kelvin}, the residual reorganization energy under the two excitation scenarios is:
-
 \begin{align}
 \lambda_{\mathrm{res}}^{\mathrm{broad}} &= \lambda_{\mathrm{DL}} + \sum_{k=1}^{12} S_k \omega_k \approx \qty{53}{\per\cm}, \label{eq:SI_lambda_broad} \\
 \lambda_{\mathrm{res}}^{\mathrm{filt}} &= \lambda_{\mathrm{DL}} + \sum_{k \notin \mathcal{S}} S_k \omega_k \approx \qty{40}{\per\cm}. \label{eq:SI_lambda_filt}
 \end{align}
-
 The \qty{20}{\percent} reduction in $\lambda_{\mathrm{res}}$ translates to a \qty{50}{\percent} coherence lifetime extension (since $\tau_c \propto 1/\lambda_{\mathrm{res}}$ in the high-temperature limit).
 The dual-band filter at \qty{750}{\nm} and \qty{820}{\nm} selectively excites those vibronic resonances that are most strongly coupled to the energy-transfer pathway (primarily the \qty{180}{\per\cm} Franck--Condon mode at Sites~3/4 and the \qty{740}{\per\cm} ring deformation mode), maximizing the dressing effect.
 
@@ -381,12 +380,10 @@ The resulting trajectories exhibit the suppressed decoherence predicted by the v
 
 Under high solar flux ($> \qty{800}{\W\per\m\squared}$), the OPV dielectric constant changes dynamically, inducing a time-dependent Stark shift.
 The driving term in the Hamiltonian is:
-
 \begin{equation}
 \hat{H}_{\mathrm{Stark}}(t) = V_0 \cos(\omega_{\mathrm{F}} t) \left( \dyad{1}{1} + \dyad{6}{6} \right),
 \label{eq:SI_stark_detuning}
 \end{equation}
-
 with $V_0 = \qty{0.05}{\eV}$ and $\omega_{\mathrm{F}} = \qty{1.2}{\THz}$.
 At $t = 0$ (zero flux), the cosine term evaluates to $V_0$, ensuring continuity with the undriven Hamiltonian.
 When the flux drops below threshold, the amplitude $V_0$ decays to zero with a relaxation time $\tau_{\mathrm{relax}} = \qty{10}{\ps}$, preventing numerical singularities.
@@ -395,7 +392,6 @@ When the flux drops below threshold, the amplitude $V_0$ decays to zero with a r
 
 The optomechanically induced transparency (OMIT) mechanism~\cite{Aspelmeyer2014} creates destructive interference in the NPoM cavity that suppresses transmission at the resonant channels.
 The transmission coefficient is:
-
 \begin{equation}
 T_{\mathrm{OMIT}}(I) = 
 \begin{cases}
@@ -404,7 +400,6 @@ T_0 \left(1 + \frac{I}{I_{\mathrm{sat}}}\right)^{-1}, & I > 0,
 \end{cases}
 \label{eq:SI_omit}
 \end{equation}
-
 where $I_{\mathrm{sat}} = \qty{800}{\W\per\m\squared}$.
 The piecewise definition at $I=0$ ensures continuity: $T_{\mathrm{OMIT}}(0) = T_0$, corresponding to the undriven cavity transmission.
 At high flux (\qty{1000}{\W\per\m\squared}), $T = T_0 \times (1 + 1000/800)^{-1} = 0.44\,T_0$, i.e., transmission drops to \qty{44}{\percent} of baseline.
@@ -446,27 +441,25 @@ The system is scaled to a \qty{500}{\m\squared} high-value floriculture micro-mo
 With a blended-finance subsidy $s$, the net CAPEX is $C_{\mathrm{net}} = C_{\mathrm{total}}(1 - s)$.
 
 The payback period is computed as:
-
 \begin{equation}
 P = \frac{C_{\mathrm{total}} (1 - s)}{R_{\mathrm{total}} - C_{\mathrm{OPEX}}},
 \label{eq:SI_payback}
 \end{equation}
-
 where $C_{\mathrm{OPEX}}$ comprises extension services and technician training (\qty{1200}{\USD\per\yr}), OPV panel cleaning to mitigate soiling (\qty{800}{\USD\per\yr}), and general maintenance (\qty{2000}{\USD\per\yr}), totaling \qty{4000}{\USD\per\yr}.
 
 \subsection{Revenue streams}
 
 \begin{itemize}
 \item \textbf{Electricity:} \qty{180}{\kWh\per\m\squared\per\yr} at \qty{0.12}{\per\kWh} = \qty{21.6}{\per\m\squared\per\yr}
-\item \textbf{Water savings:} \qty{1300}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{2.6}{\per\m\squared\per\yr}
-\item \textbf{Crop yield (high-value floriculture):} \qty{8.2}{\kg\per\m\squared\per\yr} at \qty{4.5}{\USD\per\kg} = \qty{36.9}{\per\m\squared\per\yr}. The \qty{15}{\percent} quantum improvement contributes \qty{5.5}{\per\m\squared\per\yr}.
-\item \textbf{Carbon credit (conservative):} \qty{19.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.196}{\per\m\squared\per\yr}
+\item \textbf{Water savings:} \qty{474.5}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{0.95}{\per\m\squared\per\yr}
+\item \textbf{Crop yield (high-value floriculture):} \qty{8.2}{\kg\per\m\squared\per\yr} at \qty{4.5}{\USD\per\kg} = \qty{36.9}{\per\m\squared\per\yr}, with the quantum-fertiliser channel contributing \qty{0.96}{\kg\per\m\squared\per\yr} (\qty{4.3}{\per\m\squared\per\yr}) when the CQD sentinel network is deployed (Scenario~A only)
+\item \textbf{Carbon credit (conservative):} \qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.73}{\per\m\squared\per\yr}
 \end{itemize}
-For a \qty{500}{\m\squared} module, the total annual revenue is approximately \qty{30612}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26612}{\USD}.
+For a \qty{500}{\m\squared} module, the total annual revenue is \qty{30090}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26090}{\USD}.
 
 \subsection{Payback periods and npv}
 
-For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \qty{112700}{\USD}$), the simple payback period is $\qty{112700}{\USD} / \qty{26612}{\USD\per\yr} \approx \qty{4.23}{\yr}$ for the single-owner baseline (or \qty{6.05}{\yr} without subsidy). Under the cooperative risk-sharing model, the \num{5} members pool resources and share the same subsidy, so each member's individual capital exposure drops to $\qty{22540}{\USD}$ at an identical \qty{4.23}{\yr} payback period — the cooperative's primary benefit is risk diversification and a lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \qty{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} is \qty{+37664}{\USD} when carbon credits are included. Although a baseline CAPEX of \qty{322}{\per\m\squared} is high relative to Sub-Saharan African living standards, localized adaptation --- such as using bamboo/timber supports instead of steel and green synthesis of gold nanoparticles from local plant extracts --- can reduce capital costs to \qty{140}{\per\m\squared}, reducing the unsubsidized payback period to \qty{2.63}{\yr}.
+For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \qty{112700}{\USD}$), the simple payback period is $\qty{112700}{\USD} / \qty{26090}{\USD\per\yr} \approx \qty{4.32}{\yr}$ for the single-owner baseline (or \qty{6.17}{\yr} without subsidy). Under the cooperative risk-sharing model, the \num{5} members pool resources and share the same subsidy, so each member's individual capital exposure drops to $\qty{22540}{\USD}$ at an identical \qty{4.32}{\yr} payback period — the cooperative's primary benefit is risk diversification and a lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \qty{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} is \qty{+34714}{\USD} when carbon credits are included. Although a baseline CAPEX of \qty{322}{\per\m\squared} is high relative to Sub-Saharan African living standards, localized adaptation --- such as using bamboo/timber supports instead of steel and green synthesis of gold nanoparticles from local plant extracts --- can reduce capital costs to \qty{140}{\per\m\squared}, reducing the unsubsidized payback period to \qty{2.68}{\yr}.
 
 We propose a tiered subsidy framework where the NEB serves as the verifiable metric for subsidy qualification:
 
@@ -548,29 +541,23 @@ The total runtime of \qty{4.8}{\ms} and memory footprint of \qty{2.2}{\kB} are n
 
 The resonance condition that enables the coherence protection mechanism is a general property of vibronically coupled chromophore aggregates~\cite{Chin2013,Christensson2012}.
 For a dimer of two chromophores with site energies $\varepsilon_1$, $\varepsilon_2$ and electronic coupling $J_{12}$, the excitonic energy gap is:
-
 \begin{equation}
 \Delta E_{\mathrm{exc}} = \sqrt{(\varepsilon_1 - \varepsilon_2)^2 + 4J_{12}^2}.
 \label{eq:SI_exciton_gap}
 \end{equation}
-
 When this gap is resonant with an underdamped vibrational mode of frequency $\omega_v$:
-
 \begin{equation}
 \Delta E_{\mathrm{exc}} \approx \hbar\omega_v \pm J_{12},
 \label{eq:SI_resonance_condition}
 \end{equation}
-
 the excitonic and vibrational states hybridize to form a vibronic (polaron-dressed) state.
 The $\pm J_{12}$ term accounts for Davydov splitting in the dimer: the symmetric and antisymmetric combinations of the two site excitations have energies separated by $2J_{12}$, each coupling differently to the vibrational manifold.
 
 In the vibronic basis (after the Lang--Firsov transformation), the effective pure-dephasing rate between excitonic states $\ket{\alpha}$ and $\ket{\beta}$ is:
-
 \begin{equation}
 \Gamma_{\alpha\beta}^{\mathrm{pd}} = \frac{1}{\hbar^2} \int_0^\infty d\omega\, \frac{J_{\mathrm{res}}(\omega)}{\omega^2} \left[\coth\!\left(\frac{\beta\hbar\omega}{2}\right)(1 - \cos\omega t) + i\sin\omega t\right]\bigg|_{t\to\infty},
 \label{eq:SI_dephasing_rate}
 \end{equation}
-
 where $J_{\mathrm{res}}(\omega)$ is the residual spectral density defined in \cref{eq:SI_residual_spectral}.
 Modes satisfying \cref{eq:SI_resonance_condition} are removed from $J_{\mathrm{res}}(\omega)$, reducing $\Gamma_{\alpha\beta}^{\mathrm{pd}}$ proportionally.
 
@@ -590,12 +577,10 @@ Relevant platforms include:
 
 For the OPV spectral filter design, the transmission bands are chosen to satisfy the resonance condition for the dominant energy-transfer pathway in the target photosynthetic complex.
 The general design criterion is:
-
 \begin{equation}
 \lambda_{\mathrm{filter}} \approx \frac{2\pi c}{\omega_{\mathrm{ex}} \pm \omega_v},
 \label{eq:SI_filter_design}
 \end{equation}
-
 where $\omega_{\mathrm{ex}}$ is the primary exciton absorption frequency and $\omega_v$ is the underdamped mode frequency.
 For FMO at \qty{295}{\kelvin}, $\omega_{\mathrm{ex}} \approx \qty{12500}{\per\cm}$ (\qty{800}{\nm}) and $\omega_v = \qty{180}{\per\cm}$ gives $\lambda_{\mathrm{filter}} \approx \qtylist{790;810}{\nm}$, which defines the dual-band filter passband.
 
@@ -613,12 +598,10 @@ To confirm that the dual-band filtering effect is not an artifact of the specifi
 \subsection{Trimer parameters}
 
 The trimer Hamiltonian is:
-
 \begin{equation}
 \hat{H}_{\mathrm{trimer}} = \sum_{n=1}^{3} \varepsilon_n \dyad{n} + J \sum_{n=1}^{3} \left( \dyad{n}{n+1} + \dyad{n+1}{n} \right),
 \label{eq:SI_trimer_hamiltonian}
 \end{equation}
-
 with $\varepsilon_n = \varepsilon_0 + \delta_n$ (uniform site energy $\varepsilon_0 = \qty{12410}{\per\cm}$ plus small Gaussian disorder $\delta_n \sim \mathcal{N}(0, \qty{10}{\per\cm})$), and $J = \qty{-50}{\per\cm}$.
 
 The spectral density is a single Drude--Lorentz mode ($\lambda = \qty{20}{\per\cm}$, $\gamma = \qty{30}{\per\cm}$) plus one underdamped mode at $\omega_v = \qty{200}{\per\cm}$ (Huang--Rhys factor $S = 0.08$).
@@ -658,7 +641,7 @@ This region supports high-value floriculture (strawberries, cut flowers) suitabl
 
 \subsection{Water savings}
 
-Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline yields the modelled water-savings credit of \qty{1300}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{650}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
+Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline corresponds to \qty{1.3}{\mm\per\day} of avoided water demand; annualized at \qty{365}{\day}, this yields the modelled water-savings credit of \qty{474.5}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{237}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
 
 \subsection{FAO-56 wind-speed sensitivity analysis}
 \label{SI-sec:fao56_sensitivity}
@@ -685,15 +668,15 @@ To quantify the impact of internal greenhouse air velocity on crop evapotranspir
 
 \subsection{Biomass yield improvement}
 
-The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. The \qty{15}{\percent} quantum yield enhancement observed in the passive OPV fraction translates to an additional \qty{1.23}{\kg\per\m\squared\per\yr} of high-value produce (strawberries at \qty{4.5}{\USD\per\kg}), generating substantial supplemental revenue.
+The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. Crop production is assumed at the horticultural standard for the crop mix (\qty{8.2}{\kg\per\m\squared\per\yr}); the quantum-fertiliser channel adds \qty{0.96}{\kg\per\m\squared\per\yr} (\qty{8}{\percent} biostimulation, Scenario~A only), and no coherence-derived yield gain is monetized.
 
 \subsection{Energy and carbon balance}
 
-The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr}. Displacing grid electricity at \qty{450}{\g\of{\ce{CO2e}}\per\kWh} offsets \qty{40.5}{\tonne\of{\ce{CO2e}}\per\yr}. Combined with the NEB (\qty{19.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \qty{10}{\USD\per\tonne\of{\ce{CO2e}}}~\cite{ICVCM2024}, the system generates \qty{98}{\USD\per\yr} in verified carbon revenue.
+The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr} --- the guaranteed-yield accounting used consistently in the revenue and carbon accounts. Displacing grid electricity at \qty{450}{\g\of{\ce{CO2e}}\per\kWh} offsets \qty{40.5}{\tonne\of{\ce{CO2e}}\per\yr} (\qty{81}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}). Combined with the NEB (\qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}), the system achieves net-zero operational carbon rapidly. At \qty{10}{\USD\per\tonne\of{\ce{CO2e}}}~\cite{ICVCM2024}, the system generates \qty{363}{\USD\per\yr} in verified carbon revenue.
 
 \subsection{Smallholder applicability}
 
-The \qty{500}{\m\squared} scale matches cooperative ownership models. By adopting high-value floriculture instead of staple crops, the system shifts from an \qty{8.0}{\yr} individual payback to a \qty{4.23}{\yr} cooperative payback (with a \qty{30}{\percent} blended-finance subsidy). This validates that quantum-enhanced agrivoltaics can be economically viable when coupled with strategic crop selection and dependable field-sensor integration.
+The \qty{500}{\m\squared} scale matches cooperative ownership models. By adopting high-value floriculture instead of staple crops, the system shifts from an \qty{6.17}{\yr} unsubsidized payback to a \qty{4.32}{\yr} cooperative payback (with a \qty{30}{\percent} blended-finance subsidy). This validates that quantum-enhanced agrivoltaics can be economically viable when coupled with strategic crop selection and dependable field-sensor integration.
 
 %==============================================================================
 % SECTION S10: QUANTUM MACHINE LEARNING SIGNAL PROCESSING
@@ -711,12 +694,10 @@ To address this, the Digital Twin incorporates a hybrid quantum-classical signal
 \subsection{Method i: matrix product state denoising}
 
 A noisy 1-D spectral measurement $\mathbf{x} \in \mathbb{R}^n$ (e.g., the Raman shift intensity vector) is decomposed into a Matrix Product State (MPS) via sequential truncated singular value decomposition~\cite{Stoudenmire2016}:
-
 \begin{equation}
 x_{i_1 i_2 \dots i_n} \approx \sum_{\alpha_1,\dots,\alpha_{n-1}} A^{[1]}_{i_1,\alpha_1} A^{[2]}_{\alpha_1,i_2,\alpha_2} \dots A^{[n]}_{\alpha_{n-1},i_n},
 \label{eq:SI_mps_decomp}
 \end{equation}
-
 where each $A^{[k]}$ is a third-order tensor (for $1<k<n$) and the bond dimension $\chi$ controls the compression fidelity. Truncating the Schmidt coefficients at $\chi$ acts as a nonlinear low-pass filter that suppresses high-frequency noise while preserving sharp vibronic features that would be smeared by a Fourier-domain filter.
 
 The computational cost scales as $\mathcal{O}(n \chi^3)$ for the sequential SVD decomposition, which is negligible for the $n \approx 50$--$100$ spectral bins used in the SERS readout.
@@ -724,12 +705,10 @@ The computational cost scales as $\mathcal{O}(n \chi^3)$ for the sequential SVD 
 \subsection{Method ii: quantum kernel ridge regression}
 
 After MPS denoising, the cleaned spectrum $\tilde{\mathbf{x}}$ is projected through a quantum-inspired kernel feature map~\cite{Havlicek2019}:
-
 \begin{equation}
 k(\tilde{\mathbf{x}}_i, \tilde{\mathbf{x}}_j) = \left| \braket{\phi(\tilde{\mathbf{x}}_i)}{\phi(\tilde{\mathbf{x}}_j)} \right|^2,
 \label{eq:SI_quantum_kernel}
 \end{equation}
-
 where $\ket{\phi(\mathbf{x})}$ is a variational quantum circuit encoding the spectral features into the Hilbert space of $n_{\mathrm{qubits}}$ qubits. In this work we employ two surrogate kernels that approximate the quantum feature map in the classical limit:
 
 \begin{itemize}

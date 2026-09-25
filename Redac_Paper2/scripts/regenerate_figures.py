@@ -106,20 +106,18 @@ def main():
 
         lca = NetEcologicalBenefit(config)
 
-        # Scenario A (Quantum OPV)
-        # Use baseline water saving and ideal power calculation matching the model
-        mc = config.microclimate
-        baseline_water_mm = mc.baseline_water_mm
-        et_rate = 3.2
-        water_saved_l = max(0.0, baseline_water_mm - et_rate) * 1000.0
+        # ---- Annual water-saving credit (L/m²/yr), corrected chain (Sept 2026):
+        # ET saving 4.5 -> 3.2 mm/day = 1.3 mm/day x 365 d = 474.5 L/m²/yr
+        # (1 mm = 1 L/m²). The pre-Sept-2026 chain used 1.3 L/m²/yr (x365 error).
+        ET_OPEN_FIELD = 4.5
+        ET_SMART_SHIELD = 3.2
+        water_saved_l = (ET_OPEN_FIELD - ET_SMART_SHIELD) * 365.0
 
-        # Power soiled
-        power_ideal_kwh = 600.0 * config.lca.pv_efficiency * config.lca.pv_fill_factor
-        power_soiled_kwh = SersDiagnostics.calculate_opv_power_with_soiling(
-            power_ideal=power_ideal_kwh,
-            days_since_cleaning=getattr(config.microclimate.greenhouse, "days_since_cleaning", 30),
-            daily_decay_rate=config.physics.soiling_decay_rate_per_day,
-        )
+        # ---- Unified electricity account: 180 kWh/m²/yr guaranteed yield
+        # (5.76 kWh/m²/day x 365 d x 0.15 efficiency x 0.57 performance ratio).
+        # Same number as the revenue chain, displacing grid electricity at
+        # 0.45 kg CO2e/kWh (grid_intensity from parameters.yaml).
+        power_annual_kwh_m2 = 180.0
 
         sers_obj = SersDiagnostics(config)
         phi_ft_global = sers_obj.calculate_global_canopy_yield(
@@ -132,23 +130,26 @@ def main():
             scenario="A",
             excitonic_yield=phi_ft_global,
             water_saved_liters=water_saved_l,
-            power_generated_kwh=power_soiled_kwh,
+            power_generated_kwh=power_annual_kwh_m2,
             crop_biomass_kg=config.lca.reference_biomass_kg,
         )
 
-        # Scenario B (Static PV)
+        # Scenario B (Static PV): opaque static module (~+10% electrical yield),
+        # same ET shield physics (x0.9 water), no CQD fertiliser delivery.
+        # Excitonic proxy: passive FMO yield x scenario_b_yield_factor (0.8) —
+        # static shading attenuates the canopy flux uniformly (no plasmon sink).
         scenario_b = lca.calculate_scenario_neb(
             scenario="B",
-            excitonic_yield=phi_ft * config.lca.scenario_b_yield_factor,
+            excitonic_yield=0.98 * config.lca.scenario_b_yield_factor,
             water_saved_liters=water_saved_l * config.lca.scenario_b_water_factor,
-            power_generated_kwh=power_soiled_kwh * config.lca.scenario_b_power_factor,
+            power_generated_kwh=power_annual_kwh_m2 * config.lca.scenario_b_power_factor,
             crop_biomass_kg=config.lca.scenario_b_biomass_kg,
         )
 
-        # Scenario C (Open Field)
+        # Scenario C (Open Field): no power, no water credit.
         scenario_c = lca.calculate_scenario_neb(
             scenario="C",
-            excitonic_yield=phi_ft * config.lca.scenario_c_yield_factor,
+            excitonic_yield=0.98 * config.lca.scenario_c_yield_factor,
             water_saved_liters=config.lca.scenario_c_water_liters,
             power_generated_kwh=config.lca.scenario_c_power_kwh,
             crop_biomass_kg=config.lca.scenario_c_biomass_kg,
