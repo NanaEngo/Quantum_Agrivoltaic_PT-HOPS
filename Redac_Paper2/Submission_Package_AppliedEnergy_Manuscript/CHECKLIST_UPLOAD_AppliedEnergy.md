@@ -56,8 +56,17 @@ l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés
 - Route abonnement (0 $ APC, Research4Life Group A) : le dire à la cover si
   l'écran EM propose le choix OA — « Subscription publication (no APC due) »
   figure déjà dans la cover letter.
-- Reviewers suggérés (4, dans la cover letter) : vérifier les emails actuels
-  (EM demande souvent email + institution par reviewer).
+- Reviewers suggérés (4, dans la cover letter) — **vérifiés actifs le 2026-09-25**
+  (profils institutionnels + publications 2024–2025) :
+  | Reviewer | Institution (vérifiée) | Email | Domaine |
+  |---|---|---|---|
+  | Alexandra **Olaya-Castro** | UCL, Dept. Physics & Astronomy (Prof.) | a.olaya-castro@ucl.ac.uk *(à confirmer au profil UCL)* | Biologie quantique, transport excitonique |
+  | Joel **Yuen-Zhou** | UC San Diego, Chem & Biochem (Prof.) | **joelyuen@ucsd.edu** ✓ | Chimie polaritonique |
+  | Jeremy **Baumberg** | Cambridge, Cavendish Lab (Prof. NanoScience, FRS) | jjb12@cam.ac.uk *(à confirmer)* | NPoM/SERS, nanophotonique |
+  | Greg **Barron-Gafford** | U. Arizona, School of Geography (Prof.) + Biosphere 2 | **gregbg@arizona.edu** ✓ | Agrivoltaïsme, FEW nexus |
+  Emails marqués *(à confirmer)* : déduits du format standard institutionnel,
+  à vérifier sur la page profil avant saisie EM. Aucun n'a de conflit évident
+  (pas de co-tutelle, pas de collaboration récente avec les auteurs).
 - Vérifier la limite EM sur les fichiers source (LaTeX accepté ; figures
   embarquées OK — sinon préparer les PNG séparés de `figures/`).
 
