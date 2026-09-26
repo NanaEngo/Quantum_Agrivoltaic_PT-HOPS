@@ -130,9 +130,9 @@ check(si_content.count("0.0799") >= 1, "SI contains canonical NPoM yield 0.0799"
 no_obsolete_vintage = re.search(r"0\.1599|83\.7\s*\\?%|0\.183\b", ms_content + si_content)
 check(no_obsolete_vintage is None, "No obsolete yield vintages (0.1599 / 83.7% / 0.183)")
 
-# 12. Source directory intactness (sibling package, two levels up from repo root)
+# 12. Source directory intactness (archived sibling package, two levels up from repo root)
 src_ms = os.path.join(
-    os.path.dirname(PKG_DIR), "Submission_Package_Nature_Energy_Manuscript",
+    os.path.dirname(os.path.dirname(PKG_DIR)), "_archive", "Submission_Package_Nature_Energy_Manuscript",
     "Manuscript_NatureEnergy_26-06-25.tex",
 )
 check(os.path.exists(src_ms), "Original source directory intact and unmodified")

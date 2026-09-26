@@ -211,10 +211,12 @@ Quantum_Agrivoltaic_PT-HOPS/
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
 | `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` | Master manuscript (Nature Energy single-column submission format; **Source of truth**) |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/SI.tex` | Supporting Information draft (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Cover_Letter.tex` | Submission Cover Letter (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_main_2609.tex` | Master manuscript (elsarticle, Applied Energy; **Source of truth**) |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_SM_2609.tex` | Supporting Information (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
+| `_archive/Submission_Package_Nature_Energy_Manuscript/` | Nature Energy package — ARCHIVED 2026-09-26 (declined transfer; superseded by the Applied Energy package) |
+| `_archive/Graphics/` | Figure build output — ARCHIVED 2026-09-26 (figures now land in the Applied Energy package via `scripts/regenerate_figures.py`) |
 | `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
 | `quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
 | `quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |

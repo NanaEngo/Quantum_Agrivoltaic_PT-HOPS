@@ -25,7 +25,7 @@ from src.quantum_interface.diagnostics import SersDiagnostics
 
 DEFAULT_H5 = os.path.join(PROJECT_ROOT, "data/converged/production_dynamics.h5")
 DEFAULT_GRAPHICS = os.path.join(PROJECT_ROOT, "Graphics")
-DEFAULT_SUBMISSION = os.path.join(PROJECT_ROOT, "Submission_Package_Nature_Energy_Manuscript")
+DEFAULT_SUBMISSION = os.path.join(PROJECT_ROOT, "Submission_Package_AppliedEnergy_Manuscript")
 
 
 def main():

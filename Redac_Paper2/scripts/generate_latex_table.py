@@ -166,7 +166,7 @@ latex += "\\end{table*}\n"
 
 print(latex)
 
-output_dir = "Redac_Paper2/Submission_Package_Nature_Energy_Manuscript"
+output_dir = "Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript"
 os.makedirs(output_dir, exist_ok=True)
 out_path = os.path.join(output_dir, "table_comparative_4runs.tex")
 with open(out_path, "w") as f:
