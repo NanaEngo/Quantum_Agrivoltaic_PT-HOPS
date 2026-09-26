@@ -58,7 +58,7 @@ Points nouveaux des relances : **V=1.0 → 0.0793** (saturation) et
 **V=1.4 → 0.0791** (plateau) : la série est croissante jusqu'à ≥1.2 nm³ puis
 sature — jamais >1. `Phi_FT_NPoM(raw) == (physical)` partout (correction
 active). φ_global = 0.9707–0.9710 (canon 0.971). **Validé par HDF5 le
-2026-09-24** (verdict `canon_verdict_20260924.txt`, cohérence h5↔log ≤3e-5) —
+2026-09-24** (verdict `backups/relaunch_20260924/canon_verdict_20260924.txt`, cohérence h5↔log ≤3e-5) —
 les vintages de table **0.0795 (V1.0) / 0.0797 (V1.4), sans provenance, ont
 été purgés** des deux packages au profit des moyennes n=20 mesurées.
 
@@ -138,3 +138,14 @@ checklist d'upload est dans `Submission_Package_AppliedEnergy_Manuscript/
 CHECKLIST_UPLOAD_AppliedEnergy.md` ; les **passes orales finales des deux
 packages sont closes** (audits 60/60 AE et 22/22 QST, revues orales locales
 et HPC) ; ORCID 4/5 collectés (Vedekoi à créer).*
+
+---
+
+*Mise à jour 2026-09-26 : **tour reviewer complet du package AE** (M1–M21 /
+S-M1–S-M9 + N1–N25 appliqués, faiblesses mitigées, cite frauduleux remplacés,
+Monte-Carlo 10⁵ avec IC 95 %, audit 62/62 local + HPC) puis
+**restructuration de `Redac_Paper2/`** : suppression de `reports/`,
+`_bmad-output/`, `results/`, de la bibliographie racine non utilisée, des
+marqueurs one-shot et des copies ère NE du package QST ; README du workspace
+et des deux packages réécrits. Le verdict canon est désormais référencé à
+`backups/relaunch_20260924/canon_verdict_20260924.txt`.*

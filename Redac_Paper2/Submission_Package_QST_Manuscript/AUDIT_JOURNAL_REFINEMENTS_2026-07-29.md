@@ -5,11 +5,13 @@
 >
 > **Date d'audit :** 2026-07-29 · **Auditeur :** Antigravity (Claude Sonnet 4.6 Thinking)
 >
-> **Fichiers sources analysés :**
-> - [Manuscript_NatureEnergy_26-06-25.tex](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex) (493 lignes, 63 kB)
-> - [SI.tex](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/SI.tex) (1226 lignes, 78 kB)
-> - [Pistes_Improvements260625.md](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/Pistes_Improvements260625.md) (37 axes implémentés)
-> - [MASTER_AUDIT_PROMPT.md](file:///home/taamangtchu/Documents/Github/Quantum_Agrivoltaic_PT-HOPS/Redac_Paper2/MASTER_AUDIT_PROMPT.md)
+> **Fichiers sources analysés :** (chemins d'origine 2026-07-29 ; depuis la
+> restructuration 2026-09-26 les exemplaires NE sont archivés et deux artefacts
+> ont été supprimés — récupérables via l'historique git)
+> - `…/_archive/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex` (493 lignes, 63 kB)
+> - `…/_archive/Submission_Package_Nature_Energy_Manuscript/SI.tex` (1226 lignes, 78 kB)
+> - `Pistes_Improvements260625.md` (37 axes implémentés ; supprimé 2026-09-26)
+> - `MASTER_AUDIT_PROMPT.md` (supprimé 2026-09-26)
 
 ---
 

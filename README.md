@@ -10,9 +10,9 @@ A high-performance computational framework for simulating non-Markovian quantum 
 | Component | Status | Details |
 | :--- | :--- | :--- |
 | **Core Simulation** | ✅ **Verified Stable** | 100% Trace Preservation ($L=8, K=2$) |
-| **Test Coverage** | 🧪 **16 / 16 Passed (P2)** | P1 and P2 unit tests verified locally |
+| **Test Coverage** | 🧪 **128 passed / 1 xfailed** | `Redac_Paper2/tests` (env `fl_qom`); Paper 1 suites verified separately |
 | **Paper 1 (JPCL)** | ✅ **Published** | Post-pub: decide reply to Dr T. Xiang (SBD/SI query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum |
-| **Paper 2 (transfer declined)** | 🎯 **Retargeting Q1, APC-free** | Editor-suggested transfer (with APC) declined; targeting Q1 journal via subscription route (no APC). Shortlist: Applied Energy, Solar Energy, QST (package ready), Prog. Photovoltaics |
+| **Paper 2 (transfer declined)** | 🎯 **AE package ready (62/62)** | Nature Energy transfer (with APC) declined; retargeted Q1 APC-free. `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/` = source of truth (main 45 pp / SM 26 pp); QST package alternate (22/22). Shortlist: Applied Energy, Solar Energy, QST, Prog. Photovoltaics |
 | **Data Integrity** | 🔒 LFS Tracked | Audited production ensemble ($n=100$) |
 
 ---

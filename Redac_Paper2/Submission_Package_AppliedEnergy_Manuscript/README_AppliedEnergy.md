@@ -12,18 +12,17 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
   `Implementation_Plan_AppliedEnergy_260923.md` §12–§16): numeric-consistency
   audit, horticulture-only scenario (tomato benchmark removed), condensed
   "Experimental testability" subsection + benchmark table (from the QST
-  package), PQC-vs-BB84 justification in Limitations. 39 pp, 0 error,
-  0 overfull.
+  package),   PQC-vs-BB84 justification in Limitations. **45 pp**, 0 error,
+  0 undefined references (audited 2026-09-26: reviewer round M1–M21 applied).
 - `AppliedEnergy_SM_2609.tex` : "Supplementary Material" (Elsevier terminology, retitled
-  2026-09-23; not "Supporting Information"). 25 pp, 0 error, 0 overfull.
+  2026-09-23; not "Supporting Information"). **26 pp**, 0 error.
 - `AppliedEnergy_Cover_letter.tex` : 1 page, structured on the 5 questions
   required by the AE Guide for Authors (novelty, audience, importance,
   native-speaker check, reviewer availability).
 - `Highlights_AppliedEnergy.txt` : 5 bullets, ≤ 85 chars each.
 - `figures/Graphical_Abstract_wide.png` : 2048×1024 AE-compliant wide
-  canvas — the file to upload (replaces non-compliant square
-  `Graphical_Abstract.png`; `Graphical_Abstract_fixed.png` is the
-  label-repaired square source).
+  canvas — the file to upload (the non-compliant square sources were
+  removed in the 2026-09-26 cleanup).
 
 ## Numerical canon (2026-09-23 — validated against raw HPC data)
 

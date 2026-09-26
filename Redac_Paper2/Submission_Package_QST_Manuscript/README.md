@@ -19,8 +19,11 @@ from the Nature Energy base. Target: IOP QST (subscription, $0 APC).
   `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md` (audit journal),
   `verify_acceptance.py` (acceptance audit, 22 checks — run
   `python3 verify_acceptance.py`).
-- `Manuscript_NatureEnergy_26-06-25.tex/.pdf` : inherited Nature Energy base,
-  reference only — do not submit from this package.
+
+The inherited Nature Energy base was removed from this package during the
+2026-09-26 cleanup; the reference copy lives in
+`../../_archive/Submission_Package_Nature_Energy_Manuscript/` (checked by
+check #12 of `verify_acceptance.py`).
 
 ## Figures (restored 2026-09-23)
 

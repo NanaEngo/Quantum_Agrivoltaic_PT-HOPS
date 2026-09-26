@@ -27,7 +27,7 @@ This project integrates quantum dynamics with agricultural modeling, IoT securit
 - [x] Φ_FT^global: 0.971→0.972 for consistency with Eq. φ_global.
 
 ### C. System Integration & Submission Prep
-- [x] Nature Energy Manuscript V5 Submission Package created and consolidated in `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/` (**Sole directory for active editing and compilation**).
+- [x] Nature Energy Manuscript V5 Submission Package created and consolidated in `Redac_Paper2/Submission_Package_Nature_Energy_Manuscript/` (**superseded**: transfer declined 2026-09; package **archived 2026-09-26** to `_archive/Submission_Package_Nature_Energy_Manuscript/`; source of truth is now `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/`).
 - [x] Supporting Information (SI) synchronized, merged, and compiled.
 - [x] IoT Security (BB84 QKD) Integration (buried single-mode fiber, 4.8% noise, fail-safe exception).
 - [x] Full-scale SERS Diagnostic molecular signature targets defined.
@@ -64,11 +64,11 @@ Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 13
 
 ### B. Paper 2 Submission (2026-09-23 update: Nature Energy route closed, transfer declined)
 - [x] Decision: editor-suggested transfer (with APC) DECLINED — retarget Q1 journal, APC-free via subscription route (Cameroon = Research4Life Group A; subscription publishing carries no APC regardless).
-- [ ] Pick target from shortlist: **Applied Energy** (IF ~11–12, Q1 — best systems/LCA fit), **Solar Energy** (IF ~6–8 — natural PV/agrivoltaics home), **QST** (package already in `iopart`, weakest agro fit), **Prog. Photovoltaics**.
-- [ ] Reformat single-column manuscript to target class (elsarticle for Elsevier picks; QST package reusable as-is if QST chosen).
-- [ ] Rewrite cover letter for target (scope fit + subscription-route statement).
-- [ ] Verify journal compliance (target author guidelines) + recompile MS + SI.
-- [ ] Submit via target portal.
+- [x] Pick target from shortlist: **Applied Energy** chosen (IF ~11–12, Q1 — best systems/LCA fit); QST kept as alternate package (22/22 ready).
+- [x] Reformat single-column manuscript to target class (elsarticle preprint, `AppliedEnergy_main_2609.tex`; QST package reusable as-is).
+- [x] Rewrite cover letter for target (scope fit + subscription-route statement, 5 AE questions).
+- [x] Verify journal compliance (AE Guide for Authors) + recompile MS + SI — audit **62/62** (2026-09-26).
+- [ ] Submit via AE portal.
 
 ### C. Future R&D Directions
 - [ ] Multi-module field-scale telemetry deployment.
@@ -81,7 +81,7 @@ Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 13
 
 ## 5. Pistons_Improvements260625.md Full Audit (2026-06-30)
 
-All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` have been cross-referenced against `Manuscript_NatureEnergy_26-06-25.tex` and `SI.tex`. **Status: 37/37 COMPLETE.**
+All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in the 2026-09-26 cleanup of `Redac_Paper2/` — recoverable from git history) have been cross-referenced against `Manuscript_NatureEnergy_26-06-25.tex` and `SI.tex`. **Status: 37/37 COMPLETE.**
 
 | Axe | Description | Status |
 |-----|-------------|--------|
@@ -122,3 +122,14 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` have been cross-ref
 | 35 | Fallback Classique MILP | ✅ SI S11.4 |
 | 36 | Ciblage GCF/BAD | ✅ MS Limitations (Session 25) |
 | 37 | Zenodo DOIs + Code Availability | ✅ MS (Session 25) |
+
+## 6. Paper 2 — Applied Energy Era (2026-09-23 → 2026-09-26)
+
+- [x] Nature Energy transfer declined → retarget **Applied Energy** (subscription, $0 APC); package `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/` becomes the **source of truth** (elsarticle, main 45 pp / SM 26 pp / cover 1 p).
+- [x] Numeric canon re-derived and hardened (Sept 23–24): Φ_FT without prefactor 2, 7-point volume scan (0.0505 → 0.0799), φ_global 0.971, water 460 L/m²/yr, NEB 72.6, payback 4.32/6.17/2.68 yr, NPV +34 630 USD — every headline number traced to code.
+- [x] Hostile audit pass (F1–F29): fabricated/misattributed citations removed (`Alshareef2024`, `Ravishankar2024` → `Ravishankar2020`/`Zhao2023`/`Luo2022`), OMIT → optical limiting rename, EF relative-Purcell framing, passband cost computed from ASTM G173, Monte-Carlo 95 % CI (NEB 72.6 [54.3, 92.2]).
+- [x] Reviewer round (M1–M21 main, S-M1–S-M9 + N1–N25 SI) implemented: Table 3 calibration/validation split, LCOE 0.36 USD/kWh, CAPEX benchmark, sourced grid EF (Ember 480 g / Cameroon 290 g → NEB ≈ 43.8), AI declaration named, QKD Wilson bound, SI Fig S1/S2 regenerated with canon numbers.
+- [x] Weakness mitigations (digital-twin assimilation path, τ_c/EF prediction flags, LOD field-basis values, NPoM-CAPEX overrun sensitivity 4.32→6.11 yr, n-provenance).
+- [x] Commits: `1e6c924` (audit + mitigate), `45fc296` (NE package + Graphics → `_archive/`), `98b02ba` (weakness mitigations + figure/QKD/code hardening).
+- [x] Restructuring 2026-09-26: `Redac_Paper2/` purged (`reports/`, `_bmad-output/`, `results/`, root `references.bib`, one-shot markers, orphan figures, NE-era copies in QST package) and all MD refreshed — `Redac_Paper2/README.md`, package READMEs, this roadmap, root README, AGENTS.md Session 28.
+- [ ] Upload per `CHECKLIST_UPLOAD_AppliedEnergy.md` and submit (ORCID Vedekoi pending).

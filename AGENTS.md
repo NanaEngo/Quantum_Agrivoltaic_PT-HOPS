@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-06-30 (Session 25 — Pistons_Improvements 37-Axis Full Audit, 6 Gaps Closed, 0 Errors)
+**Last updated:** 2026-09-26 (Session 28 — Redac_Paper2 Restructuring: Obsolete Files Purged, 8 MDs Refreshed, AE Package = Source of Truth 62/62)
 
 
 ---
@@ -400,6 +400,26 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 28 (2026-09-26) — Redac_Paper2 Restructuring, Obsolete Purge, MD Refresh
+
+**User request:** "RESTRUCTURER Redac_Paper2/; SUPPRIMER LES FICHIERS OBSOLETES/DESUETS; METTRE À JOUR LES FICHIERS MD" (plan approved via `.plan/restructure-redacpaper2-20260926.md`; user chose `git rm` for historical MDs and commit+push+rsync validation).
+
+**Purged via `git rm` (~40 files):**
+- `Redac_Paper2/reports/` (6 June audit reports incl. `MASTER_AUDIT_PROMPT.md`), `Redac_Paper2/_bmad-output/` (15 BMAD planning artifacts, redundant with root `_bmad-output/`), `Redac_Paper2/results/plot_local_dynamics.py` (dead — references nonexistent `V*_data.h5`, superseded by `plot_si_figures.py`).
+- Root `Redac_Paper2/references.bib` (152 entries, 0 consumers — each package owns its own biblio), `pull_relaunch_20260924.done` marker, root `canon_verdict_20260924.txt` (byte-identical dup of `backups/relaunch_20260924/` copy).
+- AE package: `fix_percentages.py` + 9 orphan figures (6 `Figure_Comparative_*`, `Figure_SI_Comparative_4Runs_HD.png`, square `Graphical_Abstract{,_fixed}.png` — only `_wide.png` required by verify).
+- QST package: `Manuscript_NatureEnergy_26-06-25.tex/.pdf`, `Cover_Letter.tex/.pdf` (NE-era), `fix_percentages.py`; tracked `.spl` build artifact of AE main also dropped.
+- Moved (provenance): `pull_relaunch_h5.sh` → `backups/relaunch_20260924/`.
+- Untracked LaTeX aux purged in both packages **except** `AppliedEnergy_Cover_letter.log` (page-count audit dependency).
+
+**Audit dependencies preserved (verified before deletion):** QST `verify_acceptance.py` check #5 requires `AUDIT_JOURNAL_REFINEMENTS_2026-07-29.md` in-package; check #12 requires `_archive/Submission_Package_Nature_Energy_Manuscript/Manuscript_NatureEnergy_26-06-25.tex`; AE verify requires `figures/Graphical_Abstract_wide.png`.
+
+**MDs refreshed (8):** `Redac_Paper2/README.md` (rewritten — 7 phantom file rows removed, AE 45/SM 26 pp, tests 128/1 xfailed, economic canon block added, verdict path → `backups/`); AE `README_AppliedEnergy.md` (39→45 pp, 25→26 pp, GA paragraph); QST `README.md` (NE line → archive pointer); QST `AUDIT_…md` source-file header (4 dangling `file://` links → archived/deleted annotations); root `ROADMAP.md` (NE package marked archived, §4B checkboxes completed, §5 Pistes path annotated, new **§6 Applied Energy Era 2026-09-23→26** with commit chain `1e6c924`/`45fc296`/`98b02ba`); root `README.md` (Paper 2 row → AE 62/62 source of truth; test row → 128/1); `Redac_Paper2/COMPARAISON_…md` (verdict path + 2026-09-26 update paragraph); this AGENTS.md (Session 28 + Last-updated).
+
+**Verification:** dangling-ref grep clean · AE verify 62/62 · QST verify 22/22 · pytest 128 passed/1 xfailed · ruff clean · no `.tex`/PDF touched (no recompile needed).
+
+**Target tree:** `Redac_Paper2/` = README + 6 root files + 2 submission packages + `src/ tests/ scripts/ data/ backups/ docs/` (removed: `reports/ _bmad-output/ results/` root biblio).
 
 ### Session 24 (2026-06-29) — Adversarial Audit Correction: Outlook → Results/Discussion Promotion
 
