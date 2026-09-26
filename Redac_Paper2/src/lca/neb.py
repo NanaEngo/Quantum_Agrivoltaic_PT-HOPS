@@ -191,6 +191,10 @@ class NetEcologicalBenefit:
         crop_biomass_kg_std: float,
         grid_intensity_std: float | None = None,
         footprint_std: float | None = None,
+        capex_mean: float | None = None,
+        capex_std: float | None = None,
+        revenue_mean: float | None = None,
+        revenue_std: float | None = None,
         n_iterations: int = 100000,
     ) -> dict:
         rng = np.random.default_rng(42)
@@ -243,11 +247,40 @@ class NetEcologicalBenefit:
 
         # Build summary statistics
         summary = {}
-        for key, arr in [
+        stat_keys = [
             ("effective_biomass_kg", effective_biomass),
             ("net_benefit_co2_kg", net_benefit),
             ("functional_unit", functional_unit),
-        ]:
+        ]
+
+        # Optional economic block: payback/NPV uncertainty consistent with
+        # calculate_cooperative_payback (same subsidy, OPEX, discount rate).
+        if capex_mean is not None and revenue_mean is not None:
+            coop = self.config.lca.cooperative
+            opex_total = (
+                self.config.lca.default_annual_opex
+                + coop.annual_training_opex_usd
+                + coop.annual_cleaning_opex_usd
+            )
+            capex_draws = np.clip(
+                rng.normal(capex_mean, capex_std or 0.0, n_iterations), 0.0, None
+            )
+            revenue_draws = np.clip(
+                rng.normal(revenue_mean, revenue_std or 0.0, n_iterations), 0.0, None
+            )
+            cashflow = revenue_draws - opex_total
+            subsidy = max(0.0, min(coop.capex_subsidy_rate, 1.0))
+            net_capex = capex_draws * (1.0 - subsidy)
+            rate = max(coop.discount_rate, -0.999)
+            annuity = sum(1.0 / (1.0 + rate) ** yr for yr in range(1, 11))
+            payback = np.where(
+                cashflow > 0.0, net_capex / np.where(cashflow > 0.0, cashflow, 1.0), np.inf
+            )
+            npv = cashflow * annuity - net_capex
+            stat_keys.append(("payback_yr", payback))
+            stat_keys.append(("npv_10yr_usd", npv))
+
+        for key, arr in stat_keys:
             summary[key] = {
                 "mean": float(np.mean(arr)),
                 "std": float(np.std(arr)),

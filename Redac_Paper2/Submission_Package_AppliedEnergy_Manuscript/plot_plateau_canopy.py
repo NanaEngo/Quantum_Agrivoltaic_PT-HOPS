@@ -69,7 +69,14 @@ style_ax(ax2)
 ax2.plot(vols, phi_gl, "s-", color=C4, lw=2.2, ms=7, mfc=C4, mec=FG, mew=0.9, zorder=3)
 ax2.axhline(0.971, color="#555555", lw=1.0, ls=":")
 ax2.fill_between(vols, 0.971, 1.0, alpha=0.08, color="#555555")
-ax2.text(0.75, 0.984, "NPoM integration cost: 0.9 pt\n(shortfall vs. ideal: 2.9 pts)", fontsize=9, color="#555555", ha="center")
+ax2.text(
+    0.75,
+    0.984,
+    "NPoM integration cost: 0.9 pt\n(shortfall vs. ideal: 2.9 pts)",
+    fontsize=9,
+    color="#555555",
+    ha="center",
+)
 ax2.set_xlabel(r"$V_{\rm mode}$ (nm$^3$)", color=FG, fontsize=11)
 ax2.set_ylabel(r"$\Phi_{\rm FT}^{\rm global}$", color=FG, fontsize=12)
 ax2.set_title("(b) Global: flat at 97.1% across the scan", color=FG, fontsize=12, pad=6)
@@ -80,7 +87,7 @@ ax2.set_yticks([0.96, 0.97, 0.98, 0.99, 1.00])
 fig.text(
     0.5,
     0.005,
-    r"MesoHOPS PT-HOPS/SBD | L=8, K=2, T=295 K, t$_{\rm max}$=1000 fs, $n$=20 — Paper 2 AE",
+    r"MesoHOPS PT-HOPS/SBD | L=8, K=2, T=295 K, t$_{\rm max}$=1000 fs, $n$=20",
     ha="center",
     fontsize=9,
     color="#555555",

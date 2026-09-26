@@ -3,6 +3,7 @@ import os
 import pytest
 
 from src.config_loader import load_config
+from src.iot_security import qkd as qkd_module
 from src.iot_security.qkd import Bb84Protocol, SecurityThresholdExceeded
 from src.iot_security.sensing import (
     DynamicCalibrator,
@@ -76,6 +77,62 @@ def test_bb84_qkd_protocol():
         qkd_fail.simulate_key_exchange(seed=101)
     assert "Irrigation command relay halted" in str(exc_info.value)
     assert "fiber" in str(exc_info.value)  # channel type in message
+
+
+def _spy_wilson(monkeypatch) -> dict:
+    """Record the (errors, n) the protocol fed to the Wilson bound."""
+    seen: dict = {}
+    real = qkd_module.wilson_upper_bound
+
+    def spy(errors: int, n: int, z: float = 1.96) -> float:
+        seen["errors"], seen["n"] = errors, n
+        return real(errors, n, z)
+
+    monkeypatch.setattr(qkd_module, "wilson_upper_bound", spy)
+    seen["_real"] = real
+    return seen
+
+
+def test_bb84_sample_size_is_at_least_128_bits_and_reports_wilson_ub(monkeypatch):
+    """SI S6: parameter estimation discloses >= 128 bits at N = 256, and the
+    result dict carries both the point-estimate QBER and its Wilson UB."""
+    config_path = os.path.join(os.path.dirname(__file__), "../../parameters.yaml")
+    config = load_config(config_path)
+
+    qkd = Bb84Protocol(config)
+    qkd.noise_rate = 0.02
+    seen = _spy_wilson(monkeypatch)
+    res = qkd.simulate_key_exchange(seed=101)
+
+    assert seen["n"] >= 128  # sample-size path is no longer capped at 50
+    assert res["status"] == "SUCCESS"
+    assert res["qber"] == pytest.approx(seen["errors"] / seen["n"])
+    assert res["qber_wilson_ub"] == pytest.approx(seen["_real"](seen["errors"], seen["n"]))
+    assert res["qber"] <= res["qber_wilson_ub"] <= config.security.qkd.security_threshold
+
+
+def test_bb84_aborts_on_wilson_upper_bound_even_when_point_qber_passes(monkeypatch):
+    """qber = 0.09375 at n = 128 (12 bit errors) is below the 11% point-estimate
+    threshold, but its Wilson 95% upper bound is ~0.157 > 0.11 — the session
+    must abort on the upper bound, not on the raw point estimate (SI S6)."""
+    config_path = os.path.join(os.path.dirname(__file__), "../../parameters.yaml")
+    config = load_config(config_path)
+
+    qkd = Bb84Protocol(config)
+    qkd.noise_rate = 0.09
+    seen = _spy_wilson(monkeypatch)
+
+    with pytest.raises(SecurityThresholdExceeded) as exc_info:
+        qkd.simulate_key_exchange(seed=0)
+
+    point_estimate = seen["errors"] / seen["n"]
+    wilson_ub = seen["_real"](seen["errors"], seen["n"])
+    assert seen["n"] == 128
+    assert point_estimate == pytest.approx(0.09375)  # would have passed on its own
+    assert point_estimate < config.security.qkd.security_threshold
+    assert wilson_ub > config.security.qkd.security_threshold
+    assert "Wilson 95% upper bound" in str(exc_info.value)  # message names the rule
+    assert "Irrigation command relay halted" in str(exc_info.value)
 
 
 def test_dynamic_calibrator():

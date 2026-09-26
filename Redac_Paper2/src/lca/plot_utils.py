@@ -2,7 +2,7 @@
 
 Produces 3-panel figures matching the manuscript caption descriptions:
   Figure 1: 3 panels — (a) Energy level diagram, (b) Population dynamics, (c) RC yield
-  Figure 2: 3 panels — (a) Floquet Stark, (b) OMIT, (c) SERS spectrum
+  Figure 2: 3 panels — (a) Floquet Stark, (b) Optical Limiting, (c) SERS spectrum
   Figure 3: 3 panels — (a) ET comparison, (b) NEB comparison, (c) Cooperative payback
 """
 
@@ -153,12 +153,14 @@ class Paper2FigureGenerator:
         n_sites = populations.shape[1]
         for i in range(n_sites):
             label = f"Site {i + 1}" if i < FMO_NSITES else "Plasmon"
+            is_plasmon = i >= FMO_NSITES
             ax2.plot(
                 time_pts,
                 populations[:, i],
                 label=label,
                 linewidth=1.8,
-                color=COLORS[i % len(COLORS)],
+                color="#8c0d1e" if is_plasmon else COLORS[i % len(COLORS)],
+                linestyle="--" if is_plasmon else "-",
             )
         ax2.set_xlabel("Time (fs)", fontweight="bold")
         ax2.set_ylabel("Population Probability", fontweight="bold")
@@ -193,7 +195,7 @@ class Paper2FigureGenerator:
     # ── Figure 2: SERS Readout (3 panels) ──────────────────────────────────
 
     def plot_figure_2_sers_readout(self, raman_spectrum: dict) -> str:
-        """3-panel figure: (a) Floquet Stark, (b) OMIT, (c) SERS spectrum."""
+        """3-panel figure: (a) Floquet Stark, (b) Optical Limiting, (c) SERS spectrum."""
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 5))
 
         # Panel (a): Floquet Stark detuning
@@ -217,7 +219,7 @@ class Paper2FigureGenerator:
         ax1.grid(True, alpha=0.3)
         ax1.legend(frameon=False, fontsize=8)
 
-        # Panel (b): OMIT transmission
+        # Panel (b): optical limiting  T = T0 / (1 + I / I_sat)
         T0 = 1.0
         I_sat = 800.0
         T_omit = T0 / (1.0 + flux / I_sat)
@@ -227,7 +229,7 @@ class Paper2FigureGenerator:
         ax2.fill_between(flux, 0, T_omit, alpha=0.15, color="#DD8452")
         ax2.set_xlabel("Solar Flux (W/m²)", fontweight="bold")
         ax2.set_ylabel("Normalised Transmission T/T₀", fontweight="bold")
-        ax2.set_title("(b) OMIT Modulation", loc="left", fontweight="bold")
+        ax2.set_title("(b) Optical Limiting", loc="left", fontweight="bold")
         ax2.grid(True, alpha=0.3)
         ax2.legend(frameon=False, fontsize=8)
 
@@ -248,6 +250,8 @@ class Paper2FigureGenerator:
 
         max_int = max(intensities) if intensities else 1.0
         y_off = max_int * 0.03
+        # Headroom so the value labels and the LOD callouts never collide.
+        ax3.set_ylim(0.0, max_int * 1.4)
         for bar_i, val in zip(bars, intensities, strict=False):
             if val < 0.001:
                 ax3.annotate(
@@ -270,24 +274,26 @@ class Paper2FigureGenerator:
                     fontsize=8,
                 )
 
+        # LOD callouts sit above the value labels; arrows land on the outer edge
+        # of each bar so they never cross the value text.
         ax3.annotate(
             "LOD = 1 nM",
-            xy=(3, intensities[3]),
+            xy=(3 + bars[3].get_width() / 2, intensities[3]),
             fontsize=7,
             color="#DD8452",
             fontweight="bold",
-            xytext=(30, 8),
+            xytext=(0, 42),
             textcoords="offset points",
             ha="center",
             arrowprops={"arrowstyle": "->", "color": "#DD8452", "lw": 0.6},
         )
         ax3.annotate(
             "LOD = 31.8 nM",
-            xy=(4, intensities[4]),
+            xy=(4 - bars[4].get_width() / 2, intensities[4]),
             fontsize=7,
             color="#937860",
             fontweight="bold",
-            xytext=(-30, 8),
+            xytext=(0, 42),
             textcoords="offset points",
             ha="center",
             arrowprops={"arrowstyle": "->", "color": "#937860", "lw": 0.6},
@@ -298,7 +304,7 @@ class Paper2FigureGenerator:
             Patch(facecolor="#DD8452", label="2,4,5-T (SERS)"),
             Patch(facecolor="#937860", label="Pb$^{2+}$ CQD (fluor.)"),
         ]
-        ax3.legend(handles=legend_elements, loc="upper right", frameon=False, fontsize=7)
+        ax3.legend(handles=legend_elements, loc="upper left", frameon=False, fontsize=7)
         ax3.set_ylabel("Intensity / Response (a.u.)", fontweight="bold")
         ax3.set_title("(c) In Situ SERS Diagnostics", loc="left", fontweight="bold")
         ax3.grid(axis="y", alpha=0.3)
@@ -366,7 +372,10 @@ class Paper2FigureGenerator:
             arrowprops={"arrowstyle": "<->", "color": "#2ca02c", "lw": 1.5},
         )
         ax1.set_ylabel("Evapotranspiration ET$_c$ (mm/day)", fontweight="bold")
-        ax1.set_title("(a) Water Savings", loc="left", fontweight="bold")
+        # Headroom: keeps the "4.5 mm/day" bar label, the reduction arrow and the
+        # title on separate rows instead of stacking into the title.
+        ax1.set_ylim(0.0, max(et_values) * 1.3)
+        ax1.set_title("(a) Water Savings", loc="left", fontweight="bold", pad=8)
         ax1.grid(axis="y", alpha=0.3)
 
         # Panel (b): NEB comparison (twin-axis)
@@ -420,14 +429,16 @@ class Paper2FigureGenerator:
                 color=COLORS[1],
             )
         ax2.set_ylabel(
-            "Avoided Emissions (kg CO$_2$e / m$^2$ yr)", color=COLORS[0], fontweight="bold"
+            "Net Ecological Benefit (kg CO$_2$e m$^{-2}$ yr$^{-1}$)",
+            color=COLORS[0],
+            fontweight="bold",
         )
         ax2.tick_params(axis="y", labelcolor=COLORS[0])
-        ax2b.set_ylabel("Crop Biomass (kg / m$^2$ yr)", color=COLORS[1], fontweight="bold")
+        ax2b.set_ylabel("Crop Biomass (kg m$^{-2}$ yr$^{-1}$)", color=COLORS[1], fontweight="bold")
         ax2b.tick_params(axis="y", labelcolor=COLORS[1])
         ax2.set_xticks(x)
         ax2.set_xticklabels(scenarios, fontweight="bold")
-        ax2.set_title("(b) NEB Scenario Comparison", loc="left", fontweight="bold")
+        ax2.set_title("(b) NEB Scenario Comparison", loc="left", fontweight="bold", pad=8)
         lines1, labels1 = ax2.get_legend_handles_labels()
         lines2, labels2 = ax2b.get_legend_handles_labels()
         ax2.legend(lines1 + lines2, labels1 + labels2, loc="upper right", frameon=False, fontsize=8)
@@ -439,32 +450,32 @@ class Paper2FigureGenerator:
                 subsidy_rates, coop_sizes, payback_matrix = curves
 
         if subsidy_rates is not None and payback_matrix is not None and coop_sizes is not None:
-            coop_colors = ["#d62728", "#ff7f0e", "#2ca02c", "#4C72B0"]
-            for i, n_coop in enumerate(coop_sizes):
-                ax3.plot(
-                    subsidy_rates * 100,
-                    payback_matrix[i, :],
-                    label=f"{n_coop} member{'s' if n_coop > 1 else ''}",
-                    color=coop_colors[i % len(coop_colors)],
-                    linewidth=2.0,
-                )
+            # Payback is cooperative-size independent (both net capex and net
+            # cashflow scale as 1/n, so n cancels) — all rows of the matrix are
+            # identical. Plot a single n=5 curve instead of 4 overlapping ones.
             ref_subsidy = 30.0
             ref_coop = 5
-            if ref_coop in list(coop_sizes):
-                ref_idx = list(coop_sizes).index(ref_coop)
-                ref_payback = np.interp(
-                    ref_subsidy, subsidy_rates * 100, payback_matrix[ref_idx, :]
-                )
-                ax3.plot(ref_subsidy, ref_payback, "o", color="#2ca02c", markersize=8, zorder=5)
-                ax3.annotate(
-                    f"5 members, 30%\\n= {ref_payback:.2f} yr",
-                    xy=(ref_subsidy, ref_payback),
-                    xytext=(ref_subsidy + 8, ref_payback + 0.8),
-                    fontsize=8,
-                    fontweight="bold",
-                    color="#2ca02c",
-                    arrowprops={"arrowstyle": "->", "color": "#2ca02c", "lw": 0.8},
-                )
+            sizes = list(coop_sizes)
+            ref_idx = sizes.index(ref_coop) if ref_coop in sizes else 0
+            n_ref = int(sizes[ref_idx])
+            ax3.plot(
+                subsidy_rates * 100,
+                payback_matrix[ref_idx, :],
+                label="cooperative payback",
+                color="#4C72B0",
+                linewidth=2.0,
+            )
+            ref_payback = np.interp(ref_subsidy, subsidy_rates * 100, payback_matrix[ref_idx, :])
+            ax3.plot(ref_subsidy, ref_payback, "o", color="#2ca02c", markersize=8, zorder=5)
+            ax3.annotate(
+                f"{n_ref} member{'s' if n_ref > 1 else ''}, 30%\n= {ref_payback:.2f} yr",
+                xy=(ref_subsidy, ref_payback),
+                xytext=(ref_subsidy + 8, ref_payback + 0.8),
+                fontsize=8,
+                fontweight="bold",
+                color="#2ca02c",
+                arrowprops={"arrowstyle": "->", "color": "#2ca02c", "lw": 0.8},
+            )
             ax3.legend(frameon=False, fontsize=8)
         else:
             # Fallback: simple payback bar chart

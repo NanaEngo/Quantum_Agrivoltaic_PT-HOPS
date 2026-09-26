@@ -208,7 +208,7 @@ check("Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunct
       "SM header mirrors the reviewed title")
 check("factor of 1.6 and the SERS enhancement by a factor of 48" in ms_content
       and "costs only 0.9 points globally" in ms_content
-      and "canopy-yield cost of 0.9\\%" in ms_content
+      and "canopy-yield cost of \\qty{0.9}{\\percent}" in ms_content
       and "0.9-point canopy-scale cost" in ms_content,
       "Quantified counterfactual costs present in the three gaps (0.9-pt NPoM cost vs 2.9-pt ideal shortfall)")
 check(all(f in ms_content for f in ["(F1) Microscopic", "(F2) Device", "(F3) System"]),

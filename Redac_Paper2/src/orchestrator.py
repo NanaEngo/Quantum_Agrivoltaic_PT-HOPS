@@ -372,6 +372,10 @@ def run_global_simulation(solar_flux: float) -> None:
         power_generated_kwh_std=power_kwh * 0.1,
         crop_biomass_kg_mean=lca_params.reference_biomass_kg,
         crop_biomass_kg_std=lca_params.reference_biomass_kg * 0.1,
+        capex_mean=lca_params.default_capex,
+        capex_std=lca_params.capex_std,
+        revenue_mean=lca_params.default_annual_revenue,
+        revenue_std=lca_params.revenue_std,
         n_iterations=10000,
     )
     logger.info(

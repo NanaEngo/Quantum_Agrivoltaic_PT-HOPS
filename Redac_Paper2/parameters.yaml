@@ -15,7 +15,7 @@ quantum:
     sbd_bundles_per_site: 3  # SBD compression bundles (Paper 1 standard)
   fmo:
     sites: 8
-    coupling_reaction_center: 0.15  # Gamma_RC in ps-1
+    coupling_reaction_center: 0.15  # Gamma_RC in fs-1 (tau = 6.7 fs); manuscript and constants.py use fs-1
     mode_volume_nm3: 0.8
   floquet:
     driving_amplitude: 0.05
