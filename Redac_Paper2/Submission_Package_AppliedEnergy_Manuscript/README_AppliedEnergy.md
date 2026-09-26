@@ -12,10 +12,10 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
   `Implementation_Plan_AppliedEnergy_260923.md` §12–§16): numeric-consistency
   audit, horticulture-only scenario (tomato benchmark removed), condensed
   "Experimental testability" subsection + benchmark table (from the QST
-  package), PQC-vs-BB84 justification in Limitations. 35 pp, 0 error,
+  package), PQC-vs-BB84 justification in Limitations. 39 pp, 0 error,
   0 overfull.
 - `AppliedEnergy_SM_2609.tex` : "Supplementary Material" (Elsevier terminology, retitled
-  2026-09-23; not "Supporting Information"). 24 pp, 0 error, 0 overfull.
+  2026-09-23; not "Supporting Information"). 25 pp, 0 error, 0 overfull.
 - `AppliedEnergy_Cover_letter.tex` : 1 page, structured on the 5 questions
   required by the AE Guide for Authors (novelty, audience, importance,
   native-speaker check, reviewer availability).
@@ -36,12 +36,14 @@ targeting a Q1 journal with a good IF and no APC for Cameroon).
 - Canonical NPoM yield at V_mode = 1.2 nm³: **0.0799** (−91.8 % vs passive).
 - Γ_RC = 0.15 **fs⁻¹** effective (τ_trap ≈ 6.7 fs) — corrected 2026-09-25 from
   the printed "0.15 ps⁻¹", which contradicted Eq. (3) (bound 0.15).
-- Economic chain re-derived 2026-09-25: water credit **474.5 L/m²/yr**
-  (1.3 mm/day × 365; corrects the ×365 error of the old 1300 L figure);
+- Economic chain re-derived 2026-09-25, audited 2026-09-26: water credit
+  **460 L/m²/yr** (1.26 mm/day × 365; ET open 4.50 − shield 3.24 mm/day at
+  Rn = 14.05 MJ/m²/day, f_shade = 0.41 = GCR(1−τ_AVT));
   electricity **180 kWh/m²/yr** guaranteed-yield account (revenue = carbon);
   **NEB_A = 72.6** / NEB_B = 84.2 kgCO₂e/m²/yr; Scenario B biomass **8.2**
-  (0.8 × 0.98/0.95); revenue **30 090 USD**, paybacks **4.32 / 6.17 / 2.68 yr**,
-  NPV **+34 714 USD**, carbon credits **363 USD/yr (1.4 %)**.
+  (0.8 × 0.98/0.95); revenue **30 075 USD** (fertilizer stream excluded),
+  paybacks **4.32 / 6.17 / 2.68 yr**, NPV **+34 630 USD**,
+  carbon credits **363 USD/yr (1.4 %)**.
 - No coherence-derived crop gain is monetized: crop production is the
   horticultural standard (8.2 kg/m²/yr) + quantum-fertiliser channel only
   (0.96 kg/m²/yr, Scenario A).

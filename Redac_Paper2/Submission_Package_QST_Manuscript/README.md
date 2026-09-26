@@ -9,8 +9,8 @@ from the Nature Energy base. Target: IOP QST (subscription, $0 APC).
   0 undefined). Reconciled 2026-09-23 to the corrected-yield canon: Φ_FT
   equation without prefactor 2, Table 2 canonical 7-point volume scan
   (0.0505 → 0.0799, monotone), Φ_global = 0.971, η_shield (1−η) semantics.
-  Re-derived 2026-09-25: water credit 474.5 L/m²/yr (1.3 mm/day × 365),
-  revenue 30 090 USD, paybacks 4.32/6.17/2.68 yr, NEB_A 72.6 kgCO₂e/m²/yr.
+  Re-derived 2026-09-25: water credit 460 L/m²/yr (1.26 mm/day × 365),
+  revenue 30 075 USD, paybacks 4.32/6.17/2.68 yr, NEB_A 72.6 kgCO₂e/m²/yr.
 - `SI.tex` : 30 pp, 0 error. Same reconciliation (0.1599/83.7 % →
   0.0799/91.8 %).
 - `Cover_Letter_QST.tex` : 2 pp, EIC, subscription route, 5 suggested
@@ -49,10 +49,10 @@ since been removed):
   global canopy yield **0.971**.
 - Γ_RC = 0.15 **fs⁻¹** effective (τ_trap ≈ 6.7 fs) — corrected 2026-09-25
   from the printed "0.15 ps⁻¹".
-- Water credit **474.5 L/m²/yr** (1.3 mm/day × 365; corrects the ×365 error
+- Water credit **460 L/m²/yr** (1.26 mm/day × 365; corrects the ×365 error
   of the old 1300 L figure); electricity **180 kWh/m²/yr** guaranteed-yield
-  account; **NEB_A = 72.6** kgCO₂e/m²/yr; revenue **30 090 USD**, paybacks
-  **4.32 / 6.17 / 2.68 yr**, NPV **+34 714 USD**; no coherence-derived crop
+  account; **NEB_A = 72.6** kgCO₂e/m²/yr; revenue **30 075 USD**, paybacks
+  **4.32 / 6.17 / 2.68 yr**, NPV **+34 630 USD**; no coherence-derived crop
   gain monetized.
 - **Do not use July-2026 `scan_A*` HDF5 `rc_yield` values raw** — divide by 2
   or re-run with the corrected code.

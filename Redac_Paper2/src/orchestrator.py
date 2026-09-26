@@ -32,9 +32,9 @@ from .constants import (
     MAX_TRAPPING_YIELD,
     MM_TO_LITER_PER_M2,
     N_DIM_DRESSED,
+    PEAK_SUN_HOURS,
     PLASMON_INDEX,
     TRAPPING_SITES,
-    WIND_SPEED_GREENHOUSE_FACTOR,
 )
 from .lca.neb import NetEcologicalBenefit
 from .lca.plot_utils import Paper2FigureGenerator
@@ -297,27 +297,48 @@ def run_global_simulation(solar_flux: float) -> None:
     _t_phase = _time.time()
 
     climate = GreenhouseEvapotranspiration(config)
-    effective_transmission = floquet_switch.apply_omit_attenuation(
+    # Optical limiting applies to the 750/820 nm passbands only (quantum
+    # channel readout) — it never gates the broadband energy balance.
+    passband_transmission = floquet_switch.apply_optical_limiting(
         solar_flux, baseline_transmission=BASELINE_TRANSMISSION
     )
-    solar_flux_greenhouse = solar_flux * effective_transmission
+    # Peak -> 24-h mean GHI: FAO-56 consumes the 24-h mean (W/m2),
+    # daily_mean = peak * PEAK_SUN_HOURS / 24 (5.76 kWh/m2/day = 240 W/m2 mean).
+    solar_flux_greenhouse = solar_flux * PEAK_SUN_HOURS / 24.0
 
     mc = config.microclimate
-    wind_greenhouse = mc.default_wind_speed_m_s * WIND_SPEED_GREENHOUSE_FACTOR
-    et_rate = climate.calculate_evapotranspiration(
+    # Free-stream reference wind u = 2.0 m/s for BOTH open and shielded fields
+    # (manuscript reference comparison; matches reference_conditions_et()).
+    wind_reference_m_s = 2.0
+    et_open = climate.calculate_evapotranspiration(
         solar_flux_w_m2=solar_flux_greenhouse,
         temp_c=mc.default_temp_c,
         relative_humidity_pct=mc.default_rh_pct,
-        wind_speed_m_s=wind_greenhouse,
+        wind_speed_m_s=wind_reference_m_s,
     )
-    logger.info("[8/10] FAO-56 ET_c: %.4f mm/day (%s)", et_rate, f"{_time.time() - _t_phase:.1f}s")
+    et_shield = climate.calculate_evapotranspiration(
+        solar_flux_w_m2=solar_flux_greenhouse,
+        temp_c=mc.default_temp_c,
+        relative_humidity_pct=mc.default_rh_pct,
+        wind_speed_m_s=wind_reference_m_s,
+        shading_factor=climate.shading_factor,
+    )
+    logger.info(
+        "[8/10] FAO-56 ET_c: open %.4f / shield %.4f mm/day (passband T/T0=%.3f) (%s)",
+        et_open,
+        et_shield,
+        passband_transmission,
+        f"{_time.time() - _t_phase:.1f}s",
+    )
     _t_phase = _time.time()
 
     lca_calc = NetEcologicalBenefit(config)
     lca_params = config.lca
     power_kwh = power_soiled_kwh  # V5: use soiling-adjusted power
-    baseline_water_mm = mc.baseline_water_mm
-    water_saved_l = max(0.0, baseline_water_mm - et_rate) * MM_TO_LITER_PER_M2
+    # Water baseline = the OPEN-FIELD ET from the same FAO-56 path (shading 0),
+    # replacing the hardcoded 5.0 mm/day. Per-tick saving = open - shield =
+    # 1.2598 mm/day -> 1.2598 L/m2/day (mm -> L/m2 is x1).
+    water_saved_l = max(0.0, et_open - et_shield) * MM_TO_LITER_PER_M2
 
     neb_results = lca_calc.calculate_scenario_neb(
         scenario="A",
@@ -375,9 +396,14 @@ def run_global_simulation(solar_flux: float) -> None:
     _t_phase = _time.time()
 
     gravimeter = QuantumGravimeter(config)
-    irrigation_saving_m3 = water_saved_l * config.lca.cooperative.area_m2 / 1000.0
+    # Annual recharge volume (manuscript: 230 m3/yr) = per-day saving x 365 d
+    # x 500 m2 / 1000; the gravimeter integrates that volume over the SAME
+    # footprint (Bouguer slab) -> d_g ~ 0.2 um/s2 confined to 500 m2.
+    annual_irrigation_m3 = water_saved_l * 365.0 * config.lca.cooperative.area_m2 / 1000.0
     aquifer_result = gravimeter.estimate_aquifer_recharge(
-        irrigation_saving_m3=irrigation_saving_m3, n_gravimeters=3
+        irrigation_saving_m3=annual_irrigation_m3,
+        catchment_area_m2=config.lca.cooperative.area_m2,
+        n_gravimeters=3,
     )
     logger.info(
         "[9d/10] Quantum gravimetry — Δg=%.2e m/s², detectable=%s, SNR=%.1f (%s)",

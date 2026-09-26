@@ -20,6 +20,7 @@ from matplotlib.patches import Patch
 
 from ..config_loader import ConfigModel, load_config
 from ..logging_config import get_logger
+from ..microclimate.fao56 import reference_conditions_et
 
 logger = get_logger("plot_utils")
 
@@ -38,6 +39,10 @@ from ..constants import (
 )
 
 MODE_VOLUME_NM3 = 0.8  # Default production mode volume
+
+# Published reference ET pair (open field vs OPV smart shield), computed once at
+# import from the FAO-56 reference conditions — no hardcoded literals.
+_REF_ET = reference_conditions_et()
 
 
 def _compute_dressed_eigenvalues() -> np.ndarray:
@@ -194,7 +199,7 @@ class Paper2FigureGenerator:
         # Panel (a): Floquet Stark detuning
         flux = np.linspace(0, 1200, 200)
         V0 = 0.05
-        I_threshold = 800.0
+        I_threshold = 850.0  # switch-on (release = 750 W/m2, hysteresis dead band)
         V_eff = V0 / (1.0 + np.exp(-(flux - I_threshold) / 30.0))
         V_eff -= V_eff[0]
         ax1.plot(flux, V_eff, color="#4C72B0", linewidth=2.5)
@@ -319,8 +324,8 @@ class Paper2FigureGenerator:
         scenario_b: dict,
         scenario_c: dict,
         *,
-        et_open_field: float = 4.5,
-        et_smart_shield: float = 3.2,
+        et_open_field: float = _REF_ET["et_open"],
+        et_smart_shield: float = _REF_ET["et_shield"],
         subsidy_rates: np.ndarray | None = None,
         payback_matrix: np.ndarray | None = None,
         coop_sizes: np.ndarray | None = None,

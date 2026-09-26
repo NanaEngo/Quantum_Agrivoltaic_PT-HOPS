@@ -1,7 +1,3 @@
-Highlights — Applied Energy submission
-Title: Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit, and Quantum-Secured Telemetry
-(3–5 bullets, max 85 characters each)
-
 - Dual-band filtering at 750/820 nm extends FMO coherence by 50% at 295 K.
 - NPoM cavity enables SERS crop diagnostics; transport trade-off quantified.
 - OPV shield cuts evapotranspiration 28% (FAO-56); NEB 72.6 kgCO2e/m2/yr.

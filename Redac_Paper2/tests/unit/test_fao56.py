@@ -1,9 +1,20 @@
 import os
 
+import pytest
+
 from src.config_loader import load_config
 from src.lca.database import AmortizationAnalysis
 from src.lca.neb import NetEcologicalBenefit
-from src.microclimate.fao56 import GreenhouseEvapotranspiration
+from src.microclimate.fao56 import GreenhouseEvapotranspiration, reference_conditions_et
+
+
+def test_reference_conditions_et():
+    """Published ET chain: open 4.50 / shield 3.24 mm/day, -27.9 %, 460 L/m2/yr."""
+    ref = reference_conditions_et()
+    assert ref["et_open"] == pytest.approx(4.50, abs=0.02)
+    assert ref["et_shield"] == pytest.approx(3.24, abs=0.02)
+    assert ref["saving_l_per_m2_yr"] == pytest.approx(459.9, abs=3.0)
+    assert ref["reduction_pct"] == pytest.approx(27.9, abs=0.5)
 
 
 def test_greenhouse_evapotranspiration():

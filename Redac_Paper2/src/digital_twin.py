@@ -115,19 +115,30 @@ class DigitalTwin:
         )
 
         # 6. FAO-56 evapotranspiration with fused climate inputs
-        from .constants import WIND_SPEED_GREENHOUSE_FACTOR
+        from .constants import MM_TO_LITER_PER_M2, PEAK_SUN_HOURS
 
-        wind_greenhouse = (
-            self.config.microclimate.default_wind_speed_m_s * WIND_SPEED_GREENHOUSE_FACTOR
-        )
+        # Free-stream reference wind u = 2.0 m/s for BOTH open and shielded
+        # fields (manuscript reference comparison; matches
+        # microclimate.fao56.reference_conditions_et()).
+        wind_reference_m_s = 2.0
+        # Peak -> 24-h mean GHI (optical limiting applies to the 750/820 nm
+        # passbands only, never to the broadband energy balance).
+        et_kwargs = {
+            "solar_flux_w_m2": solar_flux * PEAK_SUN_HOURS / 24.0,
+            "temp_c": adj_temp,
+            "relative_humidity_pct": adj_rh,
+            "wind_speed_m_s": wind_reference_m_s,
+        }
+        # Water baseline = OPEN-FIELD ET from the same FAO-56 path (shading 0),
+        # replacing the hardcoded 5.0 mm/day.
+        et_open = self.climate.calculate_evapotranspiration(shading_factor=0.0, **et_kwargs)
+        # The twin reports the shielded-canopy ET (NPoM/OPV shield installed).
         et_rate = self.climate.calculate_evapotranspiration(
-            solar_flux_w_m2=solar_flux,
-            temp_c=adj_temp,
-            relative_humidity_pct=adj_rh,
-            wind_speed_m_s=wind_greenhouse,
+            shading_factor=self.climate.shading_factor, **et_kwargs
         )
-        baseline_water_mm = self.config.microclimate.baseline_water_mm
-        water_saved = max(0.0, baseline_water_mm - et_rate) * 1000.0  # L/m²
+        # Per-tick saving = open - shield = 1.2598 mm/day -> 1.2598 L/m2/day
+        # (mm -> L/m2 is x1); x365 d = 459.8 L/m2/yr (published water credit).
+        water_saved = max(0.0, et_open - et_rate) * MM_TO_LITER_PER_M2  # L/m²
 
         # 7. LCA
         neb = self.lca.calculate_scenario_neb(

@@ -40,6 +40,7 @@ class QuantumSection(BaseModel):
 class SimulationSection(BaseModel):
     temperature_k: float = Field(..., gt=0.0)
     solar_flux_threshold: float = Field(..., ge=0.0)
+    solar_flux_release: float = Field(default=750.0, ge=0.0)  # hysteresis switch-off
 
 
 class GreenhouseConfig(BaseModel):
@@ -52,8 +53,6 @@ class MicroclimateSection(BaseModel):
     greenhouse: GreenhouseConfig
     default_temp_c: float = 25.0
     default_rh_pct: float = 60.0
-    default_wind_speed_m_s: float = 1.5
-    baseline_water_mm: float = 5.0
 
 
 class CooperativeConfig(BaseModel):

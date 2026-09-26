@@ -4,6 +4,13 @@
 % Target: Nature Energy
 % Date:    June 25, 2026 (V5 Revision)
 % Authors: Teguia Kouam S.C., Goumai Vedekoi T., Tchapet Njafa J.-P.,
+%
+% SUPERSEDED 2026-09-26 -- ARCHIVED RECORD (declined transfer, APC route closed).
+% Live canonical package: Submission_Package_AppliedEnergy_Manuscript/.
+% Economics below (revenue 30612 USD, cashflow 26612, payback 4.23 yr,
+% water credit 1300 L/m2/yr) are the historical chain; current canon:
+% 460 L/m2/yr (230 m3/yr), f_shade 0.41, revenue 30075, cashflow 26075,
+% payback 4.32 yr, NPV +34630. Do not reuse the figures below.
 %          Nguenang J.-P., Nana Engo S.G.
 
 \documentclass[onecolumn,a4paper,12pt]{article}
@@ -308,10 +315,10 @@ We parameterize the greenhouse microclimate using the FAO-56 Penman--Monteith eq
 \mathrm{ET}_c = \frac{0.408 \Delta R_n + \gamma \frac{900}{T+273} u (e_s - e_a)}{\Delta + \gamma(1 + 0.34 u)} \, K_c,
 \label{eq:fao56}
 \end{equation}
-where $R_n$ is the net radiation attenuated by the OPV shading factor $f_{\mathrm{shade}} = 0.35$ (with soil heat flux $G \approx 0$ assumed for daily timescales under greenhouse shielding), $\Delta$ is the slope of the saturation vapor pressure curve, $\gamma$ is the psychrometric constant, $u$ is wind speed, $e_s - e_a$ is the vapor pressure deficit, and $K_c = 0.85$ is the crop coefficient.
+where $R_n$ is the net radiation attenuated by the OPV shading factor $f_{\mathrm{shade}} = 0.41$ (with soil heat flux $G \approx 0$ assumed for daily timescales under greenhouse shielding), $\Delta$ is the slope of the saturation vapor pressure curve, $\gamma$ is the psychrometric constant, $u$ is wind speed, $e_s - e_a$ is the vapor pressure deficit, and $K_c = 0.85$ is the crop coefficient.
 
 Under standard conditions (\qty{600}{\W\per\m\squared}, \qty{25}{\celsius}, \qty{60}{\percent} humidity, \qty{2}{\m\per\s} wind), the open-field evapotranspiration is \qty{4.5}{\mm\per\day}.
-With the OPV smart shield, $\mathrm{ET}_c$ drops to \qty{3.2}{\mm\per\day} --- a \qty{28}{\percent} reduction --- translating to \qty{1.3}{\mm\per\day} in water savings (\Cref{fig:lca_comparison}a).
+With the OPV smart shield, $\mathrm{ET}_c$ drops to \qty{3.2}{\mm\per\day} --- a \qty{28}{\percent} reduction --- translating to \qty{1.26}{\mm\per\day} in water savings (\Cref{fig:lca_comparison}a).
 The crop coefficient $K_c = 0.85$ accounts for the reduced transpiration demand under partial shade~\cite{Allen1998}.
 
 \subsection*{Socioeconomic viability and cooperative payback}
@@ -320,7 +327,7 @@ Socioeconomic analysis (\Cref{SI-sec:socioeconomic}) is rescaled to a \qty{500}{
 A blended-finance subsidy of \qty{30}{\percent} reduces the net CAPEX to \qty{112700}{\USD}.
 
 Two operating expenditure streams are modeled: extension services and technician training (\qty{1200}{\USD\per\yr}) and OPV panel cleaning (\qty{800}{\USD\per\yr}), for a total annual OPEX of \qty{4000}{\USD\per\yr}.
-The net annual cash flow of \qty{26612}{\USD\per\yr} (from \qty{30612}{\USD\per\yr} total revenue minus \qty{4000}{\USD} dual OPEX) yields a simple payback period of \qty{4.23}{\yr} (or \qty{6.05}{\yr} without subsidy) and a 10-year discounted NPV of $+$\qty{37664}{\USD} at a \qty{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} (\Cref{fig:lca_comparison}c).
+The net annual cash flow of \qty{26612}{\USD\per\yr} (from \qty{30612}{\USD\per\yr} total revenue minus \qty{4000}{\USD} dual OPEX) yields a simple payback period of \qty{4.23}{\yr} (or \qty{6.05}{\yr} without subsidy) and a 10-year discounted NPV of $+$\qty{37664}{\USD} at a \qty{12}{\percent} risk-adjusted discount rate (\Cref{fig:lca_comparison}c).
 While a baseline CAPEX of \qty{322}{\per\m\squared} represents a significant barrier in Sub-Saharan Africa relative to local income levels, utilizing local construction materials (such as bamboo and timber framing instead of structural steel) and green chemical synthesis of gold nanoparticles from local plant extracts can reduce the capital cost to \qty{140}{\per\m\squared}, lowering the unsubsidized payback period to \qty{2.63}{\yr} and making the system highly viable for local cooperatives.
 This is \qty{1.9}{\times} shorter than the \qty{8.0}{\yr} payback for the unsubsidized 1-ha tomato scenario, demonstrating that high-value crop selection and blended-finance structurally transform the investment case.
 
@@ -404,8 +411,8 @@ Crop evapotranspiration is computed using the standard FAO-56 Penman--Monteith e
 \begin{equation}
 \mathrm{ET}_c = \frac{0.408 \Delta R_n + \gamma \frac{900}{T+273} u (e_s - e_a)}{\Delta + \gamma(1 + 0.34 u)} \, K_c,
 \end{equation}
-with $R_n$ attenuated by the OPV shading factor $f_{\mathrm{shade}} = 0.35$.
-We note that the modified FAO-56 formulation represents a first-order approximation; under the enclosed high-tunnel envelope, boundary layer resistance and sensible heat exchange are altered relative to open field conditions. Future iterations of the digital twin should integrate three-dimensional Computational Fluid Dynamics (CFD) modeling to map localized microclimatic gradients and latent heat transfer. Wind speed within the greenhouse is modeled at a static representative value of $u = \qty{0.5}{\m\per\s}$, corresponding to a typical $\qty{10}{\percent}$ reduction of average external wind velocities.
+with $R_n$ attenuated by the OPV shading factor $f_{\mathrm{shade}} = 0.41$.
+We note that the modified FAO-56 formulation represents a first-order approximation; under the enclosed high-tunnel envelope, boundary layer resistance and sensible heat exchange are altered relative to open field conditions. Future iterations of the digital twin should integrate three-dimensional Computational Fluid Dynamics (CFD) modeling to map localized microclimatic gradients and latent heat transfer. Wind speed is held at the free-stream value $u = \qty{2.0}{\m\per\s}$ and evaluated identically for the open and shielded fields, so that the reported reduction isolates the radiative effect of the array; varying $u$ over \qtyrange{1.5}{2.5}{\m\per\s} shifts the reduction over \qtyrange{25.9}{30.4}{\percent}, i.e.\ the $\pm\qty{10}{\percent}$ band.
 Temperature is fixed at \qty{25}{\celsius} and relative humidity at \qty{60}{\percent} unless specified otherwise.
 
 \subsection*{BB84 QKD simulation and fail-safe IoT architecture}

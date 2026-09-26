@@ -451,15 +451,15 @@ where $C_{\mathrm{OPEX}}$ comprises extension services and technician training (
 
 \begin{itemize}
 \item \textbf{Electricity:} \qty{180}{\kWh\per\m\squared\per\yr} at \qty{0.12}{\per\kWh} = \qty{21.6}{\per\m\squared\per\yr}
-\item \textbf{Water savings:} \qty{474.5}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{0.95}{\per\m\squared\per\yr}
+\item \textbf{Water savings:} \qty{460}{\L\per\m\squared\per\yr} at \qty{0.002}{\per\L} = \qty{0.92}{\per\m\squared\per\yr}
 \item \textbf{Crop yield (high-value floriculture):} \qty{8.2}{\kg\per\m\squared\per\yr} at \qty{4.5}{\USD\per\kg} = \qty{36.9}{\per\m\squared\per\yr}, with the quantum-fertiliser channel contributing \qty{0.96}{\kg\per\m\squared\per\yr} (\qty{4.3}{\per\m\squared\per\yr}) when the CQD sentinel network is deployed (Scenario~A only)
 \item \textbf{Carbon credit (conservative):} \qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} at \qty{10}{\USD\per\tonne} = \qty{0.73}{\per\m\squared\per\yr}
 \end{itemize}
-For a \qty{500}{\m\squared} module, the total annual revenue is \qty{30090}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26090}{\USD}.
+For a \qty{500}{\m\squared} module, the total annual revenue is \qty{30075}{\USD}. Subtracting the \qty{4000}{\USD} OPEX yields a net annual cash flow of \qty{26075}{\USD}.
 
 \subsection{Payback periods and npv}
 
-For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \qty{112700}{\USD}$), the simple payback period is $\qty{112700}{\USD} / \qty{26090}{\USD\per\yr} \approx \qty{4.32}{\yr}$ for the single-owner baseline (or \qty{6.17}{\yr} without subsidy). Under the cooperative risk-sharing model, the \num{5} members pool resources and share the same subsidy, so each member's individual capital exposure drops to $\qty{22540}{\USD}$ at an identical \qty{4.32}{\yr} payback period — the cooperative's primary benefit is risk diversification and a lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \qty{12}{\percent} risk-adjusted discount rate appropriate for Sub-Saharan Africa~\cite{Ringstrom2026} is \qty{+34714}{\USD} when carbon credits are included. Although a baseline CAPEX of \qty{322}{\per\m\squared} is high relative to Sub-Saharan African living standards, localized adaptation --- such as using bamboo/timber supports instead of steel and green synthesis of gold nanoparticles from local plant extracts --- can reduce capital costs to \qty{140}{\per\m\squared}, reducing the unsubsidized payback period to \qty{2.68}{\yr}.
+For a \qty{500}{\m\squared} module under a \qty{30}{\percent} blended-finance subsidy ($C_{\mathrm{net}} = \qty{112700}{\USD}$), the simple payback period is $\qty{112700}{\USD} / \qty{26075}{\USD\per\yr} \approx \qty{4.32}{\yr}$ for the single-owner baseline (or \qty{6.17}{\yr} without subsidy). Under the cooperative risk-sharing model, the \num{5} members pool resources and share the same subsidy, so each member's individual capital exposure drops to $\qty{22540}{\USD}$ at an identical \qty{4.32}{\yr} payback period — the cooperative's primary benefit is risk diversification and a lower barrier to entry, not a shorter payback per se. The 10-year discounted NPV at a \qty{12}{\percent} risk-adjusted discount rate is \qty{+34630}{\USD} when carbon credits are included. Although a baseline CAPEX of \qty{322}{\per\m\squared} is high relative to Sub-Saharan African living standards, localized adaptation --- such as using bamboo/timber supports instead of steel and green synthesis of gold nanoparticles from local plant extracts --- can reduce capital costs to \qty{140}{\per\m\squared}, reducing the unsubsidized payback period to \qty{2.68}{\yr}.
 
 We propose a tiered subsidy framework where the NEB serves as the verifiable metric for subsidy qualification:
 
@@ -641,27 +641,27 @@ This region supports high-value floriculture (strawberries, cut flowers) suitabl
 
 \subsection{Water savings}
 
-Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline corresponds to \qty{1.3}{\mm\per\day} of avoided water demand; annualized at \qty{365}{\day}, this yields the modelled water-savings credit of \qty{474.5}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{237}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
+Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (ET$_c$) relative to the open-field FAO-56 baseline corresponds to \qty{1.26}{\mm\per\day} of avoided water demand; annualized at \qty{365}{\day}, this yields the modelled water-savings credit of \qty{460}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{230}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
 
 \subsection{FAO-56 wind-speed sensitivity analysis}
 \label{SI-sec:fao56_sensitivity}
 
-To quantify the impact of internal greenhouse air velocity on crop evapotranspiration, we evaluate the FAO-56 Penman--Monteith model across representative wind speeds $u \in [0.2, 0.8]~\unit{\m\per\s}$. \Cref{tab:s_fao56} summarizes the resulting daily evapotranspiration rates $\mathrm{ET}_c$ under open-field and OPV smart-shield conditions, demonstrating a $\pm\qty{10}{\percent}$ sensitivity bound on predicted water savings across typical low-convection microclimate variations.
+To quantify the sensitivity of crop evapotranspiration to the assumed wind speed, we evaluate the FAO-56 Penman--Monteith model across a plausible bracket around the free-stream reference value, $u \in [1.5, 2.5]~\unit{\m\per\s}$ ($\pm\qty{25}{\percent}$). \Cref{tab:s_fao56} summarizes the resulting daily evapotranspiration rates $\mathrm{ET}_c$ under open-field and OPV smart-shield conditions, demonstrating a $\pm\qty{10}{\percent}$ relative sensitivity bound on the predicted water saving.
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Sensitivity of FAO-56 crop evapotranspiration $\mathrm{ET}_c$ to greenhouse wind speed $u$ (Table S-FAO56).} Baseline configuration uses $u = \qty{0.5}{\m\per\s}$ ($\mathrm{ET}_c = \qty{3.20}{\mm\per\day}$, \qty{28.9}{\percent} reduction relative to open field). Variations across the range $u = \qtyrange{0.2}{0.8}{\m\per\s}$ introduce a $\pm\qty{10}{\percent}$ uncertainty band on predicted water savings.}
+\caption{\textbf{Sensitivity of FAO-56 crop evapotranspiration $\mathrm{ET}_c$ to wind speed $u$ (Table S-FAO56).} Baseline configuration uses $u = \qty{2.0}{\m\per\s}$, evaluated identically for both fields ($\mathrm{ET}_c = \qty{3.25}{\mm\per\day}$, \qty{28.0}{\percent} reduction relative to open field). Variations across $u = \qtyrange{1.5}{2.5}{\m\per\s}$ shift the reduction over \qtyrange{25.9}{30.4}{\percent}, i.e.\ a $\pm\qty{10}{\percent}$ band on the \qty{28}{\percent} water saving.}
 \label{tab:s_fao56}
 \small\setlength{\tabcolsep}{4pt}
-\begin{tabular}{S[table-format=1.1] S[table-format=1.2] S[table-format=1.2] S[table-format=-2.1] S[table-format=-2.1]}
+\begin{tabular}{S[table-format=1.2] S[table-format=1.2] S[table-format=1.2] S[table-format=-2.1] S[table-format=-2.1]}
 \toprule
-{$u$ (\unit{\m\per\s})} & {Open-field $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Shield $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Saving (\unit{\percent})} & {$\Delta\mathrm{ET}_c$ vs.\ base (\unit{\percent})} \\
+{$u$ (\unit{\m\per\s})} & {Open-field $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Shield $\mathrm{ET}_c$ (\unit{\mm\per\day})} & {Saving (\unit{\percent})} & {$\Delta$ saving vs.\ base (\unit{\percent})} \\
 \midrule
-0.2 & 4.10 & 2.92 & -28.8 & -8.8 \\
-0.4 & 4.35 & 3.10 & -28.7 & -3.1 \\
-0.5 & 4.50 & 3.20 & -28.9 & 0.0 \\
-0.6 & 4.62 & 3.28 & -29.0 & +2.5 \\
-0.8 & 4.88 & 3.51 & -28.1 & +9.7 \\
+1.50 & 4.31 & 3.00 & -30.4 & +3.9 \\
+1.75 & 4.41 & 3.13 & -29.1 & +1.9 \\
+2.00 & 4.51 & 3.25 & -28.0 & 0.0 \\
+2.25 & 4.60 & 3.36 & -26.9 & -1.9 \\
+2.50 & 4.69 & 3.47 & -25.9 & -3.6 \\
 \bottomrule
 \end{tabular}
 \end{table}

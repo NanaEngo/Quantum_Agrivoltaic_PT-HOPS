@@ -6,11 +6,12 @@ Numerical canon (2026-09-23): Phi_FT = Gamma_RC * integral(P3+P4) dt, WITHOUT
 a prefactor 2 (Eq. 3 / Eq. S1). Canonical NPoM yield at V_mode = 1.2 nm^3 is
 0.0799 (91.8% suppression); global canopy yield 0.971; payback 4.32 yr.
 Economic chain re-derived 2026-09-25 (critical review): Gamma_RC = 0.15 fs-1
-effective (tau_trap ~ 6.7 fs); water credit 474.5 L/m2/yr (1.3 mm/day x 365,
-corrects the x365 error of the 1300 L figure); unified electricity account
+effective (tau_trap ~ 6.7 fs); water credit 460 L/m2/yr (1.26 mm/day x 365 =
+459.9 L, from ET open 4.50 - shield 3.24 mm/day at Rn = 14.05 MJ/m2/day,
+f_shade = GCR(1 - tau_AVT) = 0.55 x 0.75 = 0.41); unified electricity account
 180 kWh/m2/yr (guaranteed yield); NEB_A = 72.6 kgCO2e/m2/yr (81 - 8.5 + 0.14);
-NEB_B = 84.2; Scenario B biomass = 8.2 (0.8 x 0.98/0.95); revenue 30090 USD;
-paybacks 4.32 / 6.17 / 2.68 yr; NPV +34714 USD; carbon credits 363 USD/yr.
+NEB_B = 84.2; Scenario B biomass = 8.2 (0.8 x 0.98/0.95); revenue 30075 USD;
+paybacks 4.32 / 6.17 / 2.68 yr; NPV +34630 USD; carbon credits 363 USD/yr.
 Framing canon (2026-09-24): three literature gaps (static optics / TEA-LCA
 decoupled / sensing bolted on) with quantified counterfactual costs, three
 firsts, falsifiable claims F1-F3, deployment barriers split economic

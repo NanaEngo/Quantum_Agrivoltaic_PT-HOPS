@@ -152,8 +152,11 @@ def test_floquet_stark_switch():
     config = load_config(config_path)
 
     switch = FloquetStarkSwitch(config)
+    # Hysteresis contract: engage > 850 W/m2, release <= 750 W/m2
+    assert switch.solar_threshold == 850.0
+    assert switch.release_threshold == 750.0
 
-    # Under solar threshold (threshold = 450 W/m2 in parameters.yaml)
+    # Under solar threshold (400 <= 750 release)
     shift_low = switch.get_stark_detuning(400.0, 1.0)
     assert np.allclose(shift_low, 0.0)
 
@@ -162,16 +165,41 @@ def test_floquet_stark_switch():
     assert shift_high[0, 0] != 0.0
     assert shift_high[5, 5] != 0.0
 
-    # Night mode (zero flux)
+    # Night mode (zero flux) resets the latch
     shift_night = switch.get_stark_detuning(0.0, 1.0)
     assert np.allclose(shift_night, 0.0)
 
-    # OMIT transmission check (below threshold: 400 < 450)
+    # Optical limiting below the release threshold: full baseline transmission
     t_normal = switch.apply_omit_attenuation(400.0, 0.8)
     assert t_normal == 0.8
 
+    # Saturation law T = T0 / (1 + I/I_sat), I_sat = 800 W/m2 -> 0.4444 at 1000
     t_attenuated = switch.apply_omit_attenuation(1000.0, 0.8)
     assert t_attenuated < 0.8
+    assert switch.apply_optical_limiting(1000.0, 1.0) == pytest.approx(1.0 / 2.25, rel=1e-9)
+    assert switch.apply_optical_limiting(1000.0, 0.8) == pytest.approx(0.8 / 2.25, rel=1e-9)
+
+
+def test_optical_limiting_hysteresis():
+    """Dead band 750-850 W/m2: engage above 850, hold down to 750, release below."""
+    from src.quantum_interface.pulse import FloquetStarkSwitch
+
+    config_path = os.path.join(os.path.dirname(__file__), "../../parameters.yaml")
+    config = load_config(config_path)
+
+    switch = FloquetStarkSwitch(config)
+    # 840 W/m2: below engage threshold on a fresh latch -> off
+    assert switch.apply_optical_limiting(840.0, 1.0) == 1.0
+    assert np.allclose(switch.get_stark_detuning(840.0, 1.0), 0.0)
+    # 860 W/m2: engages
+    assert switch.apply_optical_limiting(860.0, 1.0) < 1.0
+    assert switch.get_stark_detuning(860.0, 1.0)[0, 0] != 0.0
+    # 760 W/m2: inside the dead band -> stays engaged
+    assert switch.apply_optical_limiting(760.0, 1.0) < 1.0
+    assert switch.get_stark_detuning(760.0, 1.0)[0, 0] != 0.0
+    # 740 W/m2: releases
+    assert switch.apply_optical_limiting(740.0, 1.0) == 1.0
+    assert np.allclose(switch.get_stark_detuning(740.0, 1.0), 0.0)
 
 
 def test_sers_diagnostics():

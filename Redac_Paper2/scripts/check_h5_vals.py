@@ -5,6 +5,7 @@ Usage : python check_h5_vals.py <file.h5>
 Sortie (1 ligne) : rc_yield=...,sum_trapped_pop=...,n_frames=...,t_max_fs=...
 Canon 2026-09-23 : Phi_FT = Gamma_RC * sum(trapped_pop) * dt, SANS prefacteur 2.
 """
+
 import sys
 
 import h5py
@@ -26,10 +27,7 @@ def main() -> int:
     except Exception as exc:  # noqa: BLE001 — on veut le message, pas un crash
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
-    print(
-        f"rc_yield={ry:.6f},sum_trapped_pop={tp:.4f},"
-        f"n_frames={nf},t_max_fs={tmax:.1f}"
-    )
+    print(f"rc_yield={ry:.6f},sum_trapped_pop={tp:.4f},n_frames={nf},t_max_fs={tmax:.1f}")
     return 0
 
 

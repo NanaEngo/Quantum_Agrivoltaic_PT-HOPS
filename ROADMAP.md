@@ -62,11 +62,13 @@ Full codebase graph built: **4,332 nodes · 6,034 edges · 439 communities · 13
 - [x] Run full test suite (unit + integration).
 - [x] Final quality gates (10/10) check.
 
-### B. Paper 2 Submission
-- [ ] Generate single-column submission version (Manuscript_NatureEnergy_26-06-25.tex) from twocolumn draft.
-- [ ] Verify journal compliance (Nature Energy author guidelines).
-- [ ] Prepare cover letter and point-by-point response (if applicable).
-- [ ] Submit via Nature Energy online portal.
+### B. Paper 2 Submission (2026-09-23 update: Nature Energy route closed, transfer declined)
+- [x] Decision: editor-suggested transfer (with APC) DECLINED — retarget Q1 journal, APC-free via subscription route (Cameroon = Research4Life Group A; subscription publishing carries no APC regardless).
+- [ ] Pick target from shortlist: **Applied Energy** (IF ~11–12, Q1 — best systems/LCA fit), **Solar Energy** (IF ~6–8 — natural PV/agrivoltaics home), **QST** (package already in `iopart`, weakest agro fit), **Prog. Photovoltaics**.
+- [ ] Reformat single-column manuscript to target class (elsarticle for Elsevier picks; QST package reusable as-is if QST chosen).
+- [ ] Rewrite cover letter for target (scope fit + subscription-route statement).
+- [ ] Verify journal compliance (target author guidelines) + recompile MS + SI.
+- [ ] Submit via target portal.
 
 ### C. Future R&D Directions
 - [ ] Multi-module field-scale telemetry deployment.

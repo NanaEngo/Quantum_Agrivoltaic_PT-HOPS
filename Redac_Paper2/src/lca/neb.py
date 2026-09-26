@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 
 from ..config_loader import ConfigModel
@@ -10,6 +12,52 @@ from ..constants import (
     LCA_WATER_PUMPING_CARBON_FACTOR,
     QUANTUM_FERTILIZER_BOOST,
 )
+
+# Dual-band excitation filter (parameters.yaml spectral_filter block).
+PASSBAND_CENTERS_NM = (750.0, 820.0)
+PASSBANDWIDTH_CM = 100.0
+# ASTM G173-03 global-tilt reference spectrum shipped with the framework.
+_AM15G_CSV = (
+    Path(__file__).resolve().parents[3]
+    / "quantum_simulations_framework"
+    / "data"
+    / "input"
+    / "ASTMG173.csv"
+)
+# Fallback integrals of that same file (band 10.236 W/m2, total 1000.4 W/m2,
+# 280-1100 nm window 804.6 W/m2) used if the CSV is unavailable.
+_FALLBACK = (0.0102, 0.0127, 10.236)
+
+
+def passband_fraction(csv_path=None) -> tuple[float, float, float]:
+    """Spectral cost of the two filter passbands.
+
+    Integrates the ASTM G173-03 global-tilt spectrum over each
+    ``PASSBAND_CENTERS_NM`` line (width = centre^2 * 100 cm^-1 * 1e-7, i.e.
+    5.6 nm at 750 nm and 6.7 nm at 820 nm).
+
+    Returns:
+        ``(f_am15g, f_pv_window, band_irradiance_w_m2)`` where ``f_am15g``
+        is the fraction of the full AM1.5G irradiance (1000.4 W/m2),
+        ``f_pv_window`` the fraction of the 280-1100 nm harvestable window,
+        and ``band_irradiance_w_m2`` the combined passband irradiance.
+    """
+    path = Path(_AM15G_CSV if csv_path is None else csv_path)
+    if not path.exists():
+        return _FALLBACK
+    data = np.genfromtxt(path, delimiter=",", skip_header=2)
+    wavelength_nm, global_tilt = data[:, 0], data[:, 2]
+    band_irradiance = 0.0
+    for centre_nm in PASSBAND_CENTERS_NM:
+        half_width_nm = centre_nm**2 * PASSBANDWIDTH_CM * 1e-7 / 2.0
+        mask = (wavelength_nm >= centre_nm - half_width_nm) & (
+            wavelength_nm <= centre_nm + half_width_nm
+        )
+        band_irradiance += float(np.trapz(global_tilt[mask], wavelength_nm[mask]))
+    total = float(np.trapz(global_tilt, wavelength_nm))
+    window = (wavelength_nm >= 280.0) & (wavelength_nm <= 1100.0)
+    window_total = float(np.trapz(global_tilt[window], wavelength_nm[window]))
+    return (band_irradiance / total, band_irradiance / window_total, band_irradiance)
 
 
 class NetEcologicalBenefit:
@@ -171,9 +219,7 @@ class NetEcologicalBenefit:
         # for the quantum scenario in the workflow.
         boost = QUANTUM_FERTILIZER_BOOST if scenario == "A" else 1.0
         safe_yield = np.minimum(excitonic_yields, LCA_MAX_PHYSICAL_YIELD)
-        effective_biomass = (
-            biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * boost
-        )
+        effective_biomass = biomass * (safe_yield / LCA_MAX_PHYSICAL_YIELD) * boost
         carbon_avoided_power = power * (grid_values / G_TO_KG)
         carbon_avoided_water = water_saved * LCA_WATER_PUMPING_CARBON_FACTOR
 

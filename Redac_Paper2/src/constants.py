@@ -74,7 +74,6 @@ IRRIGATION_MODERATE_VALVE = 5.0
 
 # Solver
 K_MATSUBARA = 2
-OMIT_SUPPRESSION_RATE = 0.01
 SOLVER_DETERMINISTIC_SEED = 0
 
 # QA/QC
@@ -84,11 +83,15 @@ MAX_TRAPPING_YIELD = 0.98  # Physical maximum (FMO baseline Φ_FT = 0.98)
 # Φ_FT = Γ_RC × ∫(P3+P4)dt with NO prefactor (canon 2026-09-23; Γ_RC = 0.15 fs⁻¹
 # effective, i.e. τ_trap ≈ 6.7 fs in the dressed-model units).
 BASELINE_TRANSMISSION = 0.8
+# Optical limiting of the 750/820 nm passbands: T = T0 / (1 + I / I_sat).
+# The picocavity saturates under strong drive (NOT optomechanically induced
+# transparency): at I = 1000 W/m2, T = T0 / 2.25 = 0.444 T0 (44 %).
+OMIT_I_SAT_W_M2 = 800.0
 PLASMON_COUPLING_SITES = [0, 5]
 
 # Irrigation / Greenhouse
-WIND_SPEED_GREENHOUSE_FACTOR = 0.10
-MM_TO_LITER_PER_M2 = 1000.0
+# 1 mm of water standing over 1 m2 = 1 L/m2 (mm -> L/m2 is x1, NOT x1000).
+MM_TO_LITER_PER_M2 = 1.0
 FAO56_ABSOLUTE_ZERO_C = -273.15
 
 # Stability audit bounds
@@ -97,12 +100,27 @@ TRACE_LOWER_BOUND = -1e-5
 POSITIVITY_TOLERANCE = -1e-5
 
 # FAO-56 Penman-Monteith coefficients
+# Argument of the ET model is the 24-h MEAN global horizontal irradiance (W/m2).
 FAO56_W_TO_MJ_CONVERSION = 0.0864
 FAO56_VAPOR_SLOPE_EMP = 17.27
-FAO56_WIND_COEFF = 0.1
+# Standard FAO-56 aerodynamic wind term (u2, m/s): no empirical rescaling.
+FAO56_WIND_COEFF = 1.0
+# Net radiation: Rn = 0.77 * Rs - 1.9 (MJ/m2/day; FAO-56 default albedo 0.23,
+# net longwave loss 1.9 MJ/m2/day). Panel soiling/canopy shading are NOT part
+# of this broadband energy balance.
+FAO56_NET_SHORTWAVE_FRACTION = 0.77
+FAO56_NET_LONGWAVE_LOSS = 1.9  # MJ/m2/day
 FAO56_RADIATION_FACTOR = 0.408
 FAO56_TEMP_NUMERATOR = 900.0
 FAO56_WIND_TERM_COEFF = 0.34
+
+# Instantaneous peak -> 24-h mean irradiance conversion for the ET path:
+#     daily_mean_W_m2 = peak_W_m2 * PEAK_SUN_HOURS / 24
+# equivalent full-load hours: daily_kWh_m2 = (peak_W/1000) * PEAK_SUN_HOURS,
+# calibrated so the 600 W/m2 reference irradiance integrates to 5.76 kWh/m2/day
+# (FAO 2022) = 240 W/m2 daily mean. Hence 9.6 = 5.76 / 0.6, and the published
+# 4.505 / 3.246 mm/day pair (open / shield) is reproduced from a 600 W/m2 peak.
+PEAK_SUN_HOURS = 9.6
 
 # Conversion factors
 G_TO_KG = 1000.0

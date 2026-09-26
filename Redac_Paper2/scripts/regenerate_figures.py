@@ -20,6 +20,7 @@ if PROJECT_ROOT not in sys.path:
 from src.config_loader import load_config
 from src.lca.neb import NetEcologicalBenefit
 from src.lca.plot_utils import Paper2FigureGenerator
+from src.microclimate.fao56 import reference_conditions_et
 from src.quantum_interface.diagnostics import SersDiagnostics
 
 DEFAULT_H5 = os.path.join(PROJECT_ROOT, "data/converged/production_dynamics.h5")
@@ -106,12 +107,19 @@ def main():
 
         lca = NetEcologicalBenefit(config)
 
-        # ---- Annual water-saving credit (L/m²/yr), corrected chain (Sept 2026):
-        # ET saving 4.5 -> 3.2 mm/day = 1.3 mm/day x 365 d = 474.5 L/m²/yr
-        # (1 mm = 1 L/m²). The pre-Sept-2026 chain used 1.3 L/m²/yr (x365 error).
-        ET_OPEN_FIELD = 4.5
-        ET_SMART_SHIELD = 3.2
-        water_saved_l = (ET_OPEN_FIELD - ET_SMART_SHIELD) * 365.0
+        # ---- Annual water-saving credit (L/m²/yr): computed from the single
+        # FAO-56 reference source of truth (reference_conditions_et), which
+        # returns ET open field vs smart shield at the published reference
+        # conditions (25 C, 60 % RH, 2.0 m/s wind, 240 W/m² mean GHI,
+        # f_shade = 0.41). 1 mm/day = 1 L/m²/day, annualized over 365 d.
+        ref_et = reference_conditions_et()
+        ET_OPEN_FIELD = ref_et["et_open"]
+        ET_SMART_SHIELD = ref_et["et_shield"]
+        water_saved_l = ref_et["saving_l_per_m2_yr"]
+        print(
+            f"    ET reference: open {ET_OPEN_FIELD:.2f} / shield {ET_SMART_SHIELD:.3f} mm/day "
+            f"(-{ref_et['reduction_pct']:.2f}%) -> {water_saved_l:.1f} L/m²/yr"
+        )
 
         # ---- Unified electricity account: 180 kWh/m²/yr guaranteed yield
         # (5.76 kWh/m²/day x 365 d x 0.15 efficiency x 0.57 performance ratio).

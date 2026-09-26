@@ -12,13 +12,13 @@ l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés
 
 | Fichier | Rôle | État |
 |---|---|---|
-| `AppliedEnergy_main_2609.tex/.pdf` | Manuscrit | **38 pp**, 0 erreur / 0 undefined / 0 overfull ; abstract 159 mots ; 8 keywords ; 60/60 audit |
-| `AppliedEnergy_SM_2609.tex/.pdf` | Supplementary Material | **24 pp**, 0 erreur / 0 undefined ; retitré « Supplementary Material » (terminologie Elsevier) |
+| `AppliedEnergy_main_2609.tex/.pdf` | Manuscrit | **39 pp**, 0 erreur / 0 undefined / 0 overfull ; abstract 159 mots ; 8 keywords ; 62/62 audit |
+| `AppliedEnergy_SM_2609.tex/.pdf` | Supplementary Material | **25 pp**, 0 erreur / 0 undefined ; retitré « Supplementary Material » (terminologie Elsevier) |
 | `AppliedEnergy_Cover_letter.tex/.pdf` | Cover letter | **1 page**, structurée sur les 5 exigences GFA (novelty / audience / importance / langue / reviewers) |
 | `Highlights_AppliedEnergy.txt` | Highlights | 5 puces ≤ 85 caractères (standard Elsevier certain) |
 | `figures/Graphical_Abstract_wide.png` | Graphical abstract | **2048×1024** ✓ (contrôle d'audit `png_size`) |
 | `references.bib` | Bibliographie | ≥ 2 papiers Applied Energy cités (contrôle d'audit) |
-| `verify_acceptance.py` | Audit d'acceptation | **60/60 PASS** (local ET HPC) — à relancer après toute retouche |
+| `verify_acceptance.py` | Audit d'acceptation | **62/62 PASS** (local ET HPC) — à relancer après toute retouche |
 | `plot_plateau_canopy.py` | Source figure-tête | Régénérable (`python3 plot_plateau_canopy.py`) |
 
 **Artefacts à ne PAS uploader** : `.aux/.log/.out/.toc/.bbl/.blg/.spl`,
@@ -86,7 +86,7 @@ les fusionner via le support ORCID avant la saisie EM.
 
 ## 5. Ordre de session d'upload (30–45 min)
 
-1. Pré-vol local : `python3 verify_acceptance.py` → 60/60 (fait : 2026-09-25).
+1. Pré-vol local : `python3 verify_acceptance.py` → 62/62 (fait : 2026-09-25).
 2. Créer la soumission EM → type « Research Article » → titre/abstract/keywords
    copiés du main (abstract 159 mots ; keywords : si l'écran plafonne à 6,
    garder les 6 les plus thématiques et reporter les autres).

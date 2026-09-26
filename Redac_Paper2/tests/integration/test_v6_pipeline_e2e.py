@@ -26,7 +26,7 @@ from src.config_loader import load_config
 from src.constants import (
     BASELINE_TRANSMISSION,
     MM_TO_LITER_PER_M2,
-    WIND_SPEED_GREENHOUSE_FACTOR,
+    PEAK_SUN_HOURS,
 )
 from src.digital_twin import DigitalTwin
 from src.lca.neb import NetEcologicalBenefit
@@ -170,28 +170,39 @@ def test_end_to_end_v6_pipeline() -> None:
 
     # ── 6. FAO-56 Evapotranspiration (Axe 1) ────────────────────────────
     floquet_switch = FloquetStarkSwitch(config)
-    effective_transmission = floquet_switch.apply_omit_attenuation(
+    # Optical limiting feeds the 750/820 nm passband channel only — it must
+    # never gate the broadband ET flux (peak -> 24-h mean conversion instead).
+    passband_transmission = floquet_switch.apply_omit_attenuation(
         solar_flux, baseline_transmission=BASELINE_TRANSMISSION
     )
-    solar_flux_greenhouse = solar_flux * effective_transmission
+    assert 0.0 < passband_transmission <= BASELINE_TRANSMISSION
     climate = GreenhouseEvapotranspiration(config)
     mc = config.microclimate
-    wind_greenhouse = mc.default_wind_speed_m_s * WIND_SPEED_GREENHOUSE_FACTOR
+    # Free-stream reference wind u = 2.0 m/s (both open and shielded fields)
+    wind_reference_m_s = 2.0
+    et_kwargs = {
+        "solar_flux_w_m2": solar_flux * PEAK_SUN_HOURS / 24.0,
+        "temp_c": mc.default_temp_c,
+        "relative_humidity_pct": mc.default_rh_pct,
+        "wind_speed_m_s": wind_reference_m_s,
+    }
+    # Water baseline = open-field ET from the same FAO-56 path (no 5.0 mm/day)
+    et_open = climate.calculate_evapotranspiration(shading_factor=0.0, **et_kwargs)
     et_rate = climate.calculate_evapotranspiration(
-        solar_flux_w_m2=solar_flux_greenhouse,
-        temp_c=mc.default_temp_c,
-        relative_humidity_pct=mc.default_rh_pct,
-        wind_speed_m_s=wind_greenhouse,
+        shading_factor=climate.shading_factor, **et_kwargs
     )
-    baseline_water_mm = mc.baseline_water_mm
-    water_saved_l = max(0.0, baseline_water_mm - et_rate) * MM_TO_LITER_PER_M2
+    water_saved_l = max(0.0, et_open - et_rate) * MM_TO_LITER_PER_M2
     results["fao56"] = {
+        "et_open_mm_day": float(et_open),
         "et_rate_mm_day": float(et_rate),
         "water_saved_liters": float(water_saved_l),
+        "passband_transmission": float(passband_transmission),
     }
     assert et_rate >= 0.0
+    assert water_saved_l > 0.0
     print(
-        f"[6/9] FAO-56 ET_c ✓ — et_rate={et_rate:.4f} mm/day, water_saved={water_saved_l:.1f} L/m2"
+        f"[6/9] FAO-56 ET_c ✓ — open={et_open:.4f} / shield={et_rate:.4f} mm/day, "
+        f"water_saved={water_saved_l:.4f} L/m2/tick, passband T/T0={passband_transmission:.3f}"
     )
 
     # ── 7. LCA cooperative payback (Axe 3) ──────────────────────────────
