@@ -1,7 +1,7 @@
 import numpy as np
 
 from ..config_loader import ConfigModel
-from ..constants import FLOQUET_SITES, FMO_NSITES, OMIT_I_SAT_W_M2
+from ..constants import EV_TO_CM1, FLOQUET_SITES, FMO_NSITES, OMIT_I_SAT_W_M2
 
 
 class FloquetStarkSwitch:
@@ -59,7 +59,8 @@ class FloquetStarkSwitch:
         if self._update_latch(solar_flux):
             # Shift primary optical absorption site energies (Site 1 & 6, index 0 and 5)
             # using the Floquet driving envelope
-            detuning_val = self.amplitude * np.cos(self.frequency * time_ps)
+            # driving_amplitude is in eV (parameters.yaml); H is in cm^-1
+            detuning_val = self.amplitude * EV_TO_CM1 * np.cos(self.frequency * time_ps)
             for site in FLOQUET_SITES:
                 shift_matrix[site, site] = detuning_val
 

@@ -89,6 +89,8 @@ BASELINE_TRANSMISSION = 0.8
 # The picocavity saturates under strong drive (NOT optomechanically induced
 # transparency): at I = 1000 W/m2, T = T0 / 2.25 = 0.444 T0 (44 %).
 OMIT_I_SAT_W_M2 = 800.0
+# eV -> cm^-1 conversion (CODATA/IAU: 1 eV = 8065.54429 cm^-1)
+EV_TO_CM1 = 8065.54429
 PLASMON_COUPLING_SITES = [0, 5]
 
 # Irrigation / Greenhouse
@@ -120,7 +122,7 @@ FAO56_WIND_TERM_COEFF = 0.34
 #     daily_mean_W_m2 = peak_W_m2 * PEAK_SUN_HOURS / 24
 # equivalent full-load hours: daily_kWh_m2 = (peak_W/1000) * PEAK_SUN_HOURS,
 # calibrated so the 600 W/m2 reference irradiance integrates to 5.76 kWh/m2/day
-# (FAO 2022) = 240 W/m2 daily mean. Hence 9.6 = 5.76 / 0.6, and the published
+# (site solar-resource assumption for the Western Highlands) = 240 W/m2 daily mean. Hence 9.6 = 5.76 / 0.6, and the published
 # 4.505 / 3.246 mm/day pair (open / shield) is reproduced from a 600 W/m2 peak.
 PEAK_SUN_HOURS = 9.6
 

@@ -376,7 +376,9 @@ def run_global_simulation(solar_flux: float) -> None:
         capex_std=lca_params.capex_std,
         revenue_mean=lca_params.default_annual_revenue,
         revenue_std=lca_params.revenue_std,
-        n_iterations=10000,
+        grid_intensity_std=lca_calc.grid_intensity * 0.1,
+        footprint_std=8.5 * 0.1,
+        n_iterations=100000,
     )
     logger.info(
         "[9b/10] Monte Carlo NEB — CO2: %.2f±%.2f kg [5%%:%.2f, 95%%:%.2f] (%s)",

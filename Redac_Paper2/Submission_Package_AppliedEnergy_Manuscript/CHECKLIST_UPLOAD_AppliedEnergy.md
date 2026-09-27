@@ -1,20 +1,25 @@
 # Checklist d'upload — Applied Energy (Research Article)
 
-**Date :** 2026-09-25 · **Package :** `Submission_Package_AppliedEnergy_Manuscript/`
+**Date :** 2026-09-27 · **Package :** `Submission_Package_AppliedEnergy_Manuscript/`
 **Préambule :** le GFA officiel Applied Energy renvoyait 403 lors de la rédaction
 (2026-09-24) — les seuils ci-dessous proviennent de sources secondaires sauf
 mention contraire. Tout seuil marqué **[À CONFIRMER]** doit être vérifié sur
 l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés).
 
+**Historique :** version condensée 2026-09-27 (18–19 pp) — titre recentré
+systèmes-énergie, équations détaillées renvoyées au SM, triple positionnement
+en prose (ex-matrice de capacités), `verify_acceptance.py` réaligné sur le
+nouveau contenu (canon numérique inchangé).
+
 ---
 
-## 1. Fichiers de soumission (états vérifiés le 2026-09-25)
+## 1. Fichiers de soumission (états vérifiés le 2026-09-27)
 
 | Fichier | Rôle | État |
 |---|---|---|
-| `AppliedEnergy_main_2609.tex/.pdf` | Manuscrit | **39 pp**, 0 erreur / 0 undefined / 0 overfull ; abstract 159 mots ; 8 keywords ; 62/62 audit |
-| `AppliedEnergy_SM_2609.tex/.pdf` | Supplementary Material | **25 pp**, 0 erreur / 0 undefined ; retitré « Supplementary Material » (terminologie Elsevier) |
-| `AppliedEnergy_Cover_letter.tex/.pdf` | Cover letter | **1 page**, structurée sur les 5 exigences GFA (novelty / audience / importance / langue / reviewers) |
+| `AppliedEnergy_main_2609.tex/.pdf` | Manuscrit | **19 pp**, 0 erreur / 0 undefined ; abstract 176 mots ; 7 keywords ; 62/62 audit |
+| `AppliedEnergy_SM_2609.tex/.pdf` | Supplementary Material | **27 pp**, 0 erreur / 0 undefined ; retitré « Supplementary Material » (terminologie Elsevier) |
+| `AppliedEnergy_Cover_letter.tex/.pdf` | Cover letter | **1 page**, nouveau titre, résultats-titres + positionnement + 4 reviewers suggérés |
 | `Highlights_AppliedEnergy.txt` | Highlights | 5 puces ≤ 85 caractères (standard Elsevier certain) |
 | `figures/Graphical_Abstract_wide.png` | Graphical abstract | **2048×1024** ✓ (contrôle d'audit `png_size`) |
 | `references.bib` | Bibliographie | ≥ 2 papiers Applied Energy cités (contrôle d'audit) |
@@ -29,8 +34,8 @@ l'écran correspondant du portail EM au moment de l'upload (ils y sont affichés
 | Seuil | Limite (source secondaire) | État AE | Statut |
 |---|---|---|---|
 | Longueur du manuscrit | ~12 000 mots hors refs/captions **[À CONFIRMER]** | ~2 800 mots (dé-TeX brut, contrôle d'audit) — marge énorme | ✅ |
-| Abstract | ≤ 300 mots **[À CONFIRMER]** | **159 mots** | ✅ |
-| Keywords | 6–8 **[À CONFIRMER]** (certain plafonds à 5–6) | **8** | ⚠️ vérifier à l'upload — si plafond 6, déplacer 2 vers les highlights |
+| Abstract | ≤ 300 mots **[À CONFIRMER]** | **176 mots** | ✅ |
+| Keywords | 1–7 (GFA Applied Energy, confirmé) | **7** | ✅ — si un écran exige ≤6, déplacer 1 vers les highlights |
 | Highlights | 5 puces × ≤ 85 car. (standard Elsevier) | 5 × ≤ 85 ✓ | ✅ |
 | Graphical abstract | 2048×1024 px min, lisible en vignette | 2048×1024 ✓ | ✅ |
 | Cover letter | 1 page, 5 exigences GFA | 1 page ✓ | ✅ |
@@ -61,10 +66,10 @@ les fusionner via le support ORCID avant la saisie EM.
 - CRediT : présent au main (contrôle d'audit) — vérifier la correspondance
   avec les rôles saisis dans EM (EM demande la saisie manuelle par auteur).
 - Déclarations : conflits d'intérêts ✓, financement ✓, IA générative ✓ (au main).
-- Data availability : engagement de dépôt public à l'acceptation + périmètre
+- Data availability : dépôt public Zenodo avec DOI réservé dès la soumission
+  (snapshot HDF5 + script d'extraction + environment pin prêts) + périmètre
   (paramètres, YAML, scripts d'orchestration, code d'analyse) — cohérent avec
-  la section du main ; préparer le dépôt (Zenodo/GitHub) pour ne pas y revenir
-  en révision.
+  la section du main ; ne plus attendre l'acceptation.
 - Route abonnement (0 $ APC, Research4Life Group A) : le dire à la cover si
   l'écran EM propose le choix OA — « Subscription publication (no APC due) »
   figure déjà dans la cover letter.
@@ -86,10 +91,10 @@ les fusionner via le support ORCID avant la saisie EM.
 
 ## 5. Ordre de session d'upload (30–45 min)
 
-1. Pré-vol local : `python3 verify_acceptance.py` → 62/62 (fait : 2026-09-25).
+1. Pré-vol local : `python3 verify_acceptance.py` → 62/62 (fait : 2026-09-27, version condensée).
 2. Créer la soumission EM → type « Research Article » → titre/abstract/keywords
-   copiés du main (abstract 159 mots ; keywords : si l'écran plafonne à 6,
-   garder les 6 les plus thématiques et reporter les autres).
+   copiés du main (abstract 176 mots ; keywords : 7 au standard GFA (1–7); si l'écran plafonne à 6,
+   garder les 6 les plus thématiques et reporter le 7e).
 3. ORCID des auteurs (bloquant) + CRediT à la saisie.
 4. Upload des fichiers dans l'ordre : main → SM → cover → highlights → GA.
 5. **Confirmer sur place** les seuils [À CONFIRMER] du §2 (mots, keywords) ;

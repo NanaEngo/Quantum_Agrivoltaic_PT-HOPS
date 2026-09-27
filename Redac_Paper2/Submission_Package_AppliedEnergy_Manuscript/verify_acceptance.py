@@ -7,19 +7,21 @@ a prefactor 2 (Eq. 3 / Eq. S1). Canonical NPoM yield at V_mode = 1.2 nm^3 is
 0.0799 (91.8% suppression); global canopy yield 0.971; payback 4.32 yr.
 Economic chain re-derived 2026-09-25 (critical review): Gamma_RC = 0.15 fs-1
 effective (tau_trap ~ 6.7 fs); water credit 460 L/m2/yr (1.26 mm/day x 365 =
-459.9 L, from ET open 4.50 - shield 3.24 mm/day at Rn = 14.05 MJ/m2/day,
+459.9 L, from ET open 4.51 - shield 3.25 mm/day at Rn = 14.05 MJ/m2/day,
 f_shade = GCR(1 - tau_AVT) = 0.55 x 0.75 = 0.41); unified electricity account
 180 kWh/m2/yr (guaranteed yield); NEB_A = 72.6 kgCO2e/m2/yr (81 - 8.5 + 0.14);
 NEB_B = 84.2; Scenario B biomass = 8.2 (0.8 x 0.98/0.95); revenue 30075 USD;
 paybacks 4.32 / 6.17 / 2.68 yr; NPV +34630 USD; carbon credits 363 USD/yr.
-Framing canon (2026-09-24): three literature gaps (static optics / TEA-LCA
-decoupled / sensing bolted on) with quantified counterfactual costs, three
-firsts, falsifiable claims F1-F3, deployment barriers split economic
-(tractable) vs physical.
-Novelty canon (2026-09-25): one-sentence central question with three
-subordinate questions Q1-Q3 mapped to Results; capability matrix
-(tab:capability_matrix); head figure fig:flat_canopy (local quenching vs
-flat canopy plateau).
+Framing canon (2026-09-24, condensed 2026-09-27): three literature gaps (static optics / TEA-LCA
+decoupled / sensing bolted on) with the quantified 0.9-pt counterfactual cost, falsifiable
+claims F1-F3, deployment barriers split economic (tractable) vs physical, prose
+triple-positioning (distinguishing features (i)-(iii)) in place of the former
+capability matrix.
+Novelty canon (2026-09-25, condensed 2026-09-27): one-sentence central question with three
+subordinate questions Q1-Q3 mapped to Results; head figure fig:flat_canopy
+(local quenching vs flat canopy plateau).
+Title canon (2026-09-27): "Spectral Co-Design of Agrivoltaic Modules for Multifunctional
+Net Energy Benefit: A Quantum-Guided Digital Twin" (energy-systems lead).
 """
 import os
 import re
@@ -97,17 +99,17 @@ bullets = [ln[2:].strip() for ln in hl_content.splitlines() if ln.startswith("- 
 check(len(bullets) == 5, f"Highlights: exactly 5 bullets ({len(bullets)})")
 max_len = max((len(b) for b in bullets), default=0)
 check(max_len <= 85, f"Highlights: all bullets <= 85 chars (max {max_len})")
-check(any("First quantum-coherence-guided" in b for b in bullets),
+check(any("First, to our knowledge, coherence-guided" in b for b in bullets),
       "Highlights carry the first-of-kind claim (no AES-256 filler)")
 check(not any("AES-256" in b for b in bullets), "No 'AES-256' residue in highlights")
 
 # 6. Cover letter: AE Guide for Authors questions
 cl_checks = {
-    "novelty statement": "Novelty, compliance, and declarations" in cl_content,
+    "novelty statement": "Novelty and positioning" in cl_content,
     "audience/fit (Why Applied Energy)": "Why \\textit{Applied Energy}?" in cl_content,
-    "significance": "Significance of the work" in cl_content,
-    "native-speaker check": "native English speaker" in cl_content,
-    "reviewer availability": "available to review" in cl_content,
+    "significance": "significance" in cl_content.lower(),
+    "language-edit statement": "language-edited" in cl_content,
+    "suggested reviewers listed": "Suggested reviewers" in cl_content,
     "not under consideration elsewhere": "not under consideration elsewhere" in cl_content,
 }
 for desc, ok in cl_checks.items():
@@ -159,12 +161,11 @@ def png_size(path):
 ga_size = png_size(GA_FILE)
 check(ga_size == (2048, 1024), f"Graphical abstract is 2048x1024 (found {ga_size})")
 
-# 7. Numerical canon: Phi_FT definition WITHOUT prefactor 2 (2026-09-23)
-phi_eq_ok = (
-    re.search(r"\\Phi_\{\\mathrm\{FT\}\}\s*=\s*\\Gamma_\{\\mathrm\{RC\}\}\s*\\int", ms_content)
-    is not None
-)
-check(phi_eq_ok, "MS Eq. (Phi_FT) uses Gamma_RC x integral(P3+P4) dt (no prefactor 2)")
+# 7. Numerical canon: Phi_FT definition WITHOUT prefactor 2 (2026-09-23).
+# Condensed MS (2026-09-27) states the definition in prose and defers the
+# equation to SI Eq. S1; the strict equation pattern is enforced on the SI.
+check("time-integrated" in ms_content and "trapping population" in ms_content,
+      "MS defines Phi_FT as time-integrated trapping population (equation in SI S1)")
 si_phi_eq_ok = (
     re.search(r"\\Phi_\{\\mathrm\{FT\}\}\s*=\s*\\Gamma_\{\\mathrm\{RC\}\}\s*\\int", si_content)
     is not None
@@ -183,14 +184,14 @@ check(no_obsolete_vintage is None, "No obsolete vintage (0.1599 / 83.7% / 0.183)
 for val, desc in [("0.971", "global canopy yield 0.971"), ("91.8", "suppression 91.8%"),
                   ("4.32", "payback 4.32 yr"), ("72.6", "NEB 72.6 kgCO2e/m2/yr")]:
     check(val in ms_content, f"MS contains {desc}")
-check(all(v in ms_content for v in ["0.0505", "0.0605", "0.0727", "0.0768"]),
-      "MS scan table carries the canonical series (0.0505/0.0605/0.0727 + n=100 ref 0.0768)")
+check(all(v in ms_content for v in ["0.0505", "0.0768", "0.0799", "0.0791"]),
+      "MS scan table carries canonical selected points (0.0505/0.0768/0.0799/0.0791; full scan in SI)")
 
 # 9. Framing canon (2026-09-24): gaps / central question / claims / firsts / barriers
 check("three gaps recur" in ms_content, "Intro states three recurring literature gaps")
-check("The optical architecture is \\emph{static}" in ms_content,
+check("optical architecture is static" in ms_content.lower(),
       "Gap (i): static optical architecture formulation present")
-check("decoupled from the underlying device physics" in ms_content,
+check("decoupled from the underlying" in ms_content,
       "Gap (ii): TEA/LCA decoupled from device physics formulation present")
 check("treated purely as an energy harvester" in ms_content,
       "Gap (iii): PV as pure energy harvester (sensing bolted on) formulation present")
@@ -198,32 +199,30 @@ check("The central question of this work is falsifiable" in ms_content,
       "Central question explicitly stated as falsifiable (one sentence)")
 check(all(f in ms_content for f in ["(Q1) Device", "(Q2) Physics", "(Q3) System"]),
       "Three subordinate questions Q1-Q3 mapped to Results")
-check("tab:capability_matrix" in ms_content and "Multifunctional accounting" in ms_content,
-      "Capability matrix present (7 functions x 4 classes)")
+check("distinguished by (i)" in ms_content and "local-to-global transport trade-off" in ms_content,
+      "Prose triple-positioning present (distinguishing features (i)-(iii))")
 check("fig:flat_canopy" in ms_content and "Figure_Plateau_Canopy.png" in ms_content,
       "Head figure fig:flat_canopy (local quenching vs flat canopy) present")
-check("Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit" in ms_content,
-      "MS title carries the energy-systems signal (title review 2026-09-25)")
-check("Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit" in si_content,
+check("Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit" in ms_content,
+      "MS title carries the energy-systems signal (title review 2026-09-27)")
+check("Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit" in si_content,
       "SM header mirrors the reviewed title")
-check("factor of 1.6 and the SERS enhancement by a factor of 48" in ms_content
-      and "costs only 0.9 points globally" in ms_content
-      and "canopy-yield cost of \\qty{0.9}{\\percent}" in ms_content
-      and "0.9-point canopy-scale cost" in ms_content,
-      "Quantified counterfactual costs present in the three gaps (0.9-pt NPoM cost vs 2.9-pt ideal shortfall)")
+check("costs 0.9 points of canopy-scale trapping yield" in ms_content
+      and "flat at $\\num{0.971}$" in ms_content,
+      "Quantified counterfactual cost present (0.9-pt NPoM cost, 0.980 to 0.971)")
 check(all(f in ms_content for f in ["(F1) Microscopic", "(F2) Device", "(F3) System"]),
       "Three falsifiable claim families F1/F2/F3 present")
-check("the first (i)" in ms_content and "and (iii)" in ms_content,
-      "Discussion positions the three firsts (first (i)...(iii))")
-check("three firsts" in cl_content or "we report the first (i)" in cl_content,
-      "Cover letter mirrors the three-firsts novelty claim")
+check("distinguished by (i)" in ms_content and "and (iii)" in ms_content,
+      "Discussion positions the triple contribution (distinguishing features (i)-(iii))")
+check("To our knowledge, this is the first" in cl_content,
+      "Cover letter mirrors the hedged first-of-kind novelty claim")
 check("physical rather than economic" in ms_content,
       "Conclusions split deployment barriers: physical vs economic")
-check("Deployment barriers are made explicit" in cl_content,
+check("physical barriers" in cl_content,
       "Cover letter states the economic-vs-physical barrier split")
 check("KaurJeet2026" in ms_content and "KaurJeet2026" in bib_content,
       "New 2026 quantum-sensing-in-agriculture reference cited (KaurJeet2026)")
-check("unreported" in cl_content, "Cover letter keeps the bounded 'to our knowledge, unreported' wording")
+check("To our knowledge" in cl_content, "Cover letter keeps the hedged 'To our knowledge' wording")
 
 # Summary
 n_pass = sum(1 for _, s in RESULTS if s.startswith("✅"))

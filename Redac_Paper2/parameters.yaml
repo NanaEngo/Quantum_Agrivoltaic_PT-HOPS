@@ -18,7 +18,7 @@ quantum:
     coupling_reaction_center: 0.15  # Gamma_RC in fs-1 (tau = 6.7 fs); manuscript and constants.py use fs-1
     mode_volume_nm3: 0.8
   floquet:
-    driving_amplitude: 0.05
+    driving_amplitude: 0.05  # eV; converted to cm^-1 in pulse.py (V0 = 403 cm^-1)
     driving_frequency: 1.2
   sers:
     optomechanical_coupling: 0.01

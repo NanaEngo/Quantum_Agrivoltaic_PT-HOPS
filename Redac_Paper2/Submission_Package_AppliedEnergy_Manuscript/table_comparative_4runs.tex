@@ -14,10 +14,11 @@ trace-conservation paragraph in the text. Its trapping-yield entry
 (\num{0.9800}) is the assumed passive capture-efficiency cap stated in the
 main text --- a model input, not the trajectory integral of that run ---
 and all suppression percentages in this work are quoted against this cap.
-$\pm$ = 1 SD over trajectories
-($n$ per column; \qty{77}{\kelvin} column $n=2$, indicative).}
+Values are ensemble means; ensemble sizes $n$ per column
+(\qty{77}{\kelvin} column $n=2$, indicative).}
 \label{tab:comparative_summary}
-\small\setlength{\tabcolsep}{4pt}
+\footnotesize\setlength{\tabcolsep}{3pt}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{l *{4}{S[table-format=3.4]} }
 \toprule
 \textbf{Metric} & {\bfseries NPoM-off} & {\bfseries NPoM-on} & {\bfseries NPoM-on} & {\bfseries NPoM-on} \\
@@ -40,5 +41,6 @@ Population trace $\mu\pm\sigma$ & {1.0000 ($\sigma<10^{-5}$)} & {1.0000 ($\sigma
 SERS enhancement factor EF & {---} & 100.0 & 44.0 & 44.0\\
 Figure of merit $\Phi_{\rm FT}\times\mathrm{EF}$ & {---} & 7.68 & 3.52 & 7.41\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}

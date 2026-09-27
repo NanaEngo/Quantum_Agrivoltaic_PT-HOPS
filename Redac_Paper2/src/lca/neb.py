@@ -262,9 +262,7 @@ class NetEcologicalBenefit:
                 + coop.annual_training_opex_usd
                 + coop.annual_cleaning_opex_usd
             )
-            capex_draws = np.clip(
-                rng.normal(capex_mean, capex_std or 0.0, n_iterations), 0.0, None
-            )
+            capex_draws = np.clip(rng.normal(capex_mean, capex_std or 0.0, n_iterations), 0.0, None)
             revenue_draws = np.clip(
                 rng.normal(revenue_mean, revenue_std or 0.0, n_iterations), 0.0, None
             )

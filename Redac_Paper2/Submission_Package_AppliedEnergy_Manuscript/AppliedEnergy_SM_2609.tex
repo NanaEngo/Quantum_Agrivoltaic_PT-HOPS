@@ -1,9 +1,9 @@
 % =============================================================================
 % Supplementary Material
-% Quantum Agrivoltaic Digital Twin: Coordinated Vibronic Light-Harvesting,
-% Spectral Co-Design, Multifunctional Net Energy Benefit, and Quantum-Secured Telemetry
+% Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit:
+% A Quantum-Guided Digital Twin
 % Target: Applied Energy (Elsevier) — Supplementary Material
-% Date:    September 23, 2026
+% Date:    September 27, 2026
 % Authors: Teguia Kouam S.C., Goumai Vedekoi T., Tchapet Njafa J.-P.,
 %          Nguenang J.-P., Nana Engo S.G.
 % =============================================================================
@@ -36,18 +36,19 @@
 \usepackage[margin=2.5cm]{geometry}
 \usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
 \usepackage[capitalise,nameinlink]{cleveref}
-\usepackage{authblk}
 \usepackage{xr-hyper}
+\externaldocument{AppliedEnergy_main_2609}
+\usepackage{authblk}
 \usepackage{enumitem}
 
 % ---- Cross-reference to main manuscript ----
-\externaldocument{AppliedEnergy_main_2609}
 
 % ---- siunitx v3/v4 configuration ----
 \sisetup{
     locale = US,
     detect-all = true,
     group-minimum-digits = 4,
+    group-digits = integer,
     separate-uncertainty = true,
     multi-part-units = single,
     range-phrase = {--},
@@ -82,9 +83,10 @@
 \newcommand{\eqphift}{\Cref{eq:SI_phi_ft}}
 
 \begin{document}
+\emergencystretch=2.5em
 
 \title{\textbf{Supplementary Material}\\[0.5em]
-\large Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit, and Quantum-Secured Telemetry}
+\large Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit: A Quantum-Guided Digital Twin}
 
 \author{Steve Cabrel Teguia Kouam}
 \affil{Department of Physics, Faculty of Science, University of Douala, Cameroon}
@@ -103,7 +105,7 @@
 \maketitle
 
 \noindent\textbf{Associated Manuscript:}
-This Supplementary Material accompanies the manuscript ``Quantum-Enhanced Agrivoltaic Digital Twin: Spectral Co-Design, Multifunctional Net Energy Benefit, and Quantum-Secured Telemetry'' submitted to \textit{Applied Energy}. Equations, figures, and tables are prefixed with ``S'' (e.g., Eq.~S1, Fig.~S1, Table~S1). References to the main manuscript are indicated by unadorned equation/figure numbers (e.g., Eq.~1, Fig.~1).
+This Supplementary Material accompanies the manuscript ``Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit: A Quantum-Guided Digital Twin'' submitted to \textit{Applied Energy}. Equations, figures, and tables are prefixed with ``S'' (e.g., Eq.~S1, Fig.~S1, Table~S1). References to the main manuscript are indicated by unadorned equation/figure numbers (e.g., Eq.~1, Fig.~1).
 
 \vspace{1em}
 
@@ -149,11 +151,11 @@ The relative site energies follow the Adolphs--Renger parameterization~\cite{Ado
 \subsection{Electronic coupling matrix}
 
 \Cref{tab:SI_coupling_matrix} presents the full $8\times8$ electronic coupling matrix $J_{nm}$ (in \unit{\per\cm}).
-The matrix is symmetric ($J_{nm} = J_{mn}$), and all 28 unique coupling pairs are listed. Values for Sites~\numrange{1}{7} follow the Adolphs--Renger parameterization~\cite{Adolphs2006}; couplings involving Site~8 are taken from~Ref.~\cite{Moix2011}. This site-8 block is held fixed across all production runs: its strongest link, $J_{18} = \qty{21.0}{\per\cm}$, attaches site~8 to the antenna, while its link into the trapping pair, $J_{38} = \qty{0.6}{\per\cm}$, is the weakest entry in the matrix --- an order of magnitude below the $J_{12}$ backbone. This weakness is why the 7-site filtered- and broadband-excitation references carry over unchanged to the 8-site network (main text).
+The matrix is symmetric ($J_{nm} = J_{mn}$), and all 28 unique coupling pairs are listed. Values for Sites~\numrange{1}{7} follow the Adolphs--Renger parameterization~\cite{Adolphs2006}; couplings involving Site~8 are taken from~Ref.~\cite{Moix2011}. This site-8 block is held fixed across all production runs: its strongest link, $J_{18} = \qty{21.0}{\per\cm}$, attaches site~8 to the antenna, while its link into the trapping pair, $J_{38} = \qty{0.6}{\per\cm}$, is the weakest entry in the matrix --- two orders of magnitude below the $J_{12}$ backbone ($|J_{12}|=\qty{87.7}{\per\cm}$; entry-channel link $J_{18}=\qty{21.0}{\per\cm}$ is about one quarter of $J_{12}$). This weakness is why the 7-site filtered- and broadband-excitation references carry over unchanged to the 8-site network (main text).
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Full 8-site electronic coupling matrix $J_{nm}$} (in \unit{\per\cm}). The site-8 column (strongest link $J_{18} = \qty{21.0}{\per\cm}$ into the antenna, weakest link $J_{38} = \qty{0.6}{\per\cm}$ into the trapping pair) extends the antenna an order of magnitude below the $J_{12}$ backbone, so site~8 modifies the entry channel without opening a fast decay path --- the regime held fixed across all production runs.}
+\caption{\textbf{Full 8-site electronic coupling matrix $J_{nm}$} (in \unit{\per\cm}). The site-8 column (strongest link $J_{18} = \qty{21.0}{\per\cm}$ into the antenna, weakest link $J_{38} = \qty{0.6}{\per\cm}$ into the trapping pair) extends the antenna about four times below the $J_{12}$ backbone (vs.\ $|J_{12}| = \qty{87.7}{\per\cm}$), so site~8 modifies the entry channel without opening a fast decay path --- the regime held fixed across all production runs.}
 \label{tab:SI_coupling_matrix}
 \begin{tabular}{l *{8}{S[table-format=-2.1]} }
 \toprule
@@ -173,7 +175,7 @@ The matrix is symmetric ($J_{nm} = J_{mn}$), and all 28 unique coupling pairs ar
 
 \subsection{Reaction center trapping}
 
-The irreversible trapping is implemented through a non-Hermitian term on Sites~3 and~4, which together form the primary funnel to the reaction center in the 8-site FMO model~\cite{Renger2003,Moix2011}. The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\fs}$ is the effective rate used in all production runs; it corresponds to a capture time $\tau_{\mathrm{trap}} \approx \qty{6.7}{\fs}$, short enough that near-complete capture (the $\Phi_{\mathrm{FT}} = 0.98$ passive baseline) is dynamically accessible within the 1-ps window of \cref{eq:SI_phi_ft}.
+The irreversible trapping is implemented through a non-Hermitian term on Sites~3 and~4, which together form the primary funnel to the reaction center in the 8-site FMO model~\cite{Renger2003,Moix2011}. The trapping rate $\Gamma_{\mathrm{RC}} = \qty{0.15}{\per\fs}$ is the effective rate used in all production runs; it corresponds to a capture time $\tau_{\mathrm{trap}} \approx \qty{6.7}{\fs}$, short enough that near-complete passive capture is physically plausible within the 1-ps window of \cref{eq:SI_phi_ft}; the quantitative reference used below ($\Phi_{\mathrm{FT}} = 0.98$) is the assumed passive capture-efficiency cap --- a model input, not a trajectory integral (see the trace-conservation paragraph of \Cref{SI-sec:comparative_hdf5}).
 
 The forward transfer yield is defined as:
 \begin{equation}\label{eq:SI_phi_ft}
@@ -213,7 +215,7 @@ We adopt $L=8$ as the production standard to ensure robust convergence across al
 \end{tabular}
 \end{table}
 
-The MAE between $L=7$ and $L=8$ is $\num{3.1e-11}$, which is below double-precision round-off for most observables.
+The MAE between $L=7$ and $L=8$ is $\num{3.1e-11}$, which is negligible at the precision of all reported observables.
 
 \subsection{Matsubara truncation}
 
@@ -222,7 +224,7 @@ We test Matsubara term counts $K = 1, 2, 3$ to assess the impact of high-tempera
 
 \begin{table}[htbp]
 \centering
-\caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \qty{295}{\kelvin} under dual-band filtered excitation; the broadband reference under identical conditions is $\Phi_{\mathrm{FT}} = 0.71(2)$ (main text and Ref.~\cite{TeguiaKouam2026}).}
+\caption{\textbf{Matsubara truncation convergence.} Impact of $K$ on key observables at \qty{295}{\kelvin} under dual-band filtered excitation; the broadband reference under identical conditions is $\Phi_{\mathrm{FT}} = 0.71(2)$ (main text and Ref.~\cite{TeguiaKouam2026}). Ensemble size $n=100$ (parenthetical values are 1 standard deviation).}
 \label{tab:SI_matsubara_convergence}
 % NOTE: separate-uncertainty=false here (override of the global separate-uncertainty=true):
 % with siunitx v3.6.0 the uncertainty-split reserve emits three phantom empty
@@ -264,7 +266,7 @@ We adopt $\Delta t = \qty{0.2}{\fs}$ as the production standard, consistent with
 
 \subsection{Detailed balance}
 
-We compare the steady-state populations with the analytical Boltzmann distribution to verify detailed balance. The maximum deviation across all 8 sites is \qty{2.3}{\percent}, confirming that thermal equilibrium is reproduced.
+We compare the steady-state populations with the analytical Boltzmann distribution to verify detailed balance. Because the production Hamiltonian carries an irreversible trap, this audit is run on the trap-free reference and is inherited from the companion propagator (\Cref{SI-sec:convergence}); it characterizes solver thermalization rather than the trapping model itself. The maximum deviation across all 8 sites is \qty{2.3}{\percent}.
 
 \subsection{Physical consistency checks}
 
@@ -314,7 +316,7 @@ For the 12-mode Kleinekath\"{o}fer/Coker parameterization at \qty{295}{\kelvin} 
 \lambda_{\mathrm{res}}^{\mathrm{filt}} &= \lambda_{\mathrm{DL}} + \sum_{k \notin \mathcal{S}} S_k \omega_k = \qty{110.2}{\per\cm}, \label{eq:SI_lambda_filt}
 \end{align}
 where the dressed set $\mathcal{S}$ contains the manifold members bridging the trapping sites to the bright exciton. The site energies fix these bridges arithmetically: $\qty{12500}{\per\cm} - \qty{12320}{\per\cm} = \qty{180}{\per\cm}$ (site~4) and $\qty{12500}{\per\cm} - \qty{12210}{\per\cm} \approx \qty{290}{\per\cm}$ (site~3, matched by the \qty{280}{\per\cm} member), so $\mathcal{S} = \{180, 280\}$ and $\sum_{k \in \mathcal{S}} S_k \omega_k = \qty{17.4}{\per\cm}$. The red \qty{820}{\nm} passband (\qty{100}{\per\cm} full width) is centred on site~3 (\qty{819}{\nm}) and lies within \qty{75}{\per\cm} of site~4 (\qty{812}{\nm}), while the blue \qty{750}{\nm} passband lies \qty{833}{\per\cm} above the $\qty{12500}{\per\cm}$ centre --- between the \qty{720}{\per\cm} and \qty{1050}{\per\cm} members, and hence outside every manifold resonance --- acting as a transparent control window. This matches the companion band scan, in which moving the blue edge from \qty{730}{\nm} to \qty{770}{\nm} left $\Phi_{\mathrm{FT}}$ unchanged whereas removing the red band collapsed it.
-Because pure dephasing proceeds as $\tau_c \propto \lambda_{\mathrm{res}}^{-2}$ in the high-temperature limit, the \qty{13}{\percent} reduction of $\lambda_{\mathrm{res}}$ predicts a coherence extension of $\times 1.34$, against the measured $\times 1.50(18)$ (\qty{280}{\fs} $\to$ \qty{420}{\fs}) --- consistent within the combined $1\sigma$ lifetime uncertainty. (The \qty{740}{\per\cm} and \qty{1145}{\per\cm} features discussed in the main text are SERS Raman markers of bacteriochlorophyll~\textit{a}, not members of the 12-mode vibronic manifold.)
+Because pure dephasing proceeds as $\tau_c \propto \lambda_{\mathrm{res}}^{-2}$ in the high-temperature limit, the \qty{13.6}{\percent} reduction of $\lambda_{\mathrm{res}}$ predicts a coherence extension of $\times 1.34$, against the computed $\times 1.50(18)$ (\qty{280}{\fs} $\to$ \qty{420}{\fs}) --- consistent within the combined $1\sigma$ lifetime uncertainty. (The \qty{740}{\per\cm} and \qty{1145}{\per\cm} features discussed in the main text are SERS Raman markers of bacteriochlorophyll~\textit{a}, not members of the 12-mode vibronic manifold.)
 
 \subsection{Connection to PT-HOPS/SBD}
 
@@ -325,16 +327,16 @@ The PT-HOPS/SBD framework captures this protection directly: the bath correlatio
 %==============================================================================
 
 \section{Dynamic photo-protection: Floquet--Stark and optical-limiting behavior}
-\label{SI-sec:npq}
+\label{SI-sec:npq}\label{SI-sec:floquet}
 
 \subsection{Floquet--Stark detuning}
 
-Under high solar flux ($\qty{> 800}{\W\per\m\squared}$), the OPV dielectric constant changes dynamically, inducing a time-dependent Stark shift. The switch is hysteretic in the deployed controller: it engages at \qty{850}{\W\per\m\squared} and releases below \qty{750}{\W\per\m\squared}, so the \qty{50}{\W\per\m\squared} dead band prevents chatter at the operating point. The driving term in the Hamiltonian is:
+Under high solar flux ($\gtrsim \qty{850}{\W\per\m\squared}$), the OPV dielectric constant changes dynamically, inducing a time-dependent Stark shift. The switch is hysteretic in the deployed controller: it engages at \qty{850}{\W\per\m\squared} and releases below \qty{750}{\W\per\m\squared}, so the \qty{50}{\W\per\m\squared} dead band prevents chatter at the operating point. The driving term in the Hamiltonian is:
 \begin{equation}\label{eq:SI_stark_detuning}
 \hat{H}_{\mathrm{Stark}}(t) = V_0 \cos(\omega_{\mathrm{F}} t) \left( \dyad{1}{1} + \dyad{6}{6} \right),
 \end{equation}
 with $V_0 = \qty{0.05}{\eV}$ and $\omega_{\mathrm{F}} = \qty{1.2}{\THz}$.
-At $t = 0$ (zero flux), the cosine term evaluates to $V_0$, ensuring continuity with the undriven Hamiltonian. When the flux drops below threshold, the amplitude $V_0$ decays to zero with a relaxation time $\tau_{\mathrm{relax}} = \qty{10}{\ps}$, preventing numerical singularities.
+The controller is a stateful latch evaluated at a fixed phase reference ($t = \qty{1}{\ps}$): when the flux rises above \qty{850}{\W\per\m\squared} the detuning term is applied, and when it falls below \qty{750}{\W\per\m\squared} the term switches off exactly, so at zero flux (night) there is no shift and no numerical singularity. A relaxation envelope ($\tau_{\mathrm{relax}}$) is not part of the implemented controller.
 
 \subsection{Flux-dependent optical limiting}
 
@@ -428,14 +430,14 @@ We propose a tiered subsidy framework where the NEB serves as the verifiable met
 \item \textbf{Tier~2 (NEB \qtyrange{5}{10}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}),} \qty{15}{\percent} subsidy
 \item \textbf{Tier~3 (NEB $>$ \qty{10}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}),} \qty{30}{\percent} subsidy
 \end{itemize}
-This creates a direct incentive loop: larger quantum yield gains raise the NEB, which unlocks greater subsidy access and broader deployment. To prevent capital loss and ensure technological accountability, Tier~3 subsidies must be structured as performance bonds or include sunset provisions. Instead of unconditional upfront capital grants, development-bank loans are amortized or partially forgiven post hoc, and only if the co-deployed QKD and SERS sentinel network certifies (via the permissioned blockchain ledger) that the targeted water savings and crop yield thresholds have been sustained for at least 24 months.
+This creates a direct incentive loop: larger verified energy, water, and carbon performance raises the NEB, which unlocks greater subsidy access and broader deployment (the transport yield carries no NEB term in the present accounting, so quantum-yield improvements qualify only insofar as the preserved device performance is documented). To prevent capital loss and ensure technological accountability, Tier~3 subsidies must be structured as performance bonds or include sunset provisions. Instead of unconditional upfront capital grants, development-bank loans are amortized or partially forgiven post hoc, and only if the co-deployed QKD and SERS sentinel network certifies (via the permissioned blockchain ledger) that the targeted water savings and crop yield thresholds have been sustained for at least 24 months.
 
 %==============================================================================
 % SECTION S6: BB84 QKD IMPLEMENTATION DETAILS
 %==============================================================================
 
 \section{BB84 quantum key distribution: implementation and performance}
-\label{SI-sec:qkd}
+\label{SI-sec:qkd}\label{SI-sec:bb84}
 
 \subsection{Protocol details}
 
@@ -445,7 +447,7 @@ The BB84 protocol~\cite{Bennett1984} is implemented as follows:
 \item \textbf{Transmission:} The quantum states are transmitted over a buried single-mode fiber channel with a simulated depolarizing noise rate of $p = \qty{4.8}{\percent}$, modeling the baseline error rate in field-deployed fiber links~\cite{Zahidy2024}.
 \item \textbf{Measurement:} Bob (cloud server) measures each received qubit in a randomly chosen basis ($+$ or $\times$), independent of Alice's preparation basis.
 \item \textbf{Sifting:} Alice and Bob publicly announce their basis choices and retain only events where bases match (approximately $2N = 512$ bits remain).
-\item \textbf{Parameter estimation:} A random sample (minimum 128 bits at $N=256$, i.e.\ $f_{\mathrm{sample}} \ge 0.5$) of the sifted key is disclosed to estimate the quantum bit error rate (QBER). The abort decision uses the \textit{Wilson \qty{95}{\percent} upper bound} on the sampled QBER, not the point estimate: a \qty{50}{\bit} sample at \qty{4.8}{\percent} has an upper bound of $\approx\qty{13.5}{\percent}$ --- undecidable against the \qty{11}{\percent} threshold --- whereas 128 bits reduce it to $\approx\qty{9.9}{\percent} < \qty{11}{\percent}$, so the session can proceed.
+\item \textbf{Parameter estimation:} A random sample (minimum 128 bits at $N=256$, i.e.\ $f_{\mathrm{sample}} \ge 0.5$) of the sifted key is disclosed to estimate the quantum bit error rate (QBER). The abort decision uses the \textit{Wilson \qty{95}{\percent} upper bound} on the sampled QBER, not the point estimate: a \qty{50}{\bit} sample observing 2 errors (i.e.\ \qty{4}{\percent}) has an upper bound of $\approx\qty{13.5}{\percent}$ --- undecidable against the \qty{11}{\percent} threshold --- whereas 128 bits observing 6 errors reduce it to $\approx\qty{9.9}{\percent} < \qty{11}{\percent}$, so the session can proceed.
 \item \textbf{Key generation:} If QBER $< \qty{11}{\percent}$ (the Shor--Preskill security threshold), the remaining sifted bits form the raw key. Error correction and privacy amplification reduce the key to $N = 256$ bits.
 \end{enumerate}
 
@@ -485,7 +487,7 @@ Total & 4.8 & 2.2 \\
 \end{tabular}
 \end{table}
 
-A total runtime of \qty{4.8}{\ms} and a memory footprint of \qty{2.2}{\kB} are negligible for resource-limited IoT nodes, confirming the practical feasibility of BB84-secured agricultural telemetry.
+A total runtime of \qty{4.8}{\ms} and a memory footprint of \qty{2.2}{\kB} are negligible for resource-limited IoT nodes, confirming the practical feasibility of BB84-secured agricultural telemetry. These figures are engineering estimates from operation counts at the stated \qty{120}{\MHz} clock, not wall-clock benchmarks.
 
 %==============================================================================
 % SECTION S7: RESONANCE CONDITION FOR GENERAL VIBRONIC COUPLING
@@ -584,19 +586,19 @@ The coherence enhancement $\eta_{\mathrm{FT}} = (\Phi_{\mathrm{FT}}^{\mathrm{fil
 \subsection{Site description}
 
 We consider a \qty{500}{\m\squared} high-tunnel greenhouse located in Cameroon's Western Highlands.
-This region supports high-value floriculture (strawberries, cut flowers) suitable for micro-module deployment by cooperatives. Site conditions combine a mean annual solar irradiance of \qty{5.76}{\kWh\per\m\squared\per\day}~\cite{FAO2022} with significant biofouling potential, which necessitates the NPoM \textit{DynamicCalibrator} and regular OPV cleaning (both factored into the cooperative OPEX model).
+This region supports high-value floriculture (strawberries, cut flowers) suitable for micro-module deployment by cooperatives. Site conditions combine a mean annual solar irradiance of \qty{5.76}{\kWh\per\m\squared\per\day} (a site solar-resource assumption for the Western Highlands) with significant biofouling potential, which necessitates the NPoM \textit{DynamicCalibrator} and regular OPV cleaning (both factored into the cooperative OPEX model).
 
 \subsection{Water savings}
 
-Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (E$T_c$) relative to the open-field FAO-56 baseline corresponds to \qty{1.26}{\mm\per\day} of avoided water demand (open field \qty{4.51}{\mm\per\day} $\to$ shield \qty{3.25}{\mm\per\day}, \qty{-28}{\percent}); annualized at \qty{365}{\day}, this yields the modeled water-savings credit of \qty{460}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{230}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}).
+Under the NPoM-shield spectral filter, the \qty{28}{\percent} reduction in crop evapotranspiration (E$T_c$) relative to the open-field FAO-56 baseline corresponds to \qty{1.26}{\mm\per\day} of avoided water demand (open field \qty{4.51}{\mm\per\day} $\to$ shield \qty{3.25}{\mm\per\day}, \qty{-28}{\percent}); annualized at \qty{365}{\day}, this yields the modeled water-savings credit of \qty{460}{\L\per\m\squared\per\yr} used in the revenue analysis (i.e., \qty{230}{\m\cubed\per\yr} for the \qty{500}{\m\squared} greenhouse; \Cref{SI-sec:socioeconomic}). Forcing: $R_n=\qty{14.05}{\mega\joule\per\m\squared\per\day}$ ($0.77R_s-\qty{1.9}{\mega\joule\per\m\squared\per\day}$ from \qty{5.76}{\kWh\per\m\squared\per\day}), $f_{\mathrm{shade}}=\num{0.41}$ (GCR \num{0.55} $\times$ $(1-\tau_{\mathrm{AVT}})$, $\tau_{\mathrm{AVT}}=\num{0.25}$), $K_c=\num{0.85}$ (cancels in the quoted ratio), $u=\qty{2.0}{\m\per\s}$ free-stream both fields ($\pm\qty{10}{\percent}$ band from $u=\qtyrange{1.5}{2.5}{\m\per\s}$).
 
 \subsection{Biomass yield improvement}
 
-The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. Crop production is assumed at the horticultural standard for the crop mix (\qty{8.2}{\kg\per\m\squared\per\yr}); the quantum-fertilizer channel adds \qty{0.96}{\kg\per\m\squared\per\yr} (\qty{8}{\percent} biostimulation, Scenario~A only), and no coherence-derived yield gain is monetized. The Scenario-A biomass bar uses a reference biomass of \qty{12}{\kg\per\m\squared\per\yr} (main text Fig.~3b); the \qty{0.96}{\kg\per\m\squared\per\yr} fertilizer increment is \qty{8}{\percent} of that reference, not of the \qty{8.2}{\kg\per\m\squared\per\yr} monetized yield, and is excluded from the baseline revenue.
+The area-weighted global canopy trapping yield ($\Phi_{\mathrm{FT}}^{\mathrm{global}} = 0.971$) ensures near-baseline productivity while accommodating a \qty{1}{\percent} NPoM sentinel fraction for SERS diagnostics. Crop production is assumed at the horticultural standard for the crop mix (\qty{8.2}{\kg\per\m\squared\per\yr}); the quantum-fertilizer channel adds \qty{0.96}{\kg\per\m\squared\per\yr} (\qty{8}{\percent} biostimulation, Scenario~A only), and no coherence-derived yield gain is monetized. The Scenario-A biomass bar uses a reference biomass of \qty{12}{\kg\per\m\squared\per\yr} (main text Fig.~3b); the \qty{0.96}{\kg\per\m\squared\per\yr} fertilizer increment is \qty{8}{\percent} of that reference, not of the \qty{8.2}{\kg\per\m\squared\per\yr} monetized yield, and is excluded from the baseline revenue. Scenario~B (opaque static shading) uses a \qty{10.0}{\kg\per\m\squared\per\yr} biomass reference $\times$ \num{0.8} canopy factor with power $\times$\num{1.1} and water $\times$\num{0.9}; Scenario~C (open field) uses the \qty{12.0}{\kg\per\m\squared\per\yr} reference $\times$ \num{0.7} canopy factor. These are configured scenario assumptions, not computed yields.
 
 \subsection{Energy and carbon balance}
 
-The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr} --- the guaranteed-yield convention used throughout the revenue and carbon accounts. Displacing grid electricity at \qty{450}{\g\of{\ce{CO2e}}\per\kWh} offsets \qty{40.5}{\tonne\of{\ce{CO2e}}\per\yr} (\qty{81}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}); this factor is sourced and sensitivity-tested in the main text against the 2023 global average (\qty{480}{\g\of{\ce{CO2e}}\per\kWh}~\cite{Ember2024}) and Cameroon's national intensity ($\approx$\qty{290}{\g\of{\ce{CO2e}}\per\kWh}, for which the NEB becomes $\approx$\qty{43.8}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr})~\cite{ClimateAnalytics2024}. With the NEB (\qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}) included, the system reaches net-zero operational carbon. At \qty{10}{\USD\per\tonne\of{\ce{CO2e}}}~\cite{ICVCM2024}, the system generates \qty{363}{\USD\per\yr} in verified carbon revenue --- the carbon revenue is priced on the net benefit (\qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} $\times$ \qty{500}{\m\squared} = \qty{36.3}{\tonne}), not on the gross \qty{40.5}{\tonne} displacement.
+The OPV module generates \qty{90}{\MWh\per\yr} of electrical energy for a \qty{500}{\m\squared} installation at \qty{180}{\kWh\per\m\squared\per\yr} --- the guaranteed-yield convention used throughout the revenue and carbon accounts. Displacing grid electricity at \qty{450}{\g\of{\ce{CO2e}}\per\kWh} offsets \qty{40.5}{\tonne\of{\ce{CO2e}}\per\yr} (\qty{81}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}); this factor is sourced and sensitivity-tested in the main text against the \qty{480}{\g\of{\ce{CO2e}}\per\kWh} 2023 global average~\cite{Ember2024} and against Cameroon's national intensity ($\approx$\qty{290}{\g\of{\ce{CO2e}}\per\kWh}, for which the NEB becomes $\approx$\qty{43.8}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr})~\cite{ClimateAnalytics2024}. With the NEB (\qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}) included, the system reaches net-zero operational carbon. At an assumed carbon price of \qty{10}{\USD\per\tonne\of{\ce{CO2e}}} (conservative assumption; Ref.~\cite{ICVCM2024} sets the integrity framework, not the price), the system generates \qty{363}{\USD\per\yr} in verified carbon revenue --- the carbon revenue is priced on the net benefit (\qty{72.6}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} $\times$ \qty{500}{\m\squared} = \qty{36.3}{\tonne}), not on the gross \qty{40.5}{\tonne} displacement.
 
 The lifecycle footprints (\qty{8.5}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr} and \qty{5.0}{\kg\of{\ce{CO2e}}\per\m\squared\per\yr}) are annualized cradle-to-gate module GWP over a \qty{20}{\yr} service life --- order-of-magnitude estimates pending a full ISO~14040/14044-compliant inventory (acknowledged as a limitation in the main text).
 
@@ -608,7 +610,7 @@ The \qty{500}{\m\squared} scale is well matched to cooperative ownership models:
 % SECTION S10: QUANTUM MACHINE LEARNING SIGNAL PROCESSING
 %==============================================================================
 
-\section{Quantum machine learning signal processing for early stress detection}
+\section{Quantum machine learning signal processing for early stress detection (exploratory)}
 \label{SI-sec:qml}
 
 \subsection{Motivation}
@@ -691,7 +693,7 @@ The total runtime of \qty{3.7}{\ms} is well within the \qty{60}{\s} refresh wind
 %==============================================================================
 
 \section{Comparative simulation results: HDF5 data analysis}
-\label{SI-sec:comparative_hdf5}
+\label{SI-sec:comparative_hdf5}\label{SI-sec:sers}
 
 This section presents a comparative analysis of the four production simulation runs performed to characterize the NPoM--FMO coupled system under different operating conditions. We ran all simulations with the PT-HOPS/SBD formalism at hierarchy depth $L=8$, $K=2$ Matsubara terms, $\Delta t = \qty{0.2}{\fs}$, and $t_{\max} = \qty{1}{\ps}$.
 
@@ -714,7 +716,7 @@ Panel~(a): forward transfer yield $\Phi_{\rm FT}$; (b): Site~1 antenna populatio
 (c): plasmon mode population; (d): trapping sites~3+4;
 (e): Site~6 antenna; (f): trace conservation;
 (g): bar chart of final $\Phi_{\rm FT}$; (h): bar chart of max trapping population;
-(i): summary table.}
+(i): summary table. Trajectory counts: $n=20$ for the OFF baseline and the $V=\qty{1.2}{\nm\cubed}$ runs, published $n=100$ values at $V=\qty{0.8}{\nm\cubed}$, $n=2$ at \qty{77}{\kelvin} (see text).}
 \label{fig:SI_comparative_dynamics}
 \end{figure}
 
@@ -728,11 +730,11 @@ To isolate the plasmonic suppression mechanism, we compare the baseline NPoM-off
 (c): trapping sites~3+4 (fivefold reduction);
 (d): Site~6 secondary antenna;
 (e): final site distribution bar chart at $t = \qty{1000}{\fs}$;
-(f): plasmon mode population (NPoM ON captures \qty{82}{\percent} of total excitation);
+(f): plasmon mode population (NPoM ON retains \qty{83}{\percent} of total excitation at $t = \qty{1}{\ps}$);
 (g): trace conservation ($\mu = 1.000000$ for both runs);
 (h): early dynamics zoom (0--\qty{50}{\fs}) showing competitive population loading;
 (i): yield comparison across four representative configurations;
-(j): physical interpretation of the strong-coupling hybridization mechanism.}
+(j): physical interpretation of the strong-coupling hybridization mechanism. Both runs: $n=20$ trajectories.}
 \label{fig:SI_npom_off_vs_on}
 \end{figure}
 
@@ -740,7 +742,7 @@ The analysis reveals the following features:
 
 \paragraph{Plasmonic suppression (Fig.~S2a).} The forward transfer yield drops from $\Phi_{\rm FT} =\num{0.98}$ (NPoM-off baseline) to $\Phi_{\rm FT} = \num{0.0799}$ (NPoM-on, $V = \qty{1.2}{\nm\cubed}$, $n=20$), a relative suppression of \qty{91.8}{\percent}. The suppression is not an artifact of the dressed Hamiltonian: the baseline HDF5 file records $n=20$ trajectories with perfect trace conservation ($\mu =\num{1.000000}$, $\sigma =\num{0.000000}$), confirming that it is physical rather than numerical. Note, however, that this NPoM-off baseline row derives from an exploratory snapshot and is a limiting-case reference, not a fully archived production run.
 
-\paragraph{Population redistribution (S2~e).} At steady state, the NPoM-off population is distributed broadly across the FMO sites (Site~1: \qty{73}{\percent}; Site~2: \qty{20}{\percent}; others: \qtyrange{0.3}{4.1}{\percent}). Under NPoM-on, the plasmon mode (Site~9) captures \qty{82.3}{\percent} of the total population, starving the reaction center; the corresponding final site distribution is reported in \Cref{tab:comparative_summary}. The maximum population on the trapping sites (3~+~4) drops by a factor of~5 (from \num{0.0189} to \num{0.0038}).
+\paragraph{Population redistribution (S2~e).} At steady state, the NPoM-off population is distributed broadly across the FMO sites (Site~1: \qty{73}{\percent}; Site~2: \qty{20}{\percent}; others: \qtyrange{0.3}{4.1}{\percent}). Under NPoM-on, the plasmon mode (Site~9) retains \qty{82.6}{\percent} of the total population at $t = \qty{1}{\ps}$, starving the reaction center; the corresponding final site distribution is reported in \Cref{tab:comparative_summary}. The maximum population on the trapping sites (3~+~4) drops by a factor of~5 (from \num{0.0189} to \num{0.0038}).
 
 \paragraph{Competitive dynamics (Fig.~S2h).} The early-time zoom (0--\qty{50}{\fs}) reveals the competition between the two decay channels. In the NPoM-on case, the plasmon mode loads within the first \qty{10}{\fs}, establishing a population reservoir that persists throughout the simulation. The trapping sites receive only the fraction of excitation that escapes the plasmonic channel. In the NPoM-off case, the initial excitation flows directly into the antenna states without competition, allowing efficient funneling to the reaction center.
 
@@ -748,13 +750,13 @@ The analysis reveals the following features:
 
 \paragraph{Temperature dependence.} \label{SI-sec:cryo} At \qty{77}{\kelvin}, the trapping yield $\Phi_{\rm FT}$ increases by a factor of~2.1 relative to the \qty{295}{\kelvin} run at the same mode volume ($V_{\mathrm{mode}} = \qty{1.2}{\nm\cubed}$). This is attributed to the suppression of thermal decoherence at cryogenic temperatures: the reduced phonon population extends the exciton coherence lifetime, allowing a larger fraction of excitons to reach the reaction center before being captured by the plasmon trap. The peak population on the trapping sites (3~+~4) increases from \num{0.0038} at \qty{295}{\kelvin} to \num{0.0055} at \qty{77}{\kelvin}, a relative enhancement of \qty{45}{\percent}.
 
-\paragraph{Volume dependence.} Increasing the mode volume from $V = \qty{0.8}{\nm\cubed}$ to $V = \qty{1.2}{\nm\cubed}$ at \qty{295}{\kelvin} produces a modest \qty{4.1}{\percent} improvement in $\Phi_{\rm FT}$ (from \num{0.0768} to \num{0.0799}). The weaker plasmon--exciton coupling at larger volumes reduces the polariton splitting, partially restoring the excitonic character of the bright states and marginally improving reaction center access.
+\paragraph{Volume dependence.} Increasing the mode volume from $V = \qty{0.8}{\nm\cubed}$ to $V = \qty{1.2}{\nm\cubed}$ at \qty{295}{\kelvin} produces a modest \qty{4.0}{\percent} improvement in $\Phi_{\rm FT}$ (from \num{0.0768} to \num{0.0799}). The weaker plasmon--exciton coupling at larger volumes reduces the polariton splitting, partially restoring the excitonic character of the bright states and marginally improving reaction center access.
 
 \paragraph{Trace conservation.} All three NPoM-on simulations conserve the total population trace to within machine precision ($\mu =\num{1.000000}$, $\sigma =\num{0.000000}$), confirming the numerical stability of the PT-HOPS/SBD propagator under strong-coupling conditions. The NPoM-off reference listed in \Cref{tab:comparative_summary} ($n_{\rm traj} = 20$) is a limiting case carried over from an exploratory HDF5 snapshot rather than from the archived production campaign. Its tabulated $\Phi_{\rm FT} =\num{0.980}$ is, moreover, not a trajectory integral but the assumed passive capture-efficiency cap stated in the main text (a model input representing near-complete charge separation): within the \qty{1}{\ps} window the off-cavity integral $\Gamma_{\rm RC}\int (P_3+P_4)\,dt$ does not saturate, because the trapping sites retain a steady-state population (the run reaches $\approx 2.01$ with a residual trap-site population of $\approx\num{0.0137}$ at $t = \qty{1}{\ps}$), so it cannot be interpreted as a yield. All suppression percentages in this work ($\qty{91.8}{\percent}$ at $V = \qty{1.2}{\nm\cubed}$) are therefore quoted against the \num{0.980} cap. The trace conservation and site distribution of that run do come from the dedicated baseline simulation and should be read as indicative.
 
 \subsection{Provenance and auditability of tabulated observables}
 
-Every tabulated observable in this work is extracted programmatically from an archived production HDF5 file; each file carries its own metadata (git commit of the simulation code, run identifier, time step, and timestamp); the recorded commit hash may predate subsequent history rewrites, and the deposited archive bundles the exact source snapshot corresponding to each run (run identifier and timestamp in the file attributes). The seven-volume $n=20$ scan of the main text is archived independently and reproduces the tabulated values to the last displayed digit; the $V = \qty{0.8}{\nm\cubed}$ $n=100$ run and the \qty{77}{\kelvin} $n=2$ run stem from the same production campaign and obey the identical extraction convention ($\Phi_{\rm FT} = \Gamma_{\rm RC} \int (P_3 + P_4)\,dt$ with no prefactor). No entry in any table of this work is hand-entered: every entry can be regenerated from the archive by a single extraction script, and the archive is released with the code upon acceptance.
+Every tabulated observable in this work is extracted programmatically from an archived production HDF5 file; each file carries its own metadata (git commit of the simulation code, run identifier, time step, and timestamp); the recorded commit hash may identify a superseded commit, and the deposited archive bundles the exact source snapshot corresponding to each run (run identifier and timestamp in the file attributes). The seven-volume $n=20$ scan of the main text is archived independently and reproduces the tabulated values within $\pm 0.002$ (exactly at $V = \qtylist{0.8;1.2}{\nm\cubed}$); the $V = \qty{0.8}{\nm\cubed}$ $n=100$ run and the \qty{77}{\kelvin} $n=2$ run stem from the same production campaign and obey the identical extraction convention ($\Phi_{\rm FT} = \Gamma_{\rm RC} \int (P_3 + P_4)\,dt$ with no prefactor). No entry in any table of this work is hand-entered: every entry can be regenerated from the archive by a single extraction script, and the archive (four HDF5 files plus extraction script and environment pin, Zenodo placeholder DOI at submission) is released with the code.
 
 \subsection{Combined figure of merit}
 
@@ -766,7 +768,7 @@ The trade-off between exciton transport efficiency and SERS sensitivity is quant
 % QUANTUM AGRIVOLTAICS
 %==============================================================================
 
-\section{Roadmap: nine advances for next-generation quantum agrivoltaics}
+\section{Roadmap: nine exploratory advances for next-generation quantum agrivoltaics}
 \label{SI-sec:roadmap}
 
 All numerical values in this roadmap are model outputs or design assumptions of the internal modules cited inline; they are not experimentally validated quantities, and primary-literature provenance is noted where available.
@@ -776,9 +778,9 @@ The quantum-to-organism framework established in this work opens several directi
 \subsection{Zwitterionic antifouling polymer coatings}
 \label{SI-sec:zwitterionic}
 
-The \textit{DynamicCalibrator} introduced in \Cref{SI-sec:qkd} is an algorithmic solution to a materials problem: biofouling of the NPoM and CQD sensor surfaces in the humid greenhouse environment. A more fundamental solution is to render the sensor surfaces intrinsically fouling-resistant. Antifouling polymer coatings bearing zwitterionic groups (sulfobetaine methacrylate, carboxybetaine methacrylate) form a strongly hydrated surface layer that physically repels protein adsorption, microbial adhesion, and sediment accumulation. For diamond-based quantum sensors---the material platform of the NPoM cavity---Kumar \emph{et al.}~\cite{Kumar2022} demonstrated a methacrylate-based antifouling polymer coating compatible with oxidized diamond surfaces that preserves quantum coherence while enabling site-specific biomolecular functionalization via click chemistry. Subsequent work on amphiphilic zwitterionic copolymer brushes has shown excellent resistance to both marine diatom adhesion and silt adsorption~\cite{Do2025}, supporting the hypothesis that such coatings can maintain sensor integrity in agricultural environments.
+The \textit{DynamicCalibrator} introduced in \Cref{SI-sec:qkd} is an algorithmic solution to a materials problem: biofouling of the NPoM and CQD sensor surfaces in the humid greenhouse environment. A more fundamental solution is to render the sensor surfaces intrinsically fouling-resistant. Antifouling polymer coatings bearing zwitterionic groups (sulfobetaine methacrylate, carboxybetaine methacrylate) form a strongly hydrated surface layer that physically repels protein adsorption, microbial adhesion, and sediment accumulation. For diamond-based quantum sensors---the material platform of the NPoM cavity---Kumar \emph{et al.}~\cite{Kumar2022} demonstrated a methacrylate-based antifouling polymer coating compatible with oxidized diamond surfaces that enables site-specific biomolecular functionalization via click chemistry; whether such coatings preserve quantum coherence under greenhouse conditions is a modeled assumption in our simulations, not a measurement reported there. Subsequent work on amphiphilic zwitterionic copolymer brushes has shown excellent resistance to both marine diatom adhesion and silt adsorption~\cite{Do2025}, supporting the hypothesis that such coatings can maintain sensor integrity in agricultural environments.
 
-Applied to the present architecture, a \qty{5}{\nm} to \qty{20}{\nm} zwitterionic coating deposited on the NPoM gold picocavity (by drop-casting or electropolymerization) and grafted onto the CQD surface during hydrothermal synthesis would reduce the Stern-Volmer drift rate from $\beta_{\mathrm{salinity}} = \qty{-0.012}{\cm\per\milli\siemens}$ (i.e., in units of (mS/cm)$^{-1}$; empirical model parameter of the sensing layer) to near-zero for at least \qty{60}{\day} of continuous field operation, based on marine-environment longevity data. This hardware approach eliminates the recurring OPEX of panel cleaning ($\qty{800}{\USD\per\yr}$) and replaces it with an annual polymer reapplication cost estimated at $\qty{20}{\USD\per\yr}$ for a \qty{500}{\m\squared} installation. A corresponding software module implements the coating degradation model, annual reapplication cycle, and OPEX projection within the digital twin architecture.
+Applied to the present architecture, a \qty{5}{\nm} to \qty{20}{\nm} zwitterionic coating deposited on the NPoM gold picocavity (by drop-casting or electropolymerization) and grafted onto the CQD surface during hydrothermal synthesis would reduce the Stern-Volmer drift rate from $\beta_{\mathrm{salinity}} = \qty{-0.012}{\cm\per\milli\siemens}$ (i.e., in units of (mS/cm)$^{-1}$; empirical model parameter of the sensing layer) to near-zero for at least \qty{60}{\day} of continuous field operation, based on marine-environment longevity data. This hardware approach would reduce the recurring OPEX of panel cleaning ($\qty{800}{\USD\per\yr}$) to an annual polymer reapplication cost estimated at $\qty{20}{\USD\per\yr}$ for a \qty{500}{\m\squared} installation; the quoted cooperative economics retain the uncoated cleaning line (conservative). A corresponding software module implements the coating degradation model, annual reapplication cycle, and OPEX projection within the digital twin architecture.
 
 To mitigate nanotoxicity and heavy metal bioaccumulation in food crops (such as strawberries), CdTe-based quantum dots are strictly confined to sealed, closed-loop polymer matrices in the NPoM sensor probes and do not contact soil or irrigation fluid directly. For agricultural biostimulation (nano-priming), only highly biocompatible, metal-free carbon quantum dots (CQDs) and graphene quantum dots (GQDs) are utilized.
 
@@ -787,7 +789,7 @@ To mitigate nanotoxicity and heavy metal bioaccumulation in food crops (such as 
 
 The FAO-56 Penman-Monteith water balance (\Cref{SI-sec:poc}) quantifies the evapotranspiration savings at the greenhouse scale, but validation at the regional aquifer scale requires a measurement technique sensitive to subsurface mass redistribution. Atom-interferometric quantum gravimeters---transportable instruments that measure the local gravitational acceleration $g$ with a stability below $\qty{10}{\nm\per\s\squared}$ ($\delta g/g \sim {1e-9}$)~\cite{Menoret2018}---provide this capability. These instruments use laser-cooled Rb atoms in a Mach--Zehnder matter-wave interferometer: a superposition of momentum states splits, falls, and recombines under gravity, and the interferometric phase is proportional to $g$. The compact Absolute Quantum Gravimeter (AQG)~\cite{Menoret2018} has demonstrated continuous field operation in a geophysical observatory and detects gravity changes of $\qty{100}{\nm\per\s\squared}$ following rainfall events, attributable to aquifer recharge.
 
-For the Cameroonian Western Highlands, the required instrument count depends on how concentrated the recharge is: if the $\qty{230}{\m\cubed\per\yr}$ saving recharges within the \qty{500}{\m\squared} greenhouse footprint, the Bouguer anomaly is $\Delta g \approx \qty{0.2}{\micro\per\s\squared}$, which a single AQG-class instrument can resolve against its $\qty{10}{\nm\per\s\squared}$ stability; spread over a \qty{3}{\hectare} recharge zone it falls to $\Delta g \approx \qty{3.2}{\nm\per\s\squared}$, below single-instrument noise, in which case a network of 3--5 gravimeters with common-mode rejection (or a gradiometer) is required. This measurement would directly confirm that the water conserved by the OPV shield recharges the shallow aquifer rather than being lost to runoff, connecting the microclimate model to satellite-scale hydrogeodesy. The recently demonstrated quantum gravity gradiometer (\qty{1}{\text{E}} sensitivity at \qty{0.5}{\m} spatial resolution)~\cite{Stray2022} offers an even more powerful variant, suppressing common-mode microseismic noise through differential measurement on two vertically separated atom clouds. The gravimetry component of the framework provides a simulated gravimeter interface that computes $\Delta g$ from irrigation savings and returns aquifer recharge estimates consistent with AQG-class sensitivity.
+For the Cameroonian Western Highlands, the required instrument count depends on how concentrated the recharge is: if the $\qty{230}{\m\cubed\per\yr}$ saving recharges within the \qty{500}{\m\squared} greenhouse footprint, the Bouguer anomaly is $\Delta g \approx \qty{0.2}{\micro\m\per\s\squared}$, which a single AQG-class instrument can resolve against its $\qty{10}{\nm\per\s\squared}$ stability; spread over a \qty{3}{\hectare} recharge zone it falls to $\Delta g \approx \qty{3.2}{\nm\per\s\squared}$, below single-instrument noise, in which case a network of 3--5 gravimeters with common-mode rejection (or a gradiometer) is required. This measurement would directly confirm that the water conserved by the OPV shield recharges the shallow aquifer rather than being lost to runoff, connecting the microclimate model to satellite-scale hydrogeodesy. The recently demonstrated quantum gravity gradiometer (\qty{1}{\text{E}} sensitivity at \qty{0.5}{\m} spatial resolution)~\cite{Stray2022} offers an even more powerful variant, suppressing common-mode microseismic noise through differential measurement on two vertically separated atom clouds. The gravimetry component of the framework provides a simulated gravimeter interface that computes $\Delta g$ from irrigation savings and returns aquifer recharge estimates consistent with AQG-class sensitivity.
 
 \subsection{Quantum approximate optimization algorithm for network scheduling}
 \label{SI-sec:qaoa}
@@ -796,7 +798,7 @@ The cooperative must decide, at sub-hourly timescales, how to allocate OPV elect
 
 The Quantum Approximate Optimization Algorithm (QAOA)~\cite{Farhi2014} is a variational quantum algorithm specifically designed for such Quadratic Unconstrained Binary Optimization (QUBO) problems. It encodes the cost function as a Hamiltonian $H_C = \sum_i h_i \sigma_i^z + \sum_{ij} J_{ij} \sigma_i^z \sigma_j^z$ and alternates between evolution under $H_C$ and a mixing Hamiltonian $H_B = \sum_i \sigma_i^x$, with variational parameters $(\beta, \gamma)$ optimized classically. The depth $p$ of the QAOA circuit controls solution quality; for $p \geq 1$, QAOA provably outperforms randomized rounding on MaxCut-type problems, and at $p \to \infty$ it recovers the exact solution.
 
-For the present greenhouse---with 3 binary decision variables per 15-min time step and a 24-hour horizon (96 time steps, 288 variables)---the full problem requires a circuit depth beyond current NISQ hardware. However, a \textit{hybrid decomposition} strategy is feasible: the day is partitioned into 6 macro-periods (dawn, morning peak, midday, afternoon, evening, night), each solved by a $p=3$ QAOA on $k=18$ variables (3 binary decisions $\times$ 6 macro-periods), with boundary conditions passed between periods via classical coordination. At this scale each per-period subproblem has only $2^3 = 8$ configurations, so exhaustive search is classically trivial; the circuit is therefore retained as a validated reference implementation (unit-tested against the brute-force optimum) and as the migration path to the full 288-variable horizon, not as a claimed quantum advantage at this scale. Recent implementations of QAOA for precision agriculture resource allocation~\cite{AlSagri2025} have demonstrated \qty{89}{\percent} water utilization and \qtyrange{12}{18}{\percent} yield improvements over classical baselines in simulation, with convergence in \qty{4.3}{\s} for 100-zone farms. The closed-loop architecture adapts every \qtyrange{15}{30}{\minute} using real-time sensor feedback, matching the greenhouse digital twin update rate exactly. The reference implementation encodes the 3-variable QUBO problem (pump, chiller, inverter) across 6 macro-periods and solves it via a variational quantum circuit emulator (PennyLane). The backend executes a $p=3$ depth circuit on 3 qubits with 1024 shots per period, using Hadamard gates, parameterized rotations (cost and mixing), and CNOT entanglement to optimize the energy nexus.
+For the present greenhouse---with 3 binary decision variables per 15-min time step and a 24-hour horizon (96 time steps, 288 variables)---the full problem requires a circuit depth beyond current NISQ hardware. However, a \textit{hybrid decomposition} strategy is feasible: the day is partitioned into 6 macro-periods (dawn, morning peak, midday, afternoon, evening, night), each solved by a $p=3$ QAOA on $k=3$ variables (one subproblem per macro-period; 18 decision variables per day, 288 on the full horizon), with boundary conditions passed between periods via classical coordination. At this scale each per-period subproblem has only $2^3 = 8$ configurations, so exhaustive search is classically trivial; the circuit is therefore retained as a validated reference implementation (unit-tested against the brute-force optimum) and as the migration path to the full 288-variable horizon, not as a claimed quantum advantage at this scale. Recent implementations of QAOA for precision agriculture resource allocation~\cite{AlSagri2025} have demonstrated \qty{89}{\percent} water utilization and \qtyrange{12}{18}{\percent} yield improvements over classical baselines in simulation, with convergence in \qty{4.3}{\s} for 100-zone farms. The closed-loop architecture adapts every \qtyrange{15}{30}{\minute} using real-time sensor feedback, running more slowly than the \qty{60}{\second} digital-twin refresh, which is appropriate for a scheduling layer. The reference implementation encodes the 3-variable QUBO problem (pump, chiller, inverter) across 6 macro-periods and solves it via a variational quantum circuit emulator (PennyLane). The backend executes a $p=3$ depth circuit on 3 qubits with 1024 shots per period, using Hadamard gates, parameterized rotations (cost and mixing), and CNOT entanglement to optimize the energy nexus.
 
 \subsection{Data sovereignty and the ethics of quantum agriculture}
 \label{SI-sec:datasovereignty}
@@ -840,14 +842,14 @@ The associated module implements: (i) $T_1$/$T_2^*$ simulation from metabolite c
 
 Carbon quantum dots (CQD) exhibit concentration-dependent biostimulation of plant growth at sub-cytotoxic doses (\qtyrange{10}{50}{\ug\per\mL}), attributed to enhanced photosynthetic electron transport and reactive oxygen species (ROS) scavenging. The proposed mechanism involves CQDs acting as artificial light-harvesting antennae---similar to the NPoM-FMO system---that transfer excitons to chloroplast photosystems, with a quantum efficiency of $\eta_{\mathrm{CQD}} \approx \qtyrange{5}{8}{\percent}$ under greenhouse light conditions. When CQDs are released from the MOF carrier (\Cref{SI-sec:mof}) into the hydroponic solution, they are taken up through root hair endocytosis and translocated to leaf mesophyll cells within \qtyrange{2}{4}{\hour}.
 
-The agronomic effect is modeled as a multiplicative boost factor $\beta_{\mathrm{QF}} =\num{1.08}$ (\qty{8}{\percent} biomass enhancement) applied to the effective crop biomass in the LCA model. This factor is conservative relative to published CQD biostimulation results (\qtyrange{12}{18}{\percent} in \textit{Arabidopsis thaliana} and \qtyrange{8}{15}{\percent} in leafy greens) and is applied only to Scenario A (quantum agrivoltaic shield), where the CQD sentinel network provides the delivery mechanism. For the \qty{500}{\m\squared} floriculture micro-module, $\beta_{\mathrm{QF}} =\num{1.08}$ translates to an additional \qty{0.96}{\kg\per\m\squared\per\yr} of cut-flower biomass, strengthening the cooperative's economic case.
+The agronomic effect is modeled as a multiplicative boost factor $\beta_{\mathrm{QF}} =\num{1.08}$ (\qty{8}{\percent} biomass enhancement) applied to the effective crop biomass in the LCA model. This factor is conservative relative to literature values of CQD biostimulation (\qtyrange{12}{18}{\percent} in \textit{Arabidopsis thaliana} and \qtyrange{8}{15}{\percent} in leafy greens --- model assumptions pending source verification, per the \Cref{SI-sec:roadmap} disclaimer) and is applied only to Scenario A (quantum agrivoltaic shield), where the CQD sentinel network provides the delivery mechanism. For the \qty{500}{\m\squared} floriculture micro-module, $\beta_{\mathrm{QF}} =\num{1.08}$ translates to an additional \qty{0.96}{\kg\per\m\squared\per\yr} of cut-flower biomass, strengthening the cooperative's economic case.
 
 \subsection{Global quantum agriculture standard (GQAS)}
 \label{SI-sec:gqas}
 
 The proliferation of quantum-enabled sensors and communication in agriculture---from the CQD/NPoM SERS network and BB84 QKD layer of this work to external initiatives in quantum-enhanced soil sensing and satellite-based QKD for precision farming---creates a pressing need for a voluntary certification framework. We propose the \textbf{Global Quantum Agriculture Standard (GQAS)}, a six-pillar compliance framework that any quantum-agrivoltaic installation can audit against:
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{QKD security}: QBER $\leq \qty{11}{\percent}$ and key rate $\geq\qty{100}{\Hz}$.
+\item \textbf{QKD security}: QBER $\leq \qty{11}{\percent}$ and key rate $\geq\qty{100}{\Hz}$ (a $\approx\qty{200}{\Hz}$ rate is implied by the \qty{4.8}{\ms} per-session budget of \Cref{SI-sec:qkd}).
 \item \textbf{Data sovereignty}: differential privacy $\varepsilon \geq 2$ and ledger integrity.
 \item \textbf{Sensor integrity}: SERS LOD $\leq \qty{50}{\nM}$ in laboratory buffer (the $\times 10$ field-basis penalty of the main text applies to raw matrices) and NV diamond calibration verified.
 \item \textbf{Quantum fidelity}: density-matrix trace $\leq\num{1.0001}$ and positivity $\geq\num{-1e-5}$.

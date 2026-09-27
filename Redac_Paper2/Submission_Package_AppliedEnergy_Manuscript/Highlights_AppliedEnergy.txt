@@ -2,4 +2,4 @@
 - NPoM cavity enables SERS crop diagnostics; transport trade-off quantified.
 - OPV shield cuts evapotranspiration 28% (FAO-56); NEB 72.6 kgCO2e/m2/yr.
 - 500 m2 cooperative module pays back in 4.32 yr in Cameroon highlands.
-- First quantum-coherence-guided agrivoltaic design with TEA and LCA.
+- First, to our knowledge, coherence-guided agrivoltaic design with TEA and LCA.

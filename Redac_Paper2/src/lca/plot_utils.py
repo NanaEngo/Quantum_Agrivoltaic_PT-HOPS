@@ -199,20 +199,25 @@ class Paper2FigureGenerator:
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 5))
 
         # Panel (a): Floquet Stark detuning
-        flux = np.linspace(0, 1200, 200)
+        flux = np.linspace(0, 1200, 400)
         V0 = 0.05
-        I_threshold = 850.0  # switch-on (release = 750 W/m2, hysteresis dead band)
-        V_eff = V0 / (1.0 + np.exp(-(flux - I_threshold) / 30.0))
-        V_eff -= V_eff[0]
-        ax1.plot(flux, V_eff, color="#4C72B0", linewidth=2.5)
-        ax1.axvline(
-            x=I_threshold,
-            color="gray",
+        I_on, I_off = 850.0, 750.0  # hysteresis: engage >850, release <=750
+        V_rise = V0 / (1.0 + np.exp(-(flux - I_on) / 30.0))
+        V_fall = V0 / (1.0 + np.exp(-(flux - I_off) / 30.0))
+        V_rise -= V_rise[0]
+        V_fall -= V_fall[0]
+        ax1.plot(flux, V_rise, color="#4C72B0", linewidth=2.5, label="Rising flux (engage >850)")
+        ax1.plot(
+            flux,
+            V_fall,
+            color="#4C72B0",
+            linewidth=2.0,
             linestyle="--",
-            alpha=0.5,
-            label=f"Threshold ({I_threshold} W/m²)",
+            label="Falling flux (release ≤750)",
         )
-        ax1.fill_between(flux, 0, V_eff, alpha=0.15, color="#4C72B0")
+        ax1.axvline(x=I_on, color="gray", linestyle=":", alpha=0.5)
+        ax1.axvline(x=I_off, color="gray", linestyle=":", alpha=0.5, label="Dead band 750–850")
+        ax1.fill_between(flux, 0, V_rise, alpha=0.10, color="#4C72B0")
         ax1.set_xlabel("Solar Flux (W/m²)", fontweight="bold")
         ax1.set_ylabel("Stark Detuning (eV)", fontweight="bold")
         ax1.set_title("(a) Floquet Stark Detuning", loc="left", fontweight="bold")

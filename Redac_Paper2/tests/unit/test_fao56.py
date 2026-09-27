@@ -9,7 +9,7 @@ from src.microclimate.fao56 import GreenhouseEvapotranspiration, reference_condi
 
 
 def test_reference_conditions_et():
-    """Published ET chain: open 4.50 / shield 3.24 mm/day, -27.9 %, 460 L/m2/yr."""
+    """Published ET chain: open 4.51 / shield 3.25 mm/day, -27.9 %, 460 L/m2/yr."""
     ref = reference_conditions_et()
     assert ref["et_open"] == pytest.approx(4.50, abs=0.02)
     assert ref["et_shield"] == pytest.approx(3.24, abs=0.02)
