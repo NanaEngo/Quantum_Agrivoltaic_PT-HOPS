@@ -25,7 +25,8 @@ Net Energy Benefit: A Quantum-Guided Digital Twin" (energy-systems lead).
 Interpretive canon (V2611, 2026-11-06): argument-first abstract; R1-R8 patches — photon-
 allocation ledger (Stallknecht2023), sentinel-utility arithmetic (EPA2021 benchmark),
 coherence-controversy exposure (Duan2017), falsifier paragraph, 5-yr replacement-cycle
-re-run + LER ledger in SM, honest BB84 threat model (Aquina2025); no "first-ever" claim
+re-run + LER ledger in SM, sentinel-area budget derivation + predicted dressed-channel
+absorption fingerprints in SM S12, honest BB84 threat model (Aquina2025); no "first-ever" claim
 in Highlights (hedged novelty stays in the cover letter).
 """
 import os
@@ -191,6 +192,15 @@ for val, desc in [("0.971", "global canopy yield 0.971"), ("91.8", "suppression 
     check(val in ms_content, f"MS contains {desc}")
 check(all(v in ms_content for v in ["0.0505", "0.0768", "0.0799", "0.0791"]),
       "MS scan table carries canonical selected points (0.0505/0.0768/0.0799/0.0791; full scan in SI)")
+
+# 8b. Interpretive canon V2611 addendum (2026-11-06): sentinel-area budget derivation (SM S12).
+check("\\label{SI-sec:budget}" in si_content, "SM carries the sentinel-area budget section (SI-sec:budget)")
+check("SI-eq:budget_law" in si_content and "0.900" in si_content,
+      "SM derives trade-off law Phi(alpha)=Phi_P - alpha*Delta with Delta=0.900")
+check("tab:SI_budget_envelope" in si_content, "SM carries the fouling-adjusted insurance envelope table")
+check("Cref{SI-sec:budget}" in ms_content, "MS points to the budget derivation from the canopy section")
+check("Stallknecht2023" in ms_content and "Duan2017" in ms_content,
+      "MS anchors R1/R2 on verified evidence keys (Stallknecht2023, Duan2017)")
 
 # 9. Framing canon (2026-09-24): gaps / central question / claims / firsts / barriers
 check("three gaps recur" in ms_content, "Intro states three recurring literature gaps")
