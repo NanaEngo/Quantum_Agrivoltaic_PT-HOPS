@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "quantum-simulations-framework"
+version = "1.0.0"
+description = "High-performance computational framework for simulating non-Markovian quantum dynamics in photosynthetic complexes (FMO) and agrivoltaic systems"
+readme = "QUICKSTART.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Nana Engo S.G."},
+    {name = "Teguia Kouam S.C."},
+    {name = "Goumai Vedekoi T."},
+    {name = "Tchapet Njafa J.-P."},
+    {name = "Nguenang J.-P."},
+]
+keywords = ["quantum-dynamics", "FMO", "agrivoltaics", "mesohops", "photosynthesis"]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quantum_simulations_framework*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["archives"]  # legacy quarantine tree, not linted (2026-11-06)
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "C", "B"]
+ignore = ["E501", "E402", "C901"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401", "F403", "F405"]
+"tests/*.py" = ["S101"]
+"tests/conftest.py" = ["E741"]  # `l` is hierarchy-depth notation in this physics codebase
+
+[tool.isort]
+profile = "black"
+line_length = 100

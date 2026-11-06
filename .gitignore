@@ -1,0 +1,151 @@
+# =============================================================================
+# .gitignore — Quantum Agrivoltaic PT-HOPS
+# =============================================================================
+
+# ─── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# ─── Testing ───────────────────────────────────────────────────────────────
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# ─── Jupyter ───────────────────────────────────────────────────────────────
+.ipynb_checkpoints
+notebooks/*.ipynb_checkpoints/
+
+# ─── IDEs ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── OS ────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── FUSE filesystem ──────────────────────────────────────────────────────
+.fuse*
+
+# ─── Graphify (knowledge graph output) ────────────────────────────────────
+graphify-out/
+
+# ─── LaTeX auxiliary ──────────────────────────────────────────────────────
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.dvi
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.maf
+*.mtc
+*.mtc0
+*.nav
+*.nlo
+*.out
+*.pdfsync
+*.pyg
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdy
+*.run.xml
+Redac_Paper1/Theory_Journals/JPCL/acs-*.bib
+
+# ─── Simulation data (binary) ─────────────────────────────────────────────
+*.h5
+*.hdf5
+
+# ─── Simulation data (tabular) ────────────────────────────────────────────
+*.csv
+*.INVALID_FALLBACK_DATA.csv
+
+# ─── Generated reports ────────────────────────────────────────────────────
+Redac_Paper2/coverage_html/
+
+# ─── Large compiled/generated files ───────────────────────────────────────
+*.tar.gz
+# *.pdf
+
+# ─── Package managers ─────────────────────────────────────────────────────
+package-lock.json
+environment.yml
+
+# ─── Project-specific ─────────────────────────────────────────────────────
+# Agent tooling configs (not source)
+.qodo/
+.kiro/
+.agent/
+.agents/
+.QWEN*/
+managed_context/
+test_suite_analysis/
+.opencode/
+
+# Unrelated submodule / tooling
+comfyui-mcp-server/
+
+# Planning artifacts
+_bmad/
+
+# Sensitive / local-only
+Next/
+QWEN.md
+
+# Laptop-specific (do not commit local test overrides)
+Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yaml
+
+# ─── Temporary files ──────────────────────────────────────────────────────
+*.tmp
+*.bak
+envs.txt
+
+# ─── Workspace migration 2026-11-06 (Session 29) ─────────────────────────
+# Raw NPoM relaunch run snapshots (~200 MB scratch; pointer scripts live in backups/)
+Redac_Paper2/relaunch_20260923/
+Redac_Paper2/relaunch_20260924/
+Redac_Paper2/logs/
+*.zip
+.gemini_security/
+blackbox_mcp_settings.json

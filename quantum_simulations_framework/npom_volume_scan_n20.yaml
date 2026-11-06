@@ -1,0 +1,64 @@
+# npom_volume_scan_n20.yaml - NPoM Mode Volume Sensitivity Scan (n=20)
+# Derived from parameters.yaml for Milestone 6 / Requirement R6
+
+metadata:
+  project: "Quantum_Agrivoltaic_PT-HOPS"
+  version: "1.0.0"
+  description: "NPoM Mode Volume Sensitivity Scan with n=20 Disorder Realizations for Table 2"
+
+hamiltonian:
+  sites: 7
+  coupling_type: "FMO_Realistic"
+  source: "Adolphs_Renger_2006"
+
+bath:
+  spectral_density: "Kleinekathoefer_Coker_Multi-Mode"
+  temperature: 295.0  # Kelvin (Room Temperature)
+  reorganization_energy: 35.0 # Drude-Lorentz (cm^-1)
+  drude_cutoff: 50.0 # cm^-1
+
+  # Realistic Vibronic Modes (12 Dominant Peaks per Coker 2013)
+  vibronic_frequencies: [180.0, 220.0, 280.0, 350.0, 520.0, 575.0, 720.0, 1050.0, 1185.0, 1220.0, 1350.0, 1500.0]
+  huang_rhys_factors: [0.05, 0.045, 0.03, 0.025, 0.02, 0.015, 0.01, 0.008, 0.005, 0.005, 0.004, 0.003]
+  vibronic_damping: [10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0] # cm^-1, one per mode
+
+dynamics:
+  L_max: 8  # Capped at L=8 to avoid OOM
+  matsubara_truncation: 2   # K=2: converged at T=295 K
+  time_max: 1000.0  # fs
+  time_step: 0.2  # fs (matching Table 2 specifications)
+  convergence_threshold: 1.0e-6  # Frobenius norm
+  sbd_bundles_per_site: 3  # Optimal: C(24,7)=346K states
+
+simulation:
+  n_traj: 20  # ensemble trajectories for volume scan
+  n_disorder_samples: 20 # static disorder realisations (n=20)
+  disorder_sigma_cm: 50.0 # cm^-1 — Gaussian diagonal disorder std dev
+  v_mode_scan_nm3: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4] # 7 V_mode values for Table 2
+
+pulse:
+  type: "Gaussian"
+  fwhm: 50.0 # fs
+  delay: 0.0 # fs (Relative to photoexcitation)
+  center_freq: 12500.0 # cm^-1 (BChl Qy band)
+  amplitude: 0.05
+  phase: 0.0
+
+spectral_filter:
+  type: "dual_band_gaussian"
+  band_centers_nm: [750.0, 820.0]       # nm
+  bandwidth_cm: 100.0                    # cm^-1 FWHM per band
+  weights: [1.0, 1.0]                    # relative amplitude of each band
+
+agrivoltaics:
+  coupling_strength: 0.03
+  opv_bandgap: 1.9 # eV
+  n_opv_sites: 4
+  regions: ["Germany", "India", "Kenya"]
+
+visualization:
+  theme: "JPCL_Standard"
+  dpi: 600
+  font_size_min: 10  # Legibility compliance
+  contrast_high: true
+  save_format: "pdf"
