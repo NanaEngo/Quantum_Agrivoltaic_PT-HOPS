@@ -768,7 +768,47 @@ The trade-off between exciton transport efficiency and SERS sensitivity is quant
 
 
 %==============================================================================
-% SECTION S12: ROADMAP — NINE ADVANCES FOR NEXT-GENERATION
+% SECTION S12: SENTINEL AREA BUDGET AND PREDICTED SPECTRAL FINGERPRINTS
+%==============================================================================
+
+\section{Sentinel area budget and predicted spectral fingerprints}
+\label{SI-sec:budget}
+
+This section makes quantitative the two trade-offs on which claim F2 rests: what the sentinel area costs the canopy (a budget identity, with the envelope it implies for fouling), and what the dressed channel should look like in a linear-absorption measurement (a falsifiable fingerprint computed with the MesoHOPS 1.8 non-dyadic spectroscopy path).
+
+\subsection{The sentinel-area budget: derivation of the trade-off law}
+
+The main text states the headline trade-off as a one-sentence law --- 0.9 canopy points per 1\% of sentinel area. Here it is derived, together with the boundary conditions that make it a design rule rather than a quote. Write the area-weighted global trapping yield of \Cref{eq:phi_global} in budget form,
+\begin{equation}\label{SI-eq:budget_law}
+\Phi_{\mathrm{FT}}^{\mathrm{global}}(\alpha) \;=\; \Phi_{\mathrm{FT}}^{\mathrm{passive}} - \alpha\,\Delta,
+\qquad \Delta \equiv \Phi_{\mathrm{FT}}^{\mathrm{passive}} - \Phi_{\mathrm{FT}}^{\mathrm{NPoM}} = \num{0.980} - \num{0.0799} = \num{0.900},
+\end{equation}
+so the marginal price of sentinel area is the constant $\mathrm{d}\Phi_{\mathrm{FT}}^{\mathrm{global}}/\mathrm{d}\alpha = -\Delta$: every additional 1\% of module area converted to NPoM sentinel costs \qty{0.90}{\percent} of canopy trapping yield, everywhere on the envelope. Three conditions make the identity physical rather than tautological. First, the two endpoints come from different places: $\num{0.0799}$ is measured on the sentinel trajectory ensemble ($n=20$ at $V=\qty{1.2}{\nm\cubed}$, cross-validated at $n=100$ at $V=\qty{0.8}{\nm\cubed}$), while \num{0.980} is the passive capture-efficiency cap --- a declared model input, not an integral. Second, the linear mixing assumes the exciton-transport problem is local to its own patch of module: the passive canopy does not optically feed the sentinel and the sentinel does not drain the passive patch beyond its own absorption. This is the same locality that allows a diagnostic cavity to exist at all, and it is exactly what a future waveguide-coupled design would violate. Third, the spectral side of the budget closes only because both passbands lie outside photosynthetically active radiation: the \qtylist{750;820}{\nm} windows divert $\sim$\qty{10.2}{\W\per\m\squared} ($\sim$\qty{1.0}{\percent} of AM1.5G) to the quantum channel while the PAR reaching the canopy is untouched, which is the design rule that crop performance tracks PAR transmittance ahead of any other module optical parameter~\cite{Stallknecht2023}. A sentinel that had to live inside the PAR band would pay this budget twice.
+
+The useful inversion of \Cref{SI-eq:budget_law} is the fouling insurance ratio. Claim F2 sets the nominal sentinel fraction at $\alpha=\num{0.01}$, at which the modeled fouling schedule leaves diagnostic availability above \qty{90}{\percent} (\Cref{SI-sec:qkd}), i.e.\ an effective coverage of \SI{0.9}{\percent} of area. If fouling outpaces the calibrator and the design must add sentinel area to restore coverage, \Cref{SI-eq:budget_law} bounds the expansion: the yield stays above \num{0.95} for $\alpha \leq \qty{3.3}{\percent}$ and above \num{0.90} for $\alpha \leq \qty{8.9}{\percent}$. The nominal design can therefore absorb a factor-$\num{3.7}$ ($\num{0.033}/\num{0.009}$) growth in area demand before claim F2 fails --- up to factor-\(9.9\) before the yield falls below 0.90. \Cref{tab:SI_budget_envelope} tabulates the envelope. The failure mode of F2 named in the main text --- one rainy season pushing $\alpha$ upward --- is thus not binary: it has a measured headroom, and the headroom is the quantity field validation should attack first.
+
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Sentinel-area budget envelope} from \Cref{SI-eq:budget_law} with $\Delta=\num{0.900}$. Nominal design $\alpha=\num{0.01}$ at availability \num{0.90} (effective coverage \SI{0.9}{\percent}).}
+\label{tab:SI_budget_envelope}
+\begin{tabular}{l S[table-format=2.1] S[table-format=2.2] S[table-format=2.1]}
+\toprule
+Yield floor {$\Phi_{\min}$} & {$\alpha_{\max}$ (\%)} & {$\Phi_{\mathrm{FT}}^{\mathrm{global}}(\alpha_{\max})$} & {Insurance ratio $\alpha_{\max}/0.9$} \\
+\midrule
+0.95 & 3.3 & 0.950 & 3.7 \\
+0.90 & 8.9 & 0.900 & 9.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Predicted linear-absorption fingerprints of the dressed channel}
+
+% PLACEHOLDER: figure + shift table + assumptions para pending completion of
+% scripts/spectro_npom_fmo.py --full run (data/spectro/*.csv, peaks.json).
+
+
+%==============================================================================
+% SECTION S13: ROADMAP — NINE ADVANCES FOR NEXT-GENERATION
 % QUANTUM AGRIVOLTAICS
 %==============================================================================
 
