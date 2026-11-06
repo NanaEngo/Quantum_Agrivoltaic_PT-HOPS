@@ -11,7 +11,7 @@
 
 This repository contains two active research projects:
 
-1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD.
+1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update; paper DOI not recorded in this workspace)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, final draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD. The "JPCL Revision" sections below are **historical pre-publication records**.
 
 2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-11-06 update): **editor-suggested transfer (with APC) DECLINED; retargeting a Q1 journal via subscription route (APC-free)**. Packages on hand: `Submission_Package_AppliedEnergy_Manuscript/` (**source of truth** — elsarticle; title reviewed 2026-09-27: *"Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit: A Quantum-Guided Digital Twin"*; verify 62/62) + `Submission_Package_QST_Manuscript/` (iopart, formatting asset; verify 22/22). V5 NE package archived at `_archive/Submission_Package_Nature_Energy_Manuscript/`. Open: upload + submit per `CHECKLIST_UPLOAD_AppliedEnergy.md` (ORCID pending).
 
@@ -256,6 +256,7 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 | Tool | Version | Purpose |
 |------|---------|---------|
 | MesoHOPS | v1.7.0 | PT-HOPS/SBD non-Markovian dynamics; site-installed in conda env `MesoHOP-sim` on this machine (historical editable install from `/home/taamangtchu/Documents/Github/mesohops/` not migrated) |
+| MesoHOPS (probe) | v1.8.0 | Evaluation env `MesoHOP-sim-18` (numpy 2.3.5, pip install from GitHub clone). 1.8 adds non-dyadic absorption/fluorescence spectroscopy, TDVP integrators, rectangular truncation. Paper 2 suite: 128/1-xf parity; spectroscopy smoke `Redac_Paper2/scripts/smoke_mesohops18.py`. **Production stays on 1.7.0** (reproducibility lock — published data pinned). |
 | Python | 3.12+ | Simulation framework (conda env `MesoHOP-sim`) |
 | HierarchicalEOM.jl | latest | Julia HEOM (Anderson model) |
 | QuTiP | 5.2.2+ | Python HEOM (Anderson model) |

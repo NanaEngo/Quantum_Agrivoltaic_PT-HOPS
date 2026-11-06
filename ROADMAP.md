@@ -141,3 +141,4 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 - [ ] Re-establish PenavoraServer access on this machine (SSH key + host entry + rsync paths).
 - [ ] Reconnect git remote and push baseline (old history not on this machine).
 - [x] Disk at 98 % — pruned 2026-11-06 (~94 MB workspace caches + 21 GB conda pkgs/npm/pip caches → 34 GB free, 93 %). Remaining bulk is other projects (`~/Malaria_codesV2` 146 G, colabfold/torch/hf model caches ~6.5 G) — user's call.
+- [x] MesoHOPS 1.8.0 evaluated in parallel env `MesoHOP-sim-18` (prod stays 1.7.0 — reproducibility lock). Paper 2 suite: 128/1-xf parity; non-dyadic absorption spectroscopy smoke passes (`Redac_Paper2/scripts/smoke_mesohops18.py`). 1.8 value: spectral co-design readout, rectangular truncation axis, TDVP for stiff cases — adopt for *future* work only.
