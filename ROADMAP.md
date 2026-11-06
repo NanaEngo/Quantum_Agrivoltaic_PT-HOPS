@@ -140,4 +140,4 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 - [x] Mitigated: git baseline commit, `np.trapezoid` fix (128/1 restored), cover-letter PDF rebuilt, ruff restored (config-only), symlink/purge hygiene, AGENTS.md tree/status/server sections reconciled, Sep-27 title-review session documented.
 - [ ] Re-establish PenavoraServer access on this machine (SSH key + host entry + rsync paths).
 - [ ] Reconnect git remote and push baseline (old history not on this machine).
-- [ ] Disk at 98 % — prune/expand before next production scan.
+- [x] Disk at 98 % — pruned 2026-11-06 (~94 MB workspace caches + 21 GB conda pkgs/npm/pip caches → 34 GB free, 93 %). Remaining bulk is other projects (`~/Malaria_codesV2` 146 G, colabfold/torch/hf model caches ~6.5 G) — user's call.
