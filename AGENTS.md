@@ -13,7 +13,7 @@ This repository contains two active research projects:
 
 1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update; paper DOI not recorded in this workspace)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, final draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD. The "JPCL Revision" sections below are **historical pre-publication records**.
 
-2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-11-06 update): **editor-suggested transfer (with APC) DECLINED; retargeting a Q1 journal via subscription route (APC-free)**. Packages on hand: `Submission_Package_AppliedEnergy_Manuscript/` (**source of truth** — elsarticle; title reviewed 2026-09-27: *"Spectral Co-Design of Agrivoltaic Modules for Multifunctional Net Energy Benefit: A Quantum-Guided Digital Twin"*; verify 62/62) + `Submission_Package_QST_Manuscript/` (iopart, formatting asset; verify 22/22). V5 NE package archived at `_archive/Submission_Package_Nature_Energy_Manuscript/`. Open: upload + submit per `CHECKLIST_UPLOAD_AppliedEnergy.md` (ORCID pending).
+2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-11-06 update): **Applied Energy rejected (reported by authors; editor-suggested paid transfer had already been declined earlier at *Nature Energy*). Retargeted to *Solar Energy* (Elsevier, subscription route — no APC) as package `Submission_Package_SolarEnergy_Manuscript/` (V2611 — source of truth; verify 62/62)**, carrying the full interpretive refinement R1–R8 (`docs/REFINEMENT_INTERPRETIVE_20261106.md`): argument-first abstract, photon-allocation ledger + LER 1.43, coherence-controversy stance, falsifier paragraph, barrier-ranked conclusions, OPV 5-yr durability stress test. Packages on hand: **Solar Energy V2611 (active)** + `Submission_Package_AppliedEnergy_Manuscript/` (historical) + `Submission_Package_QST_Manuscript/` (iopart formatting asset; verify 22/22); V5 NE package archived at `_archive/`. Open: upload + submit per `CHECKLIST_UPLOAD_SolarEnergy.md` (ORCID pending; read SE Guide for Authors at upload — GFA never fetched).
 
 ---
 
@@ -169,8 +169,9 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 │   │   └── Reviewers_Comments_260611.md       # Original reviewer comments
 │   ├── docs/Xiang/Response_to_Tianfu_Xiang.md # Open post-pub reply draft
 │   └── SYNTHESE_SIMULATIONS_JUIN2026.md, run_cluster*.sh, How-to-launch-server.md
-├── Redac_Paper2/                        # Paper 2 — Applied Energy source-of-truth era
-│   ├── Submission_Package_AppliedEnergy_Manuscript/  # MS+SM+cover+verify (62/62)
+├── Redac_Paper2/                        # Paper 2 — Solar Energy V2611 era (since 2026-11-06)
+│   ├── Submission_Package_SolarEnergy_Manuscript/  # ACTIVE source of truth (V2611, 62/62)
+│   ├── Submission_Package_AppliedEnergy_Manuscript/  # Historical (AE rejected era)
 │   ├── Submission_Package_QST_Manuscript/            # QST formatting asset+verify (22/22)
 │   ├── src/ tests/ scripts/ data/ docs/ backups/
 │   ├── relaunch_20260923/ relaunch_20260924/         # RAW NPoM scan scratch ~200 MB (gitignored)
@@ -203,10 +204,12 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Cover_Letter_JPCL_26-06-20.tex` | Cover letter — updated 2026-06-20 (**Source of truth**) |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Reviewers_Comments_260611.md` | Original reviewer comments + journal formatting requests (legacy answer drafts: `_archive/legacy_figures/Archive/`) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_main_2609.tex` | Master manuscript (elsarticle, Applied Energy; **Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_SM_2609.tex` | Supporting Information (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_main_V2611.tex` | Master manuscript (elsarticle, Solar Energy; **Source of truth** — interpretive patch R1–R8 applied 2026-11-06, 22 pp) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_SM_V2611.tex` | Supporting Information (**Source of truth** — + LER ledger & 5-yr durability re-run, 27 pp) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**, 1 p.) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth** — 201 entries; V2611 evidence canon 9 citations verified against OpenAlex/Crossref) |
+| `Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md` | Interpretive-refinement spec (R1–R8 + evidence register) — applied into V2611 |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/` | Applied Energy package — historical (AE rejected; superseded by SolarEnergy V2611) |
 | `_archive/Submission_Package_Nature_Energy_Manuscript/` | Nature Energy package — ARCHIVED 2026-09-26 (declined transfer; superseded by the Applied Energy package) |
 | `_archive/Graphics/` | Figure build output — ARCHIVED 2026-09-26 (figures now land in the Applied Energy package via `scripts/regenerate_figures.py`) |
 | `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
@@ -401,6 +404,16 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 30 (2026-11-06) — Workspace Cleanup, MesoHOPS 1.8 Probe, Interpretive Refinement, Solar Energy Retarget
+
+**Pipeline of the day**: (1) workspace + system cleanup (caches purged; disk 13 GB → 45 GB free; separate `~/Malaria_codesV2` repo GC'd 7.3 GB unreachable objects). (2) MesoHOPS **1.8.0 evaluation** in parallel env `MesoHOP-sim-18` (production stays 1.7.0 — reproducibility lock): Paper 2 suite parity 128 passed/1 xfailed; non-dyadic absorption smoke test PASS (`Redac_Paper2/scripts/smoke_mesohops18.py`; API gotchas: noise TAU = t_step/2, TLEN ≥ t_max, correlator grid excludes t=0, subtract C1 DC tail before FFT, numpy 2 needs `fft` not `rfft`). (3) User judged Paper 2 **too descriptive** → `deep-research`-style web evidence hunt → spec `Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md` (R1–R8 + evidence register with no-fabrication gate). (4) AE rejection reported → **retarget to *Solar Energy*** as `Submission_Package_SolarEnergy_Manuscript/` (V2611): R1–R8 applied to main text (argument-first abstract, photon-allocation ledger with LER ≈ 1.43 in SM, coherence-controversy stance via Duan2017/Zhu2024, falsifiers ¶, OPV 5-yr durability stress test in SM, barrier-ranked conclusions, BB84 demoted to honest sovereignty layer), 9 new citations verified entry-by-entry against OpenAlex/Crossref (EPA imidacloprid benchmark corrected to 500 µg/L; fabricated-DOI traps caught twice), cover letter rewritten for SE (1 p.), README/HIGHLIGHTS/CHECKLIST converted.
+
+**Gates**: pytest 128/1 xf ✅ (both envs) · SE verify **62/62** ✅ · main 22 pp / SM 27 pp / cover 1 pp, zero undefined refs/citations ✅ · ruff clean ✅. Commits: `a089d8a`→`b16b95b`→`8009d25`→`32917f2`→`3ee0256` (baseline → prune → 1.8 probe → refinement spec → SE package).
+
+**Open**: SE upload per `CHECKLIST_UPLOAD_SolarEnergy.md` (ORCID Vedekoi; read SE Guide for Authors first — never fetched; editorial history: declare NE+AE if asked); Barron-Gafford reviewer-conflict flag (co-author of two cited 2026 papers); SSH credentials + git remote still missing on this machine; disk prune before next scan.
+
+---
 
 ### Session 29 (2026-11-06) — Machine Migration Mitigation: Git Baseline, Gate Restoration, Doc Reconciliation
 

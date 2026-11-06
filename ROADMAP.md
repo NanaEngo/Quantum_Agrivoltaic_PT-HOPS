@@ -132,7 +132,7 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 - [x] Weakness mitigations (digital-twin assimilation path, τ_c/EF prediction flags, LOD field-basis values, NPoM-CAPEX overrun sensitivity 4.32→6.11 yr, n-provenance).
 - [x] Commits: `1e6c924` (audit + mitigate), `45fc296` (NE package + Graphics → `_archive/`), `98b02ba` (weakness mitigations + figure/QKD/code hardening).
 - [x] Restructuring 2026-09-26: `Redac_Paper2/` purged (`reports/`, `_bmad-output/`, `results/`, root `references.bib`, one-shot markers, orphan figures, NE-era copies in QST package) and all MD refreshed — `Redac_Paper2/README.md`, package READMEs, this roadmap, root README, AGENTS.md Session 28.
-- [ ] Upload per `CHECKLIST_UPLOAD_AppliedEnergy.md` and submit (ORCID Vedekoi pending).
+- [ ] Upload per `CHECKLIST_UPLOAD_SolarEnergy.md` and submit (ORCID Vedekoi pending). — *superseded 2026-11-06 by §8: AE rejected, retargeted to Solar Energy.*
 
 ## 7. Machine Migration — 2026-11-06 (Session 29)
 
@@ -142,3 +142,10 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 - [ ] Reconnect git remote and push baseline (old history not on this machine).
 - [x] Disk at 98 % — pruned 2026-11-06 (~94 MB workspace caches + 21 GB conda pkgs/npm/pip caches → 34 GB free, 93 %). Remaining bulk is other projects (`~/Malaria_codesV2` 146 G, colabfold/torch/hf model caches ~6.5 G) — user's call.
 - [x] MesoHOPS 1.8.0 evaluated in parallel env `MesoHOP-sim-18` (prod stays 1.7.0 — reproducibility lock). Paper 2 suite: 128/1-xf parity; non-dyadic absorption spectroscopy smoke passes (`Redac_Paper2/scripts/smoke_mesohops18.py`). 1.8 value: spectral co-design readout, rectangular truncation axis, TDVP for stiff cases — adopt for *future* work only.
+
+## 8. Paper 2 — Solar Energy V2611 Era (2026-11-06 →)
+
+- [x] Interpretive inversion R1–R8 designed (`Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md`) after deep web search; evidence register enforces verify-before-cite (9 citations confirmed via OpenAlex/Crossref; EPA benchmark corrected to 500 µg/L).
+- [x] AE rejection → package retargeted: `Submission_Package_SolarEnergy_Manuscript/` — main+SM+cover renamed V2611, R1–R8 applied, SM gains LER ≈ 1.43 ledger + 5-yr OPV durability stress test, cover letter + Highlights + README + upload checklist converted. verify 62/62; PDFs 22/27/1 pp, zero undefined refs. Commit `3ee0256`.
+- [ ] Read Solar Energy Guide for Authors at upload (never fetched — checklist carries [À CONFIRMER] flags), then submit.
+- [ ] ORCID for Vedekoi; drop Barron-Gafford from reviewers if EM flags co-author conflict.
