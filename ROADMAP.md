@@ -147,5 +147,7 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 
 - [x] Interpretive inversion R1–R8 designed (`Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md`) after deep web search; evidence register enforces verify-before-cite (9 citations confirmed via OpenAlex/Crossref; EPA benchmark corrected to 500 µg/L).
 - [x] AE rejection → package retargeted: `Submission_Package_SolarEnergy_Manuscript/` — main+SM+cover renamed V2611, R1–R8 applied, SM gains LER ≈ 1.43 ledger + 5-yr OPV durability stress test, cover letter + Highlights + README + upload checklist converted. verify 62/62; PDFs 22/27/1 pp, zero undefined refs. Commit `3ee0256`.
+- [x] SM S12 sentinel-area budget derivation (trade-off law Φ(α)=Φ_P−αΔ, Δ=0.900; insurance envelope 3.7×/9.9×) + main pointer (`2e9dffa`); verify canon +5 → 67/67 (`1229c8c`).
+- [x] Anti-"incremental" predicted observable: MesoHOPS-1.8 propagation attempts failed on cost (≈13 machine-h; unbundled 120-mode bath explodes hierarchy) → pivoted to exact diagonalization fingerprint: **−57.2 cm⁻¹ band-edge line at 12414.2 cm⁻¹ + two ~11 cm⁻¹ doublets, state-resolved site-0/5 pattern** (SM `tab:SI_fingerprint_shifts` + figure; main stance/falsifier name the benchtop test). Scripts hardened (`--eigen`, `--summarize`, streaming logs). verify 70/70; SM 30 pp. Commits `92e66b5`, `3c8242c`.
 - [ ] Read Solar Energy Guide for Authors at upload (never fetched — checklist carries [À CONFIRMER] flags), then submit.
 - [ ] ORCID for Vedekoi; drop Barron-Gafford from reviewers if EM flags co-author conflict.
