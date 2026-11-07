@@ -803,10 +803,39 @@ Yield floor {$\Phi_{\min}$} & {$\alpha_{\max}$ (\%)} & {$\Phi_{\mathrm{FT}}^{\ma
 
 \subsection{Predicted linear-absorption fingerprints of the dressed channel}
 
-% PLACEHOLDER: figure + shift table + assumptions para pending completion of
-% scripts/spectro_npom_fmo.py --full run (data/spectro/*.csv, peaks.json).
+The budget above prices the sentinel in canopy yield; the fingerprint below prices it in measurable spectra. Diagonalizing the $8\times8$ passive and $9\times9$ dressed Hamiltonians of \Cref{sec:sentinel} --- the same matrices that generate every transport number in this paper, with the plasmon slot resonant with site~4 and coupling $g_0 = \qty{134.2}{\per\cm}$ at $V_{\mathrm{mode}} = \qty{0.8}{\nm\cubed}$ --- yields one-to-one line correspondences that a benchtop absorption measurement of the two device variants can confirm or refute (\Cref{fig:SI_predicted_spectra}, \Cref{tab:SI_fingerprint_shifts}).
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/Figure_SI_predicted_spectra.png}
+\caption{\textbf{Predicted Qy-band linear absorption of the sentinel channel, passive versus dressed.} Stick spectra from exact diagonalization of the bare FMO and plasmon-dressed Hamiltonians with collinear site dipoles; oscillator strength $\propto\lvert\sum_k c_k\rvert^2$, line positions on the absolute BChl~$a$ Qy axis (reference \qty{12500}{\per\cm}). Blue: 8-site passive complex. Red dashed: 9-site dressed channel at $V_{\mathrm{mode}} = \qty{0.8}{\nm\cubed}$. The dressed spectrum gains a band-edge line \qty{57}{\per\cm} below the passive manifold and resolves two lines into doublets --- the fingerprint proposed as the sentinel-channel test in the main text.}
+\label{fig:SI_predicted_spectra}
+\end{figure}
 
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Predicted cavity-induced line shifts of the dressed channel} (exact diagonalization; matched by proximity, strengths collinear-dipole weighted).}
+\label{tab:SI_fingerprint_shifts}
+\begin{tabular}{lrlr}
+\toprule
+Passive line & Dressed line & Shift & Character \\
+ (\per\cm) & (\per\cm) & (\per\cm) & \\
+\midrule
+\num{12471.4} & \num{12414.2} & $-\num{57.2}$ & new band-edge state \\
+\num{12471.4} & \num{12471.5} & $+\num{0.1}$  & passive partner of doublet \\
+\num{12590.4} & \num{12590.4} & $\phantom{-}\num{0.0}$ & plasmon-dark, unshifted \\
+\num{12691.7} & \num{12694.7} & $+\num{3.0}$  & weakly coupled \\
+\num{12771.6} & \num{12771.5} & $-\num{0.1}$  & passive partner of doublet \\
+\num{12771.6} & \num{12782.6} & $+\num{11.0}$ & upper doublet component \\
+\num{12961.9} & \num{12972.9} & $+\num{11.0}$ & site-0/5-coupled manifold \\
+\num{13040.8} & \num{13066.7} & $+\num{25.9}$ & most plasmon-admixed line \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two properties make this a useful falsifier rather than a formality. The shifts are \emph{state-resolved}: they follow the site-0/5 plasmon coupling geometry, so unshifted lines (site-4-dominated) and shifted lines (site-0/5-dominated) appear in the \emph{same} spectrum --- a uniform global shift, the signature of an experimental artifact rather than of dressing, is distinguishable from the prediction. And the largest separation, \qty{57}{\per\cm} at the band edge, sits far above the resolution of any benchtop spectrometer, while the doublet splittings ($\sim\qty{11}{\per\cm}$) fall within the range of low-temperature or Fourier-transform-limited measurements; a room-temperature film test can therefore confirm the headline shift even if it blurs the splittings.
+
+Three honest bounds. The level schemes come from the \emph{bare dressed Hamiltonian}: bath coupling in the production runs broadens the lines and redistributes oscillator strengths, and lineshape-level calculation at full production hierarchy depth (a non-dyadic absorption propagation on the present \texttt{mesohops}~1.8 toolchain) remains open future work; at the depths tractable here, line positions move by less than the \qty{11}{\per\cm} doublet scale, so the ordering and the band-edge separation survive. Dipole orientations are collinear, an assumption of the same kind already flagged in \Cref{SI-sec:hamiltonian}; any real chlorophyll-protein orientation spread redistributes intensities, not positions. And the entire prediction is a property of the two Hamiltonians already fixed by the transport calculations, so no new parameters enter: if the dressed channel is fabricated and measured, these are the lines it must show.
 %==============================================================================
 % SECTION S13: ROADMAP — NINE ADVANCES FOR NEXT-GENERATION
 % QUANTUM AGRIVOLTAICS

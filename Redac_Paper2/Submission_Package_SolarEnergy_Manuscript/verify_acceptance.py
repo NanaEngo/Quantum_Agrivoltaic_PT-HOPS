@@ -26,7 +26,8 @@ Interpretive canon (V2611, 2026-11-06): argument-first abstract; R1-R8 patches â
 allocation ledger (Stallknecht2023), sentinel-utility arithmetic (EPA2021 benchmark),
 coherence-controversy exposure (Duan2017), falsifier paragraph, 5-yr replacement-cycle
 re-run + LER ledger in SM, sentinel-area budget derivation + predicted dressed-channel
-absorption fingerprints in SM S12, honest BB84 threat model (Aquina2025); no "first-ever" claim
+absorption fingerprints (âˆ’57 cm-1 band-edge line + doublets) in SM S12, honest BB84 threat
+model (Aquina2025); no "first-ever" claim
 in Highlights (hedged novelty stays in the cover letter).
 """
 import os
@@ -201,6 +202,12 @@ check("tab:SI_budget_envelope" in si_content, "SM carries the fouling-adjusted i
 check("Cref{SI-sec:budget}" in ms_content, "MS points to the budget derivation from the canopy section")
 check("Stallknecht2023" in ms_content and "Duan2017" in ms_content,
       "MS anchors R1/R2 on verified evidence keys (Stallknecht2023, Duan2017)")
+check("fig:SI_predicted_spectra" in si_content and "Figure_SI_predicted_spectra.png" in si_content,
+      "SM carries the predicted-fingerprint figure")
+check("tab:SI_fingerprint_shifts" in si_content and "12414" in si_content,
+      "SM fingerprint table carries the -57 cm-1 band-edge line (12414)")
+check("tab:SI_fingerprint_shifts" in ms_content,
+      "MS falsifier names the predicted-fingerprint table")
 
 # 9. Framing canon (2026-09-24): gaps / central question / claims / firsts / barriers
 check("three gaps recur" in ms_content, "Intro states three recurring literature gaps")

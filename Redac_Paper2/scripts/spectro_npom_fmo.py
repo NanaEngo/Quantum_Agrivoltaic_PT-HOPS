@@ -81,6 +81,36 @@ def dressed_hamiltonian(h_fmo: np.ndarray) -> np.ndarray:
     return h, g0
 
 
+def eigen_fingerprint(h_off: np.ndarray, h_on: np.ndarray) -> None:
+    """Dressed-Hamiltonian line positions (no propagator): single-excitation
+    eigenvalues plus collinear-dipole oscillator strengths |sum_k c_k|^2.
+    Exact for the coherent Hamiltonian; bath broadening/shifts would need the
+    open-system propagator (future work). Energies referred to BChl a Qy."""
+    qy_ref = 12500.0
+    lines = {}
+    for cfg, h in (("off", h_off), ("on", h_on)):
+        w, v = np.linalg.eigh(h)
+        energy = w.real + qy_ref
+        strength = np.abs(v.sum(axis=0)) ** 2
+        np.savetxt(
+            OUT_DIR / f"spectrum_{cfg}.csv",
+            np.column_stack([energy, strength]),
+            delimiter=",",
+        )
+        top = sorted(np.argsort(strength)[::-1][:8], key=lambda i: energy[i])
+        lines[cfg] = [[float(energy[i]), float(strength[i])] for i in top]
+    pairs = []
+    for a_on, s_on in lines["on"]:
+        best = min(lines["off"], key=lambda t: abs(t[0] - a_on))
+        if abs(best[0] - a_on) <= 250.0:
+            pairs.append({"on_cm1": a_on, "off_cm1": best[0], "delta_cm1": a_on - best[0], "on_amp": s_on})
+    payload = {"off": {"peaks": lines["off"]}, "on": {"peaks": lines["on"]}, "shift_table": pairs}
+    (OUT_DIR / "peaks.json").write_text(json.dumps(payload, indent=2))
+    print(f"[eigen] {len(pairs)} matched OFF->ON line shifts")
+    for p in pairs:
+        print(f"    {p['off_cm1']:.1f} -> {p['on_cm1']:.1f}  (delta {p['delta_cm1']:+.1f})")
+
+
 def build_system_param(h: np.ndarray) -> tuple[dict, float]:
     """Embed the ground state as basis slot 0 (vector+NONLINEAR absorption in
     MesoHOPS 1.8 requires the 'embedded' Hilbert convention: NSTATES = n+1)."""
@@ -220,6 +250,7 @@ def main() -> None:
     ap.add_argument("--maxhier", type=int, default=8)
     ap.add_argument("--maxprocs", type=int, default=8)
     ap.add_argument("--summarize", action="store_true", help="skip jobs; FFT existing C1_*.csv on disk")
+    ap.add_argument("--eigen", action="store_true", help="no propagator: dressed-Hamiltonian line positions")
     args = ap.parse_args()
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -237,6 +268,10 @@ def main() -> None:
     h_on, g0 = dressed_hamiltonian(h_off)
     _, e_mean_on = build_system_param(h_on)
     print(f"[spectro] g0={g0:.1f} cm^-1 | e_mean off/on = {e_mean_off:.1f}/{e_mean_on:.1f} cm^-1")
+
+    if args.eigen:
+        eigen_fingerprint(h_off, h_on)
+        return
 
     if args.summarize:
         summarize(args.t_step, e_mean_off, e_mean_on)
