@@ -218,6 +218,8 @@ def main() -> None:
     ap.add_argument("--t-max", type=float, default=600.0)
     ap.add_argument("--t-step", type=float, default=0.5)
     ap.add_argument("--maxhier", type=int, default=8)
+    ap.add_argument("--maxprocs", type=int, default=8)
+    ap.add_argument("--summarize", action="store_true", help="skip jobs; FFT existing C1_*.csv on disk")
     args = ap.parse_args()
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -236,30 +238,42 @@ def main() -> None:
     _, e_mean_on = build_system_param(h_on)
     print(f"[spectro] g0={g0:.1f} cm^-1 | e_mean off/on = {e_mean_off:.1f}/{e_mean_on:.1f} cm^-1")
 
+    if args.summarize:
+        summarize(args.t_step, e_mean_off, e_mean_on)
+        return
+
     t0 = time.time()
     if len(jobs) == 1:
-        results = [run_one(jobs[0])]
+        results_iter = iter([run_one(jobs[0])])
     else:
         ctx = mp.get_context("fork")
-        with ctx.Pool(processes=min(len(jobs), 12)) as pool:
-            results = pool.map(run_one, jobs)
-    print(f"[spectro] wall time {time.time() - t0:.0f} s")
-
-    by_cfg: dict[str, list] = {}
-    for config, seed, c1, dt in results:
-        by_cfg.setdefault(config, []).append(np.asarray(c1))
-        print(f"  {config} seed={seed}: len={len(c1)} traj_time={dt:.0f}s")
+        with ctx.Pool(processes=min(len(jobs), args.maxprocs)) as pool:
+            results_iter = pool.imap_unordered(run_one, jobs)
+    for config, seed, c1, dt in results_iter:
         np.savetxt(OUT_DIR / f"C1_{config}_{seed}.csv", np.asarray(c1), delimiter=",")
+        print(f"  {config} seed={seed}: len={len(c1)} traj_time={dt:.0f}s", flush=True)
+    print(f"[spectro] wall time {time.time() - t0:.0f} s")
 
     if args.probe:
         print("[spectro] PROBE DONE")
         return
 
+    summarize(args.t_step, e_mean_off, e_mean_on)
+
+
+def summarize(t_step: float, e_mean_off: float, e_mean_on: float) -> None:
+    """Average C1 traces found on disk (whatever completed), FFT, find peaks."""
+    by_cfg: dict[str, list] = {}
+    for path in sorted(OUT_DIR.glob("C1_*.csv")):
+        config = path.stem.split("_")[1]
+        by_cfg.setdefault(config, []).append(np.loadtxt(path, delimiter=","))
+    print("[summarize] seeds on disk: " + ", ".join(f"{k}:{len(v)}" for k, v in sorted(by_cfg.items())))
+
     summary = {}
     for config, c1s in by_cfg.items():
         c = np.mean(c1s, axis=0)
         e_mean = e_mean_off if config == "off" else e_mean_on
-        axis, power = spectrum(c, args.t_step, e_mean)
+        axis, power = spectrum(c, t_step, e_mean)
         np.savetxt(OUT_DIR / f"spectrum_{config}.csv", np.column_stack([axis, power]), delimiter=",")
         peaks = find_peaks(axis, power)
         summary[config] = {"axis": [axis.tolist(), power.tolist()], "peaks": peaks}
