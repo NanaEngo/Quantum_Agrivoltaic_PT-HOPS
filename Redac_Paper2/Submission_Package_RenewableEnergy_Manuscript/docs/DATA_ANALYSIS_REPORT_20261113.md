@@ -1,9 +1,9 @@
-# Data Analysis Report — Cameroon Tri-Crop ST-OPV Agro-Photovoltaics (WP1–WP5 Synthesis)
+# Data Analysis Report — Cameroon Tri-Crop ST-OPV Agro-Photovoltaics (WP1–WP6 Synthesis)
 
 **Package:** `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript`  
 **Configuration Baseline:** `parameters.yaml` (`framework_version: 2.5.0`)  
-**Date:** `2026-11-13`  
-**Purpose:** Comprehensive quantitative synthesis of WP1–WP5 verified datasets prior to *Renewable Energy* (`RE_main_2611.tex` + `RE_SM_2611.tex`) manuscript drafting and figure inspection. All metrics below are traced directly to local primary JSON/CSV/NPZ artifacts and ledgered peer-reviewed sources (`0 USD/tCO₂e` carbon-credit baseline; `0%` direct grant/subsidy baseline).
+**Date:** `2026-11-13` (rev. 2 — adds WP3b coupled audit §3.3 and final verification gates §7)  
+**Purpose:** Comprehensive quantitative synthesis of WP1–WP6 verified datasets underpinning the *Renewable Energy* (`RE_main_2611.tex` + `RE_SM_2611.tex`) manuscript, its figure audit (§6) and final verification gates (§7). All metrics below are traced directly to local primary JSON/CSV/NPZ artifacts and ledgered peer-reviewed sources (`0 USD/tCO₂e` carbon-credit baseline; `0%` direct grant/subsidy baseline).
 
 ---
 
@@ -85,6 +85,16 @@ Energy balance residual across all `124` scenario runs is `≤ 1.569 × 10⁻⁵
 
 ---
 
+### 3.3 WP3b Coupled Hydraulics Sweep, Monsoon-Open Louver Counterfactual & Climate Stress
+
+All values verified directly against `data/wp3/wp3b_structural_and_louver_audit.json` (regenerable via `scripts/wp3b_structural_and_louver_audit.py`, reproduced by `tests/test_wp3b_structural_and_louver_audit.py`).
+
+- **Soil-plant hydraulics sweep (`AWC ∈ {120, 160, 220}` mm × `g_b ∈ {0.6, 1.2, 2.5}` mol m⁻² s⁻¹):** the focal `S3_OPV_APT44_GCR65` annual ΔY spans `−13.40 % … +6.42 %` (coffee), `−4.42 % … +29.17 %` (Penja pepper) and `−8.21 % … +6.13 %` (tea). The matched-shade c-Si counterfactual tracks it closely: the OPV−cSi gap stays within **`−1.14 … +2.41` pp** across the whole 9-cell grid (coffee `−0.96…−0.22` pp, pepper `−0.47…+2.41` pp, tea `−1.14…−0.89` pp), and the grid center reproduces the WP3 focal run to `≤ 8.9 × 10⁻¹⁶` pp — crop-ranking conclusions are insensitive to hydraulic-parameter uncertainty.
+- **Monsoon-open louver counterfactual (`S6`, panels opened June–October):** nearly eliminates the wet-season PAR penalty — coffee wet ΔY `−15.88 % → −5.58 %` (annual `−7.08 % → +0.30 %`, rescue `+7.38` pp), tea wet `−8.84 % → +0.32 %` (annual `−3.35 % → +1.50 %`, `+4.85` pp), Penja pepper wet `−1.36 % → +0.34 %` (annual `+7.43 % → +8.65 %`). The honest cost: monsoon PV output collapses `−38.0 % … −39.9 %` (coffee `1223.3 → 738.8` MWh/ha/yr), giving `ΔNPV = −$349.6k … −$678.2k/ha` vs fixed tilt and a break-even actuation CAPEX of **`$0.00/m²`** — the open-louver scenario never beats fixed-tilt `S3` on NPV and trails irrigated dynamic shading `S5` by `$357.7k–717.2k/ha`. The wet-season loss is therefore light-harvest-limited (sub-saturation diffuse hours), not a correctable geometric-shade defect.
+- **Synthetic climate stress (warm-dry: `ΔT +1.5 °C`, `RH −5 pp`, `precip ×0.75`, `GHI ×1.05`, diffuse `−0.05`; cool-cloudy: `ΔT −1.0 °C`, `RH +5 pp`, `precip ×1.25`, `GHI ×0.90`, diffuse `+0.08`):** confirms the seasonal inversion mechanism at both ends — warm-dry flips Foumbot coffee annual OPV ΔY positive (`−7.08 % → +1.28 %`), amplifies Penja pepper (`+7.43 % → +16.67 %`, OPV−cSi gap `+1.38` pp) and tea (`→ +1.67 %`); cool-cloudy deepens penalties (coffee `−12.82 %`, tea `−7.77 %`, pepper `+0.74 %`, gaps `−0.05…−1.10` pp). The sign of the OPV-vs-c-Si crop ranking is robust under both perturbations.
+
+---
+
 ## 4. Cooperative Dispatch, TEA/LCA Break-Even & Sobol Global Sensitivity (WP5)
 
 ### 4.1 Processing Catchment Dispatch (`S3_OPV_APT44_GCR65`, `0 USD/tCO₂e`, `0%` Subsidy)
@@ -132,3 +142,12 @@ All six figures (`figures/Fig1..Fig6.{pdf,png}`) were rendered with `scienceplot
 4. **Fig. 4 (`Fig4_Four_Lever_Causal_Attribution_Phase`):** Raised Panel (a) `ylim` to `(-24.0, 34.5)` so the `+24.96%` `Pepper OPV APT44` stacked bar clears the `ncol=2` top legend; eliminated the `Tea` / `Penja Pepper` label collision in Panel (b) via leader-arrow offsets (`Penja Pepper` placed left at `1.42`, `Tea` right at `2.36`), boxed `Neutral (ΔY = 0%)` cleanly, and marked the `PAR95/Isat = 2.20` modeled domain boundary explicitly.
 5. **Fig. 5 (`Fig5_Dispatch_TEA_LCA_BreakEven`):** Raised Panel (b) `ylim` to `(0, 42)` above the `32.7 gCO2e/kWh` Tea bar; replaced vertical dark-on-red `ΔLCA = 0` text in Panel (c) with a horizontal white-backed badge (`ΔLCA = 0 (7.4 yr)`) and moved `ΔNPV = 0` to `(11.8, 0.24)` clear of the green R2R parity star (`$15/m², 16.3 yr`).
 6. **Fig. 6 (`Fig6_Sobol_Uncertainty_LER_Policy`):** Widened Panel (a) `xlim` to `(-540, 395)` to give `P(>c-Si)=23.0%` generous right padding; aligned Panel (b) so BOTH classical levers and the bounded quantum lever read from the same `ΔNPV` Sobol output (`S_Ti = 2.1 × 10⁻⁸ (bounded)`); standardized `USD/t` / `25 USD/tCO2e` typography in Panel (c).
+
+---
+
+## 7. Verification Gates & Manuscript Integration (WP6)
+
+- **Integrity tests:** `27 passed` (`pytest`, `MesoHOP-sim` env, verified `2026-11-13`) across `tests/test_wp1_data_integrity.py`, `test_wp2_tmm_and_quantum.py`, `test_wp3_microclimate_crop.py`, `test_wp3b_structural_and_louver_audit.py`, `test_wp5_tea_lca_sobol.py`, `test_wp6_manuscript_integrity.py` — including config consistency against `parameters.yaml` (`framework_version: 2.5.0`) via `scripts/check_config.py`.
+- **Compilation (pdflatex + bibtex, zero errors / zero undefined references or citations):** `RE_main_2611.pdf` **21 pp**, `RE_SM_2611.pdf` **6 pp**, `RE_Cover_letter_2611.pdf` **1 p**, `RE_Highlights_2611.pdf` **1 p**.
+- **Figures:** `Fig1`–`Fig6` (`pdf` + `png`) regenerated end-to-end by `scripts/wp6_generate_figures.py` from the primary `data/wp*` artifacts audited above.
+- **Open before upload:** fetch + read the *Renewable Energy* Guide for Authors (never fetched); create an RE-specific upload checklist; ORCID pending.
