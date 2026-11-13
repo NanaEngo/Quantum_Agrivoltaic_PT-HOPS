@@ -140,3 +140,12 @@ Redac_Paper1/quantum_simulations_framework_parallel_260509/laptop_parameters.yam
 *.tmp
 *.bak
 envs.txt
+
+# ─── Workspace migration 2026-11-06 (Session 29) ─────────────────────────
+# Raw NPoM relaunch run snapshots (~200 MB scratch; pointer scripts live in backups/)
+Redac_Paper2/relaunch_20260923/
+Redac_Paper2/relaunch_20260924/
+Redac_Paper2/logs/
+*.zip
+.gemini_security/
+blackbox_mcp_settings.json

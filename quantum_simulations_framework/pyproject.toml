@@ -38,6 +38,7 @@ target-version = ["py311"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["archives"]  # legacy quarantine tree, not linted (2026-11-06)
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "C", "B"]
@@ -47,8 +48,9 @@ ignore = ["E501", "E402", "C901"]
 quote-style = "double"
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
+"__init__.py" = ["F401", "F403", "F405"]
 "tests/*.py" = ["S101"]
+"tests/conftest.py" = ["E741"]  # `l` is hierarchy-depth notation in this physics codebase
 
 [tool.isort]
 profile = "black"

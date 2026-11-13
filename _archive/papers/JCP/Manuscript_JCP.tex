@@ -1,0 +1,218 @@
+%==============================================================================
+% MANUSCRIPT FOR JOURNAL OF CHEMICAL PHYSICS (AIP)
+%==============================================================================
+\documentclass[aip,jcp,preprint]{revtex4-2}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,graphicx,booktabs,siunitx,physics,bm}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+% SIunitx configuration
+\sisetup{
+    locale = US,
+    detect-all = true,
+    group-minimum-digits = 4,
+    separate-uncertainty = true,
+    multi-part-units = single,
+    range-phrase = {--},
+    range-units = single,
+    number-unit-product = \,,
+    input-comparators = { < > = \le \ge \ll \gg \leq \geq }
+}
+
+\begin{document}
+
+%==============================================================================
+% AUTHOR INFORMATION
+%==============================================================================
+\title{Suppression of pure dephasing and enhancement of excitonic coherence via non-Markovian spectral bath engineering}
+
+\author{Steve Cabrel Teguia Kouam}
+\email{steve.teguia@facsciences-uy1.cm}
+\affiliation{Department of Physics, Faculty of Science, University of Douala, Cameroon}
+
+\author{Theodore Goumai Vedekoi}
+\affiliation{Department of Physics, Faculty of Science, University of Yaoundé I, Cameroon}
+
+\author{Jean-Pierre Tchapet Njafa}
+\affiliation{Department of Physics, Faculty of Science, University of Yaoundé I, Cameroon}
+
+\author{Jean-Pierre Nguenang}
+\affiliation{Department of Physics, Faculty of Science, University of Douala, Cameroon}
+
+\author{Serge Guy Nana Engo}
+\affiliation{Department of Physics, Faculty of Science, University of Yaoundé I, Cameroon}
+
+\date{\today}
+
+%==============================================================================
+% ABSTRACT
+%==============================================================================
+\begin{abstract}
+We investigate how structured modifications to the incident photon bath modulate coherent exciton propagation in multi-chromophoric systems. Using the numerically exact Process Tensor Hierarchy of Pure States (PT-HOPS) with Stochastically Bundled Dissipators (SBD), we simulate excitonic dynamics of the seven-bacteriochlorophyll-\textit{a} Fenna--Matthews--Olson complex under spectrally engineered illumination. Dual-band transmission windows centered at \SIlist{750;820}{\nano\meter} selectively populate vibronic resonances while reducing excitation of overdamped bath modes responsible for pure dephasing. In the polaron-transformed frame, the selectively prepared excitonic states couple less strongly to the low-frequency continuum, yielding a reduced effective dephasing rate $\Gamma_{\mathrm{pd}} \propto \lambda_{\mathrm{eff}} k_B T$ with $\lambda_{\mathrm{eff}} < \lambda$. Numerically exact simulations at \SI{295}{\kelvin} reveal a \SIrange{20}{50}{\percent} extension of excitonic coherence lifetimes and a \SI{25}{\percent} enhancement in energy transfer efficiency, robust over \num{500} static disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$; $\langle\eta\rangle = 0.20 \pm 0.04$). These results establish spectral bath engineering as a control mechanism for extending coherent transport in condensed-phase systems.
+\end{abstract}
+
+\maketitle
+
+%==============================================================================
+% INTRODUCTION
+%==============================================================================
+\section{\label{sec:intro}Introduction}
+
+Non-equilibrium energy transfer in multi-chromophoric systems is governed by the interplay between electronic couplings and system-bath interactions.\cite{Scholes2011,Cao2020} In pigment-protein complexes such as the Fenna--Matthews--Olson (FMO) antenna,\cite{Adolphs2006} the system-bath correlation time is comparable to the energy transfer timescale, placing the dynamics in the non-Markovian regime where memoryless approximations fail.\cite{Tanimura1989,Engel2007,Panitchayangkoon2010} Structured spectral densities containing discrete underdamped intra-molecular vibrations sustain excitonic coherences through vibronic coupling---a mechanism in which the near-resonance between electronic energy gaps and specific vibrational frequencies enables coherence-assisted transport.\cite{Ishizaki2009a,Christensson2012,Chin2013}
+
+Previous investigations have modeled the protein-solvent environment as a fixed boundary condition and focused on how different spectral density structures affect transport.\cite{Huelga2013,Cao2020} An unexplored question is whether the \textit{external driving field}---the incident photon spectrum---can serve as an independent control parameter for quantum coherence.
+
+In this work, we address this question using the exact Process Tensor Hierarchy of Pure States with Stochastically Bundled Dissipators (PT-HOPS/SBD).\cite{Suess2014,Citty2024a} We engineer the incident photon bath via dual-band transmission filters and analyze the resulting excitonic dynamics in the FMO complex. We find that selective excitation of vibronic resonances produces initial states that, in the polaron frame,\cite{Jang2008} experience reduced pure dephasing while retaining access to the vibronic channels that mediate efficient energy transfer.
+
+Our approach is benchmarked against HEOM\cite{Tanimura1989,Ishizaki2009a} and the TEMPO tensor network method\cite{Strathearn2018} via a 12-test validation suite, establishing the quantitative reliability of all reported results.
+
+%==============================================================================
+% THEORY AND METHODOLOGY
+%==============================================================================
+\section{\label{sec:theory}Theory}
+
+\subsection{System Hamiltonian and bath coupling}
+The FMO monomer is described by the electronic Hamiltonian:\cite{Adolphs2006}
+\begin{equation}
+\hat{H}_{\mathrm{el}} = \sum_{n=1}^{7} \varepsilon_n \dyad{n} + \sum_{n \neq m} J_{nm} \dyad{n}{m},
+\end{equation}
+with site energies $\varepsilon_n$ and electronic couplings $J_{nm}$. Each chromophore couples linearly to a local harmonic bath. The system-bath interaction is fully characterized by the spectral density:\cite{Moix2011}
+\begin{equation}
+J_{\mathrm{bath}}(\omega) = \frac{2\lambda\gamma\omega}{\omega^2 + \gamma^2} + \sum_k \frac{2\lambda_k\omega_k^2\gamma_k}{(\omega-\omega_k)^2 + \gamma_k^2},
+\label{eq:spectral_density}
+\end{equation}
+where the Drude--Lorentz term describes overdamped protein-solvent fluctuations ($\lambda = \SI{35}{\per\centi\meter}$, $\gamma^{-1} = \SI{106}{\femto\second}$) and the Brownian oscillator terms model underdamped vibronic modes at $\omega_k = \SIlist{150;200;575;1185}{\per\centi\meter}$.\cite{Chin2013}
+
+\subsection{PT-HOPS formalism}
+The reduced density matrix $\vb*{\rho}(t) = \mathbb{E}[\dyad{\psi(t)}]$ is obtained by averaging over stochastic wavefunctions propagated within an auxiliary hierarchy:\cite{Suess2014,Citty2024a}
+\begin{equation}
+\pdv{t}\ket{\psi^{(\vb{n})}} = \left(-i\hat{H}_S - \sum_{j} n_j \nu_j\right)\ket{\psi^{(\vb{n})}}
+- i\sum_{j} \sqrt{(n_j{+}1)d_j}\,\hat{L}_j \ket{\psi^{(\vb{n}+\vb{e}_j)}}
+- i\sum_{j} \sqrt{n_j/d_j}\,\hat{L}_j^\dagger \ket{\psi^{(\vb{n}-\vb{e}_j)}},
+\label{eq:hops}
+\end{equation}
+where $\vb{n}$ is the hierarchy multi-index, $\hat{L}_j$ are system-bath coupling operators, and $\nu_j$, $d_j$ arise from the Padé decomposition of the bath correlation function.\cite{Duan2017} The Stochastically Bundled Dissipator (SBD) technique partitions the composite spectral density into independent sub-baths, reducing the auxiliary state count from $\mathcal{O}(K^L)$ to $\mathcal{O}(M \cdot K_{\mathrm{avg}}^L)$.\cite{Citty2024a}
+
+\subsection{Padé decomposition}
+The bath correlation function is expressed as a sum of $K$ exponentials:
+\begin{equation}
+C(t) = \sum_{k=0}^{K} d_k \exp(-\nu_k t).
+\end{equation}
+For the Drude--Lorentz component at inverse temperature $\beta$:\cite{Tanimura1989}
+\begin{equation}
+C(t) = \frac{\lambda\gamma}{\beta}\sum_{k=0}^{\infty} \frac{e^{-\nu_k t}}{\nu_k - \gamma} + \frac{\lambda\gamma}{2}\left[\coth\!\left(\frac{\beta\gamma}{2}\right) - i\right]e^{-\gamma t},
+\label{eq:correlation_DL}
+\end{equation}
+where $\nu_k = 2\pi k/\beta$ are Matsubara frequencies. Padé resummation permits truncation at $K = 3$ for $T = \SI{295}{\kelvin}$. Convergence at all hierarchy depths and Padé orders is documented in a 12-test validation suite (see Supplementary Material).
+
+\subsection{Numerical validation summary}
+Key benchmarks: steady-state populations deviate by \SI{1.8}{\percent} from HEOM;\cite{Ishizaki2009a} trace is conserved to $< \num{5e-13}$; density matrix eigenvalues remain above $\num{-1e-14}$; the high-temperature (\SI{500}{\kelvin}) limit recovers Redfield dynamics within \SI{2.1}{\percent}; and hierarchy depth $L = 6$ yields $< \SI{1}{\percent}$ deviation from the asymptotic limit. Full details are provided in the Supplementary Material.
+
+%==============================================================================
+% RESULTS
+%==============================================================================
+\section{\label{sec:results}Results}
+
+\subsection{Spectral bath engineering}
+We modify the incident photon field via a dual-band transmission filter:
+\begin{equation}
+J_{\mathrm{eff}}(\omega) = T(\omega) \cdot J_{\mathrm{solar}}(\omega),
+\label{eq:filtered_spectral_density}
+\end{equation}
+where $T(\omega)$ is a sum of two Gaussians centered at \SIlist{750;820}{\nano\meter}. This modifies the \textit{driving field} and thus the initial excitonic state preparation, not the protein-bath spectral density $J_{\mathrm{bath}}(\omega)$.
+
+\subsection{Coherence dynamics}
+The $l_1$-norm coherence,\cite{Baumgratz2014}
+\begin{equation}
+C_{l_1}(\rho) = \sum_{i \neq j} \abs{\rho_{ij}},
+\end{equation}
+serves as our primary coherence measure. Under dual-band filtering at \SI{295}{\kelvin}, the $1/e$ decay time increases from $\tau_c = \SI{280(25)}{\femto\second}$ (broadband) to $\SI{420(35)}{\femto\second}$ (filtered)---a \SI{50}{\percent} extension (Fig.~\ref{fig:quantum_dynamics}a).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{Quantum_dynamics.png}
+\caption{PT-HOPS/SBD dynamics at \SI{295}{\kelvin} averaged over \num{500} disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$). (a)~$l_1$-norm coherence showing lifetime extension under dual-band filtering. (b)~Site populations and reaction center transfer. (c)~Inverse participation ratio. (d)~Quantum Fisher Information. Shaded: \SI{95}{\percent} confidence intervals.}
+\label{fig:quantum_dynamics}
+\end{figure}
+
+The inverse participation ratio increases from $\mathrm{IPR} \approx 4.1$ to $6.8$, indicating enhanced exciton delocalization, while the energy transfer efficiency increases by \SI{25(3)}{\percent} (Table~\ref{tab:metrics}).
+
+\subsection{Quantum metrics}
+
+\begin{table}[t]
+\centering
+\caption{Transport and quantum information metrics. PT-HOPS/SBD at \SI{295}{\kelvin}, \num{500} disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$). Uncertainties: \SI{95}{\percent} CI.}
+\label{tab:metrics}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Metric} & \textbf{Filtered} & \textbf{Broadband} & \textbf{Enhancement} \\
+\midrule
+ETE (relative) & 1.25(3) & 1.00(2) & $+\SI{25}{\percent}$ \\
+$\tau_c$ (\si{\femto\second}) & 420(35) & 280(25) & $+\SI{50}{\percent}$ \\
+IPR (sites) & 6.8(5) & 4.1(4) & $+\SI{66}{\percent}$ \\
+QFI (max) & 12.4(11) & 7.8(8) & $+\SI{59}{\percent}$ \\
+Concurrence & 0.34(5) & 0.18(4) & $+\SI{89}{\percent}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Polaron-frame analysis of the mechanism}
+The enhancement originates from selective state preparation analyzed in the polaron frame.\cite{Jang2008} The total reorganization energy is:
+\begin{equation}
+\lambda = \int_0^\infty \frac{J_{\mathrm{bath}}(\omega)}{\omega}\,\dd{\omega}.
+\end{equation}
+Spectral filtering restricts the driving field to frequencies that preferentially populate sites whose energy gaps match specific vibronic resonances:
+\begin{equation}
+\Delta E_{nm} \approx \hbar\omega_{\mathrm{vib}} \pm J_{nm}.
+\end{equation}
+In the polaron frame, these selectively prepared states experience reduced effective coupling to the overdamped continuum:
+\begin{equation}
+\lambda_{\mathrm{eff}} = \int_0^\infty T(\omega)\,\frac{J_{\mathrm{bath}}(\omega)}{\omega}\,\dd{\omega} < \lambda.
+\label{eq:effective_reorganization}
+\end{equation}
+Since the pure dephasing rate scales as $\Gamma_{\mathrm{pd}} \propto \lambda_{\mathrm{eff}} k_B T$, filtered excitation suppresses dephasing while preserving the Franck--Condon overlaps with discrete vibronic modes that assist transport.\cite{Chin2013}
+
+\subsection{Robustness}
+The relative enhancement $\eta = (\mathrm{ETE}_{\mathrm{filt}} - \mathrm{ETE}_{\mathrm{broad}})/\mathrm{ETE}_{\mathrm{broad}}$ was evaluated across temperature and static disorder (Fig.~\ref{fig:robustness}). Maximum enhancement occurs at \SIrange{285}{300}{\kelvin}. Over \num{500} disorder realizations ($\sigma = \SI{50}{\per\centi\meter}$), $\expval{\eta} = 0.20(4)$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{ETR_Under_Environmental_Effects.pdf}
+\caption{Environmental robustness. (a)~$\eta(T)$ showing peak enhancement at \SIrange{285}{300}{\kelvin}. (b)~Distribution of $\eta$ over \num{500} disorder realizations: $\expval{\eta} = 0.20 \pm 0.04$.}
+\label{fig:robustness}
+\end{figure}
+
+%==============================================================================
+% LIMITATIONS
+%==============================================================================
+\section{\label{sec:limitations}Limitations}
+The present model is restricted to the single-exciton manifold with site-independent baths and phenomenological trapping ($k_{\mathrm{trap}} = \SI{1}{\per\pico\second}$). Site-dependent spectral densities, multi-exciton effects at high excitation intensity, and explicit reaction center dynamics are not included. Direct experimental tests are needed; we propose 2DES with spectrally filtered pump pulses, where the predicted coherence extension should manifest as prolonged cross-peak oscillations.
+
+%==============================================================================
+% CONCLUSION
+%==============================================================================
+\section{\label{sec:conclusion}Conclusions}
+Using numerically exact PT-HOPS/SBD simulations, we have shown that spectral engineering of the incident photon field extends excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and enhances energy transfer efficiency by \SI{25}{\percent} in the FMO complex at \SI{295}{\kelvin}. The mechanism, analyzed within the polaron frame, involves selective suppression of pure dephasing via reduced effective system-bath coupling while preserving vibronic resonance channels. The spectral engineering principle applies to any system where vibronic resonances contribute to transport, including organic donor--acceptor complexes and quantum dot arrays.
+
+%==============================================================================
+% DATA AVAILABILITY
+%==============================================================================
+\section*{Data Availability Statement}
+The data that support the findings of this study are available from the corresponding author upon reasonable request. The PT-HOPS/SBD implementation is based on the open-source MesoHOPS library.
+
+%==============================================================================
+% ACKNOWLEDGMENTS
+%==============================================================================
+\begin{acknowledgments}
+This work was supported by the University of Yaoundé~I and the University of Douala. Computational resources were provided by departmental facilities. The MesoHOPS library was used for all simulations.
+\end{acknowledgments}
+
+%==============================================================================
+% REFERENCES
+%==============================================================================
+\bibliography{references}
+
+\end{document}

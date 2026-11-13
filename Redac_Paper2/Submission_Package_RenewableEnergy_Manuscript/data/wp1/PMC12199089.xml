@@ -1,0 +1,1054 @@
+<?xml version="1.0" encoding="UTF-8"?><article xml:lang="en" article-type="research-article"><front><journal-meta><journal-id journal-id-type="pmc-domain-id">3686</journal-id><journal-id journal-id-type="pmc-domain">acsomega</journal-id><journal-title-group><journal-title>ACS Omega</journal-title><abbrev-journal-title>ACS Omega</abbrev-journal-title></journal-title-group><publisher><publisher-name>American Chemical Society</publisher-name></publisher></journal-meta><article-meta><article-id pub-id-type="pmcid">PMC12199089</article-id><article-id pub-id-type="pmcaid">12199089</article-id><article-id pub-id-type="pmcaiid">12199089</article-id><article-id pub-id-type="pmid">40584384</article-id><article-id pub-id-type="doi">10.1021/acsomega.4c11543</article-id><title-group><article-title>Simulations of Excitonic Couplings in Spinach Light-Harvesting
+Complex II Using a More Realistic Model in the Presence of Photosystem
+II Core</article-title></title-group><contrib-group content-type="author"><contrib><name name-style="western"><surname>Xie</surname><given-names initials="BB">Bin-Bin</given-names></name><xref ref-type="aff" rid="aff1">†</xref></contrib><contrib><name name-style="western"><surname>Yin</surname><given-names initials="BW">Bo-Wen</given-names></name><xref ref-type="aff" rid="aff2">‡</xref></contrib><contrib><name name-style="western"><surname>Jia</surname><given-names initials="PK">Pei-Ke</given-names></name><xref ref-type="aff" rid="aff1">†</xref></contrib><contrib><name name-style="western"><surname>Li</surname><given-names initials="HF">Hai-Feng</given-names></name><xref ref-type="aff" rid="aff3">§</xref></contrib><contrib><name name-style="western"><surname>Peng</surname><given-names initials="L">Liang</given-names></name><xref ref-type="aff" rid="aff4">∥</xref><xref rid="cor1" ref-type="author-notes">*</xref></contrib><contrib><name name-style="western"><surname>Shen</surname><given-names initials="L">Lin</given-names></name><xref ref-type="aff" rid="aff2">‡</xref><xref rid="cor2" ref-type="author-notes">*</xref></contrib><contrib><name name-style="western"><surname>Fang</surname><given-names initials="WH">Wei-Hai</given-names></name><xref ref-type="aff" rid="aff2">‡</xref></contrib></contrib-group><aff id="aff1">
+<label>†</label>
+Hangzhou
+Institute of Advanced Studies, Zhejiang
+Normal University, 1108 Gengwen Road, Hangzhou
+311231, Zhejiang, P. R. China
+</aff><aff id="aff2">
+<label>‡</label>
+Key
+Laboratory of Theoretical and Computational Photochemistry of Ministry
+of Education, College of Chemistry, Beijing
+Normal University, Beijing
+100875, P. R. China
+</aff><aff id="aff3">
+<label>§</label>
+School
+of Science, Xi’an Technological University, Xi’an
+710021, P. R. China
+</aff><aff id="aff4">
+<label>∥</label>
+Guangdong
+Provincial Key Laboratory of Chemical Pollution and Environmental
+Safety &amp; MOE Key Laboratory of Theoretical Chemistry of Environment,
+School of Environment, South China Normal
+University, Guangzhou
+510006, P. R. China
+</aff><author-notes><fn id="cor1"><label>*</label><p>
+Email: <email>pengliang@m.scnu.edu.cn</email>.</p></fn><fn id="cor2"><label>*</label><p>
+Email: <email>lshen@bnu.edu.cn</email>.</p></fn></author-notes><pub-date><day>9</day><month>6</month><year>2025</year></pub-date><volume>10</volume><issue>24</issue><fpage>25322</fpage><page-range>25322–25335</page-range><pub-history><event event-type="pmc-release"><date><day>27</day><month>6</month><year>2025</year></date></event></pub-history><permissions><copyright-statement>© 2025 The Authors. Published by American Chemical Society</copyright-statement><license><license-p>This article is licensed under CC-BY-NC-ND 4.0</license-p></license></permissions><self-uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="ao4c11543.pdf" content-type="pmc-pdf"><?cloudpmc-path 5a2c/12199089/ac622c8607cf/ao4c11543.pdf?><?cloudpmc-bucket app?><?size 12443644?></self-uri><abstract id="abstract1"><title>Abstract</title><p>In this study, we
+employed a method for evaluating dynamic exciton
+couplings by using atomic transition density moments and molecular
+dynamics (MD) coordinates. We then applied this computational approach
+to investigate protein-regulated exciton couplings in spinach light-harvesting
+complex II (LHCII). Our findings, based on a more realistic all-atom
+computational model in the presence of the photosystem II (PSII) core
+and minor antennas, reveal distinct coupling strength patterns for
+the monomers in LHCII. The probability distributions of excitonic
+couplings in isolated LHCII always exhibit a single peak, whereas
+those in the LHCII–PSII complex display a bimodal nature. Such
+reductions in the excitonic coupling strengths of the main pigments,
+especially for some chlorophyll–lutein pairs, suggest that
+the peripheral proteins could modulate energy transfer processes in
+LHCII–PSII. A closer examination of the key structural parameters
+reveals that the angles between helices A and B and the distance between
+CLA612 and LUT620 increase in LHCII–PSII, which are closely
+associated with the reductions in excitonic couplings.</p></abstract><abstract id="abstract2" abstract-type="graphical"><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="abs1" xlink:href="ao4c11543_0013.jpg"><?cloudpmc-path blobs/5a2c/12199089/870e4308f780/ao4c11543_0013.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 513?><?original-width 1000?><?scaled-height 342?><?scaled-width 666?></graphic></abstract><abstract id="abstract3" abstract-type="toc-graphic"><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="tgr1" xlink:href="ao4c11543_0012.jpg"><?cloudpmc-path blobs/5a2c/12199089/870e4308f780/ao4c11543_0012.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 513?><?original-width 1000?><?scaled-height 342?><?scaled-width 666?></graphic></abstract><custom-meta-group><custom-meta><meta-name>status</meta-name><meta-value>released</meta-value></custom-meta><custom-meta><meta-name>display-pdf</meta-name><meta-value>yes</meta-value></custom-meta><custom-meta><meta-name>is-olf</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>is-manuscript</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>is-preprint</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>is-journal-matter</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>is-scanned</meta-name><meta-value>no</meta-value></custom-meta><custom-meta><meta-name>is-retracted</meta-name><meta-value>no</meta-value></custom-meta></custom-meta-group></article-meta><notes notes-type="article-notes"><sec id="historyarticle-meta1" sec-type="history" disp-level="2"><p>Received 2024 Dec 23; Accepted 2025 May 27; Revised 2025 May 24; Collection date 2025 Jun 24.</p></sec></notes></front><body><sec id="sec1" disp-level="1"><label>1.</label><title>Introduction</title><p>Almost all living beings
+on earth rely on the sun as a source of
+energy, and most solar energy is encapsulated in the chemical energy
+of biomass during the process of photosynthesis. More than that, photosynthesis
+can also produce molecular oxygen in the atmosphere, which is necessary
+for the majority of heterotrophic organisms. The photosystems distributed
+over thylakoid membranes of photosynthetic organisms (such as green
+plants and green algae) are the main sites for the ‘light reaction’. Light-harvesting complex II (LHCII), one of the
+most abundant membrane proteins in photosystem II, is a crucial component
+of the photosynthetic apparatus, playing a vital role in providing
+the initial driving force for photosynthesis. Despite the differences
+in structure and composition, LHCII always contains large ensembles
+of pigments that bind to the protein scaffolds. This special structure
+of LHCII ensures efficient absorption of the photosynthetically active
+radiation (400–740 nm) and then transfers the electronic excited
+energy to the reaction center.<italic>
+−
+
+</italic> The efficient energy capture and
+delivery indeed help photosynthetic organisms to survive at very low
+levels of illumination, such as cloudy weather or water environments.<italic>
+,
+</italic> However, since the maximum turnover rate of the reaction center
+is slower than that of photon absorption and subsequent energy transfer
+in LHCII, photosynthetic organisms, especially land plants, face
+a formidable challenge once the solar radiation increases dramatically.
+Such a massive buildup of excitation energy in LHCII would lead to
+highly reactive species of radicals and singlet oxygen and then cause
+serious damage to photosystems, which is commonly known as ‘photoinhibition’.<italic>
+,
+</italic>
+</p><p>To cope with the photodamage, photosynthetic organisms developed
+an effective defense, including a series of self-regulatory mechanisms.
+These reversible regulatory processes, called non-photochemical quenching
+(NPQ), usually involve several distinct components with very broad
+spatial and temporal scales.<italic>
+−
+
+
+
+</italic> The fast and important NPQ is energy-dependent quenching, which
+can respond to the fluctuation of illumination within seconds to minutes
+and dissipate excessive excitation energy via nonradiative processes.<italic>
+−
+
+</italic> However, the detailed mechanism of NPQ at the molecular level has
+not yet been elucidated, which remains an active research field currently.
+So far, several possible mechanisms were proposed to disclose the
+origin of the fast NPQ.<italic>
+−
+
+
+
+</italic> Most studies ascribed the energy quenching to carotenoid molecules,
+since the short-lived dark excited state can directly take part in
+the NPQ process.<italic>
+,
+</italic> The strong electronic interaction
+between xanthophyll and chlorophyll was explained as the reason for
+the NPQ according to the experimental observations. Particularly,
+the short-lived S<sub>1</sub> state of lutein (LUT) can be responsible
+for energy dissipation via a relatively slow energy transfer from
+the S<sub>1</sub> (Q<sub>
+<italic>y</italic>
+</sub>) state adjacent
+chlorophylls.<italic>
+,
+</italic> Theoretically, quantum chemistry
+is a powerful approach to elucidate the excitonic dynamics in LHCII,
+such as an exciton picture combined with a quantum master equation.<italic>
+,
+</italic> Three fundamental parameters of site energies, excitonic couplings,
+and spectral densities directly govern the resonance energy transfer
+rate in excitonic dynamics.</p><p>Herein, several theoretical studies
+on excitonic couplings will
+follow in terms of high-resolution crystal structures of photosystems.<italic>
+−
+
+
+</italic> Novoderezhkin et al. modeled excitonic interactions between chlorophylls
+according to the dipole–dipole approximation.<italic>
+,
+</italic> Müh and co-workers considered the effects of a realistic
+environment and calculated the excitonic couplings of chlorophyll
+pairs in LHCII.<italic>
+,
+</italic> However, they did not study the
+chlorophyll–xanthophyll excitonic interactions due to difficulties
+in modeling the strongly correlated 2Ag<sup>–</sup> state of
+carotenoids. Duffy et al. made the first
+attempt to clarify the fluorescence quenching by computing excitonic
+couplings between chlorophyll and xanthophyll via atomic transition
+density moments. Later, they performed
+a more general model for excitonic coupling calculations that contains
+all pigments with the transition density cube method. They found that the LUT molecule could be responsible
+for the energy quenching rather than violaxanthin and neoxanthin in
+LHCII. Recently, the excitonic couplings of the chlorophyll–LUT
+pair were also estimated by high-level CASSCF and RASSCF formulations. In addition, several MD studies were conducted
+to investigate the allosteric regulation of LHCII under various external
+stimuli, such as pH gradients and ionic conditions, in order to elucidate
+the variations in excitonic couplings and the transitions between
+light-harvesting and energy-quenched states.<italic>
+−
+
+
+
+
+
+
+</italic> For example, Croce et al. carried out MD simulations to identify
+the structural changes between the light-harvesting and energy quenching
+along with the evolution of interpigment couplings. Duffy et al. further figured out the critical structural
+parameters for controlling the chlorophyll–carotenoid interactions. Daskalakis et al. explored the conformational
+phase space of LHCII and identified key residues and structural changes
+that influence excitonic couplings in chlorophyll–carotenoid
+pairs.<italic>
+,
+</italic>
+</p><p>Although more and more understandings
+on the excitonic couplings
+in LHCII have been revealed based on theoretical studies, the existing
+computational models are still far from perfect, with limitations
+such as the absence of the PSII core and other minor antennas and
+the conventional omission of phytol tails in chlorophylls. In this
+work, we aim to address the above shortcomings of molecular modeling
+to provide a more realistic representation of the protein environment.
+We will focus on the roles of the PSII core and other minor antennas,
+which may create an anisotropic protein environment around three monomers,
+regulate excitonic coupling strengths, and potentially influence the
+allosteric regulation of LHCII. We believe that this work can not
+only propose a better computational model to study excitonic couplings
+in proteins but also provide new knowledge of the energy transfer
+process of photosynthesis.</p></sec><sec id="sec2" disp-level="1"><label>2.</label><title>Computational Methods</title><sec id="sec2.1" disp-level="2"><label>2.1.</label><title>System Modeling</title><p>The crystal structure
+of spinach LHCII–PSII supercomplex (PDB ID: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/3JCU" ext-link-type="uri">3JCU</ext-link>) at 3.2 Å resolution
+was adopted to build up the system in our MD simulations. First, the exogenous molecules of diglyceride,
+alkyl chains, detergents, and glycerol introduced during experiments
+were removed. Then the Modeler in the Chimera suite was used to fix
+the missing atoms and side chains of proteins.<italic>
+,
+</italic> The phytol tails of chlorophyll a (CLA) and chlorophyll b (CHL)
+were repaired by tLEaP in AmberTools and were checked manually. Later, the protonation states of His, Asp, and
+Glu were automatically determined using the H++ Web site (pH = 7.5) and were examined manually, especially for His
+in coordination with Heme-b (HEM), CLA, and CHL to maintain the reasonable
+structures. The LHCII–PSII supercomplex was embedded into a
+lipid bilayer with 1848 DOPC molecules using the membrane builder
+of CHARMM-GUI. As shown in <xref rid="fig1" ref-type="fig">Figures 
+</xref>a and c, the final system was solvated in a water box (302.0 Å ×
+302.3 Å × 154.0 Å) containing 340,804 waters and neutralized
+by inserting 138 sodium ions (totally 1,429,924 atoms). Following
+a similar procedure, we also constructed isolated LHCII (<xref rid="fig1" ref-type="fig">Figures 
+</xref>b and d), which was extracted from the spinach LHCII–PSII
+supercomplex. The simulation box (121.3 Å × 121.3 Å
+× 99.5 Å) includes 151,095 atoms in total with 306 DOPC,
+30,713 waters, and 30 sodium ions. The distribution patterns of different
+pigments within a monomer of LHCII can be seen in <xref rid="fig2" ref-type="fig">Figure 
+</xref>. Notably, the crystal structure
+of LHCII usually represents a highly energy-quenched state, while the light-harvesting state may be obtained
+under a relatively high pH. Starting
+from the crystallographic data, we adjusted the pH to 7.5 and thus
+may capture pronounced structural changes between pigments due to
+the allosteric regulation of LHCII. For comparison, several dynamic
+simulations were also conducted for LHCII–PSII under low pH
+conditions<italic>
+,
+</italic> and realistic salt conditions. In addition, It is also important to emphasize
+that the standard DOPC lipids were used in the current study, rather
+than native thylakoid lipids, which may have a certain influence on
+the simulations.
+</p><fig id="fig1" position="float"><?disp-level 3?><label>1</label><caption><p>Overall structure of
+the spinach LHCII-PSII supercomplex (PDB ID: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/3JCU" ext-link-type="uri">3JCU</ext-link>) and LHCII viewed
+along the membrane plane (a, b) or from the stromal side along the
+thylakoid membrane (c, d). M1, M2, and M3 in (c) and (d) represent
+three monomers in LHCII.</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr1" xlink:href="ao4c11543_0001.jpg"><?cloudpmc-path blobs/5a2c/12199089/76ea461c4d60/ao4c11543_0001.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 991?><?original-width 1615?><?scaled-height 396?><?scaled-width 646?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0001.gif"><?cloudpmc-path blobs/5a2c/12199089/30bea08f6cc2/ao4c11543_0001.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><fig id="fig2" position="float"><?disp-level 3?><label>2</label><caption><p>Pigments distributed
+in a monomer of LHCII are depicted in panel
+(a), with schematic diagrams in panel (b) for CLA611-CLA612 and panel
+(c) for CLA612-LUT620, illustrating key structural parameters of distance,
+dislocation angle, rotation angle, and dihedral angle. Different colors
+represent different pigments: lutein (LUT) in orange, chlorophyll
+a (CLA) in green, chlorophyll b (CHL) in cyan, neoxanthin (NEX) and
+violaxanthin (XAT) in violet, and the secondary structure of the protein
+scaffold in light gray.</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr2" xlink:href="ao4c11543_0002.jpg"><?cloudpmc-path blobs/5a2c/12199089/086fc4738a1e/ao4c11543_0002.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 866?><?original-width 1691?><?scaled-height 346?><?scaled-width 676?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0002.gif"><?cloudpmc-path blobs/5a2c/12199089/3cc27421f83e/ao4c11543_0002.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>The proteins and ions
+were modeled with the all-atom Amber03 force
+field during the MD simulations. The
+Amber lipid17 force field in the CHARMM-GUI program was adopted for
+the DOPC lipids. The TIP3P model was
+applied to water solvents. The force
+field parameters developed by Zhang et al. were chosen for six cofactors
+of CLA, CHL, HEM, pheophytin A (PHO), β-carotene (BCR), and
+plastoquinone A (PL9), and those for
+various carotenoids of XAT, LUT, and NEX were taken from the previous
+work by Prandi et al. The antechamber
+(GAFF2) in AmberTools was used to generate the force field parameters
+for bicarbonate ion (BCT). For the OEX
+complex (CaMn<sub>4</sub>O<sub>5</sub>), the atomic charges were assigned
+to Mn<sub>1</sub>–Mn<sub>4</sub> as +3, O<sub>1</sub>–O<sub>5</sub> as −2, and Ca as +2; the harmonic restraints with
+a force constant of 2.261 × 10<sup>5</sup> kJ·mol<sup>–1</sup>·nm<sup>–2</sup> were also added between metal atoms
+and the coordinated protein residues in order to maintain a reasonable
+coordination structure around the OEX complex. This strategy has been
+applied successfully by Zhang et al. to model the crystal structure
+of PSII at 1.9 Å resolution.<italic>
+,
+</italic>
+</p></sec><sec id="sec2.2" disp-level="2"><label>2.2.</label><title>MD Simulations</title><p>The LHCII–PSII
+supercomplex system was divided into four active components: cofactors,
+proteins, DOPC lipids, water molecules, and ions. Initially, we performed
+a step-by-step energy minimization using the steepest descent algorithm
+(10,000 steps) for each active component
+while freezing the remaining parts. The entire system was then further
+energy minimized for another 10,000 steps without any positional restraints
+or constraints. Next, the system was heated under an NVT ensemble,
+with position restraints applied to all heavy atoms of the LHCII–PSII
+supercomplex. Specifically, a series of MD simulations, each of which
+lasts for 100 ps, were performed at 50, 100, 150, 200, and 250 K,
+followed by a 500 ps simulation at 300 K. Subsequently, an NPT pre-equilibration
+process was implemented with positional restraints that were removed
+gradually (from 0 to 100 ps: force constant of 3000 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for proteins and pigments
+and 1000 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for the lipid membrane; from 100 to 200 ps: 3000 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for proteins and pigments
+and 500 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for the lipid membrane; from 200 to 400 ps: 250 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for proteins, pigments,
+and the lipid membrane; from 400 to 600 ps: 100 kJ·mol<sup>–1</sup>·nm<sup>–2</sup> for proteins, pigments, and the lipid
+membrane; from 600 to 900 ps: no additional restraints).</p><p>During
+the final NPT MD production, all of the positional restraints were
+removed. For LHCII, the simulation was propagated straightforwardly
+for 1 μs. For LHCII–PSII at a much larger size, the
+simulation was first performed for 100 ns. Then snapshots at 96,
+98, and 100 ns were selected as the initial conditions for three independent
+MD simulations. Each simulation was executed for 300 ns, providing
+a total of 0.9 μs MD sampling for data collection and analysis.
+The results of structural stability analysis are shown in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figures S1 and S2</ext-link>. The particle mesh Ewald approach
+was adopted for long-range electrostatic interactions. The velocity-rescaling thermostat and the Parrinello–Rahman barostat<italic>
+,
+</italic> were used to maintain the temperature at 300 K and the pressure
+at 1 atm, respectively. The covalent hydrogen bonds were constrained
+using the LINCS algorithm. All MD simulations
+were carried out using the Gromacs 5.4.1 program.
+</p></sec><sec id="sec2.3" disp-level="2"><label>2.3.</label><title>Excited State Calculations</title><p>The semiempirical
+calculations were conducted in the MNDO program (version 8.0). This MNDO/MRCI method can give a balanced description
+of the ground and excited states for LUT, CLA, and CHL, especially
+for the vertical excitation energies and the relevant electronic configurations. The restricted open-shell Hartree–Fock
+formalism was adopted in the self-consistent-field calculations. For
+xanthophyll LUT, 10 conjugated π and π* orbitals along
+the carbon chain (including four highest doubly occupied orbitals,
+four lowest unoccupied orbitals, and two singly occupied orbitals)
+were chosen as the active space in the MRCI calculations (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S3</ext-link>). For CLA and CHL, the active space
+in MRCI was composed of 18 π and π* orbitals, namely,
+eight highest doubly occupied orbitals, eight lowest unoccupied orbitals,
+and two singly occupied orbitals (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figures S4 and S5</ext-link>). For the MRCI treatment, three electronic configurations
+derived from the HOMO and LUMO orbitals of the closed-shell ground
+state were chosen as references. The MRCI wave function was built
+by allowing single, double, and triple excitations for LUT and single
+and double excitations for CLA and CHL. Additionally, we included
+a concise description of the complete active space self-consistent-field
+(CASSCF) and multistate second-order perturbation theory (MS-CASPT2)
+methods in the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Supporting Information</ext-link>,
+specifying an active space of 10 electrons in 8 orbitals (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S6</ext-link>). Further details can be found in our
+previous work.
+</p></sec><sec id="sec2.4" disp-level="2"><label>2.4.</label><title>Transition
+Density Moments</title><p>The detailed
+derivation of transition dipole moments in terms of atomic transition
+density moments was outlined in the previous work by Duffy et al. Herein, we only give a very brief introduction
+and provide the final analytical form in the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Supporting Information</ext-link>. As with Duffy’s work, we also neglect the
+contribution of the exchange interaction. The interpigment excitonic
+coupling <italic>J</italic>
+<sub>
+<italic>DA</italic>
+</sub> only comes
+from the Coulomb interactions, which can be defined as follows:
+</p><disp-formula id="eq1"><label>1</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e625" display="block" overflow="scroll"><mml:mrow><mml:msub><mml:mrow><mml:mi>J</mml:mi></mml:mrow><mml:mrow><mml:mi>D</mml:mi><mml:mi>A</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:munder><mml:mrow><mml:mo form="prefix">∑</mml:mo></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mo>∈</mml:mo><mml:mi>D</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi><mml:mo>∈</mml:mo><mml:mi>A</mml:mi></mml:mrow></mml:munder><mml:msub><mml:mrow><mml:mi>V</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="false">⟨</mml:mo><mml:mi>G</mml:mi><mml:msub><mml:mrow><mml:mi>S</mml:mi></mml:mrow><mml:mrow><mml:mi>D</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msub><mml:mrow><mml:mi>N̂</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">|</mml:mo></mml:mrow><mml:mi>E</mml:mi><mml:msub><mml:mrow><mml:mi>X</mml:mi></mml:mrow><mml:mrow><mml:mi>D</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mrow><mml:mo stretchy="false">⟨</mml:mo><mml:mi>E</mml:mi><mml:msub><mml:mrow><mml:mi>X</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msub><mml:mrow><mml:mi>N̂</mml:mi></mml:mrow><mml:mrow><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">|</mml:mo></mml:mrow><mml:mi>G</mml:mi><mml:msub><mml:mrow><mml:mi>S</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:munder><mml:mrow><mml:mo form="prefix">∑</mml:mo></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mo>∈</mml:mo><mml:mi>D</mml:mi><mml:mo>,</mml:mo><mml:mi>j</mml:mi><mml:mo>∈</mml:mo><mml:mi>A</mml:mi></mml:mrow></mml:munder><mml:msub><mml:mrow><mml:mi>V</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:msubsup><mml:mrow><mml:mi>T</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow><mml:mrow><mml:mi>D</mml:mi></mml:mrow></mml:msubsup><mml:msubsup><mml:mrow><mml:mi>T</mml:mi></mml:mrow><mml:mrow><mml:mi>j</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:math></disp-formula><p>where <italic>i</italic> and <italic>j</italic> represent the <italic>i</italic>
+<sup>
+<italic>th</italic>
+</sup> atomic-centered
+orbital in the donor and the <italic>j</italic>
+<sup>
+<italic>th</italic>
+</sup> atomic-centered orbital in the acceptor, respectively. When
+two pigments are separated at a medium or large distance, the coefficient <italic>V</italic>
+<sub>
+<italic>ij</italic>
+</sub> that determines the scale
+of the interaction between transition densities is</p><disp-formula id="eq2"><label>2</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e770" display="block" overflow="scroll"><mml:mrow><mml:msub><mml:mrow><mml:mi>V</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:msup><mml:mrow><mml:mi>e</mml:mi></mml:mrow><mml:mrow><mml:mn>2</mml:mn></mml:mrow></mml:msup></mml:mrow><mml:mrow><mml:mn>4</mml:mn><mml:mi>π</mml:mi><mml:msub><mml:mrow><mml:mi>ε</mml:mi></mml:mrow><mml:mrow><mml:mi>r</mml:mi></mml:mrow></mml:msub><mml:msub><mml:mrow><mml:mi>ε</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msub><mml:mrow><mml:mi>r⃗</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>−</mml:mo><mml:msub><mml:mrow><mml:mi>r⃗</mml:mi></mml:mrow><mml:mrow><mml:mi>j</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">|</mml:mo></mml:mrow></mml:mrow></mml:mfrac></mml:mrow></mml:math></disp-formula><p>where <italic>r⃗</italic>
+<sub>
+<italic>i</italic>
+</sub> and <italic>r⃗</italic>
+<sub>
+<italic>j</italic>
+</sub> denote the center coordinate of the <italic>i</italic>
+<sup>
+<italic>th</italic>
+</sup> and <italic>j</italic>
+<sup>
+<italic>th</italic>
+</sup> atomic orbital, <italic>ε</italic>
+<sub>0</sub> means
+the permittivity of a vacuum, and the relative optical permittivity
+of <italic>ε</italic>
+<sub>
+<italic>r</italic>
+</sub> can be set
+as 2.0.<italic>
+,
+</italic>
+</p><p>The transition density moments <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> in <xref rid="eq1" ref-type="disp-formula">eq 
+</xref> are given by</p><disp-formula id="eq3"><label>3</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e871" display="block" overflow="scroll"><mml:mrow><mml:msub><mml:mrow><mml:mi>T</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:mrow><mml:mo>⟨</mml:mo><mml:mi>G</mml:mi><mml:mi>S</mml:mi></mml:mrow><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msub><mml:mrow><mml:mi>N̂</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo stretchy="false">|</mml:mo></mml:mrow><mml:mrow><mml:mi>E</mml:mi><mml:mi>X</mml:mi><mml:mo>⟩</mml:mo></mml:mrow></mml:mrow></mml:math></disp-formula><p>Here the number operator <italic>N̂</italic>
+<sub>
+<italic>i</italic>
+</sub> can be represented as a linear combination
+of atomic orbital annihilation (creation) operators <italic>c</italic>
+<sub arrange="stack">
+<italic>iσ</italic>
+</sub>
+<sup arrange="stack">(†)</sup> and further expressed in terms of
+molecular orbital annihilation (creation) operators <italic>a</italic>
+<sub arrange="stack">
+<italic>mσ</italic>
+</sub>
+<sup arrange="stack">(†)</sup>,</p><disp-formula id="eq4"><label>4</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e925" display="block" overflow="scroll"><mml:mrow><mml:msub><mml:mrow><mml:mi>N̂</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:munder><mml:mrow><mml:mo>∑</mml:mo></mml:mrow><mml:mrow><mml:mi>σ</mml:mi></mml:mrow></mml:munder><mml:msubsup><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mo>†</mml:mo></mml:mrow></mml:msubsup><mml:msub><mml:mrow><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>i</mml:mi><mml:mi>σ</mml:mi></mml:mrow></mml:msub><mml:mo>=</mml:mo><mml:munder><mml:mrow><mml:mo form="prefix">∑</mml:mo></mml:mrow><mml:mrow><mml:mi>m</mml:mi><mml:msup><mml:mrow><mml:mi>m</mml:mi></mml:mrow><mml:mrow><mml:mo>′</mml:mo></mml:mrow></mml:msup><mml:mo>,</mml:mo><mml:mi>σ</mml:mi></mml:mrow></mml:munder><mml:msubsup><mml:mrow><mml:mi>α</mml:mi></mml:mrow><mml:mrow><mml:mi>m</mml:mi><mml:mi>i</mml:mi></mml:mrow><mml:mrow><mml:mo>*</mml:mo></mml:mrow></mml:msubsup><mml:msub><mml:mrow><mml:mi>α</mml:mi></mml:mrow><mml:mrow><mml:mi>m</mml:mi><mml:mo accent="false">′</mml:mo><mml:mi>i</mml:mi></mml:mrow></mml:msub><mml:msubsup><mml:mrow><mml:mi>a</mml:mi></mml:mrow><mml:mrow><mml:mi>m</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mo>†</mml:mo></mml:mrow></mml:msubsup><mml:msub><mml:mrow><mml:mi>a</mml:mi></mml:mrow><mml:mrow><mml:mi>m</mml:mi><mml:mo accent="false">′</mml:mo><mml:mi>σ</mml:mi></mml:mrow></mml:msub></mml:mrow></mml:math></disp-formula><p>where <italic>α</italic>
+<sub>
+<italic>mi</italic>
+</sub> is the atomic orbital coefficients
+and σ denotes the spin of an electron.</p><p>Since the S<sub>0</sub> and S<sub>1</sub> states of CLA, CHL, and
+LUT are mainly composed of singly and doubly excited determinants,
+the contribution from higher-order excitations is negligible. In general,
+we defined the ground and excited states according to the following
+CI expansion:</p><disp-formula id="eq5"><label>5</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e1016" display="block" overflow="scroll"><mml:mrow><mml:mrow><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mi>G</mml:mi><mml:mi>S</mml:mi></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:msub><mml:mrow><mml:mi>C</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub><mml:mrow><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:msub><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub></mml:mrow></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:mrow><mml:mrow><mml:munder><mml:mrow><mml:mo>∑</mml:mo></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mi>r</mml:mi><mml:mo>,</mml:mo><mml:mi>σ</mml:mi></mml:mrow></mml:munder><mml:mrow><mml:msubsup><mml:mrow><mml:mi>C</mml:mi></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mi>r</mml:mi><mml:mi>σ</mml:mi></mml:mrow></mml:msubsup><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:msubsup><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mi>r</mml:mi><mml:mi>σ</mml:mi></mml:mrow></mml:msubsup></mml:mrow></mml:mrow></mml:mrow></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mrow><mml:mrow><mml:mo>+</mml:mo><mml:munder><mml:mrow><mml:mo>∑</mml:mo></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mo>≤</mml:mo><mml:mi>b</mml:mi><mml:mo>,</mml:mo><mml:mi>r</mml:mi><mml:mi>t</mml:mi><mml:mo>,</mml:mo><mml:mi>σ</mml:mi><mml:msup><mml:mrow><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mo>′</mml:mo></mml:mrow></mml:msup></mml:mrow></mml:munder><mml:mrow><mml:msubsup><mml:mrow><mml:mi>C</mml:mi></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mi>σ</mml:mi><mml:mi>b</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow><mml:mrow><mml:mi>r</mml:mi><mml:mi>σ</mml:mi><mml:mi>t</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow></mml:msubsup><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:msubsup><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mi>a</mml:mi><mml:mi>σ</mml:mi><mml:mi>b</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow><mml:mrow><mml:mi>r</mml:mi><mml:mi>σ</mml:mi><mml:mi>t</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow></mml:msubsup></mml:mrow></mml:mrow></mml:mrow></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow></mml:mrow></mml:math></disp-formula><disp-formula id="eq6"><label>6</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e1146" display="block" overflow="scroll"><mml:mrow><mml:mrow><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mi>E</mml:mi><mml:mi>X</mml:mi></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mo>=</mml:mo><mml:mrow><mml:mrow><mml:msub><mml:mrow><mml:mi>D</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:msub><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mn>0</mml:mn></mml:mrow></mml:msub></mml:mrow></mml:mrow></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow><mml:mo>+</mml:mo><mml:munder><mml:mrow><mml:mo form="prefix">∑</mml:mo></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mi>R</mml:mi><mml:mo>,</mml:mo><mml:mi>σ</mml:mi></mml:mrow></mml:munder><mml:mrow><mml:msubsup><mml:mrow><mml:mi>D</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mi>R</mml:mi><mml:mi>σ</mml:mi></mml:mrow></mml:msubsup><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:mrow><mml:mrow><mml:msubsup><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mi>R</mml:mi><mml:mi>σ</mml:mi></mml:mrow></mml:msubsup></mml:mrow><mml:mo stretchy="false">⟩</mml:mo></mml:mrow></mml:mrow></mml:mrow><mml:mo>+</mml:mo><mml:munder><mml:mrow><mml:mo form="prefix">∑</mml:mo></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mo>≤</mml:mo><mml:mi>B</mml:mi><mml:mo>,</mml:mo><mml:mi>R</mml:mi><mml:mi>T</mml:mi><mml:mo>,</mml:mo><mml:mi>σ</mml:mi><mml:msup><mml:mrow><mml:mi>σ</mml:mi></mml:mrow><mml:mrow><mml:mo>′</mml:mo></mml:mrow></mml:msup></mml:mrow></mml:munder><mml:mrow><mml:msubsup><mml:mrow><mml:mi>D</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mi>σ</mml:mi><mml:mi>B</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow><mml:mrow><mml:mi>R</mml:mi><mml:mi>σ</mml:mi><mml:mi>T</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow></mml:msubsup><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:mrow><mml:msubsup><mml:mrow><mml:mi>ψ</mml:mi></mml:mrow><mml:mrow><mml:mi>A</mml:mi><mml:mi>σ</mml:mi><mml:mi>B</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow><mml:mrow><mml:mi>R</mml:mi><mml:mi>σ</mml:mi><mml:mi>T</mml:mi><mml:mi>σ</mml:mi><mml:mo accent="false">′</mml:mo></mml:mrow></mml:msubsup></mml:mrow></mml:mrow></mml:mrow></mml:mrow></mml:mrow></mml:math></disp-formula><p>For the ground state, |ψ<sub>0</sub>⟩, |ψ<sub arrange="stack">
+<italic>aσ</italic>
+</sub>
+<sup arrange="stack">
+<italic>rσ</italic>
+</sup>⟩, and |ψ<sub arrange="stack">
+<italic>aσbσ</italic>′</sub>
+<sup arrange="stack">
+<italic>rσtσ</italic>′</sup>⟩
+are the closed-shell and singly and doubly excited determinants with
+the corresponding CI coefficients of <italic>C</italic>
+<sub>0</sub>, <italic>C</italic>
+<sub arrange="stack">
+<italic>aσ</italic>
+</sub>
+<sup arrange="stack">
+<italic>rσ</italic>
+</sup>, and <italic>C</italic>
+<sub arrange="stack">
+<italic>aσbσ</italic>′</sub>
+<sup arrange="stack">
+<italic>rσtσ</italic>′</sup>, respectively; <italic>a</italic> and <italic>b</italic> refer to
+the occupied orbitals; and <italic>r</italic> and <italic>t</italic> refer to the unoccupied orbitals. The notations for the excited
+states in <xref rid="eq6" ref-type="disp-formula">eq 
+</xref> are similar,
+in which the CI coefficients are expressed as <italic>D</italic> and
+the occupied (unoccupied) orbitals are represented as <italic>A</italic> and <italic>B</italic> (<italic>R</italic> and <italic>T</italic>).</p><p>Applying <xref rid="eq4" ref-type="disp-formula">eqs 
+</xref>– to <xref rid="eq3" ref-type="disp-formula">eq 
+</xref>, the transition density moment <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> is finally divided into nine terms like
+those defined in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">eq S6</ext-link> in the Supporting
+Information. Analytical
+but very complex expressions for these terms can be seen in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">eqs S8–S16</ext-link> in the Supporting Information.</p><p>As with the studies by Duffy and Müh, we rescaled the transition
+density moments <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> so
+that the average dipole strengths can be equal to the vacuum-extrapolated
+values reported by Knox and Spring (21.0 D<sup>2</sup> for CLA and
+14.7 D<sup>2</sup> for CHL).<italic>
+,,,
+</italic> The scaling factors for CLA and
+CHL were determined based on Knox’s model and defined as</p><disp-formula id="eq7"><label>7</label><mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML" id="d1e1398" display="block" overflow="scroll"><mml:mrow><mml:msup><mml:mrow><mml:mi>f</mml:mi></mml:mrow><mml:mrow><mml:mi>s</mml:mi><mml:mi>c</mml:mi><mml:mi>a</mml:mi><mml:mi>l</mml:mi><mml:mi>e</mml:mi></mml:mrow></mml:msup><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msubsup><mml:mrow><mml:mi>μ</mml:mi></mml:mrow><mml:mrow><mml:mi mathvariant="normal">exp</mml:mi><mml:mo linebreak="nobreak" lspace="0em" rspace=".25em">⁡</mml:mo><mml:mi>r</mml:mi></mml:mrow><mml:mrow><mml:mi>T</mml:mi><mml:mi>r</mml:mi></mml:mrow></mml:msubsup><mml:mo stretchy="false">|</mml:mo></mml:mrow><mml:mrow><mml:mo stretchy="false">|</mml:mo><mml:msubsup><mml:mrow><mml:mi>μ</mml:mi></mml:mrow><mml:mrow><mml:mi>c</mml:mi><mml:mi>a</mml:mi><mml:mi>l</mml:mi><mml:mi>c</mml:mi></mml:mrow><mml:mrow><mml:mi>T</mml:mi><mml:mi>r</mml:mi></mml:mrow></mml:msubsup><mml:mo stretchy="false">|</mml:mo></mml:mrow></mml:mfrac></mml:mrow></mml:math></disp-formula><p>No rescaling was applied to xanthophyll LUT because the vacuum-extrapolated
+value for its optically dark S<sub>1</sub> state is unavailable. Notably,
+although we used the transition density moments to evaluate the excitonic
+couplings in this work, the positive and negative signs of the excitonic
+couplings could still reflect the relative orientation of the corresponding
+transition dipole moments (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Table S1</ext-link>).</p></sec><sec id="sec2.5" disp-level="2"><label>2.5.</label><title>Computation Procedure</title><p>The whole procedure
+of our calculations in this work can be summarized as follow. After
+validation, the transition density moments <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> of LUT, CLA, and CHL were computed with <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">eqs S8–S16</ext-link> (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Table S2</ext-link>), in which the atomic orbital coefficients and electronic
+configurations were obtained from excited-state electronic structure
+calculations. Long-time ground-state MD simulations were performed
+for both LHCII and LHCII–PSII, with snapshots saved every 50
+ps. The atomic coordinates of LUT, CLA, and CHL extracted from equilibrium
+snapshots were applied to <xref rid="eq2" ref-type="disp-formula">eq 
+</xref>. Finally, the intermolecular excitonic couplings were evaluated
+according to <xref rid="eq1" ref-type="disp-formula">eq 
+</xref>, using <italic>V</italic>
+<sub>
+<italic>ij</italic>
+</sub> and <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> computed for LUT, CLA, and CHL. It is worth
+noting that the present method is advantageous over the widely used
+dipole model because the molecular structures of the donor and acceptor
+have been considered at the atomic scale, but the impacts of external
+environment and geometry change on the transition density moments
+of the donor and acceptor are still ignored.</p></sec><sec id="sec2.6" disp-level="2"><label>2.6.</label><title>Key Structural
+Parameters</title><p>In order
+to analyze the relationship between the interpigment excitonic couplings
+in LHCII and the variations of protein structures during MD simulations,
+we selected two pairs of the most significant and representative exciton
+couplings, CLA611–CLA612 and CLA612–LUT620, to identify
+the key structural parameters that determine excitonic coupling strengths.
+The relevant structural parameters that control the position and orientation
+of the pigment pairs can be seen in <xref rid="fig2" ref-type="fig">Figures 
+</xref>b and c. First, the
+plane of chlorophyll is constituted by the chlorin ring, and the geometric
+centers are identified as the center of the chlorin ring (for CLA
+and CHL) or the center of the conjugated carbon skeleton (for LUT).
+Then the distance is defined as the length between two geometric centers;
+the dislocation angle refers to the angle between the normal vector
+of the chlorophyll plane and the line connecting the geometric centers
+of chlorophyll and LUT; the dihedral angle describes the angle between
+the two chlorin rings of chlorophylls; and the rotation angles of
+R1­(C<sub>1</sub>C<sub>2</sub>C<sub>4</sub>C<sub>3</sub>), R2­(C<sub>3</sub>C<sub>4</sub>C<sub>6</sub>C<sub>5</sub>), and R3­(C<sub>5</sub>C<sub>6</sub>C<sub>8</sub>C<sub>7</sub>) indicate the rotational
+degree of the conjugated carbon skeleton of LUT.</p></sec></sec><sec id="sec3" disp-level="1"><label>3.</label><title>Results and Discussion</title><sec id="sec3.1" disp-level="2"><label>3.1.</label><title>Validation of Our Calculation
+Model</title><sec id="sec3.1.1" disp-level="3"><title>MNDO/MRCI Calculations</title><p>Previously, we proved that the
+OM2/MRCI structural optimization combined with single-point energy
+calculation at the MS-CASPT2­(10,8)/6-31G­(d) computational level can
+reasonably model the strongly correlated S<sub>1</sub> state of xanthophyll
+LUT. However, the missing semiempirical
+parameters of the Mg element in OM2/MRCI prevent us from calculating
+the ground- and excited-state properties of CLA and CHL. In this work,
+the MNDO/MRCI method was adopted to calculate the S<sub>1</sub> state
+of CLA, CHL, and LUT. As listed in <xref rid="tbl1" ref-type="table">Tables 
+</xref> and , the MNDO/MRCI
+and MS-CASPT2 methods can provide very similar electronic configurations
+and vertical excitation energies for the S<sub>1</sub> and S<sub>2</sub> states of LUT. The S<sub>2</sub> state provided here is only used
+for comparison with the available experimental value of LUT. For example,
+the vertical excitation energy of the S<sub>2</sub>(1Bu<sup>+</sup>) state is 2.67 and 2.68 eV at MNDO/MRCI and MS-CASPT2, which is
+about 0.1 eV the absorption maximum (2.59 eV) of LUT in the experiment
+in hexane. The optically dark properties
+of the S<sub>1</sub> state make it impossible to directly extract
+the vertical excitation properties from the absorption spectrum experiments.
+The dark S<sub>1</sub>(2Ag<sup>–</sup>) state of LUT has a
+major double electronic excitation in which two electrons in the HOMO
+are promoted to the LUMO. The vertical excitation energies of this
+dark state were calculated to be 2.49 and 2.47 eV using MNDO/MRCI
+and MS-CASPT2, respectively, which are much higher than Walla and
+co-workers’ measured value of 1.78 eV by the two-photon absorption
+spectrum in solution. The inconsistency
+between experiments and calculations comes from the difficulty inherent
+in modeling the strongly correlated property of the S<sub>1</sub> state
+theoretically. Many other theoretical studies on the S<sub>1</sub>(2Ag<sup>–</sup>) state of LUT also gave similar results,
+such as 2.87 eV by DSRG-MRPT2, 2.19 eV by R-AM1/FOMO-CASCI, and 2.13
+eV by DFT/MRCI, which are also higher than the experimental measurement.<italic>
+−
+
+</italic>
+</p><table-wrap id="tbl1" position="float"><?disp-level 4?><label>1</label><caption><title>Vertical Excitation Energies (in eV)
+of LUT with MNDO/MRCI, MS-CASPT2 Calculations, and Experimental Measurements</title></caption><table frame="hsides" rules="groups"><colgroup span="1"><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/></colgroup><thead><tr><th align="center" colspan="1" rowspan="1"> </th><th colspan="2" align="center" rowspan="1">MNDO/MRCI(10,10)<hr/></th><th colspan="2" align="center" rowspan="1">MS-CASPT2(10,8)/6-31G(d)<sup/>
+<hr/></th><th align="center" colspan="1" rowspan="1">Expt<sup/>
+<hr/></th></tr><tr><th align="center" colspan="1" rowspan="1"> </th><th align="center" colspan="1" rowspan="1">Configurations</th><th align="center" colspan="1" rowspan="1">Energies</th><th align="center" colspan="1" rowspan="1">Configurations</th><th align="center" colspan="1" rowspan="1">Energies</th><th align="center" colspan="1" rowspan="1">Energies</th></tr></thead><tbody><tr><td rowspan="3" align="left" colspan="1">LUT S<sub>1</sub>(2Ag<sup>–</sup>)</td><td align="left" colspan="1" rowspan="1">h,h→l,l [30.3%]</td><td rowspan="3" align="left" colspan="1">2.49</td><td align="left" colspan="1" rowspan="1">h,h→l,l [31.1%]</td><td rowspan="3" align="left" colspan="1">2.47</td><td rowspan="3" align="left" colspan="1">1.78</td></tr><tr><td align="left" colspan="1" rowspan="1">h-1→l
+[21.0%]</td><td rowspan="2" align="left" colspan="1">h-3→l [33.7%]</td></tr><tr><td align="left" colspan="1" rowspan="1">h→l+1 [18.8%]</td></tr><tr><td align="left" colspan="1" rowspan="1">LUT S<sub>2</sub>(1Bu<sup>+</sup>)</td><td align="left" colspan="1" rowspan="1">h→l [64.7%]</td><td align="left" colspan="1" rowspan="1">2.67</td><td align="left" colspan="1" rowspan="1">h→l [70.7%]</td><td align="left" colspan="1" rowspan="1">2.68</td><td align="left" colspan="1" rowspan="1">2.59</td></tr></tbody></table><table-wrap-foot><fn id="t1fn1"><label>a</label><p>
+<italic>J. Chem. Inf. Model</italic>
+<bold>2023</bold>, <italic>63</italic>, 4679–4690.</p></fn><fn id="t1fn2"><label>b</label><p>
+<italic>J. Phys. Chem. A</italic>
+<bold>2002</bold>, <italic>106</italic>, 1909–1916. Electronic
+configurations with corresponding weights larger than 0.1 are printed
+out as a percentage.</p></fn></table-wrap-foot></table-wrap><table-wrap id="tbl2" position="float"><?disp-level 4?><label>2</label><caption><title>Vertical Excitation Energies (in eV)
+of CLA and CHL with MNDO/MRCI, TD-DFT Calculations and Experimental
+Measurements</title></caption><table frame="hsides" rules="groups"><colgroup span="1"><col span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/><col align="left" span="1"/></colgroup><thead><tr><th align="center" colspan="1" rowspan="1"> </th><th colspan="2" align="center" rowspan="1">MNDO/MRCI(18,18)<hr/></th><th colspan="2" align="center" rowspan="1">TDA-DFT/def2-TZVP<hr/></th><th align="center" colspan="1" rowspan="1">Expt<sup/>
+<hr/></th></tr><tr><th align="center" colspan="1" rowspan="1"> </th><th align="center" colspan="1" rowspan="1">Configurations</th><th align="center" colspan="1" rowspan="1">Energies</th><th align="center" colspan="1" rowspan="1">Configurations</th><th align="center" colspan="1" rowspan="1">Energies</th><th align="center" colspan="1" rowspan="1">Energies</th></tr></thead><tbody><tr><td rowspan="2" align="left" colspan="1">CLA S<sub>1</sub>
+</td><td align="left" colspan="1" rowspan="1">h→l [64.2%]</td><td rowspan="2" align="left" colspan="1">1.98</td><td rowspan="2" align="left" colspan="1">h→l [61.5%]</td><td rowspan="2" align="left" colspan="1">2.28</td><td rowspan="2" align="left" colspan="1">1.93</td></tr><tr><td align="left" colspan="1" rowspan="1">h-1→l+1 [13.2%]</td></tr><tr><td rowspan="2" align="left" colspan="1">CHL S<sub>1</sub>
+</td><td align="left" colspan="1" rowspan="1">h→l [64.4%]</td><td rowspan="2" align="left" colspan="1">2.05</td><td rowspan="2" align="left" colspan="1">h→l [58.7%]</td><td rowspan="2" align="left" colspan="1">2.36</td><td rowspan="2" align="left" colspan="1">1.98</td></tr><tr><td align="left" colspan="1" rowspan="1">h-1→l+1 [13.1%]</td></tr></tbody></table><table-wrap-foot><fn id="t2fn1"><label>a</label><p>
+<italic>Angew. Chem. Int. Ed.</italic>
+<bold>2015</bold>, <italic>54</italic>, 2170–2173. Electronic
+configurations with corresponding weights larger than 0.1 are printed
+out as a percentage.</p></fn></table-wrap-foot></table-wrap><p>As
+for CLA and CHL, the MNDO/MRCI method can also provide reliable
+S<sub>1</sub> vertical excitation energies of 1.98 and 2.05 eV, which
+is in good agreement with the experimental value of 1.93 and 1.98
+eV. The TDA-CAM-B3LYP/def2-TZVP calculations
+were computed using Gaussian16, providing
+much higher vertical excitation energies of 2.28 and 2.36 eV for CLA
+and CHL. All these methods predicted that the chlorophylls’
+S<sub>1</sub> state is a bright state, which originates from the HOMO
+to LUMO transition.</p><p>Notably, Götze et al. pointed out
+that the vertical excitation
+energies (VH and VG) are often higher than experimental peaks because
+experiments capture vibrationally relaxed states. For CLA and CHL, the 0–0 transition dominates, so
+vertical excitation energies closely match experiments, consistent
+with our present calculations. For LUT, VH and VG give 0–0
+transition energies of 2.29 and 2.67 eV, while the adiabatic (AH)
+value of 2.49 eV aligns better with experiments. This phenomenon is
+mainly caused by the combined effect of the reorganization energy
+and ground state destabilization. Overall, the MNDO/MRCI method can
+be a reasonable choice for calculating the S<sub>1</sub> state of
+LUT, CLA, and CHL and is also suitable for computing excitonic couplings.</p></sec><sec id="sec3.1.2" disp-level="3"><title>Excitonic Coupling Calculations</title><p>As mentioned in <xref rid="eq1" ref-type="disp-formula">eq 
+</xref>, excitonic coupling <italic>J</italic>
+<sub>
+<italic>DA</italic>
+</sub> can be obtained from transition
+density moments <italic>T</italic>
+<sub>
+<italic>i</italic>
+</sub> (calculated
+with MNDO/MRCI) and coefficients <italic>V</italic>
+<sub>
+<italic>ij</italic>
+</sub> (extracted from MD trajectories). The initial excitonic couplings
+of monomer 1 in LHCII were first calculated to validate our computational
+model. The interpigment couplings of one monomer in spinach LHCII
+(PDB code: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/1RWT" ext-link-type="uri">1RWT</ext-link>) were estimated from the static crystal configuration by Duffy and
+Müh and are collected in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Table S3</ext-link>, and our calculated initial excitonic couplings of monomer 1 in
+LHCII (PDB code: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/3JCU" ext-link-type="uri">3JCU</ext-link>) are listed in the top panel of <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Table S4</ext-link> (upper-right triangle). We further depict the absolute values of
+excitonic couplings and coupling differences between our computations
+and those calculated by Duffy and Müh in <xref rid="fig3" ref-type="fig">Figure 
+</xref>. The calculated couplings of the initial
+structure of monomer 1 in LHCII are basically consistent with those
+computed by Duffy using MNDO-CAS-CI and by Müh using TD-DFT.
+Most of the coupling differences are less than 3.0 cm<sup>–1</sup> except for a small proportion larger than 10.0 cm<sup>–1</sup>. The CLA611–CLA612 pair with the largest coupling value was
+computed to be 103.1 cm<sup>–1</sup> by us, 131.4 cm<sup>–1</sup> by Duffy, and 99.0 cm<sup>–1</sup> by Müh. The coupling
+between CLA612 and LUT620 is 13.4 cm<sup>–1</sup>, in good
+agreement with Duffy’s result of 12.2 cm<sup>–1</sup>, and that of CLA603-LUT621 herein is about half of the value of
+Duffy et al. The inconsistency in excitonic couplings may arise from
+two factors: first, the different crystal structures used in our system
+modeling (PDB ID: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/3JCU" ext-link-type="uri">3JCU</ext-link>) and the one used by Duffy and Müh (PDB ID: <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.rcsb.org/structure/1RWT" ext-link-type="uri">1RWT</ext-link>), which might introduce
+anisotropy issues during sampling, as crystal packing effects can
+influence protein structures and conformations. Second, the inclusion of phytol tails in CLA and CHL during
+molecular modeling might also contribute to the discrepancies. Overall,
+our calculation model can give reasonable excitonic coupling strengths
+for pigments in LHCII.</p><fig id="fig3" position="float"><?disp-level 4?><label>3</label><caption><p>Absolute interpigment excitonic couplings (in cm<sup>–1</sup>) of monomer 1 in LHCII using different computational models (a).
+Differences between our computed values and those calculated by Duffy
+(lower-left triangle) and Müh (upper-right triangle) are shown
+in (b).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr3" xlink:href="ao4c11543_0003.jpg"><?cloudpmc-path blobs/5a2c/12199089/b56826a9c78e/ao4c11543_0003.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 1590?><?original-width 1667?><?scaled-height 635?><?scaled-width 666?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0003.gif"><?cloudpmc-path blobs/5a2c/12199089/530083f270f2/ao4c11543_0003.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig></sec></sec><sec id="sec3.2" disp-level="2"><label>3.2.</label><title>Excitonic
+Couplings</title><sec id="sec3.2.1" disp-level="3"><title>Excitonic Couplings in LHCII</title><p>Previously, Duffy and
+co-workers assumed that excitonic couplings of different pigments
+in each monomer of LHCII are equivalent. In this work, we calculated the excitonic couplings of monomers
+1, 2, and 3 in LHCII separately and found that three monomers do share
+very similar coupling strengths at the optimized static minimum structure
+(<xref rid="fig4" ref-type="fig">Figure 
+</xref>). The CLA611–CLA612
+pair in the strongly coupled chlorophyll terminal emitter of CLA610–CLA611–CLA612
+exhibits the largest excitonic coupling in all of the monomers. But
+there are still a few differences. For example, the CLA602–CLA603
+and CLA613–CLA614 pairs in monomer 3 exhibit stronger coupling
+strengths compared to the corresponding pigment pairs in monomers
+1 and 2. In contrast, the larger coupling for the CLA611–CLA612
+pair is observed in monomer 2 than those in monomers 1 and 3.</p><fig id="fig4" position="float"><?disp-level 4?><label>4</label><caption><p>Absolute interpigment
+excitonic couplings (in cm<sup>–1</sup>) of monomers 1 (M1),
+2 (M2), and 3 (M3) in LHCII.</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr4" xlink:href="ao4c11543_0004.jpg"><?cloudpmc-path blobs/5a2c/12199089/56b1313c58af/ao4c11543_0004.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 635?><?original-width 1577?><?scaled-height 317?><?scaled-width 788?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0004.gif"><?cloudpmc-path blobs/5a2c/12199089/ee7b79f8e950/ao4c11543_0004.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>Up to now, the excitonic couplings were obtained from the optimized
+static structure, which appear to be insufficient to accurately capture
+the fluctuations occurring within a realistic protein environment.
+Their probability distributions obtained from MD simulations are displayed
+in <xref rid="fig5" ref-type="fig">Figure 
+</xref>. For CLA611–CLA612,
+the average excitonic couplings are 102.1 and 100.8 cm<sup>–1</sup> for monomers 1 and 2, respectively, and decrease to 87.0 cm<sup>–1</sup> in monomer 3; monomer 3 exhibits a relatively broader
+distribution compared to that of monomers 1 and 2, ranging from 50.0
+to 125.0 cm<sup>–1</sup>. The average couplings of CLA603–LUT621
+in monomers 1 and 2 were computed to be 7.3 and 7.5 cm<sup>–1</sup>, while those in monomer 3 were estimated to be 8.6 cm<sup>–1</sup>. The same tendency was observed for CLA612-LUT620 with the coupling
+strengths of 13.7, 13.1, and 9.5 cm<sup>–1</sup> in monomers
+1, 2, and 3, respectively. Taking protein fluctuations into account,
+the excitonic couplings of monomers 1 and 2 show very similar strengths,
+while monomer 3 displays a slightly different coupling pattern.</p><fig id="fig5" position="float"><?disp-level 4?><label>5</label><caption><p>Probability
+distributions of absolute excitonic couplings (in cm<sup>–1</sup>) of representative pigment pairs in LHCII: excitonic
+couplings for CLA611–CLA612 (a, b, c), CLA603–LUT621
+(d, e, f), and CLA612–LUT620 (g, h, i), along with averaged
+values (indicated by blue lines).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr5" xlink:href="ao4c11543_0005.jpg"><?cloudpmc-path blobs/5a2c/12199089/d5d2dd284b66/ao4c11543_0005.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 1682?><?original-width 2100?><?scaled-height 561?><?scaled-width 700?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0005.gif"><?cloudpmc-path blobs/5a2c/12199089/0e1925e56752/ao4c11543_0005.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig></sec><sec id="sec3.2.2" disp-level="3"><title>Time Evolution of Excitonic Couplings and Structural Parameters</title><p>As displayed in <xref rid="fig6" ref-type="fig">Figure 
+</xref>, the excitonic couplings of CLA611–CLA612 in monomers
+1 and 2 vary slightly over time, while those in monomer 3 undergo
+relatively large changes in LHCII. We further picked out three representative
+snapshots with different structural parameters of monomer 3 in LHCII
+(<xref rid="fig6" ref-type="fig">Figure 
+</xref>c). The first
+snapshot was selected at ∼270 ns with the excitonic coupling
+of ∼70.0 cm<sup>–1</sup>, in which the distance between
+CLA611–CLA612, the dislocation angle, and the dihedral angle
+were 10.5 Å, 65°, and 26°, respectively. The distance
+became smaller after 400 ns, especially at ∼760 ns, with the
+distance of 8.0 Å. Simultaneously, the excitonic coupling increased
+to ∼115.0 cm<sup>–1</sup>. At ∼950 ns, the distance
+and the dislocation angle increased, but the dihedral angle was reduced.
+The comprehensive effect of structural changes led to a slight decrease
+in exciton coupling (∼108.0 cm<sup>–1</sup>). In addition,
+remarkable motion of the phytol tails in CLA can be observed during
+MD simulations. As shown in <xref rid="fig6" ref-type="fig">Figure 
+</xref>d, the orientation of the phytol tails initially paralleled
+the chlorine ring and then became angled, potentially affecting the
+position and excitonic coupling of the CLA611–CLA612 pair.</p><fig id="fig6" position="float"><?disp-level 4?><label>6</label><caption><p>Time evolution
+of excitonic couplings and key structural parameters
+of CLA611–CLA612 in monomers 1 (a), 2 (b), and 3 (c), along
+with representative snapshots in monomer 3 (d) (indicated by green
+stars).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr6" xlink:href="ao4c11543_0006.jpg"><?cloudpmc-path blobs/5a2c/12199089/7b2abb030a7a/ao4c11543_0006.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 1047?><?original-width 1569?><?scaled-height 523?><?scaled-width 784?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0006.gif"><?cloudpmc-path blobs/5a2c/12199089/8be225621bb3/ao4c11543_0006.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>The excitonic couplings of CLA612–LUT620
+are 1 order of
+magnitude smaller than those of CLA611–CLA612. The long and
+flexible carbon skeleton makes the LUT molecule easy to deform and
+hinders us from defining a stable plane for LUT. Instead, we employed
+three rotation angles (R1, R2, and R3) along the conjugated carbon
+skeleton rather than the dihedral angle between two planes to describe
+the geometrical structure of CLA612–LUT620. As shown in <xref rid="fig7" ref-type="fig">Figure 
+</xref>, the excitonic coupling
+between CLA612 and LUT620 in monomers 1 and 2 remained at a stable
+geometry and fluctuated around ∼13.0 cm<sup>–1</sup>. In contrast, CLA612–LUT620 in monomer 3 presented large-amplitude
+fluctuations of excitonic couplings and structural parameters (<xref rid="fig7" ref-type="fig">Figure 
+</xref>c). The separation
+of CLA and LUT became larger between 450 and 800 ns, and the rotation
+angle of R1/R2/R3 varies from 2.0°/176.0°/8.7° at 510
+ns to 5.2°/149.4°/46.9° at 880 ns, indicating a deformation
+of LUT. The geometric changes may induce fluctuations of excitonic
+couplings and reduce the averaged coupling strength to ∼7.5
+cm<sup>–1</sup>. Based on the time evolution of excitonic couplings,
+it is conceivable that LUT binds more tightly to proteins than the
+CLA and CHL molecules, since the structural changes of CLA611–CLA612
+are much easier than those of CLA612–LUT620. It is consistent
+with Duffy’s work, in which both
+LUTs are rigidly fixed position-wise relative to their chlorophyll
+partners. As a result, the coupling magnitude of CLA612–LUT620
+exhibits smaller amplitude oscillations. Notably, the selected structural
+parameters can only partially characterize the variations of exciton
+couplings within the system. Many other complicated factors, such
+as deplanarization of the chlorin ring, may also play significant
+roles.</p><fig id="fig7" position="float"><?disp-level 4?><label>7</label><caption><p>Time evolution of excitonic couplings and key structural parameters
+of CLA612–LUT620 in monomers 1 (a), 2 (b), and 3 (c), along
+with representative snapshots in monomer 3 (d) (indicated by green
+stars).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr7" xlink:href="ao4c11543_0007.jpg"><?cloudpmc-path blobs/5a2c/12199089/14a775f97800/ao4c11543_0007.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 1218?><?original-width 1661?><?scaled-height 487?><?scaled-width 664?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0007.gif"><?cloudpmc-path blobs/5a2c/12199089/f8873b0717bd/ao4c11543_0007.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig></sec><sec id="sec3.2.3" disp-level="3"><title>Excitonic Couplings in
+LHCII–PSII</title><p>We further
+focus on potential effects of the PSII core and minor antennae of
+CP26 and CP29 on the excitonic couplings in LHCII. The probability
+distributions of absolute excitonic couplings of representative pigment
+pairs in the LHCII–PSII supercomplex are shown in <xref rid="fig8" ref-type="fig">Figure 
+</xref>. Compared to the
+isolated LHCII, most probability distributions of excitonic couplings
+exhibit a bimodal character in LHCII–PSII. In monomers 1 and
+2, additional peaks with much weaker coupling strengths (22.9 and
+10.6 cm<sup>–1</sup> for CLA611–CLA612; 5.3 and 1.4
+cm<sup>–1</sup> for CLA612–LUT620) can be observed.
+Although stronger couplings for CLA603–LUT621 also appear in
+LHCII–PSII (e.g., 10.3 and 11.2 cm<sup>–1</sup> in monomers
+1 and 3), the corresponding averaged values are close to that in isolated
+LHCII on account of another peak with smaller strengths (e.g., 1.5
+and 7.2 cm<sup>–1</sup> in monomers 1 and 3). Overall, the
+couplings in monomer 2 decrease more significantly than those in monomer
+1, while monomer 3 undergoes the smallest change, indicating that
+the PSII core and the minor antennas of CP26 and CP29 may provide
+an anisotropic chemical environment to different monomers.</p><fig id="fig8" position="float"><?disp-level 4?><label>8</label><caption><p>Probability
+distributions of absolute excitonic couplings (in cm<sup>–1</sup>) of representative pigment pairs in LHCII–PSII:
+excitonic couplings for CLA611–CLA612 (a, b, c), CLA603–LUT621
+(d, e, f), and CLA612–LUT620 (g, h, i), along with averaged
+values of peaks (indicated by blue lines).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr8" xlink:href="ao4c11543_0008.jpg"><?cloudpmc-path blobs/5a2c/12199089/8291770b7bd2/ao4c11543_0008.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 1777?><?original-width 2100?><?scaled-height 592?><?scaled-width 700?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0008.gif"><?cloudpmc-path blobs/5a2c/12199089/bd479a378cd3/ao4c11543_0008.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>The probability distributions of absolute excitonic couplings for
+all CLA611–CLA612, CLA603–LUT621, and CLA612–LUT620
+pairs in the LHCII–PSII supercomplex are collected in <xref rid="fig9" ref-type="fig">Figure 
+</xref> and compared with
+the corresponding distributions in isolated LHCII. Again, the probability
+distributions of excitonic couplings in LHCII exhibit a single peak,
+whereas those in LHCII–PSII display a bimodal nature. As a
+result, the overall excitonic couplings in LHCII–PSII become
+much smaller than those in LHCII. For example, the averaged couplings
+of CLA612–LUT620 were calculated as 12.1 and 6.9 cm<sup>–1</sup> in isolated LHCII and LHCII–PSII, respectively.</p><fig id="fig9" position="float"><?disp-level 4?><label>9</label><caption><p>Probability
+distributions of absolute excitonic couplings (in cm<sup>–1</sup>) for CLA611–CLA612 (a), CLA603–LUT621
+(b), and CLA612–LUT620 pairs (c) in all three monomers in LHCII
+(in blue) and LHCII–PSII (in green), along with averaged values
+of peaks (indicated by blue and green lines).</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr9" xlink:href="ao4c11543_0009.jpg"><?cloudpmc-path blobs/5a2c/12199089/da99e10d7080/ao4c11543_0009.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 549?><?original-width 2100?><?scaled-height 183?><?scaled-width 700?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0009.gif"><?cloudpmc-path blobs/5a2c/12199089/6a87595ab217/ao4c11543_0009.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>To evaluate the potential influence of different MD protocols on
+conformational sampling and excitonic couplings, we performed three
+additional MD simulations of LHCII–PSII under (1) standard
+conditions (650 ns duration), (2) low pH, and (3) realistic salt conditions.
+The relevant results are presented in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figures S7–S9</ext-link>. On one hand, the bimodal excitonic coupling pattern
+was still observed, and the key conclusion remains unchanged in (1)
+and (3). On the other hand, in (2), the bimodal nature of excitonic
+couplings nearly disappears, replaced by a unimodal distribution.
+This indicates that low pH stabilizes the LHCII–PSII structure
+in the photoprotective state. More details can be seen in the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Supporting Information</ext-link>.</p></sec></sec><sec id="sec3.3" disp-level="2"><label>3.3.</label><title>Comparison with Previous Works</title><p>As
+mentioned above, the distinct excitonic coupling patterns differ between
+the LHCII and LHCII–PSII complexes, exhibiting single-peak
+versus bimodal spectral features, respectively. This difference motivates
+a comparative analysis of their protein scaffolds and pigment molecules
+in comparison to previous works.</p><p>Recently, Weng and co-workers
+investigated the distribution of the strength of excitonic couplings
+between LUT and chlorophylls in LHCII using multistate DFT and MD
+simulations at different conditions. Additionally,
+they also explored the quantum switch between light-harvesting and
+energy-quenching states in plants using a combination of multistate
+DFT along with X-ray and cryo-EM structures, in which both Dexter
+and Förster mechanisms are included and determined explicitly. They stated that nanodiscs can provide a lateral
+constraint force to the LHCII trimer (pH 5.4) and prompt the system
+to the energy-quenching state. In this state, the angles of LUT620–LUT621
+and helices A and B were estimated to range from 73.2° to 77.1°
+and from 116.4° to 117.8°, respectively. Based on the measured
+rates, a critical distance of 5.6 Å between CLA612 and LUT620
+was inferred to be the turning point between Förster and Dexter
+mechanisms. At pH 7.8 in solvent, they further observed that the angles
+of LUT620–LUT621 and helices A and B in LHCII increased to
+∼80° and ∼120°, respectively, and the distance
+between CLA612 and LUT620 also became larger, suggesting a dynamic
+switch to a light-harvesting state.</p><p>As mentioned above, we started
+from a highly energy-quenched crystal
+structure and adjusted the pH to 7.5 in order to partially capture
+pronounced structural changes between pigments due to the allosteric
+regulation of LHCII. According to the initial structure for our simulations,
+the angles of LUT620–LUT621 and helices A and B, as well as
+the distance between CLA612 and LUT620, were in the range of 60.0–65.0°,
+112.0–116.0°, and 6.10–6.50 Å, respectively.
+It indicates an energy-quenching state and qualitatively agrees with
+the observations by Ruan et al. in nanodiscs. We further extracted
+representative structures of monomers 1, 2, and 3 from production
+NPT MD trajectories. The results of LHCII–PSII can be seen
+in <xref rid="fig10" ref-type="fig">Figure 
+</xref>. Most
+of the relevant angles and distances increased during simulations
+with the average values being 65.9°, 118.6°, and 9.17 Å
+for monomer 1, 67.2°, 119.9°, and 10.03 Å for monomer
+2, and 64.0°, 116.5°, and 7.02 Å for monomer 3, respectively.
+A careful comparison between representative structures and the CLA612–LUT620
+excitonic couplings reveals that the structural changes may correspond
+to the additional peaks of <italic>J</italic>
+<sub>DA</sub>’s
+distribution in the presence of the PSII core and minor antennas (see <xref rid="fig8" ref-type="fig">Figures 
+</xref>g–i). Representative structures of isolated LHCII
+are shown in <xref rid="fig11" ref-type="fig">Figure 
+</xref>. It can be seen that the averaged distances between CLA612 and LUT620
+in all monomers decreased below 7.0 Å; the averaged angle of
+helices A and B between 108.8° and 113.3° became closer
+to its initial value rather than that in LHCII–PSII. These
+structural parameters suggest that the isolated LHCII remains consistently
+trapped in the energy-quenched state throughout 1 μs MD simulations.</p><fig id="fig10" position="float"><?disp-level 3?><label>10</label><caption><p>Representative
+structures of monomers 1 (a), 2 (b), and 3 (c) extracted
+from production NPT MD simulations of LHCII–PSII. Different
+colors represent averaged values of different structural parameters:
+angle of LUT620–LUT621 in orange, angle of helices A and B
+in black, distance between CLA612–LUT620 in purple.</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr10" xlink:href="ao4c11543_0010.jpg"><?cloudpmc-path blobs/5a2c/12199089/7f9dff2f023b/ao4c11543_0010.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 269?><?original-width 1000?><?scaled-height 179?><?scaled-width 666?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0010.gif"><?cloudpmc-path blobs/5a2c/12199089/9d7241107a96/ao4c11543_0010.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><fig id="fig11" position="float"><?disp-level 3?><label>11</label><caption><p>Representative structures of monomers 1 (a), 2 (b), and 3 (c) extracted
+from production NPT MD simulations of isolated LHCII. Different colors
+represent averaged values of different structural parameters: angle
+of LUT620–LUT621 in orange, angle of helices A and B in black,
+distance between CLA612–LUT620 in purple.</p></caption><alternatives><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="image" id="gr11" xlink:href="ao4c11543_0011.jpg"><?cloudpmc-path blobs/5a2c/12199089/a52dec68d5ce/ao4c11543_0011.jpg?><?cloudpmc-bucket cdn?><?image-server-status LOAD_COMPLETED?><?original-height 265?><?original-width 893?><?scaled-height 177?><?scaled-width 595?></graphic><graphic xmlns:xlink="http://www.w3.org/1999/xlink" content-type="thumb" xlink:href="ao4c11543_0011.gif"><?cloudpmc-path blobs/5a2c/12199089/00c1e2b662f6/ao4c11543_0011.gif?><?cloudpmc-bucket cdn?></graphic></alternatives></fig><p>Overall, the tendency of structural changes in the presence of
+the PSII core and minor antennas is consistent with the previous work
+by Ruan et al. Based on the above comparison and analysis, we speculated
+that peripheral proteins may provide an anisotropic protein environment
+to LHCII. Additionally, the variation in the protein scaffold, specifically
+the angle between helices A and B, seems to be relevant to the excitonic
+couplings in LHCII–PSII by affecting the angle between LUT620
+and LUT621 and the distance between CLA612 and LUT620. The larger
+angle between helices A and B, as well as the increased distance between
+pigments, may result in a bimodal distribution of excitonic couplings
+within LHCII–PSII and finally reduce the coupling strengths,
+particularly between CLA612 and LUT620.</p><p>More recently, Mennucci
+et al. discovered that the second dihedral
+angle, located on the lumenal side, of the LUT molecule plays a pivotal
+role in determining the s-cis or s-trans conformation, which may influence
+both light-harvesting efficiency and photoprotection in plant antenna
+complexes. In LHCII, the s-cis conformation
+of LUT at the L2 site enhances light absorption by lowering the excitation
+energy, while the s-trans conformation at the L1 site is optimized
+for photoprotection.</p><p>To further clarify the distinct roles of
+the two LUT molecules,
+we conducted a detailed conformational analysis in our MD simulations,
+both in isolated LHCII and in the LHCII–PSII supercomplex.
+As shown in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S10</ext-link>, both LUT620 and
+LUT621 in isolated LHCII adopt the s-trans conformation, which favors
+the photoprotective state, consistent with our previous discussions
+(<xref rid="fig5" ref-type="fig">Figure 
+</xref>). However,
+in monomer 2 of LHCII–PSII, LUT620 transiently adopts an s-cis
+conformation but quickly reverts to the s-trans state (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S11</ext-link>). Furthermore, we analyzed the relationship
+between this dihedral transition and excitonic coupling. As illustrated
+in <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S12</ext-link>, our findings indicate that
+the second dihedral angle does not exhibit a direct correlation with
+the reduction in excitonic couplings. This is consistent with recent
+studies by Mennucci and co-workers,<italic>
+,
+</italic> which show
+that the excitonic couplings between LUT and chlorophylls in CP29
+are minimally affected by the s-trans/s-cis conformational change
+of LUT, and the Coulomb interactions between LUT and chlorophylls
+remain insensitive to protein conformational rearrangements. Instead,
+the coupling appears to be influenced primarily by the distance between
+the LUT and chlorophylls, at least within the scope of our current
+simulations (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Figure S12</ext-link>).</p></sec></sec><sec id="sec4" disp-level="1"><label>4.</label><title>Conclusion</title><p>In the present work, we constructed a more
+realistic computational
+model to study protein-regulated exciton couplings in spinach LHCII.
+All-atom MD simulations combined with semiempirical MNDO/MRCI electronic
+structure calculations were performed to estimate the coupling strengths
+of key pigments in isolated LHCII and the LHCII–PSII supercomplex.
+In the case of isolated LHCII, the three monomers are nearly equivalent,
+sharing similar coupling patterns. In the presence of the PSII core
+and minor antennas, the probability distribution of excitonic couplings
+changes from a single peak to a bimodal nature, leading to remarkably
+reduced coupling strengths between CLA611 and CLA612, CLA612 and LUT620,
+and CLA603 and LUT621. We further analyzed the time evolution of excitonic
+couplings and protein structures and compared the present computational
+results to recent experiments by Weng and co-workers. It suggests
+that the peripheral proteins may provide an anisotropic protein environment
+to LHCII, which could affect the excitonic couplings between the pigments
+in LHCII–PSII. Our findings underscore the importance of the
+PSII core and minor antennas in molecular modeling of the light-harvesting
+complex and highlight the limitations of excitonic couplings derived
+from the isolated LHCII structures.</p></sec><sec id="sec19" disp-level="1"><title>Supplementary Material</title><supplementary-material id="sifile1" position="float"><media xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="ao4c11543_si_001.pdf" mimetype="application" mime-subtype="pdf"><?cloudpmc-path 5a2c/12199089/c0a85f4f695b/ao4c11543_si_001.pdf?><?cloudpmc-bucket app?><?size 4147828?></media></supplementary-material></sec><sec id="ack1" sec-type="ack" disp-level="1"><title>Acknowledgments</title><p>This
+work was supported by the National Key Research
+and Development Program of China (No. 2019YFA0709400), National Natural
+Science Foundation of China (Nos. 22193041, 22373037, and 22288201),
+Zhejiang Provincial Natural Science Foundation of China (No. LZ23B030001),
+Key Science and Technology Project of Jinhua City (2023-1-093), Natural
+Science Basic Research Program of Science and Technology Department
+of Shaanxi Province (No. 2023-JC-QN-0151), and Fundamental Research
+Funds for the Central Universities. We also thank Prof. Liang-Xu Xie
+and Prof. Lu Zhang for valuable discussions and help in LHCII–PSII
+modeling.</p></sec><sec id="notes2" disp-level="1"><p>The data supporting
+this article have been included as part of the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Supporting Information</ext-link>.</p></sec><sec id="notes1" disp-level="1"><p>The Supporting
+Information is
+available free of charge at <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/10.1021/acsomega.4c11543?goto=supporting-info" ext-link-type="uri">https://pubs.acs.org/doi/10.1021/acsomega.4c11543</ext-link>.</p><list list-type="simple" id="silist"><list-item><p>Derivation of transition
+density moment, active spaces
+in MNDO/MRCI and MS-CASPT2 calculations, electronic configurations
+of lutein and chlorophyll a/b, validation of MD simulations, interpigment
+excitonic couplings in LHCII, values of transition density moments
+and transition dipole moments of lutein and chlorophyll a/b, and additional
+tests on the excitonic couplings in LHCII–PSII (<ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">PDF</ext-link>)</p></list-item></list></sec><sec id="notes3" disp-level="1"><label>#.</label><p>B.-B.X.
+and B.-W.Y. contributed equally to this work.</p></sec><sec id="notes4" disp-level="1"><p>The authors
+declare no competing financial interest.</p></sec><sec id="ref-list1" sec-type="ref-list" disp-level="1"><title>References</title><sec id="ref-list1_sec2" disp-level="2"><ref-list><ref id="ref1"><mixed-citation id="cit1"><named-content content-type="citation-string">
+
+Blankenship, R. E.
+
+Molecular
+mechanisms of photosynthesis, Blackwell Science, Oxford, 2002; pp 1–321.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="title=Molecular mechanisms of photosynthesis&amp;publication_year=2002&amp;"/></mixed-citation></ref><ref id="ref2"><mixed-citation id="cit2"><named-content content-type="citation-string">
+
+van Amerongen, H.
+; 
+van Grondelle, R.
+; 
+Valkunas, L.
+. 
+Photosynthetic
+excitons; World Scientific, Singapore, 2000; pp 1–590.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="title=Photosynthetic excitons&amp;publication_year=2000&amp;"/></mixed-citation></ref><ref id="ref3"><mixed-citation id="cit3"><named-content content-type="citation-string">Zhu X. G., Long S. P., Ort D. R.. What is the maximum efficiency with
+which photosynthesis can convert solar energy into biomass? Curr. Opin in Biotech. 2008;19:153–159. doi: 10.1016/j.copbio.2008.02.004.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.copbio.2008.02.004"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="18374559"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Curr. Opin in Biotech&amp;title=What is the maximum efficiency with which photosynthesis can convert solar energy into biomass?&amp;author=X. G. Zhu&amp;author=S. P. Long&amp;author=D. R. Ort&amp;volume=19&amp;publication_year=2008&amp;pages=153-159&amp;pmid=18374559&amp;doi=10.1016/j.copbio.2008.02.004&amp;"/></mixed-citation></ref><ref id="ref4"><mixed-citation id="cit4"><named-content content-type="citation-string">Duffy C. D. P.. The
+simplicity of robust light harvesting. Science. 2020;368:1427–1428. doi: 10.1126/science.abc8063.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1126/science.abc8063"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="32587007"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Science&amp;title=The simplicity of robust light harvesting&amp;author=C. D. P. Duffy&amp;volume=368&amp;publication_year=2020&amp;pages=1427-1428&amp;pmid=32587007&amp;doi=10.1126/science.abc8063&amp;"/></mixed-citation></ref><ref id="ref5"><mixed-citation id="cit5"><named-content content-type="citation-string">Arp T. B., Kistner-Morris J., Aji V., Cogdell R. J., van Grondelle R., Gabor N. M.. Quieting a noisy
+antenna reproduces photosynthetic
+light-harvesting spectra. Science. 2020;368:1490–1495. doi: 10.1126/science.aba6630.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1126/science.aba6630"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="32587021"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Science&amp;title=Quieting a noisy antenna reproduces photosynthetic light-harvesting spectra&amp;author=T. B. Arp&amp;author=J. Kistner-Morris&amp;author=V. Aji&amp;author=R. J. Cogdell&amp;author=R. van Grondelle&amp;volume=368&amp;publication_year=2020&amp;pages=1490-1495&amp;pmid=32587021&amp;doi=10.1126/science.aba6630&amp;"/></mixed-citation></ref><ref id="ref6"><mixed-citation id="cit6"><named-content content-type="citation-string">Ohad I., Kyle D. J., Arntzen C. J.. Membrane-protein
+damage and repair-removal
+and replacement of inactivated 32-kilodalton polypeptides in chloroplast
+membranes. J. Cell Biol. 1984;99:481–485. doi: 10.1083/jcb.99.2.481.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1083/jcb.99.2.481"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC2113258"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="6378924"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Cell Biol.&amp;title=Membrane-protein damage and repair-removal and replacement of inactivated 32-kilodalton polypeptides in chloroplast membranes&amp;author=I. Ohad&amp;author=D. J. Kyle&amp;author=C. J. Arntzen&amp;volume=99&amp;publication_year=1984&amp;pages=481-485&amp;pmid=6378924&amp;doi=10.1083/jcb.99.2.481&amp;"/></mixed-citation></ref><ref id="ref7"><mixed-citation id="cit7"><named-content content-type="citation-string">Powles S. B.. Photoinhibition
+of photosynthesis induced by visible-light. Annu. Rev. Plant. Physiol. 1984;35:15–44. doi: 10.1146/annurev.pp.35.060184.000311.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1146/annurev.pp.35.060184.000311"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Annu. Rev. Plant. Physiol.&amp;title=Photoinhibition of photosynthesis induced by visible-light&amp;author=S. B. Powles&amp;volume=35&amp;publication_year=1984&amp;pages=15-44&amp;doi=10.1146/annurev.pp.35.060184.000311&amp;"/></mixed-citation></ref><ref id="ref8"><mixed-citation id="cit8"><named-content content-type="citation-string">Wraight C. A., Crofts A. R.. Energy-dependent
+quenching of chlorophyll-a fluorescence
+in isolated chloroplasts. Eur. J. Biochem. 1970;17:319–327. doi: 10.1111/j.1432-1033.1970.tb01169.x.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1111/j.1432-1033.1970.tb01169.x"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="5500400"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Eur. J. Biochem.&amp;title=Energy-dependent quenching of chlorophyll-a fluorescence in isolated chloroplasts&amp;author=C. A. Wraight&amp;author=A. R. Crofts&amp;volume=17&amp;publication_year=1970&amp;pages=319-327&amp;pmid=5500400&amp;doi=10.1111/j.1432-1033.1970.tb01169.x&amp;"/></mixed-citation></ref><ref id="ref9"><mixed-citation id="cit9"><named-content content-type="citation-string">Briantais J.-M., Vernotte C., Picaud M., Krause G. H.. Biochim. Biophys. Acta. 1979;548:128–138. doi: 10.1016/0005-2728(79)90193-2.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/0005-2728(79)90193-2"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="486438"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biochim. Biophys. Acta&amp;author=J.-M. Briantais&amp;author=C. Vernotte&amp;author=M. Picaud&amp;author=G. H. Krause&amp;volume=548&amp;publication_year=1979&amp;pages=128-138&amp;pmid=486438&amp;doi=10.1016/0005-2728(79)90193-2&amp;"/></mixed-citation></ref><ref id="ref10"><mixed-citation id="cit10"><named-content content-type="citation-string">Schreiber U.. Detection
+of rapid induction kinetics with a new type of high-frequency modulated
+chlorophyll fluorometer. Photosynth. Res. 1986;9:261–272. doi: 10.1007/BF00029749.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1007/BF00029749"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="24442302"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Photosynth. Res.&amp;title=Detection of rapid induction kinetics with a new type of high-frequency modulated chlorophyll fluorometer&amp;author=U. Schreiber&amp;volume=9&amp;publication_year=1986&amp;pages=261-272&amp;pmid=24442302&amp;doi=10.1007/BF00029749&amp;"/></mixed-citation></ref><ref id="ref11"><mixed-citation id="cit11"><named-content content-type="citation-string">Weis E., Berry J. A.. Quantum efficiency
+of photosystem-II in relation to
+energy-dependent quenching of chlorophyll fluorescence. Biochim. Biophys. Acta. 1987;894:198–208. doi: 10.1016/0005-2728(87)90190-3.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/0005-2728(87)90190-3"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biochim. Biophys. Acta&amp;title=Quantum efficiency of photosystem-II in relation to energy-dependent quenching of chlorophyll fluorescence&amp;author=E. Weis&amp;author=J. A. Berry&amp;volume=894&amp;publication_year=1987&amp;pages=198-208&amp;doi=10.1016/0005-2728(87)90190-3&amp;"/></mixed-citation></ref><ref id="ref12"><mixed-citation id="cit12"><named-content content-type="citation-string">Genty B., Briantais J.-M., Baker N. R.. The relationship
+between the quantum
+yield of photosynthetic electron-transport and quenching of chlorophyll
+fluorescence. Biochim. Biophys. Acta. 1989;990:87–92. doi: 10.1016/S0304-4165(89)80016-9.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/S0304-4165(89)80016-9"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biochim. Biophys. Acta&amp;title=The relationship between the quantum yield of photosynthetic electron-transport and quenching of chlorophyll fluorescence&amp;author=B. Genty&amp;author=J.-M. Briantais&amp;author=N. R. Baker&amp;volume=990&amp;publication_year=1989&amp;pages=87-92&amp;doi=10.1016/S0304-4165(89)80016-9&amp;"/></mixed-citation></ref><ref id="ref13"><mixed-citation id="cit13"><named-content content-type="citation-string">Ruban A. V., Johnson M. P., Duffy C. D. P.. The
+photoprotective molecular switch
+in the photosystem II antenna. BBA-bioenergetics. 2012;1817:167–181. doi: 10.1016/j.bbabio.2011.04.007.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.bbabio.2011.04.007"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="21569757"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=BBA-bioenergetics&amp;title=The photoprotective molecular switch in the photosystem II antenna&amp;author=A. V. Ruban&amp;author=M. P. Johnson&amp;author=C. D. P. Duffy&amp;volume=1817&amp;publication_year=2012&amp;pages=167-181&amp;pmid=21569757&amp;doi=10.1016/j.bbabio.2011.04.007&amp;"/></mixed-citation></ref><ref id="ref14"><mixed-citation id="cit14"><named-content content-type="citation-string">Cignoni E., Lapillo M., Cupellini L., Acosta-Gutiérrez S., Gervasio F. L., Mennucci B.. A different
+perspective for nonphotochemical
+quenching in plant antenna complexes. Nat. Commun. 2021;12:7152. doi: 10.1038/s41467-021-27526-8.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/s41467-021-27526-8"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC8660843"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="34887401"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nat. Commun.&amp;title=A different perspective for nonphotochemical quenching in plant antenna complexes&amp;author=E. Cignoni&amp;author=M. Lapillo&amp;author=L. Cupellini&amp;author=S. Acosta-Gutiérrez&amp;author=F. L. Gervasio&amp;volume=12&amp;publication_year=2021&amp;pages=7152&amp;pmid=34887401&amp;doi=10.1038/s41467-021-27526-8&amp;"/></mixed-citation></ref><ref id="ref15"><mixed-citation id="cit15"><named-content content-type="citation-string">Pedraza-González L., Cignoni E., D’Ascenzi J., Cupellini L., Mennucci B.. How the pH Controls
+Photoprotection in the Light-Harvesting
+Complex of Mosses. J. Am. Chem. Soc. 2023;145:7482–7494. doi: 10.1021/jacs.3c00377.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jacs.3c00377"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC10080688"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="36961522"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Am. Chem. Soc.&amp;title=How the pH Controls Photoprotection in the Light-Harvesting Complex of Mosses&amp;author=L. Pedraza-González&amp;author=E. Cignoni&amp;author=J. D’Ascenzi&amp;author=L. Cupellini&amp;author=B. Mennucci&amp;volume=145&amp;publication_year=2023&amp;pages=7482-7494&amp;pmid=36961522&amp;doi=10.1021/jacs.3c00377&amp;"/></mixed-citation></ref><ref id="ref16"><mixed-citation id="cit16"><named-content content-type="citation-string">Holt N. E., Zigmantas D., Valkunas L., Li X. P., Niyogi K. K., Fleming G. R.. Carotenoid
+cation formation and the regulation of photosynthetic
+light harvesting. Science. 2005;307:433–436. doi: 10.1126/science.1105833.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1126/science.1105833"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="15662017"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Science&amp;title=Carotenoid cation formation and the regulation of photosynthetic light harvesting&amp;author=N. E. Holt&amp;author=D. Zigmantas&amp;author=L. Valkunas&amp;author=X. P. Li&amp;author=K. K. Niyogi&amp;volume=307&amp;publication_year=2005&amp;pages=433-436&amp;pmid=15662017&amp;doi=10.1126/science.1105833&amp;"/></mixed-citation></ref><ref id="ref17"><mixed-citation id="cit17"><named-content content-type="citation-string">Pascal A. A., Liu Z. F., Broess K., van Oort B., van Amerongen H., Wang C., Horton P., Robert B., Chang W. R., Ruban A.. Molecular basis of
+photoprotection and control of photosynthetic
+light-harvesting. Nature. 2005;436:134–137. doi: 10.1038/nature03795.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nature03795"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="16001075"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nature&amp;title=Molecular basis of photoprotection and control of photosynthetic light-harvesting&amp;author=A. A. Pascal&amp;author=Z. F. Liu&amp;author=K. Broess&amp;author=B. van Oort&amp;author=H. van Amerongen&amp;volume=436&amp;publication_year=2005&amp;pages=134-137&amp;pmid=16001075&amp;doi=10.1038/nature03795&amp;"/></mixed-citation></ref><ref id="ref18"><mixed-citation id="cit18"><named-content content-type="citation-string">Ruban A. V., Berera R., Ilioaia C., van Stokkum I. H. M., Kennis J. T. M., Pascal A. A., van Amerongen H., Robert B., Horton P., van Grondelle R.. Identification
+of a mechanism of photoprotective energy dissipation in higher plants. Nature. 2007;450:575–578. doi: 10.1038/nature06262.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nature06262"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="18033302"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nature&amp;title=Identification of a mechanism of photoprotective energy dissipation in higher plants&amp;author=A. V. Ruban&amp;author=R. Berera&amp;author=C. Ilioaia&amp;author=I. H. M. van Stokkum&amp;author=J. T. M. Kennis&amp;volume=450&amp;publication_year=2007&amp;pages=575-578&amp;pmid=18033302&amp;doi=10.1038/nature06262&amp;"/></mixed-citation></ref><ref id="ref19"><mixed-citation id="cit19"><named-content content-type="citation-string">Ahn T. K., Avenson T. J., Ballottari M., Cheng Y. C., Niyogi K. K., Bassi R., Fleming G. R.. Architecture of a charge-transfer
+state regulating light harvesting in a plant antenna protein. Science. 2008;320:794–797. doi: 10.1126/science.1154800.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1126/science.1154800"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="18467588"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Science&amp;title=Architecture of a charge-transfer state regulating light harvesting in a plant antenna protein&amp;author=T. K. Ahn&amp;author=T. J. Avenson&amp;author=M. Ballottari&amp;author=Y. C. Cheng&amp;author=K. K. Niyogi&amp;volume=320&amp;publication_year=2008&amp;pages=794-797&amp;pmid=18467588&amp;doi=10.1126/science.1154800&amp;"/></mixed-citation></ref><ref id="ref20"><mixed-citation id="cit20"><named-content content-type="citation-string">Müller M. G., Lambrev P., Reus M., Wientjes E., Croce R., Holzwarth A. R.. Singlet energy dissipation in the photosystem ii light-harvesting
+complex does not involve energy transfer to carotenoids. ChemPhysChem. 2010;11:1289–1296. doi: 10.1002/cphc.200900852.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/cphc.200900852"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="20127930"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=ChemPhysChem&amp;title=Singlet energy dissipation in the photosystem ii light-harvesting complex does not involve energy transfer to carotenoids&amp;author=M. G. Müller&amp;author=P. Lambrev&amp;author=M. Reus&amp;author=E. Wientjes&amp;author=R. Croce&amp;volume=11&amp;publication_year=2010&amp;pages=1289-1296&amp;pmid=20127930&amp;doi=10.1002/cphc.200900852&amp;"/></mixed-citation></ref><ref id="ref21"><mixed-citation id="cit21"><named-content content-type="citation-string">Balevicius V., Duffy C. D. P.. Excitation quenching in chlorophyll-carotenoid antenna
+systems: ’coherent’ or ’incoherent’. Photosynth. Res. 2020;144:301–315. doi: 10.1007/s11120-020-00737-8.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1007/s11120-020-00737-8"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC7239839"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="32266612"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Photosynth. Res.&amp;title=Excitation quenching in chlorophyll-carotenoid antenna systems: ’coherent’ or ’incoherent’&amp;author=V. Balevicius&amp;author=C. D. P. Duffy&amp;volume=144&amp;publication_year=2020&amp;pages=301-315&amp;pmid=32266612&amp;doi=10.1007/s11120-020-00737-8&amp;"/></mixed-citation></ref><ref id="ref22"><mixed-citation id="cit22"><named-content content-type="citation-string">Fox K. F., Balevičius V., Chmeliov J., Valkunas L., Ruban A. V., Duffy C. D. P.. The carotenoid pathway: what is important
+for excitation
+quenching in plant antenna complexes? Phys.
+Chem. Chem. Phys. 2017;19:22957–22968. doi: 10.1039/C7CP03535G.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1039/C7CP03535G"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="28813042"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Phys. Chem. Chem. Phys.&amp;title=The carotenoid pathway: what is important for excitation quenching in plant antenna complexes?&amp;author=K. F. Fox&amp;author=V. Balevičius&amp;author=J. Chmeliov&amp;author=L. Valkunas&amp;author=A. V. Ruban&amp;volume=19&amp;publication_year=2017&amp;pages=22957-22968&amp;pmid=28813042&amp;doi=10.1039/C7CP03535G&amp;"/></mixed-citation></ref><ref id="ref23"><mixed-citation id="cit23"><named-content content-type="citation-string">Ma Y. Z., Holt N. E., Li X. P., Niyogi K. K., Fleming G. R.. Evidence
+for direct carotenoid involvement in the regulation of photosynthetic
+light harvesting. Proc. Natl. Acad. Sci. U.S.A. 2003;100:4377–4382. doi: 10.1073/pnas.0736959100.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1073/pnas.0736959100"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC404687"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="12676997"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Proc. Natl. Acad. Sci. U.S.A.&amp;title=Evidence for direct carotenoid involvement in the regulation of photosynthetic light harvesting&amp;author=Y. Z. Ma&amp;author=N. E. Holt&amp;author=X. P. Li&amp;author=K. K. Niyogi&amp;author=G. R. Fleming&amp;volume=100&amp;publication_year=2003&amp;pages=4377-4382&amp;pmid=12676997&amp;doi=10.1073/pnas.0736959100&amp;"/></mixed-citation></ref><ref id="ref24"><mixed-citation id="cit24"><named-content content-type="citation-string">Bode S., Quentmeier C. C., Liao P. N., Hafi N., Barros T., Wilk L., Bittner F., Walla P. J.. On the regulation
+of photosynthesis by excitonic interactions between carotenoids and
+chlorophylls. Proc. Natl. Acad. Sci. U.S.A. 2009;106:12311–12316. doi: 10.1073/pnas.0903536106.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1073/pnas.0903536106"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC2714278"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="19617542"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Proc. Natl. Acad. Sci. U.S.A.&amp;title=On the regulation of photosynthesis by excitonic interactions between carotenoids and chlorophylls&amp;author=S. Bode&amp;author=C. C. Quentmeier&amp;author=P. N. Liao&amp;author=N. Hafi&amp;author=T. Barros&amp;volume=106&amp;publication_year=2009&amp;pages=12311-12316&amp;pmid=19617542&amp;doi=10.1073/pnas.0903536106&amp;"/></mixed-citation></ref><ref id="ref25"><mixed-citation id="cit25"><named-content content-type="citation-string">Duffy C. D. P., Valkunas L., Ruban A. V.. Quantum
+Mechanical Calculations of
+Xanthophyll-Chlorophyll Electronic Coupling in the Light-Harvesting
+Antenna of Photosystem II of Higher Plants. J. Phys. Chem. B. 2013;117:7605–7614. doi: 10.1021/jp4025848.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jp4025848"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="23697375"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. B&amp;title=Quantum Mechanical Calculations of Xanthophyll-Chlorophyll Electronic Coupling in the Light-Harvesting Antenna of Photosystem II of Higher Plants&amp;author=C. D. P. Duffy&amp;author=L. Valkunas&amp;author=A. V. Ruban&amp;volume=117&amp;publication_year=2013&amp;pages=7605-7614&amp;pmid=23697375&amp;doi=10.1021/jp4025848&amp;"/></mixed-citation></ref><ref id="ref26"><mixed-citation id="cit26"><named-content content-type="citation-string">Duffy C. D. P., Chmeliov J., Macernis M., Sulskus J., Valkunas L., Ruban A. V.. Modeling of Fluorescence Quenching by Lutein in the
+Plant Light-Harvesting Complex LHCII. J. Phys.
+Chem. B. 2013;117:10974–10986. doi: 10.1021/jp3110997.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jp3110997"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="23234311"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. B&amp;title=Modeling of Fluorescence Quenching by Lutein in the Plant Light-Harvesting Complex LHCII&amp;author=C. D. P. Duffy&amp;author=J. Chmeliov&amp;author=M. Macernis&amp;author=J. Sulskus&amp;author=L. Valkunas&amp;volume=117&amp;publication_year=2013&amp;pages=10974-10986&amp;pmid=23234311&amp;doi=10.1021/jp3110997&amp;"/></mixed-citation></ref><ref id="ref27"><mixed-citation id="cit27"><named-content content-type="citation-string">Liu Z. F., Yan H. C., Wang K. B., Kuang T. Y., Zhang J. P., Gui L. L., An X., Chang W. R.. Crystal structure
+of spinach major light-harvesting complex at 2.72 Å resolution. Nature. 2004;428:287–292. doi: 10.1038/nature02373.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nature02373"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="15029188"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nature&amp;title=Crystal structure of spinach major light-harvesting complex at 2.72 Å resolution&amp;author=Z. F. Liu&amp;author=H. C. Yan&amp;author=K. B. Wang&amp;author=T. Y. Kuang&amp;author=J. P. Zhang&amp;volume=428&amp;publication_year=2004&amp;pages=287-292&amp;pmid=15029188&amp;doi=10.1038/nature02373&amp;"/></mixed-citation></ref><ref id="ref28"><mixed-citation id="cit28"><named-content content-type="citation-string">Wei X. P., Su X. D., Cao P., Liu X. Y., Chang W. R., Li M., Zhang X. Z., Liu Z. F.. Structure of spinach photosystem
+II-LHCII supercomplex at 3.2 Å resolution. Nature. 2016;534:69–74. doi: 10.1038/nature18020.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nature18020"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="27251276"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nature&amp;title=Structure of spinach photosystem II-LHCII supercomplex at 3.2 Å resolution&amp;author=X. P. Wei&amp;author=X. D. Su&amp;author=P. Cao&amp;author=X. Y. Liu&amp;author=W. R. Chang&amp;volume=534&amp;publication_year=2016&amp;pages=69-74&amp;pmid=27251276&amp;doi=10.1038/nature18020&amp;"/></mixed-citation></ref><ref id="ref29"><mixed-citation id="cit29"><named-content content-type="citation-string">Pan X. W., Li M., Wan T., Wang L. F., Jia C. J., Hou Z. Q., Zhao X. L., Zhang J. P., Chang W. R.. Structural insights
+into energy regulation of light-harvesting complex CP29 from spinach. Nat. Struct. Mol. Biol. 2011;18:309–315. doi: 10.1038/nsmb.2008.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nsmb.2008"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="21297637"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nat. Struct. Mol. Biol.&amp;title=Structural insights into energy regulation of light-harvesting complex CP29 from spinach&amp;author=X. W. Pan&amp;author=M. Li&amp;author=T. Wan&amp;author=L. F. Wang&amp;author=C. J. Jia&amp;volume=18&amp;publication_year=2011&amp;pages=309-315&amp;pmid=21297637&amp;doi=10.1038/nsmb.2008&amp;"/></mixed-citation></ref><ref id="ref30"><mixed-citation id="cit30"><named-content content-type="citation-string">Umena Y., Kawakami K., Shen Ji. R., Kamiya N.. Crystal structure of
+oxygen-evolving photosystem II at a resolution of 1.9 Å. Nature. 2011;473:55–60. doi: 10.1038/nature09913.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/nature09913"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="21499260"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nature&amp;title=Crystal structure of oxygen-evolving photosystem II at a resolution of 1.9 Å&amp;author=Y. Umena&amp;author=K. Kawakami&amp;author=Ji. R. Shen&amp;author=N. Kamiya&amp;volume=473&amp;publication_year=2011&amp;pages=55-60&amp;pmid=21499260&amp;doi=10.1038/nature09913&amp;"/></mixed-citation></ref><ref id="ref31"><mixed-citation id="cit31"><named-content content-type="citation-string">Novoderezhkin V. I., Palacios M. A., van Amerongen H., van Grondelle R.. Excitation
+dynamics in the LHCII complex of higher plants: Modeling based on
+the 2.72 Å crystal structure. J. Phys.
+Chem. B. 2005;109:10493–10504. doi: 10.1021/jp044082f.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jp044082f"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="16852271"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. B&amp;title=Excitation dynamics in the LHCII complex of higher plants: Modeling based on the 2.72 Å crystal structure&amp;author=V. I. Novoderezhkin&amp;author=M. A. Palacios&amp;author=H. van Amerongen&amp;author=R. van Grondelle&amp;volume=109&amp;publication_year=2005&amp;pages=10493-10504&amp;pmid=16852271&amp;doi=10.1021/jp044082f&amp;"/></mixed-citation></ref><ref id="ref32"><mixed-citation id="cit32"><named-content content-type="citation-string">Novoderezhkin V., Marinb A., van Grondelle R.. Intra- and inter-monomeric transfers
+in the light harvesting LHCII complex: the Redfield-Forster picture. Phys. Chem. Chem. Phys. 2011;13:17093–17103. doi: 10.1039/c1cp21079c.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1039/c1cp21079c"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="21866281"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Phys. Chem. Chem. Phys.&amp;title=Intra- and inter-monomeric transfers in the light harvesting LHCII complex: the Redfield-Forster picture&amp;author=V. Novoderezhkin&amp;author=A. Marinb&amp;author=R. van Grondelle&amp;volume=13&amp;publication_year=2011&amp;pages=17093-17103&amp;pmid=21866281&amp;doi=10.1039/c1cp21079c&amp;"/></mixed-citation></ref><ref id="ref33"><mixed-citation id="cit33"><named-content content-type="citation-string">Müh F., Madjet M. E.-A., Renger T.. Structure-Based Identification of
+Energy Sinks in Plant Light-Harvesting Complex II. J. Phys. Chem. B. 2010;114:13517–13535. doi: 10.1021/jp106323e.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jp106323e"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="20886872"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. B&amp;title=Structure-Based Identification of Energy Sinks in Plant Light-Harvesting Complex II&amp;author=F. Müh&amp;author=M. E.-A. Madjet&amp;author=T. Renger&amp;volume=114&amp;publication_year=2010&amp;pages=13517-13535&amp;pmid=20886872&amp;doi=10.1021/jp106323e&amp;"/></mixed-citation></ref><ref id="ref34"><mixed-citation id="cit34"><named-content content-type="citation-string">Müh F., Madjet M. E.-A., Renger T.. Structure-based simulation of linear
+optical spectra of the CP43 core antenna of photosystem II. Photosynth. Res. 2012;111:87–101. doi: 10.1007/s11120-011-9675-8.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1007/s11120-011-9675-8"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="21809112"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Photosynth. Res.&amp;title=Structure-based simulation of linear optical spectra of the CP43 core antenna of photosystem II&amp;author=F. Müh&amp;author=M. E.-A. Madjet&amp;author=T. Renger&amp;volume=111&amp;publication_year=2012&amp;pages=87-101&amp;pmid=21809112&amp;doi=10.1007/s11120-011-9675-8&amp;"/></mixed-citation></ref><ref id="ref35"><mixed-citation id="cit35"><named-content content-type="citation-string">Chmeliov J., Bricker W. P., Lo C., Jouin E., Valkunas L., Ruband A. V., Duffy C. D. P.. An ’all
+pigment’ model
+of excitation quenching in LHCII. Phys. Chem.
+Chem. Phys. 2015;17:15857–15867. doi: 10.1039/C5CP01905B.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1039/C5CP01905B"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="26017055"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Phys. Chem. Chem. Phys.&amp;title=An ’all pigment’ model of excitation quenching in LHCII&amp;author=J. Chmeliov&amp;author=W. P. Bricker&amp;author=C. Lo&amp;author=E. Jouin&amp;author=L. Valkunas&amp;volume=17&amp;publication_year=2015&amp;pages=15857-15867&amp;pmid=26017055&amp;doi=10.1039/C5CP01905B&amp;"/></mixed-citation></ref><ref id="ref36"><mixed-citation id="cit36"><named-content content-type="citation-string">Khokhlov D., Belov A.. Ab initio model for
+the chlorophyll-lutein exciton coupling in the
+LHCII complex. Biophys. Chem. 2019;246:16–24. doi: 10.1016/j.bpc.2019.01.001.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.bpc.2019.01.001"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="30639535"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biophys. Chem.&amp;title=Ab initio model for the chlorophyll-lutein exciton coupling in the LHCII complex&amp;author=D. Khokhlov&amp;author=A. Belov&amp;volume=246&amp;publication_year=2019&amp;pages=16-24&amp;pmid=30639535&amp;doi=10.1016/j.bpc.2019.01.001&amp;"/></mixed-citation></ref><ref id="ref37"><mixed-citation id="cit37"><named-content content-type="citation-string">Ruan M. X., Xu Y. J., Wang Z., Chen H. L., Weng Y. X.. Investigation
+of Transient Temperature Rising of Light-Harvesting Complex II by
+Nonradiative Heat Dissipation at the Protein Level. J. Phys. Chem. Lett. 2025;16:308–316. doi: 10.1021/acs.jpclett.4c03056.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jpclett.4c03056"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="39723969"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. Lett.&amp;title=Investigation of Transient Temperature Rising of Light-Harvesting Complex II by Nonradiative Heat Dissipation at the Protein Level&amp;author=M. X. Ruan&amp;author=Y. J. Xu&amp;author=Z. Wang&amp;author=H. L. Chen&amp;author=Y. X. Weng&amp;volume=16&amp;publication_year=2025&amp;pages=308-316&amp;pmid=39723969&amp;doi=10.1021/acs.jpclett.4c03056&amp;"/></mixed-citation></ref><ref id="ref38"><mixed-citation id="cit38"><named-content content-type="citation-string">Ruan M. X., Li H., Zhang Y., Zhao R. Q., Zhang J., Wang Y. J., Gao J. L., Weng Z., Wang Y. M., Sun D. P.. et al. Cryo-EM structures of
+LHCII in photo-active and photo-protecting
+states reveal allosteric regulation of light harvesting and excess
+energy dissipation. Nat. Plants. 2023;9:1547–1557. doi: 10.1038/s41477-023-01500-2.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/s41477-023-01500-2"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="37653340"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nat. Plants.&amp;title=Cryo-EM structures of LHCII in photo-active and photo-protecting states reveal allosteric regulation of light harvesting and excess energy dissipation&amp;author=M. X. Ruan&amp;author=H. Li&amp;author=Y. Zhang&amp;author=R. Q. Zhao&amp;author=J. Zhang&amp;volume=9&amp;publication_year=2023&amp;pages=1547-1557&amp;pmid=37653340&amp;doi=10.1038/s41477-023-01500-2&amp;"/></mixed-citation></ref><ref id="ref39"><mixed-citation id="cit39"><named-content content-type="citation-string">Li H., Wang Y. J., Ye M. P., Li S. S., Li D. Y., Ren H. S., Wang M. H., Du L. C., Li H., Veglia G.. et al. Dynamical
+and allosteric regulation of photoprotection
+in light harvesting complex II. Sci. China Chem. 2020;63:1121–1133. doi: 10.1007/s11426-020-9771-2.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1007/s11426-020-9771-2"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC7643867"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="33163014"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Sci. China Chem.&amp;title=Dynamical and allosteric regulation of photoprotection in light harvesting complex II&amp;author=H. Li&amp;author=Y. J. Wang&amp;author=M. P. Ye&amp;author=S. S. Li&amp;author=D. Y. Li&amp;volume=63&amp;publication_year=2020&amp;pages=1121-1133&amp;pmid=33163014&amp;doi=10.1007/s11426-020-9771-2&amp;"/></mixed-citation></ref><ref id="ref40"><mixed-citation id="cit40"><named-content content-type="citation-string">Balevičius V. Jr., Fox K. F., Bricker W. P., Jurinovich S., Prandi I. G., Mennucci B., Duffy C. D. P.. Fine control
+of chlorophyll-carotenoid interactions defines the functionality of
+light-harvesting proteins in plants. Sci. Rep. 2017;7:13956. doi: 10.1038/s41598-017-13720-6.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/s41598-017-13720-6"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC5655323"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="29066753"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Sci. Rep.&amp;title=Fine control of chlorophyll-carotenoid interactions defines the functionality of light-harvesting proteins in plants&amp;author=V. Balevičius&amp;author=K. F. Fox&amp;author=W. P. Bricker&amp;author=S. Jurinovich&amp;author=I. G. Prandi&amp;volume=7&amp;publication_year=2017&amp;pages=13956&amp;pmid=29066753&amp;doi=10.1038/s41598-017-13720-6&amp;"/></mixed-citation></ref><ref id="ref41"><mixed-citation id="cit41"><named-content content-type="citation-string">Liguori N., Periole X., Marrink S. J., Croce R.. From light-harvesting
+to photoprotection: structural basis of the dynamic switch of the
+major antenna complex of plants (LHCII) Sci.
+Rep. 2015;5:15661. doi: 10.1038/srep15661.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/srep15661"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC4616226"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="26493782"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Sci. Rep.&amp;title=From light-harvesting to photoprotection: structural basis of the dynamic switch of the major antenna complex of plants (LHCII)&amp;author=N. Liguori&amp;author=X. Periole&amp;author=S. J. Marrink&amp;author=R. Croce&amp;volume=5&amp;publication_year=2015&amp;pages=15661&amp;pmid=26493782&amp;doi=10.1038/srep15661&amp;"/></mixed-citation></ref><ref id="ref42"><mixed-citation id="cit42"><named-content content-type="citation-string">Daskalakis V., Papadatos S., Stergiannakos T.. The conformational phase space of
+the photoprotective switch in the major light harvesting complex II. Chem. Commun. 2020;56:11215–11218. doi: 10.1039/D0CC04486E.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1039/D0CC04486E"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="32815976"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Chem. Commun.&amp;title=The conformational phase space of the photoprotective switch in the major light harvesting complex II&amp;author=V. Daskalakis&amp;author=S. Papadatos&amp;author=T. Stergiannakos&amp;volume=56&amp;publication_year=2020&amp;pages=11215-11218&amp;pmid=32815976&amp;doi=10.1039/D0CC04486E&amp;"/></mixed-citation></ref><ref id="ref43"><mixed-citation id="cit43"><named-content content-type="citation-string">Daskalakis V., Maity S., Hart C. L., Stergiannakos T., Duffy C. D., Kleinekathöfer U.. Structural basis for
+allosteric regulation in the major antenna trimer of photosystem II. J. Phys. Chem. B. 2019;123:9609–9615. doi: 10.1021/acs.jpcb.9b09767.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jpcb.9b09767"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="31633352"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. B&amp;title=Structural basis for allosteric regulation in the major antenna trimer of photosystem II&amp;author=V. Daskalakis&amp;author=S. Maity&amp;author=C. L. Hart&amp;author=T. Stergiannakos&amp;author=C. D. Duffy&amp;volume=123&amp;publication_year=2019&amp;pages=9609-9615&amp;pmid=31633352&amp;doi=10.1021/acs.jpcb.9b09767&amp;"/></mixed-citation></ref><ref id="ref44"><mixed-citation id="cit44"><named-content content-type="citation-string">Maity S., Gelessus A., Daskalakis V., Kleinekathöfer U.. On a chlorophyll-caroteinoid
+coupling in LHCII. Chem. Phys. 2019;526:110439. doi: 10.1016/j.chemphys.2019.110439.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.chemphys.2019.110439"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Chem. Phys.&amp;title=On a chlorophyll-caroteinoid coupling in LHCII&amp;author=S. Maity&amp;author=A. Gelessus&amp;author=V. Daskalakis&amp;author=U. Kleinekathöfer&amp;volume=526&amp;publication_year=2019&amp;pages=110439&amp;doi=10.1016/j.chemphys.2019.110439&amp;"/></mixed-citation></ref><ref id="ref45"><mixed-citation id="cit45"><named-content content-type="citation-string">Webb B., Sali A.. Comparative protein
+structure modeling using MODELLER. Curr. Protoc.
+Bioinformatics. 2016;54:5.6.1–5.6.37. doi: 10.1002/cpbi.3.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/cpbi.3"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC5031415"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="27322406"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Curr. Protoc. Bioinformatics.&amp;title=Comparative protein structure modeling using MODELLER&amp;author=B. Webb&amp;author=A. Sali&amp;volume=54&amp;publication_year=2016&amp;pages=5.6.1-5.6.37&amp;pmid=27322406&amp;doi=10.1002/cpbi.3&amp;"/></mixed-citation></ref><ref id="ref46"><mixed-citation id="cit46"><named-content content-type="citation-string">Pettersen E. F., Goddard T. D., Huang C. C., Couch G. S., Greenblatt D. M., Meng E. C., Ferrin T. E.. UCSF Chimera - a visualization system
+for exploratory research and analysis. J. Comput.
+Chem. 2004;25:1605–1612. doi: 10.1002/jcc.20084.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.20084"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="15264254"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=UCSF Chimera - a visualization system for exploratory research and analysis&amp;author=E. F. Pettersen&amp;author=T. D. Goddard&amp;author=C. C. Huang&amp;author=G. S. Couch&amp;author=D. M. Greenblatt&amp;volume=25&amp;publication_year=2004&amp;pages=1605-1612&amp;pmid=15264254&amp;doi=10.1002/jcc.20084&amp;"/></mixed-citation></ref><ref id="ref47"><mixed-citation id="cit47"><named-content content-type="citation-string">Case D. A., Aktulga H. M., Belfon K., Cerutti D. S., Cisneros G. A., Cruzeiro V. W. D., Forouzesh N., Giese T. J., Götz A. W., Gohlke H.. et al. AmberTools. J. Chem. Inf. Model. 2023;63:6183–6191. doi: 10.1021/acs.jcim.3c01153.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jcim.3c01153"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC10598796"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="37805934"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Inf. Model.&amp;title=AmberTools&amp;author=D. A. Case&amp;author=H. M. Aktulga&amp;author=K. Belfon&amp;author=D. S. Cerutti&amp;author=G. A. Cisneros&amp;volume=63&amp;publication_year=2023&amp;pages=6183-6191&amp;pmid=37805934&amp;doi=10.1021/acs.jcim.3c01153&amp;"/></mixed-citation></ref><ref id="ref48"><mixed-citation id="cit48"><named-content content-type="citation-string">Anandakrishnan R., Aguilar B., Onufriev A. V.. H++ 3.0: automating
+pK prediction
+and the preparation of biomolecular structures for atomistic molecular
+modeling and simulation. Nucleic. Acids. Res. 2012;40:W537–W541. doi: 10.1093/nar/gks375.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1093/nar/gks375"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC3394296"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="22570416"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nucleic. Acids. Res.&amp;title=H++ 3.0: automating pK prediction and the preparation of biomolecular structures for atomistic molecular modeling and simulation&amp;author=R. Anandakrishnan&amp;author=B. Aguilar&amp;author=A. V. Onufriev&amp;volume=40&amp;publication_year=2012&amp;pages=W537-W541&amp;pmid=22570416&amp;doi=10.1093/nar/gks375&amp;"/></mixed-citation></ref><ref id="ref49"><mixed-citation id="cit49"><named-content content-type="citation-string">Jo S., Kim T., Iyer V. G., Im W.. CHARMM-GUI: A Web-based Graphical
+User Interface for CHARMM. J. Comput. Chem. 2008;29:1859–1865. doi: 10.1002/jcc.20945.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.20945"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="18351591"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=CHARMM-GUI: A Web-based Graphical User Interface for CHARMM&amp;author=S. Jo&amp;author=T. Kim&amp;author=V. G. Iyer&amp;author=W. Im&amp;volume=29&amp;publication_year=2008&amp;pages=1859-1865&amp;pmid=18351591&amp;doi=10.1002/jcc.20945&amp;"/></mixed-citation></ref><ref id="ref50"><mixed-citation id="cit50"><named-content content-type="citation-string">Papadatos S., Charalambous A. C., Daskalakis V.. A pathway for protective quenching
+in antenna proteins of Photosystem II. Sci.
+Rep. 7. 2017;7:2523. doi: 10.1038/s41598-017-02892-w.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/s41598-017-02892-w"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC5451436"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="28566748"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Sci. Rep. 7&amp;title=A pathway for protective quenching in antenna proteins of Photosystem II&amp;author=S. Papadatos&amp;author=A. C. Charalambous&amp;author=V. Daskalakis&amp;volume=7&amp;publication_year=2017&amp;pages=2523&amp;pmid=28566748&amp;doi=10.1038/s41598-017-02892-w&amp;"/></mixed-citation></ref><ref id="ref51"><mixed-citation id="cit51"><named-content content-type="citation-string">Lapillo M., Cignoni E., Cupellini L., Mennucci B.. The energy transfer
+model of nonphotochemical quenching: Lessons from the minor CP29 antenna
+complex of plants. Biochimica et Biophysica
+Acta (BBA)-Bioenergetics. 2020;1861:148282. doi: 10.1016/j.bbabio.2020.148282.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.bbabio.2020.148282"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="32721398"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biochimica et Biophysica Acta (BBA)-Bioenergetics&amp;title=The energy transfer model of nonphotochemical quenching: Lessons from the minor CP29 antenna complex of plants&amp;author=M. Lapillo&amp;author=E. Cignoni&amp;author=L. Cupellini&amp;author=B. Mennucci&amp;volume=1861&amp;publication_year=2020&amp;pages=148282&amp;pmid=32721398&amp;doi=10.1016/j.bbabio.2020.148282&amp;"/></mixed-citation></ref><ref id="ref52"><mixed-citation id="cit52"><named-content content-type="citation-string">Wilson S., Clarke C. D., Carbajal M. A., Buccafusca R., Fleck R. A., Daskalakis V., Ruban A. V.. Hydrophobic mismatch
+in the thylakoid membrane regulates photosynthetic light harvesting. J. Am. Chem. Soc. 2024;146:14905–14914. doi: 10.1021/jacs.4c05220.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jacs.4c05220"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC11140739"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="38759103"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Am. Chem. Soc.&amp;title=Hydrophobic mismatch in the thylakoid membrane regulates photosynthetic light harvesting&amp;author=S. Wilson&amp;author=C. D. Clarke&amp;author=M. A. Carbajal&amp;author=R. Buccafusca&amp;author=R. A. Fleck&amp;volume=146&amp;publication_year=2024&amp;pages=14905-14914&amp;pmid=38759103&amp;doi=10.1021/jacs.4c05220&amp;"/></mixed-citation></ref><ref id="ref53"><mixed-citation id="cit53"><named-content content-type="citation-string">Duan Y., Wu C., Chowdhury S., Lee M. C., Xiong G. M., Zhang W., Yang R., Cieplak P., Luo R., Lee T., Caldwell J., Wang J. M., Kollman P.. A point-charge force
+field for molecular mechanics simulations of proteins based on condensed-phase
+quantum mechanical calculations. J. Comput.
+Chem. 2003;24:1999–2012. doi: 10.1002/jcc.10349.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.10349"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="14531054"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=A point-charge force field for molecular mechanics simulations of proteins based on condensed-phase quantum mechanical calculations&amp;author=Y. Duan&amp;author=C. Wu&amp;author=S. Chowdhury&amp;author=M. C. Lee&amp;author=G. M. Xiong&amp;volume=24&amp;publication_year=2003&amp;pages=1999-2012&amp;pmid=14531054&amp;doi=10.1002/jcc.10349&amp;"/></mixed-citation></ref><ref id="ref54"><mixed-citation id="cit54"><named-content content-type="citation-string">Dickson C.
+J., Walker R. C., Gould I. R.. Lipid21: Complex Lipid Membrane Simulations
+with AMBER. J. Chem. Theory Comput. 2022;18:1726–1736. doi: 10.1021/acs.jctc.1c01217.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jctc.1c01217"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC9007451"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="35113553"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Theory Comput.&amp;title=Lipid21: Complex Lipid Membrane Simulations with AMBER&amp;author=C. J. Dickson&amp;author=R. C. Walker&amp;author=I. R. Gould&amp;volume=18&amp;publication_year=2022&amp;pages=1726-1736&amp;pmid=35113553&amp;doi=10.1021/acs.jctc.1c01217&amp;"/></mixed-citation></ref><ref id="ref55"><mixed-citation id="cit55"><named-content content-type="citation-string">Jorgensen W. L., Chandrasekhar J., Madura J. D., Impey R. W., Klein M. L.. Comparison
+of simple potential functions for simulating liquid water. J. Chem. Phys. 1983;79:926–935. doi: 10.1063/1.445869.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1063/1.445869"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Phys.&amp;title=Comparison of simple potential functions for simulating liquid water&amp;author=W. L. Jorgensen&amp;author=J. Chandrasekhar&amp;author=J. D. Madura&amp;author=R. W. Impey&amp;author=M. L. Klein&amp;volume=79&amp;publication_year=1983&amp;pages=926-935&amp;doi=10.1063/1.445869&amp;"/></mixed-citation></ref><ref id="ref56"><mixed-citation id="cit56"><named-content content-type="citation-string">Zhang L., Silva D.-A., Yan Y., Huang X.. Force field development
+for cofactors in the photosystem II. J. Comput.
+Chem. 2012;33:1969–1980. doi: 10.1002/jcc.23016.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.23016"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="22685077"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=Force field development for cofactors in the photosystem II&amp;author=L. Zhang&amp;author=D.-A. Silva&amp;author=Y. Yan&amp;author=X. Huang&amp;volume=33&amp;publication_year=2012&amp;pages=1969-1980&amp;pmid=22685077&amp;doi=10.1002/jcc.23016&amp;"/></mixed-citation></ref><ref id="ref57"><mixed-citation id="cit57"><named-content content-type="citation-string">Prandi I.
+G., Viani L., Andreussi O., Mennucci B.. Combining Classical
+Molecular Dynamics and Quantum Mechanical Methods for the Description
+of Electronic Excitations: The Case of Carotenoids. J. Comput. Chem. 2016;37:981–991. doi: 10.1002/jcc.24286.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.24286"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="26748488"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=Combining Classical Molecular Dynamics and Quantum Mechanical Methods for the Description of Electronic Excitations: The Case of Carotenoids&amp;author=I. G. Prandi&amp;author=L. Viani&amp;author=O. Andreussi&amp;author=B. Mennucci&amp;volume=37&amp;publication_year=2016&amp;pages=981-991&amp;pmid=26748488&amp;doi=10.1002/jcc.24286&amp;"/></mixed-citation></ref><ref id="ref58"><mixed-citation id="cit58"><named-content content-type="citation-string">Wang J. M., Wang W., Kollman P. A., Case D. A.. Automatic atom type
+and bond type perception in molecular mechanical calculations. J. Mol. Graph. Model. 2006;25:247–260. doi: 10.1016/j.jmgm.2005.12.005.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.jmgm.2005.12.005"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="16458552"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Mol. Graph. Model.&amp;title=Automatic atom type and bond type perception in molecular mechanical calculations&amp;author=J. M. Wang&amp;author=W. Wang&amp;author=P. A. Kollman&amp;author=D. A. Case&amp;volume=25&amp;publication_year=2006&amp;pages=247-260&amp;pmid=16458552&amp;doi=10.1016/j.jmgm.2005.12.005&amp;"/></mixed-citation></ref><ref id="ref59"><mixed-citation id="cit59"><named-content content-type="citation-string">Zhang L., Silva D.-A., Zhang H. D., Yue A., Yan Y. J., Huang X. H.. Dynamic protein conformations preferentially
+drive
+energy transfer along the active chain of the photosystem II reaction
+centre. Nat. Commun. 2014;5:4170. doi: 10.1038/ncomms5170.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/ncomms5170"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC4083425"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="24954746"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nat. Commun.&amp;title=Dynamic protein conformations preferentially drive energy transfer along the active chain of the photosystem II reaction centre&amp;author=L. Zhang&amp;author=D.-A. Silva&amp;author=H. D. Zhang&amp;author=A. Yue&amp;author=Y. J. Yan&amp;volume=5&amp;publication_year=2014&amp;pages=4170&amp;pmid=24954746&amp;doi=10.1038/ncomms5170&amp;"/></mixed-citation></ref><ref id="ref60"><mixed-citation id="cit60"><named-content content-type="citation-string">Vasil’ev S., Bruce D.. A protein dynamics study of photosystem II: The effects of protein
+conformation on reaction center function. Biophys.
+J. 2006;90:3062–3073. doi: 10.1529/biophysj.105.076075.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1529/biophysj.105.076075"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC1432123"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="16461403"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Biophys. J.&amp;title=A protein dynamics study of photosystem II: The effects of protein conformation on reaction center function&amp;author=S. Vasil’ev&amp;author=D. Bruce&amp;volume=90&amp;publication_year=2006&amp;pages=3062-3073&amp;pmid=16461403&amp;doi=10.1529/biophysj.105.076075&amp;"/></mixed-citation></ref><ref id="ref61"><mixed-citation id="cit61"><named-content content-type="citation-string">
+
+Lewis, J. M.
+; 
+Lakshmivarahan, S.
+; 
+Dhall, S.
+ Optimization: steepest descent method. In Dynamic Data Assimilation: A Least Squares Approach, 
+Dhall, S.
+; 
+Lakshmivarahan, S.
+; 
+Lewis, J.
+M.
+, Eds.; Cambridge
+University Press, Cambridge, 2006; pp 169–189.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="title=Dynamic Data Assimilation: A Least Squares Approach&amp;publication_year=2006&amp;"/></mixed-citation></ref><ref id="ref62"><mixed-citation id="cit62"><named-content content-type="citation-string">Darden T., York D., Pedersen L.. Particle mesh
+ewald - an N.log­(N)
+method for ewald sums in large systems. J. Chem.
+Phys. 1993;98:10089–10092. doi: 10.1063/1.464397.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1063/1.464397"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Phys.&amp;title=Particle mesh ewald - an N.log­(N) method for ewald sums in large systems&amp;author=T. Darden&amp;author=D. York&amp;author=L. Pedersen&amp;volume=98&amp;publication_year=1993&amp;pages=10089-10092&amp;doi=10.1063/1.464397&amp;"/></mixed-citation></ref><ref id="ref63"><mixed-citation id="cit63"><named-content content-type="citation-string">Bussi G., Donadio D., Parrinello M.. Canonical
+sampling through velocity
+rescaling. J. Chem. Phys. 2007;126:014101. doi: 10.1063/1.2408420.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1063/1.2408420"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="17212484"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Phys.&amp;title=Canonical sampling through velocity rescaling&amp;author=G. Bussi&amp;author=D. Donadio&amp;author=M. Parrinello&amp;volume=126&amp;publication_year=2007&amp;pages=014101&amp;pmid=17212484&amp;doi=10.1063/1.2408420&amp;"/></mixed-citation></ref><ref id="ref64"><mixed-citation id="cit64"><named-content content-type="citation-string">Parrinello M., Rahman A.. Crystal structure and pair potentials: A molecular-dynamics
+study. Phys. Rev. Lett. 1980;45:1196–1199. doi: 10.1103/PhysRevLett.45.1196.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1103/PhysRevLett.45.1196"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Phys. Rev. Lett.&amp;title=Crystal structure and pair potentials: A molecular-dynamics study&amp;author=M. Parrinello&amp;author=A. Rahman&amp;volume=45&amp;publication_year=1980&amp;pages=1196-1199&amp;doi=10.1103/PhysRevLett.45.1196&amp;"/></mixed-citation></ref><ref id="ref65"><mixed-citation id="cit65"><named-content content-type="citation-string">Parrinello M., Rahman A.. Polymorphic transitions
+in single crystals: A new molecular
+dynamics method. J. Appl. Phys. 1981;52:7182–7190. doi: 10.1063/1.328693.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1063/1.328693"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Appl. Phys.&amp;title=Polymorphic transitions in single crystals: A new molecular dynamics method&amp;author=M. Parrinello&amp;author=A. Rahman&amp;volume=52&amp;publication_year=1981&amp;pages=7182-7190&amp;doi=10.1063/1.328693&amp;"/></mixed-citation></ref><ref id="ref66"><mixed-citation id="cit66"><named-content content-type="citation-string">Hess B., Bekker H., Berendsen H. J. C., Fraaije J. G. E. M.. LINCS: A linear
+constraint solver for molecular simulations. J. Comput. Chem. 1997;18:1463–1472. doi: 10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=LINCS: A linear constraint solver for molecular simulations&amp;author=B. Hess&amp;author=H. Bekker&amp;author=H. J. C. Berendsen&amp;author=J. G. E. M. Fraaije&amp;volume=18&amp;publication_year=1997&amp;pages=1463-1472&amp;doi=10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H&amp;"/></mixed-citation></ref><ref id="ref67"><mixed-citation id="cit67"><named-content content-type="citation-string">Hess B., Kutzner C., van der
+Spoel D., Lindahl E.. GROMACS 4: Algorithms
+for highly efficient, load-balanced, and scalable molecular simulation. J. Chem. Theory. Comput. 2008;4:435–447. doi: 10.1021/ct700301q.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/ct700301q"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="26620784"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Theory. Comput.&amp;title=GROMACS 4: Algorithms for highly efficient, load-balanced, and scalable molecular simulation&amp;author=B. Hess&amp;author=C. Kutzner&amp;author=D. van der Spoel&amp;author=E. Lindahl&amp;volume=4&amp;publication_year=2008&amp;pages=435-447&amp;pmid=26620784&amp;doi=10.1021/ct700301q&amp;"/></mixed-citation></ref><ref id="ref68"><mixed-citation id="cit68"><named-content content-type="citation-string">
+
+Thiel, W.
+
+Mndo99 Program, Version 6.1; Max-Planck-Institut für Kohlenforschung: Mülheim, Germany, 2007.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="title=Mndo99 Program&amp;publication_year=2007&amp;"/></mixed-citation></ref><ref id="ref69"><mixed-citation id="cit69"><named-content content-type="citation-string">Koslowski A., Beck M. E., Thiel W.. Implementation
+of a general multireference
+configuration interaction procedure with analytic gradients in a semiempirical
+context using the graphical unitary group approach. J. Comput. Chem. 2003;24:714–726. doi: 10.1002/jcc.10210.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/jcc.10210"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="12666163"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Comput. Chem.&amp;title=Implementation of a general multireference configuration interaction procedure with analytic gradients in a semiempirical context using the graphical unitary group approach&amp;author=A. Koslowski&amp;author=M. E. Beck&amp;author=W. Thiel&amp;volume=24&amp;publication_year=2003&amp;pages=714-726&amp;pmid=12666163&amp;doi=10.1002/jcc.10210&amp;"/></mixed-citation></ref><ref id="ref70"><mixed-citation id="cit70"><named-content content-type="citation-string">Yin B. W., Wang J. L., Xue P. J., Zhang T. S., Xie B. B., Shen L., Fang W. H.. Understanding the excited-state relaxation
+mechanisms of xanthophyll lutein by multi-configurational electronic
+structure calculations. J. Chem. Inf. Model. 2023;63:4679–4690. doi: 10.1021/acs.jcim.3c00640.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jcim.3c00640"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="37489739"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Inf. Model.&amp;title=Understanding the excited-state relaxation mechanisms of xanthophyll lutein by multi-configurational electronic structure calculations&amp;author=B. W. Yin&amp;author=J. L. Wang&amp;author=P. J. Xue&amp;author=T. S. Zhang&amp;author=B. B. Xie&amp;volume=63&amp;publication_year=2023&amp;pages=4679-4690&amp;pmid=37489739&amp;doi=10.1021/acs.jcim.3c00640&amp;"/></mixed-citation></ref><ref id="ref71"><mixed-citation id="cit71"><named-content content-type="citation-string">Davydov A. S.. The theory
+of molecular excitons. Sov. Phys. Usp. 1964;7:145. doi: 10.1070/PU1964v007n02ABEH003659.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1070/PU1964v007n02ABEH003659"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Sov. Phys. Usp.&amp;title=The theory of molecular excitons&amp;author=A. S. Davydov&amp;volume=7&amp;publication_year=1964&amp;pages=145&amp;doi=10.1070/PU1964v007n02ABEH003659&amp;"/></mixed-citation></ref><ref id="ref72"><mixed-citation id="cit72"><named-content content-type="citation-string">Müh F., Renger T.. Refined structure-based
+simulation of plant light-harvesting
+complex II: Linear optical spectra of trimers and aggregates. BBA-Bioenergetics. 2012;1817:1446–1460. doi: 10.1016/j.bbabio.2012.02.016.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.bbabio.2012.02.016"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="22387396"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=BBA-Bioenergetics&amp;title=Refined structure-based simulation of plant light-harvesting complex II: Linear optical spectra of trimers and aggregates&amp;author=F. Müh&amp;author=T. Renger&amp;volume=1817&amp;publication_year=2012&amp;pages=1446-1460&amp;pmid=22387396&amp;doi=10.1016/j.bbabio.2012.02.016&amp;"/></mixed-citation></ref><ref id="ref73"><mixed-citation id="cit73"><named-content content-type="citation-string">Knox R. S., Spring B. Q.. Dipole strengths in the chlorophylls. Photochem. Photobiol. 2003;77:497–501. doi: 10.1562/0031-8655(2003)077&lt;0497:DSITC&gt;2.0.CO;2.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1562/0031-8655(2003)077&lt;0497:DSITC&gt;2.0.CO;2"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="12812291"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Photochem. Photobiol.&amp;title=Dipole strengths in the chlorophylls&amp;author=R. S. Knox&amp;author=B. Q. Spring&amp;volume=77&amp;publication_year=2003&amp;pages=497-501&amp;pmid=12812291&amp;doi=10.1562/0031-8655(2003)077&lt;0497:DSITC&gt;2.0.CO;2&amp;"/></mixed-citation></ref><ref id="ref74"><mixed-citation id="cit74"><named-content content-type="citation-string">Miki T., Buckup T., Krause M. S., Southall J., Cogdellb R. J., Motzkus M.. Vibronic coupling in
+the excited-states of carotenoids. Phys. Chem.
+Chem. Phys. 2016;18:11443–11453. doi: 10.1039/C5CP07542D.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1039/C5CP07542D"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="27055720"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Phys. Chem. Chem. Phys.&amp;title=Vibronic coupling in the excited-states of carotenoids&amp;author=T. Miki&amp;author=T. Buckup&amp;author=M. S. Krause&amp;author=J. Southall&amp;author=R. J. Cogdellb&amp;volume=18&amp;publication_year=2016&amp;pages=11443-11453&amp;pmid=27055720&amp;doi=10.1039/C5CP07542D&amp;"/></mixed-citation></ref><ref id="ref75"><mixed-citation id="cit75"><named-content content-type="citation-string">Walla P. J., Linden P. A., Ohta K., Fleming G. R.. Excited-state kinetics
+of the carotenoid S1 state in LHCII and two-photon excitation
+spectra of lutein and β-carotene in solution: Efficient Car
+S1 → Chl electronic energy transfer via hot S1 states? J. Phys. Chem. A. 2002;106:1909–1916. doi: 10.1021/jp011495x.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/jp011495x"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. A&amp;title=Excited-state kinetics of the carotenoid S1 state in LHCII and two-photon excitation spectra of lutein and β-carotene in solution: Efficient Car S1 → Chl electronic energy transfer via hot S1 states?&amp;author=P. J. Walla&amp;author=P. A. Linden&amp;author=K. Ohta&amp;author=G. R. Fleming&amp;volume=106&amp;publication_year=2002&amp;pages=1909-1916&amp;doi=10.1021/jp011495x&amp;"/></mixed-citation></ref><ref id="ref76"><mixed-citation id="cit76"><named-content content-type="citation-string">Andreussi O., Knecht S., Marian C. M., Kongsted J., Mennucci B.. Carotenoids
+and Light-Harvesting: From DFT/MRCI to the Tamm-Dancoff Approximation. J. Chem. Theory Comput. 2015;11:655–666. doi: 10.1021/ct5011246.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/ct5011246"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="26579601"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Chem. Theory Comput.&amp;title=Carotenoids and Light-Harvesting: From DFT/MRCI to the Tamm-Dancoff Approximation&amp;author=O. Andreussi&amp;author=S. Knecht&amp;author=C. M. Marian&amp;author=J. Kongsted&amp;author=B. Mennucci&amp;volume=11&amp;publication_year=2015&amp;pages=655-666&amp;pmid=26579601&amp;doi=10.1021/ct5011246&amp;"/></mixed-citation></ref><ref id="ref77"><mixed-citation id="cit77"><named-content content-type="citation-string">Accomasso D., Arslancan S., Cupellini L., Granucci G., Mennucci B.. Ultrafast
+excited-state dynamics of carotenoids and the role of the S-X State. J. Phys. Chem. Lett. 2022;13:6762–6769. doi: 10.1021/acs.jpclett.2c01555.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jpclett.2c01555"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC9340805"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="35852936"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. Lett.&amp;title=Ultrafast excited-state dynamics of carotenoids and the role of the S-X State&amp;author=D. Accomasso&amp;author=S. Arslancan&amp;author=L. Cupellini&amp;author=G. Granucci&amp;author=B. Mennucci&amp;volume=13&amp;publication_year=2022&amp;pages=6762-6769&amp;pmid=35852936&amp;doi=10.1021/acs.jpclett.2c01555&amp;"/></mixed-citation></ref><ref id="ref78"><mixed-citation id="cit78"><named-content content-type="citation-string">Belov A., Khokhlov D.. Low-lying excited states of natural
+carotenoids viewed
+by ab initio methods. J. Phys. Chem. A. 2022;126:4376–4391. doi: 10.1021/acs.jpca.2c02485.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1021/acs.jpca.2c02485"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="35767689"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=J. Phys. Chem. A&amp;title=Low-lying excited states of natural carotenoids viewed by ab initio methods&amp;author=A. Belov&amp;author=D. Khokhlov&amp;volume=126&amp;publication_year=2022&amp;pages=4376-4391&amp;pmid=35767689&amp;doi=10.1021/acs.jpca.2c02485&amp;"/></mixed-citation></ref><ref id="ref79"><mixed-citation id="cit79"><named-content content-type="citation-string">Milne B. F., Toker Y., Rubio A., Nielsen S. B.. Unraveling the Intrinsic
+Color of Chlorophyll. Angew. Chem., Int. Ed. 2015;54:2170–2173. doi: 10.1002/anie.201410899.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1002/anie.201410899"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="25556959"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Angew. Chem., Int. Ed.&amp;title=Unraveling the Intrinsic Color of Chlorophyll&amp;author=B. F. Milne&amp;author=Y. Toker&amp;author=A. Rubio&amp;author=S. B. Nielsen&amp;volume=54&amp;publication_year=2015&amp;pages=2170-2173&amp;pmid=25556959&amp;doi=10.1002/anie.201410899&amp;"/></mixed-citation></ref><ref id="ref80"><mixed-citation id="cit80"><named-content content-type="citation-string">
+
+Frisch, M. J.
+; 
+Trucks, G. W.
+; 
+Schlegel, H. B.
+; 
+Scuseria, G. E.
+; 
+Robb, M. A.
+; 
+Cheeseman, J. R.
+; 
+Scalmani, G.
+; 
+Barone, V.
+; 
+Petersson, G. A.
+; 
+Nakatsuji, H.
+, et al. 
+Gaussian
+16 Rev. B.01; Gaussian Inc, Wallingford, CT, 2016.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="title=Gaussian 16&amp;publication_year=2016&amp;"/></mixed-citation></ref><ref id="ref81"><mixed-citation id="cit81"><named-content content-type="citation-string">Götze J. P., Anders F., Petry S., Witte J. F., Lokstein H.. Spectral characterization
+of the main pigments in the plant photosynthetic apparatus by theory
+and experiment. Chem. Phys. 2022;559:111517. doi: 10.1016/j.chemphys.2022.111517.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1016/j.chemphys.2022.111517"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Chem. Phys.&amp;title=Spectral characterization of the main pigments in the plant photosynthetic apparatus by theory and experiment&amp;author=J. P. Götze&amp;author=F. Anders&amp;author=S. Petry&amp;author=J. F. Witte&amp;author=H. Lokstein&amp;volume=559&amp;publication_year=2022&amp;pages=111517&amp;doi=10.1016/j.chemphys.2022.111517&amp;"/></mixed-citation></ref><ref id="ref82"><mixed-citation id="cit82"><named-content content-type="citation-string">Kuzmanic A., Sutto L., Saladino G., Nebreda A. R., Gervasio F. L., Orozco M.. Changes in the free-energy
+landscape of p38a MAP kinase
+through its canonical activation and binding events as studied by
+enhanced molecular dynamics simulations. eLife. 2017;6:e22175.  doi: 10.7554/eLife.22175.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.7554/eLife.22175"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC5406204"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="28445123"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=eLife&amp;title=Changes in the free-energy landscape of p38a MAP kinase through its canonical activation and binding events as studied by enhanced molecular dynamics simulations&amp;author=A. Kuzmanic&amp;author=L. Sutto&amp;author=G. Saladino&amp;author=A. R. Nebreda&amp;author=F. L. Gervasio&amp;volume=6&amp;publication_year=2017&amp;pages=e22175&amp;pmid=28445123&amp;doi=10.7554/eLife.22175&amp;"/></mixed-citation></ref><ref id="ref83"><mixed-citation id="cit83"><named-content content-type="citation-string">Pedraza-González L., Accomasso D., Cupellini L., Granucci G., Mennucci B.. Ultrafast
+excited-state dynamics of Luteins in the major light-harvesting complex
+LHCII. Photochem. Photobiol. Sci. 2024;23:303–314. doi: 10.1007/s43630-023-00518-x.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1007/s43630-023-00518-x"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="38151602"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Photochem. Photobiol. Sci.&amp;title=Ultrafast excited-state dynamics of Luteins in the major light-harvesting complex LHCII&amp;author=L. Pedraza-González&amp;author=D. Accomasso&amp;author=L. Cupellini&amp;author=G. Granucci&amp;author=B. Mennucci&amp;volume=23&amp;publication_year=2024&amp;pages=303-314&amp;pmid=38151602&amp;doi=10.1007/s43630-023-00518-x&amp;"/></mixed-citation></ref><ref id="ref84"><mixed-citation id="cit84"><named-content content-type="citation-string">Accomasso D., Londi G., Cupellini L., Mennucci B.. The nature of carotenoid
+S* state and its role in the nonphotochemical quenching of plants. Nat. Commun. 2024;15:847. doi: 10.1038/s41467-024-45090-9.</named-content><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="doi" xlink:href="10.1038/s41467-024-45090-9"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmcid" xlink:href="PMC11258248"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="pmid" xlink:href="38286840"/><ext-link xmlns:xlink="http://www.w3.org/1999/xlink" ext-link-type="google-scholar" xlink:href="journal=Nat. Commun.&amp;title=The nature of carotenoid S* state and its role in the nonphotochemical quenching of plants&amp;author=D. Accomasso&amp;author=G. Londi&amp;author=L. Cupellini&amp;author=B. Mennucci&amp;volume=15&amp;publication_year=2024&amp;pages=847&amp;pmid=38286840&amp;doi=10.1038/s41467-024-45090-9&amp;"/></mixed-citation></ref></ref-list></sec></sec><sec id="_ad93_" xml:lang="en" sec-type="associated-data" disp-level="1"><title>Associated Data</title><sec id="_adsm93_" xml:lang="en" sec-type="supplementary-materials" disp-level="2"><title>Supplementary Materials</title><supplementary-material id="db_ds_supplementary-material1_reqid_" position="float"><media xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="ao4c11543_si_001.pdf" mimetype="application" mime-subtype="pdf"><?cloudpmc-path 5a2c/12199089/c0a85f4f695b/ao4c11543_si_001.pdf?><?cloudpmc-bucket app?><?size 4147828?></media></supplementary-material></sec><sec id="_adda93_" xml:lang="en" sec-type="data-availability-statement" disp-level="2"><title>Data Availability Statement</title><p>The data supporting
+this article have been included as part of the <ext-link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://pubs.acs.org/doi/suppl/10.1021/acsomega.4c11543/suppl_file/ao4c11543_si_001.pdf" ext-link-type="uri">Supporting Information</ext-link>.</p></sec></sec></body></article>
