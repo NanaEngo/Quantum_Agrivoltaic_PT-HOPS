@@ -1,5 +1,0 @@
-- Spectral co-design decouples diagnostics from energy yield at 0.9% canopy cost.
-- The quantum channel sits outside PAR; crops and sensors do not compete.
-- Evapotranspiration falls 28% under the shield, saving 460 L/m2/yr of irrigation.
-- Payback is 4.32 yr financed, 2.68 yr local; no quantum revenue is claimed.
-- Binding barriers are process engineering, not subsidies or economics.
