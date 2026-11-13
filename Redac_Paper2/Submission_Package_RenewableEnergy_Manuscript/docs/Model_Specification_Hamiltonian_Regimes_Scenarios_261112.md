@@ -1,9 +1,9 @@
 # Spécification Verrouillée du Modèle : Hamiltonien, Paramètres Physiques, Régimes, Scénarii & Approche Interprétative
 
-**Code document :** `MS-RE-261112-V2.4`  
-**Cible :** *Renewable Energy* (Elsevier)  
-**Source de Vérité :** `parameters.yaml` (`v2.4.0`)  
-**Objectif :** Verrouiller tous les choix physiques (Hamiltonien LHCII, pile optique TMM/LUE, bilan foliaire LWIR–Medlyn, profil horaire diurne/nocturne usine, ACV double unité fonctionnelle) et réaliser une **revue complète pré-WP1**.
+* **Code document :** `MS-RE-261112-V2.4`  
+* **Cible :** *Renewable Energy* (Elsevier)  
+* **Source de Vérité :** `parameters.yaml` (`v2.4.0`)  
+* **Objectif :** Verrouiller tous les choix physiques (Hamiltonien LHCII, pile optique TMM/LUE, bilan foliaire LWIR–Medlyn, profil horaire diurne/nocturne usine, ACV double unité fonctionnelle) et réaliser une **revue complète pré-WP1**.
 
 ---
 

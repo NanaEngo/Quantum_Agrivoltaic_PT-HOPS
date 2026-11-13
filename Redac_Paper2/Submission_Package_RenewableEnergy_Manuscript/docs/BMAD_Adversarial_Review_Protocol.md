@@ -1,9 +1,9 @@
 # BMAD Adversarial Protocol Review: Simulation, TEA & LCA Framework
 
-**Document Code:** `APR-RE-261112-REV4`  
-**Review Lenses:** `adversarial-general`, `edge-case-hunter`, `mathematical-consistency`, `lca-iso-audit`  
-**Target:** Elsevier *Renewable Energy*  
-**Date:** 2026-11-12 (Revision 4: CW NESS LHCII, LWIR/Medlyn, c-Si Counterfactual & Interpretative Regime Maps)  
+* **Document Code:** `APR-RE-261112-REV4`  
+* **Review Lenses:** `adversarial-general`, `edge-case-hunter`, `mathematical-consistency`, `lca-iso-audit`  
+* **Target:** Elsevier *Renewable Energy*  
+* **Date:** 2026-11-12 (Revision 4: CW NESS LHCII, LWIR/Medlyn, c-Si Counterfactual & Interpretative Regime Maps)  
 
 ---
 

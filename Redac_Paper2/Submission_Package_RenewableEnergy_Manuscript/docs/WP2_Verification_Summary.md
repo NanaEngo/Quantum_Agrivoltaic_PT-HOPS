@@ -1,8 +1,8 @@
 # WP2 Verification Summary — Multilayer TMM ST-OPV & Open Quantum LHCII NESS + Non-Markovian Benchmarks
 
-**Framework Version:** `2.5.0`  
-**Target Journal:** *Renewable Energy* (Elsevier)  
-**Environments Verified:** Local (`fl_qom` & `base`) + HPC `penavoraserver` (`MesoHOP-sim-18`, 48 cores / 125 GB RAM)
+* **Framework Version:** `2.5.0`  
+* **Target Journal:** *Renewable Energy* (Elsevier)  
+* **Environments Verified:** Local (`fl_qom` & `base`) + HPC `penavoraserver` (`MesoHOP-sim-18`, 48 cores / 125 GB RAM)
 
 ---
 

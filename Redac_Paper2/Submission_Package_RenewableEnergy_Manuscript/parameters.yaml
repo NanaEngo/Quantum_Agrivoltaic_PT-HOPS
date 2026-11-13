@@ -181,10 +181,10 @@ crops:
     optimum_shade_min: 0.20
     optimum_shade_max: 0.35
     canopy_height_m: 3.5
-    baseline_clean_yield_kg_ha: 800.0
-    farmgate_price_xaf_kg: 5000.0
-    certified_pgi_price_xaf_kg: 14000.0
-    processing_energy_kwh_tonne: 45.0  # mechanical washing, retting, solar convective drying
+    baseline_clean_yield_kg_ha: 800.0    # dry retted Penja white pepper (~24% recovery from ripe berries; vs 1000-1500 kg/ha black pepper)
+    farmgate_price_xaf_kg: 5000.0        # white pepper farm-gate (IGP Terroir 3500-6000 XAF/kg; higher than unretted black pepper)
+    certified_pgi_price_xaf_kg: 14000.0  # upper PGI certified Penja white export tier (band 8000-14000 XAF/kg)
+    processing_energy_kwh_tonne: 45.0    # white-pepper 7-10d retting water pumping, pulp decortication/washing, convective drying
     processing_daytime_load_fraction: 0.85  # daytime washing & fan drying
     tutor_system: "Engineered agrivoltaic trellis replacing diseased Spondias mombin"
 

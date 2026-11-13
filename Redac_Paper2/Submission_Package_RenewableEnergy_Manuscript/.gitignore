@@ -1,7 +1,12 @@
 !data/wp1/*.csv
 !data/wp2/*.csv
 !data/wp2/*.json
+!data/wp3/*.csv
+!data/wp3/*.json
+!data/wp5/*.csv
+!data/wp5/*.json
 *.INVALID_FALLBACK_DATA.csv
+*.spl
 __pycache__/
 *.pyc
 .pytest_cache/

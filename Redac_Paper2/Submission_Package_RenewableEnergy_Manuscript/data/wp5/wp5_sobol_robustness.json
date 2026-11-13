@@ -1,0 +1,124 @@
+{
+  "n_base_samples": 10000,
+  "seed": 42,
+  "n_params": 12,
+  "model_evaluations_per_crop": 140000,
+  "variants": {
+    "published": {
+      "arabica_coffee": {
+        "prob_opv_beats_csi": 0.1675,
+        "delta_npv_p50_usd_ha": -139321.51950337423,
+        "quantum_S_Ti_delta_npv": 3.832005332550191e-09,
+        "quantum_S_Ti_npv_opv": 1.162838196863029e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.34307088684866643,
+        "t80_opv_S_Ti_delta_npv": 0.2470534972408304,
+        "c_bos_si_S_Ti_delta_npv": 0.15929054612313287
+      },
+      "penja_white_pepper": {
+        "prob_opv_beats_csi": 0.2299,
+        "delta_npv_p50_usd_ha": -105263.63003066264,
+        "quantum_S_Ti_delta_npv": 2.1030940541905517e-08,
+        "quantum_S_Ti_npv_opv": 7.149006861649051e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.36633308100625134,
+        "t80_opv_S_Ti_delta_npv": 0.2599033634553297,
+        "c_bos_si_S_Ti_delta_npv": 0.17009136820809917
+      },
+      "highland_tea": {
+        "prob_opv_beats_csi": 0.11,
+        "delta_npv_p50_usd_ha": -175974.78544094483,
+        "quantum_S_Ti_delta_npv": 9.849658475465564e-09,
+        "quantum_S_Ti_npv_opv": 1.8912281656527885e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.32306802337455226,
+        "t80_opv_S_Ti_delta_npv": 0.2673721994012065,
+        "c_bos_si_S_Ti_delta_npv": 0.1500030572426683
+      }
+    },
+    "heom_envelope": {
+      "arabica_coffee": {
+        "prob_opv_beats_csi": 0.1674,
+        "delta_npv_p50_usd_ha": -139332.3596420691,
+        "quantum_S_Ti_delta_npv": 4.694174099583991e-08,
+        "quantum_S_Ti_npv_opv": 1.4244872226344148e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.34306851653420667,
+        "t80_opv_S_Ti_delta_npv": 0.24705179032106747,
+        "c_bos_si_S_Ti_delta_npv": 0.15928944556724411
+      },
+      "penja_white_pepper": {
+        "prob_opv_beats_csi": 0.2297,
+        "delta_npv_p50_usd_ha": -105271.46974791144,
+        "quantum_S_Ti_delta_npv": 2.5762525845800635e-07,
+        "quantum_S_Ti_npv_opv": 8.757710210016876e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.36632772998863766,
+        "t80_opv_S_Ti_delta_npv": 0.259899567053782,
+        "c_bos_si_S_Ti_delta_npv": 0.1700888836879878
+      },
+      "highland_tea": {
+        "prob_opv_beats_csi": 0.11,
+        "delta_npv_p50_usd_ha": -175952.40112528857,
+        "quantum_S_Ti_delta_npv": 1.2065679417114548e-07,
+        "quantum_S_Ti_npv_opv": 2.3167819106315732e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.3230639477410743,
+        "t80_opv_S_Ti_delta_npv": 0.2673688263930222,
+        "c_bos_si_S_Ti_delta_npv": 0.15000116489357257
+      }
+    },
+    "zero_carbon": {
+      "arabica_coffee": {
+        "prob_opv_beats_csi": 0.1851,
+        "delta_npv_p50_usd_ha": -131008.7382771232,
+        "quantum_S_Ti_delta_npv": 3.865872143236488e-09,
+        "quantum_S_Ti_npv_opv": 1.1954496952474708e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.3461029068405506,
+        "t80_opv_S_Ti_delta_npv": 0.24718121124582046,
+        "c_bos_si_S_Ti_delta_npv": 0.16069833716247148
+      },
+      "penja_white_pepper": {
+        "prob_opv_beats_csi": 0.2471,
+        "delta_npv_p50_usd_ha": -97858.86208383433,
+        "quantum_S_Ti_delta_npv": 2.118268291661592e-08,
+        "quantum_S_Ti_npv_opv": 7.353631448160021e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.3689762462767905,
+        "t80_opv_S_Ti_delta_npv": 0.25984889106840653,
+        "c_bos_si_S_Ti_delta_npv": 0.17131861090218298
+      },
+      "highland_tea": {
+        "prob_opv_beats_csi": 0.1234,
+        "delta_npv_p50_usd_ha": -166539.57247211196,
+        "quantum_S_Ti_delta_npv": 9.954663020926497e-09,
+        "quantum_S_Ti_npv_opv": 1.9530019090947375e-09,
+        "c_mod_opv_S_Ti_delta_npv": 0.32651216420763224,
+        "t80_opv_S_Ti_delta_npv": 0.2675627013442945,
+        "c_bos_si_S_Ti_delta_npv": 0.15160219927207721
+      }
+    },
+    "heom_zero_carbon": {
+      "arabica_coffee": {
+        "prob_opv_beats_csi": 0.1851,
+        "delta_npv_p50_usd_ha": -131019.88319570408,
+        "quantum_S_Ti_delta_npv": 4.735661533590098e-08,
+        "quantum_S_Ti_npv_opv": 1.4644364701072118e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.34610057971241814,
+        "t80_opv_S_Ti_delta_npv": 0.2471795492477871,
+        "c_bos_si_S_Ti_delta_npv": 0.1606972566583386
+      },
+      "penja_white_pepper": {
+        "prob_opv_beats_csi": 0.2472,
+        "delta_npv_p50_usd_ha": -97917.28353946962,
+        "quantum_S_Ti_delta_npv": 2.594841782558936e-07,
+        "quantum_S_Ti_npv_opv": 9.008379186004718e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.3689710029109854,
+        "t80_opv_S_Ti_delta_npv": 0.2598451984654174,
+        "c_bos_si_S_Ti_delta_npv": 0.17131617636566407
+      },
+      "highland_tea": {
+        "prob_opv_beats_csi": 0.1233,
+        "delta_npv_p50_usd_ha": -166573.2036296607,
+        "quantum_S_Ti_delta_npv": 1.2194311799960007e-07,
+        "quantum_S_Ti_npv_opv": 2.392455701866376e-08,
+        "c_mod_opv_S_Ti_delta_npv": 0.32650813716243116,
+        "t80_opv_S_Ti_delta_npv": 0.267559401353634,
+        "c_bos_si_S_Ti_delta_npv": 0.15160032948290558
+      }
+    }
+  }
+}

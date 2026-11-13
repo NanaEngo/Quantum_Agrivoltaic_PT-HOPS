@@ -1,9 +1,9 @@
 # BMAD Adversarial Stress-Test: "How Would a Reviewer Kill This Paper?"
 
-**Document Code:** `AST-RE-261112-REV3`  
-**Target:** Elsevier *Renewable Energy*  
-**Manuscript Working Title:** *Spectrally Selective Agrivoltaic Co-Design for Perennial Cash Crops in Sub-Saharan Africa: A Multi-Crop Decision Framework and a Bounded Test of Quantum Coherence Relevance*  
-**Date:** 2026-11-12 (Revision 3: Tri-Crop Arabica Coffee, Penja White Pepper, Highland Tea)  
+* **Document Code:** `AST-RE-261112-REV3`  
+* **Target:** Elsevier *Renewable Energy*  
+* **Manuscript Working Title:** *Spectrally Selective Agrivoltaic Co-Design for Perennial Cash Crops in Sub-Saharan Africa: A Multi-Crop Decision Framework * and a Bounded Test of Quantum Coherence Relevance*  
+* **Date:** 2026-11-12 (Revision 3: Tri-Crop Arabica Coffee, Penja White Pepper, Highland Tea)  
 
 ---
 
