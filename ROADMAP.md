@@ -132,4 +132,22 @@ All 37 axes from `Redac_Paper2/Pistes_Improvements260625.md` (file removed in th
 - [x] Weakness mitigations (digital-twin assimilation path, τ_c/EF prediction flags, LOD field-basis values, NPoM-CAPEX overrun sensitivity 4.32→6.11 yr, n-provenance).
 - [x] Commits: `1e6c924` (audit + mitigate), `45fc296` (NE package + Graphics → `_archive/`), `98b02ba` (weakness mitigations + figure/QKD/code hardening).
 - [x] Restructuring 2026-09-26: `Redac_Paper2/` purged (`reports/`, `_bmad-output/`, `results/`, root `references.bib`, one-shot markers, orphan figures, NE-era copies in QST package) and all MD refreshed — `Redac_Paper2/README.md`, package READMEs, this roadmap, root README, AGENTS.md Session 28.
-- [ ] Upload per `CHECKLIST_UPLOAD_AppliedEnergy.md` and submit (ORCID Vedekoi pending).
+- [ ] Upload per `CHECKLIST_UPLOAD_SolarEnergy.md` and submit (ORCID Vedekoi pending). — *superseded 2026-11-06 by §8: AE rejected, retargeted to Solar Energy.*
+
+## 7. Machine Migration — 2026-11-06 (Session 29)
+
+- [x] Workspace audit: found migrated from `taamangtchu` laptop without `.git`; gates/doc drifted.
+- [x] Mitigated: git baseline commit, `np.trapezoid` fix (128/1 restored), cover-letter PDF rebuilt, ruff restored (config-only), symlink/purge hygiene, AGENTS.md tree/status/server sections reconciled, Sep-27 title-review session documented.
+- [ ] Re-establish PenavoraServer access on this machine (SSH key + host entry + rsync paths).
+- [ ] Reconnect git remote and push baseline (old history not on this machine).
+- [x] Disk at 98 % — pruned 2026-11-06 (~94 MB workspace caches + 21 GB conda pkgs/npm/pip caches → 34 GB free, 93 %). Remaining bulk is other projects (`~/Malaria_codesV2` 146 G, colabfold/torch/hf model caches ~6.5 G) — user's call.
+- [x] MesoHOPS 1.8.0 evaluated in parallel env `MesoHOP-sim-18` (prod stays 1.7.0 — reproducibility lock). Paper 2 suite: 128/1-xf parity; non-dyadic absorption spectroscopy smoke passes (`Redac_Paper2/scripts/smoke_mesohops18.py`). 1.8 value: spectral co-design readout, rectangular truncation axis, TDVP for stiff cases — adopt for *future* work only.
+
+## 8. Paper 2 — Solar Energy V2611 Era (2026-11-06 →)
+
+- [x] Interpretive inversion R1–R8 designed (`Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md`) after deep web search; evidence register enforces verify-before-cite (9 citations confirmed via OpenAlex/Crossref; EPA benchmark corrected to 500 µg/L).
+- [x] AE rejection → package retargeted: `Submission_Package_SolarEnergy_Manuscript/` — main+SM+cover renamed V2611, R1–R8 applied, SM gains LER ≈ 1.43 ledger + 5-yr OPV durability stress test, cover letter + Highlights + README + upload checklist converted. verify 62/62; PDFs 22/27/1 pp, zero undefined refs. Commit `3ee0256`.
+- [x] SM S12 sentinel-area budget derivation (trade-off law Φ(α)=Φ_P−αΔ, Δ=0.900; insurance envelope 3.7×/9.9×) + main pointer (`2e9dffa`); verify canon +5 → 67/67 (`1229c8c`).
+- [x] Anti-"incremental" predicted observable: MesoHOPS-1.8 propagation attempts failed on cost (≈13 machine-h; unbundled 120-mode bath explodes hierarchy) → pivoted to exact diagonalization fingerprint: **−57.2 cm⁻¹ band-edge line at 12414.2 cm⁻¹ + two ~11 cm⁻¹ doublets, state-resolved site-0/5 pattern** (SM `tab:SI_fingerprint_shifts` + figure; main stance/falsifier name the benchtop test). Scripts hardened (`--eigen`, `--summarize`, streaming logs). verify 70/70; SM 30 pp. Commits `92e66b5`, `3c8242c`.
+- [ ] Read Solar Energy Guide for Authors at upload (never fetched — checklist carries [À CONFIRMER] flags), then submit.
+- [ ] ORCID for Vedekoi; drop Barron-Gafford from reviewers if EM flags co-author conflict.

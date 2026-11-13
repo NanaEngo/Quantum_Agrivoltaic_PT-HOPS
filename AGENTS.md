@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-09-26 (Session 28 — Redac_Paper2 Restructuring: Obsolete Files Purged, 8 MDs Refreshed, AE Package = Source of Truth 62/62)
+**Last updated:** 2026-11-06 (Session 29 — Machine Migration Mitigation: workspace now on `nanaengo` host, git baseline, gates restored 128/1 · AE 62/62 · QST 22/22)
 
 
 ---
@@ -11,9 +11,9 @@
 
 This repository contains two active research projects:
 
-1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD.
+1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update; paper DOI not recorded in this workspace)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, final draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD. The "JPCL Revision" sections below are **historical pre-publication records**.
 
-2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-09-23 update): **editor-suggested transfer (with APC) DECLINED; retargeting a Q1 journal via subscription route (APC-free)**. Packages on hand: `Submission_Package_Nature_Energy_Manuscript/` (V5) + `Submission_Package_QST_Manuscript/` (iopart, formatting asset). Shortlist: Applied Energy, Solar Energy, QST, Prog. Photovoltaics.
+2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-11-06 update): **Applied Energy rejected (reported by authors; editor-suggested paid transfer had already been declined earlier at *Nature Energy*). Retargeted to *Solar Energy* (Elsevier, subscription route — no APC) as package `Submission_Package_SolarEnergy_Manuscript/` (V2611 — source of truth; verify 62/62)**, carrying the full interpretive refinement R1–R8 (`docs/REFINEMENT_INTERPRETIVE_20261106.md`): argument-first abstract, photon-allocation ledger + LER 1.43, coherence-controversy stance, falsifier paragraph, barrier-ranked conclusions, OPV 5-yr durability stress test. Packages on hand: **Solar Energy V2611 (active)** + `Submission_Package_AppliedEnergy_Manuscript/` (historical) + `Submission_Package_QST_Manuscript/` (iopart formatting asset; verify 22/22); V5 NE package archived at `_archive/`. Open: upload + submit per `CHECKLIST_UPLOAD_SolarEnergy.md` (ORCID pending; read SE Guide for Authors at upload — GFA never fetched).
 
 ---
 
@@ -41,15 +41,18 @@ Monitoring: `tail -f reproducibility_cluster.log`
 **The canonical simulation framework is:**
 `quantum_simulations_framework/` (Paper 1 — JPCL revision)
 
-**ALWAYS SYNC AFTER CHANGES**: After every local modification to the codebase, you MUST synchronize the files to the server using `rsync` to ensure the production environment is up-to-date:
+**SERVER SYNC — NOT MIGRATED (as of 2026-11-06)**: The historical workflow rsynced the canonical framework from the old `taamangtchu` laptop to PenavoraServer:
 ```bash
+# HISTORICAL — requires credentials not present on this machine (no taiscale_key / host entry)
 rsync -avz -e "ssh -i /home/taamangtchu/.ssh/taiscale_key" /media/taamangtchu/MYDATA/Github/Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/ nanaengo@100.73.21.40:~/quantum_simulations_framework/
 ```
+Until an SSH key + host entry are installed here, treat every server command in this file as historical. Re-launch server workflows only after re-establishing sync from this machine.
 
 **DEPRECATED DIRECTORIES (DO NOT REGENERATE):**
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
-- `Redac_Paper1/quantum_simulations_framework_parallel/` (DELETED)
+- `Redac_Paper1/quantum_simulations_framework_parallel/` (the `_260612` copy found un-purged at migration was moved to `_archive/` on 2026-11-06; its `.tar.gz` twin also lives in `_archive/`)
 - `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/` (DELETED — moved to `_deleted_root_duplicate_260612/`)
+- `Redac_Paper2/quantum_simulations_framework` symlink → `~/quantum_simulations_framework` (REMOVED 2026-11-06 — zero references; Paper 2's `solver.py` resolves the repo-root canonical framework)
 
 If these directories appear, delete them immediately and check for stale path references in `AGENTS.md`, `ROADMAP.md`, or `README.md`.
 
@@ -157,45 +160,36 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 ### Directory Structure
 
 ```
-Quantum_Agrivoltaic_PT-HOPS/
-├── AGENTS.md                          # This file
-├── README.md                          # Project overview
-├── .gitignore
-├── Redac_Paper1/
-│   ├── JPCL_Submission_Package_2026-06-20/ # Source of truth for manuscript
-│   │   ├── Manuscript_JPCL_26-06-20.tex
-│   │   ├── SI_JPCL_26-06-20.tex
-│   │   ├── Response_to_Reviewers_26-06-20.tex
-│   │   ├── Cover_Letter_JPCL_26-06-20.tex
-│   │   ├── references.bib
-│   │   └── Figures/
-│   ├── Theory_Journals_main/JPCL/     # Old JPCL submission files (dated filenames)
-│   │   ├── Manuscript_JPCL_26-05-10.tex
-│   │   ├── SI_JPCL_26-05-10.tex
-│   │   ├── Response_to_Reviewers_26-05-08.tex
-│   │   ├── Cover_Letter_JPCL_26-05-08.tex
-│   │   ├── references.bib
-│   │   ├── Reviewers_Comments.md
-│   │   └── Reviewers_Comments_Answers.md
-│   └── quantum_simulations_framework/ # Simulation framework (Paper 1)
-│       ├── parameters.yaml            # Source of truth
-│       ├── core/                      # HopsSimulator, constants, hamiltonian
-│       ├── models/                    # QuantumDynamicsSimulator, etc.
-│       ├── extensions/                # PT_HopsNoise, SBD_HopsTrajectory
-│       ├── utils/                     # FigureGenerator, theme, logging
-│       ├── reproducibility/
-│       │   ├── main.py                # Entry point
-│       │   ├── audit_convergence.py   # L=7,8,9 audit
-│       │   ├── run_comprehensive_sweep.sh  # Full sweep orchestrator
-│       │   ├── run_phase1_continue.sh      # Phase 1 suite (skip L7)
-│       │   ├── run_phase1_parallel.sh      # Phase 1 parallèle (K=3 || dt=2.0)
-│       │   └── results/               # Valid results (72 CSVs, June 2026)
-│       └── tests/
-├── notebooks/                         # Anderson model Jupyter notebooks
-├── manuscrit/                         # Anderson model PRB publication
-├── _bmad-output/planning-artifacts/   # PRD, architecture, epics
-└── Archive/                           # Legacy code
+Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-09 (Session 29)
+├── AGENTS.md                            # This file
+├── README.md / ROADMAP.md / SUBMISSION_STANDARD.md
+├── .gitignore                           # git baseline initialized 2026-11-06 (no remote yet)
+├── Redac_Paper1/                        # Paper 1 (JPCL) — published, archival
+│   ├── JPCL_Submission_Package_2026-06-20/    # Source of truth (tex/pdf/bib/Figures)
+│   │   └── Reviewers_Comments_260611.md       # Original reviewer comments
+│   ├── docs/Xiang/Response_to_Tianfu_Xiang.md # Open post-pub reply draft
+│   └── SYNTHESE_SIMULATIONS_JUIN2026.md, run_cluster*.sh, How-to-launch-server.md
+├── Redac_Paper2/                        # Paper 2 — Solar Energy V2611 era (since 2026-11-06)
+│   ├── Submission_Package_SolarEnergy_Manuscript/  # ACTIVE source of truth (V2611, 62/62)
+│   ├── Submission_Package_AppliedEnergy_Manuscript/  # Historical (AE rejected era)
+│   ├── Submission_Package_QST_Manuscript/            # QST formatting asset+verify (22/22)
+│   ├── src/ tests/ scripts/ data/ docs/ backups/
+│   ├── relaunch_20260923/ relaunch_20260924/         # RAW NPoM scan scratch ~200 MB (gitignored)
+│   └── parameters.yaml / pyproject.toml / Makefile / main.py
+├── quantum_simulations_framework/       # CANONICAL simulation framework (root level)
+│   ├── parameters.yaml                  # Single source of truth
+│   ├── core/ models/ extensions/ utils/ src/ pipelines/
+│   └── reproducibility/                 # main.py, audit_convergence.py, sweep scripts, results/
+├── _archive/                            # Frozen legacy: NE package, Theory_Journals_main,
+│                                        #   Graphics, parallel_26xx copies (+ MASTER_AUDIT_PROMPT dup)
+├── docs/                                # Workspace architecture notes
+├── _bmad-output/planning-artifacts/     # PRD, architecture, epics
+├── extract.py / generate_light_figures.py{,.txt} / PROJECT.md   # Sept-2026 migration/QST helpers
+└── comfyui-mcp-server/ graphify-out/    # Tool assets (gitignored)
 ```
+> [!NOTE]
+> `notebooks/` and `manuscrit/` (Anderson-model PRB work) and `Archive/` (now `_archive/`) were NOT
+> migrated to this machine — the Anderson model work is not in this workspace.
 
 ---
 
@@ -209,12 +203,13 @@ Quantum_Agrivoltaic_PT-HOPS/
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Response_to_Reviewers_26-06-20.tex` | Point-by-point response letter — updated 2026-06-20 (**Source of truth**) |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Cover_Letter_JPCL_26-06-20.tex` | Cover letter — updated 2026-06-20 (**Source of truth**) |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments.md` | Original reviewer comments + journal formatting requests |
-| `Redac_Paper1/Theory_Journals_main/JPCL/Reviewers_Comments_Answers.md` | Detailed draft answers |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_main_2609.tex` | Master manuscript (elsarticle, Applied Energy; **Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_SM_2609.tex` | Supporting Information (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/AppliedEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**) |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth**) |
+| `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Reviewers_Comments_260611.md` | Original reviewer comments + journal formatting requests (legacy answer drafts: `_archive/legacy_figures/Archive/`) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_main_V2611.tex` | Master manuscript (elsarticle, Solar Energy; **Source of truth** — interpretive patch R1–R8 applied 2026-11-06, 22 pp) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_SM_V2611.tex` | Supporting Information (**Source of truth** — + LER ledger & 5-yr durability re-run, 27 pp) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**, 1 p.) |
+| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth** — 201 entries; V2611 evidence canon 9 citations verified against OpenAlex/Crossref) |
+| `Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md` | Interpretive-refinement spec (R1–R8 + evidence register) — applied into V2611 |
+| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/` | Applied Energy package — historical (AE rejected; superseded by SolarEnergy V2611) |
 | `_archive/Submission_Package_Nature_Energy_Manuscript/` | Nature Energy package — ARCHIVED 2026-09-26 (declined transfer; superseded by the Applied Energy package) |
 | `_archive/Graphics/` | Figure build output — ARCHIVED 2026-09-26 (figures now land in the Applied Energy package via `scripts/regenerate_figures.py`) |
 | `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
@@ -263,7 +258,8 @@ Quantum_Agrivoltaic_PT-HOPS/
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| MesoHOPS | v1.7.0 (local) | PT-HOPS/SBD non-Markovian dynamics; installed in editable mode from `/home/taamangtchu/Documents/Github/mesohops/` |
+| MesoHOPS | v1.7.0 | PT-HOPS/SBD non-Markovian dynamics; site-installed in conda env `MesoHOP-sim` on this machine (historical editable install from `/home/taamangtchu/Documents/Github/mesohops/` not migrated) |
+| MesoHOPS (probe) | v1.8.0 | Evaluation env `MesoHOP-sim-18` (numpy 2.3.5, pip install from GitHub clone). 1.8 adds non-dyadic absorption/fluorescence spectroscopy, TDVP integrators, rectangular truncation. Paper 2 suite: 128/1-xf parity; spectroscopy smoke `Redac_Paper2/scripts/smoke_mesohops18.py`. **Production stays on 1.7.0** (reproducibility lock — published data pinned). |
 | Python | 3.12+ | Simulation framework (conda env `MesoHOP-sim`) |
 | HierarchicalEOM.jl | latest | Julia HEOM (Anderson model) |
 | QuTiP | 5.2.2+ | Python HEOM (Anderson model) |
@@ -272,6 +268,14 @@ Quantum_Agrivoltaic_PT-HOPS/
 
 
 ### Server Environment (PenavoraServer)
+
+> [!WARNING]
+> **Migration 2026-11-06**: This section reflects the old `taamangtchu` laptop. This machine has
+> **no `taiscale_key` and no SSH host entry** for PenavoraServer — all server workflows (production
+> runs, sweeps, rsync) are INERT until credentials are installed under `~/.ssh/` here.
+> Local runtime: conda env `MesoHOP-sim` (Python 3.12, mesohops 1.7.0 site-install, ruff 0.17.4).
+> **Landmine**: `~/.local/lib/python3.12/site-packages` (numpy 2.5.4, pandas 3.1.0) shadows env
+> packages — all code must stay NumPy ≥2 compatible (`np.trapezoid`, migrated 2026-11-06).
 
 **Access:** `ssh penavora@100.73.21.40` (via Tailscale)
 **OS:** Ubuntu 24.04
@@ -400,6 +404,36 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 30 (2026-11-06) — Workspace Cleanup, MesoHOPS 1.8 Probe, Interpretive Refinement, Solar Energy Retarget
+
+**Pipeline of the day**: (1) workspace + system cleanup (caches purged; disk 13 GB → 45 GB free; separate `~/Malaria_codesV2` repo GC'd 7.3 GB unreachable objects). (2) MesoHOPS **1.8.0 evaluation** in parallel env `MesoHOP-sim-18` (production stays 1.7.0 — reproducibility lock): Paper 2 suite parity 128 passed/1 xfailed; non-dyadic absorption smoke test PASS (`Redac_Paper2/scripts/smoke_mesohops18.py`; API gotchas: noise TAU = t_step/2, TLEN ≥ t_max, correlator grid excludes t=0, subtract C1 DC tail before FFT, numpy 2 needs `fft` not `rfft`). (3) User judged Paper 2 **too descriptive** → `deep-research`-style web evidence hunt → spec `Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md` (R1–R8 + evidence register with no-fabrication gate). (4) AE rejection reported → **retarget to *Solar Energy*** as `Submission_Package_SolarEnergy_Manuscript/` (V2611): R1–R8 applied to main text (argument-first abstract, photon-allocation ledger with LER ≈ 1.43 in SM, coherence-controversy stance via Duan2017/Zhu2024, falsifiers ¶, OPV 5-yr durability stress test in SM, barrier-ranked conclusions, BB84 demoted to honest sovereignty layer), 9 new citations verified entry-by-entry against OpenAlex/Crossref (EPA imidacloprid benchmark corrected to 500 µg/L; fabricated-DOI traps caught twice), cover letter rewritten for SE (1 p.), README/HIGHLIGHTS/CHECKLIST converted.
+
+**Gates**: pytest 128/1 xf ✅ (both envs) · SE verify **62/62 → 70/70** ✅ (S12 budget +5 checks, fingerprint +3) · main 22 pp / SM 30 pp / cover 1 pp, zero undefined refs/citations ✅ · ruff clean ✅. Commits: `a089d8a`→`b16b95b`→`8009d25`→`32917f2`→`3ee0256` (baseline → prune → 1.8 probe → refinement spec → SE package).
+
+**Open**: SE upload per `CHECKLIST_UPLOAD_SolarEnergy.md` (ORCID Vedekoi; read SE Guide for Authors first — never fetched; editorial history: declare NE+AE if asked); Barron-Gafford reviewer-conflict flag (co-author of two cited 2026 papers); SSH credentials + git remote still missing on this machine; disk prune before next scan.
+
+**Follow-through (same day, Session 31 extended)**: user judged paper still *"somehow incremental"* → added a **predicted falsifiable observable**. MesoHOPS-1.8 non-dyadic absorption propagation failed on cost (~13 machine-h, 4 attempts: unbundled ~120-mode bath explodes the adaptive hierarchy at any usable depth; fixes landed regardless: `--no-capture-output` for streaming logs, `imap_unordered` per-job CSVs, `--summarize` salvage mode). PIVOT: exact diagonalization of the dressed Hamiltonians (`spectro_npom_fmo.py --eigen`) yields the predicted linear-absorption fingerprint — **band-edge line −57.2 cm⁻¹ at 12414.2, two resolved doublets (~11 cm⁻¹), state-resolved site-0/5 pattern** that distinguishes real cavity dressing from an artifact global shift. SM S12 gained the fingerprint subsection (figure `Figure_SI_predicted_spectra.png` + `tab:SI_fingerprint_shifts` + three honest bounds: bare-H levels/lineshapes=future work, collinear dipoles, no new parameters); main Discussion stance + falsifier ¶s now name it (benchtop test, one measurement earlier than 2DES). Propagator retry needs `OMP_NUM_THREADS=1` per worker. Commits `2e9dffa`→`1229c8c`→`92e66b5`→`3c8242c`.
+
+---
+
+### Session 29 (2026-11-06) — Machine Migration Mitigation: Git Baseline, Gate Restoration, Doc Reconciliation
+
+**Context**: Full workspace audit found the project had been migrated (~2026-09-21→27) from the `taamangtchu` laptop to `/home/nanaengo/Quantum_Agrivoltaic_PT-HOPS` without `.git` history and without documentation. User directive: "mitigate all".
+
+**Mitigations applied**:
+- **Git**: `git init` + first baseline commit on this machine (repo-local identity; remote reconnection TBD — old `origin/main` history is unrecoverable here). `.gitignore` extended: `Redac_Paper2/relaunch_2026092*/` (~200 MB raw NPoM scan snapshots), `*.zip`, `Redac_Paper2/logs/`, tooling dirs.
+- **Test gate**: `np.trapz` → `np.trapezoid` (3× in `src/lca/neb.py`) — NumPy 2 removed `trapz`; user-site numpy 2.5.4 shadows env numpy 2.3.5. Baseline restored: **128 passed / 1 xfailed**.
+- **AE package**: rebuilt `AppliedEnergy_Cover_letter.pdf` (tex edited 2026-09-27 in the previously-undocumented title-review session; PDF lagged one day). New title recorded in AGENTS overview.
+- **Lint gate**: installed ruff 0.17.4 in `MesoHOP-sim`. Paper 2: clean. Framework: config-only fix (`extend-exclude archives/` + per-file ignores for `__init__.py` F403/F405 and `conftest.py` E741) — no code churn on legacy.
+- **Purges/relocations** (per STRICT hygiene rules): removed zero-reference symlink `Redac_Paper2/quantum_simulations_framework` → `~/quantum_simulations_framework` (home copy kept as July-scan scratch, now documented); deleted root `cleanup.sh`, `.coverage`, empty `reproducibility/`; deleted stale `docs/AGENTS.md` (27→15 exponential correction makes `Redac_Paper1/Response_to_Tianfu_Xiang.md` the final Xiang draft — moved to the documented `Redac_Paper1/docs/Xiang/`); moved resurrected deprecated `Redac_Paper1/quantum_simulations_framework_parallel_260612/` into `_archive/`.
+- **Doc reconciliation**: AGENTS.md directory tree rewritten to reality (phantom `notebooks/`/`manuscrit/` Anderson work flagged as NOT migrated; `Archive/`→`_archive/`); Key Files reviewer-comments path fixed; MesoHOPS install description fixed; server sections marked historical; ROADMAP §7 added.
+
+**Gates after mitigation**: pytest 128/1 xf ✅ · AE verify 62/62 ✅ · QST verify 22/22 ✅ · ruff clean (Paper 2 + framework) ✅ · cover letter PDF rebuilt ✅
+
+**Open items**: SSH credentials for PenavoraServer + git remote on this machine; disk at 98 % (13 GB free) — prune before next production scan; root Sept-2026 helpers (`extract.py`, `generate_light_figures.py*`, `PROJECT.md`) retained as migration artifacts.
+
+---
 
 ### Session 28 (2026-09-26) — Redac_Paper2 Restructuring, Obsolete Purge, MD Refresh
 

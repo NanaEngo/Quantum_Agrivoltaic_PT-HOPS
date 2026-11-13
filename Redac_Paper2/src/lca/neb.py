@@ -53,10 +53,10 @@ def passband_fraction(csv_path=None) -> tuple[float, float, float]:
         mask = (wavelength_nm >= centre_nm - half_width_nm) & (
             wavelength_nm <= centre_nm + half_width_nm
         )
-        band_irradiance += float(np.trapz(global_tilt[mask], wavelength_nm[mask]))
-    total = float(np.trapz(global_tilt, wavelength_nm))
+        band_irradiance += float(np.trapezoid(global_tilt[mask], wavelength_nm[mask]))
+    total = float(np.trapezoid(global_tilt, wavelength_nm))
     window = (wavelength_nm >= 280.0) & (wavelength_nm <= 1100.0)
-    window_total = float(np.trapz(global_tilt[window], wavelength_nm[window]))
+    window_total = float(np.trapezoid(global_tilt[window], wavelength_nm[window]))
     return (band_irradiance / total, band_irradiance / window_total, band_irradiance)
 
 

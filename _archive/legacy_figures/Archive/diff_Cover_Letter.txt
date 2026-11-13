@@ -1,0 +1,75 @@
+--- Cover_Letter_JPCL_26-05-13.tex	2026-05-13 23:51:41.980458900 +0100
++++ JPCL_Submission_Package_2026-06-13/Cover_Letter_JPCL_26-06-13.tex	2026-06-13 11:12:04.331524900 +0100
+@@ -1,14 +1,15 @@
+-% Date: May 13, 2026
+-% Status: Resubmission - Cover Letter (Stabilized Revision)
++% Date: June 13, 2026
++% Status: R2 — Second Major Revision Cover Letter
+ %==============================================================================
+ 
+ \documentclass[11pt,a4paper]{letter}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath,siunitx}
++\usepackage[margin=2.5cm]{geometry}
+ \usepackage{xr}
+-\externaldocument{Manuscript_JPCL_26-05-13}
+-\externaldocument{SI_JPCL_26-05-13}
++\externaldocument{Manuscript_JPCL_26-06-13}
++\externaldocument{SI_JPCL_26-06-13}
+ 
+ \address{
+ Department of Physics\\
+@@ -30,19 +31,29 @@
+ 
+ \opening{Dear Prof. Scholes,}
+ 
+-We submit the revised version of our manuscript ``Selective Vibronic Excitation for Coherent Energy Transport in Photosynthetic and Agrivoltaic Systems'' (Manuscript ID: jz-2026-00994t) for consideration as a Letter in \textit{The Journal of Physical Chemistry Letters}.
++We submit the second major revision of our manuscript ``Selective Vibronic Excitation for Coherent Energy Transport in Photosynthetic and Agrivoltaic Systems'' (Manuscript ID: jz-2026-00994t.R1) for consideration as a Letter in \textit{The Journal of Physical Chemistry Letters}.
+ 
+-We appreciate the reviewers' constructive evaluation, which has significantly strengthened the manuscript. The revised version incorporates critical updates addressing concerns regarding numerical convergence, biological realism, and clarity:
++We thank both reviewers for their continued, careful evaluation of our work. The revisions address all points raised in the second-round reports (10 June 2026):
+ 
+ \begin{enumerate}
+-\item \textbf{Comprehensive technical audit.} We have executed a final production audit at hierarchy depth $L=8$ and $K=2$ Matsubara terms, confirming numerical convergence within an MAE of $\approx \num{3.32 e-5}$ relative to the $L=9$ limit. This configuration was strictly enforced via a new OOM-hardened resource-aware architecture that gates parallel execution based on real-time RAM monitoring. Our audit confirms bit-perfect identical excitonic populations (numerical delta = 0.0) across multiple code refactoring cycles, resolving previous numerical inconsistencies noted by Reviewers 1 and 3.
+-\item \textbf{Physiological realism.} We have updated our simulation framework to incorporate the 12-mode spectral density for the FMO complex derived by Kleinekathöfer and Coker, addressing Reviewer 2's request for higher modeling fidelity.
+-\item \textbf{Visualization overhaul.} We have replotted all figures with a new \SI{600}{dpi} publication theme, ensuring legible axes, units, and clear comparisons as requested by Reviewer 1 and 3.
+-\item \textbf{Theoretical reframing.} We have clarified the mechanism of ``spectral bath engineering'' using the polaron-frame formalism, distinguishing it from trivial state preparation.
+-\item \textbf{Updated title.} We have revised the title to ``Selective Vibronic Excitation for Coherent Energy Transport in Photosynthetic and Agrivoltaic Systems'' to more accurately reflect the physical mechanism and the targeted application, addressing the reviewers' concerns regarding the original terminology.
++\item \textbf{Transfer yield redefined (Reviewer 3).} The forward transfer yield $\Phi_{\mathrm{FT}}$ is now defined as the long-time equilibrium population of the reaction-center-coupled site (BChl~3), replacing the previous survival-probability definition. The corrected enhancement $\eta = 0.18 \pm 0.04$ ($p < 0.001$) is physically transparent and directly reflects directed energy flow toward the reaction center.
++
++\item \textbf{Vibronic-basis terminology clarified (Reviewer 2).} The term ``polaron-dressed states'' has been replaced throughout the main text by ``vibronically dressed states,'' consistent with the established literature (Womick \& Moran, JPC Lett.\ 2015; \v{S}anda et al., JPC Lett.\ 2022). The displaced-oscillator (polaron) frame argument is now confined to the SI derivation.
++
++\item \textbf{Early vibronic-resonance literature cited (Reviewer 2).} The introduction now explicitly cites and discusses the 2015 and 2022 JPC Letters references on vibronic resonance in light-harvesting systems.
++
++\item \textbf{Spectral density corrected (Reviewer 3).} Figure 3e now displays $J(\omega)$ over the full $0$--$2000$~cm$^{-1}$ range, correctly showing both the Drude--Lorentz background and all 12 discrete vibronic peaks. The reorganization energy ($\lambda_{\mathrm{tot}} = \SI{53}{\per\centi\meter}$) is justified with reference to the Kleinekath\"ofer/Coker parameterization and a new sensitivity check at $\lambda_D = \SI{100}{\per\centi\meter}$ (SI Section~S6).
++
++\item \textbf{Dissipation confirmed (Reviewer 3).} The production ensemble was re-run with the verified canonical parameters ($\lambda_D = \SI{35}{\per\centi\meter}$). The revised Figure 3 clearly shows population decay toward thermal equilibrium and a well-defined decaying envelope in $C_{l_1}(t)$.
++
++\item \textbf{Computational jargon removed (Reviewer 3).} All hardware-specific language has been removed from the main text. Figure~2 (the resource-architecture flowchart) has been moved to SI Section~S5. The manuscript now contains only physics-motivated statements on the methodology.
++
++\item \textbf{PT-HOPS scaling and Matsubara convergence clarified (Reviewer 3).} The $\mathcal{O}(1)$ size-invariance claim has been corrected; the Drude--Lorentz vs.\ discrete-mode Matsubara distinction is now explained explicitly.
++
++\item \textbf{Proofreading completed (Reviewer 2).} The manuscript has been independently reviewed by two co-authors and an automated spell-checker; all identified typographical errors have been corrected.
+ \end{enumerate}
+ 
+-These updates reinforce our finding that selective vibronic excitation of the incident field can extend excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and enhance efficiency by \SI{20}{\percent} at room temperature. We demonstrate that this approach provides the physical foundation for \textbf{symbiotic agrivoltaic systems}, where spectrally selective materials optimize both power conversion and agricultural yield. We believe these revisions fully address the reviewers' concerns and meet the standards of \textit{The Journal of Physical Chemistry Letters}.
++These updates reinforce our finding that selective vibronic excitation extends excitonic coherence lifetimes by \SIrange{20}{50}{\percent} and enhances directed transfer to the reaction center by $\eta = 0.18$ at room temperature. We believe the revisions fully address all reviewer concerns and that the manuscript now meets the standards of \textit{The Journal of Physical Chemistry Letters}.
+ 
+ \textbf{Response to manuscript formatting request (28-Apr-2026).}
+ We have addressed all non-scientific formatting items as follows:
+@@ -56,6 +67,7 @@
+ We are pleased to submit the TOC Graphic (\texttt{TOC\_Graphic.png}) for consideration as a supplementary journal cover. The image depicts the dual-band spectral filtering scheme applied to the FMO complex, with the engineered photon bath selectively populating vibronic resonances. We consent to both front and supplementary cover consideration.
+ 
+ All authors have approved this revised manuscript. We declare no conflicts of interest.
++We confirm this work received no external funding; validated ORCID iDs for the authors will be provided during the ACS submission. Top-level section headings were converted to bold run-in paragraph leads to comply with JPCL format.
+ 
+ Thank you for your continued consideration of our work.
+ 
+@@ -69,4 +81,4 @@
+ }
+ 
+ \end{letter}
+-\end{document}
++\end{document}
+\ No newline at end of file

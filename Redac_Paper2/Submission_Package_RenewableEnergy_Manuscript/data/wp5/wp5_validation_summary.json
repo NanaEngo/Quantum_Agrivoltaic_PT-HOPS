@@ -1,0 +1,114 @@
+{
+  "n_tea_lca_rows": 183,
+  "n_sobol_base_samples": 10000,
+  "max_dispatch_energy_err_kwh": 4.423782229423523e-09,
+  "coop_catchment_ha": {
+    "arabica_coffee": 3000.0,
+    "penja_white_pepper": 2000.0,
+    "highland_tea": 450.0
+  },
+  "break_even_t80_by_crop": {
+    "arabica_coffee": {
+      "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+      "csi_ref_scenario": "S2_cSi_GCR40",
+      "bess_option_ref": "small_lfp_buffer_2h",
+      "t80_npv_breakeven_yr": Infinity,
+      "t80_npv_breakeven_r2r15_yr": 31.265186109862814,
+      "t80_lca_breakeven_yr": 7.418113636201936,
+      "site_par_over_isat": 2.451,
+      "site_dry_vpd_p95_kpa": 4.07
+    },
+    "penja_white_pepper": {
+      "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+      "csi_ref_scenario": "S2_cSi_GCR40",
+      "bess_option_ref": "small_lfp_buffer_2h",
+      "t80_npv_breakeven_yr": Infinity,
+      "t80_npv_breakeven_r2r15_yr": 16.33250773908616,
+      "t80_lca_breakeven_yr": 7.398551979978538,
+      "site_par_over_isat": 1.91,
+      "site_dry_vpd_p95_kpa": 2.83
+    },
+    "highland_tea": {
+      "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+      "csi_ref_scenario": "S2_cSi_GCR40",
+      "bess_option_ref": "overnight_withering_bess",
+      "t80_npv_breakeven_yr": Infinity,
+      "t80_npv_breakeven_r2r15_yr": Infinity,
+      "t80_lca_breakeven_yr": 8.120312029398695,
+      "site_par_over_isat": 2.086,
+      "site_dry_vpd_p95_kpa": 3.03
+    }
+  },
+  "sobol_highlights": {
+    "arabica_coffee": {
+      "delta_npv_p05_p50_p95_usd_ha": [
+        -437575.2,
+        -139321.5,
+        90194.3
+      ],
+      "prob_opv_beats_csi": 0.1675,
+      "top3_S_Ti_delta_npv": [
+        [
+          "c_mod_opv_usd_m2",
+          0.34307
+        ],
+        [
+          "t80_opv_yr",
+          0.24705
+        ],
+        [
+          "c_bos_si_usd_m2",
+          0.15929
+        ]
+      ],
+      "quantum_eta_ness_S_Ti_npv_opv": 0.0
+    },
+    "penja_white_pepper": {
+      "delta_npv_p05_p50_p95_usd_ha": [
+        -394371.8,
+        -105263.6,
+        116871.1
+      ],
+      "prob_opv_beats_csi": 0.2299,
+      "top3_S_Ti_delta_npv": [
+        [
+          "c_mod_opv_usd_m2",
+          0.36633
+        ],
+        [
+          "t80_opv_yr",
+          0.2599
+        ],
+        [
+          "c_bos_si_usd_m2",
+          0.17009
+        ]
+      ],
+      "quantum_eta_ness_S_Ti_npv_opv": 1e-08
+    },
+    "highland_tea": {
+      "delta_npv_p05_p50_p95_usd_ha": [
+        -490039.2,
+        -175974.8,
+        58021.0
+      ],
+      "prob_opv_beats_csi": 0.11,
+      "top3_S_Ti_delta_npv": [
+        [
+          "c_mod_opv_usd_m2",
+          0.32307
+        ],
+        [
+          "t80_opv_yr",
+          0.26737
+        ],
+        [
+          "c_bos_si_usd_m2",
+          0.15
+        ]
+      ],
+      "quantum_eta_ness_S_Ti_npv_opv": 0.0
+    }
+  },
+  "wall_time_s": 2.974
+}
