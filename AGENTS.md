@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-11-06 (Session 29 — Machine Migration Mitigation: workspace now on `nanaengo` host, git baseline, gates restored 128/1 · AE 62/62 · QST 22/22)
+**Last updated:** 2026-11-13 (Session 32 — Git histories joined via PR #3 (`origin` live on GitHub); Paper 2 rebuilt as *Renewable Energy* package (WP1–WP6, tests 27/27); legacy Paper-2 tree moved to `_archive/` and synced to remote)
 
 
 ---
@@ -13,7 +13,7 @@ This repository contains two active research projects:
 
 1. **Quantum-Enhanced Agrivoltaics** — Selective vibronic excitation for coherent transport in the FMO complex, *The Journal of Physical Chemistry Letters* (JPCL). Manuscript ID: `jz-2026-00994t`. Status: **Published ✅ (2026-09-23 update; paper DOI not recorded in this workspace)**. Post-pub open item: reply to Dr T. Xiang (SBD/SI reproducibility query, final draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum TBD. The "JPCL Revision" sections below are **historical pre-publication records**.
 
-2. **Quantum Agrivoltaics (Paper 2)** — Multi-domain integration of quantum dynamics (PT-HOPS/SBD), microclimate modeling (FAO-56), life-cycle assessment, IoT security (BB84 QKD), and SERS diagnostics. Status (2026-11-06 update): **Applied Energy rejected (reported by authors; editor-suggested paid transfer had already been declined earlier at *Nature Energy*). Retargeted to *Solar Energy* (Elsevier, subscription route — no APC) as package `Submission_Package_SolarEnergy_Manuscript/` (V2611 — source of truth; verify 62/62)**, carrying the full interpretive refinement R1–R8 (`docs/REFINEMENT_INTERPRETIVE_20261106.md`): argument-first abstract, photon-allocation ledger + LER 1.43, coherence-controversy stance, falsifier paragraph, barrier-ranked conclusions, OPV 5-yr durability stress test. Packages on hand: **Solar Energy V2611 (active)** + `Submission_Package_AppliedEnergy_Manuscript/` (historical) + `Submission_Package_QST_Manuscript/` (iopart formatting asset; verify 22/22); V5 NE package archived at `_archive/`. Open: upload + submit per `CHECKLIST_UPLOAD_SolarEnergy.md` (ORCID pending; read SE Guide for Authors at upload — GFA never fetched).
+2. **Quantum Agrivoltaics (Paper 2)** — Status (2026-11-13 update): **rebuilt end-to-end as a *Renewable Energy* (Elsevier) submission** on an HPC work-package (WP1–WP6) evidence base. Active package: `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/` (source of truth; self-contained; tests **27/27** verified 2026-11-13; `parameters.yaml` `framework_version: 2.5.0` single source of truth). New science: three contrasting Cameroon perennial cash crops (arabica coffee — Foumbot ~1044 m; Penja white pepper PGI — Njombe-Penja ~273 m; highland tea — Djuttitsa ~1400 m) with first-principles TMM ST-OPV optics (PM6:Y6; focal APT44 stack — APT 44.12%, PCE 9.93%; optical-Pareto validation vs experimental benchmark), open-quantum 14-site LHCII CW-NESS bounds under solar illumination (max |Δη_NESS| ≤ 3.37×10⁻⁵; MesoHOPS v1.8.0/HEOM envelope ≤ 2.10×10⁻³ — the quantum channel is quantitatively **decoupled** from macro TEA: Sobol S_T ≈ 2×10⁻⁸ on ΔNPV), ERA5 8760 h microclimate + FvCB–Medlyn photosynthesis + FAO-56 water balance, and cooperative-scale TEA/LCA/Sobol at zero-carbon-credit / zero-subsidy baselines. Headline regimes: **seasonal shade–yield sign inversion** (dry-season +8.8 %→+30.2 %, up to +49.7 % irrigated Penja pepper S5; wet-season penalties turning coffee annual −7.08 %), tea BESS processing NPV $860,825/ha / IRR 35.52 %, ST-OPV-vs-c-Si LCA break-even 7.40–8.12 yr with NPV parity requiring ≈$15/m² R2R cost + T80* ≥ 16.33/31.27 yr thresholds. Manuscript: `RE_main_2611.tex` (21 pp) / `RE_SM_2611.tex` (6 pp) / cover letter + highlights (1 pp each). The prior journal lineage (Nature Energy V5 → Applied Energy, rejected → Solar Energy V2611 + QST formatting asset) is **frozen under `_archive/`** (recoverable via git trees `f0c0ada`/`2a16dce`); the Solar Energy retarget of 2026-11-06 was superseded by this strategic rebuild, not by a reported SE rejection. Open: read the *Renewable Energy* Guide for Authors before upload (never fetched); ORCID pending; no RE-specific upload checklist exists yet.
 
 ---
 
@@ -163,25 +163,26 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-09 (Session 29)
 ├── AGENTS.md                            # This file
 ├── README.md / ROADMAP.md / SUBMISSION_STANDARD.md
-├── .gitignore                           # git baseline initialized 2026-11-06 (no remote yet)
+├── .gitignore                           # remote `origin` live (NanaEngo GitHub, PR #3 2026-11-13); relaunch/logs scratch rules retargeted to _archive/
 ├── Redac_Paper1/                        # Paper 1 (JPCL) — published, archival
 │   ├── JPCL_Submission_Package_2026-06-20/    # Source of truth (tex/pdf/bib/Figures)
 │   │   └── Reviewers_Comments_260611.md       # Original reviewer comments
 │   ├── docs/Xiang/Response_to_Tianfu_Xiang.md # Open post-pub reply draft
 │   └── SYNTHESE_SIMULATIONS_JUIN2026.md, run_cluster*.sh, How-to-launch-server.md
-├── Redac_Paper2/                        # Paper 2 — Solar Energy V2611 era (since 2026-11-06)
-│   ├── Submission_Package_SolarEnergy_Manuscript/  # ACTIVE source of truth (V2611, 62/62)
-│   ├── Submission_Package_AppliedEnergy_Manuscript/  # Historical (AE rejected era)
-│   ├── Submission_Package_QST_Manuscript/            # QST formatting asset+verify (22/22)
-│   ├── src/ tests/ scripts/ data/ docs/ backups/
-│   ├── relaunch_20260923/ relaunch_20260924/         # RAW NPoM scan scratch ~200 MB (gitignored)
-│   └── parameters.yaml / pyproject.toml / Makefile / main.py
+├── Redac_Paper2/                        # Paper 2 — Renewable Energy era (2026-11-13; package-only, self-contained)
+│   └── Submission_Package_RenewableEnergy_Manuscript/  # ACTIVE source of truth (WP1–WP6, tests 27/27)
+│       ├── RE_main_2611 / RE_SM_2611 / RE_Cover_letter_2611 / RE_Highlights_2611 (.tex + .pdf)
+│       ├── data/ docs/ figures/ scripts/ tests/ (WP1–WP6 evidence base + verification summaries)
+│       └── parameters.yaml (v2.5.0) / references.bib / Makefile
 ├── quantum_simulations_framework/       # CANONICAL simulation framework (root level)
 │   ├── parameters.yaml                  # Single source of truth
 │   ├── core/ models/ extensions/ utils/ src/ pipelines/
 │   └── reproducibility/                 # main.py, audit_convergence.py, sweep scripts, results/
-├── _archive/                            # Frozen legacy: NE package, Theory_Journals_main,
-│                                        #   Graphics, parallel_26xx copies (+ MASTER_AUDIT_PROMPT dup)
+├── _archive/                            # Frozen legacy: retired Paper-2 tree moved in 2026-11-13 —
+│   ├── Submission_Package_{SolarEnergy,AppliedEnergy,QST}_Manuscript/ + NE package,
+│   ├── src/ tests/ scripts/ docs/ backups/ data/ + main.py/Makefile/pyproject.toml,
+│   ├── relaunch_2026092{3,4}/ + logs/   # ~200 MB raw NPoM scratch — GITIGNORED (retargeted rules)
+│   └── Theory_Journals_main, Graphics, parallel_26xx copies (+ MASTER_AUDIT_PROMPT dup)
 ├── docs/                                # Workspace architecture notes
 ├── _bmad-output/planning-artifacts/     # PRD, architecture, epics
 ├── extract.py / generate_light_figures.py{,.txt} / PROJECT.md   # Sept-2026 migration/QST helpers
@@ -204,14 +205,18 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Cover_Letter_JPCL_26-06-20.tex` | Cover letter — updated 2026-06-20 (**Source of truth**) |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/references.bib` | BibTeX references |
 | `Redac_Paper1/JPCL_Submission_Package_2026-06-20/Reviewers_Comments_260611.md` | Original reviewer comments + journal formatting requests (legacy answer drafts: `_archive/legacy_figures/Archive/`) |
-| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_main_V2611.tex` | Master manuscript (elsarticle, Solar Energy; **Source of truth** — interpretive patch R1–R8 applied 2026-11-06, 22 pp) |
-| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_SM_V2611.tex` | Supporting Information (**Source of truth** — + LER ledger & 5-yr durability re-run, 27 pp) |
-| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/SolarEnergy_Cover_letter.tex` | Submission Cover Letter (**Source of truth**, 1 p.) |
-| `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/references.bib` | BibTeX references database (**Source of truth** — 201 entries; V2611 evidence canon 9 citations verified against OpenAlex/Crossref) |
-| `Redac_Paper2/docs/REFINEMENT_INTERPRETIVE_20261106.md` | Interpretive-refinement spec (R1–R8 + evidence register) — applied into V2611 |
-| `Redac_Paper2/Submission_Package_AppliedEnergy_Manuscript/` | Applied Energy package — historical (AE rejected; superseded by SolarEnergy V2611) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/RE_main_2611.tex` | Master manuscript (elsarticle, *Renewable Energy*; **Source of truth**, 21 pp) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/RE_SM_2611.tex` | Supporting Information (**Source of truth**, 6 pp) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/RE_Cover_letter_2611.tex` + `RE_Highlights_2611.tex` | Cover letter + highlights (1 p. each) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/references.bib` | BibTeX references database (RE package) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/parameters.yaml` | Paper 2 single source of truth (`framework_version: 2.5.0`) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/docs/DATA_ANALYSIS_REPORT_20261113.md` | WP1–WP5 quantitative synthesis — every metric traced to primary JSON/CSV/NPZ artifacts + ledger |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/docs/Model_Specification_Hamiltonian_Regimes_Scenarios_261112.md` | Locked technical spec (Hamiltonians, regimes, scenarios) |
+| `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/docs/Adversarial_Stress_Test_Reviewer_Kill_Scenarios.md` | Adversarial review register |
+| `_archive/` (Paper-2 packages) | Superseded SolarEnergy V2611 / AppliedEnergy / QST / NE lineage — frozen legacy, recoverable via git trees `f0c0ada`/`2a16dce` |
+| `_archive/Submission_Package_AppliedEnergy_Manuscript/` | Applied Energy package — historical (AE rejected; later superseded by SolarEnergy V2611, moved to `_archive/` 2026-11-13) |
 | `_archive/Submission_Package_Nature_Energy_Manuscript/` | Nature Energy package — ARCHIVED 2026-09-26 (declined transfer; superseded by the Applied Energy package) |
-| `_archive/Graphics/` | Figure build output — ARCHIVED 2026-09-26 (figures now land in the Applied Energy package via `scripts/regenerate_figures.py`) |
+| `_archive/Graphics/` | Figure build output — ARCHIVED 2026-09-26 (Paper-2 figures now generated by the RE package `scripts/wp6_generate_figures.py` into its `figures/`) |
 | `quantum_simulations_framework/parameters.yaml` | **Single source of truth** for all simulation parameters |
 | `quantum_simulations_framework/core/constants.py` | Python constants (must match `parameters.yaml`) |
 | `quantum_simulations_framework/reproducibility/main.py` | Single-entry pipeline orchestrator |
@@ -404,6 +409,21 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 32 (2026-11-13) — Git Histories Joined, Paper 2 Rebuilt as *Renewable Energy*, Restructure Synced to Remote
+
+**Git integration**: The migrated baseline chain (`a089d8a..2a16dce`, including the HPC WP1–WP6 work on branch `hpc-renewable-energy-wp2`) shared **no common ancestor** with the old-laptop `main` (root `68129ea`) — GitHub rejects PRs between unrelated histories. Fixed with a join commit `93e2748` built via `git merge -s ours --allow-unrelated-histories` + `git read-tree -u --reset` (tree byte-identical to wp2 tip, zero conflicts), merged as **PR #3 → `f0c0ada`**. Local `main` now tracks `origin/main` (https://github.com/NanaEngo/Quantum_Agrivoltaic_PT-HOPS, gh CLI authed); the long-standing "no remote yet" caveat is obsolete. Old local branch `master` left at `2a16dce`.
+
+**Restructure synced (remote mirrors disk)**:
+- `4604bc0` — `Redac_Paper2/` slimmed to the self-contained `Submission_Package_RenewableEnergy_Manuscript/` package only (133 files untracked-deleted: SolarEnergy/AppliedEnergy/QST packages, `src/ tests/ scripts/ docs/ backups/`, root `main.py/Makefile/pyproject.toml` — all previously MOVED on disk into `_archive/`).
+- `6be1f2b` — `_archive/` fully synced (162 files, +26k lines); `.gitignore` scratch rules retargeted `Redac_Paper2/relaunch_2026092{3,4}/` + `logs/` → `_archive/` equivalents (~200 MB raw NPoM snapshots + logs stay out of git).
+- Deleted/moved content recoverable at git trees `f0c0ada` and `2a16dce`.
+
+**Paper 2 — *Renewable Energy* (the WP1–WP6 rebuild, now the active target)**: Cameroon tri-site semi-transparent OPV agrivoltaics — Foumbot arabica coffee, Njombe-Penja white pepper (PGI), Djuttitsa highland tea. WP1: 8760 h ERA5 site climates + botanical/PGI parameter ledger (no black/white-pepper conflation). WP2: TMM optical Pareto (120 PM6:Y6 stacks, energy-balance residual ~1e-16, opaque validation vs *Nat. Commun.* 2025 benchmark; focal APT44 stack APT 44.12%/PCE 9.93%) + open-quantum CW-NESS on three 14-site LHCII Hamiltonians (max |Δη_NESS| = 3.37×10⁻⁵; HEOM cross-check) proving quantum-channel decoupling from ΔNPV (Sobol S_T ≈ 2×10⁻⁸). WP3/3b: hourly FvCB–Medlyn + FAO-56 microclimate → seasonal shade–yield sign-inversion regime map (+8.8→+30.2% dry season; coffee −7.08% annual under fixed shade; Penja pepper rainfed-positive +7.4–8.2%) + structural/louver audit (ANP-EN1991). WP4/WP5(b): dispatch/BESS economics (tea NPV $860,825/ha, IRR 35.52%, LCOE $0.0886/kWh), LCA parity vs spaced c-Si (7.40–8.12 yr) + Sobol robustness at 0 USD/tCO₂e and 0% subsidy baselines. WP6: figures + integrity tests. **Gates: 27/27 tests (verified 2026-11-13, `MesoHOP-sim` env) · RE_main 21 pp / RE_SM 6 pp / cover 1 p / highlights 1 p compiled.** Package docs: implementation plan v2.4, locked model spec, WP verification summaries, adversarial kill-scenario register, `DATA_ANALYSIS_REPORT_20261113.md`.
+
+**Open**: fetch + read *Renewable Energy* Guide for Authors before upload (never fetched; no RE upload checklist yet — write one at submission time); ORCID pending; Xiang reply (Paper 1) still open; PenavoraServer SSH credentials still absent on this host (server workflows inert — WP runs executed locally).
+
+**Docs**: AGENTS.md (header, overview, tree, Key Files, this entry) + README.md status table/architecture/param paths rewritten to this reality.
 
 ### Session 30 (2026-11-06) — Workspace Cleanup, MesoHOPS 1.8 Probe, Interpretive Refinement, Solar Energy Retarget
 

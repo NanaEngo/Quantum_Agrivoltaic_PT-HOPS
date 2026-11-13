@@ -1,5 +1,5 @@
 # Selective Vibronic Excitation for Coherent Energy Transport
-> **Last updated:** 2026-09-23 | Paper 1 (JPCL `jz-2026-00994t`): **Published** ✅
+> **Last updated:** 2026-11-13 | Paper 1 (JPCL `jz-2026-00994t`): **Published** ✅ | Paper 2: **Renewable Energy** package ready (27/27 tests)
 
 A high-performance computational framework for simulating non-Markovian quantum dynamics in photosynthetic complexes (FMO) and agrivoltaic systems. This repository implements Stochastic Bundled Dissipators (SBD) and PT-HOPS methods to investigate spectral bath engineering for enhanced energy transport.
 
@@ -10,9 +10,9 @@ A high-performance computational framework for simulating non-Markovian quantum 
 | Component | Status | Details |
 | :--- | :--- | :--- |
 | **Core Simulation** | ✅ **Verified Stable** | 100% Trace Preservation ($L=8, K=2$) |
-| **Test Coverage** | 🧪 **128 passed / 1 xfailed** | `Redac_Paper2/tests` (env `fl_qom`); Paper 1 suites verified separately |
+| **Test Coverage** | 🧪 **27 passed (Paper 2 RE package)** | `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/tests` (env `MesoHOP-sim`, verified 2026-11-13); legacy 128/1 suite frozen in `_archive/`; Paper 1 suites verified separately |
 | **Paper 1 (JPCL)** | ✅ **Published** | Post-pub: decide reply to Dr T. Xiang (SBD/SI query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum |
-| **Paper 2 (AE rejected → Solar Energy)** | 🎯 **SE V2611 package ready (62/62)** | NE transfer declined, then AE rejected; retargeted to *Solar Energy* (subscription, APC-free) with full interpretive refinement R1–R8. `Redac_Paper2/Submission_Package_SolarEnergy_Manuscript/` = source of truth (main 22 pp / SM 27 pp / cover 1 p.); QST package alternate (22/22) |
+| **Paper 2 (→ Renewable Energy)** | 🎯 **RE package ready — WP1–WP6 rebuild (27/27)** | Cameroon tri-crop ST-OPV agrivoltaics: TMM optics (PM6:Y6, APT44) + 14-site LHCII quantum NESS bounds (decoupled from macro TEA) + ERA5/FvCB–Medlyn/FAO-56 microclimate + cooperative TEA/LCA/Sobol. `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/` = source of truth (main 21 pp / SM 6 pp / cover + highlights 1 p.); NE→AE→SolarEnergy V2611 lineage frozen in `_archive/` |
 | **Data Integrity** | 🔒 LFS Tracked | Audited production ensemble ($n=100$) |
 
 ---
@@ -61,6 +61,7 @@ watch -n 5 "ls -lh quantum_simulations_framework/reproducibility/results/"
     - **`models/`**: High-level simulators (2DES, Agrivoltaics, etc.).
     - **`extensions/`**: SBD adapters and PT-HOPS noise models.
     - **`reproducibility/`**: Standardized pipelines for publication figures.
+- **`Redac_Paper2/`**: Paper 2 workspace — contains only the active `Submission_Package_RenewableEnergy_Manuscript/` (LaTeX, figures, WP1–WP6 scripts/tests/data, self-contained). Retired packages & code lineage: `_archive/`.
 - **`_bmad-output/`**: Internal planning and architecture artifacts.
 
 ---
@@ -68,7 +69,7 @@ watch -n 5 "ls -lh quantum_simulations_framework/reproducibility/results/"
 ## 📉 Simulation Parameters (Source of Truth)
 
 All dynamics simulations read from:  
-`quantum_simulations_framework/parameters.yaml` (Paper 1) and `Redac_Paper2/parameters.yaml` (Paper 2)
+`quantum_simulations_framework/parameters.yaml` (Paper 1) and `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/parameters.yaml` (Paper 2, `framework_version: 2.5.0`)
 
 - **Hierarchy Depth:** $L=8$ (Converged to MAE $\approx \num{3.10e-11}$)
 - **Matsubara Terms:** $K=2$ (Physically sufficient at \qty{295}{\kelvin})
