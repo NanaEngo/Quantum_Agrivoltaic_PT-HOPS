@@ -1,0 +1,41 @@
+% Mitigation insertion for RE_main_2611.tex
+% Generated 2026-11-14 from the verified WP3 decade and WP5 export artifacts.
+% Intended location: Results, after the current annual crop results and economic results,
+% before the quantum-to-system boundary section. This is a fragment, not a replacement
+% for the canonical manuscript. Add with \input{insertions/RE_main_mitigation_insertions_261114}
+% and regenerate figures/PDF and cross-reference checks after integration.
+
+\subsection{Weather-year sensitivity qualifies the crop-specific screening result}
+\label{sec:weather_year_sensitivity}
+
+The 2023 ERA5 simulation is the canonical baseline, but it does not by itself establish that the modeled crop response is typical of other weather years. We therefore reran the focal shade-matched design for each ERA5 year from 2014 through 2023, holding the crop and technology parameters fixed. These deterministic reanalysis-year results are a sensitivity analysis, not a probability sample or field validation. For the focal ST-OPV configuration, modeled annual yield change was negative in all ten years for coffee and tea. Penja white pepper was positive in seven of ten years, with a decade mean of $+1.85\%$ and a range from $-1.43\%$ to $+7.60\%$. The shade-nearest ST-OPV--c-Si annual yield contrast was also conditional: for Penja it ranged from $-0.06$ to $+0.50$ percentage points (positive in eight of ten years), while it remained negative for coffee and tea in all ten years (Supporting Material, Table~\cref{sm:tab:weather_decade}). Thus, the 2023 Penja result is not a robust all-weather-year advantage; the decade analysis supports crop- and weather-conditional screening instead.
+
+The focal comparison matches crop-light conditions approximately, not electrical output. Across the decade, the focal ST-OPV design delivered about 81.2--82.8\% of the annual PV generation of the shade-nearest c-Si design; the 2023 ratio was about 81.0--83.0\%. No equal-shade pair in the tested scenarios also matched annual energy. Matching c-Si energy would require a lower c-Si ground-coverage ratio (approximately 30--35\%), which changes the canopy-light condition. The OPV--c-Si comparison should therefore be read as a crop-light-matched comparison with an energy-yield trade-off, not as simultaneous equality of crop and electrical services.
+
+\subsection{Financial outcomes depend strongly on accepted grid exports}
+\label{sec:export_acceptance}
+
+The baseline dispatch values all otherwise-exportable electricity at full acceptance. To expose this boundary condition, we reran the hourly dispatch with 50\% of otherwise-exportable energy accepted and the rejected share curtailed. This is an annual energy-acceptance sensitivity, not a modeled hourly interconnection power cap, grid-availability profile, or verified local export contract. At this assumption, modeled NPV falls from US\$403,544 to US\$11,896 per installed-array hectare for coffee, from US\$368,372 to US\$43,412 for Penja pepper, and from US\$860,825 to US\$590,309 for tea. Under the modeled no-export cases, the corresponding NPVs are negative for coffee and pepper and positive for tea. Export acceptance is therefore decision-critical for the first two cases; these values should not be interpreted as bankable project forecasts without site-specific interconnection and tariff evidence (Supporting Material, Table~\cref{sm:tab:export_acceptance}).
+
+\subsection{Decision map: interpret the modeled cases conditionally}
+\label{sec:decision_map}
+
+Table~\ref{tab:decision_map} summarizes what the current simulations can support as a screening aid. The categories describe outputs under stated model assumptions; they are not deployment recommendations or empirically validated crop responses.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \caption{Conditional screening summary for the focal ST-OPV design. Weather-year counts are deterministic ERA5 sensitivity results, not probabilities. Economic values are modeled NPV per installed-array hectare for the crop-specific selected battery configuration and stated export treatment.}
+  \label{tab:decision_map}
+  \begin{tabular}{@{}p{2.1cm}p{3.1cm}p{3.2cm}p{3.5cm}@{}}
+    \toprule
+    Crop & Modeled yield signal, 2014--2023 & Export sensitivity & Decision-relevant interpretation \\
+    \midrule
+    Arabica coffee & Focal ST-OPV annual yield change negative in 10/10 years; shade-nearest OPV--c-Si contrast negative in 10/10 years. & NPV: US\$403,544 at full export; US\$11,896 at 50\% acceptance; US\$--379,752 with no export. & Do not infer a general OPV crop-yield advantage. Financial viability is highly exposed to export access in this scenario. \\
+    Penja white pepper & Focal ST-OPV annual yield change positive in 7/10 years; OPV--c-Si contrast positive in 8/10, but its range crosses zero. & NPV: US\$368,372 at full export; US\$43,412 at 50\% acceptance; US\$--281,548 with no export. & A promising but weather-conditional agronomic screening case; neither a robust annual advantage nor export-independent bankability is established. \\
+    Highland tea & Focal ST-OPV annual yield change negative in 10/10 years; shade-nearest OPV--c-Si contrast negative in 10/10 years. & NPV: US\$860,825 at full export; US\$590,309 at 50\% acceptance; US\$319,794 with no export. & The modeled processing-load and overnight-storage case is less export-dependent, but c-Si remains the stronger modeled financial comparator. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Across all three crops, the equal-shade comparison does not provide equal electricity output, and the 50\% acceptance case is only a stylized export constraint. Together with the absence of paired field measurements at these sites, these results support a conditional screening framework and motivate site-level crop, device, and grid validation; they do not establish realized farm yields or project returns.
