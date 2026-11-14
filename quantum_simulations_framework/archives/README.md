@@ -1,42 +1,50 @@
-# 📁 Archives & Legacy Components (`archives/`)
-> **Last updated:** 2026-05-11
+# Archives and legacy components (`archives/`)
 
-This directory contains deprecated modules, experimental prototypes, and legacy scripts that have been removed from the active simulation framework to maintain repository hygiene and performance.
+> **Last updated:** 2026-11-14
+
+Deprecated modules, prototypes and legacy scripts removed from the active framework path to keep
+the importable tree small. Nothing here is imported by a production script.
 
 ---
 
-## 📂 Archived Categories
+## Contents
 
 ### 1. `obsolete/`
-Code that has been completely superseded by newer, more efficient implementations (e.g., non-parallelized HOPS solvers).
-- **Status:** Should not be used for any new simulations.
+Superseded implementations (for example the non-parallelised HOPS solvers). Do not use for new runs.
 
 ### 2. `experimental/`
-Work-in-progress code and high-risk prototypes.
-- **Status:** Use with caution; these modules may lack proper validation or unit tests.
+Work-in-progress prototypes and scratch checks (`experimental/scratch/`, `experimental/simulations/`).
+May lack validation.
 
-### 3. `duplicates/` & `incomplete_tests/`
-Consolidated logic and placeholder tests from previous development cycles.
-- **Status:** Retained solely for historical reference during the JPCL revision process.
+### 3. `notebooks/`
+Colab notebooks kept for provenance (launcher variants, the MesoHOPS coherence notebook).
 
 ---
 
-## 🛠️ Restoration Procedure
+## Access and restoration
 
-While these files are removed from the active path, they remain fully accessible via Git:
+These files live at their current paths and are also recoverable from git history. The older
+`Redac_Paper1/quantum_simulations_framework_parallel_2605xx/` trees they once belonged to are gone —
+the whole parallel-era codebase was moved to the repository-level `_archive/` on 2026-11-06, and the
+JPCL revision that used it is published.
 
 ```bash
-# To view a specific archived file
-cat Redac_Paper1/quantum_simulations_framework_parallel_260509/archives/obsolete/<filename>
+# Inspect an archived file in place
+sed -n '1,40p' quantum_simulations_framework/archives/experimental/scratch/check_mesohops.py
 
-# To restore a file to the active directory
-cp Redac_Paper1/quantum_simulations_framework_parallel_260509/archives/<path>/<filename> ./
+# See what a file looked like before it was archived
+git log --oneline -- quantum_simulations_framework/archives/
+git show <commit>:<old/path/to/file>
+
+# Restore one file into the active tree (then fix imports and run the tests)
+git show <commit>:<old/path/to/file> > quantum_simulations_framework/src/<target>.py
 ```
 
 ---
 
-## 📜 Maintenance Policy
+## Policy
 
-- **Safety:** Archived files must not be imported by any active production script.
-- **Cleanup:** Components in `obsolete/` will be evaluated for permanent removal following the successful publication of the JPCL manuscript.
-
+- Archived files must not be imported by active code. If one is needed, restore it, adapt it, and
+  cover it with a test before relying on it.
+- `obsolete/` is a candidate for permanent deletion now that the JPCL manuscript is published; it is
+  kept only because removal is not required for reproducibility of the published figures.

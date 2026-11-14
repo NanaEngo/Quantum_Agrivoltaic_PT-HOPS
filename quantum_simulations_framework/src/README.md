@@ -1,55 +1,60 @@
 # Simulation Framework Architecture (`src/`)
 
-This directory contains the modular source code for the Quantum Agrivoltaic 
-PT-HOPS framework. The architecture is designed for high-performance non-Markovian 
-dynamics, supporting both CPU-based stochastic trajectory methods and GPU-accelerated 
-ensemble averaging.
+Modular source code for the canonical Paper-1 (JPCL) PT-HOPS/SBD framework: non-Markovian
+exciton dynamics with stochastic trajectories, memory-aware parallelism, and the agrivoltaic
+coupling models that sit downstream of the quantum layer.
+
+**Last updated:** 2026-11-14 · **Version:** `quantum_simulations_framework/parameters.yaml`
+(`version: 1.0.0`) · **Status:** canonical framework for Paper 1; Paper 2 carries its own
+self-contained evidence base in `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/`.
 
 ---
 
-## 📂 Domain-Driven Structure
+## Directory map
 
-### 1. `core/` — Numerical Foundations
-- **`hops_simulator.py`**: The primary orchestrator for PT-HOPS/SBD trajectory generation.
-- **`hamiltonian_factory.py`**: High-precision exciton-vibronic Hamiltonian construction for photosynthetic complexes.
-- **`memory_manager.py`**: `MemoryAwareJobScheduler` — OOM prevention with RLIMIT_AS per worker.
-- **`constants.py`**: Centralized physical constants ($k_B$, $\hbar$) and unit conversions.
+### 1. `core/` — numerical foundations
+- **`hops_simulator.py`** — PT-HOPS/SBD trajectory generation (module-level workers so
+  `joblib`/`multiprocessing` can pickle them).
+- **`hamiltonian_factory.py`** — exciton–vibronic Hamiltonian construction.
+- **`memory_manager.py`** — `MemoryAwareJobScheduler`: per-worker `RLIMIT_AS`, batching, `gc` between
+  batches.
+- **`constants.py`** — physical constants, unit conversions, canonical production values.
 
-### 2. `quantum/` — Advanced Dynamics
-- **`analysis.py`**: Metrics for population kinetics, quantum coherence, and energy transfer efficiency (ETE).
-- **`spectroscopy.py`**: Simulated linear absorption and 2D electronic spectroscopy (2DES) signals.
-- **`spectral_optimization.py`**: Algorithms for engineering bath spectral densities to maximize transport.
+### 2. `quantum/` — dynamics and spectroscopy
+- **`analysis.py`** — population kinetics, coherence metrics, energy-transfer efficiency.
+- **`spectroscopy.py`** — linear absorption and 2D electronic spectroscopy signals.
+- **`spectral_optimization.py`** — bath spectral-density engineering.
+- **`quantum_dynamics_simulator.py`** — fallback propagator when MesoHOPS is unavailable
+  (loads the 12-mode vibronic bath, not DL-only).
 
-### 3. `agrivoltaic/` — Photosynthetic Models
-- **`coupling_model.py`**: Theoretical bridge between exciton dynamics and photovoltaic yield metrics.
-- **`environmental_factors.py`**: Modeling of static/dynamic temperature and spectral irradiance effects.
-- **`biodegradability_analyzer.py`**: Environmental impact assessment for material sustainability.
+### 3. `agrivoltaic/` — downstream models
+`coupling_model.py`, `environmental_factors.py`, `lca_analyzer.py`,
+`techno_economic_model.py`, `eco_design_analyzer.py`, `biodegradability_analyzer.py`.
 
-### 4. `extensions/` — Solver Enhancements
-- **`stochastic_bundling.py`**: Implementation of Stochastically Bundled Dissipators (SBD) for hierarchy compression.
-- **`mesohops_adapters.py`**: Version-agnostic adapters for the underlying MesoHOPS solver suite.
+### 4. `extensions/` — solver enhancements
+- **`stochastic_bundling.py`** — Stochastically Bundled Dissipators (SBD). *SBD never means
+  "spectrally bundled dissipators".*
+- **`mesohops_adapters.py`** — version-agnostic adapters (production pinned to MesoHOPS 1.7.0;
+  1.8.0 exists only as an evaluation environment).
 
-### 5. `io/` & `visualization/`
-- **`csv_storage.py`**: Hardened serialization with SHA-256 metadata integrity and Git-provenance tracking.
-- **`figure_generator.py`**: Publication-grade plotting engine (600 DPI) using the JPCL aesthetic theme.
+### 5. `io/` and `visualization/`
+`csv_storage.py` (SHA-256 metadata integrity), `orca_wrapper.py`, `figure_generator.py`
+(600 DPI publication theme), `fmo_schematic.py`, `theme.py`.
 
----
-
-### 6. `utils/` — Infrastructure
-- **`parallel_utils.py`**: Memory-aware job count estimation (`estimate_memory_per_traj`, `get_safe_n_jobs`).
-- **`gpu_detection.py`**: Unified GPU hardware detection (JAX, CuPy, PyTorch, nvidia-smi).
-- **`logging_config.py`**: Structured logging with rotation and test-failure capture.
-
----
-
-## 📜 Development Standards
-
-- **Numerical Integrity:** Strict enforcement of $L \ge 8, K \ge 2$ for all production-grade simulations.
-- **Code Style:** All documentation follows the **NumPy Docstring Format**.
-- **Type Safety:** Python 3.10+ static typing (mypy) is utilized throughout the API surface.
-- **Coordinate Systems:** Energy is standardized in cm⁻¹, time in femtoseconds (fs), and temperature in Kelvin (K).
+### 6. `utils/`
+`parallel_utils.py` (`estimate_memory_per_traj`, `get_safe_n_jobs`), `gpu_detection.py`
+(reports hardware; there is no GPU propagation path in this framework), `logging_config.py`.
 
 ---
-**Last Updated:** 2026-05-11  
-**Status:** Canonical Framework (v1.6-production)
 
+## Conventions
+
+- **Production configuration:** `L = 8`, `K = 2`, SBD = 3, `Δt = 0.5 fs`, 100 disorder
+  realizations, 295 K. Laptop verification mode (`laptop_parameters.yaml`) relaxes to
+  `L = 3`, `N = 4`; production runs must not.
+- **Parameters** come only from `parameters.yaml`; `core/constants.py` must match it after any change.
+- **Code style:** NumPy docstrings, Python 3.12 type hints, `ruff` for lint and format.
+  There is no `mypy` gate in this repository.
+- **NumPy ≥ 2:** the user-site `~/.local/lib/python3.12/site-packages` shadows the conda env, so
+  `np.trapz` is gone — use `np.trapezoid`.
+- **Units:** energy in cm⁻¹, time in fs, temperature in K.
