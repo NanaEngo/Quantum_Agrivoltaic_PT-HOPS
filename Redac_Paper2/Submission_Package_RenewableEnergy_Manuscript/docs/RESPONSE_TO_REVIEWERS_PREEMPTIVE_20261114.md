@@ -6,8 +6,8 @@ send if the reviewer raised the issues our own adversarial and edge-case passes 
 objection to be answered in the manuscript rather than in prose, and gives the editor a short map of
 what changed.
 
-**Manuscript state this reply refers to.** `RE_main_2611.tex` (**21 pp**; 4 567 words of prose,
-5 886 words including captions, excluding tables and references; **50 references**) and
+**Manuscript state this reply refers to.** `RE_main_2611.tex` (**20 pp**; 4 848 words of prose,
+5 331 words including captions, excluding tables and references; **50 references**) and
 `RE_SM_2611.tex` (**9 pp**, S1–S7). Zero LaTeX errors, zero undefined references or citations.
 
 **How to read it.** Each entry gives the anticipated comment, what the manuscript says now, where, and
@@ -132,7 +132,7 @@ literature-calibrated surrogates outside the twelve-parameter Sobol ensemble.
 
 **Addressed.** The bibliography is now **50 references**, all cited in text and in the Supporting
 Material; 22 redundant co-citations were removed from sentences that already carried a primary
-source. Main text is **4 567 words of prose** (5 886 including captions), within the 4 000–6 000 range.
+source. Main text is **4 848 words of prose** (5 331 including captions), within the 4 000–6 000 range.
 
 ---
 

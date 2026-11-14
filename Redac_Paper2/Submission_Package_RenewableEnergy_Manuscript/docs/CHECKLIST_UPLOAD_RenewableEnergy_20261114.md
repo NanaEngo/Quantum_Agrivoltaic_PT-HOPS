@@ -22,11 +22,11 @@ discrepancy is recorded rather than resolved by guesswork.
 | Area | Requirement as retrieved | Package state (measured 2026-11-14) | Status |
 |---|---|---|---|
 | Article type | Original research paper | Original research | Pass |
-| Abstract | ≤ 250 words, no references, abbreviations defined at first mention | 210 words, no citations, all abbreviations expanded | Pass |
+| Abstract | ≤ 250 words, no references, abbreviations defined at first mention | $\approx$210 words of prose (248 whitespace tokens in the compiled PDF, each math fragment counting separately); no citations; abbreviations expanded. Margin to the 250-word limit is thin | Pass, tight |
 | Keywords | 1–6, English | 6 | Pass |
 | Highlights | 3–5 bullets, ≤ 85 characters each, separate editable file | 5 bullets, 67–80 plain characters, in `RE_Highlights_2611.txt`; LaTeX version in `RE_Highlights_2611.tex` | Pass, needs Word conversion |
 | Graphical abstract | Encouraged; separate file, ≥ 1328 × 531 px, ≥ 300 dpi | **Not present** | Open |
-| Body length | 4 000–6 000 words excluding captions and references; count stated at submission | **4 567 words** of prose (**5 886** including captions), measured on the LaTeX body with tables, figures, equations, nomenclature and references removed | Pass |
+| Body length | 4 000–6 000 words excluding captions and references; count stated at submission | **4 848 words** of prose (**5 331** including captions), regenerated with `scripts/count_body_words.py` (tables, figures, equations and references removed; math and citation macros stripped) | Pass |
 | References | ≤ 50 | **50** entries, every one cited in text or Supporting Material (22 redundant co-citations removed 2026-11-14) | Pass |
 | Sections | Clearly defined, numbered, cross-references by number | Numbered by `elsarticle`; all cross-references via `cleveref` | Pass |
 | Figures | Separate files, cite in order, vector or ≥ 300 dpi | 6 figures, PDF (vector) + PNG, cited in order | Pass |
@@ -46,7 +46,7 @@ discrepancy is recorded rather than resolved by guesswork.
 already carried a primary source; no claim lost its support and no uncited entry remains in the
 printed bibliography. The literature-matrix table keeps its per-stream primary citations.
 
-**2. Body length: 7 500 → 4 567 words of prose (5 886 including captions).** The reduction came from
+**2. Body length: 7 500 → 4 848 words of prose (5 331 including captions).** The reduction came from
 removing duplication rather than content: the Introduction's gap statement was compressed, the two
 Discussion subsections no longer restate Results numbers already given in the same order, the
 Conclusions paragraph was tightened, and three figure captions lost redundant clauses. Every headline
@@ -68,17 +68,10 @@ values above are the ones to quote.
 
 ```bash
 cd Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript
-make check test                                   # 10/10 blocks, 8/8 datasets, 33 pytest tests
-latexmk -pdf RE_SM_2611.tex && latexmk -pdf RE_main_2611.tex   # SM 9 pp, main 21 pp
+make check test                                   # 10/10 blocks, 8/8 datasets, 35 pytest tests
+latexmk -pdf RE_SM_2611.tex && latexmk -pdf RE_main_2611.tex   # SM 9 pp, main 20 pp
 grep -c "bibitem" RE_main_2611.bbl                # reference count
-python3 - <<'PY'                                  # body word count
-import re
-t = open("RE_main_2611.tex", encoding="utf-8").read()
-b = t.split("\\begin{document}")[1].split("\\bibliographystyle")[0]
-for env in ("table", "figure", "equation"):
-    b = re.sub(r"\\begin\{%s\}.*?\\end\{%s\}" % (env, env), "", b, flags=re.S)
-print(len(re.findall(r"[A-Za-z][A-Za-z\-]+", re.sub(r"%.*", "", b))))
-PY
+python3 scripts/count_body_words.py                  # 4 848 prose / 5 331 incl. captions
 ```
 
 ## What this checklist does not establish

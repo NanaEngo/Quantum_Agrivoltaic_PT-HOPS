@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-11-14 — Session 34: BMAD `bmad-review` adversarial + edge-case lenses run on the Paper-2 RE manuscript (BMAD tooling, internal pass, M13 still open), 17 of 23 fixed, 1 refused, 5 recorded as stated scope, bibliography cut 72→50, main text 4 567 words / 21 pp, SM 9 pp, pre-emptive reviewer reply written; tests 35/35; cover letter refreshed and rebuilt; workspace cleaned (branches/tags removed, caches and duplicate trees purged).
+**Last updated:** 2026-11-14 — Session 34: BMAD `bmad-review` adversarial + edge-case lenses run on the Paper-2 RE manuscript (BMAD tooling, internal pass, M13 still open), 17 of 23 fixed, 1 refused, 5 recorded as stated scope, bibliography cut 72→50, main text 4 848 words / 20 pp, SM 9 pp, pre-emptive reviewer reply written; tests 35/35; cover letter refreshed and rebuilt; workspace cleaned (branches/tags removed, caches and duplicate trees purged).
 
 
 ---
@@ -237,6 +237,18 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 ---
 
 
+### Manuscript Voice Rules (STRICT)
+
+**A scientific manuscript is not an internal report file.** Report-style writing in the manuscript and Supporting Material `.tex` sources is **prohibited**. Before committing any change to `RE_main_2611.tex` or `RE_SM_2611.tex`, check the built text for:
+
+- **Repository artefacts**: no script paths, no document paths, no filenames (`\texttt{scripts/...}`, `docs/...`, checklist or manifest names), no "the package", "shipped", "deliverable", "work package", "WP1–WP6", "milestone".
+- **Process narration**: no account of how the work was managed or verified ("was tested rather than assumed", "was audited separately", "the model was asked what a check must reproduce"). Say what was done and what it means, in one sentence, in scientific register.
+- **Report headings and labels**: no "Conditional screening implications", "reporting protocol", "audits", "screening summary", "what this checklist does not establish". Prefer "Conditional decision rules", "design of a field test", "sensitivity sweep".
+- **Internal jargon**: no "screening rule", "bounded lever", "register", "readout package", "sign-off". Use the physics or the economics term.
+- **Meta-commentary about the study**: no self-referential remarks about the submission, its documentation, or what is or is not "claimed in this work".
+
+Keep every number, every stated limitation, and every honest concession: the prohibition is about voice, not about dropping qualifications. Internal workflow belongs in `docs/*.md` and `README.md`; the manuscript and SM state science only.
+
 ### Parameter Consistency Rules
 
 **AI agents MUST:**
@@ -418,11 +430,11 @@ Third stage on the Paper-2 mitigation plan. `bmad-review` skill installed (`npx 
 
 Defects fixed from that run: APT mislabelled as "beam transmittance"; "reproducing" a 4.7 % benchmark gap; NPV-up/IRR-down left unexplained; carbon abatement without displaced factors (now diesel 0.80 / grid 0.28 kgCO₂e/kWh); "realizations" for QMC vectors; off-grid ΔNPV conflated with standalone NPV; present-tense pepper claim; untested trellis crops; Fig. 5 caption omitting the 2-h case; "exposes"/"demonstrate"/"falsifiable test" overclaims. Edge cases handled: signed Δη convention, truncated tolerance draws, BOS range and T80 ≥ 1 yr on the parity frontier, θ>80° truncation, leap-year normalisation.
 
-**Length/references:** bibliography 72 → **50** (22 redundant co-citations dropped; uncited entries no longer printed); main text **4 567 words** of prose (**5 886** incl. captions, excl. tables/refs), inside the 4 000–6 000 target; **21 pp** main, **9 pp** SM, 0 errors, 0 undefined refs. New: `docs/RESPONSE_TO_REVIEWERS_PREEMPTIVE_20261114.md`.
+**Length/references:** bibliography 72 → **50** (22 redundant co-citations dropped; uncited entries no longer printed); main text **4 848 words** of prose (**5 331** incl. captions, excl. tables/refs), inside the 4 000–6 000 target; **20 pp** main, **9 pp** SM, 0 errors, 0 undefined refs. New: `docs/RESPONSE_TO_REVIEWERS_PREEMPTIVE_20261114.md`.
 
 Gates: pytest **35** passed, config 10/10 + 8/8, checksums regenerated (143 files).
 
-**Package close-out (same day):** cover letter refreshed (date 14 November 2026, "base draws", `C_BOS^{c-Si}`, `amsmath` for `\text{-}` inside math) and rebuilt to 1 p; it states 21 pp, 4 567 words of prose (5 886 incl. captions), 50 references, 9-page SM. Git: single branch `main`, no tags (the three side branches and the two `attic/*` tags holding their commits were deleted on request); commits `83d74c0` → `aaa64dd` → `545dccd` → cover-letter/cleanup commit.
+**Package close-out (same day):** cover letter refreshed (date 14 November 2026, "base draws", `C_BOS^{c-Si}`, `amsmath` for `\text{-}` inside math) and rebuilt to 1 p; it states 20 pp, 4 848 words of prose (5 331 incl. captions), 50 references, 9-page SM. Git: single branch `main`, no tags (the three side branches and the two `attic/*` tags holding their commits were deleted on request); commits `83d74c0` → `aaa64dd` → `545dccd` → cover-letter/cleanup commit.
 
 **Workspace cleanup:** build caches (`__pycache__`, `.pytest_cache`, `.ruff_cache`, `.mypy_cache`) purged repo-wide including `_archive/`; `*.spl` artifacts removed; `Redac_Paper1/quantum_simulations_framework_parallel_260509/` (10 MB, 0 tracked files) moved to `_archive/`; root `Archive/` (pre-rename duplicate of `_archive/`, untracked) removed after preserving its one unique file as `_archive/parameters_v1.3_Archive_261114.yaml` (51-line JPCL-v1.3 DL-only config, superseded by the 96-line canonical `parameters.yaml`); untracked duplicate `Redac_Paper1/Response_to_Tianfu_Xiang.md` removed (tracked copy in `docs/Xiang/` is canonical); empty `Project_base/` and the `.gemini_security/` scanner sandbox (6.8 MB, a copy of the framework plus a venv) removed; `PROJECT.md` / `ROADMAP.md` / `extract.py` / `generate_light_figures.py*` deletions committed (live docs are `README.md` + `AGENTS.md`).
 
