@@ -108,12 +108,12 @@ Separately, full non-Markovian 14-site MesoHOPS~1.8.0 trajectories ($N=48$ disor
 Hourly meteorological drivers (\qty{8760}{\hour}, 2023 UTC) are extracted from Open-Meteo ERA5 reanalysis~\cite{Hersbach2020} for Foumbot (\qty{1044}{\meter}, Arabica coffee), Njombe-Penja (\qty{273}{\meter}, Penja white pepper), and Djuttitsa (\qty{1400}{\meter}, highland tea). Diffuse fractions are obtained from ERA5 direct/diffuse decomposition (annual averages \num{0.365}, \num{0.461}, and \num{0.412}; wet season \numrange{0.416}{0.502}; dry season \numrange{0.260}{0.360}). Sub-canopy radiation solves 2D row-geometry shadow projection with diffuse sky view factor $F_{\mathrm{sky}}$ (generating low-PPFD shading fractions $F_{\mathrm{lp}} \in [\num{0.277}, \num{0.544}]$ under ST-OPV depending on $\mathrm{GCR}$). Coupled leaf and module temperatures resolve hourly sensible, radiative, and latent energy balances (residual $\le \qty{1.569e-5}{\watt\per\square\meter}$). Crop assimilation couples the Farquhar--von Caemmerer--Berry (FvCB) model~\cite{Farquhar1980} with Medlyn optimal stomatal conductance~\cite{Medlyn2011} and daily FAO-56 two-bucket water stress ($\mathrm{AWC}=\qty{160}{\milli\meter}$)~\cite{Allen1998}, plus calibrated irradiance photoinhibition thresholds ($I_{\mathrm{PI}} = \qty{900}{\micro\mole\per\square\meter\per\second}$ for \textit{Piper nigrum}, \qty{1200}{\micro\mole\per\square\meter\per\second} for \textit{Camellia sinensis}). Exact Shapley causal decomposition across all $2^4=16$ coalition subsets guarantees machine-precision additivity (residual $\le \qty{7.105e-15}{\percent}$).
 
 \subsection{Penja white pepper (\textit{poivre blanc de Penja}) vs.\ black pepper parameterization}
-\cref{tab:sm_pepper_audit} lists the parameters that separate Penja white pepper from whole-dried black pepper.
+\cref{tab:sm_pepper_params} lists the parameters that separate Penja white pepper from whole-dried black pepper.
 
 \begin{table}[htbp]
  \centering
  \caption{Agronomic, post-harvest processing, and market parameterization separating Protected Geographical Indication (PGI) Penja white pepper from generic black pepper.}
- \label{tab:sm_pepper_audit}
+ \label{tab:sm_pepper_params}
  \small
  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
  \toprule
@@ -366,7 +366,7 @@ Beam transmittance falls steeply with incidence angle while $\mathrm{PCE}$ is ne
 A design wind load requires a basic velocity taken from the national annex, which the present analysis does not provide. The ERA5 year used here contains hourly \qty{10}{\meter} means only: annual means of \qtyrange{1.18}{1.89}{\meter\per\second}, $p_{99}$ of \qtyrange{2.94}{5.31}{\meter\per\second}, record maxima of \qtyrange{4.58}{7.03}{\meter\per\second}, and no hour above \qty{10}{\meter\per\second} at any site. Those values correspond to dynamic pressures of \qtyrange{13.1}{30.9}{\pascal}, one to two orders of magnitude below the \qtyrange{250}{640}{\pascal} obtained for candidate basic velocities of \qtyrange{20}{32}{\meter\per\second}. A one-year record of hourly means thus cannot bound a design load, and no design pressure is asserted here. What a local annex must supply is explicit: the national-annex basic velocity, the terrain category, the orography factor, and the altitude correction. Structural cost is already carried in the uncertainty analysis as $C_{\mathrm{BOS}}^{\mathrm{c\text{-}Si}}\in[\num{35},\num{85}]\,\unit{\USD\per\square\meter}$, whose total-order index on comparative parity reaches \num{0.170}, so the economics brackets the structural class while leaving it unvalidated.
 
 \subsection{Design of a discriminating field test}
-\label{sec:sm_field_protocol}
+\label{sec:sm_field_design}
 
 No paired field measurement exists at the three sites, so the contrasts reported here remain model predictions. A test able to discriminate among them must, by pre-registration, fix before any data are collected: the four-arm plot layout (open sun, shade tree, shade-matched c-Si, ST-OPV), paired analysis on plot-level differences, primary endpoints (marketable yield, incident and transmitted PAR and spectrum, leaf temperature, VPD, soil moisture), exclusions, and the decision rule. Replication cannot be derived from this model, because the modelled inter-year standard deviation of the OPV--c--Si contrast (\qtyrange{0.06}{0.19}{pp}) reflects shared weather rather than plot variance; the design therefore tabulates replication against assumed plot-level standard deviations rather than asserting a single number.
 

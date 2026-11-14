@@ -93,6 +93,6 @@ which is exactly why M13 stays open until an external reviewer signs off.
 
 ## Post-run state (what the manuscript says after the fixes)
 
-- Main text **20 pp**, **4 848 words** of prose (**5 331** including captions, excluding tables and references); bibliography **50** entries after 22 redundant co-citations were removed.
+- Main text **20 pp**, **4 827 words** of prose (**5 310** including captions, excluding tables and references); bibliography **50** entries after 22 redundant co-citations were removed.
 - Every A1–A13 fix is present in the built PDF, not only in the source; verified by searching the compiled text for each replaced phrase.
 - The one deliberate refusal: A14 (propagating stack-tolerance into crop yield and NPV) is not done. It is recorded as a stated scope boundary in the pre-emptive reviewer reply rather than implied to be complete.
