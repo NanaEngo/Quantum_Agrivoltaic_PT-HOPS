@@ -185,12 +185,16 @@ def simulate_8760_dispatch(
     bess_cap_kwh: float,
     bess_rte: float = 0.90,
     allow_grid_export: bool = True,
+    export_acceptance_fraction: float = 1.0,
 ) -> dict[str, float]:
     """
     Hourly energy conservation dispatch (1 ha AV hub).
     1 ha PV kW_ac(t) = pv_wm2(t) * 10,000 m^2/ha / 1,000 W/kW = pv_wm2(t) * 10.0.
     Returns annual kWh flows, fractions, cycles, and exact residual check.
     """
+    if not math.isfinite(export_acceptance_fraction) or not 0.0 <= export_acceptance_fraction <= 1.0:
+        raise ValueError("export_acceptance_fraction must be finite and between 0 and 1")
+
     pv_kw = np.asarray(pv_wm2, dtype=np.float64) * 10.0
     load_kw = np.asarray(load_kw, dtype=np.float64)
 
@@ -203,8 +207,9 @@ def simulate_8760_dispatch(
     e_load = float(np.sum(load_kw))
 
     if bess_cap_kwh <= 0.0:
-        e_export = float(np.sum(surplus)) if allow_grid_export else 0.0
-        e_curtail = 0.0 if allow_grid_export else float(np.sum(surplus))
+        exportable_surplus = float(np.sum(surplus))
+        e_export = exportable_surplus * export_acceptance_fraction if allow_grid_export else 0.0
+        e_curtail = exportable_surplus - e_export
         e_diesel = float(np.sum(deficit))
         return {
             "e_pv_kwh": e_pv,
@@ -212,10 +217,11 @@ def simulate_8760_dispatch(
             "e_direct_kwh": e_direct,
             "e_bess_in_kwh": 0.0,
             "e_bess_out_kwh": 0.0,
-            "e_bess_loss_kwh": 0.0,
-            "e_export_kwh": e_export,
-            "e_curtail_kwh": e_curtail,
-            "e_diesel_kwh": e_diesel,
+        "e_bess_loss_kwh": 0.0,
+        "e_export_kwh": e_export,
+        "e_curtail_kwh": e_curtail,
+        "export_acceptance_fraction": export_acceptance_fraction if allow_grid_export else 0.0,
+        "e_diesel_kwh": e_diesel,
             "e_self_consumed_kwh": e_direct,
             "self_consumption_pct": (100.0 * e_direct / e_pv) if e_pv > 0 else 0.0,
             "load_solar_fraction_pct": (100.0 * e_direct / e_load) if e_load > 0 else 0.0,
@@ -247,7 +253,9 @@ def simulate_8760_dispatch(
             e_bess_in += ch_grid
             rem_surplus = s - ch_grid
             if allow_grid_export:
-                e_export += rem_surplus
+                accepted_export = rem_surplus * export_acceptance_fraction
+                e_export += accepted_export
+                e_curtail += rem_surplus - accepted_export
             else:
                 e_curtail += rem_surplus
         elif d > 0.0:
@@ -273,6 +281,7 @@ def simulate_8760_dispatch(
         "e_bess_loss_kwh": e_bess_loss,
         "e_export_kwh": e_export,
         "e_curtail_kwh": e_curtail,
+        "export_acceptance_fraction": export_acceptance_fraction if allow_grid_export else 0.0,
         "e_diesel_kwh": e_diesel,
         "e_self_consumed_kwh": e_self,
         "self_consumption_pct": (100.0 * e_self / e_pv) if e_pv > 0 else 0.0,
@@ -372,6 +381,10 @@ def evaluate_20yr_tea_lca(
             "lca_net_area_kgco2e_ha_yr": annual_diesel_co2,
             "lca_pv_intensity_gco2e_kwh": float("nan"),
             "lca_displaced_tco2e_ha_yr": 0.0,
+            "exported_kwh_yr1": 0.0,
+            "curtailed_kwh_yr1": 0.0,
+            "exported_kwh_20yr": 0.0,
+            "curtailed_kwh_20yr": 0.0,
         }
 
     # PV system hardware cost & degradation schedules
@@ -455,7 +468,7 @@ def evaluate_20yr_tea_lca(
 
     # Baseline Yr 1 dispatch ratios
     f_self = (dispatch_yr1["e_self_consumed_kwh"] / pv_kwh_yr_base) if pv_kwh_yr_base > 1e-9 else 0.0
-    f_exp = (dispatch_yr1["e_export_kwh"] / pv_kwh_yr_base) if pv_kwh_yr_base > 1e-9 else 0.0
+    f_exp = float(dispatch_yr1.get("export_acceptance_fraction", 1.0))
     e_bess_loss_yr1 = dispatch_yr1["e_bess_loss_kwh"]
 
     cashflows = np.zeros(horizon + 1, dtype=np.float64)
@@ -466,6 +479,9 @@ def evaluate_20yr_tea_lca(
     cum_pv_kwh = 0.0
     cum_self_kwh = 0.0
     cum_exp_kwh = 0.0
+    cum_curtail_kwh = 0.0
+    exported_kwh_yr1 = float(dispatch_yr1["e_export_kwh"])
+    curtailed_kwh_yr1 = float(dispatch_yr1["e_curtail_kwh"])
 
     for yr in range(1, horizon + 1):
         # Age since last module install (smooth cyclic age for T80 resets)
@@ -479,7 +495,9 @@ def evaluate_20yr_tea_lca(
         pv_yr = pv_kwh_yr_base * deg_factor
         # Maintain self-consumption cap at cooperative factory load; do not charge remaining coop diesel to 1-ha AV asset
         self_yr = min(e_load_coop_yr, pv_yr * f_self)
-        exp_yr = max(0.0, pv_yr - self_yr - e_bess_loss_yr1 * deg_factor) if allow_grid_export else 0.0
+        exportable_surplus_yr = max(0.0, pv_yr - self_yr - e_bess_loss_yr1 * deg_factor)
+        exp_yr = exportable_surplus_yr * f_exp if allow_grid_export else 0.0
+        curtail_yr = max(0.0, exportable_surplus_yr - exp_yr)
 
         # Avoided factory diesel revenue + grid export revenue (less 1-ha crop's own processing burden)
         pv_rev_yr = self_yr * diesel_usd_kwh + exp_yr * export_usd_kwh - e_load_1ha_yr * diesel_usd_kwh
@@ -500,6 +518,7 @@ def evaluate_20yr_tea_lca(
         cum_pv_kwh += pv_yr
         cum_self_kwh += self_yr
         cum_exp_kwh += exp_yr
+        cum_curtail_kwh += curtail_yr
 
     discounts = np.array([(1.0 + wacc) ** t for t in range(horizon + 1)], dtype=np.float64)
     npv = float(np.sum(cashflows / discounts))
@@ -545,6 +564,10 @@ def evaluate_20yr_tea_lca(
         "lca_net_area_kgco2e_ha_yr": net_area_kg_ha_yr,
         "lca_pv_intensity_gco2e_kwh": pv_co2_intensity_g_kwh,
         "lca_displaced_tco2e_ha_yr": avg_displaced_t_yr,
+        "exported_kwh_yr1": exported_kwh_yr1,
+        "curtailed_kwh_yr1": curtailed_kwh_yr1,
+        "exported_kwh_20yr": cum_exp_kwh,
+        "curtailed_kwh_20yr": cum_curtail_kwh,
     }
 
 
@@ -1017,6 +1040,11 @@ def main() -> None:
             "lca_net_area_kgco2e_ha_yr": round(res["lca_net_area_kgco2e_ha_yr"], 2),
             "lca_pv_intensity_gco2e_kwh": "",
             "lca_displaced_tco2e_ha_yr": 0.0,
+            "export_acceptance_fraction": 0.0,
+            "e_export_kwh_yr1": 0.0,
+            "e_curtail_kwh_yr1": 0.0,
+            "exported_kwh_20yr": 0.0,
+            "curtailed_kwh_20yr": 0.0,
             "dispatch_err_kwh": 0.0,
         })
 
@@ -1075,11 +1103,25 @@ def main() -> None:
                     ("S5_wacc_6pct", {"wacc_override": 0.06}),
                     ("S5_wacc_15pct", {"wacc_override": 0.15}),
                     ("S5_offgrid_no_export", {"allow_grid_export": False}),
+                    ("S5_export_acceptance_50pct", {"export_acceptance_fraction": 0.5}),
                 ])
 
             for vname, overrides in variants:
                 allow_exp = overrides.get("allow_grid_export", True)
-                disp_v = disp if allow_exp else simulate_8760_dispatch(pv_wm2, load_kw, bess_cap, rte, allow_grid_export=False)
+                acceptance = float(overrides.get("export_acceptance_fraction", 1.0)) if allow_exp else 0.0
+                disp_v = (
+                    disp
+                    if allow_exp and acceptance == 1.0
+                    else simulate_8760_dispatch(
+                        pv_wm2,
+                        load_kw,
+                        bess_cap,
+                        rte,
+                        allow_grid_export=allow_exp,
+                        export_acceptance_fraction=acceptance,
+                    )
+                )
+                max_dispatch_err_kwh = max(max_dispatch_err_kwh, disp_v["energy_balance_err_kwh"])
                 res = evaluate_20yr_tea_lca(
                     tech, crop_name, float(row["gcr"]), float(row["yield_kg_ha"]),
                     float(row["pv_mwh_ha_yr"]) * 1000.0, disp_v, bess_cap, bool(row["irrigated"]), cfg,
@@ -1121,6 +1163,11 @@ def main() -> None:
                     "lca_net_area_kgco2e_ha_yr": round(res["lca_net_area_kgco2e_ha_yr"], 1),
                     "lca_pv_intensity_gco2e_kwh": round(res["lca_pv_intensity_gco2e_kwh"], 2),
                     "lca_displaced_tco2e_ha_yr": round(res["lca_displaced_tco2e_ha_yr"], 2),
+                    "export_acceptance_fraction": round(acceptance, 6),
+                    "e_export_kwh_yr1": round(disp_v["e_export_kwh"], 6),
+                    "e_curtail_kwh_yr1": round(disp_v["e_curtail_kwh"], 6),
+                    "exported_kwh_20yr": round(res["exported_kwh_20yr"], 3),
+                    "curtailed_kwh_20yr": round(res["curtailed_kwh_20yr"], 3),
                     "dispatch_err_kwh": round(disp_v["energy_balance_err_kwh"], 9),
                 })
 

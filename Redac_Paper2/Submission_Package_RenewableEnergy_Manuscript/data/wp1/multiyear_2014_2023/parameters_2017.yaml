@@ -1,0 +1,292 @@
+provenance:
+  framework_version: 2.5.0
+  target_journal: Renewable Energy (Elsevier)
+  date: '2026-11-12'
+  quantum_solver: 'Partial-Secular + Pauli Modified Redfield-Forster NESS (benchmark:
+    MesoHOPS v1.8.0 HopsTensorTrajectory)'
+lhcii_hamiltonian:
+  complex_model: LHCII_monomer_14_sites
+  site_count: 14
+  chla_sites: 8
+  chlb_sites: 6
+  primary_hamiltonian: Novoderezhkin_Marin_vanGrondelle_2011
+  sensitivity_hamiltonian: Muh_Madjet_Renger_2010_and_MMSIC_MD_2025
+  hamiltonian_source: data/wp1/lhcii_hamiltonians_14site.json
+  dipole_geometry_pdb: data/wp1/lhcii_pdb_dipoles.json
+  ness_master_equation_modes:
+  - partial_secular_redfield_forster
+  - pauli_secular_rate_limit
+  rc_npq_closure_enabled: true
+  redfield_forster_coupling_cutoff_cm1: 15.0
+  drude_lorentz_lambda_cm1: 50.87
+  drude_lorentz_gamma_cm1: 50.0
+  renger_bath_parameters:
+    S: 0.65
+    s1: 0.8
+    s2: 0.5
+    omega1_cm1: 0.5565
+    omega2_cm1: 1.936
+    E_lambda_cm1: 50.87
+  full_vibrational_modes_count: 48
+  temperature_kelvin: 295.0
+  static_disorder_fwhm_cm1: 110.0
+  n_disorder_realizations: 200
+  mesohops_validation_benchmark:
+    enabled_for_error_bound_only: true
+    purpose: Lightweight non-Markovian error-bound verification; NOT brute-force 48-mode
+      steady-state production
+    reduced_bath_modes_count: 2
+    resonant_mode_frequencies_cm1:
+    - 340.0
+    - 740.0
+    hierarchy_depth_L: 6
+    matsubara_modes_K: 2
+    time_step_fs: 1.0
+    total_time_fs: 1000.0
+    tensor_mps_svd_threshold: 1.0e-06
+    n_trajectories_benchmark: 32
+ness_solar_pumping:
+  illumination_regime: Continuous-wave incoherent solar blackbody + AM1.5G
+  solar_temperature_kelvin: 5778.0
+  pumping_rate_scale_s1: 10.0
+  rc_trapping_rate_ps1: 0.005
+  terminal_cluster_exit_sensitivity_ps1:
+  - 0.0033
+  - 0.5
+  nonradiative_decay_ns1: 0.25
+opv_technology:
+  active_layer: PM6:Y6
+  stack_architecture: Barrier_PET/ITO(100nm)/ZnO(35nm)/PM6:Y6(d_act)/MoO3(10nm)/Ag(d_Ag)/MoO3_cap(d_cap)
+  optical_nk_dataset: data/wp1/optical_nk_stack_1nm.csv
+  solar_spectrum_dataset: data/wp1/ASTMG173.csv
+  tmm_design_bounds_nm:
+    active_layer_thickness_range:
+    - 50.0
+    - 120.0
+    donor_acceptor_ratios:
+    - '1:1.2'
+    - '1:3'
+    top_ag_electrode_range:
+    - 10.0
+    - 16.0
+    dielectric_cap_moo3_range:
+    - 0.0
+    - 50.0
+  pce_apt_pareto_coupled: true
+  reference_opaque_cell_pce_percent: 16.27
+  lue_pareto_target_percent_range:
+  - 2.5
+  - 4.2
+  pce_temp_coeff_per_c: -8.0e-05
+  average_photosynthetic_transmittance_range:
+  - 0.35
+  - 0.7
+  gcr_scan_range:
+  - 0.3
+  - 0.85
+  soiling_derating_seasonal_range:
+  - 0.02
+  - 0.06
+  t80_lifetime_years: 5.0
+  t80_sensitivity_range_years:
+  - 3.0
+  - 25.0
+  degradation_rate_annual: 0.04
+  module_cost_usd_per_m2: 35.0
+  replacement_cost_usd_per_m2: 25.0
+  bos_cost_usd_per_m2: 20.0
+  standard_mounting_height_m: 2.4
+  infrared_emissivity: 0.88
+  lca_embodied_carbon_module_kgco2e_m2: 20.0
+  lca_embodied_carbon_bos_kgco2e_m2: 10.0
+si_counterfactual:
+  technology: Spaced Opaque Monocrystalline c-Si Agrivoltaic
+  base_pce_percent: 20.5
+  pce_temp_coeff_per_c: -0.0038
+  gcr_scan_range:
+  - 0.2
+  - 0.7
+  soiling_derating_seasonal_range:
+  - 0.02
+  - 0.05
+  lifetime_years: 25.0
+  degradation_rate_annual: 0.005
+  module_cost_usd_per_m2: 45.0
+  bos_structural_cost_usd_per_m2: 55.0
+  standard_mounting_height_m: 3.5
+  infrared_emissivity: 0.9
+  lca_embodied_carbon_module_kgco2e_m2: 105.0
+  lca_embodied_carbon_bos_kgco2e_m2: 48.0
+optical_radiative_model:
+  method: Transfer Matrix Method (TMM) + Direct/Diffuse Sky Decomposition
+  wavelength_range_nm:
+  - 300.0
+  - 2500.0
+  par_range_nm:
+  - 400.0
+  - 700.0
+  epar_range_nm:
+  - 400.0
+  - 750.0
+  red_band_nm:
+  - 655.0
+  - 665.0
+  far_red_band_nm:
+  - 725.0
+  - 735.0
+  diffuse_fraction_highlands_range:
+  - 0.26
+  - 0.5
+  incidence_angles_deg:
+  - 0.0
+  - 15.0
+  - 30.0
+  - 45.0
+  - 60.0
+  panel_lwir_coupling_enabled: true
+  panel_sky_view_factor_range:
+  - 0.25
+  - 0.75
+crops:
+  arabica_coffee:
+    scientific_name: Coffea arabica
+    region: Western Highlands (Foumbot/Noun)
+    altitude_m: 1044
+    climate_dataset: foumbot_coffee_2017.csv.gz
+    A_sat: 11.5
+    I_sat: 750.0
+    phi_max: 0.042
+    theta: 0.85
+    R_d: 0.9
+    fvcb_medlyn:
+      basis: chloroplastic_Cc
+      V_cmax25: 58.1
+      V_cmax25_sun_cc: 78.5
+      J_max25: 102.7
+      J_max25_sun_cc: 142.6
+      g_m25: 0.116
+      g_m_shade_acclimation_ratio: 0.655
+      g_0: 0.01
+      g_1: 3.2
+      photoinhibition_ppfd_threshold: 950.0
+    optimum_shade_min: 0.25
+    optimum_shade_max: 0.4
+    canopy_height_m: 2.2
+    baseline_clean_yield_kg_ha: 850.0
+    farmgate_price_xaf_kg: 2400.0
+    certified_organic_price_xaf_kg: 3100.0
+    processing_energy_kwh_tonne: 25.0
+    processing_daytime_load_fraction: 0.9
+  penja_white_pepper:
+    scientific_name: Piper nigrum L.
+    region: Moungo Volcanic Valley (Njombe-Penja)
+    altitude_m: 273
+    climate_dataset: njombe_penja_pepper_2017.csv.gz
+    A_sat: 16.4
+    I_sat: 880.0
+    phi_max: 0.048
+    theta: 0.9
+    R_d: 1.4
+    fvcb_medlyn:
+      basis: intercellular_Ci
+      V_cmax25: 44.6
+      J_max25: 65.0
+      g_0: 0.01
+      g_1: 3.4
+      photoinhibition_ppfd_threshold: 900.0
+    optimum_shade_min: 0.2
+    optimum_shade_max: 0.35
+    canopy_height_m: 3.5
+    baseline_clean_yield_kg_ha: 800.0
+    farmgate_price_xaf_kg: 5000.0
+    certified_pgi_price_xaf_kg: 14000.0
+    processing_energy_kwh_tonne: 45.0
+    processing_daytime_load_fraction: 0.85
+    tutor_system: Engineered agrivoltaic trellis replacing diseased Spondias mombin
+  highland_tea:
+    scientific_name: Camellia sinensis
+    region: Highlands of Djuttitsa (Bamboutos) & Ndu (Donga-Mantung)
+    altitude_m: 1400
+    climate_dataset: djuttitsa_tea_2017.csv.gz
+    A_sat: 10.4
+    I_sat: 850.0
+    phi_max: 0.035
+    theta: 0.82
+    R_d: 1.03
+    fvcb_medlyn:
+      basis: intercellular_Ci
+      V_cmax25: 48.0
+      J_max25: 88.0
+      g_0: 0.01
+      g_1: 2.9
+      photoinhibition_ppfd_threshold: 1200.0
+    optimum_shade_min: 0.3
+    optimum_shade_max: 0.5
+    canopy_height_m: 1.0
+    mounting_clearance_m: 2.2
+    baseline_clean_yield_kg_ha: 1800.0
+    farmgate_price_xaf_kg: 1800.0
+    certified_premium_price_xaf_kg: 2600.0
+    processing_electricity_kwh_tonne: 380.0
+    processing_electricity_range_kwh_tonne:
+    - 250.0
+    - 600.0
+    processing_thermal_kwh_tonne: 4500.0
+    processing_daytime_load_fraction: 0.55
+    quality_enhancement: Theanine accumulation and polyphenol bitterness reduction
+      via PAR moderation
+microclimate:
+  climate_summary_dataset: climate_summary_2017.json
+  fao56_kc_coffee: 0.95
+  fao56_kc_pepper: 1.05
+  fao56_kc_tea: 1.0
+  albedo_soil: 0.18
+  canopy_reflection_par: 0.06
+  air_vpd_range_kpa:
+  - 0.1
+  - 4.07
+  boundary_layer_conductance_mol_m2_s: 1.2
+  bidirectional_tpv_tleaf_coupling: true
+  seasonal_resolution_hours: 8760
+  rainfed_soil_awc_mm: 160.0
+economics:
+  analysis_period_years: 20
+  discount_rate_wacc: 0.1
+  discount_rate_sensitivity_range:
+  - 0.06
+  - 0.15
+  diesel_generation_cost_usd_kwh: 0.45
+  grid_export_tariff_usd_kwh: 0.085
+  bess_dispatch_options:
+  - no_bess_daytime_only
+  - small_lfp_buffer_2h
+  - overnight_withering_bess
+  bess_lfp_capex_usd_kwh: 220.0
+  bess_roundtrip_efficiency: 0.9
+  bess_lifetime_years: 10.0
+  avoided_pepper_living_tutor_cost_usd_ha_yr: 350.0
+  currency_rate_xaf_per_usd: 610.0
+  carbon_credit_usd_per_tonne_co2e: 0.0
+  subsidies_rate_baseline: 0.0
+scenarios:
+  S0_open_field_control:
+    description: Unshaded monoculture (baseline farmers' practice, diesel processing)
+  S1_natural_agroforestry_shade:
+    description: Biological tree shade (30-40% coffee/tea; Spondias mombin living
+      tutors for pepper w/ pathogen risk)
+  S2_spaced_opaque_cSi_AV:
+    description: Elevated spaced monocrystalline c-Si (20.5% PCE, 25 yr, GCR 0.20-0.70,
+      heavy BOS, LFP dispatch sensitivity)
+  S3_ST_OPV_spectral_baseline:
+    description: PM6:Y6 ST-OPV Pareto stack (LUE-coupled PCE(APT), T80=5 yr conservative
+      tropical + 5-yr replacement, carbon=0)
+  S4_ST_OPV_encapsulated_high_T80:
+    description: Long-lived encapsulated ST-OPV regime (T80=10-25 yr per Li et al.
+      2021 + improved BOS)
+  S5_policy_and_dispatch_stress:
+    description: 'Sensitivity: overnight BESS vs daytime-only load, carbon (0->25
+      USD/t), WACC (6->15%), irrigation vs rainfed'
+monte_carlo:
+  n_samples: 10000
+  random_seed: 42
+  sobol_calc_second_order: false

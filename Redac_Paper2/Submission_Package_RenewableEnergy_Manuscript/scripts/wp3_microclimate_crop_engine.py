@@ -35,6 +35,8 @@ for _env_var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "
 import argparse
 import csv
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime
+import gzip
 import json
 import math
 from pathlib import Path
@@ -59,9 +61,17 @@ LEAF_SW_ABSORPTIVITY = 0.50  # Whole-shortwave (300-2500nm) leaf absorption (1 -
 PAR_ABS_LEAF = 0.85
 
 
-def load_config() -> dict:
-    with open(PKG_ROOT / "parameters.yaml", "r", encoding="utf-8") as f:
+def load_config(config_path: Path | None = None) -> dict:
+    """Load parameters from the package baseline or an explicitly supplied config."""
+    path = config_path or (PKG_ROOT / "parameters.yaml")
+    with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+def resolve_config_path(config_root: Path, value: str | Path) -> Path:
+    """Resolve a dataset path relative to its config, while allowing absolute paths."""
+    path = Path(value)
+    return path if path.is_absolute() else config_root / path
 
 
 def sat_vapor_pressure_kpa(T_c: np.ndarray | float) -> np.ndarray | float:
@@ -70,12 +80,31 @@ def sat_vapor_pressure_kpa(T_c: np.ndarray | float) -> np.ndarray | float:
 
 
 def solar_zenith_hourly(lat_deg: float, hours_idx: np.ndarray) -> np.ndarray:
-    """Compute hourly solar zenith angle [deg] over 365-day year (Cameroon ~10E ~ UTC+1 solar offset)."""
+    """Compute hourly solar zenith; accept legacy row indexes or ISO timestamps.
+
+    Timestamp inputs use calendar day-of-year and 365/366-day declination. Numeric
+    inputs retain the original 365-day behavior for compatibility with callers.
+    """
     lat_rad = np.deg2rad(lat_deg)
-    doy = (hours_idx // 24) + 1.0
-    hour_of_day = hours_idx % 24
+    values = np.asarray(hours_idx)
+    if np.issubdtype(values.dtype, np.number):
+        doy = (values // 24) + 1.0
+        year_days = np.full(values.shape, 365.0)
+        hour_of_day = values % 24
+    else:
+        timestamps = [datetime.fromisoformat(str(value)) for value in values]
+        doy = np.asarray([stamp.timetuple().tm_yday for stamp in timestamps], dtype=np.float64)
+        year_days = np.asarray(
+            [366.0 if (stamp.year % 4 == 0 and (stamp.year % 100 != 0 or stamp.year % 400 == 0)) else 365.0
+             for stamp in timestamps],
+            dtype=np.float64,
+        )
+        hour_of_day = np.asarray(
+            [stamp.hour + stamp.minute / 60.0 + stamp.second / 3600.0 for stamp in timestamps],
+            dtype=np.float64,
+        )
     # Solar declination (Cooper)
-    decl = np.deg2rad(23.45 * np.sin(np.deg2rad(360.0 * (284.0 + doy) / 365.0)))
+    decl = np.deg2rad(23.45 * np.sin(np.deg2rad(360.0 * (284.0 + doy) / year_days)))
     # Local solar hour angle (assume ERA5 timestamps are UTC; Cameroon ~10E -> +0.67h)
     solar_time = (hour_of_day + 0.67) % 24.0
     hra = np.deg2rad(15.0 * (solar_time - 12.0))
@@ -85,7 +114,7 @@ def solar_zenith_hourly(lat_deg: float, hours_idx: np.ndarray) -> np.ndarray:
 
 
 def load_site_climate(csv_path: Path, lat_deg: float) -> Dict[str, np.ndarray]:
-    """Load 8760h ERA5 CSV cleanly without pandas dependency."""
+    """Load a single calendar year's ERA5 CSV (plain or gzip) without pandas."""
     cols: Dict[str, List[float]] = {
         "T_air_c": [],
         "rh_pct": [],
@@ -97,9 +126,12 @@ def load_site_climate(csv_path: Path, lat_deg: float) -> Dict[str, np.ndarray]:
         "vpd_air_kpa": [],
     }
     months: List[int] = []
-    with open(csv_path, "r", encoding="utf-8") as f:
+    timestamps: List[str] = []
+    opener = gzip.open if str(csv_path).endswith(".gz") else open
+    with opener(csv_path, "rt", encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
+            timestamps.append(row["time"])
             cols["T_air_c"].append(float(row["temperature_2m"]))
             cols["rh_pct"].append(float(row["relative_humidity_2m"]))
             cols["precip_mm"].append(float(row["precipitation"]))
@@ -113,7 +145,7 @@ def load_site_climate(csv_path: Path, lat_deg: float) -> Dict[str, np.ndarray]:
     out = {k: np.asarray(v, dtype=np.float64) for k, v in cols.items()}
     out["month"] = np.asarray(months, dtype=np.int32)
     out["hour_idx"] = np.arange(len(months), dtype=np.int32)
-    out["zenith_deg"] = solar_zenith_hourly(lat_deg, out["hour_idx"])
+    out["zenith_deg"] = solar_zenith_hourly(lat_deg, np.asarray(timestamps, dtype=str))
     # Safe partitioning into beam & diffuse fractions
     ghi = out["sw_ghi"]
     f_diff = np.where(ghi > 5.0, np.clip(out["sw_diffuse"] / np.maximum(ghi, 1e-6), 0.0, 1.0), 1.0)
@@ -627,7 +659,9 @@ def compute_exact_shapley_4levers(
 
 def _crop_job_worker(args: Tuple[Any, ...]) -> List[Dict[str, Any]]:
     """Run full scenario matrix + ST-OPV Pareto & c-Si GCR sweeps for one crop."""
-    crop_key, cfg, pareto_designs, tmm_lib_dict, q_summary, save_hourly = args
+    crop_key, cfg, pareto_designs, tmm_lib_dict, q_summary, save_hourly = args[:6]
+    config_root = Path(args[6]) if len(args) > 6 else PKG_ROOT
+    output_dir = Path(args[7]) if len(args) > 7 else DATA_WP3
     crop_cfg = cfg["crops"][crop_key]
     micro_cfg = cfg["microclimate"]
     opv_cfg = cfg["opv_technology"]
@@ -635,12 +669,12 @@ def _crop_job_worker(args: Tuple[Any, ...]) -> List[Dict[str, Any]]:
     opt_cfg = cfg["optical_radiative_model"]
     svf_bounds = tuple(float(x) for x in opt_cfg["panel_sky_view_factor_range"])
 
-    climate = load_site_climate(PKG_ROOT / crop_cfg["climate_dataset"], float(crop_cfg.get("latitude", 5.2)))
+    climate = load_site_climate(resolve_config_path(config_root, crop_cfg["climate_dataset"]), float(crop_cfg.get("latitude", 5.2)))
     # Note: read exact lat from climate_summary_2023.json
-    csum = json.loads((PKG_ROOT / micro_cfg["climate_summary_dataset"]).read_text(encoding="utf-8"))
+    csum = json.loads(resolve_config_path(config_root, micro_cfg["climate_summary_dataset"]).read_text(encoding="utf-8"))
     for sk, sv in csum.items():
         if sk.split("_")[-1] in crop_key or crop_key.split("_")[-1] in sk:
-            climate = load_site_climate(PKG_ROOT / crop_cfg["climate_dataset"], float(sv["latitude"]))
+            climate = load_site_climate(resolve_config_path(config_root, crop_cfg["climate_dataset"]), float(sv["latitude"]))
             break
 
     n_h = len(climate["T_air_c"])
@@ -962,8 +996,8 @@ def _crop_job_worker(args: Tuple[Any, ...]) -> List[Dict[str, Any]]:
                 )
 
     if save_hourly:
-        DATA_WP3.mkdir(parents=True, exist_ok=True)
-        np.savez_compressed(DATA_WP3 / f"hourly_{crop_key}.npz", sw_ghi=climate["sw_ghi"], T_air_c=climate["T_air_c"], **hourly_exports)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(output_dir / f"hourly_{crop_key}.npz", sw_ghi=climate["sw_ghi"], T_air_c=climate["T_air_c"], **hourly_exports)
 
     return rows_out
 
@@ -971,11 +1005,20 @@ def _crop_job_worker(args: Tuple[Any, ...]) -> List[Dict[str, Any]]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workers", type=int, default=3)
+    parser.add_argument("--config", type=Path, default=None, help="Alternate WP3 YAML configuration")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Isolated output directory for this run")
+    parser.add_argument("--no-hourly", action="store_true", help="Do not save per-hour scenario arrays")
     args = parser.parse_args()
+    config_path = args.config.resolve() if args.config else PKG_ROOT / "parameters.yaml"
+    config_root = config_path.parent
+    canonical_config = (PKG_ROOT / "parameters.yaml").resolve()
+    if config_path != canonical_config and args.output_dir is None:
+        parser.error("--output-dir is required when using a noncanonical --config")
+    output_dir = args.output_dir.resolve() if args.output_dir else DATA_WP3
 
     t0 = time.perf_counter()
-    DATA_WP3.mkdir(parents=True, exist_ok=True)
-    cfg = load_config()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    cfg = load_config(config_path)
     with open(DATA_WP2 / "tmm_pareto_opv.csv", "r", encoding="utf-8") as f:
         pareto_designs = list(csv.DictReader(f))
     tmm_lib = dict(np.load(DATA_WP2 / "tmm_spectral_library.npz"))
@@ -985,17 +1028,17 @@ def main() -> None:
     all_rows: List[Dict[str, Any]] = []
     if args.workers > 1:
         with ProcessPoolExecutor(max_workers=min(args.workers, len(crops))) as pool:
-            futs = [pool.submit(_crop_job_worker, (c, cfg, pareto_designs, tmm_lib, q_summary, True)) for c in crops]
+            futs = [pool.submit(_crop_job_worker, (c, cfg, pareto_designs, tmm_lib, q_summary, not args.no_hourly, config_root, output_dir)) for c in crops]
             for fut in as_completed(futs):
                 all_rows.extend(fut.result())
     else:
         for c in crops:
-            all_rows.extend(_crop_job_worker((c, cfg, pareto_designs, tmm_lib, q_summary, True)))
+            all_rows.extend(_crop_job_worker((c, cfg, pareto_designs, tmm_lib, q_summary, not args.no_hourly, config_root, output_dir)))
 
     # Sort deterministically
     all_rows.sort(key=lambda r: (r["crop"], r["technology"], r["gcr"], r["apt_par"], r["scenario_id"]))
 
-    csv_out = DATA_WP3 / "wp3_crop_microclimate_scenarios.csv"
+    csv_out = output_dir / "wp3_crop_microclimate_scenarios.csv"
     fieldnames = list(all_rows[0].keys())
     with open(csv_out, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -1047,7 +1090,7 @@ def main() -> None:
             if val_tea:
                 summary["by_crop_empirical_checks"][ck]["tea_47pct_shade_delta_y_pct"] = round(val_tea["delta_y_total_pct"], 2)
 
-    sum_out = DATA_WP3 / "wp3_validation_summary.json"
+    sum_out = output_dir / "wp3_validation_summary.json"
     sum_out.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(json.dumps(summary, indent=2))
 

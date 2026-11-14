@@ -1,0 +1,1791 @@
+{
+  "source": "Open-Meteo Archive API (ERA5 historical reanalysis)",
+  "api": "https://archive-api.open-meteo.com/v1/archive",
+  "timezone": "Africa/Douala",
+  "wind_speed_unit": "kmh",
+  "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "hourly_variables": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "precipitation",
+    "wind_speed_10m",
+    "shortwave_radiation",
+    "direct_radiation",
+    "diffuse_radiation",
+    "terrestrial_radiation",
+    "vapor_pressure_deficit"
+  ],
+  "sites": {
+    "arabica_coffee": {
+      "site_key": "foumbot_coffee",
+      "latitude": 5.5184536,
+      "longitude": 10.597014,
+      "elevation_m": 1044.0,
+      "years": {
+        "2014": {
+          "hours": 8760,
+          "sha256_gzip_csv": "6bcb6153cb4c76ae1bced3e75e9f7419634a2a9f903ac20ac98e80db7a1a7ce5",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2014.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.282168949771687,
+              "temperature_min_c": 15.4,
+              "temperature_max_c": 34.7,
+              "relative_humidity_mean_pct": 74.53801369863014,
+              "vpd_mean_kpa": 0.8315456621004567,
+              "vpd_p95_kpa": 3.05,
+              "precipitation_sum_mm": 1390.5,
+              "wind_mean_kmh": 5.9610958904109586,
+              "ghi_sum_kwh_m2": 1868.64,
+              "ghi_mean_kwh_m2_day": 5.119561643835617,
+              "diffuse_fraction": 0.3556549148043497
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.876797385620918,
+              "temperature_min_c": 15.9,
+              "temperature_max_c": 27.5,
+              "relative_humidity_mean_pct": 84.98393246187364,
+              "vpd_mean_kpa": 0.41422657952069714,
+              "vpd_p95_kpa": 1.12,
+              "precipitation_sum_mm": 973.8,
+              "wind_mean_kmh": 4.892401960784314,
+              "ghi_sum_kwh_m2": 672.382,
+              "ghi_mean_kwh_m2_day": 4.394653594771241,
+              "diffuse_fraction": 0.44740638506087316
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 24.153518518518517,
+              "temperature_min_c": 15.4,
+              "temperature_max_c": 34.7,
+              "relative_humidity_mean_pct": 53.080555555555556,
+              "vpd_mean_kpa": 1.6752083333333332,
+              "vpd_p95_kpa": 3.95,
+              "precipitation_sum_mm": 1.9000000000000001,
+              "wind_mean_kmh": 7.949953703703704,
+              "ghi_sum_kwh_m2": 578.466,
+              "ghi_mean_kwh_m2_day": 6.4274000000000004,
+              "diffuse_fraction": 0.22379880580708286
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2015": {
+          "hours": 8760,
+          "sha256_gzip_csv": "83bb99c1c37d8c4a7a9755544267e6dff1c24fac156ff811ba379e2bc4caaf85",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2015.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.623995433789954,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 33.9,
+              "relative_humidity_mean_pct": 72.6541095890411,
+              "vpd_mean_kpa": 0.9023858447488584,
+              "vpd_p95_kpa": 3.08,
+              "precipitation_sum_mm": 1581.2,
+              "wind_mean_kmh": 5.919075342465753,
+              "ghi_sum_kwh_m2": 1908.647,
+              "ghi_mean_kwh_m2_day": 5.2291698630136985,
+              "diffuse_fraction": 0.3388054469998905
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 21.17246732026144,
+              "temperature_min_c": 16.4,
+              "temperature_max_c": 27.8,
+              "relative_humidity_mean_pct": 85.21514161220044,
+              "vpd_mean_kpa": 0.413031045751634,
+              "vpd_p95_kpa": 1.11,
+              "precipitation_sum_mm": 1266.5,
+              "wind_mean_kmh": 4.5153322440087145,
+              "ghi_sum_kwh_m2": 662.076,
+              "ghi_mean_kwh_m2_day": 4.327294117647059,
+              "diffuse_fraction": 0.4530960191881295
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 24.085509259259258,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 33.9,
+              "relative_humidity_mean_pct": 52.923611111111114,
+              "vpd_mean_kpa": 1.644976851851852,
+              "vpd_p95_kpa": 3.78,
+              "precipitation_sum_mm": 23.2,
+              "wind_mean_kmh": 7.626250000000001,
+              "ghi_sum_kwh_m2": 563.174,
+              "ghi_mean_kwh_m2_day": 6.257488888888888,
+              "diffuse_fraction": 0.23362406645193137
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2016": {
+          "hours": 8784,
+          "sha256_gzip_csv": "2b35f0f682863785e87fe8bfbd0fb139ffc4bdaa4e8b966379c10f85c3ef4017",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2016.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 22.866939890710384,
+              "temperature_min_c": 15.8,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 72.54417122040073,
+              "vpd_mean_kpa": 0.9211407103825137,
+              "vpd_p95_kpa": 3.26,
+              "precipitation_sum_mm": 1258.9,
+              "wind_mean_kmh": 6.038934426229508,
+              "ghi_sum_kwh_m2": 1905.839,
+              "ghi_mean_kwh_m2_day": 5.207210382513661,
+              "diffuse_fraction": 0.34553495861927475
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 21.1994825708061,
+              "temperature_min_c": 15.8,
+              "temperature_max_c": 27.8,
+              "relative_humidity_mean_pct": 84.25027233115469,
+              "vpd_mean_kpa": 0.4420751633986928,
+              "vpd_p95_kpa": 1.18,
+              "precipitation_sum_mm": 947.2,
+              "wind_mean_kmh": 4.836546840958605,
+              "ghi_sum_kwh_m2": 689.723,
+              "ghi_mean_kwh_m2_day": 4.507993464052287,
+              "diffuse_fraction": 0.4438216501407087
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 24.9521978021978,
+              "temperature_min_c": 15.9,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 48.205128205128204,
+              "vpd_mean_kpa": 1.8955860805860807,
+              "vpd_p95_kpa": 4.08,
+              "precipitation_sum_mm": 1.3,
+              "wind_mean_kmh": 7.9519688644688635,
+              "ghi_sum_kwh_m2": 586.167,
+              "ghi_mean_kwh_m2_day": 6.441395604395605,
+              "diffuse_fraction": 0.2131184457671619
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2017": {
+          "hours": 8760,
+          "sha256_gzip_csv": "d9c2e7b378dc6c16569d8c57ed2180e71b3681c75c87004d3f563e2e380282e3",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2017.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.45659817351598,
+              "temperature_min_c": 14.3,
+              "temperature_max_c": 35.0,
+              "relative_humidity_mean_pct": 71.69098173515982,
+              "vpd_mean_kpa": 0.9487066210045663,
+              "vpd_p95_kpa": 3.54,
+              "precipitation_sum_mm": 1632.5,
+              "wind_mean_kmh": 5.559611872146118,
+              "ghi_sum_kwh_m2": 1993.145,
+              "ghi_mean_kwh_m2_day": 5.460671232876712,
+              "diffuse_fraction": 0.32678003858224064
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.966040305010893,
+              "temperature_min_c": 15.5,
+              "temperature_max_c": 29.0,
+              "relative_humidity_mean_pct": 84.23311546840958,
+              "vpd_mean_kpa": 0.44260893246187366,
+              "vpd_p95_kpa": 1.25,
+              "precipitation_sum_mm": 1132.0,
+              "wind_mean_kmh": 4.557679738562092,
+              "ghi_sum_kwh_m2": 738.297,
+              "ghi_mean_kwh_m2_day": 4.825470588235294,
+              "diffuse_fraction": 0.40581906739428714
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 24.030879629629627,
+              "temperature_min_c": 14.5,
+              "temperature_max_c": 34.9,
+              "relative_humidity_mean_pct": 50.15416666666667,
+              "vpd_mean_kpa": 1.7716064814814816,
+              "vpd_p95_kpa": 4.17,
+              "precipitation_sum_mm": 1.0,
+              "wind_mean_kmh": 6.892222222222222,
+              "ghi_sum_kwh_m2": 567.714,
+              "ghi_mean_kwh_m2_day": 6.307933333333334,
+              "diffuse_fraction": 0.23071652275617652
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2018": {
+          "hours": 8760,
+          "sha256_gzip_csv": "245017a4b6292471a8e5db2fda2c91bd76430a9f9f4caa2b2538324d44bcaf5c",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2018.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 21.908538812785388,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 34.8,
+              "relative_humidity_mean_pct": 74.80707762557077,
+              "vpd_mean_kpa": 0.8038321917808219,
+              "vpd_p95_kpa": 2.91,
+              "precipitation_sum_mm": 1683.4,
+              "wind_mean_kmh": 5.4841210045662105,
+              "ghi_sum_kwh_m2": 1877.798,
+              "ghi_mean_kwh_m2_day": 5.144652054794521,
+              "diffuse_fraction": 0.3854898130682853
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.844662309368193,
+              "temperature_min_c": 15.3,
+              "temperature_max_c": 29.3,
+              "relative_humidity_mean_pct": 84.6661220043573,
+              "vpd_mean_kpa": 0.4353104575163399,
+              "vpd_p95_kpa": 1.29,
+              "precipitation_sum_mm": 1119.0,
+              "wind_mean_kmh": 4.89212962962963,
+              "ghi_sum_kwh_m2": 739.271,
+              "ghi_mean_kwh_m2_day": 4.831836601307189,
+              "diffuse_fraction": 0.4129135323852823
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 23.276805555555555,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 34.8,
+              "relative_humidity_mean_pct": 54.41481481481482,
+              "vpd_mean_kpa": 1.551101851851852,
+              "vpd_p95_kpa": 3.74,
+              "precipitation_sum_mm": 31.900000000000002,
+              "wind_mean_kmh": 6.5862037037037044,
+              "ghi_sum_kwh_m2": 509.642,
+              "ghi_mean_kwh_m2_day": 5.662688888888889,
+              "diffuse_fraction": 0.3107710902947559
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2019": {
+          "hours": 8760,
+          "sha256_gzip_csv": "ca10d8ff16a932066b72e5442e7c6853f650bd0a3156e2deb43a8d617a165a55",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2019.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.24192922374429,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 75.75228310502283,
+              "vpd_mean_kpa": 0.7993139269406393,
+              "vpd_p95_kpa": 3.01,
+              "precipitation_sum_mm": 1910.0,
+              "wind_mean_kmh": 5.343025114155251,
+              "ghi_sum_kwh_m2": 1840.146,
+              "ghi_mean_kwh_m2_day": 5.041495890410959,
+              "diffuse_fraction": 0.3938057088948377
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.93616557734205,
+              "temperature_min_c": 16.0,
+              "temperature_max_c": 28.2,
+              "relative_humidity_mean_pct": 85.74400871459694,
+              "vpd_mean_kpa": 0.4008251633986928,
+              "vpd_p95_kpa": 1.19,
+              "precipitation_sum_mm": 1320.1,
+              "wind_mean_kmh": 4.418382352941176,
+              "ghi_sum_kwh_m2": 711.284,
+              "ghi_mean_kwh_m2_day": 4.648915032679739,
+              "diffuse_fraction": 0.42927016494114867
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 23.78222222222222,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 55.50046296296296,
+              "vpd_mean_kpa": 1.5773842592592593,
+              "vpd_p95_kpa": 3.94,
+              "precipitation_sum_mm": 30.3,
+              "wind_mean_kmh": 6.572314814814815,
+              "ghi_sum_kwh_m2": 507.092,
+              "ghi_mean_kwh_m2_day": 5.634355555555556,
+              "diffuse_fraction": 0.3089794356842545
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2020": {
+          "hours": 8784,
+          "sha256_gzip_csv": "e779de8b7b8ddfbe3baf64589dd71e488a5edd695852d1fdc99dffec27d1d65b",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2020.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 22.46511839708561,
+              "temperature_min_c": 13.2,
+              "temperature_max_c": 36.0,
+              "relative_humidity_mean_pct": 71.9014116575592,
+              "vpd_mean_kpa": 0.9439742714025502,
+              "vpd_p95_kpa": 3.45,
+              "precipitation_sum_mm": 1656.0,
+              "wind_mean_kmh": 5.502049180327869,
+              "ghi_sum_kwh_m2": 1929.116,
+              "ghi_mean_kwh_m2_day": 5.270808743169399,
+              "diffuse_fraction": 0.3497011066208564
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 21.010239651416125,
+              "temperature_min_c": 15.5,
+              "temperature_max_c": 29.5,
+              "relative_humidity_mean_pct": 84.02505446623094,
+              "vpd_mean_kpa": 0.45645969498910677,
+              "vpd_p95_kpa": 1.41,
+              "precipitation_sum_mm": 1130.2,
+              "wind_mean_kmh": 4.484531590413943,
+              "ghi_sum_kwh_m2": 712.506,
+              "ghi_mean_kwh_m2_day": 4.656901960784314,
+              "diffuse_fraction": 0.4114856576646372
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 24.01570512820513,
+              "temperature_min_c": 13.2,
+              "temperature_max_c": 36.0,
+              "relative_humidity_mean_pct": 48.86446886446886,
+              "vpd_mean_kpa": 1.8310347985347986,
+              "vpd_p95_kpa": 4.1,
+              "precipitation_sum_mm": 0.1,
+              "wind_mean_kmh": 7.066666666666666,
+              "ghi_sum_kwh_m2": 556.423,
+              "ghi_mean_kwh_m2_day": 6.114538461538461,
+              "diffuse_fraction": 0.25500203981503283
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2021": {
+          "hours": 8760,
+          "sha256_gzip_csv": "ac2b830c55546c12a1906cecd9e8692576059f379158d904bae4321e6d59ede6",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2021.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.22945205479452,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 71.99577625570777,
+              "vpd_mean_kpa": 0.9282146118721462,
+              "vpd_p95_kpa": 3.46,
+              "precipitation_sum_mm": 1659.8,
+              "wind_mean_kmh": 5.582465753424658,
+              "ghi_sum_kwh_m2": 1900.09,
+              "ghi_mean_kwh_m2_day": 5.20572602739726,
+              "diffuse_fraction": 0.3602966175286434
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.96285403050109,
+              "temperature_min_c": 15.8,
+              "temperature_max_c": 30.1,
+              "relative_humidity_mean_pct": 84.34831154684096,
+              "vpd_mean_kpa": 0.4463044662309368,
+              "vpd_p95_kpa": 1.38,
+              "precipitation_sum_mm": 1080.3,
+              "wind_mean_kmh": 4.616013071895424,
+              "ghi_sum_kwh_m2": 707.722,
+              "ghi_mean_kwh_m2_day": 4.625633986928104,
+              "diffuse_fraction": 0.42307290150652377
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 23.896481481481484,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 34.7,
+              "relative_humidity_mean_pct": 47.92314814814815,
+              "vpd_mean_kpa": 1.8422222222222222,
+              "vpd_p95_kpa": 4.18,
+              "precipitation_sum_mm": 0.6000000000000001,
+              "wind_mean_kmh": 7.155324074074074,
+              "ghi_sum_kwh_m2": 556.317,
+              "ghi_mean_kwh_m2_day": 6.1813,
+              "diffuse_fraction": 0.2579698265557227
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2022": {
+          "hours": 8760,
+          "sha256_gzip_csv": "46361a6ced3a876f919dddf5dc9f5109e7138209c3a7b655aa5d33d172e95d75",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2022.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 21.948344748858446,
+              "temperature_min_c": 13.9,
+              "temperature_max_c": 35.0,
+              "relative_humidity_mean_pct": 70.87922374429223,
+              "vpd_mean_kpa": 0.9478401826484019,
+              "vpd_p95_kpa": 3.25,
+              "precipitation_sum_mm": 1694.8,
+              "wind_mean_kmh": 5.712785388127854,
+              "ghi_sum_kwh_m2": 1993.275,
+              "ghi_mean_kwh_m2_day": 5.461027397260274,
+              "diffuse_fraction": 0.35148286112051774
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 20.537254901960786,
+              "temperature_min_c": 15.3,
+              "temperature_max_c": 28.4,
+              "relative_humidity_mean_pct": 84.32489106753813,
+              "vpd_mean_kpa": 0.44090141612200434,
+              "vpd_p95_kpa": 1.4,
+              "precipitation_sum_mm": 1254.3,
+              "wind_mean_kmh": 4.5489379084967325,
+              "ghi_sum_kwh_m2": 743.597,
+              "ghi_mean_kwh_m2_day": 4.860111111111111,
+              "diffuse_fraction": 0.42988473595240434
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 23.145555555555557,
+              "temperature_min_c": 13.9,
+              "temperature_max_c": 34.4,
+              "relative_humidity_mean_pct": 49.0412037037037,
+              "vpd_mean_kpa": 1.7228796296296296,
+              "vpd_p95_kpa": 4.01,
+              "precipitation_sum_mm": 1.6,
+              "wind_mean_kmh": 7.041944444444445,
+              "ghi_sum_kwh_m2": 557.075,
+              "ghi_mean_kwh_m2_day": 6.189722222222223,
+              "diffuse_fraction": 0.2588017771395234
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2023": {
+          "hours": 8760,
+          "sha256_gzip_csv": "79ca4c1c9ea587c5fa3a9107ac9b89a6237be5ba8af0cee6fe0bb7a2b0b24f21",
+          "api_elevation_m": 1044.0,
+          "file": "foumbot_coffee_2023.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 22.210011415525116,
+              "temperature_min_c": 14.0,
+              "temperature_max_c": 35.0,
+              "relative_humidity_mean_pct": 73.5494292237443,
+              "vpd_mean_kpa": 0.8717191780821918,
+              "vpd_p95_kpa": 3.16,
+              "precipitation_sum_mm": 1904.5,
+              "wind_mean_kmh": 5.512066210045662,
+              "ghi_sum_kwh_m2": 1964.567,
+              "ghi_mean_kwh_m2_day": 5.382375342465753,
+              "diffuse_fraction": 0.36528710906779965
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 21.147440087145966,
+              "temperature_min_c": 15.7,
+              "temperature_max_c": 29.3,
+              "relative_humidity_mean_pct": 84.95125272331154,
+              "vpd_mean_kpa": 0.441729302832244,
+              "vpd_p95_kpa": 1.37,
+              "precipitation_sum_mm": 1312.6,
+              "wind_mean_kmh": 4.634286492374727,
+              "ghi_sum_kwh_m2": 766.522,
+              "ghi_mean_kwh_m2_day": 5.009947712418301,
+              "diffuse_fraction": 0.4161785310793428
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 23.406759259259257,
+              "temperature_min_c": 14.0,
+              "temperature_max_c": 34.7,
+              "relative_humidity_mean_pct": 51.37314814814815,
+              "vpd_mean_kpa": 1.6988611111111112,
+              "vpd_p95_kpa": 4.07,
+              "precipitation_sum_mm": 3.9,
+              "wind_mean_kmh": 6.926712962962963,
+              "ghi_sum_kwh_m2": 553.081,
+              "ghi_mean_kwh_m2_day": 6.1453444444444445,
+              "diffuse_fraction": 0.2598100459064766
+            }
+          },
+          "baseline_comparison": {
+            "baseline_file": "era5_2023_foumbot_coffee.json",
+            "policy": "Exact match except bounded current-archive thermodynamic deltas for Penja; not field validation.",
+            "variables": {
+              "temperature_2m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "relative_humidity_2m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "precipitation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "wind_speed_10m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "shortwave_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "direct_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "diffuse_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "terrestrial_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "vapor_pressure_deficit": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "penja_white_pepper": {
+      "site_key": "njombe_penja_pepper",
+      "latitude": 4.674868,
+      "longitude": 9.679803,
+      "elevation_m": 273.0,
+      "years": {
+        "2014": {
+          "hours": 8760,
+          "sha256_gzip_csv": "0841b2a2ef7a176c2f9379665462070f4b68eb3357c99f5f49fa410100f5087f",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2014.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.4513698630137,
+              "temperature_min_c": 20.1,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 89.26358447488585,
+              "vpd_mean_kpa": 0.39136643835616436,
+              "vpd_p95_kpa": 1.53,
+              "precipitation_sum_mm": 3486.7,
+              "wind_mean_kmh": 3.2501940639269407,
+              "ghi_sum_kwh_m2": 1453.477,
+              "ghi_mean_kwh_m2_day": 3.982128767123288,
+              "diffuse_fraction": 0.4648391409014384
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.36200980392157,
+              "temperature_min_c": 20.2,
+              "temperature_max_c": 30.2,
+              "relative_humidity_mean_pct": 93.55228758169935,
+              "vpd_mean_kpa": 0.20903594771241832,
+              "vpd_p95_kpa": 0.84,
+              "precipitation_sum_mm": 2107.3,
+              "wind_mean_kmh": 3.1489106753812632,
+              "ghi_sum_kwh_m2": 498.385,
+              "ghi_mean_kwh_m2_day": 3.257418300653595,
+              "diffuse_fraction": 0.5526791536663422
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 25.968564814814815,
+              "temperature_min_c": 20.5,
+              "temperature_max_c": 35.3,
+              "relative_humidity_mean_pct": 80.13287037037037,
+              "vpd_mean_kpa": 0.7805324074074075,
+              "vpd_p95_kpa": 2.45,
+              "precipitation_sum_mm": 126.0,
+              "wind_mean_kmh": 3.690462962962963,
+              "ghi_sum_kwh_m2": 459.882,
+              "ghi_mean_kwh_m2_day": 5.1098,
+              "diffuse_fraction": 0.32187387199325046
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2015": {
+          "hours": 8760,
+          "sha256_gzip_csv": "f2ecc7909d8d9eb4901a0510e99236396444fb558ccf359766a07fd69fe50486",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2015.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.533390410958905,
+              "temperature_min_c": 18.1,
+              "temperature_max_c": 33.9,
+              "relative_humidity_mean_pct": 88.62134703196347,
+              "vpd_mean_kpa": 0.41275570776255704,
+              "vpd_p95_kpa": 1.62,
+              "precipitation_sum_mm": 3539.6,
+              "wind_mean_kmh": 3.244634703196347,
+              "ghi_sum_kwh_m2": 1458.656,
+              "ghi_mean_kwh_m2_day": 3.996317808219178,
+              "diffuse_fraction": 0.4489934569905447
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.509014161220044,
+              "temperature_min_c": 20.4,
+              "temperature_max_c": 30.4,
+              "relative_humidity_mean_pct": 93.79547930283225,
+              "vpd_mean_kpa": 0.2020533769063181,
+              "vpd_p95_kpa": 0.82,
+              "precipitation_sum_mm": 2279.9,
+              "wind_mean_kmh": 2.9984204793028324,
+              "ghi_sum_kwh_m2": 475.541,
+              "ghi_mean_kwh_m2_day": 3.108111111111111,
+              "diffuse_fraction": 0.5603281315386055
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 25.623333333333335,
+              "temperature_min_c": 18.1,
+              "temperature_max_c": 33.9,
+              "relative_humidity_mean_pct": 79.3236111111111,
+              "vpd_mean_kpa": 0.7867962962962963,
+              "vpd_p95_kpa": 2.31,
+              "precipitation_sum_mm": 207.6,
+              "wind_mean_kmh": 3.892175925925926,
+              "ghi_sum_kwh_m2": 461.491,
+              "ghi_mean_kwh_m2_day": 5.127677777777778,
+              "diffuse_fraction": 0.3210138442569844
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2016": {
+          "hours": 8784,
+          "sha256_gzip_csv": "635462f42fcada0b91131959779e672f5eac04e7937cbdc1827ea5e1d8e62220",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2016.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 24.976263661202186,
+              "temperature_min_c": 19.5,
+              "temperature_max_c": 35.6,
+              "relative_humidity_mean_pct": 88.1648451730419,
+              "vpd_mean_kpa": 0.4505999544626594,
+              "vpd_p95_kpa": 1.86,
+              "precipitation_sum_mm": 3291.4,
+              "wind_mean_kmh": 3.4595742258652096,
+              "ghi_sum_kwh_m2": 1489.46,
+              "ghi_mean_kwh_m2_day": 4.069562841530055,
+              "diffuse_fraction": 0.45431028694963277
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.719172113289762,
+              "temperature_min_c": 20.7,
+              "temperature_max_c": 30.2,
+              "relative_humidity_mean_pct": 92.63589324618736,
+              "vpd_mean_kpa": 0.24280773420479304,
+              "vpd_p95_kpa": 0.93,
+              "precipitation_sum_mm": 2011.0,
+              "wind_mean_kmh": 3.327995642701525,
+              "ghi_sum_kwh_m2": 526.713,
+              "ghi_mean_kwh_m2_day": 3.44256862745098,
+              "diffuse_fraction": 0.5502446303774541
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 26.781272893772893,
+              "temperature_min_c": 19.5,
+              "temperature_max_c": 35.6,
+              "relative_humidity_mean_pct": 77.05860805860806,
+              "vpd_mean_kpa": 0.9592261904761904,
+              "vpd_p95_kpa": 2.98,
+              "precipitation_sum_mm": 137.0,
+              "wind_mean_kmh": 4.035851648351648,
+              "ghi_sum_kwh_m2": 478.562,
+              "ghi_mean_kwh_m2_day": 5.258923076923077,
+              "diffuse_fraction": 0.2977294478040463
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2017": {
+          "hours": 8760,
+          "sha256_gzip_csv": "23442883b2d7ea2e7ffac0a6cccaf14643c8c497e5b25129828f5d27610d8c09",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2017.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.87974885844749,
+              "temperature_min_c": 20.1,
+              "temperature_max_c": 36.7,
+              "relative_humidity_mean_pct": 87.1216894977169,
+              "vpd_mean_kpa": 0.49191095890410963,
+              "vpd_p95_kpa": 1.9,
+              "precipitation_sum_mm": 2572.5,
+              "wind_mean_kmh": 4.261244292237443,
+              "ghi_sum_kwh_m2": 1589.683,
+              "ghi_mean_kwh_m2_day": 4.355295890410959,
+              "diffuse_fraction": 0.4394662332049849
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.68357843137255,
+              "temperature_min_c": 20.5,
+              "temperature_max_c": 31.4,
+              "relative_humidity_mean_pct": 91.73774509803921,
+              "vpd_mean_kpa": 0.276609477124183,
+              "vpd_p95_kpa": 1.09,
+              "precipitation_sum_mm": 1576.9,
+              "wind_mean_kmh": 4.006045751633987,
+              "ghi_sum_kwh_m2": 576.883,
+              "ghi_mean_kwh_m2_day": 3.7704771241830066,
+              "diffuse_fraction": 0.5183356070468362
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 26.210694444444442,
+              "temperature_min_c": 20.1,
+              "temperature_max_c": 36.7,
+              "relative_humidity_mean_pct": 79.35694444444445,
+              "vpd_mean_kpa": 0.8564027777777777,
+              "vpd_p95_kpa": 2.94,
+              "precipitation_sum_mm": 193.6,
+              "wind_mean_kmh": 4.888657407407408,
+              "ghi_sum_kwh_m2": 460.196,
+              "ghi_mean_kwh_m2_day": 5.113288888888889,
+              "diffuse_fraction": 0.3196811793235926
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2018": {
+          "hours": 8760,
+          "sha256_gzip_csv": "5ea2356437d44bfbcb22c178c0020135647ca785039ad1b605e7ffb563211722",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2018.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.60041095890411,
+              "temperature_min_c": 19.5,
+              "temperature_max_c": 36.3,
+              "relative_humidity_mean_pct": 88.31712328767124,
+              "vpd_mean_kpa": 0.4334554794520548,
+              "vpd_p95_kpa": 1.62,
+              "precipitation_sum_mm": 2777.2,
+              "wind_mean_kmh": 4.149143835616439,
+              "ghi_sum_kwh_m2": 1574.944,
+              "ghi_mean_kwh_m2_day": 4.314915068493151,
+              "diffuse_fraction": 0.47705950179815915
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.703867102396515,
+              "temperature_min_c": 19.6,
+              "temperature_max_c": 31.4,
+              "relative_humidity_mean_pct": 91.70343137254902,
+              "vpd_mean_kpa": 0.2842892156862745,
+              "vpd_p95_kpa": 1.17,
+              "precipitation_sum_mm": 1732.7,
+              "wind_mean_kmh": 4.058197167755991,
+              "ghi_sum_kwh_m2": 639.296,
+              "ghi_mean_kwh_m2_day": 4.17840522875817,
+              "diffuse_fraction": 0.49498980128140957
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 25.770416666666666,
+              "temperature_min_c": 19.5,
+              "temperature_max_c": 36.3,
+              "relative_humidity_mean_pct": 80.95416666666667,
+              "vpd_mean_kpa": 0.7617083333333333,
+              "vpd_p95_kpa": 2.61,
+              "precipitation_sum_mm": 258.3,
+              "wind_mean_kmh": 4.717453703703704,
+              "ghi_sum_kwh_m2": 412.536,
+              "ghi_mean_kwh_m2_day": 4.583733333333333,
+              "diffuse_fraction": 0.40772199274729964
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2019": {
+          "hours": 8760,
+          "sha256_gzip_csv": "54962568fb2889be7bd054224cee817964a2a12205ec9b176f3bfb90284f83c5",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2019.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.76739726027397,
+              "temperature_min_c": 20.1,
+              "temperature_max_c": 35.7,
+              "relative_humidity_mean_pct": 89.21917808219177,
+              "vpd_mean_kpa": 0.40705821917808216,
+              "vpd_p95_kpa": 1.61,
+              "precipitation_sum_mm": 3557.1,
+              "wind_mean_kmh": 4.185673515981735,
+              "ghi_sum_kwh_m2": 1532.822,
+              "ghi_mean_kwh_m2_day": 4.199512328767123,
+              "diffuse_fraction": 0.49238985348592335
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.70479302832244,
+              "temperature_min_c": 20.1,
+              "temperature_max_c": 31.0,
+              "relative_humidity_mean_pct": 92.66857298474946,
+              "vpd_mean_kpa": 0.2537581699346405,
+              "vpd_p95_kpa": 1.11,
+              "precipitation_sum_mm": 2287.2,
+              "wind_mean_kmh": 4.18390522875817,
+              "ghi_sum_kwh_m2": 611.29,
+              "ghi_mean_kwh_m2_day": 3.995359477124183,
+              "diffuse_fraction": 0.5005823749775066
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 26.021388888888886,
+              "temperature_min_c": 20.5,
+              "temperature_max_c": 35.7,
+              "relative_humidity_mean_pct": 81.4574074074074,
+              "vpd_mean_kpa": 0.749175925925926,
+              "vpd_p95_kpa": 2.58,
+              "precipitation_sum_mm": 230.0,
+              "wind_mean_kmh": 4.639861111111111,
+              "ghi_sum_kwh_m2": 414.873,
+              "ghi_mean_kwh_m2_day": 4.6097,
+              "diffuse_fraction": 0.4104629609543161
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2020": {
+          "hours": 8784,
+          "sha256_gzip_csv": "b5da1d6559bf177f0a49a130ea3e2746e9d215ea89f5c869c02decdd4de31596",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2020.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 25.030134335154827,
+              "temperature_min_c": 18.7,
+              "temperature_max_c": 36.6,
+              "relative_humidity_mean_pct": 86.93533697632058,
+              "vpd_mean_kpa": 0.5140983606557378,
+              "vpd_p95_kpa": 2.06,
+              "precipitation_sum_mm": 2570.7,
+              "wind_mean_kmh": 4.377333788706739,
+              "ghi_sum_kwh_m2": 1623.356,
+              "ghi_mean_kwh_m2_day": 4.435398907103825,
+              "diffuse_fraction": 0.444211251259736
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.66059368191721,
+              "temperature_min_c": 19.9,
+              "temperature_max_c": 31.7,
+              "relative_humidity_mean_pct": 91.92129629629629,
+              "vpd_mean_kpa": 0.2786165577342048,
+              "vpd_p95_kpa": 1.2,
+              "precipitation_sum_mm": 1706.5,
+              "wind_mean_kmh": 4.290059912854031,
+              "ghi_sum_kwh_m2": 620.518,
+              "ghi_mean_kwh_m2_day": 4.055673202614379,
+              "diffuse_fraction": 0.4853332215987288
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 26.57000915750916,
+              "temperature_min_c": 18.7,
+              "temperature_max_c": 36.6,
+              "relative_humidity_mean_pct": 76.62133699633699,
+              "vpd_mean_kpa": 0.9891529304029304,
+              "vpd_p95_kpa": 3.33,
+              "precipitation_sum_mm": 106.3,
+              "wind_mean_kmh": 4.955998168498168,
+              "ghi_sum_kwh_m2": 455.653,
+              "ghi_mean_kwh_m2_day": 5.007175824175825,
+              "diffuse_fraction": 0.35531424131960065
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2021": {
+          "hours": 8760,
+          "sha256_gzip_csv": "2e5639b3509561d97e5c4e374ca72eede776b739809a1de13aebcfdfef9c4e52",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2021.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.89373287671233,
+              "temperature_min_c": 18.9,
+              "temperature_max_c": 36.0,
+              "relative_humidity_mean_pct": 86.7972602739726,
+              "vpd_mean_kpa": 0.5110388127853881,
+              "vpd_p95_kpa": 2.03,
+              "precipitation_sum_mm": 2527.7,
+              "wind_mean_kmh": 4.297237442922375,
+              "ghi_sum_kwh_m2": 1618.055,
+              "ghi_mean_kwh_m2_day": 4.4330273972602745,
+              "diffuse_fraction": 0.45744304118216006
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.84618736383442,
+              "temperature_min_c": 20.5,
+              "temperature_max_c": 32.6,
+              "relative_humidity_mean_pct": 91.30582788671023,
+              "vpd_mean_kpa": 0.3022058823529412,
+              "vpd_p95_kpa": 1.23,
+              "precipitation_sum_mm": 1696.1,
+              "wind_mean_kmh": 4.121704793028322,
+              "ghi_sum_kwh_m2": 626.554,
+              "ghi_mean_kwh_m2_day": 4.0951241830065355,
+              "diffuse_fraction": 0.5007182142321333
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 26.33546296296296,
+              "temperature_min_c": 18.9,
+              "temperature_max_c": 35.9,
+              "relative_humidity_mean_pct": 77.72083333333333,
+              "vpd_mean_kpa": 0.929787037037037,
+              "vpd_p95_kpa": 3.0,
+              "precipitation_sum_mm": 66.9,
+              "wind_mean_kmh": 4.836157407407407,
+              "ghi_sum_kwh_m2": 456.968,
+              "ghi_mean_kwh_m2_day": 5.077422222222222,
+              "diffuse_fraction": 0.3607254774951419
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2022": {
+          "hours": 8760,
+          "sha256_gzip_csv": "b5a851d9f470e9e7942f43bc90d169ccb9ef47b527fd283fd72cc02f0fcc2203",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2022.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.546552511415523,
+              "temperature_min_c": 19.8,
+              "temperature_max_c": 36.2,
+              "relative_humidity_mean_pct": 86.05993150684931,
+              "vpd_mean_kpa": 0.5345490867579908,
+              "vpd_p95_kpa": 2.14,
+              "precipitation_sum_mm": 2270.7,
+              "wind_mean_kmh": 4.458561643835616,
+              "ghi_sum_kwh_m2": 1660.065,
+              "ghi_mean_kwh_m2_day": 4.548123287671233,
+              "diffuse_fraction": 0.4679142081785954
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.254901960784313,
+              "temperature_min_c": 20.0,
+              "temperature_max_c": 30.9,
+              "relative_humidity_mean_pct": 91.40522875816994,
+              "vpd_mean_kpa": 0.2896078431372549,
+              "vpd_p95_kpa": 1.22,
+              "precipitation_sum_mm": 1589.0,
+              "wind_mean_kmh": 4.2124999999999995,
+              "ghi_sum_kwh_m2": 621.83,
+              "ghi_mean_kwh_m2_day": 4.064248366013072,
+              "diffuse_fraction": 0.540597912612772
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 25.914907407407405,
+              "temperature_min_c": 19.8,
+              "temperature_max_c": 36.2,
+              "relative_humidity_mean_pct": 77.33935185185184,
+              "vpd_mean_kpa": 0.9322546296296297,
+              "vpd_p95_kpa": 3.14,
+              "precipitation_sum_mm": 91.7,
+              "wind_mean_kmh": 5.098657407407408,
+              "ghi_sum_kwh_m2": 467.49,
+              "ghi_mean_kwh_m2_day": 5.194333333333334,
+              "diffuse_fraction": 0.36105585146206337
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2023": {
+          "hours": 8760,
+          "sha256_gzip_csv": "3cf65a6b9fc11ade0be700a854aa0c34640bc605ab89a4e4eab879a0398434f8",
+          "api_elevation_m": 273.0,
+          "file": "njombe_penja_pepper_2023.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 24.769668949771688,
+              "temperature_min_c": 19.8,
+              "temperature_max_c": 35.8,
+              "relative_humidity_mean_pct": 86.87625570776255,
+              "vpd_mean_kpa": 0.5002534246575343,
+              "vpd_p95_kpa": 1.92,
+              "precipitation_sum_mm": 2321.0,
+              "wind_mean_kmh": 4.234611872146118,
+              "ghi_sum_kwh_m2": 1676.394,
+              "ghi_mean_kwh_m2_day": 4.592860273972603,
+              "diffuse_fraction": 0.46115650616740456
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 23.863507625272334,
+              "temperature_min_c": 20.3,
+              "temperature_max_c": 31.2,
+              "relative_humidity_mean_pct": 91.31399782135077,
+              "vpd_mean_kpa": 0.3026171023965142,
+              "vpd_p95_kpa": 1.23,
+              "precipitation_sum_mm": 1489.7,
+              "wind_mean_kmh": 3.8681917211328978,
+              "ghi_sum_kwh_m2": 658.909,
+              "ghi_mean_kwh_m2_day": 4.30659477124183,
+              "diffuse_fraction": 0.5021983308772532
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 25.99398148148148,
+              "temperature_min_c": 19.8,
+              "temperature_max_c": 35.8,
+              "relative_humidity_mean_pct": 77.95972222222223,
+              "vpd_mean_kpa": 0.8978981481481482,
+              "vpd_p95_kpa": 2.83,
+              "precipitation_sum_mm": 96.3,
+              "wind_mean_kmh": 4.910231481481482,
+              "ghi_sum_kwh_m2": 466.001,
+              "ghi_mean_kwh_m2_day": 5.177788888888888,
+              "diffuse_fraction": 0.3600399999141633
+            }
+          },
+          "baseline_comparison": {
+            "baseline_file": "era5_2023_njombe_penja_pepper.json",
+            "policy": "Exact match except bounded current-archive thermodynamic deltas for Penja; not field validation.",
+            "variables": {
+              "temperature_2m": {
+                "max_abs_difference": 0.10000000000000142,
+                "mean_abs_difference": 0.04932648401826486,
+                "different_samples": 4321,
+                "tolerance": 0.1,
+                "within_tolerance": true
+              },
+              "relative_humidity_2m": {
+                "max_abs_difference": 1.0,
+                "mean_abs_difference": 0.0015981735159817352,
+                "different_samples": 14,
+                "tolerance": 1.0,
+                "within_tolerance": true
+              },
+              "precipitation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "wind_speed_10m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "shortwave_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "direct_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "diffuse_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "terrestrial_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "vapor_pressure_deficit": {
+                "max_abs_difference": 0.010000000000000675,
+                "mean_abs_difference": 0.000507990867579909,
+                "different_samples": 445,
+                "tolerance": 0.01,
+                "within_tolerance": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "highland_tea": {
+      "site_key": "djuttitsa_tea",
+      "latitude": 5.448155,
+      "longitude": 10.06628,
+      "elevation_m": 1400.0,
+      "years": {
+        "2014": {
+          "hours": 8760,
+          "sha256_gzip_csv": "ef909cf41a44b2ac7fb55eb18edff7834e5605d6e5bf1cdafed71792f3593906",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2014.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.429132420091324,
+              "temperature_min_c": 12.4,
+              "temperature_max_c": 31.0,
+              "relative_humidity_mean_pct": 83.83641552511415,
+              "vpd_mean_kpa": 0.4579703196347032,
+              "vpd_p95_kpa": 2.08,
+              "precipitation_sum_mm": 4310.1,
+              "wind_mean_kmh": 3.1628995433789955,
+              "ghi_sum_kwh_m2": 1614.273,
+              "ghi_mean_kwh_m2_day": 4.422665753424657,
+              "diffuse_fraction": 0.42685840622992516
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.397031590413942,
+              "temperature_min_c": 13.5,
+              "temperature_max_c": 26.1,
+              "relative_humidity_mean_pct": 91.55255991285404,
+              "vpd_mean_kpa": 0.20517156862745098,
+              "vpd_p95_kpa": 0.75,
+              "precipitation_sum_mm": 2587.1,
+              "wind_mean_kmh": 3.2424564270152505,
+              "ghi_sum_kwh_m2": 551.73,
+              "ghi_mean_kwh_m2_day": 3.6060784313725494,
+              "diffuse_fraction": 0.5464466315045403
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.90476851851852,
+              "temperature_min_c": 12.4,
+              "temperature_max_c": 31.0,
+              "relative_humidity_mean_pct": 66.79675925925926,
+              "vpd_mean_kpa": 1.0177407407407408,
+              "vpd_p95_kpa": 2.87,
+              "precipitation_sum_mm": 121.9,
+              "wind_mean_kmh": 3.4188425925925925,
+              "ghi_sum_kwh_m2": 534.638,
+              "ghi_mean_kwh_m2_day": 5.940422222222223,
+              "diffuse_fraction": 0.25549250146828323
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2015": {
+          "hours": 8760,
+          "sha256_gzip_csv": "eb37a98b14342e315841f97f5a996af7f8e7ce7312db9e337aa83d94d4e08567",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2015.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.653093607305937,
+              "temperature_min_c": 12.3,
+              "temperature_max_c": 30.4,
+              "relative_humidity_mean_pct": 82.67534246575343,
+              "vpd_mean_kpa": 0.49149315068493143,
+              "vpd_p95_kpa": 2.14,
+              "precipitation_sum_mm": 4386.3,
+              "wind_mean_kmh": 3.221404109589041,
+              "ghi_sum_kwh_m2": 1648.599,
+              "ghi_mean_kwh_m2_day": 4.5167095890410955,
+              "diffuse_fraction": 0.4082806067454851
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.658523965141615,
+              "temperature_min_c": 13.8,
+              "temperature_max_c": 25.2,
+              "relative_humidity_mean_pct": 91.96595860566448,
+              "vpd_mean_kpa": 0.1968355119825708,
+              "vpd_p95_kpa": 0.73,
+              "precipitation_sum_mm": 2816.4,
+              "wind_mean_kmh": 3.199591503267974,
+              "ghi_sum_kwh_m2": 527.051,
+              "ghi_mean_kwh_m2_day": 3.444777777777778,
+              "diffuse_fraction": 0.5642508979206946
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.907592592592593,
+              "temperature_min_c": 12.3,
+              "temperature_max_c": 30.4,
+              "relative_humidity_mean_pct": 65.16527777777777,
+              "vpd_mean_kpa": 1.038523148148148,
+              "vpd_p95_kpa": 2.84,
+              "precipitation_sum_mm": 188.6,
+              "wind_mean_kmh": 3.5170833333333333,
+              "ghi_sum_kwh_m2": 522.753,
+              "ghi_mean_kwh_m2_day": 5.808366666666667,
+              "diffuse_fraction": 0.2693432653662437
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2016": {
+          "hours": 8784,
+          "sha256_gzip_csv": "31b98417ddc71c6e71107fb736540aa45f0d66195f21b26e8c0d31bd7f0a1360",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2016.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 20.06565346083789,
+              "temperature_min_c": 13.1,
+              "temperature_max_c": 32.9,
+              "relative_humidity_mean_pct": 81.12386156648452,
+              "vpd_mean_kpa": 0.554799635701275,
+              "vpd_p95_kpa": 2.39,
+              "precipitation_sum_mm": 4261.7,
+              "wind_mean_kmh": 3.3122609289617486,
+              "ghi_sum_kwh_m2": 1643.367,
+              "ghi_mean_kwh_m2_day": 4.4900737704918035,
+              "diffuse_fraction": 0.41715331998269406
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.65498366013072,
+              "temperature_min_c": 13.7,
+              "temperature_max_c": 26.2,
+              "relative_humidity_mean_pct": 91.02450980392157,
+              "vpd_mean_kpa": 0.22150054466230937,
+              "vpd_p95_kpa": 0.81,
+              "precipitation_sum_mm": 2414.6,
+              "wind_mean_kmh": 3.3766339869281046,
+              "ghi_sum_kwh_m2": 559.107,
+              "ghi_mean_kwh_m2_day": 3.6542941176470585,
+              "diffuse_fraction": 0.5515294925658237
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 22.146520146520146,
+              "temperature_min_c": 13.1,
+              "temperature_max_c": 32.9,
+              "relative_humidity_mean_pct": 57.29075091575091,
+              "vpd_mean_kpa": 1.3514835164835164,
+              "vpd_p95_kpa": 3.35,
+              "precipitation_sum_mm": 65.1,
+              "wind_mean_kmh": 3.6529761904761906,
+              "ghi_sum_kwh_m2": 559.749,
+              "ghi_mean_kwh_m2_day": 6.151087912087912,
+              "diffuse_fraction": 0.2354519615041742
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2017": {
+          "hours": 8760,
+          "sha256_gzip_csv": "e60ce3cdd50f8025ba13b1486bf4af500caa6c1ea934fb4a20abf3fd11668b88",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2017.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.93101598173516,
+              "temperature_min_c": 14.4,
+              "temperature_max_c": 31.5,
+              "relative_humidity_mean_pct": 79.69417808219178,
+              "vpd_mean_kpa": 0.5593732876712328,
+              "vpd_p95_kpa": 2.08,
+              "precipitation_sum_mm": 2055.6,
+              "wind_mean_kmh": 6.585958904109589,
+              "ghi_sum_kwh_m2": 1766.8,
+              "ghi_mean_kwh_m2_day": 4.840547945205479,
+              "diffuse_fraction": 0.38304788317862803
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.959177559912856,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 25.9,
+              "relative_humidity_mean_pct": 89.73910675381264,
+              "vpd_mean_kpa": 0.2525789760348584,
+              "vpd_p95_kpa": 0.86,
+              "precipitation_sum_mm": 1334.6,
+              "wind_mean_kmh": 5.561492374727669,
+              "ghi_sum_kwh_m2": 634.838,
+              "ghi_mean_kwh_m2_day": 4.149267973856209,
+              "diffuse_fraction": 0.4718510864188974
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.84037037037037,
+              "temperature_min_c": 14.4,
+              "temperature_max_c": 31.5,
+              "relative_humidity_mean_pct": 63.266666666666666,
+              "vpd_mean_kpa": 1.0537083333333335,
+              "vpd_p95_kpa": 2.83,
+              "precipitation_sum_mm": 110.0,
+              "wind_mean_kmh": 8.298888888888888,
+              "ghi_sum_kwh_m2": 525.864,
+              "ghi_mean_kwh_m2_day": 5.842933333333334,
+              "diffuse_fraction": 0.26407017784065845
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2018": {
+          "hours": 8760,
+          "sha256_gzip_csv": "d753f036c5044d975c8747e644c4d149d7a6c2552498fc612e31384b6d87d125",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2018.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.50925799086758,
+              "temperature_min_c": 12.5,
+              "temperature_max_c": 31.1,
+              "relative_humidity_mean_pct": 82.34771689497717,
+              "vpd_mean_kpa": 0.468472602739726,
+              "vpd_p95_kpa": 1.82,
+              "precipitation_sum_mm": 2110.5,
+              "wind_mean_kmh": 6.52351598173516,
+              "ghi_sum_kwh_m2": 1683.278,
+              "ghi_mean_kwh_m2_day": 4.611720547945206,
+              "diffuse_fraction": 0.43783558033788833
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.78720043572985,
+              "temperature_min_c": 14.3,
+              "temperature_max_c": 25.5,
+              "relative_humidity_mean_pct": 89.59340958605665,
+              "vpd_mean_kpa": 0.25525871459694993,
+              "vpd_p95_kpa": 0.89,
+              "precipitation_sum_mm": 1379.7,
+              "wind_mean_kmh": 6.019281045751634,
+              "ghi_sum_kwh_m2": 666.248,
+              "ghi_mean_kwh_m2_day": 4.354562091503269,
+              "diffuse_fraction": 0.4709747721569145
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.41810185185185,
+              "temperature_min_c": 12.5,
+              "temperature_max_c": 31.1,
+              "relative_humidity_mean_pct": 65.61527777777778,
+              "vpd_mean_kpa": 0.9528148148148148,
+              "vpd_p95_kpa": 2.67,
+              "precipitation_sum_mm": 128.1,
+              "wind_mean_kmh": 8.2775,
+              "ghi_sum_kwh_m2": 471.993,
+              "ghi_mean_kwh_m2_day": 5.244366666666666,
+              "diffuse_fraction": 0.3446703658740702
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2019": {
+          "hours": 8760,
+          "sha256_gzip_csv": "0d0c5c6195f23a9c7846aa46ff7017e98169584696d03f6d8a8b6f420804771a",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2019.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.690045662100456,
+              "temperature_min_c": 14.0,
+              "temperature_max_c": 30.5,
+              "relative_humidity_mean_pct": 83.70753424657535,
+              "vpd_mean_kpa": 0.43758561643835614,
+              "vpd_p95_kpa": 1.77,
+              "precipitation_sum_mm": 2779.8,
+              "wind_mean_kmh": 6.301723744292238,
+              "ghi_sum_kwh_m2": 1664.115,
+              "ghi_mean_kwh_m2_day": 4.559219178082192,
+              "diffuse_fraction": 0.4445924710732131
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.805174291939,
+              "temperature_min_c": 14.9,
+              "temperature_max_c": 24.7,
+              "relative_humidity_mean_pct": 91.6026688453159,
+              "vpd_mean_kpa": 0.2024074074074074,
+              "vpd_p95_kpa": 0.73,
+              "precipitation_sum_mm": 1866.5,
+              "wind_mean_kmh": 5.436737472766885,
+              "ghi_sum_kwh_m2": 644.403,
+              "ghi_mean_kwh_m2_day": 4.211784313725491,
+              "diffuse_fraction": 0.4792016796942286
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.50560185185185,
+              "temperature_min_c": 14.0,
+              "temperature_max_c": 30.5,
+              "relative_humidity_mean_pct": 68.3236111111111,
+              "vpd_mean_kpa": 0.8871388888888889,
+              "vpd_p95_kpa": 2.59,
+              "precipitation_sum_mm": 166.9,
+              "wind_mean_kmh": 7.846851851851852,
+              "ghi_sum_kwh_m2": 474.784,
+              "ghi_mean_kwh_m2_day": 5.275377777777778,
+              "diffuse_fraction": 0.3373765754532587
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2020": {
+          "hours": 8784,
+          "sha256_gzip_csv": "3d1db888163a353d55dcbba804dd18667d9b849be5912e9528c3079254fefeed",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2020.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8784,
+              "temperature_mean_c": 19.949510473588344,
+              "temperature_min_c": 13.9,
+              "temperature_max_c": 32.9,
+              "relative_humidity_mean_pct": 80.0228825136612,
+              "vpd_mean_kpa": 0.5608982240437159,
+              "vpd_p95_kpa": 2.23,
+              "precipitation_sum_mm": 2397.4,
+              "wind_mean_kmh": 6.896357012750455,
+              "ghi_sum_kwh_m2": 1761.612,
+              "ghi_mean_kwh_m2_day": 4.813147540983607,
+              "diffuse_fraction": 0.38635408932273396
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.747657952069716,
+              "temperature_min_c": 14.7,
+              "temperature_max_c": 26.1,
+              "relative_humidity_mean_pct": 90.25190631808279,
+              "vpd_mean_kpa": 0.240068082788671,
+              "vpd_p95_kpa": 0.88,
+              "precipitation_sum_mm": 1632.1,
+              "wind_mean_kmh": 5.912527233115468,
+              "ghi_sum_kwh_m2": 636.668,
+              "ghi_mean_kwh_m2_day": 4.161228758169934,
+              "diffuse_fraction": 0.4596760006785326
+            },
+            "dry_dec_feb": {
+              "hours": 2184,
+              "temperature_mean_c": 21.32701465201465,
+              "temperature_min_c": 13.9,
+              "temperature_max_c": 32.9,
+              "relative_humidity_mean_pct": 59.51602564102564,
+              "vpd_mean_kpa": 1.2022985347985349,
+              "vpd_p95_kpa": 3.1,
+              "precipitation_sum_mm": 37.9,
+              "wind_mean_kmh": 8.948443223443224,
+              "ghi_sum_kwh_m2": 538.047,
+              "ghi_mean_kwh_m2_day": 5.912604395604396,
+              "diffuse_fraction": 0.26469806541064256
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2021": {
+          "hours": 8760,
+          "sha256_gzip_csv": "8259f1680fed6838546c70baaff251195a943d21b6f051effd0faa6eb8a77cdd",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2021.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.90038812785388,
+              "temperature_min_c": 13.8,
+              "temperature_max_c": 31.8,
+              "relative_humidity_mean_pct": 78.05490867579908,
+              "vpd_mean_kpa": 0.6081324200913242,
+              "vpd_p95_kpa": 2.4,
+              "precipitation_sum_mm": 2255.5,
+              "wind_mean_kmh": 7.0052739726027395,
+              "ghi_sum_kwh_m2": 1767.899,
+              "ghi_mean_kwh_m2_day": 4.843558904109589,
+              "diffuse_fraction": 0.3931440653566748
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.89490740740741,
+              "temperature_min_c": 14.8,
+              "temperature_max_c": 26.9,
+              "relative_humidity_mean_pct": 89.42184095860567,
+              "vpd_mean_kpa": 0.26078976034858387,
+              "vpd_p95_kpa": 0.89,
+              "precipitation_sum_mm": 1554.8,
+              "wind_mean_kmh": 5.881917211328976,
+              "ghi_sum_kwh_m2": 654.521,
+              "ghi_mean_kwh_m2_day": 4.277915032679738,
+              "diffuse_fraction": 0.4621792119733362
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 21.198101851851852,
+              "temperature_min_c": 13.8,
+              "temperature_max_c": 31.7,
+              "relative_humidity_mean_pct": 56.64259259259259,
+              "vpd_mean_kpa": 1.2566481481481482,
+              "vpd_p95_kpa": 3.1,
+              "precipitation_sum_mm": 18.0,
+              "wind_mean_kmh": 9.37888888888889,
+              "ghi_sum_kwh_m2": 538.093,
+              "ghi_mean_kwh_m2_day": 5.978811111111111,
+              "diffuse_fraction": 0.2685279310453769
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2022": {
+          "hours": 8760,
+          "sha256_gzip_csv": "74e18c0742651530f83af0fce91e00c765197cc47eb2278c20baa8a1c3a6aa46",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2022.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.5475,
+              "temperature_min_c": 13.5,
+              "temperature_max_c": 31.3,
+              "relative_humidity_mean_pct": 78.2203196347032,
+              "vpd_mean_kpa": 0.5943230593607306,
+              "vpd_p95_kpa": 2.26,
+              "precipitation_sum_mm": 2241.5,
+              "wind_mean_kmh": 7.2771917808219175,
+              "ghi_sum_kwh_m2": 1802.829,
+              "ghi_mean_kwh_m2_day": 4.939257534246575,
+              "diffuse_fraction": 0.40781738035054904
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.38494008714597,
+              "temperature_min_c": 14.6,
+              "temperature_max_c": 25.4,
+              "relative_humidity_mean_pct": 89.48502178649237,
+              "vpd_mean_kpa": 0.2541966230936819,
+              "vpd_p95_kpa": 0.89,
+              "precipitation_sum_mm": 1605.7,
+              "wind_mean_kmh": 6.17467320261438,
+              "ghi_sum_kwh_m2": 641.757,
+              "ghi_mean_kwh_m2_day": 4.194490196078431,
+              "diffuse_fraction": 0.5184579209887855
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 20.757037037037037,
+              "temperature_min_c": 13.5,
+              "temperature_max_c": 31.3,
+              "relative_humidity_mean_pct": 58.31805555555555,
+              "vpd_mean_kpa": 1.181675925925926,
+              "vpd_p95_kpa": 3.01,
+              "precipitation_sum_mm": 27.1,
+              "wind_mean_kmh": 9.279398148148148,
+              "ghi_sum_kwh_m2": 538.672,
+              "ghi_mean_kwh_m2_day": 5.985244444444445,
+              "diffuse_fraction": 0.27390879793269374
+            }
+          },
+          "baseline_comparison": null
+        },
+        "2023": {
+          "hours": 8760,
+          "sha256_gzip_csv": "eb0aaa2dc7a2c5ff0f42a897c9cc03e3c9fd9df3ca5942581f8bd343c416ecbd",
+          "api_elevation_m": 1400.0,
+          "file": "djuttitsa_tea_2023.csv.gz",
+          "summary": {
+            "annual": {
+              "hours": 8760,
+              "temperature_mean_c": 19.862100456621004,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 31.0,
+              "relative_humidity_mean_pct": 79.81929223744292,
+              "vpd_mean_kpa": 0.558837899543379,
+              "vpd_p95_kpa": 2.17,
+              "precipitation_sum_mm": 2320.3,
+              "wind_mean_kmh": 6.798504566210045,
+              "ghi_sum_kwh_m2": 1788.624,
+              "ghi_mean_kwh_m2_day": 4.900339726027397,
+              "diffuse_fraction": 0.411825515032785
+            },
+            "wet_jun_oct": {
+              "hours": 3672,
+              "temperature_mean_c": 18.99934640522876,
+              "temperature_min_c": 14.9,
+              "temperature_max_c": 26.2,
+              "relative_humidity_mean_pct": 89.3082788671024,
+              "vpd_mean_kpa": 0.2697685185185185,
+              "vpd_p95_kpa": 0.92,
+              "precipitation_sum_mm": 1651.1,
+              "wind_mean_kmh": 5.488671023965142,
+              "ghi_sum_kwh_m2": 669.765,
+              "ghi_mean_kwh_m2_day": 4.3775490196078435,
+              "diffuse_fraction": 0.4858704172358962
+            },
+            "dry_dec_feb": {
+              "hours": 2160,
+              "temperature_mean_c": 21.002314814814813,
+              "temperature_min_c": 14.2,
+              "temperature_max_c": 31.0,
+              "relative_humidity_mean_pct": 60.39907407407407,
+              "vpd_mean_kpa": 1.1581296296296295,
+              "vpd_p95_kpa": 3.03,
+              "precipitation_sum_mm": 32.9,
+              "wind_mean_kmh": 9.06638888888889,
+              "ghi_sum_kwh_m2": 537.286,
+              "ghi_mean_kwh_m2_day": 5.969844444444444,
+              "diffuse_fraction": 0.2732064487070201
+            }
+          },
+          "baseline_comparison": {
+            "baseline_file": "era5_2023_djuttitsa_tea.json",
+            "policy": "Exact match except bounded current-archive thermodynamic deltas for Penja; not field validation.",
+            "variables": {
+              "temperature_2m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "relative_humidity_2m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "precipitation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "wind_speed_10m": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "shortwave_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "direct_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "diffuse_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "terrestrial_radiation": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              },
+              "vapor_pressure_deficit": {
+                "max_abs_difference": 0.0,
+                "mean_abs_difference": 0.0,
+                "different_samples": 0,
+                "tolerance": 0.0,
+                "within_tolerance": true
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "generated_utc": "2026-11-13T23:32:17.240592+00:00",
+  "warning": "Reanalysis robustness is not field validation; 2023 remains the manuscript baseline."
+}

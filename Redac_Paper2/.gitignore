@@ -7,3 +7,5 @@ __pycache__/
 *.pyc
 *.h5
 *.png
+# Preuve cross-validation n=20 (verdict canon 20260924) : exceptions explicites
+!backups/relaunch_20260924/**/*.h5

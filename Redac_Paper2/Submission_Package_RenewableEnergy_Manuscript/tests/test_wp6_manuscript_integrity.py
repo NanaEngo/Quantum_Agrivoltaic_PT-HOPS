@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Integrity tests for WP6 figures, Data Analysis Report, and Renewable Energy LaTeX submission package."""
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -205,6 +206,22 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
             self.assertNotIn("There were undefined references.", log_txt, f"Undefined ref in {log_path.name}")
             self.assertNotIn("There were undefined citations.", log_txt, f"Undefined cite in {log_path.name}")
             self.assertNotIn("multiply defined", log_txt, f"Multiply defined label/cite in {log_path.name}")
+
+    def test_wp3b_stress_ranking_reversal_is_reported(self) -> None:
+        """The report must preserve the near-tie Penja OPV/c-Si ranking reversal in WP3b data."""
+        audit_path = BASE_DIR / "data" / "wp3" / "wp3b_structural_and_louver_audit.json"
+        audit = json.loads(audit_path.read_text(encoding="utf-8"))
+        pepper = audit["synthetic_climate_stress"]["penja_white_pepper"]
+        warm_gap = pepper["warm_dry_stress"]["opv_minus_csi_pp"]
+        cool_gap = pepper["cool_cloudy_stress"]["opv_minus_csi_pp"]
+
+        self.assertGreater(warm_gap, 0.0)
+        self.assertLess(cool_gap, 0.0)
+        self.assertGreater(cool_gap, -0.1, "Cool-cloudy reversal should remain identified as near zero")
+
+        report = (BASE_DIR / "docs" / "DATA_ANALYSIS_REPORT_20261113.md").read_text(encoding="utf-8")
+        self.assertIn("near-tie reversal", report)
+        self.assertIn("pepper technology ranking is not robust", report)
 
 
 if __name__ == "__main__":

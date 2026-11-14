@@ -149,3 +149,7 @@ _archive/logs/
 *.zip
 .gemini_security/
 blackbox_mcp_settings.json
+
+# WP3 decade weather-year run: hourly per-site intermediates are regenerable
+# (scripts/wp1_multiyear_climate_robustness.py); aggregates + manifest are committed.
+Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/data/wp3/multiyear_2014_2023/*/*hourly*.csv

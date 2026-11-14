@@ -1,19 +1,18 @@
 # =============================================================================
 # Makefile for Renewable Energy Submission Package (Elsevier)
 # Target: Renewable Energy
-# Date: 2026-11-12
+# Date: 2026-11-13
 # =============================================================================
 
-PYTHON ?= /home/taamangtchu/miniforge3/bin/python3
+PYTHON ?= python3
 CONFIG ?= parameters.yaml
 
-.PHONY: all check test clean hpc-sync help
+.PHONY: all check test clean help
 
 help:
 	@echo "Available targets:"
 	@echo "  make check       Validate YAML parameters consistency"
-	@echo "  make test        Run local unit & analytical tests"
-	@echo "  make hpc-sync    Synchronize code to HPC cluster (100.73.21.40)"
+	@echo "  make test        Run package verification tests (pytest)"
 	@echo "  make clean       Remove temporary and compiled files"
 
 check:
@@ -23,7 +22,7 @@ check:
 
 test: check
 	@echo "Running verification suite..."
-	@$(PYTHON) -m unittest discover -s tests -p "test_*.py" -v
+	@$(PYTHON) -m pytest tests -q
 
 clean:
 	rm -rf *.aux *.log *.out *.bbl *.blg *.synctex.gz __pycache__ .pytest_cache

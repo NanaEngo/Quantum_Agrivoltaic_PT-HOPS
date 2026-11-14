@@ -1,0 +1,136 @@
+{
+  "generated_date": "2026-11-14",
+  "framework_version": "2.5.0",
+  "scope": "S3 OPV APT44 versus the existing zero-export and full-export controls, for each crop's selected BESS option.",
+  "export_acceptance_fraction": 0.5,
+  "interpretation": "The fraction is the share of otherwise-exportable annual energy accepted for export; it is not an hourly kW interconnection cap.",
+  "scenario_id": "S3_OPV_APT44_GCR65",
+  "variants": [
+    "S5_export_acceptance_50pct",
+    "S5_offgrid_no_export",
+    "baseline_zero_credit"
+  ],
+  "row_count": 9,
+  "wp5_validation_summary": {
+    "n_tea_lca_rows": 186,
+    "n_sobol_base_samples": 10000,
+    "max_dispatch_energy_err_kwh": 4.6566128730773926e-09,
+    "coop_catchment_ha": {
+      "arabica_coffee": 3000.0,
+      "penja_white_pepper": 2000.0,
+      "highland_tea": 450.0
+    },
+    "break_even_t80_by_crop": {
+      "arabica_coffee": {
+        "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+        "csi_ref_scenario": "S2_cSi_GCR40",
+        "bess_option_ref": "small_lfp_buffer_2h",
+        "t80_npv_breakeven_yr": Infinity,
+        "t80_npv_breakeven_r2r15_yr": 31.265186109862896,
+        "t80_lca_breakeven_yr": 7.418113636201936,
+        "site_par_over_isat": 2.451,
+        "site_dry_vpd_p95_kpa": 4.07
+      },
+      "penja_white_pepper": {
+        "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+        "csi_ref_scenario": "S2_cSi_GCR40",
+        "bess_option_ref": "small_lfp_buffer_2h",
+        "t80_npv_breakeven_yr": Infinity,
+        "t80_npv_breakeven_r2r15_yr": 16.33250773908616,
+        "t80_lca_breakeven_yr": 7.398551979978538,
+        "site_par_over_isat": 1.91,
+        "site_dry_vpd_p95_kpa": 2.83
+      },
+      "highland_tea": {
+        "opv_ref_scenario": "S3_OPV_APT44_GCR65",
+        "csi_ref_scenario": "S2_cSi_GCR40",
+        "bess_option_ref": "overnight_withering_bess",
+        "t80_npv_breakeven_yr": Infinity,
+        "t80_npv_breakeven_r2r15_yr": Infinity,
+        "t80_lca_breakeven_yr": 8.120312029398695,
+        "site_par_over_isat": 2.086,
+        "site_dry_vpd_p95_kpa": 3.03
+      }
+    },
+    "sobol_highlights": {
+      "arabica_coffee": {
+        "delta_npv_p05_p50_p95_usd_ha": [
+          -437575.2,
+          -139321.5,
+          90194.3
+        ],
+        "prob_opv_beats_csi": 0.1675,
+        "top3_S_Ti_delta_npv": [
+          [
+            "c_mod_opv_usd_m2",
+            0.34307
+          ],
+          [
+            "t80_opv_yr",
+            0.24705
+          ],
+          [
+            "c_bos_si_usd_m2",
+            0.15929
+          ]
+        ],
+        "quantum_eta_ness_S_Ti_npv_opv": 0.0
+      },
+      "penja_white_pepper": {
+        "delta_npv_p05_p50_p95_usd_ha": [
+          -394371.8,
+          -105263.6,
+          116871.1
+        ],
+        "prob_opv_beats_csi": 0.2299,
+        "top3_S_Ti_delta_npv": [
+          [
+            "c_mod_opv_usd_m2",
+            0.36633
+          ],
+          [
+            "t80_opv_yr",
+            0.2599
+          ],
+          [
+            "c_bos_si_usd_m2",
+            0.17009
+          ]
+        ],
+        "quantum_eta_ness_S_Ti_npv_opv": 1e-08
+      },
+      "highland_tea": {
+        "delta_npv_p05_p50_p95_usd_ha": [
+          -490039.2,
+          -175974.8,
+          58021.0
+        ],
+        "prob_opv_beats_csi": 0.11,
+        "top3_S_Ti_delta_npv": [
+          [
+            "c_mod_opv_usd_m2",
+            0.32307
+          ],
+          [
+            "t80_opv_yr",
+            0.26737
+          ],
+          [
+            "c_bos_si_usd_m2",
+            0.15
+          ]
+        ],
+        "quantum_eta_ness_S_Ti_npv_opv": 0.0
+      }
+    },
+    "wall_time_s": 1.796
+  },
+  "inputs": {
+    "parameters_yaml_sha256": "4c53ccebb20551a73f4ac9ed128e5177945914bf18ffae9a79d4e32e1ca181cb",
+    "wp5_script_sha256": "3e15f7f1d008a63f179834c433af5d5e5d9aabdff9ee92d21dc6353b900a0fe6",
+    "wp3_scenarios_csv_sha256": "29a7db685598b0e44346a09b7d47dbfda3987d46955b4c09f92f4909974b3449",
+    "wp1_summary_sha256": "0f2d8d3374af9547c9ca2f0b51ff6482e01fd88b9c3157704fc1fb6ca34279ef"
+  },
+  "output_csv_sha256": "18f1211ec6e2e8447675d5767a9359484b1af487006964319369acb611fc99ba",
+  "canonical_wp5_outputs_overwritten": false
+}

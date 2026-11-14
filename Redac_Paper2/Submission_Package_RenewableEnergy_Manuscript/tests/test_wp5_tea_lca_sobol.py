@@ -52,6 +52,26 @@ class TestWP5TeaLcaSobol(unittest.TestCase):
         self.assertLessEqual(d_over["effective_rte"], 0.900001)
         self.assertLess(self.summary["max_dispatch_energy_err_kwh"], 1e-5)
 
+    def test_dispatch_export_acceptance_splits_surplus_and_validates(self) -> None:
+        kwargs = {
+            "pv_wm2": np.array([0.3, 0.0]),
+            "load_kw": np.array([1.0, 0.0]),
+            "bess_cap_kwh": 0.0,
+            "bess_rte": 0.9,
+            "allow_grid_export": True,
+        }
+        dispatch = simulate_8760_dispatch(**kwargs, export_acceptance_fraction=0.5)
+
+        self.assertAlmostEqual(dispatch["e_direct_kwh"], 1.0)
+        self.assertAlmostEqual(dispatch["e_export_kwh"], 1.0)
+        self.assertAlmostEqual(dispatch["e_curtail_kwh"], 1.0)
+        self.assertLess(dispatch["energy_balance_err_kwh"], 1e-12)
+
+        for fraction in (-0.01, 1.01, np.nan, np.inf):
+            with self.subTest(export_acceptance_fraction=fraction):
+                with self.assertRaises(ValueError):
+                    simulate_8760_dispatch(**kwargs, export_acceptance_fraction=fraction)
+
     def test_baseline_zero_carbon_zero_subsidy_and_s4_monotonic(self) -> None:
         """Baseline scenarios carry zero carbon/subsidy revenue, and S4 T80 extension strictly helps."""
         baselines = [r for r in self.rows if r["wp5_variant"] == "baseline_zero_credit"]

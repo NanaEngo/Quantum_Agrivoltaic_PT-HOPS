@@ -1,0 +1,81 @@
+{
+  "n_scenarios_total": 124,
+  "wall_time_s": 5.115259172394872,
+  "max_energy_residual_wm2": 6.216410113779602e-06,
+  "max_shapley_residual_pct": 1.0658141036401503e-14,
+  "by_crop_empirical_checks": {
+    "arabica_coffee": {
+      "s0_yield_kg_ha": 850.0,
+      "s0_t_leaf_day_c": 27.98,
+      "s0_t_leaf_dry_day_c": 31.94,
+      "s1_delta_y_pct": -3.39,
+      "s1_dt_leaf_dry_day_c": -1.91,
+      "best_opv_shade_scenario": "S3_OPV_APT56_GCR50",
+      "best_opv_delta_y_pct": -2.0,
+      "best_opv_dt_leaf_dry_day_c": -1.44,
+      "best_opv_dt_pv_excess_day_c": 2.81,
+      "best_opv_levers_pct": {
+        "PAR_PI": -11.171,
+        "therm": 5.094,
+        "VPD_H2O": 4.294,
+        "spec_Q": -0.2206
+      },
+      "best_opv_delta_et_pct": -7.67,
+      "best_opv_delta_et_rad_mm": -42.14,
+      "best_opv_delta_et_aero_mm": 10.71,
+      "best_opv_pv_mwh_ha_yr": 694.8,
+      "best_csi_scenario": "S2_cSi_GCR30",
+      "best_csi_delta_y_pct": -3.09,
+      "best_csi_pv_mwh_ha_yr": 1081.1
+    },
+    "penja_white_pepper": {
+      "s0_yield_kg_ha": 800.0,
+      "s0_t_leaf_day_c": 29.4,
+      "s0_t_leaf_dry_day_c": 32.95,
+      "s1_delta_y_pct": 2.19,
+      "s1_dt_leaf_dry_day_c": -1.71,
+      "best_opv_shade_scenario": "S3_OPV_APT56_GCR50",
+      "best_opv_delta_y_pct": 2.23,
+      "best_opv_dt_leaf_dry_day_c": -1.64,
+      "best_opv_dt_pv_excess_day_c": 2.89,
+      "best_opv_levers_pct": {
+        "PAR_PI": -10.256,
+        "therm": 10.426,
+        "VPD_H2O": 2.382,
+        "spec_Q": -0.3173
+      },
+      "best_opv_delta_et_pct": -8.72,
+      "best_opv_delta_et_rad_mm": -31.66,
+      "best_opv_delta_et_aero_mm": 9.17,
+      "best_opv_pv_mwh_ha_yr": 542.6,
+      "best_csi_scenario": "S2_cSi_GCR30",
+      "best_csi_delta_y_pct": 1.16,
+      "best_csi_pv_mwh_ha_yr": 839.1
+    },
+    "highland_tea": {
+      "s0_yield_kg_ha": 1800.0,
+      "s0_t_leaf_day_c": 25.43,
+      "s0_t_leaf_dry_day_c": 30.54,
+      "s1_delta_y_pct": -0.82,
+      "s1_dt_leaf_dry_day_c": -3.67,
+      "best_opv_shade_scenario": "S3_OPV_APT56_GCR50",
+      "best_opv_delta_y_pct": 0.39,
+      "best_opv_dt_leaf_dry_day_c": -2.13,
+      "best_opv_dt_pv_excess_day_c": 3.11,
+      "best_opv_levers_pct": {
+        "PAR_PI": -8.939,
+        "therm": 7.466,
+        "VPD_H2O": 2.132,
+        "spec_Q": -0.2691
+      },
+      "best_opv_delta_et_pct": -7.4,
+      "best_opv_delta_et_rad_mm": -32.77,
+      "best_opv_delta_et_aero_mm": 9.14,
+      "best_opv_pv_mwh_ha_yr": 598.4,
+      "best_csi_scenario": "S2_cSi_GCR30",
+      "best_csi_delta_y_pct": 0.44,
+      "best_csi_pv_mwh_ha_yr": 933.7,
+      "tea_47pct_shade_delta_y_pct": -4.85
+    }
+  }
+}
