@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-11-14 — Session 34: BMAD `bmad-review` adversarial + edge-case lenses run on the Paper-2 RE manuscript (BMAD tooling, internal pass, M13 still open), 17 of 23 fixed, 1 refused, 5 recorded as stated scope, bibliography cut 72→50, main text 4 567 words / 21 pp, SM 9 pp, pre-emptive reviewer reply written; tests 35/35.
+**Last updated:** 2026-11-14 — Session 34: BMAD `bmad-review` adversarial + edge-case lenses run on the Paper-2 RE manuscript (BMAD tooling, internal pass, M13 still open), 17 of 23 fixed, 1 refused, 5 recorded as stated scope, bibliography cut 72→50, main text 4 567 words / 21 pp, SM 9 pp, pre-emptive reviewer reply written; tests 35/35; cover letter refreshed and rebuilt; workspace cleaned (branches/tags removed, caches and duplicate trees purged).
 
 
 ---
@@ -52,9 +52,10 @@ Until an SSH key + host entry are installed here, treat every server command in 
 - `Redac_Paper1/quantum_simulations_framework/` (DELETED)
 - `Redac_Paper1/quantum_simulations_framework_parallel/` (the `_260612` copy found un-purged at migration was moved to `_archive/` on 2026-11-06; its `.tar.gz` twin also lives in `_archive/`)
 - `Quantum_Agrivoltaic_PT-HOPS/quantum_simulations_framework/` (DELETED — moved to `_deleted_root_duplicate_260612/`)
+- `Redac_Paper1/quantum_simulations_framework_parallel_260509/` (10 MB untracked copy — moved to `_archive/quantum_simulations_framework_parallel_260509/` on 2026-11-14)
 - `Redac_Paper2/quantum_simulations_framework` symlink → `~/quantum_simulations_framework` (REMOVED 2026-11-06 — zero references; Paper 2's `solver.py` resolves the repo-root canonical framework)
 
-If these directories appear, delete them immediately and check for stale path references in `AGENTS.md`, `ROADMAP.md`, or `README.md`.
+If these directories appear, delete them immediately and check for stale path references in `AGENTS.md` or `README.md`.
 
 #### Hardware Management
 The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallelization.
@@ -162,7 +163,7 @@ The simulation now utilizes **2/3 of available CPU cores** via `joblib` parallel
 ```
 Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-09 (Session 29)
 ├── AGENTS.md                            # This file
-├── README.md / ROADMAP.md / SUBMISSION_STANDARD.md
+├── README.md / SUBMISSION_STANDARD.md
 ├── .gitignore                           # remote `origin` live (NanaEngo GitHub, PR #3 2026-11-13); relaunch/logs scratch rules retargeted to _archive/
 ├── Redac_Paper1/                        # Paper 1 (JPCL) — published, archival
 │   ├── JPCL_Submission_Package_2026-06-20/    # Source of truth (tex/pdf/bib/Figures)
@@ -170,7 +171,7 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 │   ├── docs/Xiang/Response_to_Tianfu_Xiang.md # Open post-pub reply draft
 │   └── SYNTHESE_SIMULATIONS_JUIN2026.md, run_cluster*.sh, How-to-launch-server.md
 ├── Redac_Paper2/                        # Paper 2 — Renewable Energy era (2026-11-13; package-only, self-contained)
-│   └── Submission_Package_RenewableEnergy_Manuscript/  # ACTIVE source of truth (WP1–WP6, tests 27/27)
+│   └── Submission_Package_RenewableEnergy_Manuscript/  # ACTIVE source of truth (WP1–WP6, tests 35/35)
 │       ├── RE_main_2611 / RE_SM_2611 / RE_Cover_letter_2611 / RE_Highlights_2611 (.tex + .pdf)
 │       ├── data/ docs/ figures/ scripts/ tests/ (WP1–WP6 evidence base + verification summaries)
 │       └── parameters.yaml (v2.5.0) / references.bib / Makefile
@@ -182,10 +183,11 @@ Quantum_Agrivoltaic_PT-HOPS/             # /home/nanaengo/... — migrated 2026-
 │   ├── Submission_Package_{SolarEnergy,AppliedEnergy,QST}_Manuscript/ + NE package,
 │   ├── src/ tests/ scripts/ docs/ backups/ data/ + main.py/Makefile/pyproject.toml,
 │   ├── relaunch_2026092{3,4}/ + logs/   # ~200 MB raw NPoM scratch — GITIGNORED (retargeted rules)
-│   └── Theory_Journals_main, Graphics, parallel_26xx copies (+ MASTER_AUDIT_PROMPT dup)
+│   └── Theory_Journals_main, Graphics, parallel_26xx copies (+ MASTER_AUDIT_PROMPT dup),
+│       quantum_simulations_framework_parallel_260509/, Paper2_stale_docs_261114/,
+│       parameters_v1.3_Archive_261114.yaml
 ├── docs/                                # Workspace architecture notes
 ├── _bmad-output/planning-artifacts/     # PRD, architecture, epics
-├── extract.py / generate_light_figures.py{,.txt} / PROJECT.md   # Sept-2026 migration/QST helpers
 └── comfyui-mcp-server/ graphify-out/    # Tool assets (gitignored)
 ```
 > [!NOTE]
@@ -419,6 +421,10 @@ Defects fixed from that run: APT mislabelled as "beam transmittance"; "reproduci
 **Length/references:** bibliography 72 → **50** (22 redundant co-citations dropped; uncited entries no longer printed); main text **4 567 words** of prose (**5 886** incl. captions, excl. tables/refs), inside the 4 000–6 000 target; **21 pp** main, **9 pp** SM, 0 errors, 0 undefined refs. New: `docs/RESPONSE_TO_REVIEWERS_PREEMPTIVE_20261114.md`.
 
 Gates: pytest **35** passed, config 10/10 + 8/8, checksums regenerated (143 files).
+
+**Package close-out (same day):** cover letter refreshed (date 14 November 2026, "base draws", `C_BOS^{c-Si}`, `amsmath` for `\text{-}` inside math) and rebuilt to 1 p; it states 21 pp, 4 567 words of prose (5 886 incl. captions), 50 references, 9-page SM. Git: single branch `main`, no tags (the three side branches and the two `attic/*` tags holding their commits were deleted on request); commits `83d74c0` → `aaa64dd` → `545dccd` → cover-letter/cleanup commit.
+
+**Workspace cleanup:** build caches (`__pycache__`, `.pytest_cache`, `.ruff_cache`, `.mypy_cache`) purged repo-wide including `_archive/`; `*.spl` artifacts removed; `Redac_Paper1/quantum_simulations_framework_parallel_260509/` (10 MB, 0 tracked files) moved to `_archive/`; root `Archive/` (pre-rename duplicate of `_archive/`, untracked) removed after preserving its one unique file as `_archive/parameters_v1.3_Archive_261114.yaml` (51-line JPCL-v1.3 DL-only config, superseded by the 96-line canonical `parameters.yaml`); untracked duplicate `Redac_Paper1/Response_to_Tianfu_Xiang.md` removed (tracked copy in `docs/Xiang/` is canonical); empty `Project_base/` and the `.gemini_security/` scanner sandbox (6.8 MB, a copy of the framework plus a venv) removed; `PROJECT.md` / `ROADMAP.md` / `extract.py` / `generate_light_figures.py*` deletions committed (live docs are `README.md` + `AGENTS.md`).
 
 ### Session 32 (2026-11-13) — Git Histories Joined, Paper 2 Rebuilt as *Renewable Energy*, Restructure Synced to Remote
 
