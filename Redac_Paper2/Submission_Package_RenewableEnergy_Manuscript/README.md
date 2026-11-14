@@ -5,7 +5,7 @@ Open-Quantum Assessment of Semi-Transparent Organic Agrivoltaics for Sub-Saharan
 (Elsevier, *Renewable Energy*). Located at
 `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/`.
 
-**State 2026-11-14:** main **21 pp / 50 references**, Supporting Material **9 pp**, cover letter and
+**State 2026-11-14:** main **20 pp / 50 references**, Supporting Material **9 pp**, cover letter and
 highlights 1 p. each, tests **35/35**, `parameters.yaml` `framework_version: 2.5.0`.
 Zero LaTeX errors, zero undefined references or citations.
 
