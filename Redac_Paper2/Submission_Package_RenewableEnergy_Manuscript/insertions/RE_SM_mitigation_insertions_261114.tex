@@ -1,26 +1,25 @@
-% Mitigation insertion for RE_SM_2611.tex
-% Generated 2026-11-14 from package artifacts and the WP3/WP5 analysis report.
-% Intended location: immediately before \end{document} in RE_SM_2611.tex.
-% This is an insertion fragment, not a replacement for the canonical SI. Add with
-% \input{insertions/RE_SM_mitigation_insertions_261114}, then compile both documents
-% and verify the external-document labels against the main manuscript.
+% Mitigation insertion for RE_SM_2611.tex.
+% Intended location: immediately before \end{document}. This file is a fragment,
+% not a replacement for the canonical Supporting Information. Insert with
+% \input{insertions/RE_SM_mitigation_insertions_261114} and compile both documents.
 
 \section{Weather-year and accepted-export sensitivity analyses}
 \label{sec:sm_weather_export}
 
-\subsection{Deterministic 2014--2023 ERA5 weather-year sensitivity}
+\subsection{ERA5 weather-year sensitivity, 2014--2023}
 \label{sec:sm_weather_decade}
 
-The canonical manuscript scenarios use 2023 hourly ERA5 forcing. To test sensitivity to interannual weather variation without changing the registered crop, optical, or economic parameters, the WP3 crop engine was rerun for each year from 2014 through 2023 at the three modeled sites. Leap years were represented by 8784 hourly samples; other years by 8760. The year-specific simulations are deterministic reanalysis counterfactuals. The ten years are not treated as independent random draws, and the resulting counts are not probabilities or confidence intervals. The 2023 baseline outputs were retained separately. No paired agrivoltaic field observations are available for validating these simulations.
+The main analysis uses 2023 hourly ERA5 forcing. To assess interannual weather sensitivity while holding the crop, optical, and economic parameters fixed, we repeated the WP3 simulations for each year from 2014 through 2023 at the three modeled sites. Leap years contain 8784 hourly samples; other years contain 8760. These are deterministic historical-reanalysis scenarios, not independent random draws, probabilities, confidence intervals, or field validation. The 2023 baseline outputs were retained separately.
 
 \begin{table}[htbp]
   \centering
-  \small
-  \caption{Focal ST-OPV modeled annual crop-yield change and shade-nearest OPV--c-Si yield contrast across 2014--2023 ERA5 forcing. Mean and standard deviation are across the ten deterministic weather years; positive-year counts are descriptive.}
+  \scriptsize
+  \caption{Focal ST-OPV modeled annual crop-yield change and shade-nearest OPV--c-Si yield contrast across 2014--2023 ERA5 forcing. Means and standard deviations are across ten deterministic weather years; positive-year counts are descriptive.}
   \label{tab:weather_decade}
   \begin{tabular}{@{}lrrrrrr@{}}
     \toprule
-    Crop & Mean $\Delta Y_{\rm OPV}$ (\%) & SD (pp) & Range (\%) & Positive years & Mean OPV--c-Si (pp) & Positive contrast years \\
+    Crop & Mean $\Delta Y_{\rm OPV}$ & SD & Range & Positive years & Mean OPV--c-Si contrast & Positive contrast years \\
+    & (\unit{\percent}) & (pp) & (\unit{\percent}) & & (pp) & \\
     \midrule
     Arabica coffee & $-8.22$ & 1.11 & $[-11.45,-6.38]$ & 0/10 & $-0.74$ & 0/10 \\
     Penja white pepper & $+1.85$ & 2.01 & $[-1.43,+7.60]$ & 7/10 & $+0.17$ & 8/10 \\
@@ -29,33 +28,30 @@ The canonical manuscript scenarios use 2023 hourly ERA5 forcing. To test sensiti
   \end{tabular}
 \end{table}
 
-For Penja, the OPV--c-Si yield contrast ranges from $-0.06$ to $+0.50$ percentage points, so its sign is not invariant across the tested years. The positive-year counts characterize only this ten-year, fixed-parameter reanalysis set; they must not be reported as probabilities of future success. This sensitivity addresses weather-year variability only. It does not sample uncertainty in crop parameters, soil properties, future climate, or model structure.
+For Penja white pepper, the shade-nearest OPV--c-Si annual yield contrast ranges from $-0.06$ to $+0.50$ percentage points, crossing zero. The positive-year counts apply only to this ten-year, fixed-parameter reanalysis set and should not be interpreted as probabilities of future outcomes. This sensitivity addresses weather-year variability; it does not sample uncertainty in crop parameters, soil properties, future climate, or model structure.
 
-The focal design is approximately shade-matched to the c-Si reference, not energy-matched. Across 2014--2023, ST-OPV generation is reported as 81.2--82.8\% of the shade-nearest c-Si generation; the 2023 ratio is 81.0--83.0\%. Matching the c-Si energy output requires a lower c-Si ground-coverage ratio (approximately 30--35\%), which changes crop-light exposure. Thus this analysis does not claim simultaneous matching of agricultural and electrical services.
-
-The multiyear outputs are reproducible from `scripts/wp1_multiyear_climate_robustness.py` and the archived inputs/manifest in `data/wp1/multiyear_2014_2023/` and `data/wp3/multiyear_2014_2023/`. The weather manifest records source, time coverage, completeness checks, and SHA-256 checksums. Reanalysis reproducibility is not field validation.
+The focal design is approximately shade-matched to the c-Si reference, not energy-matched. Across 2014--2023, ST-OPV generation was \qtyrange{81.2}{82.8}{\percent} of generation for the shade-nearest c-Si design; the 2023 ratio was \qtyrange{81.0}{83.0}{\percent}. No tested equal-shade pair also matched annual electricity generation. Matching c-Si output would require reducing its ground-coverage ratio to approximately 30--35\%, thereby changing crop-light exposure. The comparison therefore matches crop-light conditions approximately, not both agricultural and electrical services.
 
 \subsection{Accepted-export accounting sensitivity}
 \label{sec:sm_export_acceptance}
 
-The baseline WP5 case accepts all otherwise-exportable energy. In the 50\% case, the hourly dispatch accepts one half of otherwise-exportable energy and curtails the remainder; local consumption and the selected battery configuration are retained. The assumed fraction is a share of annual otherwise-exportable energy. It is not an hourly kW interconnection cap, a grid outage model, or a confirmed utility purchase agreement. Financial results are NPV per hectare of installed array under the modeled cooperative-load allocation.
+The full-export baseline assumes acceptance of all otherwise-exportable electricity. In the sensitivity case, the hourly dispatch accepts \qty{50}{\percent} of otherwise-exportable annual energy and curtails the remainder; local consumption and the crop-specific selected battery configuration are retained. This annual acceptance fraction is not an hourly interconnection power limit, a grid-outage model, or evidence of a local purchase agreement. NPV is reported per hectare of installed array under the modeled cooperative-load allocation.
 
 \begin{table}[htbp]
   \centering
-  \small
-  \caption{Modeled NPV under full, 50\%-accepted, and zero grid export for the focal ST-OPV scenario. Each crop uses its selected BESS option; values are USD per installed-array hectare. The 50\% acceptance case is a stylized annual energy constraint, not a local grid interconnection study.}
+  \scriptsize
+  \caption{Modeled NPV for the focal ST-OPV scenario under full, \qty{50}{\percent}-accepted, and zero grid export. Each crop uses its selected battery configuration. NPV is per installed-array hectare; export acceptance is a stylized annual energy constraint.}
   \label{tab:export_acceptance}
-  \begin{tabular}{@{}llrrrr@{}}
+  \begin{tabular}{@{}llrrr@{}}
     \toprule
-    Crop & Selected BESS & Full-export NPV (USD/ha) & 50\% accepted-export NPV (USD/ha) & Change vs full export (USD/ha) & No-export NPV (USD/ha) \\
+    Crop & Selected battery & Full export & \qty{50}{\percent} accepted & No export \\
+    & & \multicolumn{3}{c}{NPV (\unit{\USD\per\hectare})} \\
     \midrule
-    Arabica coffee & Small LFP, 2 h & 403,543.53 & 11,895.55 & $-391,647.98$ & $-379,752.43$ \\
-    Penja white pepper & Small LFP, 2 h & 368,372.49 & 43,412.03 & $-324,960.46$ & $-281,548.43$ \\
-    Highland tea & Overnight withering BESS & 860,825.08 & 590,309.49 & $-270,515.59$ & 319,793.89 \\
+    Arabica coffee & Small LFP, \qty{2}{\hour} & 403,543.53 & 11,895.55 & $-379,752.43$ \\
+    Penja white pepper & Small LFP, \qty{2}{\hour} & 368,372.49 & 43,412.03 & $-281,548.43$ \\
+    Highland tea & Overnight withering BESS & 860,825.08 & 590,309.49 & 319,793.89 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Under 50\% acceptance, the rejected portion of otherwise-exportable energy is curtailed. The selected cases preserve the modeled ordering full export $>$ 50\% accepted export $>$ no export, but the magnitude and project relevance depend on an unvalidated export assumption. The analysis does not establish that the local grid can accept the modeled energy or that the assumed tariff is available. The per-hectare NPV also depends on the cooperative catchment and load-allocation assumptions described in the main Methods.
-
-The sensitivity was generated by `scripts/wp5_export_acceptance_sensitivity.py`; its CSV and JSON provenance record are `data/wp5/wp5_export_acceptance_sensitivity_20261114.csv` and `data/wp5/wp5_export_acceptance_sensitivity_20261114.json`. The JSON manifest specifies the 0.5 acceptance fraction, input checksums, and that canonical WP5 outputs were not overwritten. The full-export baseline was checked against the canonical dispatch outputs; this code-level consistency check does not validate real-world export feasibility.
+At \qty{50}{\percent} acceptance, rejected otherwise-exportable energy is curtailed. In these modeled cases, NPV declines from full export to partial acceptance and again to no export; coffee and pepper become unprofitable in the no-export cases, whereas tea remains positive. The results show that export access is decision-relevant under the assumptions tested, but do not establish that the local grid can accept the modeled energy or provide the assumed tariff. Site-specific interconnection and tariff data are needed before interpreting these values as project returns.
