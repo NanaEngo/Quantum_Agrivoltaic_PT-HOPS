@@ -133,6 +133,31 @@ class TestWP5TeaLcaSobol(unittest.TestCase):
                 self.assertGreater(vals["prob_opv_beats_csi"], 0.05)
                 self.assertLess(vals["prob_opv_beats_csi"], 0.35)
 
+    def test_sobol_convergence_and_seed_stability(self) -> None:
+        """Resolution ladder and scrambles preserve the reported driver ranking (M10)."""
+        conv_path = BASE_DIR / "data" / "wp5" / "wp5_sobol_convergence.json"
+        self.assertTrue(conv_path.exists(), "Missing wp5_sobol_convergence.json diagnostic ledger")
+        conv = json.loads(conv_path.read_text(encoding="utf-8"))
+        self.assertEqual(conv["n_published"], 10000)
+        self.assertEqual(conv["ladder_n"], [1250, 2500, 5000, 10000])
+        for crop, res in conv["crops"].items():
+            spread = res["seed_spread"]
+            # Published seed-42 value must lie inside the seed range it summarizes.
+            pub = res["seed_runs"]["42"]["prob_opv_beats_csi"]
+            self.assertGreaterEqual(pub, spread["prob_opv_beats_csi"]["min"])
+            self.assertLessEqual(pub, spread["prob_opv_beats_csi"]["max"])
+            self.assertLess(spread["prob_opv_beats_csi"]["abs_spread"], 0.01, msg=f"{crop} P spread")
+            # Module CAPEX must remain the leading hardware driver at every rung.
+            for n, row in res["N_ladder"].items():
+                ranked = sorted(
+                    ("c_mod_opv_usd_m2", "t80_opv_yr", "c_bos_si_usd_m2"),
+                    key=lambda d: row[f"{d}_S_Ti"],
+                    reverse=True,
+                )
+                self.assertEqual(ranked[0], "c_mod_opv_usd_m2", msg=f"{crop} N={n} driver order")
+            # Quantum sensitivity stays negligible under every scramble.
+            self.assertLess(spread["quantum_S_Ti_delta_npv"]["max"], 1e-7, msg=f"{crop} quantum S_Ti")
+
     def test_phase_maps_sign_transitions(self) -> None:
         """Agronomic phase map and LCA break-even grids contain valid zero-contour sign changes."""
         dy = self.phase["agro_delta_y_pct"]

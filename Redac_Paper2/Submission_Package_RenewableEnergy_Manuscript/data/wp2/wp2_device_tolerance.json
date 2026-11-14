@@ -1,0 +1,137 @@
+{
+  "focal_stack": {
+    "d_act_nm": 60.0,
+    "d_ag_nm": 12.0,
+    "d_cap_nm": 35.0
+  },
+  "stack_architecture": "Barrier_PET/ITO(100nm)/ZnO(35nm)/PM6:Y6(d_act)/MoO3(10nm)/Ag(d_Ag)/MoO3_cap(d_cap)",
+  "iqe_used": 0.96,
+  "nominal": {
+    "apt_par_pct": 44.118351,
+    "pce_pct": 9.92676,
+    "lue_pct": 4.379523,
+    "epar_ratio": 0.420955,
+    "conservation_error": 0.0
+  },
+  "one_at_a_time_2sigma": {
+    "d_act_nm_2sigma_low": {
+      "value_nm": 54.0,
+      "apt_par_pct": 46.369,
+      "pce_pct": 9.351,
+      "lue_pct": 4.336,
+      "delta_apt_pp": 2.25,
+      "delta_pce_pp": -0.576
+    },
+    "d_act_nm_2sigma_high": {
+      "value_nm": 66.0,
+      "apt_par_pct": 41.995,
+      "pce_pct": 10.4,
+      "lue_pct": 4.367,
+      "delta_apt_pp": -2.123,
+      "delta_pce_pp": 0.473
+    },
+    "d_ag_nm_2sigma_low": {
+      "value_nm": 10.0,
+      "apt_par_pct": 47.934,
+      "pce_pct": 9.223,
+      "lue_pct": 4.421,
+      "delta_apt_pp": 3.815,
+      "delta_pce_pp": -0.704
+    },
+    "d_ag_nm_2sigma_high": {
+      "value_nm": 14.0,
+      "apt_par_pct": 40.129,
+      "pce_pct": 10.522,
+      "lue_pct": 4.222,
+      "delta_apt_pp": -3.99,
+      "delta_pce_pp": 0.595
+    },
+    "d_cap_nm_2sigma_low": {
+      "value_nm": 31.0,
+      "apt_par_pct": 43.354,
+      "pce_pct": 10.127,
+      "lue_pct": 4.391,
+      "delta_apt_pp": -0.764,
+      "delta_pce_pp": 0.2
+    },
+    "d_cap_nm_2sigma_high": {
+      "value_nm": 39.0,
+      "apt_par_pct": 44.453,
+      "pce_pct": 9.749,
+      "lue_pct": 4.334,
+      "delta_apt_pp": 0.334,
+      "delta_pce_pp": -0.178
+    }
+  },
+  "monte_carlo": {
+    "n_draws": 4000,
+    "seed": 42,
+    "spread": {
+      "d_act_nm": {
+        "mean_nm": 60.0,
+        "sigma_nm": 3.0
+      },
+      "d_ag_nm": {
+        "mean_nm": 12.0,
+        "sigma_nm": 1.0
+      },
+      "d_cap_nm": {
+        "mean_nm": 35.0,
+        "sigma_nm": 2.0
+      }
+    },
+    "apt_par_pct": {
+      "p05": 40.30137114781386,
+      "p50": 44.100827356324196,
+      "p95": 47.748530024846566,
+      "min": 35.75364668249865,
+      "max": 52.90993220459076,
+      "sd": 2.293933769815436
+    },
+    "pce_pct": {
+      "p05": 9.176561555897074,
+      "p50": 9.900794783999697,
+      "p95": 10.604916661437382,
+      "min": 8.121085253514561,
+      "max": 11.403806179323858,
+      "sd": 0.43578155532788465
+    },
+    "lue_pct": {
+      "p05": 4.241709779483632,
+      "p50": 4.364883764203627,
+      "p95": 4.429236738412747,
+      "min": 4.038288721276647,
+      "max": 4.476457434784881,
+      "sd": 0.05918442354122004
+    },
+    "max_conservation_error": 4.440892098500626e-16
+  },
+  "angular_acceptance": {
+    "0": {
+      "apt_par_pct": 44.118,
+      "pce_pct": 9.927,
+      "lue_pct": 4.38
+    },
+    "30": {
+      "apt_par_pct": 42.113,
+      "pce_pct": 10.071,
+      "lue_pct": 4.241
+    },
+    "45": {
+      "apt_par_pct": 39.062,
+      "pce_pct": 10.186,
+      "lue_pct": 3.979
+    },
+    "60": {
+      "apt_par_pct": 33.069,
+      "pce_pct": 10.13,
+      "lue_pct": 3.35
+    },
+    "75": {
+      "apt_par_pct": 20.004,
+      "pce_pct": 9.06,
+      "lue_pct": 1.812
+    }
+  },
+  "note": "Thickness spreads are illustrative fabrication tolerances, not measured line statistics; they define the reproducibility a laboratory check must meet, not a process capability claim."
+}

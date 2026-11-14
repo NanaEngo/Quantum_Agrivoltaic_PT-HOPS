@@ -1,8 +1,8 @@
 # Spécification Verrouillée du Modèle : Hamiltonien, Paramètres Physiques, Régimes, Scénarii & Approche Interprétative
 
-* **Code document :** `MS-RE-261112-V2.4`  
+* **Code document :** `MS-RE-261112-V2.4` (spec frozen at v2.4; executed configuration `parameters.yaml` `framework_version: 2.5.0`)  
 * **Cible :** *Renewable Energy* (Elsevier)  
-* **Source de Vérité :** `parameters.yaml` (`v2.4.0`)  
+* **Source de Vérité :** `parameters.yaml` (`framework_version: 2.5.0`)  
 * **Objectif :** Verrouiller tous les choix physiques (Hamiltonien LHCII, pile optique TMM/LUE, bilan foliaire LWIR–Medlyn, profil horaire diurne/nocturne usine, ACV double unité fonctionnelle) et réaliser une **revue complète pré-WP1**.
 
 ---
@@ -119,7 +119,7 @@ Au lieu de décrire des tableaux de simulation, la section Résultats & Discussi
 
 ## 7. Revue Complète de Cohérence Pré-WP1 (Verdict d'Audit)
 
-| Axe vérifié | Risque critique identifié lors de la revue | Verrou mis en place (`v2.4.0`) | Statut |
+| Axe vérifié | Risque critique identifié lors de la revue | Verrou mis en place (v2.4.0, carried into v2.5.0) | Statut |
 |---|---|---|---|
 | **Quantique / Hamiltonien** | Confusion laser/FMO vs lumière solaire continue ; sensibilité au jeu d'énergies de site ; coût MesoHOPS excessif | **LHCII 14 sites (H1 Novoderezhkin + H2 Müh–Renger)**, NESS partiellement séculaire vs Pauli, MesoHOPS v1.8.0 limité au benchmark d'erreur 2-modes ($N=32$) | Verrouillé |
 | **Optique ST-OPV** | Violation conservation des photons (`PCE = 10.5%` fixe à `APT = 70%`) | Empilement explicite `ITO/ZnO/PM6:Y6/MoO3/Ag/MoO3` résolu en TMM le long de la frontière de Pareto $\text{LUE} = \text{PCE} \times \text{APT}$ | Verrouillé |

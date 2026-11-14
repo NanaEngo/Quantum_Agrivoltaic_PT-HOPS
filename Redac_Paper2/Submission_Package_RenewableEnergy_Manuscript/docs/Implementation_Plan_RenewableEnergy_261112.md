@@ -3,8 +3,8 @@
 **Target Journal:** *Renewable Energy* (Elsevier, IF ~9.1)  
 **Working Title:** *Classical Microclimate Versus Quantum Bounds: Spectral and Techno-Economic Regime Maps for Agrivoltaics Over Tropical Perennial Cash Crops*  
 **Workspace:** `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/`  
-**Date:** 2026-11-12 (Version 2.4 — Optical Pareto LUE, Factory Diurnal Dispatch & LCA Audit)  
-**Single Source of Truth:** `parameters.yaml` (`v2.4.0`) · **Locked Technical Spec:** `docs/Model_Specification_Hamiltonian_Regimes_Scenarios_261112.md`
+**Date:** 2026-11-12, status reconciled 2026-11-14 (plan written at Version 2.4 — Optical Pareto LUE, Factory Diurnal Dispatch & LCA Audit; the executed model is Version 2.5.0)  
+**Single Source of Truth:** `parameters.yaml` (`framework_version: 2.5.0`, the configuration that generated the submitted manuscript; supersedes the v2.4.0 planning baseline) · **Locked Technical Spec:** `docs/Model_Specification_Hamiltonian_Regimes_Scenarios_261112.md`
 
 ---
 

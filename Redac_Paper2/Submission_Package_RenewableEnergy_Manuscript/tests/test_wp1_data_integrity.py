@@ -132,5 +132,23 @@ class TestWP1DataIntegrity(unittest.TestCase):
         self.assertGreaterEqual(len(am15.read_text(encoding="utf-8").splitlines()), 2000)
 
 
+    def test_wind_load_screening_consistency(self):
+        """Site wind screening stays inside the ERA5 record and its load table is monotone (M9)."""
+        path = DATA_WP1 / "wind_load_screening.json"
+        self.assertTrue(path.exists(), "wind_load_screening.json missing (run wp1_wind_load_screening.py)")
+        d = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(len(d["sites"]), 3)
+        for site, v in d["sites"].items():
+            self.assertEqual(v["hours"], 8760, msg=site)
+            self.assertTrue(0.0 <= v["p50_ms"] <= v["p95_ms"] <= v["p99_ms"] <= v["max_ms"], msg=site)
+        q = d["dynamic_pressure"]["table_Pa"]
+        keys = sorted(q, key=float)
+        vals = [q[k] for k in keys]
+        self.assertTrue(all(a < b for a, b in zip(vals, vals[1:])), "dynamic pressure not monotone in v")
+        # The record maximum must be far below any plausible design dynamic pressure.
+        record_max = max(s["q_at_record_max_Pa"] for s in d["sites"].values())
+        self.assertLess(record_max, min(vals))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

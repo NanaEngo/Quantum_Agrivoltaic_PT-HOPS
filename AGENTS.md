@@ -1,6 +1,6 @@
 # AGENTS.md - Project Context Document
 
-**Last updated:** 2026-11-13 (Session 32 — Git histories joined via PR #3 (`origin` live on GitHub); Paper 2 rebuilt as *Renewable Energy* package (WP1–WP6, tests 27/27); legacy Paper-2 tree moved to `_archive/` and synced to remote)
+**Last updated:** 2026-11-14 — Session 34: BMAD `bmad-review` adversarial + edge-case lenses run on the Paper-2 RE manuscript (BMAD tooling, internal pass, M13 still open), 17 of 23 fixed, 1 refused, 5 recorded as stated scope, bibliography cut 72→50, main text 4 567 words / 21 pp, SM 9 pp, pre-emptive reviewer reply written; tests 35/35.
 
 
 ---
@@ -409,6 +409,16 @@ Browse available agents: `ls /home/taamangtchu/Documents/Github/everything-claud
 ---
 
 ## Session Logs
+
+### Session 34 (2026-11-14) — BMAD Review Lenses Run; Bibliography Cut to 50; Reviewer Reply Pre-Drafted
+
+Third stage on the Paper-2 mitigation plan. `bmad-review` skill installed (`npx skills add bmad-code-org/BMAD-METHOD --skill bmad-review`, uses `.agents/skills/bmad-review/`) and its **adversarial** and **edge-case-hunter** lenses run over the staged manuscript + SM, per the skill's workflow (customization resolution, staged-content file, canonical findings JSON). Record: `docs/BMAD_REVIEW_20261114.md` (14 adversarial + 9 edge-case findings, provenance stated). It is BMAD tooling executed by the same agent that wrote the text — **not independent review**, so M13 stays open.
+
+Defects fixed from that run: APT mislabelled as "beam transmittance"; "reproducing" a 4.7 % benchmark gap; NPV-up/IRR-down left unexplained; carbon abatement without displaced factors (now diesel 0.80 / grid 0.28 kgCO₂e/kWh); "realizations" for QMC vectors; off-grid ΔNPV conflated with standalone NPV; present-tense pepper claim; untested trellis crops; Fig. 5 caption omitting the 2-h case; "exposes"/"demonstrate"/"falsifiable test" overclaims. Edge cases handled: signed Δη convention, truncated tolerance draws, BOS range and T80 ≥ 1 yr on the parity frontier, θ>80° truncation, leap-year normalisation.
+
+**Length/references:** bibliography 72 → **50** (22 redundant co-citations dropped; uncited entries no longer printed); main text **4 567 words** of prose (**5 886** incl. captions, excl. tables/refs), inside the 4 000–6 000 target; **21 pp** main, **9 pp** SM, 0 errors, 0 undefined refs. New: `docs/RESPONSE_TO_REVIEWERS_PREEMPTIVE_20261114.md`.
+
+Gates: pytest **35** passed, config 10/10 + 8/8, checksums regenerated (143 files).
 
 ### Session 32 (2026-11-13) — Git Histories Joined, Paper 2 Rebuilt as *Renewable Energy*, Restructure Synced to Remote
 

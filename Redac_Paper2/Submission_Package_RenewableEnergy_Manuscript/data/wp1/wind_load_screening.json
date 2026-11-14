@@ -1,0 +1,54 @@
+{
+  "source": "ERA5 hourly 10 m wind speed, 2023 (data/wp1/climate_*_2023.csv)",
+  "caveat": "Hourly means, not 10-min means or gusts. They describe ordinary operating wind at the sites and cannot supply a basic wind velocity v_b,0, which requires the national annex map, a terrain category and an orography factor.",
+  "dynamic_pressure": {
+    "formula": "q_p = 0.5 * rho * v^2, rho = 1.25 kg/m3",
+    "table_Pa": {
+      "20": 250.0,
+      "22": 302.5,
+      "24": 360.0,
+      "26": 422.5,
+      "28": 490.0,
+      "30": 562.5,
+      "32": 640.0
+    }
+  },
+  "sites": {
+    "foumbot_coffee": {
+      "hours": 8760,
+      "mean_ms": 1.531,
+      "p50_ms": 1.444,
+      "p95_ms": 3.0,
+      "p99_ms": 3.872,
+      "max_ms": 5.417,
+      "wet_season_mean_ms": 1.287,
+      "hours_above_10ms": 0,
+      "hours_above_15ms": 0,
+      "q_at_record_max_Pa": 18.3
+    },
+    "njombe_penja_pepper": {
+      "hours": 8760,
+      "mean_ms": 1.176,
+      "p50_ms": 1.111,
+      "p95_ms": 2.278,
+      "p99_ms": 2.944,
+      "max_ms": 4.583,
+      "wet_season_mean_ms": 1.074,
+      "hours_above_10ms": 0,
+      "hours_above_15ms": 0,
+      "q_at_record_max_Pa": 13.1
+    },
+    "djuttitsa_tea": {
+      "hours": 8760,
+      "mean_ms": 1.888,
+      "p50_ms": 1.722,
+      "p95_ms": 3.862,
+      "p99_ms": 5.306,
+      "max_ms": 7.028,
+      "wet_season_mean_ms": 1.525,
+      "hours_above_10ms": 0,
+      "hours_above_15ms": 0,
+      "q_at_record_max_Pa": 30.9
+    }
+  }
+}

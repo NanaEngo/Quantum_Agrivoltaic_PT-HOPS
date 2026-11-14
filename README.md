@@ -1,5 +1,5 @@
 # Selective Vibronic Excitation for Coherent Energy Transport
-> **Last updated:** 2026-11-13 | Paper 1 (JPCL `jz-2026-00994t`): **Published** ✅ | Paper 2: **Renewable Energy** package ready (27/27 tests)
+> **Last updated:** 2026-11-14 | Paper 1 (JPCL `jz-2026-00994t`): **Published** ✅ | Paper 2: **Renewable Energy** package ready (35/35 tests, 50 references, main 21 pp)
 
 A high-performance computational framework for simulating non-Markovian quantum dynamics in photosynthetic complexes (FMO) and agrivoltaic systems. This repository implements Stochastic Bundled Dissipators (SBD) and PT-HOPS methods to investigate spectral bath engineering for enhanced energy transport.
 
@@ -10,9 +10,9 @@ A high-performance computational framework for simulating non-Markovian quantum 
 | Component | Status | Details |
 | :--- | :--- | :--- |
 | **Core Simulation** | ✅ **Verified Stable** | 100% Trace Preservation ($L=8, K=2$) |
-| **Test Coverage** | 🧪 **27 passed (Paper 2 RE package)** | `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/tests` (env `MesoHOP-sim`, verified 2026-11-13); legacy 128/1 suite frozen in `_archive/`; Paper 1 suites verified separately |
+| **Test Coverage** | 🧪 **35 passed (Paper 2 RE package)** | `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/tests` (env `MesoHOP-sim`, verified 2026-11-14); legacy 128/1 suite frozen in `_archive/`; Paper 1 suites verified separately |
 | **Paper 1 (JPCL)** | ✅ **Published** | Post-pub: decide reply to Dr T. Xiang (SBD/SI query, draft in `Redac_Paper1/docs/Xiang/`) — private reply vs erratum |
-| **Paper 2 (→ Renewable Energy)** | 🎯 **RE package ready — WP1–WP6 rebuild (27/27)** | Cameroon tri-crop ST-OPV agrivoltaics: TMM optics (PM6:Y6, APT44) + 14-site LHCII quantum NESS bounds (decoupled from macro TEA) + ERA5/FvCB–Medlyn/FAO-56 microclimate + cooperative TEA/LCA/Sobol. `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/` = source of truth (main 21 pp / SM 6 pp / cover + highlights 1 p.); NE→AE→SolarEnergy V2611 lineage frozen in `_archive/` |
+| **Paper 2 (→ Renewable Energy)** | 🎯 **RE package ready — WP1–WP6 rebuild (35/35)** | Cameroon tri-crop ST-OPV agrivoltaics: TMM optics (PM6:Y6, APT44) + 14-site LHCII quantum NESS bounds (decoupled from macro TEA) + ERA5/FvCB–Medlyn/FAO-56 microclimate + cooperative TEA/LCA/Sobol. `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/` = source of truth (main **21 pp / 50 refs** / SM 9 pp / cover + highlights 1 p.); NE→AE→SolarEnergy V2611 lineage frozen in `_archive/` |
 | **Data Integrity** | 🔒 LFS Tracked | Audited production ensemble ($n=100$) |
 
 ---

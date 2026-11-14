@@ -1,0 +1,318 @@
+{
+  "n_published": 10000,
+  "ladder_n": [
+    1250,
+    2500,
+    5000,
+    10000
+  ],
+  "seeds": [
+    42,
+    1234,
+    2024
+  ],
+  "n_params": 12,
+  "note": "Sampling diagnostics for a scrambled quasi-Monte Carlo Sobol estimator; not confidence intervals and not probabilities of future outcomes.",
+  "crops": {
+    "arabica_coffee": {
+      "N_ladder": {
+        "1250": {
+          "prob_opv_beats_csi": 0.1744,
+          "delta_npv_p50_usd_ha": -137968.72895573804,
+          "quantum_S_Ti_delta_npv": 3.836882679280573e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3489801016896908,
+          "t80_opv_yr_S_Ti": 0.24248047840912146,
+          "c_bos_si_usd_m2_S_Ti": 0.15784176126207322
+        },
+        "2500": {
+          "prob_opv_beats_csi": 0.1708,
+          "delta_npv_p50_usd_ha": -140214.53162730858,
+          "quantum_S_Ti_delta_npv": 3.8535837578304215e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3454309446602169,
+          "t80_opv_yr_S_Ti": 0.2470240383616166,
+          "c_bos_si_usd_m2_S_Ti": 0.1597812568103639
+        },
+        "5000": {
+          "prob_opv_beats_csi": 0.1696,
+          "delta_npv_p50_usd_ha": -140014.59348886096,
+          "quantum_S_Ti_delta_npv": 3.8343341705403385e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.34320486195097827,
+          "t80_opv_yr_S_Ti": 0.24659805793958334,
+          "c_bos_si_usd_m2_S_Ti": 0.15908620168629897
+        },
+        "10000": {
+          "prob_opv_beats_csi": 0.1675,
+          "delta_npv_p50_usd_ha": -139321.51950337435,
+          "quantum_S_Ti_delta_npv": 3.832005332548875e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3430708868486666,
+          "t80_opv_yr_S_Ti": 0.2470534972408299,
+          "c_bos_si_usd_m2_S_Ti": 0.15929054612313295
+        }
+      },
+      "seed_runs": {
+        "42": {
+          "prob_opv_beats_csi": 0.1675,
+          "delta_npv_p50_usd_ha": -139321.51950337435,
+          "quantum_S_Ti_delta_npv": 3.832005332548875e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3430708868486666,
+          "t80_opv_yr_S_Ti": 0.2470534972408299,
+          "c_bos_si_usd_m2_S_Ti": 0.15929054612313295
+        },
+        "1234": {
+          "prob_opv_beats_csi": 0.1715,
+          "delta_npv_p50_usd_ha": -137938.26256799608,
+          "quantum_S_Ti_delta_npv": 3.839854190434721e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3440922889744807,
+          "t80_opv_yr_S_Ti": 0.24684548194721193,
+          "c_bos_si_usd_m2_S_Ti": 0.15951685824477332
+        },
+        "2024": {
+          "prob_opv_beats_csi": 0.1657,
+          "delta_npv_p50_usd_ha": -137904.11094224846,
+          "quantum_S_Ti_delta_npv": 3.83692510393017e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3452743756159116,
+          "t80_opv_yr_S_Ti": 0.24663185091684206,
+          "c_bos_si_usd_m2_S_Ti": 0.15954453355128606
+        }
+      },
+      "seed_spread": {
+        "prob_opv_beats_csi": {
+          "min": 0.1657,
+          "median": 0.1675,
+          "max": 0.1715,
+          "abs_spread": 0.005800000000000027
+        },
+        "delta_npv_p50_usd_ha": {
+          "min": -139321.51950337435,
+          "median": -137938.26256799608,
+          "max": -137904.11094224846,
+          "abs_spread": 1417.4085611258924
+        },
+        "quantum_S_Ti_delta_npv": {
+          "min": 3.832005332548875e-09,
+          "median": 3.83692510393017e-09,
+          "max": 3.839854190434721e-09,
+          "abs_spread": 7.8488578858459e-12
+        },
+        "c_mod_opv_usd_m2_S_Ti": {
+          "min": 0.3430708868486666,
+          "median": 0.3440922889744807,
+          "max": 0.3452743756159116,
+          "abs_spread": 0.002203488767245021
+        },
+        "t80_opv_yr_S_Ti": {
+          "min": 0.24663185091684206,
+          "median": 0.24684548194721193,
+          "max": 0.2470534972408299,
+          "abs_spread": 0.0004216463239878343
+        },
+        "c_bos_si_usd_m2_S_Ti": {
+          "min": 0.15929054612313295,
+          "median": 0.15951685824477332,
+          "max": 0.15954453355128606,
+          "abs_spread": 0.0002539874281531074
+        }
+      }
+    },
+    "penja_white_pepper": {
+      "N_ladder": {
+        "1250": {
+          "prob_opv_beats_csi": 0.2288,
+          "delta_npv_p50_usd_ha": -103287.31856605352,
+          "quantum_S_Ti_delta_npv": 2.106641944662146e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.3727971250857777,
+          "t80_opv_yr_S_Ti": 0.25511354142430476,
+          "c_bos_si_usd_m2_S_Ti": 0.16861406863047768
+        },
+        "2500": {
+          "prob_opv_beats_csi": 0.2292,
+          "delta_npv_p50_usd_ha": -106447.95318909598,
+          "quantum_S_Ti_delta_npv": 2.1150672310506095e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.36887591242081946,
+          "t80_opv_yr_S_Ti": 0.2598945844080297,
+          "c_bos_si_usd_m2_S_Ti": 0.17062587415740663
+        },
+        "5000": {
+          "prob_opv_beats_csi": 0.2298,
+          "delta_npv_p50_usd_ha": -106140.56759319722,
+          "quantum_S_Ti_delta_npv": 2.1042217029101366e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.36644993572153683,
+          "t80_opv_yr_S_Ti": 0.259406155966366,
+          "c_bos_si_usd_m2_S_Ti": 0.16986102134664566
+        },
+        "10000": {
+          "prob_opv_beats_csi": 0.2299,
+          "delta_npv_p50_usd_ha": -105263.63003066252,
+          "quantum_S_Ti_delta_npv": 2.1030940541902956e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.3663330810062515,
+          "t80_opv_yr_S_Ti": 0.2599033634553292,
+          "c_bos_si_usd_m2_S_Ti": 0.17009136820809925
+        }
+      },
+      "seed_runs": {
+        "42": {
+          "prob_opv_beats_csi": 0.2299,
+          "delta_npv_p50_usd_ha": -105263.63003066252,
+          "quantum_S_Ti_delta_npv": 2.1030940541902956e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.3663330810062515,
+          "t80_opv_yr_S_Ti": 0.2599033634553292,
+          "c_bos_si_usd_m2_S_Ti": 0.17009136820809925
+        },
+        "1234": {
+          "prob_opv_beats_csi": 0.229,
+          "delta_npv_p50_usd_ha": -104120.18306348537,
+          "quantum_S_Ti_delta_npv": 2.1074745617673802e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.3674364451128743,
+          "t80_opv_yr_S_Ti": 0.25968427767900965,
+          "c_bos_si_usd_m2_S_Ti": 0.17033891548026164
+        },
+        "2024": {
+          "prob_opv_beats_csi": 0.2312,
+          "delta_npv_p50_usd_ha": -104271.3319348805,
+          "quantum_S_Ti_delta_npv": 2.106225052688322e-08,
+          "c_mod_opv_usd_m2_S_Ti": 0.36876142405736656,
+          "t80_opv_yr_S_Ti": 0.2594935288474478,
+          "c_bos_si_usd_m2_S_Ti": 0.17039743910329505
+        }
+      },
+      "seed_spread": {
+        "prob_opv_beats_csi": {
+          "min": 0.229,
+          "median": 0.2299,
+          "max": 0.2312,
+          "abs_spread": 0.0021999999999999797
+        },
+        "delta_npv_p50_usd_ha": {
+          "min": -105263.63003066252,
+          "median": -104271.3319348805,
+          "max": -104120.18306348537,
+          "abs_spread": 1143.4469671771512
+        },
+        "quantum_S_Ti_delta_npv": {
+          "min": 2.1030940541902956e-08,
+          "median": 2.106225052688322e-08,
+          "max": 2.1074745617673802e-08,
+          "abs_spread": 4.380507577084688e-11
+        },
+        "c_mod_opv_usd_m2_S_Ti": {
+          "min": 0.3663330810062515,
+          "median": 0.3674364451128743,
+          "max": 0.36876142405736656,
+          "abs_spread": 0.002428343051115056
+        },
+        "t80_opv_yr_S_Ti": {
+          "min": 0.2594935288474478,
+          "median": 0.25968427767900965,
+          "max": 0.2599033634553292,
+          "abs_spread": 0.0004098346078814097
+        },
+        "c_bos_si_usd_m2_S_Ti": {
+          "min": 0.17009136820809925,
+          "median": 0.17033891548026164,
+          "max": 0.17039743910329505,
+          "abs_spread": 0.000306070895195798
+        }
+      }
+    },
+    "highland_tea": {
+      "N_ladder": {
+        "1250": {
+          "prob_opv_beats_csi": 0.1104,
+          "delta_npv_p50_usd_ha": -175782.89075429155,
+          "quantum_S_Ti_delta_npv": 9.88447591040515e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.32937515294264574,
+          "t80_opv_yr_S_Ti": 0.2639779217353784,
+          "c_bos_si_usd_m2_S_Ti": 0.14897455185757302
+        },
+        "2500": {
+          "prob_opv_beats_csi": 0.1128,
+          "delta_npv_p50_usd_ha": -176857.54439144104,
+          "quantum_S_Ti_delta_npv": 9.91198755892905e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3255159156692071,
+          "t80_opv_yr_S_Ti": 0.2676920719038707,
+          "c_bos_si_usd_m2_S_Ti": 0.1505694348506133
+        },
+        "5000": {
+          "prob_opv_beats_csi": 0.1108,
+          "delta_npv_p50_usd_ha": -176072.0208958286,
+          "quantum_S_Ti_delta_npv": 9.858177329343245e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.32327724745710035,
+          "t80_opv_yr_S_Ti": 0.2670216664651454,
+          "c_bos_si_usd_m2_S_Ti": 0.14984912829381103
+        },
+        "10000": {
+          "prob_opv_beats_csi": 0.11,
+          "delta_npv_p50_usd_ha": -175974.7854409446,
+          "quantum_S_Ti_delta_npv": 9.849658475464917e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3230680233745525,
+          "t80_opv_yr_S_Ti": 0.26737219940120566,
+          "c_bos_si_usd_m2_S_Ti": 0.15000305724266835
+        }
+      },
+      "seed_runs": {
+        "42": {
+          "prob_opv_beats_csi": 0.11,
+          "delta_npv_p50_usd_ha": -175974.7854409446,
+          "quantum_S_Ti_delta_npv": 9.849658475464917e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3230680233745525,
+          "t80_opv_yr_S_Ti": 0.26737219940120566,
+          "c_bos_si_usd_m2_S_Ti": 0.15000305724266835
+        },
+        "1234": {
+          "prob_opv_beats_csi": 0.1112,
+          "delta_npv_p50_usd_ha": -174855.93080196332,
+          "quantum_S_Ti_delta_npv": 9.867561278649979e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3239552936512975,
+          "t80_opv_yr_S_Ti": 0.26711660839843604,
+          "c_bos_si_usd_m2_S_Ti": 0.1501816004335119
+        },
+        "2024": {
+          "prob_opv_beats_csi": 0.1097,
+          "delta_npv_p50_usd_ha": -174484.38495851075,
+          "quantum_S_Ti_delta_npv": 9.866215717851562e-09,
+          "c_mod_opv_usd_m2_S_Ti": 0.3252719965167754,
+          "t80_opv_yr_S_Ti": 0.26711068851166264,
+          "c_bos_si_usd_m2_S_Ti": 0.15030182552351828
+        }
+      },
+      "seed_spread": {
+        "prob_opv_beats_csi": {
+          "min": 0.1097,
+          "median": 0.11,
+          "max": 0.1112,
+          "abs_spread": 0.0014999999999999875
+        },
+        "delta_npv_p50_usd_ha": {
+          "min": -175974.7854409446,
+          "median": -174855.93080196332,
+          "max": -174484.38495851075,
+          "abs_spread": 1490.400482433848
+        },
+        "quantum_S_Ti_delta_npv": {
+          "min": 9.849658475464917e-09,
+          "median": 9.866215717851562e-09,
+          "max": 9.867561278649979e-09,
+          "abs_spread": 1.790280318506161e-11
+        },
+        "c_mod_opv_usd_m2_S_Ti": {
+          "min": 0.3230680233745525,
+          "median": 0.3239552936512975,
+          "max": 0.3252719965167754,
+          "abs_spread": 0.002203973142222926
+        },
+        "t80_opv_yr_S_Ti": {
+          "min": 0.26711068851166264,
+          "median": 0.26711660839843604,
+          "max": 0.26737219940120566,
+          "abs_spread": 0.00026151088954301516
+        },
+        "c_bos_si_usd_m2_S_Ti": {
+          "min": 0.15000305724266835,
+          "median": 0.1501816004335119,
+          "max": 0.15030182552351828,
+          "abs_spread": 0.00029876828084993146
+        }
+      }
+    }
+  }
+}

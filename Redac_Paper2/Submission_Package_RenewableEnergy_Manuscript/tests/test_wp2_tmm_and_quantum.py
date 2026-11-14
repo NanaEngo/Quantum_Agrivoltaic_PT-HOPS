@@ -107,5 +107,37 @@ class TestWP2TMMAndQuantum(unittest.TestCase):
         self.assertLess(results["H2_Muh2010_diag_PDA_DL_K1"]["terminal_mae_0_tmax"], 0.05)
 
 
+    def test_device_tolerance_audit(self):
+        """Fabrication-tolerance audit reproduces the nominal stack and stays in tolerance (M9)."""
+        path = DATA_WP2 / "wp2_device_tolerance.json"
+        self.assertTrue(path.exists(), "wp2_device_tolerance.json missing (run wp2b_device_tolerance_audit.py)")
+        d = json.loads(path.read_text(encoding="utf-8"))
+        nom = d["nominal"]
+        # Nominal evaluation must reproduce the published focal-stack numbers.
+        self.assertAlmostEqual(nom["apt_par_pct"], 44.118, places=2)
+        self.assertAlmostEqual(nom["pce_pct"], 9.927, places=2)
+        self.assertLess(nom["conservation_error"], 1e-12)
+        mc = d["monte_carlo"]
+        self.assertEqual(mc["n_draws"], 4000)
+        self.assertLess(mc["max_conservation_error"], 1e-12)
+        # Distribution must bracket the nominal value and stay physically bounded.
+        self.assertLess(mc["apt_par_pct"]["p05"], mc["apt_par_pct"]["p50"])
+        self.assertLess(mc["apt_par_pct"]["p50"], mc["apt_par_pct"]["p95"])
+        self.assertGreater(mc["apt_par_pct"]["min"], 0.0)
+        self.assertLess(mc["apt_par_pct"]["max"], 100.0)
+        # LUE must be far stiffer than APT under the same thickness spread: relative SD
+        # stays below 2 % for LUE while APT exceeds 4 %.
+        rel_sd_lue = mc["lue_pct"]["sd"] / nom["lue_pct"]
+        rel_sd_apt = mc["apt_par_pct"]["sd"] / nom["apt_par_pct"]
+        self.assertLess(rel_sd_lue, 0.02, msg=f"LUE relative SD too large: {rel_sd_lue}")
+        self.assertGreater(rel_sd_apt, 0.04, msg=f"APT relative SD expected larger: {rel_sd_apt}")
+        # Angular decay must be monotone over the sampled angles.
+        ang = d["angular_acceptance"]
+        seq = [ang[k]["apt_par_pct"] for k in ("0", "30", "45", "60", "75")]
+        self.assertTrue(all(a > b for a, b in zip(seq, seq[1:])), f"APT not monotone with angle: {seq}")
+        for k, v in ang.items():
+            self.assertGreater(v["pce_pct"], 0.0, msg=f"non-positive PCE at {k} deg")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

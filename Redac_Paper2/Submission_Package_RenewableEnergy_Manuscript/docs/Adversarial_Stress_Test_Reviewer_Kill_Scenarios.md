@@ -102,3 +102,55 @@ In accordance with BMAD adversarial review principles (`bmad-brainstorming` and 
   1. **LUE-Coupled Optical Stack:** Full TMM (`ITO/ZnO/PM6:Y6/MoO3/Ag/MoO3`) derives $\text{PCE}(\text{APT})$ self-consistently along the $\text{LUE} = \text{PCE} \times \text{APT}$ Pareto front (`2.5–4.2%`), including seasonal Harmattan/monsoon soiling (`2–6%`).
   2. **Closed Bidirectional $(T_{\text{pv}}, T_{\text{leaf}})$ + Finite $g_m$ + 8760h Seasonality:** Couples panel LWIR emission ($F_{l\to p}\varepsilon_p\sigma T_p^4$), canopy latent cooling, Medlyn $g_s(\text{VPD}_l)$, **finite *C. arabica* $g_m$ (`0.04–0.15 mol m⁻² s⁻¹`)**, ePAR/R:FR, and hourly dry-vs-monsoon $f_{\text{diff}}$ resolution.
   3. **Dual-FU ISO LCA & 2D Regime Maps vs. Spaced c-Si:** Reports both $\text{kg CO}_2\text{e}/\text{ha}/\text{yr}$ and $\text{g CO}_2\text{e}/\text{kWh}$ to locate the exact $T_{80}^*$ break-even against 25-year spaced c-Si ($\beta_T=-0.38\,\%/^\circ\text{C}$).
+
+---
+
+## Reconciliation pass — 2026-11-14
+
+**What was done.** This register was compared line by line against the package as it now stands
+(`RE_main_2611.tex`, `RE_SM_2611.tex`, `parameters.yaml` `framework_version: 2.5.0`,
+`docs/DATA_ANALYSIS_REPORT_20261113.md` rev. 3). The comparison is a verification-gap pass done by
+direct reading; no BMAD agent or BMAD tooling was executed for it, and nothing below is offered as
+an independent domain review.
+
+**Status of the register.** The Scenario 1–7 arguments remain valid as *argument structure*: each
+still names a real reviewer objection and the defence the manuscript actually makes. Several
+numbers and one design claim inside them, however, predate the executed model and would
+misrepresent the paper if quoted. They are listed here rather than overwritten, so the record of
+what was claimed earlier stays visible.
+
+| Location | Stale statement in this register | Current package value (verified) | Verified against |
+|---|---|---|---|
+| Header | Working title "*Spectrally Selective Agrivoltaic Co-Design … A Multi-Crop Decision Framework \* and a Bounded Test …*" (stray asterisk) | "Scale-Bridging Techno-Economic, Microclimatic, and Open-Quantum Assessment of Semi-Transparent Organic Agrivoltaics for Sub-Saharan Perennial Crops" | `RE_main_2611.tex` `\title` |
+| Scenario 1 | "hybrid Modified Redfield–Generalized Förster (15 cm⁻¹ cutoff, 48 vibrational modes)"; MesoHOPS "N=32" | Bloch–Redfield partial-secular equilibrium and non-equilibrium steady states versus diagonal Pauli; Renger spectral density (λ_D = 50.87 cm⁻¹, γ_D = 50 cm⁻¹); three 14-site Hamiltonians (H1 Novoderezhkin, H2 Müh, H3 MMSIC-MD); N = 200 disorder draws; MesoHOPS 1.8.0 benchmark at N = 48 seeds over 2000 fs | `sec:methods_quantum`, `sec:quantum_bound` |
+| Scenario 1 | "if an editor removes it, the tri-crop classical core stands intact … (Section 4)" | Still satisfied: the scale-separation analysis is the standalone §4, between Results (§3) and Discussion (§5) | section order in the compiled `RE_main_2611.pdf` |
+| Scenario 3 | Model "parameterized directly" from BREEDCAFS/CIRAD field trials; "probabilistic distributions … with ±20 % confidence bands" | Inputs are literature-calibrated, not site-calibrated; no paired field measurements exist at the three sites; VPD/soil/conductance levers are scenario ranges, and the ten ERA5 years are deterministic reanalyses explicitly *not* a probability sample | `sec:interpretive`, `sec:weather_year_sensitivity`, `sec:disc_limits` |
+| Scenario 5 | Pepper optimum "APT > 65 %, shade < 25 %" | No APT > 65 % design exists in the optical library (bounded at APT = 52.06 %); the modelled pepper optimum is APT 44–52 % at GCR 65 %, shade 36–41 %, with APT 56 %/GCR 50 % (25.9 % shade) giving +7.27 % | `sec:res_tmm`, `tab:agro_summary` |
+| Scenario 6 | Coffee milling "25 kWh/t, 90 % day" | 25.0 kWh/t at 85 % daytime share (pepper 45.0 kWh/t at 85 %; tea 380 kWh/t at 55 % daytime, 45 % overnight) | `tab:sites`, `sec:methods_tea` |
+| Scenario 6 | Diesel 0.45 USD/kWh, export 0.085 USD/kWh quoted without provenance | Export tariff 0.085 USD/kWh and diesel price are the modelled inputs; both are Sobol parameters, and export tariff is the leading driver of standalone bankability in coffee and pepper | `parameters.yaml`, `tab:sobol_dual` |
+| Scenario 7 | LUE "2.5–4.2 %" | LUE_max = 4.424 % on the Pareto-optimal subset, 4.486 % grid peak, photon conservation |ΔR+T+A_tot−1| = 4.44×10⁻¹⁶ | `sec:res_tmm`, `fig:opt_pareto` |
+| Scenario 7 | "2D regime maps" as the only regime product | Regime information is carried by the seasonal year map plus the phase diagram of `fig:shapley`b, and now also by the conditional screening tables `tab:decision_map`, `tab:weather_decade`, `tab:export_acceptance` | `sec:res_agro`, `sec:decision_map` |
+
+**Objections this register does not answer, and the manuscript now does.** Three critiques raised
+after Revision 3 are absent from the Scenario 1–7 set and are handled in the text:
+
+1. *Export monetisation* (Scenario 6 assumes a buyer exists) — answered by `sec:export_acceptance`
+   with the 50 %-acceptance and no-export cases, which turn coffee and pepper negative.
+2. *Single weather year* — answered by the 2014–2023 sensitivity (`sec:weather_year_sensitivity`),
+   which removes any decade-robust claim for Penja pepper.
+3. *Estimator stability* — answered by the resolution ladder and scramble study in SM
+   `sec:sm_sobol_convergence`; the driver ranking is unchanged and the exceedance probability
+   varies by at most 0.6 percentage points.
+
+**Standing limitation.** Every defence in this document is a modelling argument. None of them
+constitutes field, device, or interconnection evidence, and no entry here should be cited as if it
+did.
+
+### Where a fresh pass changed the text (2026-11-14)
+
+A later verification pass, recorded in `docs/ADVERSARIAL_PASS_20261114.md`, is a better starting
+point than this file for what is currently true. It is **internal, not independent**, and it found
+defects the Scenario 1–7 set never covered — most notably that the Methods described a different
+optical stack (ITO 140 nm, ZnO 30 nm, 1 nm grid) from the one that produced the reported numbers,
+and that the stated k_RC ceiling was contradicted by the paper's own baseline value. Read it before
+reusing any defence here.

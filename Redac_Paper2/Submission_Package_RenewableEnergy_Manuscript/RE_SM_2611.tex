@@ -8,18 +8,18 @@
 \usepackage{multirow}
 \usepackage{siunitx}
 \sisetup{
-  uncertainty-mode = separate,
-  mode = match,
-  propagate-math-font = true,
-  reset-math-version = false,
-  reset-text-family = false,
-  reset-text-series = false,
-  reset-text-shape = false,
-  text-family-to-math = true,
-  text-series-to-math = true,
-  retain-explicit-plus = true,
-  range-units = single,
-  list-units = single
+ uncertainty-mode = separate,
+ mode = match,
+ propagate-math-font = true,
+ reset-math-version = false,
+ reset-text-family = false,
+ reset-text-series = false,
+ reset-text-shape = false,
+ text-family-to-math = true,
+ text-series-to-math = true,
+ retain-explicit-plus = true,
+ range-units = single,
+ list-units = single
 }
 \DeclareSIUnit\kWh{kWh}
 \DeclareSIUnit\MWh{MWh}
@@ -30,6 +30,7 @@
 \DeclareSIUnit\XAF{XAF}
 \DeclareSIUnit\yr{yr}
 \DeclareSIUnit\ppm{ppm}
+\DeclareSIUnit\pp{pp}
 \DeclareSIUnit\debye{D}
 \DeclareSIUnit\day{d}
 \usepackage{physics}
@@ -74,11 +75,11 @@ This Supporting Material documents the complete optical transfer-matrix formulat
 \section{Optical transfer-matrix formalism and spectral calibration}
 \label{sec:sm_tmm}
 
-Multilayer optical propagation across the semi-transparent organic photovoltaic (ST-OPV) stack---glass substrate (\qty{1.1}{\milli\meter}, incoherent) / ITO anode (\qty{140}{\nano\meter}) / \ce{ZnO} ETL (\qty{30}{\nano\meter}) / PM6:Y6 ($1{:}1.2$) photoactive layer ($d_{\mathrm{act}} \in [\num{40}, \num{140}]\,\unit{\nano\meter}$) / \ce{MoO3} HTL (\qty{10}{\nano\meter}) / ultrathin \ce{Ag} electrode ($d_{\mathrm{Ag}} \in [\num{8}, \num{22}]\,\unit{\nano\meter}$) / \ce{MoO3} dielectric capping layer ($d_{\mathrm{cap}} \in [\num{0}, \num{60}]\,\unit{\nano\meter}$)---is evaluated using the $2\times 2$ Abeles characteristic transfer-matrix method at \qty{1}{\nano\meter} spectral resolution ($\lambda \in [\num{300}, \num{1100}]\,\unit{\nano\meter}$). Unpolarized irradiance responses average transverse-electric (TE) and transverse-magnetic (TM) modes across incident angles $\theta \in [\ang{0}, \ang{80}]$:
+Multilayer optical propagation across the semi-transparent organic photovoltaic (ST-OPV) stack---glass substrate (\qty{1.1}{\milli\meter}, incoherent) / ITO anode (\qty{100}{\nano\meter}) / \ce{ZnO} ETL (\qty{35}{\nano\meter}) / PM6:Y6 ($1{:}1.2$) photoactive layer ($d_{\mathrm{act}} \in \{50, 60, 75, 90, 105, 120\}\,\unit{\nano\meter}$) / \ce{MoO3} HTL (\qty{10}{\nano\meter}) / ultrathin \ce{Ag} electrode ($d_{\mathrm{Ag}} \in \{8, 10, 12, 14, 16\}\,\unit{\nano\meter}$) / \ce{MoO3} dielectric capping layer ($d_{\mathrm{cap}} \in \{0, 20, 35, 50\}\,\unit{\nano\meter}$)---is evaluated using the $2\times 2$ Abeles characteristic transfer-matrix method at \qty{1}{\nano\meter} spectral resolution ($\lambda \in [\num{300}, \num{1100}]\,\unit{\nano\meter}$). Unpolarized irradiance responses average transverse-electric (TE) and transverse-magnetic (TM) modes across incident angles $\theta \in [\ang{0}, \ang{80}]$; the integration stops at \ang{80} because the Abeles stack becomes ill-conditioned at grazing incidence, and the neglected solid-angle weight above \ang{80} is $\cos^2\ang{80}\approx\num{0.03}$ of the normal-incidence weight:
 \begin{equation}
-  T_{\mathrm{OPV}}^{\mathrm{beam}}(\lambda,\theta) = \frac{1}{2}\left[T_{\mathrm{TE}}(\lambda,\theta) + T_{\mathrm{TM}}(\lambda,\theta)\right], \qquad
-  T_{\mathrm{OPV}}^{\mathrm{diff}}(\lambda) = 2 \int_0^{\pi/2} T_{\mathrm{OPV}}^{\mathrm{beam}}(\lambda,\theta)\sin\theta\cos\theta\,\dd\theta.
-  \label{eq:tmm_diff}
+ T_{\mathrm{OPV}}^{\mathrm{beam}}(\lambda,\theta) = \frac{1}{2}\left[T_{\mathrm{TE}}(\lambda,\theta) + T_{\mathrm{TM}}(\lambda,\theta)\right], \qquad
+ T_{\mathrm{OPV}}^{\mathrm{diff}}(\lambda) = 2 \int_0^{\pi/2} T_{\mathrm{OPV}}^{\mathrm{beam}}(\lambda,\theta)\sin\theta\cos\theta\,\dd\theta.
+ \label{eq:tmm_diff}
 \end{equation}
 Complex refractive indices $n(\lambda)+i\kappa(\lambda)$ use published variable-angle spectroscopic ellipsometry datasets for PM6:Y6, D18:Y6, and ITO alongside dispersive Johnson--Christy \ce{Ag} optical constants, avoiding constant-index artifacts. Across all \num{120} Pareto-swept stacks, local energy conservation satisfies $\max |R(\lambda) + T(\lambda) + A_{\mathrm{tot}}(\lambda) - 1| = \num{4.44e-16}$. An opaque reference cell ($d_{\mathrm{act}}=\qty{75}{\nano\meter}$, $d_{\mathrm{Ag}}=\qty{100}{\nano\meter}$) reproduces the experimental PM6:Y6 benchmark ($J_{\mathrm{sc}}=\qty{25.701}{\milli\ampere\per\square\centi\meter}$, $\mathrm{PCE}=\qty{15.501}{\percent}$ vs.\ \qty{26.36}{\milli\ampere\per\square\centi\meter} and \qty{16.27}{\percent} reported by Shen et~al.~\cite{Shen2025NatCommun}).
 
@@ -93,11 +94,11 @@ To eliminate single-Hamiltonian bias, three monomeric LHCII 14-pigment Frenkel-e
 \subsection{Continuous-wave non-equilibrium steady state vs.\ pulsed MesoHOPS}
 Under continuous-wave (CW) solar illumination filtered by $T_{\mathrm{OPV}}(\lambda)$, broadband photon-pumping operators act without inter-mode temporal phase correlation~\cite{BrumerShapiro2012,Kassal2013}. Solving the Liouville steady state $\mathcal{L}\rho_{\mathrm{ss}} = 0$ compares the full Bloch--Redfield partial-secular tensor ($\eta_{\mathrm{PS}}$) against its diagonal secular Pauli counterpart ($\eta_{\mathrm{Pauli}}$) via
 \begin{equation}
-  \Delta\eta_{\mathrm{NESS}} = \eta_{\mathrm{PS}} - \eta_{\mathrm{Pauli}}, \qquad
-  \eta = \frac{k_{\mathrm{RC}}\,\mathrm{Tr}(P_{\mathrm{term}}\rho_{\mathrm{ss}})}{k_{\mathrm{RC}}\,\mathrm{Tr}(P_{\mathrm{term}}\rho_{\mathrm{ss}}) + k_{\mathrm{NR}}\,\mathrm{Tr}(\rho_{\mathrm{ss}}) + k_{\mathrm{NPQ}}\,\mathrm{Tr}(P_{\mathrm{qE}}\rho_{\mathrm{ss}})},
-  \label{eq:ness_eta}
+ \Delta\eta_{\mathrm{NESS}} = \eta_{\mathrm{PS}} - \eta_{\mathrm{Pauli}}, \qquad
+ \eta = \frac{k_{\mathrm{RC}}\,\mathrm{Tr}(P_{\mathrm{term}}\rho_{\mathrm{ss}})}{k_{\mathrm{RC}}\,\mathrm{Tr}(P_{\mathrm{term}}\rho_{\mathrm{ss}}) + k_{\mathrm{NR}}\,\mathrm{Tr}(\rho_{\mathrm{ss}}) + k_{\mathrm{NPQ}}\,\mathrm{Tr}(P_{\mathrm{qE}}\rho_{\mathrm{ss}})},
+ \label{eq:ness_eta}
 \end{equation}
-with open-RC trapping $k_{\mathrm{RC}} = \qty{0.005}{\per\pico\second}$ (swept over $[\num{0.0033}, \num{0.5}]\,\unit{\per\pico\second}$), nonradiative decay $k_{\mathrm{NR}} = \qty{0.25}{\per\nano\second}$, and $q_E$ photoprotective quenching $k_{\mathrm{NPQ}} \in \{\num{0}, \num{1.5}\}\,\unit{\per\nano\second}$. A 4-site exact QuTiP-BoFiN HEOM cross-check~\cite{Lambert2023} verifies $|\eta_{\mathrm{HEOM}}-\eta_{\mathrm{Pauli}}| = \num{0.00210}$ (H2) and \num{0.000106} (H3).
+with open-RC trapping $k_{\mathrm{RC}} = \qty{0.005}{\per\pico\second}$ (swept over $[\num{0.0033}, \num{0.5}]\,\unit{\per\pico\second}$), nonradiative decay $k_{\mathrm{NR}} = \qty{0.25}{\per\nano\second}$, and $q_E$ photoprotective quenching $k_{\mathrm{NPQ}} \in \{\num{0}, \num{1.5}\}\,\unit{\per\nano\second}$. The bound is reported as a magnitude, but the crop model receives a signed perturbation sampled over the stated interval (baseline $[\num{-0.02},\num{+0.10}]\,\unit{\percent}$, exact-HEOM envelope $[\num{-0.21},\num{+0.21}]\,\unit{\percent}$), so no sign of the coherence shift is assumed. A 4-site exact QuTiP-BoFiN HEOM cross-check~\cite{Lambert2023} verifies $|\eta_{\mathrm{HEOM}}-\eta_{\mathrm{Pauli}}| = \num{0.00210}$ (H2) and \num{0.000106} (H3).
 
 Separately, full non-Markovian 14-site MesoHOPS~1.8.0 trajectories ($N=48$ disorder seeds, \qty{2000}{\femto\second} propagation, max trace-norm deviation $\le \num{1.11e-15}$) confirm that coherent transient wavepacket dynamics under pulsed initial conditions deviate markedly from secular kinetics (terminal Chl~$a_{610}$--$a_{612}$ $\mathrm{MAE} = \num{0.0198}$ on H2--DL, \num{0.2017} on H3--DL, and \num{0.2200} on H3--DL+Vib$_{340}$, where \qty{340}{\per\centi\meter} vibronic dynamics reach $p_{\mathrm{term}} = \num{0.0835}$ vs.\ \num{0.4035} Pauli), yet vanish under CW incoherent sunlight ($|\Delta\eta_{\mathrm{NESS}}| \le \num{3.370e-5}$).
 
@@ -110,54 +111,54 @@ Hourly meteorological drivers (\qty{8760}{\hour}, 2023 UTC) are extracted from O
 \cref{tab:sm_pepper_audit} documents why Penja white pepper parameters avoid conflation with whole-dried black pepper.
 
 \begin{table}[htbp]
-  \centering
-  \caption{Agronomic, post-harvest processing, and market parameterization separating Protected Geographical Indication (PGI) Penja white pepper from generic black pepper.}
-  \label{tab:sm_pepper_audit}
-  \small
-  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
-    \toprule
-    \textbf{Parameter} & \textbf{Model Value (White)} & \textbf{Black Pepper Contrast} & \textbf{Agronomic / Market Basis} \\
-    \midrule
-    Clean dry yield & \qty{800}{\kilogram\per\hectare\per\yr} & \qty{1100}{\kilogram\per\hectare\per\yr} equivalent & White kernel recovery is \mbox{$\sim$\qty{24}{\percent}} of red-ripe fresh berries vs.\ \mbox{$\sim$\qty{34}{\percent}} whole-dried black pepper. \\
-    Baseline farm-gate price & \qty{5000}{\XAF\per\kilogram} & \qtyrange{1800}{2800}{\XAF\per\kilogram} & Cameroon Njombe-Penja peeled white kernel price (\qtyrange{3500}{6000}{\XAF\per\kilogram} range); PGI export tier $= \qty{14000}{\XAF\per\kilogram}$. \\
-    Post-harvest electric load & \qty{45.0}{\kWh\per\tonne} (\qty{85}{\percent} day) & \qtyrange{10}{15}{\kWh\per\tonne} (sun drying) & Sized for spring-water retting circulation pumps (\qtyrange{7}{10}{\day}), mechanical decortication/washing, and fan-assisted solar drying. \\
-    Gas-exchange ($V_{c\max 25}, J_{\max 25}$) & \num{44.6}, \qty{65.0}{\micro\mole\per\square\meter\per\second} & Species-shared (\textit{Piper nigrum}~L.) & Calibrated in steady-state FvCB against Oliveira et~al.~\cite{Oliveira2018} and Ferreira et~al.~\cite{Ferreira2024Piper}. \\
-    \bottomrule
-  \end{tabular}
+ \centering
+ \caption{Agronomic, post-harvest processing, and market parameterization separating Protected Geographical Indication (PGI) Penja white pepper from generic black pepper.}
+ \label{tab:sm_pepper_audit}
+ \small
+ \begin{tabular}{@{}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{3.0cm}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}p{5.0cm}@{}}
+ \toprule
+ \textbf{Parameter} & \textbf{Model Value (White)} & \textbf{Black Pepper Contrast} & \textbf{Agronomic / Market Basis} \\
+ \midrule
+ Clean dry yield & \qty{800}{\kilogram\per\hectare\per\yr} & \qty{1100}{\kilogram\per\hectare\per\yr} equivalent & White kernel recovery is \mbox{$\sim$\qty{24}{\percent}} of red-ripe fresh berries vs.\ \mbox{$\sim$\qty{34}{\percent}} whole-dried black pepper. \\
+ Baseline farm-gate price & \qty{5000}{\XAF\per\kilogram} & \qtyrange{1800}{2800}{\XAF\per\kilogram} & Cameroon Njombe-Penja peeled white kernel price (\qtyrange{3500}{6000}{\XAF\per\kilogram} range); PGI export tier $= \qty{14000}{\XAF\per\kilogram}$. \\
+ Post-harvest electric load & \qty{45.0}{\kWh\per\tonne} (\qty{85}{\percent} day) & \qtyrange{10}{15}{\kWh\per\tonne} (sun drying) & Sized for spring-water retting circulation pumps (\qtyrange{7}{10}{\day}), mechanical decortication/washing, and fan-assisted solar drying. \\
+ Gas-exchange ($V_{c\max 25}, J_{\max 25}$) & \num{44.6}, \qty{65.0}{\micro\mole\per\square\meter\per\second} & Species-shared (\textit{Piper nigrum}~L.) & Calibrated in steady-state FvCB against Oliveira et~al.~\cite{Oliveira2018} and Ferreira et~al.~\cite{Ferreira2024Piper}. \\
+ \bottomrule
+ \end{tabular}
 \end{table}
 
 \section{Extended scenario results ($S_0$--$S_5$)}
 \label{sec:sm_tables}
 
 \begin{table}[htbp]
-  \centering
-  \caption{Summary of focal agronomic, PV generation, and techno-economic outputs under grid-connected operation at the baseline \qty{0}{\USD\per\tCOtwoe} carbon price and \qty{0}{\percent} CAPEX subsidy. NPV and LCA use a \qty{2}{\hour} LFP buffer for coffee/pepper and overnight withering BESS for tea in $S_3(\mathrm{APT44,\,GCR65})$, $S_5(\mathrm{APT44,\,GCR65,\,irrig.})$, and $S_2(\mathrm{c\text{-}Si,\,GCR40})$, whereas $S_3(\mathrm{APT56,\,GCR50})$ and $S_3(\mathrm{APT52,\,GCR65})$ reflect daytime-only dispatch without storage.}
-  \label{tab:sm_focal_matrix}
-  \scriptsize
-  \resizebox{\textwidth}{!}{
-  \begin{tabular}{@{}llrrrrrrrr@{}}
-    \toprule
-    \textbf{Crop} & \textbf{Scenario} & \textbf{Shade} & $\Delta Y_{\mathrm{ann}}$ & $\Delta Y_{\mathrm{dry}}$ & $\Delta Y_{\mathrm{wet}}$ & \textbf{PV Yield} & \textbf{LER} & \textbf{NPV} & \textbf{LCA} \\
-     & & (\unit{\percent}) & (\unit{\percent}) & (\unit{\percent}) & (\unit{\percent}) & (\unit{\MWh\per\hectare\per\yr}) & (--) & (\unit{\kUSD\per\hectare}) & (\unit{\gCOtwoe\per\kWh}) \\
-    \midrule
-    Coffee & S3 (APT56, GCR50) & \num{25.7} & \num{-1.21} & \num{+9.02} & \num{-6.96} & \num{717.0} & \num{1.265} & \num{213.0} & \num{33.99} \\
-    Coffee & S3 (APT44, GCR65) & \num{40.6} & \num{-7.08} & \num{+8.82} & \num{-15.88} & \num{1223.3} & \num{1.401} & \num{403.5} & \num{26.16} \\
-    Coffee & S5 (APT44, GCR65, irrig.) & \num{40.6} & \num{+0.22} & \num{+38.23} & \num{-15.88} & \num{1223.3} & \num{1.474} & \num{414.2} & \num{26.18} \\
-    Coffee & S2 (c-Si, GCR40) & \num{40.0} & \num{-6.38} & \num{+8.73} & \num{-14.92} & \num{1479.0} & \num{1.507} & \num{779.3} & \num{18.92} \\
-    \midrule
-    Penja Pepper & S3 (APT56, GCR50) & \num{25.9} & \num{+7.27} & \num{+19.57} & \num{+1.53} & \num{611.7} & \num{1.350} & \num{205.7} & \num{39.84} \\
-    Penja Pepper & S3 (APT52, GCR65) & \num{36.0} & \num{+8.16} & \num{+27.56} & \num{+0.04} & \num{870.2} & \num{1.477} & \num{253.3} & \num{36.85} \\
-    Penja Pepper & S3 (APT44, GCR65) & \num{40.8} & \num{+7.43} & \num{+30.24} & \num{-1.36} & \num{1043.7} & \num{1.548} & \num{368.4} & \num{30.73} \\
-    Penja Pepper & S5 (APT44, GCR65, irrig.) & \num{40.8} & \num{+12.25} & \num{+49.68} & \num{-1.36} & \num{1043.7} & \num{1.596} & \num{376.5} & \num{30.74} \\
-    Penja Pepper & S2 (c-Si, GCR40) & \num{40.0} & \num{+6.95} & \num{+27.89} & \num{-0.78} & \num{1257.2} & \num{1.640} & \num{709.1} & \num{22.31} \\
-    \midrule
-    Highland Tea & S3 (APT56, GCR50) & \num{25.8} & \num{+0.01} & \num{+11.26} & \num{-3.47} & \num{652.5} & \num{1.271} & \num{556.3} & \num{37.35} \\
-    Highland Tea & S3 (APT44, GCR65) & \num{40.7} & \num{-3.35} & \num{+15.98} & \num{-8.84} & \num{1113.3} & \num{1.429} & \num{860.8} & \num{32.66} \\
-    Highland Tea & S5 (APT44, GCR65, irrig.) & \num{40.7} & \num{+2.47} & \num{+41.38} & \num{-8.84} & \num{1113.3} & \num{1.487} & \num{899.8} & \num{32.91} \\
-    Highland Tea & S2 (c-Si, GCR40) & \num{40.0} & \num{-2.30} & \num{+16.56} & \num{-7.65} & \num{1374.4} & \num{1.548} & \num{1272.6} & \num{23.46} \\
-    \bottomrule
-  \end{tabular}
-  }
+ \centering
+ \caption{Summary of focal agronomic, PV generation, and techno-economic outputs under grid-connected operation at the baseline \qty{0}{\USD\per\tCOtwoe} carbon price and \qty{0}{\percent} CAPEX subsidy. NPV and LCA use a \qty{2}{\hour} LFP buffer for coffee/pepper and overnight withering BESS for tea in $S_3(\mathrm{APT44,\,GCR65})$, $S_5(\mathrm{APT44,\,GCR65,\,irrig.})$, and $S_2(\mathrm{c\text{-}Si,\,GCR40})$, whereas $S_3(\mathrm{APT56,\,GCR50})$ and $S_3(\mathrm{APT52,\,GCR65})$ reflect daytime-only dispatch without storage.}
+ \label{tab:sm_focal_matrix}
+ \scriptsize
+ \resizebox{\textwidth}{!}{
+ \begin{tabular}{@{}llrrrrrrrr@{}}
+ \toprule
+ \textbf{Crop} & \textbf{Scenario} & \textbf{Shade} & $\Delta Y_{\mathrm{ann}}$ & $\Delta Y_{\mathrm{dry}}$ & $\Delta Y_{\mathrm{wet}}$ & \textbf{PV Yield} & \textbf{LER} & \textbf{NPV} & \textbf{LCA} \\
+ & & (\unit{\percent}) & (\unit{\percent}) & (\unit{\percent}) & (\unit{\percent}) & (\unit{\MWh\per\hectare\per\yr}) & (--) & (\unit{\kUSD\per\hectare}) & (\unit{\gCOtwoe\per\kWh}) \\
+ \midrule
+ Coffee & S3 (APT56, GCR50) & \num{25.7} & \num{-1.21} & \num{+9.02} & \num{-6.96} & \num{717.0} & \num{1.265} & \num{213.0} & \num{33.99} \\
+ Coffee & S3 (APT44, GCR65) & \num{40.6} & \num{-7.08} & \num{+8.82} & \num{-15.88} & \num{1223.3} & \num{1.401} & \num{403.5} & \num{26.16} \\
+ Coffee & S5 (APT44, GCR65, irrig.) & \num{40.6} & \num{+0.22} & \num{+38.23} & \num{-15.88} & \num{1223.3} & \num{1.474} & \num{414.2} & \num{26.18} \\
+ Coffee & S2 (c-Si, GCR40) & \num{40.0} & \num{-6.38} & \num{+8.73} & \num{-14.92} & \num{1479.0} & \num{1.507} & \num{779.3} & \num{18.92} \\
+ \midrule
+ Penja Pepper & S3 (APT56, GCR50) & \num{25.9} & \num{+7.27} & \num{+19.57} & \num{+1.53} & \num{611.7} & \num{1.350} & \num{205.7} & \num{39.84} \\
+ Penja Pepper & S3 (APT52, GCR65) & \num{36.0} & \num{+8.16} & \num{+27.56} & \num{+0.04} & \num{870.2} & \num{1.477} & \num{253.3} & \num{36.85} \\
+ Penja Pepper & S3 (APT44, GCR65) & \num{40.8} & \num{+7.43} & \num{+30.24} & \num{-1.36} & \num{1043.7} & \num{1.548} & \num{368.4} & \num{30.73} \\
+ Penja Pepper & S5 (APT44, GCR65, irrig.) & \num{40.8} & \num{+12.25} & \num{+49.68} & \num{-1.36} & \num{1043.7} & \num{1.596} & \num{376.5} & \num{30.74} \\
+ Penja Pepper & S2 (c-Si, GCR40) & \num{40.0} & \num{+6.95} & \num{+27.89} & \num{-0.78} & \num{1257.2} & \num{1.640} & \num{709.1} & \num{22.31} \\
+ \midrule
+ Highland Tea & S3 (APT56, GCR50) & \num{25.8} & \num{+0.01} & \num{+11.26} & \num{-3.47} & \num{652.5} & \num{1.271} & \num{556.3} & \num{37.35} \\
+ Highland Tea & S3 (APT44, GCR65) & \num{40.7} & \num{-3.35} & \num{+15.98} & \num{-8.84} & \num{1113.3} & \num{1.429} & \num{860.8} & \num{32.66} \\
+ Highland Tea & S5 (APT44, GCR65, irrig.) & \num{40.7} & \num{+2.47} & \num{+41.38} & \num{-8.84} & \num{1113.3} & \num{1.487} & \num{899.8} & \num{32.91} \\
+ Highland Tea & S2 (c-Si, GCR40) & \num{40.0} & \num{-2.30} & \num{+16.56} & \num{-7.65} & \num{1374.4} & \num{1.548} & \num{1272.6} & \num{23.46} \\
+ \bottomrule
+ \end{tabular}
+ }
 \end{table}
 
 \subsection{Sobol robustness checks across exact-HEOM quantum bounds and zero-carbon pricing}
@@ -166,45 +167,64 @@ Hourly meteorological drivers (\qty{8760}{\hour}, 2023 UTC) are extracted from O
 To test sensitivity under stricter counterfactual bounds, all $N=\num{10000}$ Saltelli sequences (\num{140000} model evaluations per crop under an identical quasi-Monte Carlo sequence) are re-evaluated across four uncertainty-set variants (\cref{tab:sm_sobol_robustness}): (1) the baseline policy ensemble ($\Delta\eta_{\mathrm{NESS}}\in[\num{-0.02},\num{+0.10}]\,\unit{\percent}$, carbon price $[\num{0},\num{25}]\,\unit{\USD\per\tCOtwoe}$); (2) the exact-HEOM quantum envelope ($\Delta\eta_{\mathrm{NESS}}\in[\num{-0.21},\num{+0.21}]\,\unit{\percent}$, matching $|\eta_{\mathrm{HEOM}}-\eta_{\mathrm{Pauli}}|=\num{2.10e-3}$); (3) strict zero-carbon Monte Carlo (\qty{0}{\USD\per\tCOtwoe}); and (4) the combined exact-HEOM and zero-carbon configuration. Even under the widest combined envelope, comparative quantum total-order Sobol sensitivity never exceeds \num{2.59e-7} on $\Delta\mathrm{NPV}$ or \num{9.01e-8} on standalone $\mathrm{NPV}_{\mathrm{OPV}}$, while exceedance odds remain bounded within \qtyrange{11.0}{24.7}{\percent}. In contrast, classical macro-financial parameters govern standalone $\mathrm{NPV}_{\mathrm{OPV}}$ (grid export tariff $S_{Ti}=\num{0.5176}$ in coffee and \num{0.4263} in pepper; WACC $S_{Ti}=\num{0.4503}$ and diesel price $S_{Ti}=\num{0.2817}$ in highland tea), whereas hardware parameters ($C_{\mathrm{mod}}^{\mathrm{OPV}}$, $T_{80}$, and $C_{\mathrm{BOS}}^{\mathrm{c\text{-}Si}}$) govern comparative parity $\Delta\mathrm{NPV}$ as summarized in Main Text~\cref{main:tab:sobol_dual}.
 
 \begin{table}[htbp]
-  \centering
-  \caption{Robustness of Saltelli--Sobol exceedance probabilities $P(\mathrm{NPV}_{\mathrm{OPV}} > \mathrm{NPV}_{\mathrm{c\text{-}Si}})$ and quantum total-order sensitivity $S_{Ti}(\Delta\eta_{\mathrm{NESS}})$ evaluated on $\Delta\mathrm{NPV}$ across $N=\num{10000}$ base samples.}
-  \label{tab:sm_sobol_robustness}
-  \scriptsize
-  \resizebox{\textwidth}{!}{
-  \begin{tabular}{@{}llrrrrr@{}}
-    \toprule
-    \textbf{Variant} & \textbf{Crop} & $P(>\mathrm{c\text{-}Si})$ & $\Delta\mathrm{NPV}_{p50}$ & $S_{Ti}^{\mathrm{Q}}(\Delta\mathrm{NPV})$ & $S_{Ti}^{\mathrm{Q}}(\mathrm{NPV}_{\mathrm{OPV}})$ & $S_{Ti}(C_{\mathrm{mod}}^{\mathrm{OPV}})$ \\
-     & & (\unit{\percent}) & (\unit{\kUSD\per\hectare}) & (--) & (--) & (--) \\
-    \midrule
-    Baseline & Coffee & \num{16.75} & \num{-139.3} & \num{3.83e-9} & \num{1.16e-9} & \num{0.343} \\
-    Baseline & Penja Pepper & \num{22.99} & \num{-105.3} & \num{2.10e-8} & \num{7.15e-9} & \num{0.366} \\
-    Baseline & Highland Tea & \num{11.00} & \num{-176.0} & \num{9.85e-9} & \num{1.89e-9} & \num{0.323} \\
-    \midrule
-    HEOM ($\pm\qty{0.21}{\percent}$) & Coffee & \num{16.74} & \num{-139.3} & \num{4.69e-8} & \num{1.42e-8} & \num{0.343} \\
-    HEOM ($\pm\qty{0.21}{\percent}$) & Penja Pepper & \num{22.97} & \num{-105.3} & \num{2.58e-7} & \num{8.76e-8} & \num{0.366} \\
-    HEOM ($\pm\qty{0.21}{\percent}$) & Highland Tea & \num{11.00} & \num{-176.0} & \num{1.21e-7} & \num{2.32e-8} & \num{0.323} \\
-    \midrule
-    Zero-Carbon & Coffee & \num{18.51} & \num{-131.0} & \num{3.87e-9} & \num{1.20e-9} & \num{0.346} \\
-    Zero-Carbon & Penja Pepper & \num{24.71} & \num{-97.9} & \num{2.12e-8} & \num{7.35e-9} & \num{0.369} \\
-    Zero-Carbon & Highland Tea & \num{12.34} & \num{-166.5} & \num{9.95e-9} & \num{1.95e-9} & \num{0.327} \\
-    \midrule
-    HEOM + Zero-Carbon & Coffee & \num{18.51} & \num{-131.0} & \num{4.74e-8} & \num{1.46e-8} & \num{0.346} \\
-    HEOM + Zero-Carbon & Penja Pepper & \num{24.72} & \num{-97.9} & \num{2.59e-7} & \num{9.01e-8} & \num{0.369} \\
-    HEOM + Zero-Carbon & Highland Tea & \num{12.33} & \num{-166.6} & \num{1.22e-7} & \num{2.39e-8} & \num{0.327} \\
-    \bottomrule
-  \end{tabular}
-  }
+ \centering
+ \caption{Robustness of Saltelli--Sobol exceedance probabilities $P(\mathrm{NPV}_{\mathrm{OPV}} > \mathrm{NPV}_{\mathrm{c\text{-}Si}})$ and quantum total-order sensitivity $S_{Ti}(\Delta\eta_{\mathrm{NESS}})$ evaluated on $\Delta\mathrm{NPV}$ across $N=\num{10000}$ base samples.}
+ \label{tab:sm_sobol_robustness}
+ \scriptsize
+ \resizebox{\textwidth}{!}{
+ \begin{tabular}{@{}llrrrrr@{}}
+ \toprule
+ \textbf{Variant} & \textbf{Crop} & $P(>\mathrm{c\text{-}Si})$ & $\Delta\mathrm{NPV}_{p50}$ & $S_{Ti}^{\mathrm{Q}}(\Delta\mathrm{NPV})$ & $S_{Ti}^{\mathrm{Q}}(\mathrm{NPV}_{\mathrm{OPV}})$ & $S_{Ti}(C_{\mathrm{mod}}^{\mathrm{OPV}})$ \\
+ & & (\unit{\percent}) & (\unit{\kUSD\per\hectare}) & (--) & (--) & (--) \\
+ \midrule
+ Baseline & Coffee & \num{16.75} & \num{-139.3} & \num{3.83e-9} & \num{1.16e-9} & \num{0.343} \\
+ Baseline & Penja Pepper & \num{22.99} & \num{-105.3} & \num{2.10e-8} & \num{7.15e-9} & \num{0.366} \\
+ Baseline & Highland Tea & \num{11.00} & \num{-176.0} & \num{9.85e-9} & \num{1.89e-9} & \num{0.323} \\
+ \midrule
+ HEOM ($\qty{\pm 0.21}{\percent}$) & Coffee & \num{16.74} & \num{-139.3} & \num{4.69e-8} & \num{1.42e-8} & \num{0.343} \\
+ HEOM ($\qty{\pm 0.21}{\percent}$) & Penja Pepper & \num{22.97} & \num{-105.3} & \num{2.58e-7} & \num{8.76e-8} & \num{0.366} \\
+ HEOM ($\qty{\pm 0.21}{\percent}$) & Highland Tea & \num{11.00} & \num{-176.0} & \num{1.21e-7} & \num{2.32e-8} & \num{0.323} \\
+ \midrule
+ Zero-Carbon & Coffee & \num{18.51} & \num{-131.0} & \num{3.87e-9} & \num{1.20e-9} & \num{0.346} \\
+ Zero-Carbon & Penja Pepper & \num{24.71} & \num{-97.9} & \num{2.12e-8} & \num{7.35e-9} & \num{0.369} \\
+ Zero-Carbon & Highland Tea & \num{12.34} & \num{-166.5} & \num{9.95e-9} & \num{1.95e-9} & \num{0.327} \\
+ \midrule
+ HEOM + Zero-Carbon & Coffee & \num{18.51} & \num{-131.0} & \num{4.74e-8} & \num{1.46e-8} & \num{0.346} \\
+ HEOM + Zero-Carbon & Penja Pepper & \num{24.72} & \num{-97.9} & \num{2.59e-7} & \num{9.01e-8} & \num{0.369} \\
+ HEOM + Zero-Carbon & Highland Tea & \num{12.33} & \num{-166.6} & \num{1.22e-7} & \num{2.39e-8} & \num{0.327} \\
+ \bottomrule
+ \end{tabular}
+ }
 \end{table}
 
-\bibliographystyle{elsarticle-num}
-\bibliography{references}
+\subsection{Convergence and seed stability of the Saltelli--Sobol decomposition}
+\label{sec:sm_sobol_convergence}
+
+The indices in \cref{main:tab:sobol_dual} come from one scrambled sequence, so their numerical stability was tested rather than assumed. Repeating the identical decomposition on a resolution ladder ($N=1250$, $2500$, $5000$, $10\,000$ base draws) and across three independent scrambles of the quasi-Monte Carlo sequence (\texttt{scripts/wp5c\_sobol\_convergence.py}) leaves the ranking of drivers unchanged in every case (\cref{tab:sobol_convergence}). At the coarsest rung the three hardware total-order indices differ from their $N=\num{10000}$ values by at most \num{0.007}, and across scrambles at $N=\num{10000}$ they span at most \num{0.005}. The exceedance probability $P(\Delta\mathrm{NPV}>0)$ varies by at most \qty{0.6}{pp} across scrambles, and the bounded quantum index moves only in its third significant digit. These ranges describe the sampling behaviour of the estimator: they are not confidence intervals for a population parameter, and they do not convert the deterministic reanalysis years of \cref{sec:sm_weather_decade} into a probability sample. Parameters outside the twelve-parameter ensemble (soil water capacity, boundary-layer conductance, crop physiology) remain fixed at their literature values and were audited separately (\cref{sec:sm_structural_louver}).
+
+\begin{table}[htbp]
+ \centering
+ \scriptsize
+ \caption{Seed and resolution stability of the comparative Sobol decomposition. Entries give the minimum--maximum range across three independent scrambles (seeds 42, 1234, 2024) at $N=\num{10000}$ base draws; all three reported hardware drivers retain their rank order in every run. Ranges are sampling diagnostics, not confidence intervals.}
+ \label{tab:sobol_convergence}
+ \begin{tabular}{@{}lrrrrr@{}}
+ \toprule
+ Crop & $S_{Ti}(C_{\mathrm{mod}}^{\mathrm{OPV}})$ & $S_{Ti}(T_{80})$ & $S_{Ti}(C_{\mathrm{BOS}}^{\mathrm{c\text{-}Si}})$ & $P(\Delta>0)$ & $S_{Ti}^{Q}(\Delta\mathrm{NPV})$ \\
+ & (--) & (--) & (--) & (\unit{\percent}) & (--) \\
+ \midrule
+ Arabica coffee & \num{0.343}--\num{0.345} & \num{0.2466}--\num{0.2471} & \num{0.1593}--\num{0.1595} & \num{16.57}--\num{17.15} & \num{3.83e-9}--\num{3.84e-9} \\
+ Penja white pepper & \num{0.366}--\num{0.369} & \num{0.2595}--\num{0.2599} & \num{0.1701}--\num{0.1704} & \num{22.90}--\num{23.12} & \num{2.103e-8}--\num{2.107e-8} \\
+ Highland tea & \num{0.323}--\num{0.325} & \num{0.2671}--\num{0.2674} & \num{0.1500}--\num{0.1503} & \num{10.97}--\num{11.12} & \num{9.85e-9}--\num{9.87e-9} \\
+ \bottomrule
+ \end{tabular}
+\end{table}
 
 \section{Coupled structural ($AWC\times g_b$), meteorological stress, and seasonal monsoon-open louver audits}
 \label{sec:sm_structural_louver}
 
-To quantify biophysical parameter uncertainty that enters upstream of the \num{12}-parameter Sobol QMC ensemble (\cref{main:sec:disc_limits}), \texttt{scripts/wp3b\_structural\_and\_louver\_audit.py} propagates the full \qty{8760}{\hour} coupled FvCB--Medlyn--FAO-56--LWIR engine across two non-Sobol axes without altering baseline canonical datasets: (i) a coupled \num{3}$\times$\num{3} factorial sweep of rainfed root-zone available water capacity $\mathrm{AWC}\in\{\num{120}, \num{160}, \num{220}\}\,\unit{\milli\meter}$ and leaf boundary-layer conductance $g_b\in\{\num{0.6}, \num{1.2}, \num{2.5}\}\,\unit{\mole\per\square\meter\per\second}$, and (ii) two physically consistent synthetic meteorological stress perturbations around the verified 2023 ERA5 forcing (``warm--dry'': $\Delta T_{\mathrm{air}}=\qty{+1.5}{\celsius}$, $\Delta\mathrm{RH}=\qty{-5}{pp}$, precipitation $\times\num{0.75}$, GHI $\times\num{1.05}$, $\Delta f_{\mathrm{diff}}=\num{-0.05}$; ``cool--cloudy'': $\Delta T_{\mathrm{air}}=\qty{-1.0}{\celsius}$, $\Delta\mathrm{RH}=\qty{+5}{pp}$, precipitation $\times\num{1.25}$, GHI $\times\num{0.90}$, $\Delta f_{\mathrm{diff}}=\num{+0.08}$, recomputing $e_a$ and ambient VPD via Tetens saturation). Each corner is referenced to an open-sun control ($S_0$) evaluated under identical $(\mathrm{AWC}, g_b)$ or climate forcing (\cref{tab:sm_awc_gb_stress}). Across all three crops, wind-coupled boundary-layer conductance $g_b$ dominates soil $\mathrm{AWC}$ by more than an order of magnitude: dense, calmer canopies ($g_b=\qty{0.6}{\mole\per\square\meter\per\second}$) elevate open-sun leaf temperature and render agrivoltaic cooling strongly yield-positive ($\qtyrange{+5.20}{+29.17}{\percent}$), whereas well-mixed windy canopies ($g_b=\qty{2.5}{\mole\per\square\meter\per\second}$) keep open-sun leaves near ambient air temperature and shift shaded yields mildly light-limited ($\qtyrange{-13.40}{-1.88}{\percent}$), while preserving narrow inter-technology parity ($\qtyrange{-1.14}{+2.41}{pp}$).
+To quantify biophysical parameter uncertainty that enters upstream of the \num{12}-parameter Sobol QMC ensemble (\cref{main:sec:disc_limits}), \texttt{scripts/wp3b\_structural\_and\_louver\_audit.py} propagates the full \qty{8760}{\hour} coupled FvCB--Medlyn--FAO-56--LWIR engine across two non-Sobol axes without altering baseline canonical datasets: (i) a coupled \num{3}$\times$\num{3} factorial sweep of rainfed root-zone available water capacity $\mathrm{AWC}\in\{\num{120}, \num{160}, \num{220}\}\,\unit{\milli\meter}$ and leaf boundary-layer conductance $g_b\in\{\num{0.6}, \num{1.2}, \num{2.5}\}\,\unit{\mole\per\square\meter\per\second}$, and (ii) two physically consistent synthetic meteorological stress perturbations around the verified 2023 ERA5 forcing (``warm--dry'': $\Delta T_{\mathrm{air}}=\qty{+1.5}{\celsius}$, $\Delta\mathrm{RH}=-\qty{5}{pp}$, precipitation $\times\num{0.75}$, GHI $\times\num{1.05}$, $\Delta f_{\mathrm{diff}}=\num{-0.05}$; ``cool--cloudy'': $\Delta T_{\mathrm{air}}=\qty{-1.0}{\celsius}$, $\Delta\mathrm{RH}=+\qty{5}{pp}$, precipitation $\times\num{1.25}$, GHI $\times\num{0.90}$, $\Delta f_{\mathrm{diff}}=\num{+0.08}$, recomputing $e_a$ and ambient VPD via Tetens saturation). Each corner is referenced to an open-sun control ($S_0$) evaluated under identical $(\mathrm{AWC}, g_b)$ or climate forcing (\cref{tab:sm_awc_gb_stress}). Across all three crops, wind-coupled boundary-layer conductance $g_b$ dominates soil $\mathrm{AWC}$ by more than an order of magnitude: dense, calmer canopies ($g_b=\qty{0.6}{\mole\per\square\meter\per\second}$) elevate open-sun leaf temperature and render agrivoltaic cooling strongly yield-positive ($\qtyrange{+5.20}{+29.17}{\percent}$), whereas well-mixed windy canopies ($g_b=\qty{2.5}{\mole\per\square\meter\per\second}$) keep open-sun leaves near ambient air temperature and shift shaded yields mildly light-limited ($\qtyrange{-13.40}{-1.88}{\percent}$), while preserving narrow inter-technology parity ($\qtyrange{-1.14}{+2.41}{pp}$).
 
-We also quantify the counterfactual seasonal retraction design ($S_6$, \cref{tab:sm_monsoon_louver}) suggested qualitatively for cloudy wet months in Section~\ref{main:sec:disc_mech}, wherein panels on $S_3$ (PM6:Y6 ST-OPV, $\mathrm{GCR}=\num{0.65}$) and $S_2$ (c-Si, $\mathrm{GCR}=\num{0.40}$) retract edge-on to full open sky from June through October ($\mathrm{GCR}_h=0$, $\tau_{\mathrm{PAR},h}=1$) while remaining closed November--May. Re-evaluating the coupled \qty{8760}{\hour} crop engine, factory/BESS dispatch, \qty{20}{\yr} DCF economics, and dual-FU ISO~14040 LCA shows that although June--October retraction rescues monsoon photosynthesis by \qtyrange{+1.22}{+7.38}{pp} ($S_3$) and \qtyrange{+0.98}{+6.98}{pp} ($S_2$), the associated \qtyrange{38.0}{40.1}{\percent} loss in annual electricity revenue reduces \qty{20}{\yr} NPV by \qtyrange{349596}{784209}{\USD\per\hectare} relative to fixed arrays (and by \qtyrange{357696}{826855}{\USD\per\hectare} relative to $S_5$ dry-season drip irrigation), yielding zero (\qty{0.00}{\USD\per\square\meter}) capital headroom for motorized louver actuation wherever grid-connected power monetization anchors bankability.
+We also quantify the counterfactual seasonal retraction design ($S_6$, \cref{tab:sm_monsoon_louver}) suggested qualitatively for cloudy wet months in \cref{main:sec:disc_mech}, wherein panels on $S_3$ (PM6:Y6 ST-OPV, $\mathrm{GCR}=\num{0.65}$) and $S_2$ (c-Si, $\mathrm{GCR}=\num{0.40}$) retract edge-on to full open sky from June through October ($\mathrm{GCR}_h=0$, $\tau_{\mathrm{PAR},h}=1$) while remaining closed November--May. Re-evaluating the coupled \qty{8760}{\hour} crop engine, factory/BESS dispatch, \qty{20}{\yr} DCF economics, and dual-FU ISO~14040 LCA shows that although June--October retraction rescues monsoon photosynthesis by $\qtyrange{+1.22}{+7.38}{pp}$ ($S_3$) and $\qtyrange{+0.98}{+6.98}{pp}$ ($S_2$), the associated \qtyrange{38.0}{40.1}{\percent} loss in annual electricity revenue reduces \qty{20}{\yr} NPV by \qtyrange{349596}{784209}{\USD\per\hectare} relative to fixed arrays (and by \qtyrange{357696}{826855}{\USD\per\hectare} relative to $S_5$ dry-season drip irrigation), yielding zero (\qty{0.00}{\USD\per\square\meter}) capital headroom for motorized louver actuation wherever grid-connected power monetization anchors bankability.
 
 \begin{table}[htbp]
 \centering
@@ -255,5 +275,102 @@ Tea & c-Si ($S_2$) & \num{-2.30} & \num{+1.97} & \num{+4.26} & \num{1374.4} & \n
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Weather-year and accepted-export sensitivity analyses}
+\label{sec:sm_weather_export}
+
+\subsection{ERA5 weather-year sensitivity, 2014--2023}
+\label{sec:sm_weather_decade}
+
+The main analysis uses 2023 hourly ERA5 forcing. To assess interannual weather sensitivity with crop, optical, and economic parameters held fixed, we repeated the WP3 simulations for each year from 2014 to 2023 at the three modeled sites; leap years contribute 8784 hourly samples and the remaining years 8760; annual sums and low-PPFD fractions are normalised per year, so the \qty{0.3}{\percent} longer leap-year basis does not propagate into the comparison. These deterministic reanalysis scenarios are neither independent random draws nor a probability sample, and they support neither confidence intervals nor field validation. The 2023 baseline outputs were kept separately.
+
+\begin{table}[htbp]
+ \centering
+ \scriptsize
+ \caption{Focal ST-OPV modeled annual crop-yield change and shade-nearest OPV--c-Si yield contrast across 2014--2023 ERA5 forcing. Means and standard deviations are across ten deterministic weather years; positive-year counts are descriptive.}
+ \label{tab:weather_decade}
+ \begin{tabular}{@{}lrrrrrr@{}}
+ \toprule
+ Crop & Mean $\Delta Y_{\mathrm{OPV}}$ & SD & Range & Positive years & Mean OPV--c-Si contrast & Positive contrast years \\
+ & (\unit{\percent}) & (\unit{pp}) & (\unit{\percent}) & & (\unit{pp}) & \\
+ \midrule
+ Arabica coffee & \num{-8.22} & \num{1.11} & \numrange{-11.45}{-6.38} & 0/10 & \num{-0.74} & 0/10 \\
+ Penja white pepper & \num{+1.85} & \num{2.01} & \numrange{-1.43}{+7.60} & 7/10 & \num{+0.17} & 8/10 \\
+ Highland tea & \num{-3.54} & \num{0.97} & \numrange{-5.85}{-1.86} & 0/10 & \num{-1.11} & 0/10 \\
+ \bottomrule
+ \end{tabular}
+\end{table}
+
+For Penja white pepper the shade-nearest OPV--c-Si contrast spans \numrange{-0.06}{+0.50}~percentage points and therefore crosses zero. The positive-year counts describe this ten-year, fixed-parameter reanalysis set only and carry no probability of future outcomes. The exercise resolves weather-year variability alone; uncertainty in crop parameters, soil properties, future climate, and model structure remains outside it.
+
+The focal design is approximately shade-matched to the c-Si reference and is not energy-matched. Across 2014--2023 the per-crop mean generation reached \qtyrange{81.2}{82.8}{\percent} of the shade-nearest c-Si design's annual generation; the 2023 envelope across crops was \qtyrange{81.0}{83.0}{\percent}. No tested equal-shade pair also matched annual electricity generation. Matching c-Si output would require lowering its ground-coverage ratio to \qtyrange{30}{35}{\percent}, which alters the crop-light exposure the comparison is designed to hold. Crop light is therefore matched approximately, electrical service is not.
+
+\subsection{Accepted-export accounting sensitivity}
+\label{sec:sm_export_acceptance}
+
+The full-export baseline accepts all otherwise-exportable electricity. In the sensitivity case the dispatch accepts \qty{50}{\percent} of otherwise-exportable annual energy and curtails the remainder, with local consumption and each crop's selected battery configuration unchanged. The fraction is applied to annual energy and is neither an hourly interconnection limit nor a grid-availability model, and no local purchase agreement is assumed. NPV is reported per hectare of installed array under the modeled cooperative-load allocation.
+
+\begin{table}[htbp]
+ \centering
+ \scriptsize
+ \caption{Modeled NPV for the focal ST-OPV scenario under full, \qty{50}{\percent}-accepted, and zero grid export. Each crop uses its selected battery configuration. NPV is per installed-array hectare; export acceptance is a stylized annual energy constraint.}
+ \label{tab:export_acceptance}
+ \begin{tabular}{@{}llrrr@{}}
+ \toprule
+ Crop & Selected battery & Full export & \qty{50}{\percent} accepted & No export \\
+ & & \multicolumn{3}{c}{NPV (\unit{\USD\per\hectare})} \\
+ \midrule
+ Arabica coffee & Small LFP, \qty{2}{\hour} & \num{403543.53} & \num{11895.55} & \num{-379752.43} \\
+ Penja white pepper & Small LFP, \qty{2}{\hour} & \num{368372.49} & \num{43412.03} & \num{-281548.43} \\
+ Highland tea & Overnight withering BESS & \num{860825.08} & \num{590309.49} & \num{319793.89} \\
+ \bottomrule
+ \end{tabular}
+\end{table}
+
+Because rejected otherwise-exportable energy is curtailed, modeled NPV falls from full export to partial acceptance and again to no export, turning negative for coffee and pepper while tea remains positive. Export access is thus decision-relevant under the assumptions tested, yet these model runs do not establish that the local grid can accept the modeled energy or deliver the assumed tariff; site-specific interconnection and tariff data are required before the values can be read as project returns.
+
+\section{Device-fabrication tolerance, angular acceptance, and structural-load evidence}
+\label{sec:sm_device_struct}
+
+\subsection{Thickness tolerance of the focal ST-OPV stack}
+\label{sec:sm_tolerance}
+
+An independent optical check of the modelled stack cannot be reported here, so instead the model was asked what such a check would have to reproduce. The focal $\mathrm{APT44}$ design ($d_{\mathrm{act}}=\qty{60}{\nano\meter}$, $d_{\mathrm{Ag}}=\qty{12}{\nano\meter}$, $d_{\mathrm{cap}}=\qty{35}{\nano\meter}$, ITO \qty{100}{\nano\meter}, \ce{ZnO} \qty{35}{\nano\meter}) was re-evaluated with layer thicknesses drawn from illustrative roll-to-roll spreads (active layer \qty{60}{\nano\meter} at \qty{5}{\percent} standard deviation, \ce{Ag} at \qty{1}{\nano\meter}, capping \ce{MoO3} at \qty{2}{\nano\meter}; $\num{4000}$ draws, seed 42, \texttt{scripts/wp2b\_device\_tolerance\_audit.py}). Photon conservation holds to $\max|R+T+A_{\mathrm{tot}}-1|=\num{4.44e-16}$ over every draw.
+
+The spread is not uniform across the three figures of merit (\cref{tab:sm_tolerance}). \ce{Ag} thickness dominates, moving $\mathrm{APT}$ by \qtyrange{-3.99}{+3.82}{pp} at $\pm2\sigma$; the active layer contributes \qtyrange{-2.12}{+2.25}{pp} and the capping layer at most \qty{0.76}{pp}. Because $\mathrm{PCE}$ and $\mathrm{APT}$ move in opposite directions, $\mathrm{LUE}$ is comparatively stiff: its standard deviation is \qty{1.3}{\percent} of the nominal value. Any ranking that rests on $\mathrm{LUE}$ is therefore insensitive to fabrication tolerance, whereas a claim that quotes $\mathrm{APT}$ alone inherits a standard deviation of \qty{2.3}{pp}.
+
+\begin{table}[htbp]
+ \centering
+ \scriptsize
+ \caption{Fabrication-tolerance response of the focal $\mathrm{APT44}$ stack under $\num{4000}$ thickness draws. The standard deviation is across draws, not an experimental repeatability, and the spreads are illustrative rather than measured line statistics. Draws were truncated at \qty{4}{\nano\meter} (\ce{Ag}) and \qty{0}{\nano\meter} (capping layer) to keep thicknesses physical, so the reported tails are conservative.}
+ \label{tab:sm_tolerance}
+ \begin{tabular}{@{}lrrrrr@{}}
+ \toprule
+ Quantity & Nominal & $p_{05}$ & $p_{50}$ & $p_{95}$ & SD \\
+ \midrule
+ $\mathrm{APT}$ (\unit{\percent}) & \num{44.12} & \num{40.30} & \num{44.10} & \num{47.75} & \num{2.29} \\
+ $\mathrm{PCE}$ (\unit{\percent}) & \num{9.93} & \num{9.18} & \num{9.90} & \num{10.61} & \num{0.44} \\
+ $\mathrm{LUE}$ (\unit{\percent}) & \num{4.38} & \num{4.24} & \num{4.37} & \num{4.43} & \num{0.06} \\
+ \bottomrule
+ \end{tabular}
+\end{table}
+
+\subsection{Angular acceptance}
+\label{sec:sm_angular}
+
+Beam transmittance falls steeply with incidence angle while $\mathrm{PCE}$ is nearly flat: $\mathrm{APT}$ decreases from \qty{44.12}{\percent} at normal incidence to \qty{33.07}{\percent} at \ang{60} and \qty{20.00}{\percent} at \ang{75}, whereas $\mathrm{PCE}$ stays between \qty{9.06}{\percent} and \qty{10.19}{\percent} over the same range. A gonioscopic measurement, or one reported only at normal incidence, therefore cannot be compared with the diffuse-weighted results used here without declaring its angular protocol; the hemispherical average in \cref{eq:tmm_diff} is the quantity that enters the hourly canopy model.
+
+\subsection{Structural and wind-load evidence}
+\label{sec:sm_wind}
+
+The elevated structures require a local wind-load class that this package cannot supply. The shipped ERA5 year contains hourly \qty{10}{\meter} means only: annual means of \qtyrange{1.18}{1.89}{\meter\per\second}, $p_{99}$ of \qtyrange{2.94}{5.31}{\meter\per\second}, record maxima of \qtyrange{4.58}{7.03}{\meter\per\second}, and no hour above \qty{10}{\meter\per\second} at any site (\texttt{scripts/wp1\_wind\_load\_screening.py}). Those values correspond to dynamic pressures of \qtyrange{13.1}{30.9}{\pascal}, one to two orders of magnitude below the \qtyrange{250}{640}{\pascal} obtained for candidate basic velocities of \qtyrange{20}{32}{\meter\per\second}. A one-year record of hourly means thus cannot bound a design load, and no design pressure is asserted here. What a local annex must supply is explicit: the national-annex basic velocity, the terrain category, the orography factor, and the altitude correction. Structural cost is already carried in the uncertainty analysis as $C_{\mathrm{BOS}}^{\mathrm{c\text{-}Si}}\in[\num{35},\num{85}]\,\unit{\USD\per\square\meter}$, whose total-order index on comparative parity reaches \num{0.170}, so the economics brackets the structural class while leaving it unvalidated.
+
+\subsection{Field validation and reporting protocol}
+\label{sec:sm_field_protocol}
+
+Paired field validation remains outstanding and is not claimed anywhere in this work. The pre-registered design that would test the reported contrasts is documented in the package (\texttt{docs/FIELD\_VALIDATION\_PROTOCOL\_20261114.md}) and fixes, before any data are collected: the four-arm plot layout (open sun, shade tree, shade-matched c-Si, ST-OPV), paired analysis on plot-level differences, primary endpoints (marketable yield, incident and transmitted PAR and spectrum, leaf temperature, VPD, soil moisture), exclusions, and the decision rule. Replication cannot be set from this model, because the modelled inter-year standard deviation of the OPV--c--Si contrast (\qtyrange{0.06}{0.19}{pp}) reflects shared weather rather than plot variance; the protocol therefore tables replication against assumed plot-level standard deviations instead of asserting a single number.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
 
 \end{document}
