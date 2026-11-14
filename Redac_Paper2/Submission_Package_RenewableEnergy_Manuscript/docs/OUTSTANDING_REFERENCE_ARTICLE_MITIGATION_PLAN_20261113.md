@@ -59,3 +59,14 @@ Keep this hierarchy visible throughout the abstract, introduction, results, disc
 ## Applied workflow
 
 This mitigation uses the academic-research quality gates (contribution, technical soundness, writing, experimental rigor, ethics/reproducibility) and LaTeX integrity checks. BMAD lens concepts are used as a staged checklist: adversarial claims/omissions, edge cases and boundary conditions, then structure/prose, followed by verification of changed claims. This document does not claim an official BMAD review run or replace independent domain-expert review.
+
+## SuggestionsV261114 implementation (2026-11-14)
+
+All six items from `docs/SuggestionsV261114.md` (repo root) implemented or assessed:
+
+1. **Weather-year counterfactuals** — done. WP3 re-run for 2014–2023 (SM S9.1 decade table with min/median/max, seasonal ranges; report §3.4; main text qualification of Penja as baseline-specific, 7/10 years). Validation protocol now explicit as SM §S9.3 (paired-plot design, measured variables, analysis criteria); paired field trials remain external (M8).
+2. **Economic headline qualification** — done. Accepted-export accounting (SM §S9.2, report §4.4): NPV reported at $f_{\rm exp}=1/0.5/0$ with the 50%-acceptance collapse (271–392k USD/ha) stated as an accounting sensitivity, not a physical operating condition; NPV kept as an operating case, not a universal crop NPV; no claim that ST-OPV creates energy value by itself.
+3. **Claim-to-evidence boundary** — done. `docs/DATA_ANALYSIS_REPORT_20261113.md` rev.3 is the claim-to-evidence register (M4); scenario robustness limited to tested perturbations.
+4. **Decision relevance vs scientific novelty** — done. New main §4.5 "Decision map: when ST-OPV is defensible" with `tab:decision_map` (four axes: decade yield, shade-nearest OPV–c-Si contrast, offtake NPV at three export fractions, LCA break-even 7.40–8.12 yr → unfavorable/conditional/conditional verdicts) and a one-sentence decision rule; former §4.5 Limitations renumbered §4.6 (sections carry no labels, renumbering is safe).
+5. **Publication-grade release** — partial. `docs/environment_lock_MesoHOP-sim.yml` added (pinned deps); weather/WP3 manifests with SHA-256 checksums and reproduction instructions already in SM §S9; versioned Zenodo DOI archive remains external (open).
+6. **Title/framing** — assessed, no change needed. The title already leads with ST-OPV ("Cameroon Tri-Crop ST-OPV Agro-Photovoltaics…"); "quantum agrivoltaics" as a brand appears nowhere; the quantum result is bounded to a decoupling limit in the abstract, one Results subsection, and one Discussion sentence; cover letter and highlights use "quantum-channel contribution" / "open-quantum channel". T80* 16.33/31.27 yr and $15/m² thresholds were excluded from the decision map because they are untraceable to any package artifact (standing no-unverified-numbers rule).
