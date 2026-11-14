@@ -9,7 +9,7 @@
 \subsection{ERA5 weather-year sensitivity, 2014--2023}
 \label{sec:sm_weather_decade}
 
-The main analysis uses 2023 hourly ERA5 forcing. To assess interannual weather sensitivity while holding the crop, optical, and economic parameters fixed, we repeated the WP3 simulations for each year from 2014 through 2023 at the three modeled sites. Leap years contain 8784 hourly samples; other years contain 8760. These are deterministic historical-reanalysis scenarios, not independent random draws, probabilities, confidence intervals, or field validation. The 2023 baseline outputs were retained separately.
+The main analysis uses 2023 hourly ERA5 forcing. To assess interannual weather sensitivity while holding the crop, optical, and economic parameters fixed, we repeated the WP3 simulations for each year from 2014 through 2023 at the three modeled sites. Leap years contain 8784 hourly samples; other years contain 8760. These deterministic historical-reanalysis scenarios are not independent random draws, probabilities, confidence intervals, or field validation. The 2023 baseline outputs were retained separately.
 
 \begin{table}[htbp]
   \centering
@@ -35,7 +35,7 @@ The focal design is approximately shade-matched to the c-Si reference, not energ
 \subsection{Accepted-export accounting sensitivity}
 \label{sec:sm_export_acceptance}
 
-The full-export baseline assumes acceptance of all otherwise-exportable electricity. In the sensitivity case, the hourly dispatch accepts \qty{50}{\percent} of otherwise-exportable annual energy and curtails the remainder; local consumption and the crop-specific selected battery configuration are retained. This annual acceptance fraction is not an hourly interconnection power limit, a grid-outage model, or evidence of a local purchase agreement. NPV is reported per hectare of installed array under the modeled cooperative-load allocation.
+The full-export baseline assumes acceptance of all otherwise-exportable electricity. In the sensitivity case, the hourly dispatch accepts \qty{50}{\percent} of otherwise-exportable annual energy and curtails the remainder; local consumption and the crop-specific selected battery configuration are retained. This annual acceptance fraction is not an hourly interconnection limit, a grid-availability model, or evidence of a local purchase agreement. NPV is reported per hectare of installed array under the modeled cooperative-load allocation.
 
 \begin{table}[htbp]
   \centering
@@ -54,4 +54,4 @@ The full-export baseline assumes acceptance of all otherwise-exportable electric
   \end{tabular}
 \end{table}
 
-At \qty{50}{\percent} acceptance, rejected otherwise-exportable energy is curtailed. In these modeled cases, NPV declines from full export to partial acceptance and again to no export; coffee and pepper become unprofitable in the no-export cases, whereas tea remains positive. The results show that export access is decision-relevant under the assumptions tested, but do not establish that the local grid can accept the modeled energy or provide the assumed tariff. Site-specific interconnection and tariff data are needed before interpreting these values as project returns.
+At \qty{50}{\percent} acceptance, rejected otherwise-exportable energy is curtailed. In these modeled cases, NPV declines from full export to partial acceptance and again to no export; coffee and pepper have negative NPV in the no-export cases, whereas tea remains positive. The results show that export access is decision-relevant under the assumptions tested, but do not establish that the local grid can accept the modeled energy or provide the assumed tariff. Site-specific interconnection and tariff data are needed before interpreting these values as project returns.
