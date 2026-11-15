@@ -18,10 +18,10 @@ FIGURE_BASENAMES = [
 ]
 
 MANUSCRIPT_BASENAMES = [
-    "RE_main_2611",
-    "RE_SM_2611",
-    "RE_Highlights_2611",
-    "RE_Cover_letter_2611",
+    "RENE_main_2611",
+    "RENE_SM_2611",
+    "RENE_Highlights_2611",
+    "RENE_Cover_letter_2611",
 ]
 
 
@@ -53,8 +53,8 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
         self.assertGreater(bib.stat().st_size, 10_000)
 
     def test_required_latex_packages_and_geometry(self) -> None:
-        """RE_main_2611 and RE_SM_2611 enforce siunitx, cleveref, xr[nocite], and margin=2cm."""
-        for stem, ext_target in [("RE_main_2611", "RE_SM_2611"), ("RE_SM_2611", "RE_main_2611")]:
+        """RENE_main_2611 and RENE_SM_2611 enforce siunitx, cleveref, xr[nocite], and margin=2cm."""
+        for stem, ext_target in [("RENE_main_2611", "RENE_SM_2611"), ("RENE_SM_2611", "RENE_main_2611")]:
             tex = (BASE_DIR / f"{stem}.tex").read_text(encoding="utf-8")
             self.assertIn(r"\usepackage[margin=2cm]{geometry}", tex)
             self.assertIn(r"\usepackage{siunitx}", tex)
@@ -65,14 +65,14 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
             self.assertNotRegex(tex, r"\*[A-Za-z]")
             self.assertNotRegex(tex, r"\\texttt\{[^$}]*\\mathrm")
 
-        highlights = (BASE_DIR / "RE_Highlights_2611.tex").read_text(encoding="utf-8")
+        highlights = (BASE_DIR / "RENE_Highlights_2611.tex").read_text(encoding="utf-8")
         self.assertIn(r"\usepackage[margin=2cm]{geometry}", highlights)
-        cover = (BASE_DIR / "RE_Cover_letter_2611.tex").read_text(encoding="utf-8")
+        cover = (BASE_DIR / "RENE_Cover_letter_2611.tex").read_text(encoding="utf-8")
         self.assertIn(r"\usepackage[margin=2cm]{geometry}", cover)
 
     def test_elsevier_highlights_character_limit(self) -> None:
         """Elsevier Highlights bullets stay strictly <= 85 rendered characters each."""
-        highlights_tex = (BASE_DIR / "RE_Highlights_2611.tex").read_text(encoding="utf-8")
+        highlights_tex = (BASE_DIR / "RENE_Highlights_2611.tex").read_text(encoding="utf-8")
         bullets = re.findall(r"\\item\s+(.+)", highlights_tex)
         self.assertGreaterEqual(len(bullets), 3)
         self.assertLessEqual(len(bullets), 5)
@@ -93,31 +93,32 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
             self.assertLessEqual(len(rendered), 85, f"Highlight #{idx} exceeds 85 chars ({len(rendered)}): {rendered}")
 
     def test_citations_and_xr_labels_resolve(self) -> None:
-        """Every \\cite{...} resolves in references.bib and every sm:... \\cref resolves in RE_SM_2611."""
+        """Every \\cite{...} resolves in references.bib and every sm:... \\cref resolves in RENE_SM_2611."""
         bib_text = (BASE_DIR / "references.bib").read_text(encoding="utf-8")
         bib_keys = set(re.findall(r"@\w+\{([^,\s]+),", bib_text))
-        sm_tex = (BASE_DIR / "RE_SM_2611.tex").read_text(encoding="utf-8")
-        main_tex = (BASE_DIR / "RE_main_2611.tex").read_text(encoding="utf-8")
+        sm_tex = (BASE_DIR / "RENE_SM_2611.tex").read_text(encoding="utf-8")
+        main_tex = (BASE_DIR / "RENE_main_2611.tex").read_text(encoding="utf-8")
         sm_labels = set(re.findall(r"\\label\{([^}]+)\}", sm_tex))
 
-        for tex_name, tex_src in [("RE_main_2611.tex", main_tex), ("RE_SM_2611.tex", sm_tex)]:
+        for tex_name, tex_src in [("RENE_main_2611.tex", main_tex), ("RENE_SM_2611.tex", sm_tex)]:
             for cite_group in re.findall(r"\\cite\{([^}]+)\}", tex_src):
                 for key in cite_group.split(","):
                     k = key.strip()
                     self.assertIn(k, bib_keys, f"Citation key '{k}' in {tex_name} missing from references.bib")
 
         for sm_ref in re.findall(r"\\(?:c?ref)\{sm:([^}]+)\}", main_tex):
-            self.assertIn(sm_ref, sm_labels, f"Cross-reference 'sm:{sm_ref}' missing from RE_SM_2611.tex")
+            self.assertIn(sm_ref, sm_labels, f"Cross-reference 'sm:{sm_ref}' missing from RENE_SM_2611.tex")
 
-        # Require >= 50 unique cited references in RE_main_2611.tex per journal maturity standard
+        # Require >= 50 and <= 50 unique cited references in RENE_main_2611.tex
         main_cites = {k.strip() for g in re.findall(r"\\cite\{([^}]+)\}", main_tex) for k in g.split(",")}
         self.assertGreaterEqual(len(main_cites), 50, f"Expected >=50 cited references, got {len(main_cites)}")
+        self.assertLessEqual(len(main_cites), 50, f"Expected <=50 cited references, got {len(main_cites)}")
 
     def test_elsevier_author_guideline_compliance(self) -> None:
         """Enforce Renewable Energy author guidelines: corresponding author, abstract<=250w, zero keyword overlap, declarations."""
-        main_tex = (BASE_DIR / "RE_main_2611.tex").read_text(encoding="utf-8")
-        sm_tex = (BASE_DIR / "RE_SM_2611.tex").read_text(encoding="utf-8")
-        cover_tex = (BASE_DIR / "RE_Cover_letter_2611.tex").read_text(encoding="utf-8")
+        main_tex = (BASE_DIR / "RENE_main_2611.tex").read_text(encoding="utf-8")
+        sm_tex = (BASE_DIR / "RENE_SM_2611.tex").read_text(encoding="utf-8")
+        cover_tex = (BASE_DIR / "RENE_Cover_letter_2611.tex").read_text(encoding="utf-8")
 
         self.assertIn("Serge Guy Nana Engo\\corref{cor1}", main_tex)
         self.assertIn("Serge Guy Nana Engo\\corref{cor1}", sm_tex)
@@ -150,15 +151,16 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
         self.assertIn(r"\label{sec:interpretive}", main_tex)
         self.assertNotIn("decoupling theorem", main_tex.lower())
         # Ensure zero Markdown inline-code backticks (`...`) leaked into LaTeX
-        for tex_name, tex_src in [("RE_main_2611.tex", main_tex), ("RE_SM_2611.tex", sm_tex), ("RE_Cover_letter_2611.tex", cover_tex)]:
+        for tex_name, tex_src in [("RENE_main_2611.tex", main_tex), ("RENE_SM_2611.tex", sm_tex), ("RENE_Cover_letter_2611.tex", cover_tex)]:
             without_latex_open_quotes = tex_src.replace("``", "")
             self.assertNotIn("`", without_latex_open_quotes, f"Markdown backtick leaked into {tex_name}")
+            self.assertNotIn(r"\authorcheck", tex_src, f"Unresolved \\authorcheck in {tex_name}")
 
         # Elsevier Copyediting rule & anti-report-style hygiene:
         # 1) Zero bullet/numbered lists in main body prose (continuous IMRAD paragraphs only)
-        self.assertNotIn(r"\begin{itemize}", main_tex, "Bullet list found in RE_main_2611.tex")
-        self.assertNotIn(r"\begin{enumerate}", main_tex, "Numbered list found in RE_main_2611.tex")
-        self.assertNotIn(r"\begin{enumerate}", cover_tex, "Numbered list found in RE_Cover_letter_2611.tex")
+        self.assertNotIn(r"\begin{itemize}", main_tex, "Bullet list found in RENE_main_2611.tex")
+        self.assertNotIn(r"\begin{enumerate}", main_tex, "Numbered list found in RENE_main_2611.tex")
+        self.assertNotIn(r"\begin{enumerate}", cover_tex, "Numbered list found in RENE_Cover_letter_2611.tex")
 
         # 2) Zero internal file names, script paths, YAML versions, ledger labels, or raw snake_case tokens
         forbidden_report_tokens = [
@@ -178,7 +180,7 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
             r"\texttt{t80\_",
             r"\texttt{mesohops",
         ]
-        for tex_name, tex_src in [("RE_main_2611.tex", main_tex), ("RE_SM_2611.tex", sm_tex), ("RE_Cover_letter_2611.tex", cover_tex)]:
+        for tex_name, tex_src in [("RENE_main_2611.tex", main_tex), ("RENE_SM_2611.tex", sm_tex), ("RENE_Cover_letter_2611.tex", cover_tex)]:
             low = tex_src.lower()
             for tok in forbidden_report_tokens:
                 self.assertNotIn(tok, low, f"Report-style token '{tok}' found in {tex_name}")
@@ -191,7 +193,7 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
             is_credit_line = "Conceptualization" in line and "Serge Guy Nana Engo" in line
             self.assertTrue(
                 is_table_header or is_credit_line,
-                f"Disallowed inline prose \\textbf on RE_main_2611.tex:{lineno}: {line.strip()[:80]}",
+                f"Disallowed inline prose \\textbf on RENE_main_2611.tex:{lineno}: {line.strip()[:80]}",
             )
 
     def test_compiled_logs_clean_when_present(self) -> None:
@@ -222,6 +224,30 @@ class TestWP6ManuscriptIntegrity(unittest.TestCase):
         report = (BASE_DIR / "docs" / "DATA_ANALYSIS_REPORT_20261113.md").read_text(encoding="utf-8")
         self.assertIn("near-tie reversal", report)
         self.assertIn("pepper technology ranking is not robust", report)
+
+    def test_wp5d_tariff_and_residual_sensitivity_present(self) -> None:
+        """Round-3 captive-at-MT-tariff and Year-20 residual-value sensitivities match published bounds."""
+        ga_png = BASE_DIR / "figures" / "Graphical_Abstract_RENE_2611.png"
+        ga_pdf = BASE_DIR / "figures" / "Graphical_Abstract_RENE_2611.pdf"
+        self.assertTrue(ga_png.exists(), f"Missing Graphical Abstract PNG: {ga_png}")
+        self.assertTrue(ga_pdf.exists(), f"Missing Graphical Abstract PDF: {ga_pdf}")
+
+        sens_path = BASE_DIR / "data" / "wp5" / "wp5d_tariff_residual_sensitivity.json"
+        self.assertTrue(sens_path.exists(), f"Missing WP5d sensitivity output: {sens_path}")
+        sens = json.loads(sens_path.read_text(encoding="utf-8"))
+
+        tea_bess = sens["captive_at_grid_tariff_sensitivity"]["highland_tea"]["overnight_withering_bess"]
+        tea_mt10 = [r for r in tea_bess if abs(r["captive_tariff_usd_kwh"] - 0.10) < 1e-6][0]
+        self.assertAlmostEqual(tea_mt10["opv_npv_usd_ha"], 38746.20, places=1)
+
+        tea_nobess = sens["captive_at_grid_tariff_sensitivity"]["highland_tea"]["no_bess_daytime_only"]
+        tea_nb_mt10 = [r for r in tea_nobess if abs(r["captive_tariff_usd_kwh"] - 0.10) < 1e-6][0]
+        self.assertAlmostEqual(tea_nb_mt10["opv_npv_usd_ha"], 209143.40, places=1)
+
+        pep_t80 = sens["year20_residual_value_sensitivity"]["pepper_r2r_15_parity_t80"]
+        self.assertAlmostEqual(pep_t80["none"]["t80_star_yr"], 16.33, places=2)
+        self.assertAlmostEqual(pep_t80["module_only"]["t80_star_yr"], 18.48, places=2)
+        self.assertAlmostEqual(pep_t80["module_and_bos"]["t80_star_yr"], 20.73, places=2)
 
 
 if __name__ == "__main__":

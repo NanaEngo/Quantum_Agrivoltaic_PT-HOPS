@@ -1,0 +1,446 @@
+{
+  "generated_date": "2026-11-15",
+  "framework_version": "2.5.0",
+  "captive_at_grid_tariff_sensitivity": {
+    "arabica_coffee": {
+      "small_lfp_buffer_2h": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 403543.53,
+          "opv_irr_pct": 26.16,
+          "opv_dpbp_yr": 3.95,
+          "csi_npv_usd_ha": 779310.56,
+          "csi_irr_pct": 34.77,
+          "delta_npv_opv_minus_csi_usd_ha": -375767.03,
+          "bess_cap_kwh_opv": 38.18
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 288645.74,
+          "opv_irr_pct": 21.77,
+          "opv_dpbp_yr": 6.42,
+          "csi_npv_usd_ha": 658817.3,
+          "csi_irr_pct": 31.14,
+          "delta_npv_opv_minus_csi_usd_ha": -370171.56,
+          "bess_cap_kwh_opv": 38.18
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 262852.36,
+          "opv_irr_pct": 20.77,
+          "opv_dpbp_yr": 6.69,
+          "csi_npv_usd_ha": 631767.8,
+          "csi_irr_pct": 30.32,
+          "delta_npv_opv_minus_csi_usd_ha": -368915.43,
+          "bess_cap_kwh_opv": 38.18
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 239403.84,
+          "opv_irr_pct": 19.85,
+          "opv_dpbp_yr": 6.95,
+          "csi_npv_usd_ha": 607177.34,
+          "csi_irr_pct": 29.57,
+          "delta_npv_opv_minus_csi_usd_ha": -367773.5,
+          "bess_cap_kwh_opv": 38.18
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 232369.28,
+          "opv_irr_pct": 19.57,
+          "opv_dpbp_yr": 7.03,
+          "csi_npv_usd_ha": 599800.2,
+          "csi_irr_pct": 29.35,
+          "delta_npv_opv_minus_csi_usd_ha": -367430.92,
+          "bess_cap_kwh_opv": 38.18
+        }
+      ],
+      "no_bess_daytime_only": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 402540.63,
+          "opv_irr_pct": 26.46,
+          "opv_dpbp_yr": 3.9,
+          "csi_npv_usd_ha": 777806.85,
+          "csi_irr_pct": 35.16,
+          "delta_npv_opv_minus_csi_usd_ha": -375266.22,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 296353.52,
+          "opv_irr_pct": 22.32,
+          "opv_dpbp_yr": 6.3,
+          "csi_npv_usd_ha": 666430.28,
+          "csi_irr_pct": 31.74,
+          "delta_npv_opv_minus_csi_usd_ha": -370076.77,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 272515.59,
+          "opv_irr_pct": 21.38,
+          "opv_dpbp_yr": 6.55,
+          "csi_npv_usd_ha": 641427.38,
+          "csi_irr_pct": 30.97,
+          "delta_npv_opv_minus_csi_usd_ha": -368911.79,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 250844.75,
+          "opv_irr_pct": 20.52,
+          "opv_dpbp_yr": 6.78,
+          "csi_npv_usd_ha": 618697.47,
+          "csi_irr_pct": 30.27,
+          "delta_npv_opv_minus_csi_usd_ha": -367852.72,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 244343.5,
+          "opv_irr_pct": 20.26,
+          "opv_dpbp_yr": 6.86,
+          "csi_npv_usd_ha": 611878.5,
+          "csi_irr_pct": 30.06,
+          "delta_npv_opv_minus_csi_usd_ha": -367535.0,
+          "bess_cap_kwh_opv": 0.0
+        }
+      ]
+    },
+    "penja_white_pepper": {
+      "small_lfp_buffer_2h": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 368372.49,
+          "opv_irr_pct": 24.74,
+          "opv_dpbp_yr": 5.73,
+          "csi_npv_usd_ha": 709050.57,
+          "csi_irr_pct": 32.55,
+          "delta_npv_opv_minus_csi_usd_ha": -340678.09,
+          "bess_cap_kwh_opv": 47.09
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 218401.74,
+          "opv_irr_pct": 18.97,
+          "opv_dpbp_yr": 7.23,
+          "csi_npv_usd_ha": 553634.61,
+          "csi_irr_pct": 27.86,
+          "delta_npv_opv_minus_csi_usd_ha": -335232.87,
+          "bess_cap_kwh_opv": 47.09
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 184734.84,
+          "opv_irr_pct": 17.65,
+          "opv_dpbp_yr": 7.72,
+          "csi_npv_usd_ha": 518745.31,
+          "csi_irr_pct": 26.8,
+          "delta_npv_opv_minus_csi_usd_ha": -334010.47,
+          "bess_cap_kwh_opv": 47.09
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 154128.56,
+          "opv_irr_pct": 16.43,
+          "opv_dpbp_yr": 8.22,
+          "csi_npv_usd_ha": 487027.76,
+          "csi_irr_pct": 25.83,
+          "delta_npv_opv_minus_csi_usd_ha": -332899.2,
+          "bess_cap_kwh_opv": 47.09
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 144946.68,
+          "opv_irr_pct": 16.06,
+          "opv_dpbp_yr": 8.4,
+          "csi_npv_usd_ha": 477512.5,
+          "csi_irr_pct": 25.54,
+          "delta_npv_opv_minus_csi_usd_ha": -332565.82,
+          "bess_cap_kwh_opv": 47.09
+        }
+      ],
+      "no_bess_daytime_only": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 358003.68,
+          "opv_irr_pct": 24.72,
+          "opv_dpbp_yr": 5.76,
+          "csi_npv_usd_ha": 697856.29,
+          "csi_irr_pct": 32.68,
+          "delta_npv_opv_minus_csi_usd_ha": -339852.61,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 225068.73,
+          "opv_irr_pct": 19.47,
+          "opv_dpbp_yr": 7.1,
+          "csi_npv_usd_ha": 560000.84,
+          "csi_irr_pct": 28.43,
+          "delta_npv_opv_minus_csi_usd_ha": -334932.11,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 195226.18,
+          "opv_irr_pct": 18.27,
+          "opv_dpbp_yr": 7.52,
+          "csi_npv_usd_ha": 529053.69,
+          "csi_irr_pct": 27.47,
+          "delta_npv_opv_minus_csi_usd_ha": -333827.51,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 168096.6,
+          "opv_irr_pct": 17.17,
+          "opv_dpbp_yr": 7.94,
+          "csi_npv_usd_ha": 500919.93,
+          "csi_irr_pct": 26.6,
+          "delta_npv_opv_minus_csi_usd_ha": -332823.33,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 159957.73,
+          "opv_irr_pct": 16.83,
+          "opv_dpbp_yr": 8.08,
+          "csi_npv_usd_ha": 492479.8,
+          "csi_irr_pct": 26.33,
+          "delta_npv_opv_minus_csi_usd_ha": -332522.07,
+          "bess_cap_kwh_opv": 0.0
+        }
+      ]
+    },
+    "highland_tea": {
+      "overnight_withering_bess": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 860825.08,
+          "opv_irr_pct": 35.52,
+          "opv_dpbp_yr": 3.01,
+          "csi_npv_usd_ha": 1272578.99,
+          "csi_irr_pct": 41.66,
+          "delta_npv_opv_minus_csi_usd_ha": -411753.91,
+          "bess_cap_kwh_opv": 574.98
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 285369.86,
+          "opv_irr_pct": 19.03,
+          "opv_dpbp_yr": 6.91,
+          "csi_npv_usd_ha": 666642.95,
+          "csi_irr_pct": 27.28,
+          "delta_npv_opv_minus_csi_usd_ha": -381273.09,
+          "bess_cap_kwh_opv": 574.98
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 156186.04,
+          "opv_irr_pct": 15.06,
+          "opv_dpbp_yr": 8.49,
+          "csi_npv_usd_ha": 530616.49,
+          "csi_irr_pct": 23.96,
+          "delta_npv_opv_minus_csi_usd_ha": -374430.46,
+          "bess_cap_kwh_opv": 574.98
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 38746.2,
+          "opv_irr_pct": 11.29,
+          "opv_dpbp_yr": 17.24,
+          "csi_npv_usd_ha": 406956.08,
+          "csi_irr_pct": 20.88,
+          "delta_npv_opv_minus_csi_usd_ha": -368209.88,
+          "bess_cap_kwh_opv": 574.98
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 3514.24,
+          "opv_irr_pct": 10.12,
+          "opv_dpbp_yr": 19.7,
+          "csi_npv_usd_ha": 369857.95,
+          "csi_irr_pct": 19.94,
+          "delta_npv_opv_minus_csi_usd_ha": -366343.71,
+          "bess_cap_kwh_opv": 574.98
+        }
+      ],
+      "no_bess_daytime_only": [
+        {
+          "captive_tariff_usd_kwh": 0.45,
+          "label": "baseline_diesel_0.45",
+          "opv_npv_usd_ha": 724074.51,
+          "opv_irr_pct": 38.65,
+          "opv_dpbp_yr": 2.73,
+          "csi_npv_usd_ha": 1126491.09,
+          "csi_irr_pct": 45.78,
+          "delta_npv_opv_minus_csi_usd_ha": -402416.59,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.205,
+          "label": "grid_mt_0.205",
+          "opv_npv_usd_ha": 363622.74,
+          "opv_irr_pct": 24.95,
+          "opv_dpbp_yr": 5.72,
+          "csi_npv_usd_ha": 743301.33,
+          "csi_irr_pct": 34.09,
+          "delta_npv_opv_minus_csi_usd_ha": -379678.59,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.15,
+          "label": "grid_mt_0.150",
+          "opv_npv_usd_ha": 282704.99,
+          "opv_irr_pct": 21.77,
+          "opv_dpbp_yr": 6.44,
+          "csi_npv_usd_ha": 657279.13,
+          "csi_irr_pct": 31.45,
+          "delta_npv_opv_minus_csi_usd_ha": -374574.14,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.1,
+          "label": "grid_mt_0.100",
+          "opv_npv_usd_ha": 209143.4,
+          "opv_irr_pct": 18.84,
+          "opv_dpbp_yr": 7.32,
+          "csi_npv_usd_ha": 579077.14,
+          "csi_irr_pct": 29.03,
+          "delta_npv_opv_minus_csi_usd_ha": -369933.73,
+          "bess_cap_kwh_opv": 0.0
+        },
+        {
+          "captive_tariff_usd_kwh": 0.085,
+          "label": "grid_mt_0.085",
+          "opv_npv_usd_ha": 187074.93,
+          "opv_irr_pct": 17.95,
+          "opv_dpbp_yr": 7.64,
+          "csi_npv_usd_ha": 555616.54,
+          "csi_irr_pct": 28.31,
+          "delta_npv_opv_minus_csi_usd_ha": -368541.61,
+          "bess_cap_kwh_opv": 0.0
+        }
+      ]
+    }
+  },
+  "year20_residual_value_sensitivity": {
+    "by_crop_wacc10": {
+      "arabica_coffee": {
+        "opv_npv_usd_ha": 403543.53,
+        "opv_rem_frac_at_t80_5": 0.0,
+        "csi_npv_no_salvage_usd_ha": 779310.56,
+        "csi_module_only_salvage_undisc_usd_ha": 36000.0,
+        "csi_module_only_salvage_disc_usd_ha": 5351.17,
+        "csi_npv_module_salvage_usd_ha": 784661.73,
+        "csi_mod_bos_salvage_undisc_usd_ha": 80000.0,
+        "csi_mod_bos_salvage_disc_usd_ha": 11891.49,
+        "csi_npv_mod_bos_salvage_usd_ha": 791202.05,
+        "delta_npv_baseline_usd_ha": -375767.03,
+        "delta_npv_with_csi_mod_salvage_usd_ha": -381118.2,
+        "delta_npv_with_csi_mod_bos_salvage_usd_ha": -387658.52
+      },
+      "penja_white_pepper": {
+        "opv_npv_usd_ha": 368372.49,
+        "opv_rem_frac_at_t80_5": 0.0,
+        "csi_npv_no_salvage_usd_ha": 709050.57,
+        "csi_module_only_salvage_undisc_usd_ha": 36000.0,
+        "csi_module_only_salvage_disc_usd_ha": 5351.17,
+        "csi_npv_module_salvage_usd_ha": 714401.74,
+        "csi_mod_bos_salvage_undisc_usd_ha": 80000.0,
+        "csi_mod_bos_salvage_disc_usd_ha": 11891.49,
+        "csi_npv_mod_bos_salvage_usd_ha": 720942.06,
+        "delta_npv_baseline_usd_ha": -340678.09,
+        "delta_npv_with_csi_mod_salvage_usd_ha": -346029.26,
+        "delta_npv_with_csi_mod_bos_salvage_usd_ha": -352569.58
+      },
+      "highland_tea": {
+        "opv_npv_usd_ha": 860825.08,
+        "opv_rem_frac_at_t80_5": 0.0,
+        "csi_npv_no_salvage_usd_ha": 1272578.99,
+        "csi_module_only_salvage_undisc_usd_ha": 36000.0,
+        "csi_module_only_salvage_disc_usd_ha": 5351.17,
+        "csi_npv_module_salvage_usd_ha": 1277930.17,
+        "csi_mod_bos_salvage_undisc_usd_ha": 80000.0,
+        "csi_mod_bos_salvage_disc_usd_ha": 11891.49,
+        "csi_npv_mod_bos_salvage_usd_ha": 1284470.49,
+        "delta_npv_baseline_usd_ha": -411753.91,
+        "delta_npv_with_csi_mod_salvage_usd_ha": -417105.08,
+        "delta_npv_with_csi_mod_bos_salvage_usd_ha": -423645.4
+      }
+    },
+    "wacc_stress_tea_and_pepper": {
+      "wacc_6pct": {
+        "csi_module_only_salvage_disc_usd_ha": 11224.97,
+        "csi_mod_bos_salvage_disc_usd_ha": 24944.38
+      },
+      "wacc_10pct": {
+        "csi_module_only_salvage_disc_usd_ha": 5351.17,
+        "csi_mod_bos_salvage_disc_usd_ha": 11891.49
+      },
+      "wacc_15pct": {
+        "csi_module_only_salvage_disc_usd_ha": 2199.61,
+        "csi_mod_bos_salvage_disc_usd_ha": 4888.02
+      }
+    },
+    "opv_t80_salvage_check_pepper": {
+      "t80_5yr_at_15usd": {
+        "opv_npv_usd_ha": 630660.63,
+        "pv_rep_disc_net_of_salvage_usd_ha": 90759.17
+      },
+      "t80_7yr_at_15usd": {
+        "opv_npv_usd_ha": 657732.81,
+        "pv_rep_disc_net_of_salvage_usd_ha": 56592.24
+      },
+      "t80_12yr_at_15usd": {
+        "opv_npv_usd_ha": 696415.22,
+        "pv_rep_disc_net_of_salvage_usd_ha": 22733.86
+      },
+      "t80_16yr_at_15usd": {
+        "opv_npv_usd_ha": 711308.48,
+        "pv_rep_disc_net_of_salvage_usd_ha": 11386.49
+      }
+    },
+    "pepper_r2r_15_parity_t80": {
+      "none": {
+        "target_csi_npv_usd_ha": 709050.57,
+        "t80_star_yr": 16.33
+      },
+      "module_only": {
+        "target_csi_npv_usd_ha": 714401.74,
+        "t80_star_yr": 18.48
+      },
+      "module_and_bos": {
+        "target_csi_npv_usd_ha": 720942.06,
+        "t80_star_yr": 20.73
+      }
+    }
+  }
+}

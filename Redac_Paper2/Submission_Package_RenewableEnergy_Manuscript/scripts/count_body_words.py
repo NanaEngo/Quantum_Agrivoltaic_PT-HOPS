@@ -57,7 +57,7 @@ def caption_words(tex: str) -> int:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--tex", default=str(BASE_DIR / "RE_main_2611.tex"))
+    parser.add_argument("--tex", default=str(BASE_DIR / "RENE_main_2611.tex"))
     args = parser.parse_args()
     tex = Path(args.tex).read_text(encoding="utf-8")
     prose = prose_words(tex)

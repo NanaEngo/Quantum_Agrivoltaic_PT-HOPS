@@ -113,7 +113,7 @@ def plot_fig1_optical_pareto() -> None:
     for fa in focal_apts:
         sub = par.iloc[(par["apt_par"] * 100.0 - fa).abs().argsort()[:1]]
         ax.scatter(sub["apt_par"] * 100.0, sub["pce_pct"], s=65, color=PALETTE[1], edgecolor="black", zorder=5)
-    ax.scatter([], [], s=65, color=PALETTE[1], edgecolor="black", label="Focal WP3/WP5 stacks")
+    ax.scatter([], [], s=65, color=PALETTE[1], edgecolor="black", label="Focal agrivoltaic stacks")
     ax.set_xlabel("Average Photosynthetic Transmittance, APT (%)")
     ax.set_ylabel("Power Conversion Efficiency, PCE (%)")
     ax.set_title("(a) Coupled TMM PCE(APT) Pareto Front")
@@ -238,7 +238,7 @@ def plot_fig3_microclimate_seasonal() -> None:
     # (a) Dry-season leaf cooling dT_leaf & excess PV heating dT_pv across focal scenarios
     ax = axes[0]
     scen_pick = ["S1_agroforestry_shade", "S2_cSi_GCR40", "S3_OPV_APT44_GCR65"]
-    scen_labels = {"S1_agroforestry_shade": "S1 Agroforestry", "S2_cSi_GCR40": "S2 c-Si GCR40", "S3_OPV_APT44_GCR65": "S3 OPV APT44"}
+    scen_labels = {"S1_agroforestry_shade": "D1 Agroforestry", "S2_cSi_GCR40": "D2 c-Si GCR40", "S3_OPV_APT44_GCR65": "D3 OPV APT44"}
     sub_a = df_wp3[df_wp3["scenario_id"].isin(scen_pick)].copy()
     sub_a["Scenario"] = sub_a["scenario_id"].map(scen_labels)
     sub_a["Crop"] = sub_a["crop"].map(CROP_SHORT)
@@ -247,7 +247,7 @@ def plot_fig3_microclimate_seasonal() -> None:
     ax.set_ylim(-3.35, 0.10)
     ax.set_xlabel("")
     ax.set_ylabel("Dry-Season Daytime $\\Delta T_{\\mathrm{leaf}}$ (°C)")
-    ax.set_title("(a) Canopy Leaf Cooling vs. Open Sun $S_0$")
+    ax.set_title("(a) Canopy Leaf Cooling vs. Open Sun $D_0$")
     ax.legend(loc="lower center", ncol=2, fontsize=7.4, frameon=True, framealpha=0.93)
 
     # (b) Dry vs Wet yield inversion curve across Effective Shade (%) for Highland Tea & Coffee & Pepper
@@ -261,7 +261,7 @@ def plot_fig3_microclimate_seasonal() -> None:
     ax.text(46.0, 21.5, "Dry season (dashed): +9 to +30%", fontsize=7.4, color="#333333", ha="center", bbox=dict(boxstyle="round,pad=0.18", fc="white", ec="none", alpha=0.82))
     ax.text(35.0, -30.5, "Monsoon (dotted): PAR deficit", fontsize=7.4, color="#333333", ha="center", bbox=dict(boxstyle="round,pad=0.18", fc="white", ec="none", alpha=0.82))
     ax.set_xlabel("Effective Canopy Shading Factor (%)")
-    ax.set_ylabel("Yield Anomaly $\\Delta Y$ vs. Open $S_0$ (%)")
+    ax.set_ylabel("Yield Anomaly $\\Delta Y$ vs. Open $D_0$ (%)")
     ax.set_title("(b) Dry-Season Rescue vs. Monsoon Light Deficit")
     ax.set_xlim(10, 72)
     ax.set_ylim(-42, 42)
@@ -334,7 +334,7 @@ def plot_fig4_shapley_and_agro_phase() -> None:
         ("PAR_PI", "PAR / Photoinhibition", PALETTE[0]),
         ("therm", "Leaf Thermal Cooling ($\\Delta T_l$)", PALETTE[1]),
         ("VPD_H2O", "Stomatal VPD & Soil $H_2O$", PALETTE[2]),
-        ("spec_Q", "ePAR / R:FR / Quantum $\\eta_{\\mathrm{NESS}}$", PALETTE[3]),
+        ("spec_Q", "Spectral (ePAR)", PALETTE[3]),
     ]
     for k, lbl, col in lever_meta:
         vals = np.array(levs[k])
@@ -349,8 +349,8 @@ def plot_fig4_shapley_and_agro_phase() -> None:
     ax.set_xticks(x)
     ax.set_xticklabels([p[2] for p in picks], fontsize=8.5)
     ax.set_ylim(-24.0, 34.5)
-    ax.set_ylabel("Yield Attribution $\\Delta Y$ (% vs. Open $S_0$)")
-    ax.set_title("(a) Exact Four-Lever Shapley Causal Attribution")
+    ax.set_ylabel("Yield Attribution $\\Delta Y$ (% vs. Open $D_0$)")
+    ax.set_title("(a) Exact Four-Lever Shapley Attribution")
     ax.legend(loc="upper left", ncol=2, fontsize=7.0, frameon=True, framealpha=0.93, columnspacing=0.8)
 
     # (b) 2D Agronomic Regime Phase Map (PAR_peak / I_sat vs VPD_peak)
@@ -433,10 +433,10 @@ def plot_fig5_tea_lca_breakeven() -> None:
     for crop in ("arabica_coffee", "penja_white_pepper", "highland_tea"):
         bess_ref = "overnight_withering_bess" if crop == "highland_tea" else "small_lfp_buffer_2h"
         for sid, var, lbl in [
-            ("S3_OPV_APT44_GCR65", "baseline_zero_credit", "S3 OPV (T80=5 yr)"),
-            ("S3_OPV_APT44_GCR65", "S4_OPV_encapsulated_T80_15yr", "S4 OPV (T80=15 yr)"),
-            ("S3_OPV_APT44_GCR65", "S4_OPV_encapsulated_T80_25yr", "S4 OPV (T80=25 yr)"),
-            ("S2_cSi_GCR40", "baseline_zero_credit", "S2 c-Si (25 yr)"),
+            ("S3_OPV_APT44_GCR65", "baseline_zero_credit", "D3 OPV (T80=5 yr)"),
+            ("S3_OPV_APT44_GCR65", "S4_OPV_encapsulated_T80_15yr", "D4 OPV (T80=15 yr)"),
+            ("S3_OPV_APT44_GCR65", "S4_OPV_encapsulated_T80_25yr", "D4 OPV (T80=25 yr)"),
+            ("S2_cSi_GCR40", "baseline_zero_credit", "D2 c-Si (25 yr)"),
         ]:
             match = df_wp5[(df_wp5["crop"] == crop) & (df_wp5["scenario_id"] == sid) & (df_wp5["wp5_variant"] == var) & (df_wp5["bess_option"] == bess_ref)]
             if len(match):
