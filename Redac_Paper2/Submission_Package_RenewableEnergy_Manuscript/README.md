@@ -19,6 +19,7 @@ Zero LaTeX errors, zero undefined references or citations.
 | `RENE_Cover_letter_2611.tex` / `.pdf` | Cover letter (`1 p.`) |
 | `RENE_Title_page_2611.tex` / `.pdf` | Elsevier Title Page with authors, affiliations, ORCIDs (`4/5`), CRediT & declarations (`1 p.`) |
 | `RENE_Declaration_of_interest_2611.tex` / `.pdf` | Standalone Declaration of Interest, Funding & Generative-AI Statement (`1 p.`) |
+| `RENE_Abstract_2611.docx` | Standalone Word abstract (`219` words) + title & 6 keywords |
 | `RENE_Highlights_2611.txt` (+ `.tex`/`.pdf`) | 5 highlights, 67–80 characters each (`1 p.`) |
 | `figures/Graphical_Abstract_RENE_2611.png` / `.pdf` | Landscape Graphical Abstract (`3590 x 1315 px`, `300 DPI`; script: `scripts/wp6_generate_graphical_abstract.py`) |
 | `ZENODO_UPLOAD_GUIDE.md` | Author ORCIDs (`4/5` recorded), Editorial Manager & Zenodo metadata guide |
