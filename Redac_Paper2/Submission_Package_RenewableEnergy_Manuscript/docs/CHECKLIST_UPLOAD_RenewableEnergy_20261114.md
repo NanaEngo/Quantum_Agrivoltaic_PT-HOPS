@@ -32,12 +32,12 @@ discrepancy is recorded rather than resolved by guesswork.
 | Figures | Separate files, cite in order, vector or ≥ 300 dpi | 6 main figures (`Fig1..Fig6`, PDF vector + 600 DPI PNG), cited in order, plus Graphical Abstract | Pass |
 | Tables | Editable, cited in order | 7 main tables + SM tables (`tab:sm_econ_inputs`..`tab:sm_tariff_residual`, `tab:sm_extensions`) in LaTeX source | Pass |
 | CRediT statement | Required | Present in `RENE_main_2611.tex` | Pass |
-| Competing-interest declaration | Required | Present in `RENE_main_2611.tex` | Pass |
+| Competing-interest declaration | Required | Present in `RENE_main_2611.tex` and standalone `RENE_Declaration_of_interest_2611.tex` / `.pdf` (`1 p.`) | Pass |
 | Funding statement | Required (or explicit no-funding statement) | Present: explicit no-grant statement + PenavoraServer compute acknowledgment (`Penabei Samafou`); no institutional grant claim | Pass |
-| Generative-AI declaration | Required where AI tools were used | Present in `RENE_main_2611.tex` | Pass |
+| Generative-AI declaration | Required where AI tools were used | Present in `RENE_main_2611.tex` and `RENE_Declaration_of_interest_2611.pdf` | Pass |
 | Data availability statement | Required | Present in `RENE_main_2611.tex` (summary tables in SM; underlying data/scripts planned for Zenodo DOI per `ZENODO_UPLOAD_GUIDE.md`) | Pass (DOI pending) |
-| ORCID of co-authors | Collected at submission | `4 of 5` ORCIDs recorded in `ZENODO_UPLOAD_GUIDE.md` (incl. corresponding author `0000-0002-7484-3508`); `T. Goumai Vedekoi` pending | Partial (4/5 recorded) |
-| Cover letter | Required | `RENE_Cover_letter_2611.tex` / `.pdf`, `1 p.` (synced counts & US English) | Pass |
+| ORCID of co-authors | Collected at submission | `4 of 5` ORCIDs recorded in `ZENODO_UPLOAD_GUIDE.md` and `RENE_Title_page_2611.pdf` (incl. corresponding author `0000-0002-7484-3508`); `T. Goumai Vedekoi` pending | Partial (4/5 recorded) |
+| Cover letter & Title page | Required | `RENE_Cover_letter_2611.tex` / `.pdf` (`1 p.`) and `RENE_Title_page_2611.tex` / `.pdf` (`1 p.`) | Pass |
 | Source packaging | LaTeX source + PDF + class files | Self-contained `elsarticle` source tree + PDFs + `THREE_READING_AUDIT_20261115.md` | Pass |
 
 ## The two hard numeric gates — closed (updated after Round-3 refinements)

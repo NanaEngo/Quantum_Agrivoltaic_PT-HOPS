@@ -80,6 +80,6 @@ and S. G. Nana Engo (submitted to Renewable Energy, Elsevier).
 - **Manuscript (`RENE_main_2611.pdf` / `.tex`)**: Original Research Paper (`20` pages, `4,705` prose words / `5,194` incl. captions, `50` references; compiles with `elsarticle` + `RENE_SM_2611` cross-references).
 - **Supporting Material (`RENE_SM_2611.pdf` / `.tex`)**: Supplementary files §S1–S9 (`13` pages, `21` references).
 - **Graphical Abstract (`figures/Graphical_Abstract_RENE_2611.png` / `.pdf`)**: Landscape 3-panel summary (`3590 x 1315 px` @ `300 DPI`, exceeding Elsevier's `>= 1328 x 531 px` floor).
-- **Cover Letter (`RENE_Cover_letter_2611.pdf`)** and **Highlights (`RENE_Highlights_2611.txt` / `.tex`)**: Separate upload files (`5` bullets, `<= 85` chars per bullet).
+- **Cover Letter (`RENE_Cover_letter_2611.pdf`)**, **Title Page (`RENE_Title_page_2611.pdf`)**, **Declaration of Interest (`RENE_Declaration_of_interest_2611.pdf`)**, and **Highlights (`RENE_Highlights_2611.txt` / `.tex`)**: Separate upload files (`1 p.` each; `5` highlight bullets, `<= 85` chars per bullet).
 - **Funding statement**: Explicit no-grant / no-funding declaration (matching `RENE_main_2611.tex`).
 - **Pre-upload reminder**: Add `T. Goumai Vedekoi`'s ORCID iD if registered before submission.

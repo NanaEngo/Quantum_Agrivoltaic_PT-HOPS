@@ -17,6 +17,8 @@ Zero LaTeX errors, zero undefined references or citations.
 | `RENE_main_2611.tex` / `.pdf` | Manuscript (`elsarticle`, `20 pp`, `50` refs) |
 | `RENE_SM_2611.tex` / `.pdf` | Supporting Material, `§S1–S9` (`13 pp`, `21` refs) |
 | `RENE_Cover_letter_2611.tex` / `.pdf` | Cover letter (`1 p.`) |
+| `RENE_Title_page_2611.tex` / `.pdf` | Elsevier Title Page with authors, affiliations, ORCIDs (`4/5`), CRediT & declarations (`1 p.`) |
+| `RENE_Declaration_of_interest_2611.tex` / `.pdf` | Standalone Declaration of Interest, Funding & Generative-AI Statement (`1 p.`) |
 | `RENE_Highlights_2611.txt` (+ `.tex`/`.pdf`) | 5 highlights, 67–80 characters each (`1 p.`) |
 | `figures/Graphical_Abstract_RENE_2611.png` / `.pdf` | Landscape Graphical Abstract (`3590 x 1315 px`, `300 DPI`; script: `scripts/wp6_generate_graphical_abstract.py`) |
 | `ZENODO_UPLOAD_GUIDE.md` | Author ORCIDs (`4/5` recorded), Editorial Manager & Zenodo metadata guide |
@@ -38,7 +40,7 @@ Zero LaTeX errors, zero undefined references or citations.
 ```bash
 make check test PYTHON=/home/taamangtchu/miniforge3/envs/qom/bin/python
 latexmk -pdf RENE_SM_2611.tex && latexmk -pdf RENE_main_2611.tex   # SM first, then main
-latexmk -pdf RENE_Cover_letter_2611.tex && latexmk -pdf RENE_Highlights_2611.tex
+latexmk -pdf RENE_Cover_letter_2611.tex RENE_Highlights_2611.tex RENE_Title_page_2611.tex RENE_Declaration_of_interest_2611.tex
 python3 scripts/make_release_manifest.py                       # docs/CHECKSUMS_SHA256.txt
 ```
 
