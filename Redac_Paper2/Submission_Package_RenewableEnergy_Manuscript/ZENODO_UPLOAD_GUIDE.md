@@ -8,17 +8,17 @@
 
 ---
 
-## 1. Author Roster, Affiliations & ORCID iDs
+## 1. Author Roster, Affiliations, Emails & ORCID iDs
 
-Use this table identically for **Editorial Manager** author entry and **Zenodo** contributor metadata:
+Use this table identically for **Editorial Manager** author entry and **Zenodo** contributor metadata (see also `AUTHORS_METADATA_2611.md` for split Given/Family names and CRediT roles):
 
-| Order | Name (`Family, Given`) | Affiliation | ORCID iD | Role |
-|---|---|---|---|---|
-| 1 | `Teguia Kouam, Steve Cabrel` | Department of Physics, Faculty of Science, University of Douala, P.O. Box 24157, Douala, Cameroon | `0009-0000-7853-5476` | First author |
-| 2 | `Goumai Vedekoi, Theodore` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | *(not yet registered in workspace)* | Co-author |
-| 3 | `Tchapet Njafa, Jean-Pierre` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | `0000-0002-1936-8353` | Co-author |
-| 4 | `Nguenang, Jean-Pierre` | Department of Physics, Faculty of Science, University of Douala, P.O. Box 24157, Douala, Cameroon | `0000-0002-7140-7196` | Co-author |
-| 5 | `Nana Engo, Serge Guy` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | `0000-0002-7484-3508` | **Corresponding author** (`serge.nana-engo@facsciences-uy1.cm`) |
+| Order | Name (`Family, Given`) | Email | Affiliation | ORCID iD | Role |
+|---|---|---|---|---|---|
+| 1 | `Teguia Kouam, Steve Cabrel` | `steve.teguia@facsciences-uy1.cm` | Department of Physics, Faculty of Science, University of Douala, P.O. Box 24157, Douala, Cameroon | `0009-0000-7853-5476` | First author |
+| 2 | `Goumai Vedekoi, Theodore` | `theodore.goumai@facsciences-uy1.cm` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | *(not yet registered in workspace)* | Co-author |
+| 3 | `Tchapet Njafa, Jean-Pierre` | `jean-pierre.tchapet@facsciences-uy1.cm` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | `0000-0002-1936-8353` | Co-author |
+| 4 | `Nguenang, Jean-Pierre` | `nguenang@yahoo.com` | Department of Physics, Faculty of Science, University of Douala, P.O. Box 24157, Douala, Cameroon | `0000-0002-7140-7196` | Co-author |
+| 5 | `Nana Engo, Serge Guy` | `serge.nana-engo@facsciences-uy1.cm` | Department of Physics, Faculty of Science, University of Yaoundé I, P.O. Box 812, Yaoundé, Cameroon | `0000-0002-7484-3508` | **Corresponding author** |
 
 ---
 

@@ -23,6 +23,7 @@ Zero LaTeX errors, zero undefined references or citations.
 | `RENE_Highlights_2611.txt` (+ `.tex`/`.pdf`) | 5 highlights, 67–80 characters each (`1 p.`) |
 | `figures/Graphical_Abstract_RENE_2611.png` / `.pdf` | Landscape Graphical Abstract (`3590 x 1315 px`, `300 DPI`; script: `scripts/wp6_generate_graphical_abstract.py`) |
 | `ZENODO_UPLOAD_GUIDE.md` | Author ORCIDs (`4/5` recorded), Editorial Manager & Zenodo metadata guide |
+| `AUTHORS_METADATA_2611.md` | Editorial Manager author roster (names, emails, affiliations, ORCIDs, CRediT roles) |
 | `references.bib` | Bibliography (`50` main / `21` SM cited entries) |
 | `parameters.yaml` | Single source of truth for every physical and economic input |
 | `figures/` | 6 main figures (`Fig1..Fig6`, PDF vector + PNG) + Graphical Abstract |
