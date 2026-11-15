@@ -4,8 +4,8 @@ Self-contained submission package for **"Semi-Transparent Organic Agrivoltaics f
 (Elsevier, *Renewable Energy*). Located at
 `Redac_Paper2/Submission_Package_RenewableEnergy_Manuscript/`.
 
-**State 2026-11-15:** main **20 pp / 4,705 prose words (5,194 incl. captions) / 50 references**, Supporting Material **13 pp / 21 references**, cover letter and
-highlights **1 p.** each, Graphical Abstract **`3590 x 1315 px` @ `300 DPI`**, tests **36/36**, `parameters.yaml` `framework_version: 2.5.0`.
+**Submission status (2026-11-15):** **Submitted to *Renewable Energy* (Elsevier)** — Manuscript ID **`RENE-D-26-14529`** (**With Editor**).  
+**Package metrics:** main **20 pp / 4,424 body words (excl. abstract, tables, figures, references; 4,705 w/ frontmatter, 5,194 incl. captions) / 50 references**, Supporting Material **13 pp / 21 references**, Cover Letter, Title Page, Declaration of Interest Statement, and Highlights **1 p.** each, Word Abstract `RENE_Abstract_2611.docx` (`219` words), Graphical Abstract **`3590 x 1315 px` @ `300 DPI`**, tests **36/36**, `parameters.yaml` `framework_version: 2.5.0`.
 Zero LaTeX errors, zero undefined references or citations.
 
 ---
